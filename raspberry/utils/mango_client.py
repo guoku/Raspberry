@@ -40,7 +40,6 @@ class MangoApiClient(object):
                 _data_dict['title'] = kwargs['title'].encode('utf-8')
             _data = urllib.urlencode(_data_dict)
             _response = requests.post(_url, data = _data)
-            print _response.text
             
             _parser = JSONResponseParser(_response.text)
             if _parser.success():
