@@ -1,0 +1,16 @@
+*.log
+*.pot
+*.pyc
+*.swp
+*.swo
+*~
+.idea/
+local_settings.py
+.DS_Store
+dump.rdb
+celerybeat-schedule
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject

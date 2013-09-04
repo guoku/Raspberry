@@ -1,0 +1,26 @@
+{% load management %}
+
+{% if available %}
+    <tr {% if soldout > 0 %}class="info"{% else %}class="success"{% endif %}>
+        <td width="90">
+            <a href="{% url web.views.detail entity_hash %}" target=_blank>
+                <img class="img-polaroid" src="{{ image_url }}" style="max-height:80px;max-width:80px;">
+            </a>
+        </td>
+        <td>
+            <p class="text-info">
+                <a href="{% url maria_web.views.entity_list %}?cid={{ category_id }}">
+                    {{ category_title }}
+                </a>
+            </p>
+        </td>
+        <td><p class="text-info">{{ brand }}</p></td>
+        <td width="200"><p class="text-info">{{ title }}</p></td>
+        <td>{{ item_count }}</td>
+        <td width="50">
+            <div class="btn-group">
+                <a class="btn" href="{% url maria_web.views.edit_entity entity_id %}">编</a>
+            </div>
+        </td>
+    </tr>
+{% endif %}

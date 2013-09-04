@@ -1,0 +1,83 @@
+{% extends "management_base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="span11">
+                <tr>
+                    {% for image in thumb_images %}
+                        <td>
+                            <img class="img-polaroid" src="{{ image }}" style="max-height:150px;max-width:150px;">
+                        </td>
+                    {% endfor %}
+                </tr>
+            </div> 
+        </div> 
+        <div>
+            <form class="well form-horizontal" action="{% url 'management.views.create_entity_by_taobao_item' %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="taobao_id_display">淘宝id:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="taobao_id_display" name="taobao_id_display" value="{{ taobao_id }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_nick">店家</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="shop_nick" name="shop_nick" value="{{ shop_nick }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="price">价格</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="price" name="price" value="{{ price }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="taobao_title">原名称</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="taobao_title" name="taobao_title" value="{{ taobao_title }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="brand">品牌</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="brand" name="brand" value="" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="title">名称</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="title" name="title" value="" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="image_url">选图</label>
+                        <div class="controls">
+                            <select id="image_url" name="image_url">
+                                {% for image_url in thumb_images %}
+                                    {% if forloop.counter == 1 %} 
+                                        <option selected="selected" value="{{ image_url }}">{{ forloop.counter }}</option>
+                                    {% else %}
+                                        <option value="{{ image_url }}">{{ forloop.counter }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <input class="input-xxlarge" type="hidden" id="taobao_id" name="taobao_id" value="{{ taobao_id }}" />
+                    <input class="input-xxlarge" type="hidden" id="taobao_category_id" name="taobao_category_id" value="{{ taobao_category_id }}" />
+                    <input class="input-xxlarge" type="hidden" id="taobao_shop_nick" name="taobao_shop_nick" value="{{ shop_nick }}" />
+                    <input class="input-xxlarge" type="hidden" id="taobao_title" name="taobao_title" value="{{ taobao_title }}" />
+                    <input class="input-xxlarge" type="hidden" id="taobao_price" name="taobao_price" value="{{ price }}" />
+                    <input class="input-xxlarge" type="hidden" id="taobao_soldout" name="taobao_soldout" value="{{ soldout }}" />
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
