@@ -90,13 +90,14 @@ def create_entity_by_taobao_item(request):
         _mango_client = MangoApiClient()
         _entity_id = _mango_client.create_entity_by_taobao_item(
             taobao_id = _taobao_id,
+            brand = _brand,
+            title = _title,
             taobao_category_id = _taobao_category_id,
             taobao_title = _taobao_title,
             taobao_shop_nick = _taobao_shop_nick,
             taobao_price = _taobao_price,
             taobao_soldout = _taobao_soldout,
         )
-
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }))
 

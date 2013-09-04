@@ -24,7 +24,7 @@ class MangoApiClient(object):
 
         
     def create_entity_by_taobao_item(self, taobao_id, **kwargs):
-        try:
+        #try:
             _url = 'http://10.0.1.100:8001/entity/create/' 
             _data_dict = {
                 'taobao_id' : taobao_id,
@@ -35,9 +35,9 @@ class MangoApiClient(object):
                 'taobao_soldout' : kwargs['taobao_soldout'].encode('utf-8'),
             }
             if kwargs.has_key('brand'):
-                _params_dict['brand'] = kwargs['brand']
+                _data_dict['brand'] = kwargs['brand'].encode('utf-8')
             if kwargs.has_key('title'):
-                _params_dict['title'] = kwargs['title']
+                _data_dict['title'] = kwargs['title'].encode('utf-8')
             _data = urllib.urlencode(_data_dict)
             _response = requests.post(_url, data = _data)
             print _response.text
@@ -48,7 +48,7 @@ class MangoApiClient(object):
                 return _data["entity_id"]
 
 
-        except:
-            pass
+        #except:
+        #    pass
          
          

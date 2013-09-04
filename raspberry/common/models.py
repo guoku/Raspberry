@@ -7,4 +7,4 @@ class Entity(models.Model):
     creator = models.ForeignKey(User) 
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
-    
+ 
