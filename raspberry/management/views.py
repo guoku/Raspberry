@@ -110,3 +110,16 @@ def edit_entity(request, entity_id):
         context_instance = RequestContext(request)
     )
 
+@login_required
+def entity_list(request):
+    _entity_id_list = RBEntity.filter()
+    _entity_context_list = RBEntity.read_entities(_entity_id_list)
+
+    return render_to_response( 
+        'management/entity/list.html', 
+        {
+          'entity_context_list' : _entity_context_list,
+        },
+        context_instance = RequestContext(request)
+    )
+

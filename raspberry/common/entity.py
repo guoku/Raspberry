@@ -49,17 +49,44 @@ class RBEntity(object):
 
     def __ensure_entity_obj(self):
         if not hasattr(self, '__entity_obj'):
-            self.__entity_obj = RBEntityModel.objects.get(pk = self.__entity_id) 
+            self.__entity_obj = RBEntityModel.objects.get(pk = self.__entity_id)
+
+    def __load_entity_context(self):
+        self.__ensure_entity_obj()
+        _context = {}
+        _context["entity_hash"] = self.__entity_obj.entity_hash
+        _context["created_time"] = self.__entity_obj.created_time
+        _context["updated_time"] = self.__entity_obj.updated_time
+        return _context
+        
     
     def read(self):
         _mango_client = MangoApiClient()
         _base_info = _mango_client.read_entity(self.__entity_id)
-       
-        self.__ensure_entity_obj()
-        _context = {}
-        _context["base_info"] = _base_info 
-        _context["entity_hash"] = self.__entity_obj.entity_hash
-        _context["created_time"] = self.__entity_obj.created_time
-        _context["updated_time"] = self.__entity_obj.updated_time
-            
+        _context = self.__load_entity_context()
+        _context['base_info'] = _base_info
         return _context    
+   
+    @classmethod
+    def read_entities(cls, entity_id_list):
+        _mango_client = MangoApiClient()
+        _base_datum = _mango_client.read_entities(entity_id_list)
+        
+        _context_list = []
+        for _entity_id in entity_id_list:
+            if _base_datum.has_key(str(_entity_id)):
+                if _base_datum[str(_entity_id)]['status'] == '0':
+                    _context = cls(_entity_id).read()
+                    _context['base_info'] = _base_datum[str(_entity_id)]['context']
+                    _context_list.append(_context)
+        return _context_list
+             
+       
+    @classmethod
+    def filter(cls, offset = 0, count = 30):
+        _hdl = RBEntityModel.objects
+        _hdl = _hdl.order_by('-created_time')[offset : offset + count]
+        _entity_id_list = map(lambda x: x.id, _hdl)
+        return _entity_id_list
+        
+

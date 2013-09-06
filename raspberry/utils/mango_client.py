@@ -4,9 +4,10 @@ import httplib, urllib
 import requests
 
 class MangoApiClient(object):
+    
     def __init__(self):
         self.__host = settings.MANGO['host'] 
-        self.__port = settings.MANGO['port'] 
+        self.__port = settings.MANGO['port']
 
     def check_taobao_item_exist(self, taobao_id):
         _url = 'http://%s:%s/taobao/item/check/%s/'%(self.__host, self.__port, taobao_id) 
@@ -51,5 +52,15 @@ class MangoApiClient(object):
         if _parser.success():
             _data = _parser.read()
             return _data["context"]
+         
+         
+    def read_entities(self, entity_id_list):
+        _url = 'http://%s:%s/entity/'%(self.__host, self.__port)
+        _params = '&'.join(map(lambda x: 'eid=' + str(x), entity_id_list)) 
+        _response = requests.get(_url, params = _params)
+        _parser = JSONResponseParser(_response.text)
+        if _parser.success():
+            _data = _parser.read()
+            return _data
          
          
