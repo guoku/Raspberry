@@ -85,8 +85,8 @@ def create_entity_by_taobao_item(request):
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
             
-        _mango_client = MangoApiClient()
-        _entity_id = _mango_client.create_entity_by_taobao_item(
+        _entity = RBEntity.create_by_taobao_item(
+            creator_id = request.user.id,
             taobao_id = _taobao_id,
             brand = _brand,
             title = _title,
@@ -97,5 +97,5 @@ def create_entity_by_taobao_item(request):
             taobao_soldout = _taobao_soldout,
         )
 
-        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }))
+        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
 

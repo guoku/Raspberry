@@ -1,5 +1,5 @@
 # coding=utf8
-from models import Entity as EntityModel
+from models import Entity as RBEntityModel
 import datetime 
 from utils.lib import cal_guoku_hash 
 from utils.mango_client import MangoApiClient
@@ -30,40 +30,18 @@ class RBEntity(object):
         except:
             pass
         return None
-            
-        
-    
     
     @classmethod
-    def create_by_taobao_item(cls, title, brand, taobao_item_info):
-        
-        entity_hash = cls.cal_entity_hash(taobao_item_info["taobao_id"])
-        
-        if brand != None: 
-            brand = brand.strip()
-        if title != None:
-            title = title.strip()
-        
-        _entity_obj = EntityModel.objects.create( 
-            entity_hash = entity_hash, 
-            brand = brand,
-            title = title 
+    def create_by_taobao_item(cls, creator_id, taobao_id, **kwargs):
+        _mango_client = MangoApiClient()
+        _entity_id = _mango_client.create_entity_by_taobao_item(taobao_id, **kwargs)
+        _entity_hash = cls.cal_entity_hash(taobao_id)
+        _entity_obj = RBEntityModel.objects.create( 
+            id = _entity_id,
+            entity_hash = _entity_hash,
+            creator_id = creator_id
         )
         
-        try:
-            _taobao_item_obj = Item.create_taobao_item( 
-                entity_id = _entity_obj.id, 
-                taobao_id = taobao_item_info["taobao_id"],
-                category_id = taobao_item_info["category_id"],
-                title = taobao_item_info["title"],
-                shop_nick = taobao_item_info["shop_nick"], 
-                price = taobao_item_info["price"], 
-                soldout = taobao_item_info["soldout"], 
-            )
-
-        except Exception, e:
-            _entity_obj.delete()
-            raise e
 
         _inst = cls(_entity_obj.id)
         _inst.__entity_obj = _entity_obj
