@@ -46,7 +46,7 @@ def _load_taobao_item_info(taobao_id):
 def new_entity(request):
     if request.method == 'GET':
         return render_to_response(
-            "management/entity/new.html", 
+            "entity/new.html", 
             context_instance=RequestContext(request)
         )
     else: 
@@ -59,7 +59,7 @@ def new_entity(request):
             if _entity_id == None:
                 _taobao_item_info = _load_taobao_item_info(_taobao_id)
                 return render_to_response( 
-                    'management/entity/create.html', 
+                    'entity/create.html', 
                     {
                       'taobao_id' : _taobao_id,
                       'taobao_category_id' : _taobao_item_info['cid'], 
@@ -103,7 +103,7 @@ def create_entity_by_taobao_item(request):
 def edit_entity(request, entity_id):
     _entity_context = RBEntity(entity_id).read()
     return render_to_response( 
-        'management/entity/edit.html', 
+        'entity/edit.html', 
         {
           'entity_context' : _entity_context,
         },
@@ -116,7 +116,7 @@ def entity_list(request):
     _entity_context_list = RBEntity.read_entities(_entity_id_list)
 
     return render_to_response( 
-        'management/entity/list.html', 
+        'entity/list.html', 
         {
           'entity_context_list' : _entity_context_list,
         },

@@ -1,63 +1,28 @@
-{% extends "maria_management_base.html" %}
-{% load maria_management %} 
+{% extends "management_base.html" %}
+{% load management %}
 
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-            <div class="span3">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">Groups</li>
-                        <li{%if group_id == None %} class="active"{%endif%}>
-                            <a href="{% url maria_web.views.entity_list %}">
-                                全部
-                            </a>
-                        </li>
-                        {% for group in category_groups %}
-                            <li{%if group.id = group_id%} class="active"{%endif%}>
-                                <a href="{% url maria_web.views.entity_list %}?cid={{ group.category_list.0.id }}">
-                                    {{ group.title }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
             <div class="span11">
-                {% if category_list != None %}
-                    <div class="sub-nav">
-                        <ul class="nav nav-pills">
-                            {% for category in category_list %}
-                                <li {% if category_id == category.id %}class="active"{% endif %}>
-                                    <a href="{% url maria_web.views.entity_list %}?cid={{ category.id }}">{{ category.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
                 <div>
                     <table class="table table-striped table-bordered table-condensed">
                         <thead>
                             <tr>
                                 <th>图片</th>
-                                <th>分类</th>
                                 <th>品牌</th>
                                 <th>名称</th>
-                                <th>商品数量</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for entity_id in entity_id_list %}
-                                {% display_entity_row entity_id %}
+                            {% for entity_context in entity_context_list %}
+                                {% display_entity_row entity_context %}
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        {% if paginator %}
-            {% display_paginator paginator %}
-        {% endif %}
     </div>
 {% endblock %}
