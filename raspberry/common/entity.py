@@ -1,10 +1,10 @@
 # coding=utf8
 from models import Entity as EntityModel
-from item import Item
 import datetime 
-from utils.common import cal_guoku_hash 
+from utils.lib import cal_guoku_hash 
+from utils.mango_client import MangoApiClient
 
-class Entity(object):
+class RBEntity(object):
     
     def __init__(self, entity_id):
         self.__entity_id = int(entity_id)
@@ -21,6 +21,18 @@ class Entity(object):
     
     def get_entity_id(self):
         return self.__entity_id
+    
+    @staticmethod
+    def check_taobao_item_exist(tabao_id):
+        try:
+            _mango_client = MangoApiClient()
+            return _mango_client.check_taobao_item(taobao_id)
+        except:
+            pass
+        return None
+            
+        
+    
     
     @classmethod
     def create_by_taobao_item(cls, title, brand, taobao_item_info):

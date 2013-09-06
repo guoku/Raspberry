@@ -14,7 +14,7 @@ import datetime
 import time
 import json
 
-from utils.mango_client import MangoApiClient
+from common.entity import RBEntity
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -55,9 +55,7 @@ def new_entity(request):
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) != None: 
             _taobao_id = _parse_taobao_id_from_url(_cand_url)
 
-            _mango_client = MangoApiClient()
-            _entity_id = _mango_client.check_taobao_item(_taobao_id)
-
+            _entity_id = RBEntity.check_taobao_item_exist(_taobao_id)
             if _entity_id == None:
                 _taobao_item_info = _load_taobao_item_info(_taobao_id)
                 return render_to_response( 

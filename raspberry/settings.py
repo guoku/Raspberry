@@ -35,6 +35,11 @@ DATABASES = {
 #    }
 }
 
+MANGO = {
+    'host' : '10.0.1.100',
+    'port' : '8001'
+}
+
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1
