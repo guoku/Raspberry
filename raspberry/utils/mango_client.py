@@ -44,4 +44,12 @@ class MangoApiClient(object):
             return _data["entity_id"]
 
 
+    def read_entity(self, entity_id):
+        _url = 'http://%s:%s/entity/%s/'%(self.__host, self.__port, entity_id) 
+        _response = requests.get(_url)
+        _parser = JSONResponseParser(_response.text)
+        if _parser.success():
+            _data = _parser.read()
+            return _data["context"]
+         
          

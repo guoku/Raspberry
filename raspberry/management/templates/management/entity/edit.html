@@ -1,164 +1,32 @@
-{% extends "maria_management_base.html" %}
-{% load maria_management %} 
+{% extends "management_base.html" %}
 
 {% block content %}
-    <div class="container">
-        <div class="row-fluid" id="chlid-images">
-            <ul class="thumbnails">
-                <li class="span4">
-                    <div class="thumbnail">
-                        <a href="{{ entity_context.image_url }}" >
-                            <img id="main-image" class="img-polaroid" src="{{ entity_context.image_url }}" alt="" style="max-width: 280px;max-height: 280px">
-                        </a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <form class="well form-horizontal" action="{% url maria_web.views.update_entity entity_context.entity_id %}" method="POST">
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="image_url">图片链接</label>
-                        <div class="controls">
-                            <input class="input-xxlarge" type="text" id="image_url" name="image_url" value="{{ entity_context.image_url }}" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="entity_hash">Hash</label>
-                        <div class="controls">
-                            <input class="input-xxlarge" type="text" id="entity_hash" name="entity_hash" value="{{ entity_context.entity_hash }}" disabled/>
-                            <a href="{% url web.views.detail entity_context.entity_hash %}" >
-                                去果库看看 >> 
-                            </a>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="brand">品牌</label>
-                        <div class="controls">
-                            <input class="input-xxlarge" type="text" id="brand" name="brand" value="{{ entity_context.brand }}" onChange="loadSimilarEntity(null);"/>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="title">名称</label>
-                        <div class="controls">
-                            <input class="input-xxlarge" type="text" id="title" name="title" value="{{ entity_context.title }}" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="remarks">参数</label>
-                        <div class="controls">
-                            <input class="input-xxlarge" type="text" id="remarks" name="remarks" value="{{ entity_context.remark_list|combine_remarks}}" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="category_group_id">组别</label>
-                        <div class="controls">
-                            <select id="category_group_id_selection" name="category_group_id_selection" onChange="changeGroupSelection(this.value);">
-                                {% for group in category_groups %}
-                                    {% if group.id == entity_context.group_id %} 
-                                        <option selected="selected" value="{{ group.id }}">{{ group.title }}</option>
-                                    {% else %}
-                                        <option value="{{ group.id }}">{{ group.title }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="catagory_id">分类</label>
-                        <div class="controls">
-                            <select id="category_id_selection" name="category_id_selection" onChange="changeCategorySelection(this.value, 0);loadSimilarEntity(null);">
-                                {% for category in category_list %}
-                                    {% if category.id == entity_context.category_id %} 
-                                        <option selected="selected" value="{{ category.id }}">{{ category.title }}</option>
-                                    {% else %}
-                                        <option value="{{ category.id }}">{{ category.title }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="phase_id">阶段</label>
-                        <div class="controls">
-                            <div id="phase_id_check">
-                                {% for phase in phase_list %}
-                                    <div class='phase_id'>
-                                        {% if phase.id in entity_context.phase_id_list %}
-                                            <input type="checkbox" name="phase_id" value ="{{ phase.id }}" checked>{{ phase.title }}<br>
-                                        {% else %}
-                                            <input type="checkbox" name="phase_id" value ="{{ phase.id }}">{{ phase.title }}<br>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">更新</button>
-                </div>
-            </form>
-            {% for item_context in item_context_list %}
-                <form class="well form-horizontal" action="{% url maria_web.views.update_item item_context.item_id %}" method="POST">
-                    <fieldset>
-                        <div class="control-group">
-                            <label class="control-label" for="item_id_display">item id:</label>
-                            <div class="controls">
-                                <input class="input-xxlarge" type="text" id="item_id_display" name="item_id_display" value="{{ item_context.item_id }}" disabled/>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="taobao_id_display">淘宝id:</label>
-                            <div class="controls">
-                                <input class="input-xxlarge" type="text" id="taobao_id_display" name="taobao_id_display" value="{{ item_context.taobao_id }}" disabled/>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="shop_nick">店家</label>
-                            <div class="controls">
-                                <input class="input-xxlarge" type="text" id="shop_nick" name="shop_nick" value="{{ item_context.shop_nick }}" disabled/>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="price">价格</label>
-                            <div class="controls">
-                                <input class="input-xxlarge" type="text" id="price" name="price" value="{{ item_context.price }}" />
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="soldout">已下架</label>
-                            <div class="controls">
-                                <input class="input-xxlarge" type="text" id="soldout" name="soldout" value="{%if item_context.soldout%}1{%else%}0{%endif%}" />
-                            </div>
-                        </div>
-                    </fieldset>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">更新</button>
-                        <a class="btn" href="{% url maria_web.views.remove_item item_context.item_id %}">删除</a>
-                    </div>
-                </form>
-            {% endfor %}
-        </div>
-        <form class="well form-horizontal" action="{% url maria_web.views.add_taobao_item_for_entity  entity_context.entity_id %}" method="POST">
+    <div>
+        <form class="well form-horizontal" action="" method="POST">
             <fieldset>
                 <div class="control-group">
-                    <label class="control-label" for="image_url">添加新 item :</label>
+                    <label class="control-label" for="entity_hash">Hash</label>
                     <div class="controls">
-                        <input class="input-xxlarge" type="text" id="taobao_id" name="taobao_id" value="" />
+                        <input class="input-xxlarge" type="text" id="entity_hash" name="entity_hash" value="{{ entity_context.entity_hash }}" disabled/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="brand">品牌</label>
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="brand" name="brand" value="{{ entity_context.base_info.brand }}" onChange="loadSimilarEntity(null);"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="title">名称</label>
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="title" name="title" value="{{ entity_context.base_info.title }}" />
                     </div>
                 </div>
             </fieldset>
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">添加</button>
+                <button type="submit" class="btn btn-primary">更新</button>
             </div>
         </form>
     </div>
 {% endblock %}
 
-{% block extra %}
-    {% display_entity_category_phase_extra %}
-    <script type="text/javascript">
-        initPhase(0);
-    </script>
-{% endblock %} 

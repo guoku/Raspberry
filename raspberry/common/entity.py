@@ -49,15 +49,16 @@ class RBEntity(object):
 
     def __ensure_entity_obj(self):
         if not hasattr(self, '__entity_obj'):
-            self.__entity_obj = Entity.objects.get(pk = self.__entity_id) 
+            self.__entity_obj = RBEntityModel.objects.get(pk = self.__entity_id) 
     
     def read(self):
+        _mango_client = MangoApiClient()
+        _base_info = _mango_client.read_entity(self.__entity_id)
+       
+        self.__ensure_entity_obj()
         _context = {}
-        
-        _context["entity_id"] = self.__entity_obj.id
+        _context["base_info"] = _base_info 
         _context["entity_hash"] = self.__entity_obj.entity_hash
-        _context["brand"] = self.__entity_obj.brand 
-        _context["title"] = self.__entity_obj.title
         _context["created_time"] = self.__entity_obj.created_time
         _context["updated_time"] = self.__entity_obj.updated_time
             

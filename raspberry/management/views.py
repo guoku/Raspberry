@@ -72,7 +72,7 @@ def new_entity(request):
                     context_instance = RequestContext(request)
                 )
                 
-#@login_required
+@login_required
 def create_entity_by_taobao_item(request):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
@@ -98,4 +98,15 @@ def create_entity_by_taobao_item(request):
         )
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+
+@login_required
+def edit_entity(request, entity_id):
+    _entity_context = RBEntity(entity_id).read()
+    return render_to_response( 
+        'management/entity/edit.html', 
+        {
+          'entity_context' : _entity_context,
+        },
+        context_instance = RequestContext(request)
+    )
 
