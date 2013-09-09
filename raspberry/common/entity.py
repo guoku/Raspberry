@@ -32,13 +32,14 @@ class RBEntity(object):
         return None
     
     @classmethod
-    def create_by_taobao_item(cls, creator_id, taobao_id, **kwargs):
+    def create_by_taobao_item(cls, creator_id, category_id, taobao_id, **kwargs):
         _mango_client = MangoApiClient()
         _entity_id = _mango_client.create_entity_by_taobao_item(taobao_id, **kwargs)
         _entity_hash = cls.cal_entity_hash(taobao_id)
         _entity_obj = RBEntityModel.objects.create( 
             id = _entity_id,
             entity_hash = _entity_hash,
+            category_id = category_id,
             creator_id = creator_id
         )
         
