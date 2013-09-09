@@ -10,7 +10,7 @@ for line in fi.readlines():
             pid = count
         cid = count
         ttl = line
-        print "INSERT INTO raspberry_category(id, pid, title, status) VALUES (%d, %d, %s, 1);"%(cid, pid, ttl)
+        print "INSERT INTO common_category(id, pid, title, status) VALUES (%d, %d, '%s', 1);"%(cid, pid, ttl)
         count += 1
         
         
