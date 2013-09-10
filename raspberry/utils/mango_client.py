@@ -20,6 +20,8 @@ class MangoApiClient(object):
                 return _data["entity_id"]
             else:
                 return None
+        else:
+            raise Exception(_parser.message()) 
 
         
     def create_entity_by_taobao_item(self, taobao_id, **kwargs):
@@ -43,6 +45,8 @@ class MangoApiClient(object):
         if _parser.success():
             _data = _parser.read()
             return _data["entity_id"]
+        else:
+            raise Exception(_parser.message()) 
 
 
     def read_entity(self, entity_id):
@@ -52,6 +56,8 @@ class MangoApiClient(object):
         if _parser.success():
             _data = _parser.read()
             return _data["context"]
+        else:
+            raise Exception(_parser.message()) 
          
          
     def read_entities(self, entity_id_list):
@@ -62,5 +68,7 @@ class MangoApiClient(object):
         if _parser.success():
             _data = _parser.read()
             return _data
+        else:
+            raise Exception(_parser.message()) 
          
          
