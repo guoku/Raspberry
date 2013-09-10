@@ -3,14 +3,14 @@
 <tr class="success">
     <td width="90">
         <a href="" target=_blank>
-            <img class="img-polaroid" src="http://img03.taobaocdn.com/bao/uploaded/i3/10094021952813140/T1Vj1fXthfXXXXXXXX_!!0-item_pic.jpg" style="max-height:80px;max-width:80px;">
+            <img class="img-polaroid" src="{{ entity_context.image_url }}" style="max-height:80px;max-width:80px;">
         </a>
     </td>
     <td><p class="text-info">{{ entity_context.base_info.brand }}</p></td>
     <td width="200"><p class="text-info">{{ entity_context.base_info.title }}</p></td>
     <td width="50">
         <div class="btn-group">
-            <a class="btn" href="">编</a>
+            <a class="btn" href="{% url 'management.views.edit_entity' entity_context.base_info.entity_id %}">编</a>
         </div>
     </td>
 </tr>

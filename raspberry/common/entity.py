@@ -1,6 +1,8 @@
 # coding=utf8
 from models import Entity as RBEntityModel
-import datetime 
+from models import Entity_Image as RBEntityImageModel
+import datetime
+import urllib
 from utils.lib import cal_guoku_hash 
 from utils.mango_client import MangoApiClient
 
@@ -32,9 +34,10 @@ class RBEntity(object):
         return None
     
     @classmethod
-    def create_by_taobao_item(cls, creator_id, category_id, taobao_id, **kwargs):
+    def create_by_taobao_item(cls, creator_id, category_id, taobao_id, image_url, **kwargs):
         _mango_client = MangoApiClient()
         _entity_id = _mango_client.create_entity_by_taobao_item(taobao_id, **kwargs)
+       
         _entity_hash = cls.cal_entity_hash(taobao_id)
         _entity_obj = RBEntityModel.objects.create( 
             id = _entity_id,
@@ -42,6 +45,16 @@ class RBEntity(object):
             category_id = category_id,
             creator_id = creator_id
         )
+        
+        try: 
+            _entity_image_obj = RBEntityImageModel.objects.create( 
+                entity_id = _entity_id, 
+                image_url = image_url,
+                is_chief = True,
+            )
+        except Exception, e:
+            _entity_obj.delete()
+            raise Exception("Can't create entity image: " + str(e)) 
         
 
         _inst = cls(_entity_obj.id)
@@ -52,12 +65,18 @@ class RBEntity(object):
         if not hasattr(self, '__entity_obj'):
             self.__entity_obj = RBEntityModel.objects.get(pk = self.__entity_id)
 
+    def __ensure_entity_image_obj(self):
+        if not hasattr(self, '__entity_image_obj'):
+            self.__entity_image_obj = RBEntityImageModel.objects.filter(entity = self.__entity_id)[0:1].get()
+    
     def __load_entity_context(self):
         self.__ensure_entity_obj()
+        self.__ensure_entity_image_obj()
         _context = {}
         _context["entity_hash"] = self.__entity_obj.entity_hash
         _context["created_time"] = self.__entity_obj.created_time
         _context["updated_time"] = self.__entity_obj.updated_time
+        _context["image_url"] = self.__entity_image_obj.image_url
         return _context
         
     
