@@ -14,6 +14,7 @@ import datetime
 import time
 import json
 
+from common.category import RBCategory
 from common.entity import RBEntity
 
 def _parse_taobao_id_from_url(url):
@@ -68,6 +69,7 @@ def new_entity(request):
                       'price' : _taobao_item_info['price'], 
                       'thumb_images' : _taobao_item_info["thumb_images"],
                       'soldout' : 0, 
+                      'category_list' : RBCategory.all(), 
                     },
                     context_instance = RequestContext(request)
                 )
@@ -84,9 +86,11 @@ def create_entity_by_taobao_item(request):
         _image_url = request.POST.get("image_url", None)
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
+        _category_id = int(request.POST.get("category_id", None))
             
         _entity = RBEntity.create_by_taobao_item(
             creator_id = request.user.id,
+            category_id = _category_id,
             taobao_id = _taobao_id,
             brand = _brand,
             title = _title,
