@@ -16,6 +16,7 @@ import json
 
 from common.category import RBCategory
 from common.entity import RBEntity
+from common.item import RBItem
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -63,7 +64,7 @@ def new_entity(request):
                     'entity/create.html', 
                     {
                       'taobao_id' : _taobao_id,
-                      'taobao_category_id' : _taobao_item_info['cid'], 
+                      'cid' : _taobao_item_info['cid'], 
                       'taobao_title' : _taobao_item_info['title'], 
                       'shop_nick' : _taobao_item_info['shop_nick'], 
                       'price' : _taobao_item_info['price'], 
@@ -78,7 +79,7 @@ def new_entity(request):
 def create_entity_by_taobao_item(request):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
-        _taobao_category_id = request.POST.get("taobao_category_id", None)
+        _cid = request.POST.get("cid", None)
         _taobao_shop_nick = request.POST.get("taobao_shop_nick", None)
         _taobao_title = request.POST.get("taobao_title", None)
         _taobao_price = request.POST.get("taobao_price", None)
@@ -95,7 +96,7 @@ def create_entity_by_taobao_item(request):
             image_url = _image_url,
             brand = _brand,
             title = _title,
-            taobao_category_id = _taobao_category_id,
+            cid = _cid,
             taobao_title = _taobao_title,
             taobao_shop_nick = _taobao_shop_nick,
             taobao_price = _taobao_price,
@@ -107,10 +108,12 @@ def create_entity_by_taobao_item(request):
 @login_required
 def edit_entity(request, entity_id):
     _entity_context = RBEntity(entity_id).read()
+    _item_context_list = RBItem.read_items(_entity_context['base_info']['item_id_list'])
     return render_to_response( 
         'entity/edit.html', 
         {
           'entity_context' : _entity_context,
+          'item_context_list' : _item_context_list,
         },
         context_instance = RequestContext(request)
     )

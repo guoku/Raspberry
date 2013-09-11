@@ -39,6 +39,46 @@
                     <button type="submit" class="btn btn-primary">更新</button>
                 </div>
             </form>
+            {% for item_context in item_context_list %}
+                <form class="well form-horizontal" action="" method="POST">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="item_id_display">item id:</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="item_id_display" name="item_id_display" value="{{ item_context.item_id }}" disabled/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="taobao_id_display">淘宝id:</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="taobao_id_display" name="taobao_id_display" value="{{ item_context.taobao_id }}" disabled/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="shop_nick">店家</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="shop_nick" name="shop_nick" value="{{ item_context.shop_nick }}" disabled/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="price">价格</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="price" name="price" value="{{ item_context.price }}" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="soldout">已下架</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="soldout" name="soldout" value="{%if item_context.soldout%}1{%else%}0{%endif%}" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">更新</button>
+                        <a class="btn" href="">删除</a>
+                    </div>
+                </form>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

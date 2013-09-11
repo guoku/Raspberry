@@ -25,10 +25,10 @@ class MangoApiClient(object):
 
         
     def create_entity_by_taobao_item(self, taobao_id, **kwargs):
-        _url = 'http://%s:%s/entity/create/'%(self.__host, self.__port) 
+        _url = 'http://%s:%s/entity/create/'%(self.__host, self.__port)
         _data_dict = {
             'taobao_id' : taobao_id,
-            'taobao_category_id' : kwargs['taobao_category_id'].encode('utf-8'),
+            'cid' : kwargs['cid'].encode('utf-8'),
             'taobao_title' : kwargs['taobao_title'].encode('utf-8'),
             'taobao_shop_nick' : kwargs['taobao_shop_nick'].encode('utf-8'),
             'taobao_price' : kwargs['taobao_price'].encode('utf-8'),
@@ -63,6 +63,18 @@ class MangoApiClient(object):
     def read_entities(self, entity_id_list):
         _url = 'http://%s:%s/entity/'%(self.__host, self.__port)
         _params = '&'.join(map(lambda x: 'eid=' + str(x), entity_id_list)) 
+        _response = requests.get(_url, params = _params)
+        _parser = JSONResponseParser(_response.text)
+        if _parser.success():
+            _data = _parser.read()
+            return _data
+        else:
+            raise Exception(_parser.message()) 
+         
+         
+    def read_items(self, item_id_list):
+        _url = 'http://%s:%s/item/'%(self.__host, self.__port)
+        _params = '&'.join(map(lambda x: 'iid=' + str(x), item_id_list)) 
         _response = requests.get(_url, params = _params)
         _parser = JSONResponseParser(_response.text)
         if _parser.success():
