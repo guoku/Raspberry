@@ -75,7 +75,7 @@
                     </fieldset>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">更新</button>
-                        <a class="btn" href="">删除</a>
+                        <a class="btn" href="{% url 'management.views.unbind_entity_item' entity_context.base_info.entity_id item_context.item_id %}">删除</a>
                     </div>
                 </form>
             {% endfor %}

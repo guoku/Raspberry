@@ -109,4 +109,8 @@ class RBEntity(object):
         _entity_id_list = map(lambda x: x.id, _hdl)
         return _entity_id_list
         
+    def unbind_item(self, item_id):
+        _mango_client = MangoApiClient()
+        _mango_client.unbind_entity_item(self.__entity_id, item_id)
+         
 

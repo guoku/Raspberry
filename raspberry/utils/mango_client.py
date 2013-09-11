@@ -82,5 +82,12 @@ class MangoApiClient(object):
             return _data
         else:
             raise Exception(_parser.message()) 
+    
+    def unbind_entity_item(self, entity_id, item_id):
+        _url = 'http://%s:%s/entity/%s/item/%s/unbind'%(self.__host, self.__port, entity_id, item_id)
+        _response = requests.get(_url)
+        _parser = JSONResponseParser(_response.text)
+        if not _parser.success():
+            raise Exception(_parser.message()) 
          
          

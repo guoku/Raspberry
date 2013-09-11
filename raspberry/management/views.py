@@ -131,3 +131,9 @@ def entity_list(request):
         context_instance = RequestContext(request)
     )
 
+@login_required
+def unbind_entity_item(request, entity_id, item_id):
+    _entity = RBEntity(entity_id)
+    _entity.unbind_item(item_id)
+
+    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
