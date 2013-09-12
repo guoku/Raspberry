@@ -9,3 +9,10 @@ def display_entity_row(entity_context):
     } 
 register.inclusion_tag("entity/partial/row.html")(display_entity_row)
 
+
+def count(value):
+    if value == None:
+        return 0
+    return len(value)
+register.filter(count)
+
