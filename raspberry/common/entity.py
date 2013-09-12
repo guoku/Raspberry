@@ -33,34 +33,11 @@ class RBEntity(object):
             pass
         return None
     
-    @classmethod
-    def create_by_taobao_item(cls, creator_id, category_id, taobao_id, image_url, **kwargs):
+    def add_taobao_item(self, taobao_id, **kwargs):
         _mango_client = MangoApiClient()
-        _entity_id = _mango_client.create_entity_by_taobao_item(taobao_id, **kwargs)
-       
-        _entity_hash = cls.cal_entity_hash(taobao_id)
-        _entity_obj = RBEntityModel.objects.create( 
-            id = _entity_id,
-            entity_hash = _entity_hash,
-            category_id = category_id,
-            creator_id = creator_id
-        )
-        
-        try: 
-            _entity_image_obj = RBEntityImageModel.objects.create( 
-                entity_id = _entity_id, 
-                image_url = image_url,
-                is_chief = True,
-            )
-        except Exception, e:
-            _entity_obj.delete()
-            raise Exception("Can't create entity image: " + str(e)) 
-        
-
-        _inst = cls(_entity_obj.id)
-        _inst.__entity_obj = _entity_obj
-        return _inst
-
+        _item_id = _mango_client.add_taobao_item_for_entity(self.__entity_id, taobao_id, **kwargs)
+    
+    
     def __ensure_entity_obj(self):
         if not hasattr(self, '__entity_obj'):
             self.__entity_obj = RBEntityModel.objects.get(pk = self.__entity_id)

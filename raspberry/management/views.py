@@ -137,3 +137,48 @@ def unbind_entity_item(request, entity_id, item_id):
     _entity.unbind_item(item_id)
 
     return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+
+@login_required
+def load_taobao_item_for_entity(request, entity_id):
+    if request.method == 'POST':
+        _taobao_id = request.POST.get("taobao_id", None)
+            
+        _entity_id = RBEntity.check_taobao_item_exist(_taobao_id)
+        if _entity_id == None:
+            _taobao_item_info = _load_taobao_item_info(_taobao_id)
+            return render_to_response( 
+                'entity/taobao_item_info.html', 
+                {
+                  'entity_id' : entity_id,
+                  'taobao_id' : _taobao_id,
+                  'cid' : _taobao_item_info['cid'], 
+                  'taobao_title' : _taobao_item_info['title'], 
+                  'shop_nick' : _taobao_item_info['shop_nick'], 
+                  'price' : _taobao_item_info['price'], 
+                  'thumb_images' : _taobao_item_info["thumb_images"],
+                  'soldout' : 0, 
+                },
+                context_instance = RequestContext(request)
+            )
+    
+@login_required
+def add_taobao_item_for_entity(request, entity_id):
+    if request.method == 'POST':
+        _taobao_id = request.POST.get("taobao_id", None)
+        _cid = request.POST.get("cid", None)
+        _taobao_shop_nick = request.POST.get("taobao_shop_nick", None)
+        _taobao_title = request.POST.get("taobao_title", None)
+        _taobao_price = request.POST.get("taobao_price", None)
+        _taobao_soldout = request.POST.get("taobao_soldout", None)
+            
+    
+        _entity = RBEntity(entity_id)
+        _entity.add_taobao_item(
+            taobao_id = _taobao_id,
+            cid = _cid,
+            taobao_title = _taobao_title,
+            taobao_shop_nick = _taobao_shop_nick,
+            taobao_price = _taobao_price,
+            taobao_soldout = _taobao_soldout,
+        ) 
+        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
