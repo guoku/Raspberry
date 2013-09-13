@@ -107,20 +107,32 @@ def create_entity_by_taobao_item(request):
 
 @login_required
 def edit_entity(request, entity_id):
-    _entity_context = RBEntity(entity_id).read()
-    _item_context_list = RBItem.read_items(_entity_context['base_info']['item_id_list'])
-    return render_to_response( 
-        'entity/edit.html', 
-        {
-          'entity_context' : _entity_context,
-          'item_context_list' : _item_context_list,
-        },
-        context_instance = RequestContext(request)
-    )
+    if request.method == 'GET':
+        _entity_context = RBEntity(entity_id).read()
+        _item_context_list = RBItem.read_items(_entity_context['base_info']['item_id_list'])
+        return render_to_response( 
+            'entity/edit.html', 
+            {
+              'entity_context' : _entity_context,
+              'category_list' : RBCategory.all(), 
+              'item_context_list' : _item_context_list,
+            },
+            context_instance = RequestContext(request)
+        )
+    elif request.method == 'POST':
+        _brand = request.POST.get("brand", None)
+        _title = request.POST.get("title", None)
+        _category_id = int(request.POST.get("category_id", None))
+        _entity = RBEntity(entity_id)
+
+        
 
 @login_required
 def entity_list(request):
-    _entity_id_list = RBEntity.filter()
+    _category_id = request.GET.get("cid", None)
+    if _category_id != None:
+        _category_id = int(_category_id)
+    _entity_id_list = RBEntity.find(_category_id)
     _entity_context_list = RBEntity.read_entities(_entity_id_list)
 
     return render_to_response( 

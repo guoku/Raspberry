@@ -34,6 +34,16 @@
                             <input class="input-xxlarge" type="text" id="title" name="title" value="{{ entity_context.base_info.title }}" />
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label class="control-label" for="catagory_id">分类:</label>
+                        <div class="controls">
+                            <select id="catagory" name="category_id">
+                                {% for category in category_list %}
+                                    <option {%if category.id == entity_context.category_id%}selected="selected" {%endif%}value="{{ category.id }}">{{ category.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                 </fieldset>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">更新</button>

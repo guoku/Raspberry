@@ -51,12 +51,16 @@ class RBEntity(object):
         self.__ensure_entity_image_obj()
         _context = {}
         _context["entity_hash"] = self.__entity_obj.entity_hash
+        _context["category_id"] = self.__entity_obj.category_id
         _context["created_time"] = self.__entity_obj.created_time
         _context["updated_time"] = self.__entity_obj.updated_time
         _context["image_url"] = self.__entity_image_obj.image_url
         return _context
         
-    
+    def update(self, category_id = None, brand = None, title = None):
+       ################ TODO ######### 
+         
+
     def read(self):
         _mango_client = MangoApiClient()
         _base_info = _mango_client.read_entity(self.__entity_id)
@@ -80,8 +84,10 @@ class RBEntity(object):
              
        
     @classmethod
-    def filter(cls, offset = 0, count = 30):
+    def find(cls, category_id = None, offset = 0, count = 30):
         _hdl = RBEntityModel.objects
+        if category_id != None:
+            _hdl = _hdl.filter(category_id = category_id)
         _hdl = _hdl.order_by('-created_time')[offset : offset + count]
         _entity_id_list = map(lambda x: x.id, _hdl)
         return _entity_id_list

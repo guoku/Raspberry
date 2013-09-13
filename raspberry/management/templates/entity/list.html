@@ -5,21 +5,30 @@
     <div class="span2">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                <li class="nav-header"><a>Groups</a></li>
-                <li><a>Link</a></li>
+                <li class="nav-header">操作</li>
+                <li>
+                    <a href="{% url 'management.views.new_entity' %}">
+                        添加
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
     <div class="span10">
         <div class="sub-nav">
             <ul class="nav nav-pills">
-                <div class="btn-group">
+                <li>
                     <a href="{% url 'management.views.new_entity' %}">
-                        <button class="btn">
-                            添加
-                        </button>
+                        添加
                     </a>
-                </div>
+                </li>
+            </ul>
+            <ul class="nav nav-pills">
+                <li>
+                    <a href="{% url 'management.views.new_entity' %}">
+                        添加
+                    </a>
+                </li>
             </ul>
         </div>
         <div>
