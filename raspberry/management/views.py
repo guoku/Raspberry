@@ -124,6 +124,12 @@ def edit_entity(request, entity_id):
         _title = request.POST.get("title", None)
         _category_id = int(request.POST.get("category_id", None))
         _entity = RBEntity(entity_id)
+        _entity.update(
+            category_id = _category_id,
+            brand = _brand,
+            title = _title
+        )
+        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : entity_id })) 
 
         
 

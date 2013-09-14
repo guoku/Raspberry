@@ -57,9 +57,6 @@ class RBEntity(object):
         _context["image_url"] = self.__entity_image_obj.image_url
         return _context
         
-    def update(self, category_id = None, brand = None, title = None):
-       ################ TODO ######### 
-         
 
     def read(self):
         _mango_client = MangoApiClient()
@@ -67,6 +64,24 @@ class RBEntity(object):
         _context = self.__load_entity_context()
         _context['base_info'] = _base_info
         return _context    
+    
+    def update(self, category_id = None, brand = None, title = None):
+        if brand != None or title != None:
+            _mango_client = MangoApiClient()
+            _base_info = _mango_client.read_entity(self.__entity_id)
+            
+            if brand != None and _base_info["brand"] == brand:
+                brand = None
+            if title != None and _base_info["title"] == title:
+                title = None
+            if brand != None or title != None:
+                _mango_client.update_entity(self.__entity_id, brand, title)
+        
+        if category_id != None:
+            self.__ensure_entity_obj()
+            self.__entity_obj.category_id = int(category_id)
+            self.__entity_obj.save()
+            
    
     @classmethod
     def read_entities(cls, entity_id_list):

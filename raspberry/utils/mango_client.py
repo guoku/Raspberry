@@ -78,6 +78,18 @@ class MangoApiClient(object):
         else:
             raise Exception(_parser.message()) 
          
+    def update_entity(self, entity_id, brand = None, title = None):
+        _url = 'http://%s:%s/entity/%s/'%(self.__host, self.__port, entity_id) 
+        _data_dict = {}
+        if brand != None:
+            _data_dict["brand"] = brand
+        if title != None:
+            _data_dict["brand"] = title  
+        _data = urllib.urlencode(_data_dict)
+        _response = requests.post(_url, data = _data)
+        _parser = JSONResponseParser(_response.text)
+        if not _parser.success():
+            raise Exception(_parser.message()) 
          
     def read_entities(self, entity_id_list):
         _url = 'http://%s:%s/entity/'%(self.__host, self.__port)
