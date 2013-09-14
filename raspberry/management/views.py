@@ -88,7 +88,7 @@ def create_entity_by_taobao_item(request):
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
         _category_id = int(request.POST.get("category_id", None))
-           
+        
         _entity = RBEntity.create_by_taobao_item(
             creator_id = request.user.id,
             category_id = _category_id,
