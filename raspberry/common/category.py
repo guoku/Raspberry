@@ -5,7 +5,7 @@ import datetime
 class RBCategory(object):
     
     @staticmethod
-    def all():
+    def all_list():
         _dict = {} 
         _list = []
         for _cat_obj in RBCategoryModel.objects.order_by('id'):
@@ -19,4 +19,14 @@ class RBCategory(object):
                 'title' : _ttl
             })
         return _list
+    
+    @staticmethod
+    def all_dict():
+        _dict = {} 
+        for _cat_obj in RBCategoryModel.objects.order_by('id'):
+            _dict[_cat_obj.id] = {
+                'title' : _cat_obj.title,
+                'pid' : _cat_obj.pid
+            }
+        return _dict
     

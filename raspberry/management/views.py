@@ -70,7 +70,7 @@ def new_entity(request):
                       'price' : _taobao_item_info['price'], 
                       'thumb_images' : _taobao_item_info["thumb_images"],
                       'soldout' : 0, 
-                      'category_list' : RBCategory.all(), 
+                      'category_list' : RBCategory.all_list(), 
                     },
                     context_instance = RequestContext(request)
                 )
@@ -114,7 +114,7 @@ def edit_entity(request, entity_id):
             'entity/edit.html', 
             {
               'entity_context' : _entity_context,
-              'category_list' : RBCategory.all(), 
+              'category_list' : RBCategory.all_list(), 
               'item_context_list' : _item_context_list,
             },
             context_instance = RequestContext(request)
@@ -138,13 +138,40 @@ def entity_list(request):
     _category_id = request.GET.get("cid", None)
     if _category_id != None:
         _category_id = int(_category_id)
+    
+    _cdict = RBCategory.all_dict()
+    if _category_id != None: 
+        _cat_anc_tree = []
+        _i_cat = _category_id
+        while True:
+            _cat_anc_tree.insert(0, { 'id' : _i_cat, 'title' : _cdict[_i_cat]['title'] })
+            if _cdict[_i_cat]['pid'] == _i_cat:
+                break
+            _i_cat = _cdict[_i_cat]['pid']
+    else:
+        _cat_anc_tree = None
+    _cat_child_tree = []
+    if _category_id != None:
+        for _key, _value in _cdict.items():
+            if _value['pid'] == _category_id and _key != _category_id:
+                _cat_child_tree.append({ 'id' : _key, 'title' : _value['title']})
+        if len(_cat_child_tree) == 0:
+            _cat_child_tree = None
+    else:
+        for _key, _value in _cdict.items():
+            if _value['pid'] == _key:
+                _cat_child_tree.append({ 'id' : _key, 'title' : _value['title']})
+    
     _entity_id_list = RBEntity.find(_category_id)
     _entity_context_list = RBEntity.read_entities(_entity_id_list)
-
+    
     return render_to_response( 
         'entity/list.html', 
         {
-          'entity_context_list' : _entity_context_list,
+            'filtering_category_id' : _category_id,
+            'category_ancestor_tree' : _cat_anc_tree,
+            'category_child_tree' : _cat_child_tree,
+            'entity_context_list' : _entity_context_list,
         },
         context_instance = RequestContext(request)
     )
