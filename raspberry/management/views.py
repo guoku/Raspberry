@@ -87,6 +87,7 @@ def create_entity_by_taobao_item(request):
         _image_url = request.POST.get("image_url", None)
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
+        _intro = request.POST.get("intro", None)
         _category_id = int(request.POST.get("category_id", None))
         
         _entity = RBEntity.create_by_taobao_item(
@@ -96,6 +97,7 @@ def create_entity_by_taobao_item(request):
             image_url = _image_url,
             brand = _brand,
             title = _title,
+            intro = _intro,
             cid = _cid,
             taobao_title = _taobao_title,
             taobao_shop_nick = _taobao_shop_nick,
@@ -122,12 +124,14 @@ def edit_entity(request, entity_id):
     elif request.method == 'POST':
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
+        _intro = request.POST.get("intro", None)
         _category_id = int(request.POST.get("category_id", None))
         _entity = RBEntity(entity_id)
         _entity.update(
             category_id = _category_id,
             brand = _brand,
-            title = _title
+            title = _title,
+            intro = _intro
         )
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : entity_id })) 
 

@@ -38,6 +38,8 @@ class MangoApiClient(object):
             _data_dict['brand'] = kwargs['brand'].encode('utf-8')
         if kwargs.has_key('title'):
             _data_dict['title'] = kwargs['title'].encode('utf-8')
+        if kwargs.has_key('intro'):
+            _data_dict['intro'] = kwargs['intro'].encode('utf-8')
         _response = requests.post(_url, data = _data_dict) 
         
         _parser = JSONResponseParser(_response.text)
@@ -76,13 +78,15 @@ class MangoApiClient(object):
         else:
             raise Exception(_parser.message()) 
          
-    def update_entity(self, entity_id, brand = None, title = None):
+    def update_entity(self, entity_id, brand = None, title = None, intro = None):
         _url = 'http://%s:%s/entity/%s/update/'%(self.__host, self.__port, entity_id) 
         _data_dict = {}
         if brand != None:
             _data_dict["brand"] = brand.encode('utf-8')
         if title != None:
             _data_dict["title"] = title.encode('utf-8') 
+        if intro != None:
+            _data_dict["intro"] = intro.encode('utf-8') 
         _response = requests.post(_url, data = _data_dict)
         _parser = JSONResponseParser(_response.text)
         if not _parser.success():
