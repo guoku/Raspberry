@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class Category(models.Model):
-    pid = models.IntegerField(default = 0)
-    title = models.CharField(max_length = 256)
+    pid = models.IntegerField(default = 0, db_index = True)
+    title = models.CharField(max_length = 128, db_index = True)
+    level = models.IntegerField(db_index = True)
     status = models.IntegerField(default = 1, db_index = True)
 
 class Entity(models.Model):
