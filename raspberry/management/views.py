@@ -47,12 +47,19 @@ def _load_taobao_item_info(taobao_id):
 @login_required
 def new_entity(request):
     if request.method == 'GET':
+        _cid = int(request.GET.get("cid", "1"))
+        _category_list = RBCategory.find()
         return render_to_response(
             "entity/new.html", 
+            {
+                'selected_category_id' : _cid,
+                'category_list' : _category_list
+            },
             context_instance=RequestContext(request)
         )
     else: 
         _cand_url = request.POST.get("url", None)
+        _selected_category_id = int(request.POST.get("category_id", "1"))
         _hostname = urlparse(_cand_url).hostname
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) != None: 
             _taobao_id = _parse_taobao_id_from_url(_cand_url)
@@ -70,7 +77,8 @@ def new_entity(request):
                       'price' : _taobao_item_info['price'], 
                       'thumb_images' : _taobao_item_info["thumb_images"],
                       'soldout' : 0, 
-                      'category_list' : RBCategory.all_list(), 
+                      'selected_category_id' : _selected_category_id, 
+                      'category_list' : RBCategory.find(), 
                     },
                     context_instance = RequestContext(request)
                 )
@@ -116,7 +124,7 @@ def edit_entity(request, entity_id):
             'entity/edit.html', 
             {
               'entity_context' : _entity_context,
-              'category_list' : RBCategory.all_list(), 
+              'category_list' : RBCategory.find(), 
               'item_context_list' : _item_context_list,
             },
             context_instance = RequestContext(request)
@@ -139,46 +147,30 @@ def edit_entity(request, entity_id):
 
 @login_required
 def entity_list(request):
-    _category_id = request.GET.get("cid", None)
-    if _category_id != None:
-        _category_id = int(_category_id)
+    _group_id = request.GET.get("gid", None)
+    if _group_id == None:
+        _category_groups = RBCategory.allgroups()
+        _category_id = int(request.GET.get("cid", "1"))
+        _category_obj = RBCategory.get(_category_id)
+        _categories = RBCategory.find(group_id = _category_obj['group_id'])
+         
     
-    _cdict = RBCategory.all_dict()
-    if _category_id != None: 
-        _cat_anc_tree = []
-        _i_cat = _category_id
-        while True:
-            _cat_anc_tree.insert(0, { 'id' : _i_cat, 'title' : _cdict[_i_cat]['title'] })
-            if _cdict[_i_cat]['pid'] == _i_cat:
-                break
-            _i_cat = _cdict[_i_cat]['pid']
+        _entity_id_list = RBEntity.find(_category_id)
+        _entity_context_list = RBEntity.read_entities(_entity_id_list)
+        
+        return render_to_response( 
+            'entity/list.html', 
+            {
+                'category_obj' : _category_obj,
+                'category_groups' : _category_groups,
+                'categories' : _categories,
+                'entity_context_list' : _entity_context_list,
+            },
+            context_instance = RequestContext(request)
+        )
     else:
-        _cat_anc_tree = None
-    _cat_child_tree = []
-    if _category_id != None:
-        for _key, _value in _cdict.items():
-            if _value['pid'] == _category_id and _key != _category_id:
-                _cat_child_tree.append({ 'id' : _key, 'title' : _value['title']})
-        if len(_cat_child_tree) == 0:
-            _cat_child_tree = None
-    else:
-        for _key, _value in _cdict.items():
-            if _value['pid'] == _key:
-                _cat_child_tree.append({ 'id' : _key, 'title' : _value['title']})
-    
-    _entity_id_list = RBEntity.find(_category_id)
-    _entity_context_list = RBEntity.read_entities(_entity_id_list)
-    
-    return render_to_response( 
-        'entity/list.html', 
-        {
-            'filtering_category_id' : _category_id,
-            'category_ancestor_tree' : _cat_anc_tree,
-            'category_child_tree' : _cat_child_tree,
-            'entity_context_list' : _entity_context_list,
-        },
-        context_instance = RequestContext(request)
-    )
+        _categories = RBCategory.find(group_id = int(_group_id))
+        return HttpResponseRedirect(reverse('management.views.entity_list') + '?cid=' + str(_categories[0]['id'])) 
 
 @login_required
 def unbind_entity_item(request, entity_id, item_id):

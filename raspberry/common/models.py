@@ -2,11 +2,20 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-class Category(models.Model):
-    pid = models.IntegerField(default = 0, db_index = True)
+class Category_Group(models.Model):
     title = models.CharField(max_length = 128, db_index = True)
-    level = models.IntegerField(db_index = True)
     status = models.IntegerField(default = 1, db_index = True)
+    class Meta:
+        ordering = ['id']
+
+
+class Category(models.Model):
+    group = models.ForeignKey(Category_Group)
+    title = models.CharField(max_length = 128, db_index = True)
+    status = models.IntegerField(default = 1, db_index = True)
+    class Meta:
+        ordering = ['id']
+ 
 
 class Entity(models.Model):
     entity_hash = models.CharField(max_length = 32, unique = True, db_index = True)
