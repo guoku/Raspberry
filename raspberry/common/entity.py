@@ -139,10 +139,8 @@ class RBEntity(object):
         return _entity_id_list
         
     @classmethod
-    def count(cls, category_ids = None):
-        _hdl = RBEntityModel.objects
-        if category_ids != None:
-            _hdl = _hdl.filter(category_id__in = category_ids)
+    def count(cls, category_id = None):
+        _hdl = RBEntityModel.objects.filter(category_id = category_id)
         return _hdl.count()
     
     def unbind_item(self, item_id):

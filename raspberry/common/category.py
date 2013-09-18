@@ -65,7 +65,8 @@ class RBCategory(object):
             _rslt.append({
                 'id' : _group_obj.id,
                 'title' : _group_obj.title,
-                'status' : _group_obj.status
+                'status' : _group_obj.status,
+                'category_count' : RBCategoryModel.objects.filter(group_id = _group_obj.id).count()
             })
         return _rslt
 

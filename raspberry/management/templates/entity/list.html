@@ -19,7 +19,7 @@
                 {% for group in category_groups %}
                     <li{%if group.id == category_obj.group_id%} class="active"{%endif%}>
                         <a href="{% url 'management.views.entity_list' %}?gid={{group.id}}">
-                            {{ group.title }}
+                            {{ group.title }}({{ group.category_count }})
                         </a>
                     </li>
                 {% endfor %}
@@ -32,7 +32,7 @@
                 {% for category in categories%}
                     <li{%if category.id == category_obj.id%} class="active"{%endif%}>
                         <a href="{% url 'management.views.entity_list' %}?cid={{category.id}}">
-                            {{ category.title }}
+                            {{ category.title }}({{ category.entity_count }})
                         </a>
                     </li>
                 {% endfor %}
