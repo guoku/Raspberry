@@ -92,7 +92,7 @@ def new_entity(request):
                     context_instance = RequestContext(request)
                 )
             else:
-                return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }))
+                return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
                 
                 
 @login_required
@@ -130,6 +130,11 @@ def create_entity_by_taobao_item(request):
 @login_required
 def edit_entity(request, entity_id):
     if request.method == 'GET':
+        _code = request.GET.get("code", None)
+        if _code == "1":
+            _message = "淘宝商品已被创建至本entity" 
+        else:
+            _message = None
         _entity_context = RBEntity(entity_id).read()
         _item_context_list = RBItem.read_items(_entity_context['base_info']['item_id_list'])
         return render_to_response( 
@@ -138,6 +143,7 @@ def edit_entity(request, entity_id):
               'entity_context' : _entity_context,
               'category_list' : RBCategory.find(), 
               'item_context_list' : _item_context_list,
+              'message' : _message
             },
             context_instance = RequestContext(request)
         )
@@ -215,7 +221,7 @@ def load_taobao_item_for_entity(request, entity_id):
                 context_instance = RequestContext(request)
             )
         else:
-            return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }))
+            return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
     
 @login_required
 def add_taobao_item_for_entity(request, entity_id):
