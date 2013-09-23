@@ -214,6 +214,8 @@ def load_taobao_item_for_entity(request, entity_id):
                 },
                 context_instance = RequestContext(request)
             )
+        else:
+            return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }))
     
 @login_required
 def add_taobao_item_for_entity(request, entity_id):
@@ -225,7 +227,7 @@ def add_taobao_item_for_entity(request, entity_id):
         _taobao_price = request.POST.get("taobao_price", None)
         _taobao_soldout = request.POST.get("taobao_soldout", None)
             
-    
+        
         _entity = RBEntity(entity_id)
         _entity.add_taobao_item(
             taobao_id = _taobao_id,
