@@ -18,6 +18,15 @@ from common.category import RBCategory
 from common.entity import RBEntity
 from common.item import RBItem
 
+def index(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('management.views.entity_list', kwargs = {})) 
+    else:
+        return HttpResponseRedirect('admin')
+        
+        
+
+
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
     for param in params.split("&"):
