@@ -91,6 +91,9 @@ def new_entity(request):
                     },
                     context_instance = RequestContext(request)
                 )
+            else:
+                return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }))
+                
                 
 @login_required
 def create_entity_by_taobao_item(request):

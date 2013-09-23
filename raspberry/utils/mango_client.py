@@ -10,8 +10,8 @@ class MangoApiClient(object):
         self.__port = settings.MANGO['port']
 
     def check_taobao_item_exist(self, taobao_id):
-        _url = 'http://%s:%s/taobao/item/check/%s/'%(self.__host, self.__port, taobao_id) 
-
+        _url = 'http://%s:%s/taobao/item/check/%s/exist/'%(self.__host, self.__port, taobao_id) 
+        
         _response = requests.get(_url) 
         _parser = JSONResponseParser(_response.text)
         if _parser.success():
