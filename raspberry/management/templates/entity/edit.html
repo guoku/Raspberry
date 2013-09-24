@@ -2,6 +2,11 @@
 
 {% block content %}
     <div class="container">
+        {% if message %}
+            <div class="hero-unit">
+                <h3>{{ message }}</h3>
+            </div>
+        {% endif %}
         <div class="row-fluid" id="chlid-images">
             <ul class="thumbnails">
                 <li class="span4">

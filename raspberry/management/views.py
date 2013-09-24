@@ -18,6 +18,15 @@ from common.category import RBCategory
 from common.entity import RBEntity
 from common.item import RBItem
 
+def index(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('management.views.entity_list', kwargs = {})) 
+    else:
+        return HttpResponseRedirect('admin')
+        
+        
+
+
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
     for param in params.split("&"):
@@ -82,6 +91,9 @@ def new_entity(request):
                     },
                     context_instance = RequestContext(request)
                 )
+            else:
+                return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
+                
                 
 @login_required
 def create_entity_by_taobao_item(request):
@@ -118,6 +130,11 @@ def create_entity_by_taobao_item(request):
 @login_required
 def edit_entity(request, entity_id):
     if request.method == 'GET':
+        _code = request.GET.get("code", None)
+        if _code == "1":
+            _message = "淘宝商品已被创建至本entity" 
+        else:
+            _message = None
         _entity_context = RBEntity(entity_id).read()
         _item_context_list = RBItem.read_items(_entity_context['base_info']['item_id_list'])
         return render_to_response( 
@@ -126,6 +143,7 @@ def edit_entity(request, entity_id):
               'entity_context' : _entity_context,
               'category_list' : RBCategory.find(), 
               'item_context_list' : _item_context_list,
+              'message' : _message
             },
             context_instance = RequestContext(request)
         )
@@ -202,6 +220,8 @@ def load_taobao_item_for_entity(request, entity_id):
                 },
                 context_instance = RequestContext(request)
             )
+        else:
+            return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
     
 @login_required
 def add_taobao_item_for_entity(request, entity_id):
@@ -213,7 +233,7 @@ def add_taobao_item_for_entity(request, entity_id):
         _taobao_price = request.POST.get("taobao_price", None)
         _taobao_soldout = request.POST.get("taobao_soldout", None)
             
-    
+        
         _entity = RBEntity(entity_id)
         _entity.add_taobao_item(
             taobao_id = _taobao_id,

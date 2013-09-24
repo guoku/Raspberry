@@ -25,13 +25,13 @@ class RBEntity(object):
         return self.__entity_id
     
     @staticmethod
-    def check_taobao_item_exist(tabao_id):
-        try:
+    def check_taobao_item_exist(taobao_id):
+        #try:
             _mango_client = MangoApiClient()
-            return _mango_client.check_taobao_item(taobao_id)
-        except:
-            pass
-        return None
+            return _mango_client.check_taobao_item_exist(taobao_id)
+        #except:
+        #    pass
+        #return None
     
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, taobao_id, image_url, **kwargs):
