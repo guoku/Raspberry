@@ -1,6 +1,6 @@
 # coding=utf8
 import urllib
-from utils.mango_client import MangoApiClient
+from mango.client import MangoApiClient
 
 class RBItem(object):
     
@@ -10,12 +10,10 @@ class RBItem(object):
     @classmethod
     def read_items(cls, item_id_list):
         _mango_client = MangoApiClient()
-        _base_datum = _mango_client.read_items(item_id_list)
         
         _context_list = []
         for _item_id in item_id_list:
-            if _base_datum.has_key(str(_item_id)):
-                if _base_datum[str(_item_id)]['status'] == '0':
-                    _context_list.append(_base_datum[str(_item_id)]['context'])
+            _context = _mango_client.read_item(_item_id)
+            _context_list.append(_context)
         return _context_list
              

@@ -85,7 +85,6 @@ def new_entity(request):
                       'shop_nick' : _taobao_item_info['shop_nick'], 
                       'price' : _taobao_item_info['price'], 
                       'thumb_images' : _taobao_item_info["thumb_images"],
-                      'soldout' : 0, 
                       'selected_category_id' : _selected_category_id, 
                       'category_list' : RBCategory.find(), 
                     },
@@ -103,7 +102,6 @@ def create_entity_by_taobao_item(request):
         _taobao_shop_nick = request.POST.get("taobao_shop_nick", None)
         _taobao_title = request.POST.get("taobao_title", None)
         _taobao_price = request.POST.get("taobao_price", None)
-        _taobao_soldout = request.POST.get("taobao_soldout", None)
         _image_url = request.POST.get("image_url", None)
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
@@ -122,7 +120,7 @@ def create_entity_by_taobao_item(request):
             taobao_title = _taobao_title,
             taobao_shop_nick = _taobao_shop_nick,
             taobao_price = _taobao_price,
-            taobao_soldout = _taobao_soldout,
+            taobao_soldout = False,
         )
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))

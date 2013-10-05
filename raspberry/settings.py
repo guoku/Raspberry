@@ -21,24 +21,20 @@ DATABASES = {
             'init_command':'SET storage_engine=INNODB',
         }
     },
-#    'slave': {
-#        'ENGINE': 'django.db.backends.mysql', 
-#        'NAME': 'core_slave',                      
-#        'USER': 'root',                      
-#        'PASSWORD': '123456',                  
-#        'HOST': 'localhost',                      
-#        'PORT': '',                      
-#        'OPTIONS': {
-#            'use_unicode':'utf-8',
-#            'init_command':'SET storage_engine=INNODB',
-#        }
-#    }
+    'mango': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'mango',                      
+        'USER': 'root',                      
+        'PASSWORD': '123456',                  
+        'HOST': 'localhost',                      
+        'PORT': '',                      
+        'OPTIONS': {
+            'use_unicode':'utf-8',
+            'init_command':'SET storage_engine=INNODB',
+        }
+    }
 }
-
-MANGO = {
-    'host' : '10.0.1.100',
-    'port' : '8001'
-}
+DATABASE_ROUTERS = ['mango.db_router.MangoRouter', 'default_db_router.DefaultRouter']
 
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'
@@ -111,6 +107,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'common',
     'management',
+    'mango',
 )
 
 LOGGING = {

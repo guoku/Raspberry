@@ -4,7 +4,7 @@ from models import Entity_Image as RBEntityImageModel
 import datetime
 import urllib
 from utils.lib import cal_guoku_hash 
-from utils.mango_client import MangoApiClient
+from mango.client import MangoApiClient
 
 class RBEntity(object):
     
@@ -26,12 +26,8 @@ class RBEntity(object):
     
     @staticmethod
     def check_taobao_item_exist(taobao_id):
-        #try:
-            _mango_client = MangoApiClient()
-            return _mango_client.check_taobao_item_exist(taobao_id)
-        #except:
-        #    pass
-        #return None
+        _mango_client = MangoApiClient()
+        return _mango_client.check_taobao_item_exist(taobao_id)
     
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, taobao_id, image_url, **kwargs):
@@ -117,15 +113,11 @@ class RBEntity(object):
     @classmethod
     def read_entities(cls, entity_id_list):
         _mango_client = MangoApiClient()
-        _base_datum = _mango_client.read_entities(entity_id_list)
-        
         _context_list = []
         for _entity_id in entity_id_list:
-            if _base_datum.has_key(str(_entity_id)):
-                if _base_datum[str(_entity_id)]['status'] == '0':
-                    _context = cls(_entity_id).read()
-                    _context['base_info'] = _base_datum[str(_entity_id)]['context']
-                    _context_list.append(_context)
+            _context = cls(_entity_id).read()
+            _context['base_info'] = _mango_client.read_entity(_entity_id)
+            _context_list.append(_context)
         return _context_list
              
        
