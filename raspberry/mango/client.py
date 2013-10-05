@@ -16,7 +16,7 @@ class MangoApiClient(object):
             taobao_item_info = { 
                 'taobao_id' : taobao_id, 
                 'cid' : kwargs['cid'], 
-                'title' : kwargs['title'], 
+                'title' : kwargs['taobao_title'], 
                 'shop_nick' : kwargs['taobao_shop_nick'], 
                 'price' : kwargs['taobao_price'], 
                 'soldout' : kwargs['taobao_soldout'] 
