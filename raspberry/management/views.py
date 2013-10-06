@@ -236,11 +236,13 @@ def add_taobao_item_for_entity(request, entity_id):
         
         _entity = RBEntity(entity_id)
         _entity.add_taobao_item(
-            taobao_id = _taobao_id,
-            cid = _cid,
-            taobao_title = _taobao_title,
-            taobao_shop_nick = _taobao_shop_nick,
-            taobao_price = _taobao_price,
-            taobao_soldout = _taobao_soldout,
+            taobao_item_info = {
+                'taobao_id' : _taobao_id,
+                'cid' : _cid,
+                'title' : _taobao_title,
+                'shop_nick' : _taobao_shop_nick,
+                'price' : _taobao_price,
+                'soldout' : False,
+            }
         ) 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))

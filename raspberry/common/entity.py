@@ -65,9 +65,9 @@ class RBEntity(object):
         return _inst
 
     
-    def add_taobao_item(self, taobao_id, **kwargs):
+    def add_taobao_item(self, taobao_item_info):
         _mango_client = MangoApiClient()
-        _item_id = _mango_client.add_taobao_item_for_entity(self.__entity_id, taobao_id, **kwargs)
+        _item_id = _mango_client.add_taobao_item_for_entity(self.__entity_id, taobao_item_info)
     
     
     def __ensure_entity_obj(self):

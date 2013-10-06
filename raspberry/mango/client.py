@@ -18,17 +18,9 @@ class MangoApiClient(object):
         return _entity.get_entity_id()
         
 
-    def add_taobao_item_for_entity(self, entity_id, taobao_id, **kwargs):
-        _entity = Entity(entity_id)
-        _item_id = _entity.add_taobao_item(
-            taobao_item_info = { 
-                'taobao_id' : taobao_id, 
-                'cid' : kwargs['cid'], 
-                'title' : kwargs['title'], 
-                'shop_nick' : kwargs['taobao_shop_nick'], 
-                'price' : kwargs['taobao_price'], 
-                'soldout' : kwargs['taobao_soldout'] 
-            },
+    def add_taobao_item_for_entity(self, entity_id, taobao_item_info):
+        _item_id = Entity(entity_id).add_taobao_item(
+            taobao_item_info = taobao_item_info
         )
         return _item_id
         
