@@ -30,11 +30,18 @@ class RBEntity(object):
         return _mango_client.check_taobao_item_exist(taobao_id)
     
     @classmethod
-    def create_by_taobao_item(cls, creator_id, category_id, taobao_id, image_url, **kwargs):
+    def create_by_taobao_item(cls, creator_id, category_id, image_url, 
+                              taobao_item_info, brand = "", title = "", intro = ""):
+        
         _mango_client = MangoApiClient()
-        _entity_id = _mango_client.create_entity_by_taobao_item(taobao_id, **kwargs)
+        _entity_id = _mango_client.create_entity_by_taobao_item(
+            taobao_item_info = taobao_item_info,
+            brand = brand,
+            title = title,
+            intro = intro
+        )
        
-        _entity_hash = cls.cal_entity_hash(taobao_id)
+        _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'])
         _entity_obj = RBEntityModel.objects.create( 
             id = _entity_id,
             entity_hash = _entity_hash,
@@ -91,18 +98,23 @@ class RBEntity(object):
         return _context    
     
     def update(self, category_id = None, brand = None, title = None, intro = None):
-        if brand != None or title != None:
+        if brand != None or title != None or intro != None:
             _mango_client = MangoApiClient()
             _base_info = _mango_client.read_entity(self.__entity_id)
             
-            if brand != None and _base_info["brand"] == brand:
+            if _base_info["brand"] == brand:
                 brand = None
-            if title != None and _base_info["title"] == title:
+            if _base_info["title"] == title:
                 title = None
-            if intro != None and (intro == "" or _base_info["intro"] == intro):
+            if _base_info["intro"] == intro:
                 intro = None
             if brand != None or title != None or intro != None:
-                _mango_client.update_entity(self.__entity_id, brand, title, intro)
+                _mango_client.update_entity(
+                    entity_id = self.__entity_id, 
+                    brand = brand, 
+                    title = title, 
+                    intro = intro
+                )
         
         if category_id != None:
             self.__ensure_entity_obj()

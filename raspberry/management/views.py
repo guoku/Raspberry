@@ -111,16 +111,18 @@ def create_entity_by_taobao_item(request):
         _entity = RBEntity.create_by_taobao_item(
             creator_id = request.user.id,
             category_id = _category_id,
-            taobao_id = _taobao_id,
             image_url = _image_url,
+            taobao_item_info = {
+                'taobao_id' : _taobao_id,
+                'cid' : _cid,
+                'title' : _taobao_title,
+                'shop_nick' : _taobao_shop_nick,
+                'price' : _taobao_price,
+                'soldout' : False,
+            },
             brand = _brand,
             title = _title,
             intro = _intro,
-            cid = _cid,
-            taobao_title = _taobao_title,
-            taobao_shop_nick = _taobao_shop_nick,
-            taobao_price = _taobao_price,
-            taobao_soldout = False,
         )
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))

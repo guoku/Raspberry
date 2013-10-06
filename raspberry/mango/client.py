@@ -8,19 +8,12 @@ class MangoApiClient(object):
         return Item.get_entity_id_by_taobao_id(taobao_id)
 
         
-    def create_entity_by_taobao_item(self, taobao_id, **kwargs):
+    def create_entity_by_taobao_item(self, taobao_item_info, brand = "", title = "", intro = ""):
         _entity = Entity.create_by_taobao_item(
-            brand = kwargs.get('brand', None),
-            title = kwargs.get('title', None),
-            intro = kwargs.get('intro', None),
-            taobao_item_info = { 
-                'taobao_id' : taobao_id, 
-                'cid' : kwargs['cid'], 
-                'title' : kwargs['taobao_title'], 
-                'shop_nick' : kwargs['taobao_shop_nick'], 
-                'price' : kwargs['taobao_price'], 
-                'soldout' : kwargs['taobao_soldout'] 
-            },
+            brand = brand,
+            title = title,
+            intro = intro, 
+            taobao_item_info = taobao_item_info 
         )
         return _entity.get_entity_id()
         
@@ -48,11 +41,11 @@ class MangoApiClient(object):
         _item = Item(item_id)
         return _item.read()
          
-    def update_entity(self, entity_id, **kwargs):
+    def update_entity(self, entity_id, brand = None, title = None, intro = None):
         Entity(entity_id).update(
-            brand = kwargs.get('brand', None),
-            title = kwargs.get('title', None),
-            intro = kwargs.get('intro', None),
+            brand = brand,
+            title = title,
+            intro = intro
         )
          
          
