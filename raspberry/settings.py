@@ -108,6 +108,7 @@ INSTALLED_APPS = (
     'common',
     'management',
     'mango',
+    'mobile',
 )
 
 LOGGING = {
