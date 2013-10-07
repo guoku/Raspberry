@@ -12,6 +12,9 @@ class RBCategory(object):
         if not hasattr(self, '__category_obj'):
             self.__category_obj = RBCategoryModel.objects.get(pk = self.__category_id)
     
+    def get_category_id(self):
+        return self.__category_id
+    
     def update(self, title = None, group_id = None):
         self.__ensure_category_obj()
         if title != None:
@@ -20,15 +23,24 @@ class RBCategory(object):
             self.__category_obj.group_id = group_id 
         self.__category_obj.save()
 
+    @classmethod
+    def create(cls, title, group_id, status = 1):
+        _category_obj = RBCategoryModel.objects.create(
+            title = title,
+            group_id = group_id,
+            status = status
+        )
+        _inst = cls(_category_obj.id)
+        _inst.__category_obj = _category_obj
+        return _inst
     
-    @staticmethod
-    def get(category_id):
-        _obj = RBCategoryModel.objects.get(pk = category_id)
+    def read(self):
+        self.__ensure_category_obj()
         return {
-            'id' : _obj.id,
-            'title' : _obj.title,
-            'group_id' : _obj.group_id,
-            'status' : _obj.status
+            'id' : self.__category_obj.id,
+            'title' : self.__category_obj.title,
+            'group_id' : self.__category_obj.group_id,
+            'status' : self.__category_obj.status
         }
         
     

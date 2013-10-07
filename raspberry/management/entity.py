@@ -159,8 +159,8 @@ def entity_list(request):
     if _group_id == None:
         _category_groups = RBCategory.allgroups()
         _category_id = int(request.GET.get("cid", "1"))
-        _category_obj = RBCategory.get(_category_id)
-        _categories = RBCategory.find(group_id = _category_obj['group_id'])
+        _category_context = RBCategory(_category_id).read()
+        _categories = RBCategory.find(group_id = _category_context['group_id'])
         for _category in _categories:
             _category['entity_count'] = RBEntity.count(_category['id'])
     
@@ -170,7 +170,7 @@ def entity_list(request):
         return render_to_response( 
             'entity/list.html', 
             {
-                'category_obj' : _category_obj,
+                'category_context' : _category_context,
                 'category_groups' : _category_groups,
                 'categories' : _categories,
                 'entity_context_list' : _entity_context_list,

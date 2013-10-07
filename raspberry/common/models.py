@@ -11,7 +11,7 @@ class Category_Group(models.Model):
 
 class Category(models.Model):
     group = models.ForeignKey(Category_Group)
-    title = models.CharField(max_length = 128, db_index = True)
+    title = models.CharField(max_length = 128, db_index = True, unique = True)
     status = models.IntegerField(default = 1, db_index = True)
     class Meta:
         ordering = ['id']

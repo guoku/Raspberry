@@ -7,13 +7,13 @@
             <ul class="nav nav-list">
                 <li class="nav-header">操作</li>
                 <li>
-                    <a href="{% url 'management.views.new_entity' %}?cid={{category_obj.id}}" target=_blank>
-                        添加商品
+                    <a href="{% url 'management.views.new_entity' %}?cid={{category_context.id}}" target=_blank>
+                        添加商品 - {{ category_context.title }}
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'management.views.edit_category' category_obj.id %}" target=_blank>
-                        编辑分类 
+                    <a href="{% url 'management.views.edit_category' category_context.id %}" target=_blank>
+                        编辑分类 - {{ category_context.title }}
                     </a>
                 </li>
             </ul>
@@ -22,7 +22,7 @@
             <ul class="nav nav-list">
                 <li class="nav-header">分类</li>
                 {% for group in category_groups %}
-                    <li{%if group.id == category_obj.group_id%} class="active"{%endif%}>
+                    <li{%if group.id == category_context.group_id%} class="active"{%endif%}>
                         <a href="{% url 'management.views.entity_list' %}?gid={{group.id}}">
                             {{ group.title }}({{ group.category_count }})
                         </a>
@@ -35,12 +35,15 @@
         <div class="sub-nav">
             <ul class="nav nav-pills">
                 {% for category in categories%}
-                    <li{%if category.id == category_obj.id%} class="active"{%endif%}>
+                    <li{%if category.id == category_context.id%} class="active"{%endif%}>
                         <a href="{% url 'management.views.entity_list' %}?cid={{category.id}}">
                             {{ category.title }}({{ category.entity_count }})
                         </a>
                     </li>
                 {% endfor %}
+                <li>
+                    <a href="{% url 'management.views.create_category' %}">+</a> 
+                </li>
             </ul>
         </div>
         <div>
