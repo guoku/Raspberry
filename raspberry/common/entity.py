@@ -1,6 +1,7 @@
 # coding=utf8
 from models import Entity as RBEntityModel
 from models import Entity_Image as RBEntityImageModel
+from hashlib import md5
 import datetime
 import urllib
 from utils.lib import cal_guoku_hash 
@@ -14,12 +15,12 @@ class RBEntity(object):
     @classmethod
     def cal_entity_hash(cls, entity_hash_string):
         while True:
-            entity_hash = cal_guoku_hash(entity_hash_string)
+            _hash = md5(entity_hash_string + unicode(datetime.datetime.now())).hexdigest()[0:8]
             try:
-                Entity.objects.get(entity_hash = entity_hash)
+                Entity.objects.get(entity_hash = _hash)
             except:
                 break
-        return entity_hash
+        return _hash 
     
     def get_entity_id(self):
         return self.__entity_id
