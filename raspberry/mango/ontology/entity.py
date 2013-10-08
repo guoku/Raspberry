@@ -43,18 +43,18 @@ class Entity(object):
         
         _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
         _chief_image_id = _chief_image_obj.get_image_id()
-        _detail_image_list = []
+        _detail_image_ids = []
         for image_url in detail_image_urls:
             _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], image_url)
-            _detail_image_list.append(_image_obj.get_image_id())
+            _detail_image_ids.append(_image_obj.get_image_id())
         
         _entity_obj = EntityModel(
             brand = "",
             title = title,
             intro = intro,
             images = EntityImageModel(
-                chief = _chief_image_id,
-                detail = _detail_image_list
+                chief_id = _chief_image_id,
+                detail_ids = _detail_image_ids
             ),
             created_time = datetime.datetime.now(),
             updated_time = datetime.datetime.now() 
@@ -65,7 +65,7 @@ class Entity(object):
         _inst.__entity_obj = _entity_obj
         
         try:
-            _item_images = _detail_image_list
+            _item_images = _detail_image_ids
             _item_images.append(_chief_image_id)
             _taobao_item_id = _inst.add_taobao_item(taobao_item_info, _item_images)
         except Exception, e:
@@ -81,11 +81,17 @@ class Entity(object):
     def read(self):
         self.__ensure_entity_obj()
         _context = {}
-        _context["entity_id"] = str(self.__entity_obj.id)
-        _context["brand"] = self.__entity_obj.brand 
-        _context["title"] = self.__entity_obj.title
-        _context["intro"] = self.__entity_obj.intro
-        _context["item_id_list"] = Item.get_item_id_list_by_entity_id(self.__entity_id) 
+        _context['entity_id'] = str(self.__entity_obj.id)
+        _context['brand'] = self.__entity_obj.brand 
+        _context['title'] = self.__entity_obj.title
+        _context['intro'] = self.__entity_obj.intro
+        _context['chief_image'] = { 'url' : Image(self.__entity_obj.images.chief_id).getlink() }
+        _context['detail_images'] = []
+        for _image_id in self.__entity_obj.images.detail_ids:
+            _context['detail_images'].append({
+                'url' : Image(_image_id).getlink()
+            })
+        _context['item_id_list'] = Item.get_item_id_list_by_entity_id(self.__entity_id) 
         return _context    
     
     def update(self, brand = None, title = None, intro = None):

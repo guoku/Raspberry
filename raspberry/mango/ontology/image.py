@@ -12,7 +12,7 @@ class Image(object):
     
     def __ensure_image_obj(self):
         if not hasattr(self, '__image_obj'):
-            self.__image_obj = ImageModel.objects.filter(id = self.__image_obj).first()
+            self.__image_obj = ImageModel.objects.filter(id = self.__image_id).first()
     
     @classmethod
     def create(cls, source, origin_url): 
@@ -33,4 +33,8 @@ class Image(object):
         _context = {}
         _context["source"] = self.__image_obj.source
         _context["origin_url"] = self.__image_obj.origin_url
-        return _context    
+        return _context
+
+    def getlink(self):
+        self.__ensure_image_obj()
+        return self.__image_obj.origin_url

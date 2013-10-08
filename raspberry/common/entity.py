@@ -51,7 +51,7 @@ class RBEntity(object):
             creator_id = creator_id
         )
          
-        _inst = cls(_entity_obj.id)
+        _inst = cls(_entity_obj.entity_id)
         _inst.__entity_obj = _entity_obj
         return _inst
 
@@ -65,27 +65,21 @@ class RBEntity(object):
         if not hasattr(self, '__entity_obj'):
             self.__entity_obj = RBEntityModel.objects.get(entity_id = self.__entity_id)
 
-    def __ensure_entity_image_obj(self):
-        if not hasattr(self, '__entity_image_obj'):
-            self.__entity_image_obj = RBEntityImageModel.objects.filter(entity = self.__entity_id)[0:1].get()
-    
     def __load_entity_context(self):
         self.__ensure_entity_obj()
-        self.__ensure_entity_image_obj()
         _context = {}
         _context["entity_hash"] = self.__entity_obj.entity_hash
         _context["category_id"] = self.__entity_obj.category_id
         _context["created_time"] = self.__entity_obj.created_time
         _context["updated_time"] = self.__entity_obj.updated_time
-        _context["image_url"] = self.__entity_image_obj.image_url
         return _context
         
 
     def read(self):
         _mango_client = MangoApiClient()
-        _base_info = _mango_client.read_entity(self.__entity_id)
+        _meta_info = _mango_client.read_entity(self.__entity_id)
         _context = self.__load_entity_context()
-        _context['base_info'] = _base_info
+        _context['meta'] = _meta_info
         return _context    
     
     def update(self, category_id = None, brand = None, title = None, intro = None):
@@ -130,7 +124,7 @@ class RBEntity(object):
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
         _hdl = _hdl.order_by('-created_time')[offset : offset + count]
-        _entity_id_list = map(lambda x: x.id, _hdl)
+        _entity_id_list = map(lambda x: x.entity_id, _hdl)
         return _entity_id_list
         
     @classmethod

@@ -131,7 +131,7 @@ def edit_entity(request, entity_id):
         else:
             _message = None
         _entity_context = RBEntity(entity_id).read()
-        _item_context_list = RBItem.read_items(_entity_context['base_info']['item_id_list'])
+        _item_context_list = RBItem.read_items(_entity_context['meta']['item_id_list'])
         return render_to_response( 
             'entity/edit.html', 
             {

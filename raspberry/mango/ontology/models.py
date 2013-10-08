@@ -2,8 +2,8 @@
 from mongoengine import *
 
 class EntityImage(EmbeddedDocument):
-    chief = StringField(required = True)
-    detail = ListField(required = False)
+    chief_id = StringField(required = True)
+    detail_ids = ListField(required = False)
     
 
 class Entity(Document):
