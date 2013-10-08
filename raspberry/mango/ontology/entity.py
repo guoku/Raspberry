@@ -1,19 +1,22 @@
 # coding=utf8
 from models import Entity as EntityModel
+from models import EntityImage as EntityImageModel
+from image import Image
 from item import Item
 import datetime 
 
 class Entity(object):
     
     def __init__(self, entity_id):
-        self.__entity_id = int(entity_id)
+        self.__entity_id = entity_id
     
     def get_entity_id(self):
         return self.__entity_id
     
-    def add_taobao_item(self, taobao_item_info):
+    def add_taobao_item(self, taobao_item_info, images):
         _taobao_item_obj = Item.create_taobao_item( 
             entity_id = self.__entity_id,
+            images = images,
             taobao_id = taobao_item_info["taobao_id"],
             cid = taobao_item_info["cid"],
             title = taobao_item_info["title"],
@@ -29,7 +32,7 @@ class Entity(object):
             _item_obj.bind_entity(-1)
     
     @classmethod
-    def create_by_taobao_item(cls, brand, title, intro, taobao_item_info):
+    def create_by_taobao_item(cls, brand, title, intro, taobao_item_info, chief_image_url, detail_image_urls):
         
         if brand != None: 
             brand = brand.strip()
@@ -38,17 +41,33 @@ class Entity(object):
         if intro != None:
             intro = intro.strip()
         
-        _entity_obj = EntityModel.objects.create( 
-            brand = brand,
+        _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
+        _chief_image_id = _chief_image_obj.get_image_id()
+        _detail_image_list = []
+        for image_url in detail_image_urls:
+            _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], image_url)
+            _detail_image_list.append(_image_obj.get_image_id())
+        
+        _entity_obj = EntityModel(
+            brand = "",
             title = title,
             intro = intro,
+            images = EntityImageModel(
+                chief = _chief_image_id,
+                detail = _detail_image_list
+            ),
+            created_time = datetime.datetime.now(),
+            updated_time = datetime.datetime.now() 
         )
+        _entity_obj.save()
         
-        _inst = cls(_entity_obj.id)
+        _inst = cls(str(_entity_obj.id))
         _inst.__entity_obj = _entity_obj
         
         try:
-            _taobao_item_id = _inst.add_taobao_item(taobao_item_info)
+            _item_images = _detail_image_list
+            _item_images.append(_chief_image_id)
+            _taobao_item_id = _inst.add_taobao_item(taobao_item_info, _item_images)
         except Exception, e:
             _entity_obj.delete()
             raise e
@@ -62,7 +81,7 @@ class Entity(object):
     def read(self):
         self.__ensure_entity_obj()
         _context = {}
-        _context["entity_id"] = self.__entity_obj.id
+        _context["entity_id"] = str(self.__entity_obj.id)
         _context["brand"] = self.__entity_obj.brand 
         _context["title"] = self.__entity_obj.title
         _context["intro"] = self.__entity_obj.intro

@@ -39,6 +39,7 @@ class Category(models.Model):
  
 
 class Entity(models.Model):
+    entity_id = models.CharField(max_length = 32, unique = True, db_index = True)
     entity_hash = models.CharField(max_length = 32, unique = True, db_index = True)
     creator = models.ForeignKey(User) 
     category = models.ForeignKey(Category)
@@ -47,9 +48,3 @@ class Entity(models.Model):
     class Meta:
         ordering = ['-created_time']
  
-class Entity_Image(models.Model):
-    entity = models.ForeignKey(Entity)
-    image_url = models.URLField(max_length = 1024)
-    is_chief = models.BooleanField(default = False)
-    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
-

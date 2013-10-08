@@ -34,13 +34,14 @@ class Item(object):
         return None
 
     @classmethod
-    def create_taobao_item(cls, entity_id, taobao_id, cid, title, shop_nick, price, soldout): 
+    def create_taobao_item(cls, entity_id, images, taobao_id, cid, title, shop_nick, price, soldout): 
         _taobao_id = taobao_id.strip()
         _title = title.strip()
         _shop_nick = shop_nick.strip()
         
         _item_obj = TaobaoItemDocument( 
             entity_id = entity_id,
+            images = images,
             source = 'taobao',
             taobao_id = _taobao_id,
             cid = cid,

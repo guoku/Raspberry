@@ -8,17 +8,19 @@ class MangoApiClient(object):
         return Item.get_entity_id_by_taobao_id(taobao_id)
 
         
-    def create_entity_by_taobao_item(self, taobao_item_info, brand = "", title = "", intro = ""):
+    def create_entity_by_taobao_item(self, taobao_item_info, chief_image_url, brand = "", title = "", intro = "", detail_image_urls = []):
         _entity = Entity.create_by_taobao_item(
             brand = brand,
             title = title,
             intro = intro, 
-            taobao_item_info = taobao_item_info 
+            taobao_item_info = taobao_item_info,
+            chief_image_url = chief_image_url,
+            detail_image_urls = detail_image_urls
         )
         return _entity.get_entity_id()
         
 
-    def add_taobao_item_for_entity(self, entity_id, taobao_item_info):
+    def add_taobao_item_for_entity(self, entity_id, taobao_item_info, image_urls):
         _item_id = Entity(entity_id).add_taobao_item(
             taobao_item_info = taobao_item_info
         )
