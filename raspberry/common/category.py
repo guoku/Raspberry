@@ -5,40 +5,42 @@ import datetime
 
 class RBCategory(object):
     
-    @staticmethod
-    def all_list():
-        _dict = {} 
-        _list = []
-        for _cat_obj in RBCategoryModel.objects.order_by('id'):
-            _dict[_cat_obj.id] = _cat_obj.title
-            if _cat_obj.pid != _cat_obj.id:
-                _ttl = _dict[_cat_obj.pid] + '-'  + _cat_obj.title
-            else:
-                _ttl = _cat_obj.title
-            _list.append({
-                'id' : _cat_obj.id, 
-                'title' : _ttl
-            })
-        return _list
+    def __init__(self, category_id):
+        self.__category_id= int(category_id)
     
-    @staticmethod
-    def all_dict():
-        _dict = {} 
-        for _cat_obj in RBCategoryModel.objects.order_by('id'):
-            _dict[_cat_obj.id] = {
-                'title' : _cat_obj.title,
-                'pid' : _cat_obj.pid
-            }
-        return _dict
+    def __ensure_category_obj(self):
+        if not hasattr(self, '__category_obj'):
+            self.__category_obj = RBCategoryModel.objects.get(pk = self.__category_id)
     
-    @staticmethod
-    def get(category_id):
-        _obj = RBCategoryModel.objects.get(pk = category_id)
+    def get_category_id(self):
+        return self.__category_id
+    
+    def update(self, title = None, group_id = None):
+        self.__ensure_category_obj()
+        if title != None:
+            self.__category_obj.title = title
+        if group_id != None:
+            self.__category_obj.group_id = group_id 
+        self.__category_obj.save()
+
+    @classmethod
+    def create(cls, title, group_id, status = 1):
+        _category_obj = RBCategoryModel.objects.create(
+            title = title,
+            group_id = group_id,
+            status = status
+        )
+        _inst = cls(_category_obj.id)
+        _inst.__category_obj = _category_obj
+        return _inst
+    
+    def read(self):
+        self.__ensure_category_obj()
         return {
-            'id' : _obj.id,
-            'title' : _obj.title,
-            'group_id' : _obj.group_id,
-            'status' : _obj.status
+            'id' : self.__category_obj.id,
+            'title' : self.__category_obj.title,
+            'group_id' : self.__category_obj.group_id,
+            'status' : self.__category_obj.status
         }
         
     

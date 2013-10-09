@@ -55,13 +55,13 @@
                     <div class="control-group">
                         <label class="control-label" for="intro">简介</label>
                         <div class="controls">
-                            <textarea class="input-xxlarge" type="text" id="intro" name="intro" ></textarea>
+                            <textarea class="input-xxlarge" style="height:120px" type="text" id="intro" name="intro" ></textarea>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="image_url">选图</label>
+                        <label class="control-label" for="chief_image_url">选图</label>
                         <div class="controls">
-                            <select id="image_url" name="image_url">
+                            <select id="chief_image_url" name="chief_image_url">
                                 {% for image_url in thumb_images %}
                                     {% if forloop.counter == 1 %} 
                                         <option selected="selected" value="{{ image_url }}">{{ forloop.counter }}</option>
@@ -87,7 +87,9 @@
                     <input class="input-xxlarge" type="hidden" id="taobao_shop_nick" name="taobao_shop_nick" value="{{ shop_nick }}" />
                     <input class="input-xxlarge" type="hidden" id="taobao_title" name="taobao_title" value="{{ taobao_title }}" />
                     <input class="input-xxlarge" type="hidden" id="taobao_price" name="taobao_price" value="{{ price }}" />
-                    <input class="input-xxlarge" type="hidden" id="taobao_soldout" name="taobao_soldout" value="{{ soldout }}" />
+                    {% for image_url in thumb_images %}
+                        <input class="input-xxlarge" type="hidden" id="image_url" name="image_url" value="{{ image_url }}" />
+                    {% endfor %}
                 </fieldset>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">添加</button>

@@ -11,8 +11,8 @@
             <ul class="thumbnails">
                 <li class="span4">
                     <div class="thumbnail">
-                        <a href="{{ entity_context.image_url }}" >
-                            <img id="main-image" class="img-polaroid" src="{{ entity_context.image_url }}" alt="" style="max-width: 280px;max-height: 280px">
+                        <a href="{{ entity_context.meta.chief_image.url }}" >
+                            <img id="main-image" class="img-polaroid" src="{{ entity_context.meta.chief_image.url }}" alt="" style="max-width: 280px;max-height: 280px">
                         </a>
                     </div>
                 </li>
@@ -30,19 +30,19 @@
                     <div class="control-group">
                         <label class="control-label" for="brand">品牌</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="brand" name="brand" value="{{ entity_context.base_info.brand }}" onChange="loadSimilarEntity(null);"/>
+                            <input class="input-xxlarge" type="text" id="brand" name="brand" value="{{ entity_context.meta.brand }}" onChange="loadSimilarEntity(null);"/>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="title">名称</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="title" name="title" value="{{ entity_context.base_info.title }}" />
+                            <input class="input-xxlarge" type="text" id="title" name="title" value="{{ entity_context.meta.title }}" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="intro">简介</label>
                         <div class="controls">
-                            <textarea class="input-xxlarge" type="text" id="intro" name="intro" >{{ entity_context.base_info.intro }}</textarea>
+                            <textarea class="input-xxlarge" style="height:120px" type="text" id="intro" name="intro" >{{ entity_context.meta.intro }}</textarea>
                         </div>
                     </div>
                     <div class="control-group">
@@ -96,11 +96,11 @@
                     </fieldset>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">更新</button>
-                        <a class="btn" href="{% url 'management.views.unbind_entity_item' entity_context.base_info.entity_id item_context.item_id %}">删除</a>
+                        <a class="btn" href="{% url 'management.views.unbind_entity_item' entity_context.meta.entity_id item_context.item_id %}">删除</a>
                     </div>
                 </form>
             {% endfor %}
-            <form class="well form-horizontal" action="{% url 'management.views.load_taobao_item_for_entity' entity_context.base_info.entity_id %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management.views.load_taobao_item_for_entity' entity_context.meta.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="image_url">添加新 item :</label>
