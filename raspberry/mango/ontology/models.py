@@ -35,7 +35,6 @@ class Image(Document):
         'allow_inheritance' : True
     }
 
-register_connection('mango', 'mango')
 class Item(Document):
     entity_id = StringField(required = True) 
     source = StringField(required = True)

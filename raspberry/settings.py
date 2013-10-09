@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'raspberry',                      
+        'NAME': 'raspberry',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
@@ -21,20 +21,10 @@ DATABASES = {
             'init_command':'SET storage_engine=INNODB',
         }
     },
-#    'mango': {
-#        'ENGINE': 'django.db.backends.mysql', 
-#        'NAME': 'mango',                      
-#        'USER': 'root',                      
-#        'PASSWORD': '123456',                  
-#        'HOST': 'localhost',                      
-#        'PORT': '',                      
-#        'OPTIONS': {
-#            'use_unicode':'utf-8',
-#            'init_command':'SET storage_engine=INNODB',
-#        }
-#    }
 }
-DATABASE_ROUTERS = ['mango.db_router.MangoRouter', 'default_db_router.DefaultRouter']
+
+from mongoengine import register_connection 
+register_connection('mango', 'mango')
 
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'
@@ -108,7 +98,7 @@ INSTALLED_APPS = (
     'common',
     'management',
     'mango',
-    'mobile',
+#    'mobile',
 )
 
 LOGGING = {
