@@ -5,8 +5,8 @@ from datetime import datetime
 from hashlib import md5
 
 class SessionKeyManager(models.Manager):
-    def create_new_session(self, user_id, username, passwd, email):
-        _session = username + passwd + email + unicode(datetime.now())
+    def generate_session(self, user_id, username, email, api_key):
+        _session = username + email + api_key + unicode(datetime.now())
         _session_key = md5(_session.encode('utf-8')).hexdigest()
         _session_object = self.create(
             user_id = user_id, 
