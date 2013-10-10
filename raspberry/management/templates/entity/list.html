@@ -42,7 +42,7 @@
                     </li>
                 {% endfor %}
                 <li>
-                    <a href="{% url 'management.views.create_category' %}">+</a> 
+                    <a href="{% url 'management.views.create_category' %}?gid={{category_group_id}}">+</a> 
                 </li>
             </ul>
         </div>
