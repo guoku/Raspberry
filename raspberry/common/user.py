@@ -30,6 +30,13 @@ class RBUser(object):
         _username = "mb_%s" % str(_seed) 
         return _username
 
+    @staticmethod
+    def check_auth(self, password):
+        self.__ensure_user_obj()
+        if authenticate(username = self.get_username(), password = password):
+            return True
+        return False
+    
     @classmethod
     def create(cls, email, password, username = None):
         _username = cls._generate_username()
