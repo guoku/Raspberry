@@ -1,0 +1,30 @@
+{% extends "management_base.html" %}
+
+{% block content %}
+<div class="container">
+    <div>
+        <form class="well form-horizontal" action="{% url 'management.views.create_category' %}" method="POST">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="title">名称:</label>
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="title" name="title" value="" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="group">组别:</label>
+                    <div class="controls">
+                        <select id="group_id" name="group_id">
+                            {% for group in category_groups %}
+                                <option {%if  group.id == selected_group_id%}selected="selected" {%endif%}value="{{ group.id }}">{{ group.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">添加</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
