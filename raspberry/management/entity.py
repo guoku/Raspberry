@@ -227,6 +227,7 @@ def add_taobao_item_for_entity(request, entity_id):
         _taobao_title = request.POST.get("taobao_title", None)
         _taobao_price = request.POST.get("taobao_price", None)
         _taobao_soldout = request.POST.get("taobao_soldout", None)
+        _image_urls = request.POST.getlist("image_url")
             
         
         _entity = RBEntity(entity_id)
@@ -238,6 +239,7 @@ def add_taobao_item_for_entity(request, entity_id):
                 'shop_nick' : _taobao_shop_nick,
                 'price' : _taobao_price,
                 'soldout' : False,
-            }
+            },
+            image_urls = _image_urls
         ) 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))

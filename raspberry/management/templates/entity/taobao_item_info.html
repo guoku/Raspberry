@@ -2,6 +2,17 @@
 
 {% block content %}
     <div class="container">
+        <div class="row">
+            <div class="span11">
+                <tr>
+                    {% for image in thumb_images %}
+                        <td>
+                            <img class="img-polaroid" src="{{ image }}" style="max-height:150px;max-width:150px;">
+                        </td>
+                    {% endfor %}
+                </tr>
+            </div> 
+        </div> 
         <div>
             <form class="well form-horizontal" action="{% url 'management.views.add_taobao_item_for_entity' entity_id %}" method="POST">
                 <fieldset>
@@ -35,6 +46,9 @@
                     <input class="input-xxlarge" type="hidden" id="taobao_title" name="taobao_title" value="{{ taobao_title }}" />
                     <input class="input-xxlarge" type="hidden" id="taobao_price" name="taobao_price" value="{{ price }}" />
                     <input class="input-xxlarge" type="hidden" id="taobao_soldout" name="taobao_soldout" value="{{ soldout }}" />
+                    {% for image_url in thumb_images %}
+                        <input class="input-xxlarge" type="hidden" id="image_url" name="image_url" value="{{ image_url }}" />
+                    {% endfor %}
                 </fieldset>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">添加</button>

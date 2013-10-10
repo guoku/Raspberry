@@ -13,7 +13,7 @@ class Entity(object):
     def get_entity_id(self):
         return self.__entity_id
     
-    def add_taobao_item(self, taobao_item_info, images):
+    def _insert_taobao_item(self, taobao_item_info, images):
         _taobao_item_obj = Item.create_taobao_item( 
             entity_id = self.__entity_id,
             images = images,
@@ -25,11 +25,23 @@ class Entity(object):
             soldout = taobao_item_info["soldout"], 
         )
         return _taobao_item_obj.get_item_id()
+    
+    def add_taobao_item(self, taobao_item_info, image_urls):
+        _image_ids = []
+        for _image_url in image_urls:
+            _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
+            _image_ids.append(_image_obj.get_image_id())
+        
+        _item_id = self._insert_taobao_item( 
+            taobao_item_info = taobao_item_info,
+            images = _image_ids
+        )
+        return _item_id 
 
     def del_taobao_item(self, item_id):
         _item_obj = Item(item_id)
         if _item_obj.get_entity_id() == self.__entity_id:
-            _item_obj.bind_entity(-1)
+            _item_obj.bind_entity("")
     
     @classmethod
     def create_by_taobao_item(cls, brand, title, intro, taobao_item_info, chief_image_url, detail_image_urls):
@@ -44,8 +56,8 @@ class Entity(object):
         _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
         _chief_image_id = _chief_image_obj.get_image_id()
         _detail_image_ids = []
-        for image_url in detail_image_urls:
-            _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], image_url)
+        for _image_url in detail_image_urls:
+            _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
             _detail_image_ids.append(_image_obj.get_image_id())
         
         _entity_obj = EntityModel(
@@ -67,7 +79,7 @@ class Entity(object):
         try:
             _item_images = _detail_image_ids
             _item_images.append(_chief_image_id)
-            _taobao_item_id = _inst.add_taobao_item(taobao_item_info, _item_images)
+            _taobao_item_id = _inst._insert_taobao_item(taobao_item_info, _item_images)
         except Exception, e:
             _entity_obj.delete()
             raise e

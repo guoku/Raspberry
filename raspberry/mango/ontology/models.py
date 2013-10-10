@@ -38,7 +38,7 @@ class Image(Document):
 class Item(Document):
     entity_id = StringField(required = True) 
     source = StringField(required = True)
-    images = ListField(required = True)
+    images = ListField(required = False)
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
