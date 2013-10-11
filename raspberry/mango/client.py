@@ -36,11 +36,12 @@ class MangoApiClient(object):
         _item = Item(item_id)
         return _item.read()
          
-    def update_entity(self, entity_id, brand = None, title = None, intro = None):
+    def update_entity(self, entity_id, brand = None, title = None, intro = None, price = None):
         Entity(entity_id).update(
             brand = brand,
             title = title,
-            intro = intro
+            intro = intro,
+            price = price
         )
          
          

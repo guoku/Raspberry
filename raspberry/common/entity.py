@@ -65,9 +65,9 @@ class RBEntity(object):
         if not hasattr(self, '__entity_obj'):
             self.__entity_obj = RBEntityModel.objects.get(entity_id = self.__entity_id)
 
-    def __load_entity_context(self):
+    def __load_entity_context(self, meta_context):
         self.__ensure_entity_obj()
-        _context = {}
+        _context = meta_context 
         _context["entity_hash"] = self.__entity_obj.entity_hash
         _context["category_id"] = self.__entity_obj.category_id
         _context["created_time"] = self.__entity_obj.created_time
@@ -77,32 +77,26 @@ class RBEntity(object):
 
     def read(self):
         _mango_client = MangoApiClient()
-        _meta_info = _mango_client.read_entity(self.__entity_id)
-        _context = self.__load_entity_context()
-        _context['meta'] = _meta_info
+        _meta_context = _mango_client.read_entity(self.__entity_id)
+        _context = self.__load_entity_context(_meta_context)
         return _context    
     
     def read_full_context(self):
         _context = self.read() 
         return _context    
     
-    def update(self, category_id = None, brand = None, title = None, intro = None):
+    def update(self, category_id = None, brand = None, title = None, intro = None, price = None):
         if brand != None or title != None or intro != None:
             _mango_client = MangoApiClient()
             _base_info = _mango_client.read_entity(self.__entity_id)
             
-            if _base_info["brand"] == brand:
-                brand = None
-            if _base_info["title"] == title:
-                title = None
-            if _base_info["intro"] == intro:
-                intro = None
-            if brand != None or title != None or intro != None:
+            if brand != None or title != None or intro != None or price != None:
                 _mango_client.update_entity(
                     entity_id = self.__entity_id, 
                     brand = brand, 
                     title = title, 
-                    intro = intro
+                    intro = intro,
+                    price = price
                 )
         
         if category_id != None:

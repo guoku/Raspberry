@@ -11,6 +11,7 @@ class Entity(Document):
     title = StringField(required = True)
     intro = StringField(required = False)
     images = EmbeddedDocumentField('EntityImage', required = True)
+    price = DecimalField(required = True)
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
@@ -18,6 +19,7 @@ class Entity(Document):
         'indexes' : [ 
             'brand',
             'title',
+            'price',
         ],
         'allow_inheritance' : True
     }

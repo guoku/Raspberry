@@ -36,6 +36,12 @@ class Entity(object):
             taobao_item_info = taobao_item_info,
             images = _image_ids
         )
+        
+        self.__ensure_entity_obj()
+        if taobao_item_info['price'] < self.__entity_obj.price:
+            self.__entity_obj.price = taobao_item_info['price']
+            self.__entity_obj.updated_time = datetime.datetime.now()
+            self.__entity_obj.save()
         return _item_id 
 
     def del_taobao_item(self, item_id):
@@ -60,10 +66,12 @@ class Entity(object):
             _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
             _detail_image_ids.append(_image_obj.get_image_id())
         
+        _price = taobao_item_info['price']
         _entity_obj = EntityModel(
             brand = brand,
             title = title,
             intro = intro,
+            price = _price,
             images = EntityImageModel(
                 chief_id = _chief_image_id,
                 detail_ids = _detail_image_ids
@@ -97,6 +105,7 @@ class Entity(object):
         _context['brand'] = self.__entity_obj.brand 
         _context['title'] = self.__entity_obj.title
         _context['intro'] = self.__entity_obj.intro
+        _context['price'] = self.__entity_obj.price
         _context['chief_image'] = { 'url' : Image(self.__entity_obj.images.chief_id).getlink() }
         _context['detail_images'] = []
         for _image_id in self.__entity_obj.images.detail_ids:
@@ -106,7 +115,7 @@ class Entity(object):
         _context['item_id_list'] = Item.get_item_id_list_by_entity_id(self.__entity_id) 
         return _context    
     
-    def update(self, brand = None, title = None, intro = None):
+    def update(self, brand = None, title = None, intro = None, price = None):
         self.__ensure_entity_obj()
         if brand != None:
             self.__entity_obj.brand = brand
@@ -114,4 +123,7 @@ class Entity(object):
             self.__entity_obj.title = title
         if intro != None:
             self.__entity_obj.intro = intro
+        if price != None:
+            self.__entity_obj.price = price
+        self.__entity_obj.updated_time = datetime.datetime.now()
         self.__entity_obj.save()

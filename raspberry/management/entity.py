@@ -131,7 +131,7 @@ def edit_entity(request, entity_id):
         else:
             _message = None
         _entity_context = RBEntity(entity_id).read()
-        _item_context_list = RBItem.read_items(_entity_context['meta']['item_id_list'])
+        _item_context_list = RBItem.read_items(_entity_context['item_id_list'])
         return render_to_response( 
             'entity/edit.html', 
             {
@@ -146,13 +146,19 @@ def edit_entity(request, entity_id):
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
-        _category_id = int(request.POST.get("category_id", None))
+        _price = request.POST.get("price", None)
+        if _price:
+            _price = float(_price)
+        _category_id = request.POST.get("category_id", None)
+        if _category_id:
+            _category_id = int(_category_id)
         _entity = RBEntity(entity_id)
         _entity.update(
             category_id = _category_id,
             brand = _brand,
             title = _title,
-            intro = _intro
+            intro = _intro,
+            price = _price
         )
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : entity_id })) 
 
