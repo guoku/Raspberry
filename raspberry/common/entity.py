@@ -82,6 +82,10 @@ class RBEntity(object):
         _context['meta'] = _meta_info
         return _context    
     
+    def read_full_context(self):
+        _context = self.read() 
+        return _context    
+    
     def update(self, category_id = None, brand = None, title = None, intro = None):
         if brand != None or title != None or intro != None:
             _mango_client = MangoApiClient()
