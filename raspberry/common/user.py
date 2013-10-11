@@ -1,5 +1,6 @@
 # coding=utf8
 from django.contrib.auth.models import User as AuthUser
+from django.contrib.auth import authenticate
 from models import User_Profile
 import datetime
 
@@ -30,13 +31,22 @@ class RBUser(object):
         _username = "mb_%s" % str(_seed) 
         return _username
 
-    @staticmethod
     def check_auth(self, password):
         self.__ensure_user_obj()
         if authenticate(username = self.get_username(), password = password):
             return True
         return False
     
+    @classmethod
+    def login(cls, email, password):
+        _user_obj = AuthUser.objects.get(email = email)
+        _inst = cls(_user_obj.id)
+        _inst.__user_obj = _user_obj
+        
+        if _inst.check_auth(password): 
+            return _inst
+        return None
+
     @classmethod
     def create(cls, email, password, username = None):
         _username = cls._generate_username()
@@ -63,20 +73,35 @@ class RBUser(object):
         self.__ensure_user_obj()
         _context = {}
         _context['user_id'] = self.__user_obj.id
+        
+        try:
+            _profile = User_Profile.objects.get(user_id = self.__user_id)
+            _context['nickname'] = _profile.nickname
+            _context['avatar'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+            _context['verified'] = 0 
+            _context['verified_type'] = 'guoku' 
+            _context['verified_reason'] = 'guoku' 
+            _context['gender'] = _profile.gender 
+            _context['friend_count'] = 0 
+            _context['follower_count'] = 0 
+            _context['money_i_need'] = 0 
+            _context['like_count'] = 0 
+            _context['note_count'] = 0 
+            _context['same_follow'] = []
+        except User_Profile.DoesNotExist, e:
+            _context['nickname'] = 'unknown' 
+            _context['avatar'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+            _context['verified'] = 0 
+            _context['verified_type'] = 'guoku' 
+            _context['verified_reason'] = 'guoku' 
+            _context['gender'] = 'O' 
+            _context['friend_count'] = 0 
+            _context['follower_count'] = 0 
+            _context['money_i_need'] = 0 
+            _context['like_count'] = 0 
+            _context['note_count'] = 0 
+            _context['same_follow'] = []
             
-        _profile = User_Profile.objects.get(user_id = self.__user_id)
-        _context['nickname'] = _profile.nickname
-        _context['avatar'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
-        _context['verified'] = 0 
-        _context['verified_type'] = 'guoku' 
-        _context['verified_reason'] = 'guoku' 
-        _context['gender'] = _profile.gender 
-        _context['friend_count'] = 0 
-        _context['follower_count'] = 0 
-        _context['money_i_need'] = 0 
-        _context['like_count'] = 0 
-        _context['note_count'] = 0 
-        _context['same_follow'] = []
             
         return _context
     
