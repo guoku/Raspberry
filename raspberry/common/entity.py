@@ -32,7 +32,7 @@ class RBEntity(object):
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, chief_image_url, 
                               taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = []):
-        
+       
         _mango_client = MangoApiClient()
         _entity_id = _mango_client.create_entity_by_taobao_item(
             taobao_item_info = taobao_item_info,

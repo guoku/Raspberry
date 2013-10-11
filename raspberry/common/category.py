@@ -80,7 +80,7 @@ class RBCategory(object):
             for _category_obj in RBCategoryModel.objects.filter(group_id = _group['id']):
                 _group['content'].append({
                     'category_id' : _category_obj.id,
-                    'category_titile' : _category_obj.title,
+                    'category_title' : _category_obj.title,
                     'category_img' : ''
                 })
         return _rslt

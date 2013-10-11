@@ -61,7 +61,7 @@ class Entity(object):
             _detail_image_ids.append(_image_obj.get_image_id())
         
         _entity_obj = EntityModel(
-            brand = "",
+            brand = brand,
             title = title,
             intro = intro,
             images = EntityImageModel(
