@@ -1,6 +1,6 @@
 # coding=utf8
 from common.user import RBUser
-from mobile.lib.http import SuccessJsonResponse
+from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
 
 def login(request):
@@ -36,13 +36,35 @@ def register(request):
         _api_key = request.POST.get('api_key', None)
         #_dev_token = request.POST.get('dev_token', None)
         
-        _user = RBUser.create(
-            email = _email, 
-            password = _password
-        )
-        _user.set_profile(
-            nickname = _nickname
-        )
+        try:
+            _user = RBUser.create(
+                email = _email, 
+                password = _password
+            )
+        except RBUser.EmailExistAlready, e:
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'email',
+                    'message' : str(e),
+                },
+                status = 409
+            )
+            
+
+        try:
+            _user.set_profile(
+                nickname = _nickname
+            )
+        except RBUser.NicknameExistAlready, e:
+            _user.delete()
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'nickname',
+                    'message' : str(e),
+                },
+                status = 409
+            )
+        
         _session = Session_Key.objects.generate_session(
             user_id = _user.get_user_id(),
             username = _user.get_username(),

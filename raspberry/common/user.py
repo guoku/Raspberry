@@ -6,6 +6,18 @@ import datetime
 
 class RBUser(object):
     
+    class EmailExistAlready(Exception):
+        def __init__(self, email):
+            self.__message = "email %s is exist" %email
+        def __str__(self):
+            return repr(self.__message)
+
+    class NicknameExistAlready(Exception):
+        def __init__(self, nickname):
+            self.__message = "nickname%s is exist" %nickname
+        def __str__(self):
+            return repr(self.__message)
+    
     def __init__(self, user_id):
         self.__user_id = int(user_id) 
     
@@ -47,8 +59,17 @@ class RBUser(object):
             return _inst
         return None
 
+    @staticmethod
+    def email_exist(email):
+        if AuthUser.objects.filter(email = email).count() > 0:
+            return True
+        return False
+
     @classmethod
     def create(cls, email, password, username = None):
+        if RBUser.email_exist(email):
+            raise RBUser.EmailExistAlready(email) 
+
         _username = cls._generate_username()
         _user = AuthUser.objects.create(username = _username, email = email)
         _user.set_password(password)
@@ -56,9 +77,22 @@ class RBUser(object):
          
         _inst = cls(_user.id)
         return _inst
+    
+    def delete(self):
+        self.__ensure_user_obj()
+        self.__user_obj.delete()
+        
 
+    @staticmethod
+    def nickname_exist(nickname):
+        if User_Profile.objects.filter(nickname = nickname).count() > 0:
+            return True
+        return False
     
     def set_profile(self, nickname, location = 'beijing', gender = 'O', bio = '', website = ''):
+        if RBUser.nickname_exist(nickname):
+            raise RBUser.NicknameExistAlready(nickname) 
+        
         _user_profile = User_Profile.objects.create(
             user_id = self.__user_id,
             nickname = nickname,
