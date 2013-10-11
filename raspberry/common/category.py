@@ -72,3 +72,17 @@ class RBCategory(object):
             })
         return _rslt
 
+    @staticmethod
+    def all_group_with_full_category():
+        _rslt = RBCategory.allgroups()
+        for _group in _rslt: 
+            _group['content'] = []
+            for _category_obj in RBCategoryModel.objects.filter(group_id = _group['id']):
+                _group['content'].append({
+                    'category_id' : _category_obj.id,
+                    'category_titile' : _category_obj.title,
+                    'category_img' : ''
+                })
+        return _rslt
+            
+        

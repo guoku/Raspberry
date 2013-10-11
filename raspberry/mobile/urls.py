@@ -8,6 +8,6 @@ urlpatterns = patterns('mobile.views',
 #    url(r'^weibo/register/$', 'register_by_weibo'),
 #    url(r'^weibo/bind/$', 'bind_weibo'),
 #    url(r'^weibo/unbind/$', 'unbind_weibo'),
+    (r'^category/$', 'all_category'),
 )
-
 
