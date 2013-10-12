@@ -1,6 +1,7 @@
 # coding=utf8
 from common.entity import RBEntity
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
+from mobile.models import Session_Key 
 import time
 
 class RBMobileEntity(RBEntity):
@@ -30,4 +31,18 @@ def category_entity(request, category_id):
     return SuccessJsonResponse(_rslt)
 
 
+def like_entity(request, entity_id, target_status):
+    if request.method == "POST":
+        _session = request.POST.get('session', None)
+        
+        _user_id = Session_Key.objects.get_user_id(_session)
+        _rslt = { 'entity_id' : entity_id }
+        if target_status == '1':
+            RBMobileEntity(entity_id).like(_user_id)
+            _rslt['like_already'] = 1
+        else:
+            RBMobileEntity(entity_id).unlike(_user_id)
+            _rslt['like_already'] = 0
+        return SuccessJsonResponse(_rslt)
+            
 

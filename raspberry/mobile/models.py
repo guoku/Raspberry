@@ -13,6 +13,12 @@ class SessionKeyManager(models.Manager):
             session_key = _session_key
         )
         return _session_object
+    
+    def get_user_id(self, session_key):
+        _session_object = self.get(
+            session_key = session_key 
+        )
+        return _session_object.user_id
 
 class Session_Key(models.Model):
     user = models.ForeignKey(User, related_name = "mobile_client_session")

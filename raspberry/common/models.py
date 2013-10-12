@@ -48,3 +48,12 @@ class Entity(models.Model):
     class Meta:
         ordering = ['-created_time']
  
+
+class Entity_Like(models.Model):
+    entity_id = models.CharField(max_length = 32, unique = True, db_index = True)
+    user = models.ForeignKey(User)
+    created_time = models.DateTimeField(auto_now_add = True, db_index=True)
+    
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('entity_id', 'user')
