@@ -50,10 +50,22 @@ class Entity(models.Model):
  
 
 class Entity_Like(models.Model):
-    entity_id = models.CharField(max_length = 32, unique = True, db_index = True)
+    entity_id = models.CharField(max_length = 32, db_index = True)
     user = models.ForeignKey(User)
     created_time = models.DateTimeField(auto_now_add = True, db_index=True)
     
     class Meta:
         ordering = ['-created_time']
         unique_together = ('entity_id', 'user')
+
+class Entity_Note(models.Model):
+    entity_id = models.CharField(max_length = 32, db_index = True)
+    creator = models.ForeignKey(User) 
+    note_text = models.TextField(null = False)
+    weight = models.IntegerField(default = 0, db_index = True)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    updated_time = models.DateTimeField(auto_now = True, db_index = True)
+
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('entity_id', 'creator')

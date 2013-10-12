@@ -1,13 +1,51 @@
 # coding=utf8
 from models import Entity as RBEntityModel
 from models import Entity_Like as RBEntityLikeModel
+from models import Entity_Note as RBEntityNoteModel
 from hashlib import md5
 import datetime
 import urllib
 from utils.lib import cal_guoku_hash 
 from mango.client import MangoApiClient
 
+
+
 class RBEntity(object):
+    
+    class Note(object):
+    
+        def __init__(self, note_id):
+            self.__note_id = note_id
+    
+        def __ensure_note_obj(self):
+            if not hasattr(self, '__note_obj'):
+                self.__note_obj = RBEntityNoteModel.objects.get(pk = self.__note_id)
+    
+        @classmethod
+        def create(cls, entity_id, creator_id, note_text):
+            _note_obj = RBEntityNoteModel.objects.create(
+                entity_id = entity_id,
+                creator_id = creator_id,
+                note_text = note_text
+            )
+            _inst = cls(_note_obj.id)
+            _inst.__note_obj = _note_obj
+            return _inst
+        
+        def __load_note_context(self):
+            self.__ensure_note_obj()
+            _context = {} 
+            _context["note_id"] = self.__note_obj.id
+            _context["creator_id"] = self.__note_obj.creator_id
+            _context["note_text"] = self.__note_obj.note_text
+            _context["created_time"] = self.__note_obj.created_time
+            _context["updated_time"] = self.__note_obj.updated_time
+            return _context
+            
+        def read(self):
+            _context = self.__load_note_context()
+            return _context    
+
     
     def __init__(self, entity_id):
         self.__entity_id = entity_id
@@ -163,3 +201,11 @@ class RBEntity(object):
         return False
          
 
+    def add_note(self, creator_id, note_text):
+        _note = self.Note.create(
+            entity_id = self.__entity_id,
+            creator_id = creator_id,
+            note_text = note_text
+        )
+        return _note.read()
+     
