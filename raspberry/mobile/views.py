@@ -2,6 +2,7 @@
 from account import *
 from category import *
 from entity import *
+from user import *
 
 
 def homepage(request):

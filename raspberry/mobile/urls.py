@@ -2,14 +2,15 @@ __author__ = 'stxiong'
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('mobile.views',
-    url(r'^login/$', 'login'),
+    (r'^login/$', 'login'),
 #    url(r'^logout/$', 'logout'),
-    url(r'^register/$', 'register'),
+    (r'^register/$', 'register'),
     (r'^homepage/$', 'homepage'),
+    (r'^category/$', 'all_category'),
+    (r'^category/(?P<category_id>\d+)/entity/$', 'category_entity'),
     (r'^entity/(?P<entity_id>\w+)/like/(?P<target_status>\d+)/$', 'like_entity'),
     (r'^entity/(?P<entity_id>\w+)/add/note/$', 'add_note_for_entity'),
     (r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\d+)/poke/(?P<target_status>\d+)/$', 'poke_entity_note'),
-    (r'^category/$', 'all_category'),
-    (r'^category/(?P<category_id>\d+)/entity/$', 'category_entity'),
+    (r'^follow/user/(?P<followee_id>\d+)/(?P<target_status>\d+)/$', 'follow_user'),
 )
 

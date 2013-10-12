@@ -1,7 +1,8 @@
 # coding=utf8
 from django.contrib.auth.models import User as AuthUser
 from django.contrib.auth import authenticate
-from models import User_Profile
+from models import User_Profile as RBUserProfileModel 
+from models import User_Follow as RBUserFollowModel
 import datetime
 
 class RBUser(object):
@@ -85,7 +86,7 @@ class RBUser(object):
 
     @staticmethod
     def nickname_exist(nickname):
-        if User_Profile.objects.filter(nickname = nickname).count() > 0:
+        if RBUserProfileModel.objects.filter(nickname = nickname).count() > 0:
             return True
         return False
     
@@ -93,7 +94,7 @@ class RBUser(object):
         if RBUser.nickname_exist(nickname):
             raise RBUser.NicknameExistAlready(nickname) 
         
-        _user_profile = User_Profile.objects.create(
+        _user_profile = RBUserProfileModel.objects.create(
             user_id = self.__user_id,
             nickname = nickname,
             location = location,
@@ -109,7 +110,7 @@ class RBUser(object):
         _context['user_id'] = self.__user_obj.id
         
         try:
-            _profile = User_Profile.objects.get(user_id = self.__user_id)
+            _profile = RBUserProfileModel.objects.get(user_id = self.__user_id)
             _context['nickname'] = _profile.nickname
             _context['avatar'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
             _context['verified'] = 0 
@@ -122,7 +123,7 @@ class RBUser(object):
             _context['like_count'] = 0 
             _context['note_count'] = 0 
             _context['same_follow'] = []
-        except User_Profile.DoesNotExist, e:
+        except RBUserProfileModel.DoesNotExist, e:
             _context['nickname'] = 'unknown' 
             _context['avatar'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
             _context['verified'] = 0 
@@ -142,4 +143,58 @@ class RBUser(object):
     def read(self):
         _context = self.__load_user_context()
         return _context
+
+    def follow(self, followee_id):
+        try:
+            RBUserFollowModel.objects.create(
+                follower_id = self.__user_id,
+                followee_id = followee_id 
+            )
+            return True
+        except:
+            pass
+        return False
+         
+    def unfollow(self, followee_id):
+        try:
+            _obj = RBUserFollowModel.objects.get(
+                follower_id = self.__user_id,
+                followee_id = followee_id 
+            )
+            _obj.delete()
+            return True
+        except:
+            pass
+        return False
+
+    def get_relation(self, user_id):
+        _user_id = int(user_id)
+        if _user_id == self.__user_id:
+            return 4
+        
+        _is_following = RBUserFollowModel.objects.filter(
+                follower_id = self.__user_id,
+                followee_id = _user_id
+        ).count()
+        
+        _is_followed = RBUserFollowModel.objects.filter(
+                follower_id = _user_id,
+                followee_id = self.__user_id
+        ).count()
+        
+        if _is_following > 0 and _is_followed > 0:
+            return 3
+
+        if _is_following > 0:
+            return 1
+
+        if _is_followed > 0:
+            return 2
+
+        return 4
+
+             
+
+            
+         
 
