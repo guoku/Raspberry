@@ -44,7 +44,11 @@ class Entity(object):
             self.__entity_obj.save()
         return _item_id 
 
-    def del_taobao_item(self, item_id):
+    def bind_taobao_item(self, item_id):
+        _item_obj = Item(item_id)
+        _item_obj.bind_entity(self.__entity_id)
+    
+    def unbind_taobao_item(self, item_id):
         _item_obj = Item(item_id)
         if _item_obj.get_entity_id() == self.__entity_id:
             _item_obj.bind_entity("")

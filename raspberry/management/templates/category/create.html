@@ -16,7 +16,7 @@
                     <div class="controls">
                         <select id="group_id" name="group_id">
                             {% for group in category_groups %}
-                                <option {%if  group.id == selected_group_id%}selected="selected" {%endif%}value="{{ group.id }}">{{ group.title }}</option>
+                                <option {%if  group.group_id == selected_group_id%}selected="selected" {%endif%}value="{{ group.group_id }}">{{ group.title }}</option>
                             {% endfor %}
                         </select>
                     </div>

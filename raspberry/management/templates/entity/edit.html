@@ -56,7 +56,7 @@
                         <div class="controls">
                             <select id="catagory" name="category_id">
                                 {% for category in category_list %}
-                                    <option {%if category.id == entity_context.category_id%}selected="selected" {%endif%}value="{{ category.id }}">{{ category.title }}</option>
+                                    <option {%if category.category_id == entity_context.category_id%}selected="selected" {%endif%}value="{{ category.category_id }}">{{ category.title }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -101,7 +101,7 @@
                         </div>
                     </fieldset>
                     <div class="form-actions">
-                        <a class="btn" href="{% url 'management.views.unbind_entity_item' entity_context.entity_id item_context.item_id %}">删除</a>
+                        <a class="btn" href="{% url 'management.views.unbind_taobao_item_from_entity' entity_context.entity_id item_context.item_id %}">删除</a>
                     </div>
                 </form>
             {% endfor %}

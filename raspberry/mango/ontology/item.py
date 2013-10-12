@@ -33,6 +33,13 @@ class Item(object):
             return _taobao_item_obj.entity_id
         return None
 
+    @staticmethod
+    def get_item_id_by_taobao_id(taobao_id):
+        _taobao_item_obj = TaobaoItemDocument.objects.filter(taobao_id = taobao_id).first()
+        if _taobao_item_obj != None:
+            return str(_taobao_item_obj.id)
+        return None
+
     @classmethod
     def create_taobao_item(cls, entity_id, images, taobao_id, cid, title, shop_nick, price, soldout): 
         _taobao_id = taobao_id.strip()

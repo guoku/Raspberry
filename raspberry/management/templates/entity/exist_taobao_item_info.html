@@ -1,0 +1,51 @@
+{% extends "management_base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="span11">
+                <tr>
+                    {% for image in images %}
+                        <td>
+                            <img class="img-polaroid" src="{{ image.url }}" style="max-height:150px;max-width:150px;">
+                        </td>
+                    {% endfor %}
+                </tr>
+            </div> 
+        </div> 
+        <div>
+            <form class="well form-horizontal" action="{% url 'management.views.bind_taobao_item_to_entity' entity_id item_id %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="taobao_id_display">淘宝id:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="taobao_id_display" name="taobao_id_display" value="{{ taobao_id }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_nick">店家</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="shop_nick" name="shop_nick" value="{{ shop_nick }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="price">价格</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="price" name="price" value="{{ price }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="taobao_title">原名称</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="taobao_title" name="taobao_title" value="{{ taobao_title }}" disabled/>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

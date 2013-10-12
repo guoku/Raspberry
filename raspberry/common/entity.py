@@ -130,6 +130,10 @@ class RBEntity(object):
         _hdl = RBEntityModel.objects.filter(category_id = category_id)
         return _hdl.count()
     
+    def bind_item(self, item_id):
+        _mango_client = MangoApiClient()
+        _mango_client.bind_entity_item(self.__entity_id, item_id)
+    
     def unbind_item(self, item_id):
         _mango_client = MangoApiClient()
         _mango_client.unbind_entity_item(self.__entity_id, item_id)
