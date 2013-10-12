@@ -113,12 +113,10 @@ class Entity(object):
             _context['price'] = float(self.__entity_obj.price)
         else:
             _context['price'] = 0.0 
-        _context['chief_image'] = { 'url' : Image(self.__entity_obj.images.chief_id).getlink() }
+        _context['chief_image'] = Image(self.__entity_obj.images.chief_id).getlink()
         _context['detail_images'] = []
         for _image_id in self.__entity_obj.images.detail_ids:
-            _context['detail_images'].append({
-                'url' : Image(_image_id).getlink()
-            })
+            _context['detail_images'].append(Image(_image_id).getlink())
         _context['item_id_list'] = Item.get_item_id_list_by_entity_id(self.__entity_id) 
         return _context    
     

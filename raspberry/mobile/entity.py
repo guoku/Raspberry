@@ -1,7 +1,7 @@
 # coding=utf8
 from common.entity import RBEntity
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
-
+import time
 
 class RBMobileEntity(RBEntity):
     
@@ -10,8 +10,8 @@ class RBMobileEntity(RBEntity):
 
     def read(self):
         _context = super(RBMobileEntity, self).read()
-        _context['created_time'] = _context["created_time"].strftime("%Y-%m-%d %H:%M:%S")
-        _context['updated_time'] = _context["updated_time"].strftime("%Y-%m-%d %H:%M:%S")
+        _context['created_time'] = time.mktime(_context["created_time"].timetuple())
+        _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
         return _context
 
 
