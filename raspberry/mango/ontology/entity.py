@@ -105,7 +105,10 @@ class Entity(object):
         _context['brand'] = self.__entity_obj.brand 
         _context['title'] = self.__entity_obj.title
         _context['intro'] = self.__entity_obj.intro
-        _context['price'] = self.__entity_obj.price
+        if self.__entity_obj.price:
+            _context['price'] = float(self.__entity_obj.price)
+        else:
+            _context['price'] = 0.0 
         _context['chief_image'] = { 'url' : Image(self.__entity_obj.images.chief_id).getlink() }
         _context['detail_images'] = []
         for _image_id in self.__entity_obj.images.detail_ids:
