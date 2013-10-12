@@ -66,3 +66,19 @@ def add_note_for_entity(request, entity_id):
         )
         return SuccessJsonResponse(_note_context)
 
+def poke_entity_note(request, entity_id, note_id, target_status):
+    if request.method == "POST":
+        _session = request.POST.get('session', None)
+        
+        _user_id = Session_Key.objects.get_user_id(_session)
+        _rslt = { 
+            'entity_id' : entity_id, 
+            'note_id' : note_id 
+        }
+        if target_status == '1':
+            RBMobileEntity(entity_id).poke_note(note_id, _user_id)
+            _rslt['poke_already'] = 1
+        else:
+            RBMobileEntity(entity_id).depoke_note(note_id, _user_id)
+            _rslt['poke_already'] = 0
+        return SuccessJsonResponse(_rslt)

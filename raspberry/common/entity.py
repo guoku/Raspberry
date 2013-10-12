@@ -2,6 +2,7 @@
 from models import Entity as RBEntityModel
 from models import Entity_Like as RBEntityLikeModel
 from models import Entity_Note as RBEntityNoteModel
+from models import Entity_Note_Poke as RBEntityNotePokeModel
 from hashlib import md5
 import datetime
 import urllib
@@ -44,8 +45,30 @@ class RBEntity(object):
             
         def read(self):
             _context = self.__load_note_context()
-            return _context    
+            return _context
 
+        def poke(self, user_id):
+            try:
+                RBEntityNotePokeModel.objects.create(
+                    note_id = self.__note_id,
+                    user_id = user_id
+                )
+                return True
+            except: 
+                pass
+            return False
+
+        def depoke(self, user_id):
+            try:
+                _obj = RBEntityNotePokeModel.objects.get(
+                    note_id = self.__note_id,
+                    user_id = user_id
+                )
+                _obj.delete()
+                return True
+            except: 
+                pass
+            return False
     
     def __init__(self, entity_id):
         self.__entity_id = entity_id
@@ -209,3 +232,8 @@ class RBEntity(object):
         )
         return _note.read()
      
+    def poke_note(self, note_id, user_id):
+        return self.Note(note_id).poke(user_id)
+    
+    def depoke_note(self, note_id, user_id):
+        return self.Note(note_id).depoke(user_id)

@@ -69,3 +69,13 @@ class Entity_Note(models.Model):
     class Meta:
         ordering = ['-created_time']
         unique_together = ('entity_id', 'creator')
+
+class Entity_Note_Poke(models.Model):
+    note = models.ForeignKey(Entity_Note)
+    user = models.ForeignKey(User) 
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('note', 'user')
+
