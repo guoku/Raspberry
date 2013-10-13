@@ -89,7 +89,7 @@ def poke_entity_note(request, entity_id, note_id, target_status):
 
 def user_like(request, user_id):
     if request.method == "GET":
-        _session = request.POST.get('session', None)
+        _session = request.GET.get('session', None)
         if _session != None:
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
@@ -103,7 +103,7 @@ def user_like(request, user_id):
     
 def user_note(request, user_id):
     if request.method == "GET":
-        _session = request.POST.get('session', None)
+        _session = request.GET.get('session', None)
         if _session != None:
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
@@ -121,3 +121,16 @@ def user_note(request, user_id):
 
         return SuccessJsonResponse(_rslt)
     
+def search(request):
+    if request.method == "GET":
+        _query = request.GET.get('q', None)
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _rslt = []
+        for _entity_id in RBMobileEntity.search(_query):
+            _rslt.append(RBMobileEntity(_entity_id).read(_request_user_id))
+        
+        return SuccessJsonResponse(_rslt)

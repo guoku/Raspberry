@@ -55,3 +55,6 @@ class MangoApiClient(object):
         _entity = Entity(entity_id)
         _entity.unbind_taobao_item(item_id)
          
+    def search_entity(self, query):
+        return Entity.search(query)
+         

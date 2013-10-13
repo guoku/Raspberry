@@ -132,3 +132,10 @@ class Entity(object):
             self.__entity_obj.price = price
         self.__entity_obj.updated_time = datetime.datetime.now()
         self.__entity_obj.save()
+   
+    @staticmethod
+    def search(query):
+        _entity_id_list = []  
+        for _entity_obj in EntityModel.objects.filter(intro__contains = query):
+            _entity_id_list.append(str(_entity_obj.id))
+        return _entity_id_list

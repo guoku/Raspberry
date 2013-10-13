@@ -266,3 +266,7 @@ class RBEntity(object):
             })
         return _list
         
+    @staticmethod
+    def search(query):
+        _mango_client = MangoApiClient()
+        return _mango_client.search_entity(query)
