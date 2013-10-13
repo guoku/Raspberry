@@ -69,6 +69,11 @@ class RBEntity(object):
             except: 
                 pass
             return False
+
+        def poke_already(self, user_id):
+            return RBEntityNotePokeModel.objects.filter(user_id = user_id).count() > 0
+
+
     
     def __init__(self, entity_id):
         self.__entity_id = entity_id
@@ -132,6 +137,7 @@ class RBEntity(object):
         _context = meta_context 
         _context["entity_hash"] = self.__entity_obj.entity_hash
         _context["category_id"] = self.__entity_obj.category_id
+        _context["note_id_list"] = map(lambda x : x.id, RBEntityNoteModel.objects.filter(entity_id = self.__entity_id))
         _context["created_time"] = self.__entity_obj.created_time
         _context["updated_time"] = self.__entity_obj.updated_time
         return _context
@@ -143,9 +149,6 @@ class RBEntity(object):
         _context = self.__load_entity_context(_meta_context)
         return _context    
     
-    def read_full_context(self):
-        _context = self.read() 
-        return _context    
     
     def update(self, category_id = None, brand = None, title = None, intro = None, price = None):
         if brand != None or title != None or intro != None:
@@ -223,6 +226,8 @@ class RBEntity(object):
             pass
         return False
          
+    def like_already(self, user_id):
+        return RBEntityLikeModel.objects.filter(user_id = user_id).count() > 0 
 
     def add_note(self, creator_id, note_text):
         _note = self.Note.create(
@@ -231,9 +236,16 @@ class RBEntity(object):
             note_text = note_text
         )
         return _note.read()
+    
+    def read_note(self, note_id):
+        return self.Note(note_id).read()
      
     def poke_note(self, note_id, user_id):
         return self.Note(note_id).poke(user_id)
     
     def depoke_note(self, note_id, user_id):
         return self.Note(note_id).depoke(user_id)
+    
+    def poke_note_already(self, note_id, user_id):
+        return self.Note(note_id).poke_already(user_id)
+    
