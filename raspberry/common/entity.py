@@ -230,6 +230,11 @@ class RBEntity(object):
     def like_already(self, user_id):
         return RBEntityLikeModel.objects.filter(user_id = user_id).count() > 0 
 
+    @staticmethod
+    def like_list_of_user(user_id):
+        _user_id = int(user_id)
+        return map(lambda x : x.entity_id, RBEntityLikeModel.objects.filter(user_id = _user_id))
+        
     def add_note(self, creator_id, note_text):
         _note = self.Note.create(
             entity_id = self.__entity_id,
@@ -250,3 +255,14 @@ class RBEntity(object):
     def poke_note_already(self, note_id, user_id):
         return self.Note(note_id).poke_already(user_id)
     
+    @staticmethod
+    def note_list_of_user(user_id):
+        _user_id = int(user_id)
+        _list = []
+        for _note_obj in RBEntityNoteModel.objects.filter(creator_id = _user_id):
+            _list.append({
+                'entity_id' : _note_obj.entity_id,
+                'note_id' : _note_obj.id
+            })
+        return _list
+        

@@ -1,16 +1,8 @@
 # coding=utf8
-from common.user import RBUser
+from lib.user import RBMobileUser
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
 import time
-
-
-class RBMobileUser(RBUser):
-    
-    def __init__(self, user_id):
-        RBUser.__init__(self, user_id)
-
-     
 
 
 def follow_user(request, followee_id, target_status):

@@ -1,81 +1,8 @@
 # coding=utf8
-from common.item import RBItem
-from common.entity import RBEntity
-from user import RBMobileUser
-from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
+from lib.entity import RBMobileEntity
+from lib.user import RBMobileUser
+from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
-import time
-
-class RBMobileItem(RBItem):
-
-    def __init__(self, item_id):
-        RBItem.__init__(self, item_id)
-
-    def read(self):
-        _context = super(RBMobileItem, self).read()
-        return _context
-
-
-class RBMobileEntity(RBEntity):
-    
-    def __init__(self, entity_id):
-        RBEntity.__init__(self, entity_id)
-
-    def read(self, user_id):
-        _context = super(RBMobileEntity, self).read()
-        _context['created_time'] = time.mktime(_context["created_time"].timetuple())
-        _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
-        
-        if user_id and self.like_already(user_id):
-            _context['like_already'] = 1
-        else:
-            _context['like_already'] = 0
-        
-        return _context
-    
-    def read_full_context(self, user_id):
-        _context = {}
-        _context['entity'] = self.read(user_id) 
-        
-        _context['item_list'] = []
-        for _item_id in _context['entity']['item_id_list']:
-            _context['item_list'].append(RBMobileItem(_item_id).read())
-
-        _context['note_list'] = []
-        for _note_id in _context['entity']['note_id_list']:
-            _context['note_list'].append(self.read_note(_note_id, user_id)) 
-       
-        _context['note_friend_list'] = []
-        for _followee_id in RBMobileUser(user_id).get_following_user_id_list():
-            _context['note_friend_list'].append(RBMobileUser(_followee_id).read())
-        
-        return _context    
-
-    def add_note(self, creator_id, note_text):
-        _note_context = super(RBMobileEntity, self).add_note(creator_id, note_text)
-        _note_context['created_time'] = time.mktime(_note_context["created_time"].timetuple())
-        _note_context['updated_time'] = time.mktime(_note_context["updated_time"].timetuple())
-        return _note_context
-    
-    def read_note(self, note_id, user_id):
-        _note_context = super(RBMobileEntity, self).read_note(note_id)
-        _note_context['created_time'] = time.mktime(_note_context["created_time"].timetuple())
-        _note_context['updated_time'] = time.mktime(_note_context["updated_time"].timetuple())
-        if user_id and self.poke_note_already(note_id, user_id):
-            _note_context['poke_already'] = 1
-        else:
-            _note_context['poke_already'] = 0
-        return _note_context 
-    
-    def read_note_full_context(self, note_id, user_id):
-        _context = {}
-        _context['note'] = self.read_note(note_id, user_id)
-        _context['entity'] = self.read(user_id)
-        _context['poker_list'] = []
-        for _poker_id in _context['note']['poker_id_list']: 
-            _context['poker_list'].append(RBMobileUser(_poker_id).read())
-        return _context
-
 
 def category_entity(request, category_id):
     _entity_id_list = RBEntity.find(
@@ -159,3 +86,38 @@ def poke_entity_note(request, entity_id, note_id, target_status):
             RBMobileEntity(entity_id).depoke_note(note_id, _user_id)
             _rslt['poke_already'] = 0
         return SuccessJsonResponse(_rslt)
+
+def user_like(request, user_id):
+    if request.method == "GET":
+        _session = request.POST.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        
+        _rslt = []
+        for _entity_id in RBMobileEntity.like_list_of_user(user_id):
+            _rslt.append(RBMobileEntity(_entity_id).read(_request_user_id))
+
+        return SuccessJsonResponse(_rslt)
+    
+def user_note(request, user_id):
+    if request.method == "GET":
+        _session = request.POST.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        
+        _rslt = []
+        for _note_info in RBMobileEntity.note_list_of_user(user_id):
+            _entity_id = _note_info['entity_id'] 
+            _note_id = _note_info['note_id']
+            _entity = RBMobileEntity(_entity_id)
+            _rslt.append({
+                'entity' : _entity.read(_request_user_id),
+                'note' : _entity.read_note(_note_id, _request_user_id)
+            })
+
+        return SuccessJsonResponse(_rslt)
+    
