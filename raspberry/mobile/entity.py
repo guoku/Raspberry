@@ -34,17 +34,16 @@ class RBMobileEntity(RBEntity):
         return _context
     
     def read_full_context(self, user_id):
-        _context = self.read(user_id) 
+        _context = {}
+        _context['entity'] = self.read(user_id) 
         
         _context['item_list'] = []
-        for _item_id in _context['item_id_list']:
+        for _item_id in _context['entity']['item_id_list']:
             _context['item_list'].append(RBMobileItem(_item_id).read())
-        del _context['item_id_list']
 
         _context['note_list'] = []
-        for _note_id in _context['note_id_list']:
+        for _note_id in _context['entity']['note_id_list']:
             _context['note_list'].append(self.read_note(_note_id, user_id)) 
-        del _context['note_id_list']
        
         _context['note_friend_list'] = []
         for _followee_id in RBMobileUser(user_id).get_following_user_id_list():
@@ -67,6 +66,15 @@ class RBMobileEntity(RBEntity):
         else:
             _note_context['poke_already'] = 0
         return _note_context 
+    
+    def read_note_full_context(self, note_id, user_id):
+        _context = {}
+        _context['note'] = self.read_note(note_id, user_id)
+        _context['entity'] = self.read(user_id)
+        _context['poker_list'] = []
+        for _poker_id in _context['note']['poker_id_list']: 
+            _context['poker_list'].append(RBMobileUser(_poker_id).read())
+        return _context
 
 
 def category_entity(request, category_id):
@@ -123,6 +131,17 @@ def add_note_for_entity(request, entity_id):
             note_text = _note_text
         )
         return SuccessJsonResponse(_note_context)
+
+def entity_note_detail(request, entity_id, note_id):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _user_id = None
+
+        _rslt = RBMobileEntity(entity_id).read_note_full_context(note_id, _user_id)
+        return SuccessJsonResponse(_rslt)
 
 def poke_entity_note(request, entity_id, note_id, target_status):
     if request.method == "POST":

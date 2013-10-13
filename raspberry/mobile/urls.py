@@ -11,6 +11,7 @@ urlpatterns = patterns('mobile.views',
     (r'^entity/(?P<entity_id>\w+)/$', 'entity_detail'),
     (r'^entity/(?P<entity_id>\w+)/like/(?P<target_status>\d+)/$', 'like_entity'),
     (r'^entity/(?P<entity_id>\w+)/add/note/$', 'add_note_for_entity'),
+    (r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\d+)/$', 'entity_note_detail'),
     (r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\d+)/poke/(?P<target_status>\d+)/$', 'poke_entity_note'),
     (r'^follow/user/(?P<followee_id>\d+)/(?P<target_status>\d+)/$', 'follow_user'),
 )

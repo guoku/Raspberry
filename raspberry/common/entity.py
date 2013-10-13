@@ -39,6 +39,7 @@ class RBEntity(object):
             _context["note_id"] = self.__note_obj.id
             _context["creator_id"] = self.__note_obj.creator_id
             _context["note_text"] = self.__note_obj.note_text
+            _context["poker_id_list"] = map(lambda x : x.user_id, RBEntityNotePokeModel.objects.filter(note_id = self.__note_id))
             _context["created_time"] = self.__note_obj.created_time
             _context["updated_time"] = self.__note_obj.updated_time
             return _context
