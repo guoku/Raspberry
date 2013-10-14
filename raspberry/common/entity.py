@@ -5,6 +5,7 @@ from models import Entity_Score as RBEntityScoreModel
 from models import Entity_Note as RBEntityNoteModel
 from models import Entity_Note_Comment as RBEntityNoteCommentModel
 from models import Entity_Note_Poke as RBEntityNotePokeModel
+from django.db.models import Sum
 from hashlib import md5
 import datetime
 import urllib
@@ -163,6 +164,14 @@ class RBEntity(object):
         _context["note_id_list"] = map(lambda x : x.id, RBEntityNoteModel.objects.filter(entity_id = self.__entity_id))
         _context["created_time"] = self.__entity_obj.created_time
         _context["updated_time"] = self.__entity_obj.updated_time
+        
+
+        _context["total_score"] = 0 
+        _context["score_count"] = 0 
+        for _score_obj in RBEntityScoreModel.objects.filter(entity_id = self.__entity_id):
+            _context["total_score"] += _score_obj.score
+            _context["score_count"] += 1
+
         return _context
         
 
@@ -271,7 +280,14 @@ class RBEntity(object):
                 user_id = user_id
             )
     
-    
+    def get_user_score(self, user_id):
+        try:
+            _obj = RBEntityScoreModel.objects.get(user_id = user_id)
+            return _obj.score
+        except RBEntityScoreModel.DoesNotExist, e:
+            pass
+        return -1
+
     def add_note(self, creator_id, note_text):
         _note = self.Note.create(
             entity_id = self.__entity_id,

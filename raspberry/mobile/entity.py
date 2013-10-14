@@ -5,17 +5,24 @@ from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
 
 def category_entity(request, category_id):
-    _entity_id_list = RBMobileEntity.find(
-        category_id = category_id
-    )
-    _rslt = []
-    for _entity_id in _entity_id_list:
-        _entity = RBMobileEntity(_entity_id)
-        _rslt.append(
-            _entity.read()
-        )
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _user_id = None
         
-    return SuccessJsonResponse(_rslt)
+        _entity_id_list = RBMobileEntity.find(
+            category_id = category_id
+        )
+        _rslt = []
+        for _entity_id in _entity_id_list:
+            _entity = RBMobileEntity(_entity_id)
+            _rslt.append(
+                _entity.read(_request_user_id)
+            )
+            
+        return SuccessJsonResponse(_rslt)
 
 
 def entity_detail(request, entity_id):

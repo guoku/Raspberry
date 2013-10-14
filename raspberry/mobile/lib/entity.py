@@ -29,10 +29,12 @@ class RBMobileEntity(RBEntity):
         _context['created_time'] = time.mktime(_context["created_time"].timetuple())
         _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
         
-        if user_id and self.like_already(user_id):
-            _context['like_already'] = 1
-        else:
-            _context['like_already'] = 0
+        _context['like_already'] = 0
+        _context['score_already'] = -1 
+        if user_id: 
+            if self.like_already(user_id):
+                _context['like_already'] = 1
+            _context['score_already'] = self.get_user_score(user_id) 
         
         return _context
     
