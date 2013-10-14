@@ -28,11 +28,24 @@ def user_following(request, user_id):
             _request_user = RBMobileUser(_request_user_id)
             
             _rslt = []
-            _following_user_id_list = RBMobileUser(_request_user_id).get_following_user_id_list()
+            _following_user_id_list = RBMobileUser(user_id).get_following_user_id_list()
+            
             for _following_user_id in _following_user_id_list: 
-                _rslt.append({
-                    'entity' : _entity.read(),
-                    'note' : _entity.read_note(_note_info['note_id'], _request_user_id)
-                })
+                _rslt.append(RBMobileUser(_following_user_id).read(_request_user_id))
+        
+            return SuccessJsonResponse(_rslt)
+
+def user_fan(request, user_id):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+            _request_user = RBMobileUser(_request_user_id)
+            
+            _rslt = []
+            _fan_user_id_list = RBMobileUser(user_id).get_fan_user_id_list()
+            
+            for _fan_user_id in _fan_user_id_list: 
+                _rslt.append(RBMobileUser(_fan_user_id).read(_request_user_id))
         
             return SuccessJsonResponse(_rslt)
