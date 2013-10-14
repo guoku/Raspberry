@@ -58,6 +58,17 @@ class Entity_Like(models.Model):
         ordering = ['-created_time']
         unique_together = ('entity_id', 'user')
 
+class Entity_Score(models.Model):
+    entity_id = models.CharField(max_length = 32, db_index = True)
+    user = models.ForeignKey(User) 
+    score = models.IntegerField(db_index = True, default = 0)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('entity_id', 'user')
+
+
 class Entity_Note(models.Model):
     entity_id = models.CharField(max_length = 32, db_index = True)
     creator = models.ForeignKey(User) 

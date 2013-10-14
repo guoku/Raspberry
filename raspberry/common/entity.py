@@ -1,6 +1,7 @@
 # coding=utf8
 from models import Entity as RBEntityModel
 from models import Entity_Like as RBEntityLikeModel
+from models import Entity_Score as RBEntityScoreModel
 from models import Entity_Note as RBEntityNoteModel
 from models import Entity_Note_Poke as RBEntityNotePokeModel
 from hashlib import md5
@@ -235,6 +236,21 @@ class RBEntity(object):
         _user_id = int(user_id)
         return map(lambda x : x.entity_id, RBEntityLikeModel.objects.filter(user_id = _user_id))
         
+    def score(self, user_id, score):
+        try:
+            _obj = RBEntityScoreModel.objects.get(
+                entity_id = self.__entity_id,
+                user_id = user_id
+            )
+            _obj.score = score
+            _obj.save()
+        except RBEntityScoreModel.DoesNotExist, e:
+            _obj = RBEntityScoreModel.objects.create(
+                entity_id = self.__entity_id,
+                user_id = user_id
+            )
+    
+    
     def add_note(self, creator_id, note_text):
         _note = self.Note.create(
             entity_id = self.__entity_id,
