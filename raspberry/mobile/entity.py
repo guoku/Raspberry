@@ -144,8 +144,11 @@ def feed(request):
             _following_user_id_list = RBMobileUser(_request_user_id).get_following_user_id_list()
             
             for _note_info in RBMobileEntity.note_list_of_user(_following_user_id_list):
-                _entity_id = _note_info['entity_id']
                 _note_id = _note_info['note_id']
-                _rslt.append(RBMobileEntity(_entity_id).read_note(_note_id, _request_user_id))
+                _entity = RBMobileEntity(_note_info['entity_id'])
+                _rslt.append({
+                    'entity' : _entity.read(),
+                    'note' : _entity.read_note(_note_info['note_id'], _request_user_id)
+                })
         
             return SuccessJsonResponse(_rslt)
