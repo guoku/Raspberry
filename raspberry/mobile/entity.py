@@ -5,7 +5,7 @@ from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
 
 def category_entity(request, category_id):
-    _entity_id_list = RBEntity.find(
+    _entity_id_list = RBMobileEntity.find(
         category_id = category_id
     )
     _rslt = []

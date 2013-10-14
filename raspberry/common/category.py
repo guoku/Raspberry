@@ -77,7 +77,7 @@ class RBCategory(object):
         _rslt = RBCategory.allgroups()
         for _group in _rslt: 
             _group['content'] = []
-            for _category_obj in RBCategoryModel.objects.filter(group_id = _group['id']):
+            for _category_obj in RBCategoryModel.objects.filter(group_id = _group['group_id']):
                 _group['content'].append({
                     'category_id' : _category_obj.id,
                     'category_title' : _category_obj.title,

@@ -9,8 +9,13 @@ class RBMobileItem(RBItem):
     def __init__(self, item_id):
         RBItem.__init__(self, item_id)
 
+    @staticmethod
+    def generate_taobao_item_url(taobao_id):
+        return 'http://item.taobao.com/item.htm?id=' + taobao_id
+
     def read(self):
         _context = super(RBMobileItem, self).read()
+        _context['url'] = RBMobileItem.generate_taobao_item_url(_context['taobao_id'])
         return _context
 
 
@@ -19,7 +24,7 @@ class RBMobileEntity(RBEntity):
     def __init__(self, entity_id):
         RBEntity.__init__(self, entity_id)
 
-    def read(self, user_id):
+    def read(self, user_id = None):
         _context = super(RBMobileEntity, self).read()
         _context['created_time'] = time.mktime(_context["created_time"].timetuple())
         _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
@@ -31,7 +36,7 @@ class RBMobileEntity(RBEntity):
         
         return _context
     
-    def read_full_context(self, user_id):
+    def read_full_context(self, user_id = None):
         _context = {}
         _context['entity'] = self.read(user_id) 
         
@@ -42,10 +47,11 @@ class RBMobileEntity(RBEntity):
         _context['note_list'] = []
         for _note_id in _context['entity']['note_id_list']:
             _context['note_list'].append(self.read_note(_note_id, user_id)) 
-       
-        _context['note_friend_list'] = []
-        for _followee_id in RBMobileUser(user_id).get_following_user_id_list():
-            _context['note_friend_list'].append(RBMobileUser(_followee_id).read())
+      
+        if user_id:
+            _context['note_friend_list'] = []
+            for _followee_id in RBMobileUser(user_id).get_following_user_id_list():
+                _context['note_friend_list'].append(RBMobileUser(_followee_id).read())
         
         return _context    
 
@@ -55,8 +61,10 @@ class RBMobileEntity(RBEntity):
         _note_context['updated_time'] = time.mktime(_note_context["updated_time"].timetuple())
         return _note_context
     
-    def read_note(self, note_id, user_id):
+    def read_note(self, note_id, user_id = None):
         _note_context = super(RBMobileEntity, self).read_note(note_id)
+        _note_context['creator'] = RBMobileUser(_note_context['creator_id']).read()
+        del _note_context['creator_id']
         _note_context['created_time'] = time.mktime(_note_context["created_time"].timetuple())
         _note_context['updated_time'] = time.mktime(_note_context["updated_time"].timetuple())
         if user_id and self.poke_note_already(note_id, user_id):
@@ -65,7 +73,7 @@ class RBMobileEntity(RBEntity):
             _note_context['poke_already'] = 0
         return _note_context 
     
-    def read_note_full_context(self, note_id, user_id):
+    def read_note_full_context(self, note_id, user_id = None):
         _context = {}
         _context['note'] = self.read_note(note_id, user_id)
         _context['entity'] = self.read(user_id)
