@@ -3,6 +3,7 @@ from models import Entity as RBEntityModel
 from models import Entity_Like as RBEntityLikeModel
 from models import Entity_Score as RBEntityScoreModel
 from models import Entity_Note as RBEntityNoteModel
+from models import Entity_Note_Comment as RBEntityNoteCommentModel
 from models import Entity_Note_Poke as RBEntityNotePokeModel
 from hashlib import md5
 import datetime
@@ -41,6 +42,7 @@ class RBEntity(object):
             _context["creator_id"] = self.__note_obj.creator_id
             _context["content"] = self.__note_obj.note_text
             _context["poker_id_list"] = map(lambda x : x.user_id, RBEntityNotePokeModel.objects.filter(note_id = self.__note_id))
+            _context["comment_id_list"] = map(lambda x : x.id, RBEntityNoteCommentModel.objects.filter(note_id = self.__note_id))
             _context["created_time"] = self.__note_obj.created_time
             _context["updated_time"] = self.__note_obj.updated_time
             return _context
@@ -75,6 +77,24 @@ class RBEntity(object):
         def poke_already(self, user_id):
             return RBEntityNotePokeModel.objects.filter(user_id = user_id).count() > 0
 
+        def read_comment(self, comment_id):
+            _obj = RBEntityNoteCommentModel.objects.get(pk = comment_id)
+            _context = {}
+            _context["comment_id"] = _obj.id
+            _context["content"] = _obj.comment_text 
+            _context["creator_id"] = _obj.creator_id
+            _context["reply_to"] = _obj.reply_to
+            _context["created_time"] = _obj.created_time
+            return _context
+        
+        def add_comment(self, comment_text, creator_id, reply_to = None):
+            _obj = RBEntityNoteCommentModel.objects.create(
+                note_id = self.__note_id,
+                comment_text = comment_text, 
+                creator_id = creator_id,
+                reply_to = reply_to
+            )
+            return _obj.id
 
     
     def __init__(self, entity_id):
@@ -270,6 +290,19 @@ class RBEntity(object):
     
     def poke_note_already(self, note_id, user_id):
         return self.Note(note_id).poke_already(user_id)
+    
+    def add_note_comment(self, note_id, comment_text, creator_id, reply_to = None):
+        _note = self.Note(note_id)
+        _comment_id = _note.add_comment(
+            comment_text = comment_text,
+            creator_id = creator_id,
+            reply_to = reply_to
+        )
+        return _note.read_comment(_comment_id)
+    
+    def read_note_comment(self, note_id, comment_id):
+        _note = self.Note(note_id)
+        return _note.read_comment(comment_id)
     
     @staticmethod
     def note_list_of_user(user_id_list):

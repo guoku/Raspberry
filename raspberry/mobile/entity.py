@@ -98,6 +98,22 @@ def poke_entity_note(request, entity_id, note_id, target_status):
             _rslt['poke_already'] = 0
         return SuccessJsonResponse(_rslt)
 
+def comment_entity_note(request, entity_id, note_id):
+    if request.method == "POST":
+        _session = request.POST.get('session', None)
+        _comment_text = request.POST.get('comment', None)
+        
+        _request_user_id = Session_Key.objects.get_user_id(_session)
+        
+        _comment_context = RBMobileEntity(entity_id).add_note_comment(
+            note_id = note_id, 
+            comment_text = _comment_text, 
+            creator_id = _request_user_id, 
+            reply_to = None
+        )
+        return SuccessJsonResponse(_comment_context)
+
+
 def user_like(request, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)

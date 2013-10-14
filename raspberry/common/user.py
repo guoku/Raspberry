@@ -191,7 +191,7 @@ class RBUser(object):
         if _is_followed > 0:
             return 2
 
-        return 4
+        return 0
 
     def get_following_user_id_list(self):
         return map(lambda x : x.followee_id, RBUserFollowModel.objects.filter(follower_id = self.__user_id))
