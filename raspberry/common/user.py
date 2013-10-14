@@ -166,20 +166,22 @@ class RBUser(object):
         except:
             pass
         return False
-
-    def get_relation(self, user_id):
-        _user_id = int(user_id)
-        if _user_id == self.__user_id:
+    
+    @staticmethod
+    def get_relation(sub_user_id, obj_user_id):
+        _sub_user_id = int(sub_user_id)
+        _obj_user_id = int(obj_user_id)
+        if _sub_user_id == _obj_user_id: 
             return 4
         
         _is_following = RBUserFollowModel.objects.filter(
-                follower_id = self.__user_id,
-                followee_id = _user_id
+                follower_id = _sub_user_id, 
+                followee_id = _obj_user_id, 
         ).count()
         
         _is_followed = RBUserFollowModel.objects.filter(
-                follower_id = _user_id,
-                followee_id = self.__user_id
+                follower_id = _obj_user_id,
+                followee_id = _sub_user_id, 
         ).count()
         
         if _is_following > 0 and _is_followed > 0:
@@ -196,6 +198,8 @@ class RBUser(object):
     def get_following_user_id_list(self):
         return map(lambda x : x.followee_id, RBUserFollowModel.objects.filter(follower_id = self.__user_id))
              
+    def get_fan_user_id_list(self):
+        return map(lambda x : x.follower_id, RBUserFollowModel.objects.filter(followee_id = self.__user_id))
 
             
          

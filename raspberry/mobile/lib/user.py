@@ -6,4 +6,4 @@ class RBMobileUser(RBUser):
     
     def __init__(self, user_id):
         RBUser.__init__(self, user_id)
-
+    
