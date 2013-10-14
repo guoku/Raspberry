@@ -40,13 +40,15 @@ class RBMobileEntity(RBEntity):
         _context = {}
         _context['entity'] = self.read(user_id) 
         
-        _context['item_list'] = []
+        _context['entity']['item_list'] = []
         for _item_id in _context['entity']['item_id_list']:
-            _context['item_list'].append(RBMobileItem(_item_id).read())
+            _context['entity']['item_list'].append(RBMobileItem(_item_id).read())
+        del _context['entity']['item_id_list']
 
         _context['note_list'] = []
         for _note_id in _context['entity']['note_id_list']:
             _context['note_list'].append(self.read_note(_note_id, user_id)) 
+        del _context['entity']['note_id_list']
       
         if user_id:
             _context['note_friend_list'] = []
@@ -55,10 +57,14 @@ class RBMobileEntity(RBEntity):
         
         return _context    
 
+
     def add_note(self, creator_id, note_text):
         _note_context = super(RBMobileEntity, self).add_note(creator_id, note_text)
+        _note_context['creator'] = RBMobileUser(_note_context['creator_id']).read()
+        del _note_context['creator_id']
         _note_context['created_time'] = time.mktime(_note_context["created_time"].timetuple())
         _note_context['updated_time'] = time.mktime(_note_context["updated_time"].timetuple())
+        _note_context['poke_already'] = 0
         return _note_context
     
     def read_note(self, note_id, user_id = None):

@@ -110,7 +110,7 @@ def user_note(request, user_id):
             _request_user_id = None
         
         _rslt = []
-        for _note_info in RBMobileEntity.note_list_of_user(user_id):
+        for _note_info in RBMobileEntity.note_list_of_user([int(user_id)]):
             _entity_id = _note_info['entity_id'] 
             _note_id = _note_info['note_id']
             _entity = RBMobileEntity(_entity_id)
@@ -134,3 +134,18 @@ def search(request):
             _rslt.append(RBMobileEntity(_entity_id).read(_request_user_id))
         
         return SuccessJsonResponse(_rslt)
+
+def feed(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+            _rslt = []
+            _following_user_id_list = RBMobileUser(_request_user_id).get_following_user_id_list()
+            
+            for _note_info in RBMobileEntity.note_list_of_user(_following_user_id_list):
+                _entity_id = _note_info['entity_id']
+                _note_id = _note_info['note_id']
+                _rslt.append(RBMobileEntity(_entity_id).read_note(_note_id, _request_user_id))
+        
+            return SuccessJsonResponse(_rslt)

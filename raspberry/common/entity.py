@@ -38,7 +38,7 @@ class RBEntity(object):
             _context = {} 
             _context["note_id"] = self.__note_obj.id
             _context["creator_id"] = self.__note_obj.creator_id
-            _context["note_text"] = self.__note_obj.note_text
+            _context["content"] = self.__note_obj.note_text
             _context["poker_id_list"] = map(lambda x : x.user_id, RBEntityNotePokeModel.objects.filter(note_id = self.__note_id))
             _context["created_time"] = self.__note_obj.created_time
             _context["updated_time"] = self.__note_obj.updated_time
@@ -256,10 +256,9 @@ class RBEntity(object):
         return self.Note(note_id).poke_already(user_id)
     
     @staticmethod
-    def note_list_of_user(user_id):
-        _user_id = int(user_id)
+    def note_list_of_user(user_id_list):
         _list = []
-        for _note_obj in RBEntityNoteModel.objects.filter(creator_id = _user_id):
+        for _note_obj in RBEntityNoteModel.objects.filter(creator_id__in = user_id_list):
             _list.append({
                 'entity_id' : _note_obj.entity_id,
                 'note_id' : _note_obj.id

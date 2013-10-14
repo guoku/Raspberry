@@ -39,6 +39,7 @@ class RBCategory(object):
         return {
             'category_id' : self.__category_obj.id,
             'title' : self.__category_obj.title,
+            'category_icon' : '',
             'group_id' : self.__category_obj.group_id,
             'status' : self.__category_obj.status
         }
