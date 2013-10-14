@@ -90,6 +90,16 @@ class Entity_Note_Poke(models.Model):
         ordering = ['-created_time']
         unique_together = ('note', 'user')
 
+class Entity_Note_Comment(models.Model):
+    note = models.ForeignKey(Entity_Note)
+    creator = models.ForeignKey(User) 
+    comment_text = models.TextField(null = False)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    reply_to = models.IntegerField(default = None, null = True, db_index = True)
+    
+    class Meta:
+        ordering = ['-created_time']
+
 class User_Follow(models.Model):
     follower = models.ForeignKey(User, related_name = "followings")
     followee = models.ForeignKey(User, related_name = "fans")
