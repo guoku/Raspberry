@@ -37,8 +37,9 @@ class RBCategory(object):
     def read(self):
         self.__ensure_category_obj()
         return {
-            'id' : self.__category_obj.id,
+            'category_id' : self.__category_obj.id,
             'title' : self.__category_obj.title,
+            'category_icon' : '',
             'group_id' : self.__category_obj.group_id,
             'status' : self.__category_obj.status
         }
@@ -53,7 +54,7 @@ class RBCategory(object):
         _rslt = []
         for _cat_obj in _hdl:
             _rslt.append({
-                'id' : _cat_obj.id,
+                'category_id' : _cat_obj.id,
                 'title' : _cat_obj.title,
                 'group_id' : _cat_obj.group_id,
                 'status' : _cat_obj.status
@@ -65,10 +66,24 @@ class RBCategory(object):
         _rslt = []
         for _group_obj in RBCategoryGroupModel.objects.all():
             _rslt.append({
-                'id' : _group_obj.id,
+                'group_id' : _group_obj.id,
                 'title' : _group_obj.title,
                 'status' : _group_obj.status,
                 'category_count' : RBCategoryModel.objects.filter(group_id = _group_obj.id).count()
             })
         return _rslt
 
+    @staticmethod
+    def all_group_with_full_category():
+        _rslt = RBCategory.allgroups()
+        for _group in _rslt: 
+            _group['content'] = []
+            for _category_obj in RBCategoryModel.objects.filter(group_id = _group['group_id']):
+                _group['content'].append({
+                    'category_id' : _category_obj.id,
+                    'category_title' : _category_obj.title,
+                    'category_img' : ''
+                })
+        return _rslt
+            
+        

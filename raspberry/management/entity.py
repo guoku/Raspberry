@@ -131,7 +131,7 @@ def edit_entity(request, entity_id):
         else:
             _message = None
         _entity_context = RBEntity(entity_id).read()
-        _item_context_list = RBItem.read_items(_entity_context['meta']['item_id_list'])
+        _item_context_list = RBItem.read_items(_entity_context['item_id_list'])
         return render_to_response( 
             'entity/edit.html', 
             {
@@ -146,13 +146,19 @@ def edit_entity(request, entity_id):
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
-        _category_id = int(request.POST.get("category_id", None))
+        _price = request.POST.get("price", None)
+        if _price:
+            _price = float(_price)
+        _category_id = request.POST.get("category_id", None)
+        if _category_id:
+            _category_id = int(_category_id)
         _entity = RBEntity(entity_id)
         _entity.update(
             category_id = _category_id,
             brand = _brand,
             title = _title,
-            intro = _intro
+            intro = _intro,
+            price = _price
         )
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : entity_id })) 
 
@@ -165,9 +171,10 @@ def entity_list(request):
         _category_groups = RBCategory.allgroups()
         _category_id = int(request.GET.get("cid", "1"))
         _category_context = RBCategory(_category_id).read()
+        _category_group_id = _category_context['group_id'] 
         _categories = RBCategory.find(group_id = _category_context['group_id'])
         for _category in _categories:
-            _category['entity_count'] = RBEntity.count(_category['id'])
+            _category['entity_count'] = RBEntity.count(_category['category_id'])
     
         _entity_id_list = RBEntity.find(_category_id)
         _entity_context_list = RBEntity.read_entities(_entity_id_list)
@@ -178,20 +185,28 @@ def entity_list(request):
                 'category_context' : _category_context,
                 'category_groups' : _category_groups,
                 'categories' : _categories,
+                'category_group_id' : _category_group_id,
                 'entity_context_list' : _entity_context_list,
             },
             context_instance = RequestContext(request)
         )
     else:
         _categories = RBCategory.find(group_id = int(_group_id))
-        return HttpResponseRedirect(reverse('management.views.entity_list') + '?cid=' + str(_categories[0]['id'])) 
+        return HttpResponseRedirect(reverse('management.views.entity_list') + '?cid=' + str(_categories[0]['category_id'])) 
 
 @login_required
-def unbind_entity_item(request, entity_id, item_id):
+def unbind_taobao_item_from_entity(request, entity_id, item_id):
     _entity = RBEntity(entity_id)
     _entity.unbind_item(item_id)
 
     return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+
+@login_required
+def bind_taobao_item_to_entity(request, entity_id, item_id):
+    _entity = RBEntity(entity_id)
+    _entity.bind_item(item_id)
+    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+
 
 @login_required
 def load_taobao_item_for_entity(request, entity_id):
@@ -202,7 +217,7 @@ def load_taobao_item_for_entity(request, entity_id):
         if _entity_id == None:
             _taobao_item_info = _load_taobao_item_info(_taobao_id)
             return render_to_response( 
-                'entity/taobao_item_info.html', 
+                'entity/new_taobao_item_info.html', 
                 {
                   'entity_id' : entity_id,
                   'taobao_id' : _taobao_id,
@@ -211,6 +226,28 @@ def load_taobao_item_for_entity(request, entity_id):
                   'shop_nick' : _taobao_item_info['shop_nick'], 
                   'price' : _taobao_item_info['price'], 
                   'thumb_images' : _taobao_item_info["thumb_images"],
+                  'soldout' : 0, 
+                },
+                context_instance = RequestContext(request)
+            )
+        elif _entity_id == "":
+            _item_id = RBItem.get_item_id_by_taobao_id(_taobao_id)
+            _item = RBItem(_item_id)
+            _item_context = _item.read()
+            
+            if not _item_context.has_key('images'):
+                _item_context['images'] = None
+            return render_to_response( 
+                'entity/exist_taobao_item_info.html', 
+                {
+                  'entity_id' : entity_id,
+                  'taobao_id' : _taobao_id,
+                  'item_id' : _item_id,
+                  'cid' : _item_context['cid'], 
+                  'taobao_title' : _item_context['title'], 
+                  'shop_nick' : _item_context['shop_nick'], 
+                  'price' : _item_context['price'], 
+                  'images' : _item_context['images'],
                   'soldout' : 0, 
                 },
                 context_instance = RequestContext(request)
@@ -227,6 +264,7 @@ def add_taobao_item_for_entity(request, entity_id):
         _taobao_title = request.POST.get("taobao_title", None)
         _taobao_price = request.POST.get("taobao_price", None)
         _taobao_soldout = request.POST.get("taobao_soldout", None)
+        _image_urls = request.POST.getlist("image_url")
             
         
         _entity = RBEntity(entity_id)
@@ -238,6 +276,7 @@ def add_taobao_item_for_entity(request, entity_id):
                 'shop_nick' : _taobao_shop_nick,
                 'price' : _taobao_price,
                 'soldout' : False,
-            }
+            },
+            image_urls = _image_urls
         ) 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))

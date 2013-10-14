@@ -13,7 +13,7 @@ class Entity(object):
     def get_entity_id(self):
         return self.__entity_id
     
-    def add_taobao_item(self, taobao_item_info, images):
+    def _insert_taobao_item(self, taobao_item_info, images):
         _taobao_item_obj = Item.create_taobao_item( 
             entity_id = self.__entity_id,
             images = images,
@@ -25,11 +25,33 @@ class Entity(object):
             soldout = taobao_item_info["soldout"], 
         )
         return _taobao_item_obj.get_item_id()
+    
+    def add_taobao_item(self, taobao_item_info, image_urls):
+        _image_ids = []
+        for _image_url in image_urls:
+            _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
+            _image_ids.append(_image_obj.get_image_id())
+        
+        _item_id = self._insert_taobao_item( 
+            taobao_item_info = taobao_item_info,
+            images = _image_ids
+        )
+        
+        self.__ensure_entity_obj()
+        if taobao_item_info['price'] < self.__entity_obj.price:
+            self.__entity_obj.price = taobao_item_info['price']
+            self.__entity_obj.updated_time = datetime.datetime.now()
+            self.__entity_obj.save()
+        return _item_id 
 
-    def del_taobao_item(self, item_id):
+    def bind_taobao_item(self, item_id):
+        _item_obj = Item(item_id)
+        _item_obj.bind_entity(self.__entity_id)
+    
+    def unbind_taobao_item(self, item_id):
         _item_obj = Item(item_id)
         if _item_obj.get_entity_id() == self.__entity_id:
-            _item_obj.bind_entity(-1)
+            _item_obj.bind_entity("")
     
     @classmethod
     def create_by_taobao_item(cls, brand, title, intro, taobao_item_info, chief_image_url, detail_image_urls):
@@ -44,14 +66,16 @@ class Entity(object):
         _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
         _chief_image_id = _chief_image_obj.get_image_id()
         _detail_image_ids = []
-        for image_url in detail_image_urls:
-            _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], image_url)
+        for _image_url in detail_image_urls:
+            _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
             _detail_image_ids.append(_image_obj.get_image_id())
         
+        _price = taobao_item_info['price']
         _entity_obj = EntityModel(
-            brand = "",
+            brand = brand,
             title = title,
             intro = intro,
+            price = _price,
             images = EntityImageModel(
                 chief_id = _chief_image_id,
                 detail_ids = _detail_image_ids
@@ -67,7 +91,7 @@ class Entity(object):
         try:
             _item_images = _detail_image_ids
             _item_images.append(_chief_image_id)
-            _taobao_item_id = _inst.add_taobao_item(taobao_item_info, _item_images)
+            _taobao_item_id = _inst._insert_taobao_item(taobao_item_info, _item_images)
         except Exception, e:
             _entity_obj.delete()
             raise e
@@ -85,16 +109,18 @@ class Entity(object):
         _context['brand'] = self.__entity_obj.brand 
         _context['title'] = self.__entity_obj.title
         _context['intro'] = self.__entity_obj.intro
-        _context['chief_image'] = { 'url' : Image(self.__entity_obj.images.chief_id).getlink() }
+        if self.__entity_obj.price:
+            _context['price'] = float(self.__entity_obj.price)
+        else:
+            _context['price'] = 0.0 
+        _context['chief_image'] = Image(self.__entity_obj.images.chief_id).getlink()
         _context['detail_images'] = []
         for _image_id in self.__entity_obj.images.detail_ids:
-            _context['detail_images'].append({
-                'url' : Image(_image_id).getlink()
-            })
+            _context['detail_images'].append(Image(_image_id).getlink())
         _context['item_id_list'] = Item.get_item_id_list_by_entity_id(self.__entity_id) 
         return _context    
     
-    def update(self, brand = None, title = None, intro = None):
+    def update(self, brand = None, title = None, intro = None, price = None):
         self.__ensure_entity_obj()
         if brand != None:
             self.__entity_obj.brand = brand
@@ -102,4 +128,14 @@ class Entity(object):
             self.__entity_obj.title = title
         if intro != None:
             self.__entity_obj.intro = intro
+        if price != None:
+            self.__entity_obj.price = price
+        self.__entity_obj.updated_time = datetime.datetime.now()
         self.__entity_obj.save()
+   
+    @staticmethod
+    def search(query):
+        _entity_id_list = []  
+        for _entity_obj in EntityModel.objects.filter(intro__contains = query):
+            _entity_id_list.append(str(_entity_obj.id))
+        return _entity_id_list
