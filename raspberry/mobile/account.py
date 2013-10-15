@@ -21,7 +21,7 @@ def login(request):
         )
         
         _data = {
-            'user' : _user.read(),
+            'user' : _user.read_full_context(),
             'session' : _session.session_key
         }
         return SuccessJsonResponse(_data)

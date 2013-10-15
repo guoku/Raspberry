@@ -117,12 +117,6 @@ class RBUser(object):
             _context['verified_type'] = 'guoku' 
             _context['verified_reason'] = 'guoku' 
             _context['gender'] = _profile.gender 
-            _context['friend_count'] = 0 
-            _context['follower_count'] = 0 
-            _context['money_i_need'] = 0 
-            _context['like_count'] = 0 
-            _context['note_count'] = 0 
-            _context['same_follow'] = []
         except RBUserProfileModel.DoesNotExist, e:
             _context['nickname'] = 'unknown' 
             _context['avatar'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
@@ -130,13 +124,6 @@ class RBUser(object):
             _context['verified_type'] = 'guoku' 
             _context['verified_reason'] = 'guoku' 
             _context['gender'] = 'O' 
-            _context['friend_count'] = 0 
-            _context['follower_count'] = 0 
-            _context['money_i_need'] = 0 
-            _context['like_count'] = 0 
-            _context['note_count'] = 0 
-            _context['same_follow'] = []
-            
             
         return _context
     

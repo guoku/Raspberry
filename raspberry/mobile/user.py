@@ -1,4 +1,5 @@
 # coding=utf8
+from lib.entity import RBMobileEntity
 from lib.user import RBMobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
@@ -49,3 +50,20 @@ def user_fan(request, user_id):
                 _rslt.append(RBMobileUser(_fan_user_id).read(_request_user_id))
         
             return SuccessJsonResponse(_rslt)
+
+def user_detail(request, user_id):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+            
+        _rslt = {}
+        _rslt['user'] = RBMobileUser(user_id).read_full_context(_request_user_id)
+        _last_note = RBMobileEntity.get_user_last_note(user_id)
+        _rslt['last_note'] = RBMobileEntity(_last_note['entity_id']).read_note(_last_note['note_id'], _request_user_id)
+        _last_like_entity_id = RBMobileEntity.get_user_last_like(user_id)
+        _rslt['last_like'] = RBMobileEntity(_last_like_entity_id).read(_request_user_id)
+            
+        return SuccessJsonResponse(_rslt)

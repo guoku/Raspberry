@@ -15,7 +15,7 @@ class RBMobileItem(RBItem):
 
     def read(self):
         _context = super(RBMobileItem, self).read()
-        _context['url'] = RBMobileItem.generate_taobao_item_url(_context['taobao_id'])
+        _context['buy_link'] = RBMobileItem.generate_taobao_item_url(_context['taobao_id'])
         return _context
 
 
@@ -54,9 +54,9 @@ class RBMobileEntity(RBEntity):
         del _context['entity']['note_id_list']
      
         if user_id:
-            _context['note_friend_list'] = []
+            _context['following_note_list'] = []
             for _followee_id in RBMobileUser(user_id).get_following_user_id_list():
-                _context['note_friend_list'].append(RBMobileUser(_followee_id).read())
+                _context['following_note_list'].append(RBMobileUser(_followee_id).read())
         
         return _context    
 

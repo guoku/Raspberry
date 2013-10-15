@@ -83,6 +83,7 @@ class Item(object):
         _context["shop_nick"] = self.__item_obj.shop_nick
         _context["price"] = float(self.__item_obj.price)
         _context["soldout"] = self.__item_obj.soldout
+        _context["volume"] = 0 
         return _context
 
 

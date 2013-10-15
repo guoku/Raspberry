@@ -46,7 +46,9 @@ class RBEntity(object):
             _context["score"] = self.__note_obj.score
             _context["content"] = self.__note_obj.note_text
             _context["poker_id_list"] = map(lambda x : x.user_id, RBEntityNotePokeModel.objects.filter(note_id = self.__note_id))
+            _context["poke_count"] = len(_context["poker_id_list"]) 
             _context["comment_id_list"] = map(lambda x : x.id, RBEntityNoteCommentModel.objects.filter(note_id = self.__note_id))
+            _context["comment_count"] = len(_context["comment_id_list"]) 
             _context["created_time"] = self.__note_obj.created_time
             _context["updated_time"] = self.__note_obj.updated_time
             return _context
@@ -321,6 +323,30 @@ class RBEntity(object):
             })
         return _list
         
+    @staticmethod
+    def get_user_note_count(user_id):
+        _user_id = int(user_id)
+        return RBEntityNoteModel.objects.filter(creator_id = _user_id).count()
+    
+    @staticmethod
+    def get_user_like_count(user_id):
+        _user_id = int(user_id)
+        return RBEntityLikeModel.objects.filter(user_id = _user_id).count()
+    
+    @staticmethod
+    def get_user_last_note(user_id):
+        _user_id = int(user_id)
+        _note = RBEntityNoteModel.objects.filter(creator_id = _user_id).order_by('-created_time')[0]
+        return {
+            'note_id' : _note.id,
+            'entity_id' : _note.entity_id
+        }
+    
+    @staticmethod
+    def get_user_last_like(user_id):
+        _user_id = int(user_id)
+        _obj = RBEntityLikeModel.objects.filter(user_id = _user_id).order_by('-created_time')[0]
+        return _obj.entity_id 
     @staticmethod
     def search(query):
         _mango_client = MangoApiClient()
