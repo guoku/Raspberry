@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'raspberry',
+        'NAME': 'raspberry_10_15',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
@@ -24,7 +24,7 @@ DATABASES = {
 }
 
 from mongoengine import register_connection 
-register_connection('mango', 'mango')
+register_connection('mango', 'mango_10_15')
 
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'

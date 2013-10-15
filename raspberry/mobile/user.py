@@ -62,8 +62,10 @@ def user_detail(request, user_id):
         _rslt = {}
         _rslt['user'] = RBMobileUser(user_id).read_full_context(_request_user_id)
         _last_note = RBMobileEntity.get_user_last_note(user_id)
-        _rslt['last_note'] = RBMobileEntity(_last_note['entity_id']).read_note(_last_note['note_id'], _request_user_id)
+        if _last_note != None:
+            _rslt['last_note'] = RBMobileEntity(_last_note['entity_id']).read_note(_last_note['note_id'], _request_user_id)
         _last_like_entity_id = RBMobileEntity.get_user_last_like(user_id)
-        _rslt['last_like'] = RBMobileEntity(_last_like_entity_id).read(_request_user_id)
+        if _last_like_entity_id != None:
+            _rslt['last_like'] = RBMobileEntity(_last_like_entity_id).read(_request_user_id)
             
         return SuccessJsonResponse(_rslt)
