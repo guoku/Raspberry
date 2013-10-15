@@ -1,7 +1,6 @@
 # coding=utf8
 from models import Entity as RBEntityModel
 from models import Entity_Like as RBEntityLikeModel
-from models import Entity_Score as RBEntityScoreModel
 from models import Entity_Note as RBEntityNoteModel
 from models import Entity_Note_Comment as RBEntityNoteCommentModel
 from models import Entity_Note_Poke as RBEntityNotePokeModel
@@ -23,13 +22,15 @@ class RBEntity(object):
     
         def __ensure_note_obj(self):
             if not hasattr(self, '__note_obj'):
+                print self.__note_id
                 self.__note_obj = RBEntityNoteModel.objects.get(pk = self.__note_id)
     
         @classmethod
-        def create(cls, entity_id, creator_id, note_text):
+        def create(cls, entity_id, creator_id, score, note_text):
             _note_obj = RBEntityNoteModel.objects.create(
                 entity_id = entity_id,
                 creator_id = creator_id,
+                score = score,
                 note_text = note_text
             )
             _inst = cls(_note_obj.id)
@@ -42,6 +43,7 @@ class RBEntity(object):
             _context["note_id"] = self.__note_obj.id
             _context["entity_id"] = self.__note_obj.entity_id
             _context["creator_id"] = self.__note_obj.creator_id
+            _context["score"] = self.__note_obj.score
             _context["content"] = self.__note_obj.note_text
             _context["poker_id_list"] = map(lambda x : x.user_id, RBEntityNotePokeModel.objects.filter(note_id = self.__note_id))
             _context["comment_id_list"] = map(lambda x : x.id, RBEntityNoteCommentModel.objects.filter(note_id = self.__note_id))
@@ -161,15 +163,16 @@ class RBEntity(object):
         _context = meta_context 
         _context["entity_hash"] = self.__entity_obj.entity_hash
         _context["category_id"] = self.__entity_obj.category_id
-        _context["note_id_list"] = map(lambda x : x.id, RBEntityNoteModel.objects.filter(entity_id = self.__entity_id))
         _context["created_time"] = self.__entity_obj.created_time
         _context["updated_time"] = self.__entity_obj.updated_time
         
 
         _context["total_score"] = 0 
         _context["score_count"] = 0 
-        for _score_obj in RBEntityScoreModel.objects.filter(entity_id = self.__entity_id):
-            _context["total_score"] += _score_obj.score
+        _context["note_id_list"] = []
+        for _note_obj in RBEntityNoteModel.objects.filter(entity_id = self.__entity_id):
+            _context["note_id_list"].append(_note_obj.id)
+            _context["total_score"] += _note_obj.score
             _context["score_count"] += 1
 
         return _context
@@ -266,32 +269,19 @@ class RBEntity(object):
         _user_id = int(user_id)
         return map(lambda x : x.entity_id, RBEntityLikeModel.objects.filter(user_id = _user_id))
         
-    def score(self, user_id, score):
-        try:
-            _obj = RBEntityScoreModel.objects.get(
-                entity_id = self.__entity_id,
-                user_id = user_id
-            )
-            _obj.score = score
-            _obj.save()
-        except RBEntityScoreModel.DoesNotExist, e:
-            _obj = RBEntityScoreModel.objects.create(
-                entity_id = self.__entity_id,
-                user_id = user_id
-            )
-    
-    def get_user_score(self, user_id):
-        try:
-            _obj = RBEntityScoreModel.objects.get(user_id = user_id, entity_id = self.__entity_id)
-            return _obj.score
-        except RBEntityScoreModel.DoesNotExist, e:
-            pass
-        return -1
+#    def get_user_score(self, user_id):
+#        try:
+#            _obj = RBEntityScoreModel.objects.get(user_id = user_id, entity_id = self.__entity_id)
+#            return _obj.score
+#        except RBEntityScoreModel.DoesNotExist, e:
+#            pass
+#        return -1
 
-    def add_note(self, creator_id, note_text):
+    def add_note(self, creator_id, score, note_text):
         _note = self.Note.create(
             entity_id = self.__entity_id,
             creator_id = creator_id,
+            score = score,
             note_text = note_text
         )
         return _note.read()

@@ -57,25 +57,17 @@ def add_note_for_entity(request, entity_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
         _note_text = request.POST.get('note', None)
-        _score = request.POST.get('score', None)
+        _score = int(request.POST.get('score', None))
        
         _user_id = Session_Key.objects.get_user_id(_session)
-        _rslt = {}
         _entity = RBMobileEntity(entity_id)
-        if _note_text != None:
-            _note_context = _entity.add_note(
-                creator_id = _user_id,
-                note_text = _note_text
-            )
-            _rslt['note'] = _note_context
-        if _score != None:
-            _score = int(_score)
-            _entity.score(
-                user_id = _user_id,
-                score = _score
-            )
-            _rslt['score'] = _score
-        return SuccessJsonResponse(_rslt)
+        _note_context = _entity.add_note(
+            creator_id = _user_id,
+            score = _score,
+            note_text = _note_text
+        )
+        
+        return SuccessJsonResponse(_note_context)
 
 def entity_note_detail(request, entity_id, note_id):
     if request.method == "GET":

@@ -30,11 +30,11 @@ class RBMobileEntity(RBEntity):
         _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
         
         _context['like_already'] = 0
-        _context['score_already'] = -1 
+#        _context['note_already'] = -1 
         if user_id: 
             if self.like_already(user_id):
                 _context['like_already'] = 1
-            _context['score_already'] = self.get_user_score(user_id) 
+#            _context['score_already'] = self.get_user_score(user_id) 
         
         return _context
     
@@ -51,7 +51,7 @@ class RBMobileEntity(RBEntity):
         for _note_id in _context['entity']['note_id_list']:
             _context['note_list'].append(self.read_note(_note_id, user_id)) 
         del _context['entity']['note_id_list']
-      
+     
         if user_id:
             _context['note_friend_list'] = []
             for _followee_id in RBMobileUser(user_id).get_following_user_id_list():
@@ -60,8 +60,8 @@ class RBMobileEntity(RBEntity):
         return _context    
 
 
-    def add_note(self, creator_id, note_text):
-        _note_context = super(RBMobileEntity, self).add_note(creator_id, note_text)
+    def add_note(self, creator_id, score, note_text):
+        _note_context = super(RBMobileEntity, self).add_note(creator_id, score, note_text)
         _note_context['creator'] = RBMobileUser(_note_context['creator_id']).read()
         del _note_context['creator_id']
         _note_context['created_time'] = time.mktime(_note_context["created_time"].timetuple())
