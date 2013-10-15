@@ -59,12 +59,13 @@ def add_note_for_entity(request, entity_id):
         _note_text = request.POST.get('note', None)
         _score = int(request.POST.get('score', None))
        
-        _user_id = Session_Key.objects.get_user_id(_session)
+        _request_user_id = Session_Key.objects.get_user_id(_session)
         _entity = RBMobileEntity(entity_id)
         _note_context = _entity.add_note(
-            creator_id = _user_id,
+            creator_id = _request_user_id,
             score = _score,
-            note_text = _note_text
+            note_text = _note_text,
+            request_user_id = _request_user_id
         )
         
         return SuccessJsonResponse(_note_context)
@@ -73,27 +74,27 @@ def entity_note_detail(request, entity_id, note_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
-            _user_id = Session_Key.objects.get_user_id(_session)
+            _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
-            _user_id = None
+            _request_user_id = None
 
-        _rslt = RBMobileEntity(entity_id).read_note_full_context(note_id, _user_id)
+        _rslt = RBMobileEntity(entity_id).read_note_full_context(note_id, _request_user_id)
         return SuccessJsonResponse(_rslt)
 
 def poke_entity_note(request, entity_id, note_id, target_status):
     if request.method == "POST":
         _session = request.POST.get('session', None)
         
-        _user_id = Session_Key.objects.get_user_id(_session)
+        _request_user_id = Session_Key.objects.get_user_id(_session)
         _rslt = { 
             'entity_id' : entity_id, 
             'note_id' : note_id 
         }
         if target_status == '1':
-            RBMobileEntity(entity_id).poke_note(note_id, _user_id)
+            RBMobileEntity(entity_id).poke_note(note_id, _request_user_id)
             _rslt['poke_already'] = 1
         else:
-            RBMobileEntity(entity_id).depoke_note(note_id, _user_id)
+            RBMobileEntity(entity_id).depoke_note(note_id, _request_user_id)
             _rslt['poke_already'] = 0
         return SuccessJsonResponse(_rslt)
 
@@ -108,7 +109,8 @@ def comment_entity_note(request, entity_id, note_id):
             note_id = note_id, 
             comment_text = _comment_text, 
             creator_id = _request_user_id, 
-            reply_to = None
+            reply_to = None,
+            request_user_id = _request_user_id
         )
         return SuccessJsonResponse(_comment_context)
 

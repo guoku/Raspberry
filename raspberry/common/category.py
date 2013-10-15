@@ -82,7 +82,7 @@ class RBCategory(object):
                 _group['content'].append({
                     'category_id' : _category_obj.id,
                     'category_title' : _category_obj.title,
-                    'category_img' : ''
+                    'category_image' : ''
                 })
         return _rslt
             

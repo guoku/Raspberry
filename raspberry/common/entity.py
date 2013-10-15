@@ -347,6 +347,7 @@ class RBEntity(object):
         _user_id = int(user_id)
         _obj = RBEntityLikeModel.objects.filter(user_id = _user_id).order_by('-created_time')[0]
         return _obj.entity_id 
+    
     @staticmethod
     def search(query):
         _mango_client = MangoApiClient()

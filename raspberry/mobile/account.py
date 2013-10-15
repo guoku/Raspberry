@@ -1,5 +1,5 @@
 # coding=utf8
-from common.user import RBUser
+from lib.user import RBMobileUser
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
 
@@ -9,7 +9,7 @@ def login(request):
         _password = request.POST.get('password', None)
         _api_key = request.POST.get('api_key', None)
 
-        _user = RBUser.login(
+        _user = RBMobileUser.login(
             email = _email, 
             password = _password
         )
@@ -21,7 +21,7 @@ def login(request):
         )
         
         _data = {
-            'user' : _user.read_full_context(),
+            'user' : _user.read_full_context(_user.get_user_id()),
             'session' : _session.session_key
         }
         return SuccessJsonResponse(_data)
@@ -37,11 +37,11 @@ def register(request):
         #_dev_token = request.POST.get('dev_token', None)
         
         try:
-            _user = RBUser.create(
+            _user = RBMobileUser.create(
                 email = _email, 
                 password = _password
             )
-        except RBUser.EmailExistAlready, e:
+        except RBMobileUser.EmailExistAlready, e:
             return ErrorJsonResponse(
                 data = {
                     'type' : 'email',
@@ -55,7 +55,7 @@ def register(request):
             _user.set_profile(
                 nickname = _nickname
             )
-        except RBUser.NicknameExistAlready, e:
+        except RBMobileUser.NicknameExistAlready, e:
             _user.delete()
             return ErrorJsonResponse(
                 data = {
@@ -73,7 +73,7 @@ def register(request):
         )
 
         _data = {
-            'user' : _user.read(),
+            'user' : _user.read(_user.get_user_id()),
             'session' : _session.session_key
         }
         return SuccessJsonResponse(_data)
