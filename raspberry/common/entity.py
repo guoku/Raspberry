@@ -259,7 +259,7 @@ class RBEntity(object):
         return False
          
     def like_already(self, user_id):
-        return RBEntityLikeModel.objects.filter(user_id = user_id).count() > 0 
+        return RBEntityLikeModel.objects.filter(user_id = user_id, entity_id = self.__entity_id).count() > 0 
 
     @staticmethod
     def like_list_of_user(user_id):
@@ -282,7 +282,7 @@ class RBEntity(object):
     
     def get_user_score(self, user_id):
         try:
-            _obj = RBEntityScoreModel.objects.get(user_id = user_id)
+            _obj = RBEntityScoreModel.objects.get(user_id = user_id, entity_id = self.__entity_id)
             return _obj.score
         except RBEntityScoreModel.DoesNotExist, e:
             pass
