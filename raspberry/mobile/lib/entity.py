@@ -76,7 +76,10 @@ class RBMobileEntity(RBEntity):
         _note_context = super(RBMobileEntity, self).read_note(note_id)
         _note_context['entity_chief_image'] = _entity_context['chief_image']
         _note_context['creator'] = RBMobileUser(_note_context['creator_id']).read(request_user_id)
-        _note_context['creator_like_already'] = self.like_already(_note_context['creator_id'])
+        if self.like_already(_note_context['creator_id']):
+            _note_context['creator_like_already'] = 1
+        else:
+            _note_context['creator_like_already'] = 0
         del _note_context['creator_id']
         _note_context['created_time'] = time.mktime(_note_context["created_time"].timetuple())
         _note_context['updated_time'] = time.mktime(_note_context["updated_time"].timetuple())
