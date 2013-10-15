@@ -17,7 +17,7 @@ def follow_user(request, user_id, target_status):
             RBMobileUser(_request_user_id).follow(_user_id)
         else:
             RBMobileUser(_request_user_id).unfollow(_user_id)
-        _rslt['status'] = RBMobileUser.get_relation(_request_user_id, _user_id)
+        _rslt['relation'] = RBMobileUser.get_relation(_request_user_id, _user_id)
         return SuccessJsonResponse(_rslt)
 
 
