@@ -30,11 +30,12 @@ class RBMobileEntity(RBEntity):
         _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
         
         _context['like_already'] = 0
-#        _context['note_already'] = -1 
         if user_id: 
             if self.like_already(user_id):
                 _context['like_already'] = 1
-#            _context['score_already'] = self.get_user_score(user_id) 
+            _note_id = self.get_user_note(user_id)
+            if _note_id != None:
+                _context['my_note'] = self.read_note(_note_id, user_id) 
         
         return _context
     

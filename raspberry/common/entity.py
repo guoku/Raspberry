@@ -269,13 +269,13 @@ class RBEntity(object):
         _user_id = int(user_id)
         return map(lambda x : x.entity_id, RBEntityLikeModel.objects.filter(user_id = _user_id))
         
-#    def get_user_score(self, user_id):
-#        try:
-#            _obj = RBEntityScoreModel.objects.get(user_id = user_id, entity_id = self.__entity_id)
-#            return _obj.score
-#        except RBEntityScoreModel.DoesNotExist, e:
-#            pass
-#        return -1
+    def get_user_note(self, user_id):
+        try:
+            _obj = RBEntityNoteModel.objects.get(creator_id = user_id, entity_id = self.__entity_id)
+            return _obj.id
+        except RBEntityNoteModel.DoesNotExist, e:
+            pass
+        return None 
 
     def add_note(self, creator_id, score, note_text):
         _note = self.Note.create(
