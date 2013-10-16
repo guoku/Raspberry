@@ -8,7 +8,6 @@ from django.db.models import Sum
 from hashlib import md5
 import datetime
 import urllib
-from utils.lib import cal_guoku_hash 
 from mango.client import MangoApiClient
 
 
