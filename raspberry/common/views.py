@@ -2,7 +2,7 @@
 from django.http import HttpResponse
 from pymogile import Client, MogileFSError
 
-def image(request, image_key):
+def image(request, image_key, image_type):
     
     datastore = Client( 
         domain = 'staging',
@@ -11,7 +11,7 @@ def image(request, image_key):
     
     _data = datastore.get_file_data('test_guoku4pk_avatar')
 
-    return HttpResponse(_data, mimetype="image/jpeg")
+    return HttpResponse(_data, content_type="image/jpeg")
         
         
 

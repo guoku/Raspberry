@@ -18,5 +18,5 @@ if settings.DEBUG:
 
 if settings.IMAGE_LOCAL:
     urlpatterns += patterns('',
-        (r'^image/(?P<image_key>\w+)$', 'common.views.image'),
+        (r'^image/(?P<image_key>.*)$', 'common.views.image'),
     )
