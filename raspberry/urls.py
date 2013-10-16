@@ -12,8 +12,11 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG:
-
     urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.MEDIA_ROOT}),
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    )
+
+if settings.IMAGE_LOCAL:
+    urlpatterns += patterns('',
+        (r'^image/(?P<image_key>\w+)$', 'common.views.image'),
     )

@@ -1,5 +1,6 @@
 import os.path
 DEBUG = True
+IMAGE_LOCAL = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
