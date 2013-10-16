@@ -16,7 +16,7 @@
                     <div class="controls">
                         <select id="catagory" name="category_id">
                             {% for category in category_list %}
-                                <option {%if selected_category_id == category.id%}selected="selected" {%endif%}value="{{ category.id }}">{{ category.title }}</option>
+                                <option {%if selected_category_id == category.category_id%}selected="selected" {%endif%}value="{{ category.category_id }}">{{ category.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
