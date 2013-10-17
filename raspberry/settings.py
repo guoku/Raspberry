@@ -27,6 +27,9 @@ DATABASES = {
 from mongoengine import register_connection 
 register_connection('mango', 'mango_10_15')
 
+MOGILEFS_DOMAIN = "stage"
+MOGILEFS_TRACKERS = ["10.0.2.50:7001"]
+
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1
