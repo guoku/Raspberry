@@ -14,5 +14,8 @@ def entity_note_figure(request, key):
     return HttpResponse(_data, content_type = "image/jpeg")
         
         
+def category_icon_image(request, key):
+    _data = Avatar.read_image_data_by_store_key(key)
+    return HttpResponse(_data, content_type = "image/jpeg")
 
 

@@ -43,6 +43,7 @@ class Category_Group(models.Model):
 class Category(models.Model):
     group = models.ForeignKey(Category_Group)
     title = models.CharField(max_length = 128, db_index = True, unique = True)
+    image_store_hash = models.CharField(max_length = 64, db_index = True, null = True, default = None)
     status = models.IntegerField(default = 1, db_index = True)
     class Meta:
         ordering = ['id']

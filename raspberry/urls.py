@@ -20,4 +20,5 @@ if settings.IMAGE_LOCAL:
     urlpatterns += patterns('',
         (r'^image/avatar/(?P<key>\w+)$', 'common.views.avatar_image'),
         (r'^image/entity/figure/(?P<key>\w+)$', 'common.views.entity_note_figure'),
+        (r'^image/category/icon/(?P<key>\w+)$', 'common.views.category_icon_image'),
     )

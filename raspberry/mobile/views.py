@@ -12,6 +12,6 @@ def homepage(request):
     _rslt['hot'].append(RBCategory(8).read())
     _rslt['hot'].append(RBCategory(9).read())
     _rslt['hot'].append(RBCategory(10).read())
-         
+    
     return SuccessJsonResponse(_rslt)
      

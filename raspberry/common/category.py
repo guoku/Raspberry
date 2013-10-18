@@ -1,6 +1,7 @@
 # coding=utf8
 from models import Category_Group as RBCategoryGroupModel
 from models import Category as RBCategoryModel
+from django.conf import settings
 import datetime 
 
 class RBCategory(object):
@@ -34,15 +35,24 @@ class RBCategory(object):
         _inst.__category_obj = _category_obj
         return _inst
     
-    def read(self):
+    def __load_category_context(self):
         self.__ensure_category_obj()
-        return {
-            'category_id' : self.__category_obj.id,
-            'title' : self.__category_obj.title,
-            'category_icon' : '',
-            'group_id' : self.__category_obj.group_id,
-            'status' : self.__category_obj.status
-        }
+        _context = {}
+        _context['category_id'] = self.__category_obj.id
+        _context['category_title'] = self.__category_obj.title
+        _context['group_id'] = self.__category_obj.group_id
+        _context['status'] = self.__category_obj.status
+        if self.__category_obj.image_store_hash:
+            _context['category_icon_large'] = settings.IMAGE_SERVER + 'image/category/icon/' + self.__category_obj.image_store_hash + '_large' 
+            _context['category_icon_small'] = settings.IMAGE_SERVER + 'image/category/icon/' + self.__category_obj.image_store_hash + '_small'
+        else:
+            _context['category_icon_large'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+            _context['category_icon_small'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+        return _context
+
+    
+    def read(self):
+        return self.__load_category_context()
         
     
     @staticmethod
@@ -55,7 +65,7 @@ class RBCategory(object):
         for _cat_obj in _hdl:
             _rslt.append({
                 'category_id' : _cat_obj.id,
-                'title' : _cat_obj.title,
+                'category_title' : _cat_obj.title,
                 'group_id' : _cat_obj.group_id,
                 'status' : _cat_obj.status
             })
@@ -79,10 +89,17 @@ class RBCategory(object):
         for _group in _rslt: 
             _group['content'] = []
             for _category_obj in RBCategoryModel.objects.filter(group_id = _group['group_id']):
+                if _category_obj.image_store_hash:
+                    _category_icon_large = settings.IMAGE_SERVER + 'image/category/icon/' + _category_obj.image_store_hash + '_large' 
+                    _category_icon_small = settings.IMAGE_SERVER + 'image/category/icon/' + _category_obj.image_store_hash + '_small'
+                else:
+                    _category_icon_large = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+                    _category_icon_small = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
                 _group['content'].append({
                     'category_id' : _category_obj.id,
                     'category_title' : _category_obj.title,
-                    'category_image' : ''
+                    'category_icon_large' : _category_icon_large,
+                    'category_icon_small' : _category_icon_small
                 })
         return _rslt
             
