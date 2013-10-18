@@ -61,8 +61,13 @@ class RBMobileEntity(RBEntity):
         return _context    
 
 
-    def add_note(self, creator_id, score, note_text, request_user_id = None):
-        _note_context = super(RBMobileEntity, self).add_note(creator_id, score, note_text)
+    def add_note(self, creator_id, score, note_text, image_data = None, request_user_id = None):
+        _note_context = super(RBMobileEntity, self).add_note(
+            creator_id = creator_id, 
+            score = score, 
+            note_text = note_text,
+            image_data = image_data
+        )
         _note_context['creator'] = RBMobileUser(_note_context['creator_id']).read(request_user_id)
         del _note_context['creator_id']
         _note_context['created_time'] = time.mktime(_note_context["created_time"].timetuple())

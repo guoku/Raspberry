@@ -58,13 +58,23 @@ def add_note_for_entity(request, entity_id):
         _session = request.POST.get('session', None)
         _note_text = request.POST.get('note', None)
         _score = int(request.POST.get('score', None))
-       
+        
+        _image_file = request.FILES.get('image', None)
+        if _image_file == None:
+            _image_data = None
+        else:
+            if hasattr(_image_file, 'chunks'):
+                _image_data = ''.join(chunk for chunk in _image_file.chunks())
+            else:
+                _image_data = _image_file.read()
+        
         _request_user_id = Session_Key.objects.get_user_id(_session)
         _entity = RBMobileEntity(entity_id)
         _note_context = _entity.add_note(
             creator_id = _request_user_id,
             score = _score,
             note_text = _note_text,
+            image_data = _image_data,
             request_user_id = _request_user_id
         )
         

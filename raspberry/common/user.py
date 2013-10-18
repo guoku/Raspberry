@@ -1,6 +1,8 @@
 # coding=utf8
 from django.contrib.auth.models import User as AuthUser
 from django.contrib.auth import authenticate
+from avatar import Avatar
+from models import Avatar as RBAvatarModel 
 from models import User_Profile as RBUserProfileModel 
 from models import User_Follow as RBUserFollowModel
 import datetime
@@ -25,6 +27,7 @@ class RBUser(object):
     def __ensure_user_obj(self):
         if not hasattr(self, '__user_obj'):
             self.__user_obj = AuthUser.objects.get(pk = self.__user_id)
+    
 
     def get_user_id(self):
         return self.__user_id
@@ -112,18 +115,25 @@ class RBUser(object):
         try:
             _profile = RBUserProfileModel.objects.get(user_id = self.__user_id)
             _context['nickname'] = _profile.nickname
-            _context['avatar'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
             _context['verified'] = 0 
             _context['verified_type'] = 'guoku' 
             _context['verified_reason'] = 'guoku' 
             _context['gender'] = _profile.gender 
         except RBUserProfileModel.DoesNotExist, e:
             _context['nickname'] = 'unknown' 
-            _context['avatar'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
             _context['verified'] = 0 
             _context['verified_type'] = 'guoku' 
             _context['verified_reason'] = 'guoku' 
             _context['gender'] = 'O' 
+        
+        try:
+            _avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, current = True)
+            _avatar = Avatar(_avatar_obj.store_hash)
+            _context['avatar_large'] = _avatar.read_large_link() 
+            _context['avatar_small'] = _avatar.read_small_link() 
+        except RBAvatarModel.DoesNotExist, e:
+            _context['avatar_large'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+            _context['avatar_small'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
             
         return _context
     
@@ -188,6 +198,30 @@ class RBUser(object):
     def get_fan_user_id_list(self):
         return map(lambda x : x.follower_id, RBUserFollowModel.objects.filter(followee_id = self.__user_id))
 
-            
-         
+    def upload_avatar(self, data):
+        _avatar = Avatar.create(data)
+       
+        try:
+            _avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, store_hash = _avatar.get_hash_key())
+            if _avatar_obj.current == False:
+                _avatar_obj.current = True
+                try:
+                    _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, current = True)
+                    _current_avatar_obj.current = False
+                    _current_avatar_obj.save()
+                except RBAvatarModel.DoesNotExist, e:
+                    pass
+        except RBAvatarModel.DoesNotExist, e:
+            _obj = RBAvatarModel.objects.create(
+                user_id = self.__user_id,
+                store_hash = _avatar.get_hash_key(),
+                current = True
+            )
+            try:
+                _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, current = True)
+                _current_avatar_obj.current = False
+                _current_avatar_obj.save()
+            except RBAvatarModel.DoesNotExist, e:
+                pass
 
+        

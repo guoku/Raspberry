@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'raspberry_10_15',
+        'NAME': 'raspberry',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
@@ -25,10 +25,11 @@ DATABASES = {
 }
 
 from mongoengine import register_connection 
-register_connection('mango', 'mango_10_15')
+register_connection('mango', 'mango')
 
-MOGILEFS_DOMAIN = "stage"
-MOGILEFS_TRACKERS = ["10.0.2.50:7001"]
+MOGILEFS_DOMAIN = 'staging'
+MOGILEFS_TRACKERS = ['10.0.1.23:7001']
+IMAGE_SERVER  = 'http://10.0.1.101:8000/'
 
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'

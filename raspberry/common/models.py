@@ -22,6 +22,16 @@ class User_Profile(models.Model):
 
     def __unicode__(self):
         return self.nickname
+    
+class Avatar(models.Model):
+    user = models.ForeignKey(User)
+    store_hash = models.CharField(max_length = 64, db_index = True, null = False, blank = False)
+    current = models.BooleanField(default = False)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('user', 'store_hash')
 
 class Category_Group(models.Model):
     title = models.CharField(max_length = 128, db_index = True)
@@ -86,6 +96,16 @@ class Entity_Note_Comment(models.Model):
     comment_text = models.TextField(null = False)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     reply_to = models.IntegerField(default = None, null = True, db_index = True)
+    
+    class Meta:
+        ordering = ['-created_time']
+
+class Entity_Note_Figure(models.Model):
+    entity_id = models.CharField(max_length = 32, db_index = True)
+    note = models.ForeignKey(Entity_Note)
+    creator = models.ForeignKey(User)
+    store_hash = models.CharField(max_length = 64, db_index = True, null = False, blank = False)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     
     class Meta:
         ordering = ['-created_time']
