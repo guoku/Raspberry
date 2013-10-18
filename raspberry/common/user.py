@@ -126,12 +126,12 @@ class RBUser(object):
             _context['verified_reason'] = 'guoku' 
             _context['gender'] = 'O' 
         
-        try:
-            _avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, current = True)
+        _avatar_obj = RBAvatarModel.objects.filter(user_id = self.__user_id, current = True).order_by('-created_time')[0]
+        if _avatar_obj != None:
             _avatar = Avatar(_avatar_obj.store_hash)
             _context['avatar_large'] = _avatar.read_large_link() 
             _context['avatar_small'] = _avatar.read_small_link() 
-        except RBAvatarModel.DoesNotExist, e:
+        else:
             _context['avatar_large'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
             _context['avatar_small'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
             
@@ -204,24 +204,26 @@ class RBUser(object):
         try:
             _avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, store_hash = _avatar.get_hash_key())
             if _avatar_obj.current == False:
-                _avatar_obj.current = True
                 try:
                     _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, current = True)
                     _current_avatar_obj.current = False
                     _current_avatar_obj.save()
                 except RBAvatarModel.DoesNotExist, e:
                     pass
+                _avatar_obj.current = True
+                _avatar_obj.save()
         except RBAvatarModel.DoesNotExist, e:
-            _obj = RBAvatarModel.objects.create(
-                user_id = self.__user_id,
-                store_hash = _avatar.get_hash_key(),
-                current = True
-            )
             try:
                 _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, current = True)
                 _current_avatar_obj.current = False
                 _current_avatar_obj.save()
             except RBAvatarModel.DoesNotExist, e:
                 pass
+            
+            _obj = RBAvatarModel.objects.create(
+                user_id = self.__user_id,
+                store_hash = _avatar.get_hash_key(),
+                current = True
+            )
 
         
