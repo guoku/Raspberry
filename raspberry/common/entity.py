@@ -253,10 +253,13 @@ class RBEntity(object):
              
        
     @classmethod
-    def find(cls, category_id = None, offset = 0, count = 30):
+    def find(cls, category_id = None, timestamp = None, offset = 0, count = 30):
         _hdl = RBEntityModel.objects
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
+        if timestamp != None:
+            print timestamp
+            _hdl = _hdl.filter(created_time__lt = timestamp)
         _hdl = _hdl.order_by('-created_time')[offset : offset + count]
         _entity_id_list = map(lambda x: x.entity_id, _hdl)
         return _entity_id_list

@@ -78,17 +78,16 @@ def register(request):
         }
         return SuccessJsonResponse(_data)
 
-#def logout(request):
-#    _req_uri = request.get_full_path()
-#    if request.method == "POST":
-#        _session = request.POST.get('session', None)
-#        _dev_token = request.POST.get('dev_token', None)
-#        logger.info("%s" % _session)
-#        _res = Account.logout(session=_session, dev_token=_dev_token)
-#        # _res = []
-#        return SuccessV2JsonResponse(data=_res, req_uri=_req_uri)
-#
-#
+def logout(request):
+    _req_uri = request.get_full_path()
+    if request.method == "POST":
+        _session = request.POST.get('session', None)
+        _session_obj = Session_Key.objects.get(session_key = _session)
+        _session_obj.delete()
+        
+        return SuccessJsonResponse("1")
+
+
 #def forget_passwd(request):
 #    _req_uri = request.get_full_path()
 #    _host = request.get_host()

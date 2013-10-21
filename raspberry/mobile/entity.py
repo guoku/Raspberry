@@ -2,7 +2,37 @@
 from lib.entity import RBMobileEntity
 from lib.user import RBMobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
-from mobile.models import Session_Key 
+from mobile.models import Session_Key
+import datetime
+
+def entity_list(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _timestamp = request.GET.get('timestamp', None)
+        if _timestamp != None:
+            _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
+        _offset = int(request.GET.get('offset', '0'))
+        _count = int(request.GET.get('count', '30'))
+        
+        _entity_id_list = RBMobileEntity.find(
+            timestamp = _timestamp,
+            offset = _offset,
+            count = _count
+        )
+        _rslt = []
+        for _entity_id in _entity_id_list:
+            _entity = RBMobileEntity(_entity_id)
+            _rslt.append(
+                _entity.read(_request_user_id)
+            )
+        return SuccessJsonResponse(_rslt)
+    
+
+
 
 def category_entity(request, category_id):
     if request.method == "GET":
@@ -10,7 +40,7 @@ def category_entity(request, category_id):
         if _session != None:
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
-            _user_id = None
+            _request_user_id = None
         
         _entity_id_list = RBMobileEntity.find(
             category_id = category_id
@@ -29,11 +59,11 @@ def entity_detail(request, entity_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
-            _user_id = Session_Key.objects.get_user_id(_session)
+            _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
-            _user_id = None
+            _request_user_id = None
 
-        _rslt = RBMobileEntity(entity_id).read_full_context(_user_id)
+        _rslt = RBMobileEntity(entity_id).read_full_context(_request_user_id)
         return SuccessJsonResponse(_rslt)
         
 
@@ -42,13 +72,13 @@ def like_entity(request, entity_id, target_status):
     if request.method == "POST":
         _session = request.POST.get('session', None)
         
-        _user_id = Session_Key.objects.get_user_id(_session)
+        _request_user_id = Session_Key.objects.get_user_id(_session)
         _rslt = { 'entity_id' : entity_id }
         if target_status == '1':
-            RBMobileEntity(entity_id).like(_user_id)
+            RBMobileEntity(entity_id).like(_request_user_id)
             _rslt['like_already'] = 1
         else:
-            RBMobileEntity(entity_id).unlike(_user_id)
+            RBMobileEntity(entity_id).unlike(_request_user_id)
             _rslt['like_already'] = 0
         return SuccessJsonResponse(_rslt)
             
