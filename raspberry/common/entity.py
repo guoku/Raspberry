@@ -75,7 +75,7 @@ class RBEntity(object):
             return _list
     
         @classmethod
-        def create(cls, entity_id, creator_id, score, note_text, image_data):
+        def create(cls, entity_id, creator_id, score, note_text):
             _note_obj = RBEntityNoteModel.objects.create(
                 entity_id = entity_id,
                 creator_id = creator_id,
@@ -86,6 +86,13 @@ class RBEntity(object):
             _inst = cls(_note_obj.id)
             _inst.note_obj = _note_obj
             return _inst
+        
+        @classmethod
+        def update(cls, score, note_text):
+            self.__ensure_note_obj()
+            self.note_obj.note_text = note_text
+            self.note_obj.score = score
+            self.note_obj.save()
         
         def __load_note_context(self):
             self.__ensure_note_obj()
@@ -336,8 +343,7 @@ class RBEntity(object):
             entity_id = self.__entity_id,
             creator_id = creator_id,
             score = score,
-            note_text = note_text,
-            image_data = image_data
+            note_text = note_text
         )
         _context = _note.read()
         
@@ -352,6 +358,13 @@ class RBEntity(object):
             _context['figure'] = _figure.read_origin_link()
 
         return _context 
+    
+    def update_note(self, score, note_text):
+        _note = self.Note.update(
+            score = score,
+            note_text = note_text
+        )
+             
     
     def read_note(self, note_id):
         _context = self.Note(note_id).read()
