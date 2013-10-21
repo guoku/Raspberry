@@ -30,6 +30,7 @@ class RBEntity(object):
         def get_hash_key(self):
             return self.__key
    
+        
         @classmethod
         def create(cls, origin_data):
             _key = md5(origin_data).hexdigest()
@@ -57,6 +58,21 @@ class RBEntity(object):
         def __ensure_note_obj(self):
             if not hasattr(self, 'note_obj'):
                 self.note_obj = RBEntityNoteModel.objects.get(pk = self.note_id)
+    
+        @classmethod
+        def find(cls, timestamp = None, creator_set = None, offset = 0, count = 30):
+            _hdl = RBEntityNoteModel.objects
+            if timestamp != None:
+                _hdl = _hdl.filter(created_time__lt = timestamp)
+            if creator_set != None:
+                _hdl = _hdl.filter(creator_id__in = creator_set)
+            _list = []
+            for _note_obj in _hdl.order_by('-created_time')[offset : offset + count]:
+                _list.append({
+                    'entity_id' : _note_obj.entity_id,
+                    'note_id' : _note_obj.id
+                })
+            return _list
     
         @classmethod
         def create(cls, entity_id, creator_id, score, note_text, image_data):
@@ -258,7 +274,6 @@ class RBEntity(object):
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
         if timestamp != None:
-            print timestamp
             _hdl = _hdl.filter(created_time__lt = timestamp)
         _hdl = _hdl.order_by('-created_time')[offset : offset + count]
         _entity_id_list = map(lambda x: x.entity_id, _hdl)
@@ -367,16 +382,6 @@ class RBEntity(object):
         _note = self.Note(note_id)
         return _note.read_comment(comment_id)
     
-    @staticmethod
-    def note_list_of_user(user_id_list):
-        _list = []
-        for _note_obj in RBEntityNoteModel.objects.filter(creator_id__in = user_id_list):
-            _list.append({
-                'entity_id' : _note_obj.entity_id,
-                'note_id' : _note_obj.id
-            })
-        return _list
-        
     @staticmethod
     def get_user_note_count(user_id):
         _user_id = int(user_id)

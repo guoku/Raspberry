@@ -206,17 +206,36 @@ def search(request):
 def feed(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
+        _type = request.GET.get('type', 'all')
         if _session != None:
             _request_user_id = Session_Key.objects.get_user_id(_session)
-            _rslt = []
+        else:
+            _request_user_id = None
+        _timestamp = request.GET.get('timestamp', None)
+        if _timestamp != None:
+            _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
+        _offset = int(request.GET.get('offset', '0'))
+        _count = int(request.GET.get('count', '30'))
+
+        if _type == 'friend':
             _following_user_id_list = RBMobileUser(_request_user_id).get_following_user_id_list()
-            
-            for _note_info in RBMobileEntity.note_list_of_user(_following_user_id_list):
-                _note_id = _note_info['note_id']
-                _entity = RBMobileEntity(_note_info['entity_id'])
-                _rslt.append({
-                    'entity' : _entity.read(),
-                    'note' : _entity.read_note(_note_info['note_id'], _request_user_id)
-                })
+        else:
+            _following_user_id_list = None
+
+        _note_list = RBMobileEntity.Note.find(
+            timestamp = _timestamp,
+            creator_set = _following_user_id_list,
+            offset = _offset,
+            count = _count
+        ) 
         
-            return SuccessJsonResponse(_rslt)
+        _rslt = []
+        for _note_info in _note_list: 
+            _note_id = _note_info['note_id']
+            _entity = RBMobileEntity(_note_info['entity_id'])
+            _rslt.append({
+                'entity' : _entity.read(),
+                'note' : _entity.read_note(_note_info['note_id'], _request_user_id)
+            })
+        
+        return SuccessJsonResponse(_rslt)

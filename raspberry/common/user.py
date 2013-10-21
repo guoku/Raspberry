@@ -125,9 +125,9 @@ class RBUser(object):
             _context['verified_type'] = 'guoku' 
             _context['verified_reason'] = 'guoku' 
             _context['gender'] = 'O' 
-        
-        _avatar_obj = RBAvatarModel.objects.filter(user_id = self.__user_id, current = True).order_by('-created_time')[0]
-        if _avatar_obj != None:
+       
+        if RBAvatarModel.objects.filter(user_id = self.__user_id, current = True).count() > 0:
+            _avatar_obj = RBAvatarModel.objects.filter(user_id = self.__user_id, current = True).order_by('-created_time')[0]
             _avatar = Avatar(_avatar_obj.store_hash)
             _context['avatar_large'] = _avatar.read_large_link() 
             _context['avatar_small'] = _avatar.read_small_link() 
