@@ -87,11 +87,11 @@ class RBEntity(object):
             _inst.note_obj = _note_obj
             return _inst
         
-        @classmethod
-        def update(cls, score, note_text):
+        def update(self, score, note_text):
+            _score = int(score)
             self.__ensure_note_obj()
             self.note_obj.note_text = note_text
-            self.note_obj.score = score
+            self.note_obj.score = _score
             self.note_obj.save()
         
         def __load_note_context(self):
@@ -359,11 +359,29 @@ class RBEntity(object):
 
         return _context 
     
-    def update_note(self, score, note_text):
-        _note = self.Note.update(
+    def update_note(self, note_id, score, note_text, image_data = None):
+        _note = self.Note(note_id).update(
             score = score,
             note_text = note_text
         )
+        
+        if image_data != None:
+            try:
+                _figure_obj = RBEntityNoteFigureModel.objects.get(
+                    entity_id = self.__entity_id,
+                    note_id = _note_.note_id
+                )
+                _figure = self.Figure.create(image_data)
+                _figure_obj.store_hash = _figure.get_hash_key()
+                _figure_obj.save()
+            except RBEntityNoteFigureModel.DoesNotExist, e: 
+                _figure = self.Figure.create(image_data)
+                _figure_obj = RBEntityNoteFigureModel.objects.create(
+                    entity_id = self.__entity_id,
+                    note_id = _note.note_id,
+                    creator_id = creator_id,
+                    store_hash = _figure.get_hash_key()
+                )
              
     
     def read_note(self, note_id):

@@ -121,6 +121,37 @@ def entity_note_detail(request, entity_id, note_id):
         _rslt = RBMobileEntity(entity_id).read_note_full_context(note_id, _request_user_id)
         return SuccessJsonResponse(_rslt)
 
+def update_entity_note(request, entity_id, note_id):
+    if request.method == "POST":
+        _session = request.POST.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _note_text = request.POST.get('note', None)
+        _score = int(request.POST.get('score', None))
+
+        _image_file = request.FILES.get('image', None)
+        if _image_file == None:
+            _image_data = None
+        else:
+            if hasattr(_image_file, 'chunks'):
+                _image_data = ''.join(chunk for chunk in _image_file.chunks())
+            else:
+                _image_data = _image_file.read()
+        
+        ## There's no authorize confirmation yet ##
+
+        _entity = RBMobileEntity(entity_id)
+        _entity.update_note(
+            note_id = note_id,
+            score = _score,
+            note_text = _note_text,
+            image_data = _image_data
+        )
+        _rslt = _entity.read_note(note_id, _request_user_id)
+        return SuccessJsonResponse(_rslt)
+
 def poke_entity_note(request, entity_id, note_id, target_status):
     if request.method == "POST":
         _session = request.POST.get('session', None)
