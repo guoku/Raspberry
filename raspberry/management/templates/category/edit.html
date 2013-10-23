@@ -2,8 +2,20 @@
 
 {% block content %}
 <div class="container">
+    <div class="row-fluid" id="chlid-images">
+        <ul class="thumbnails">
+            <li class="span4">
+                <a href="" >
+                    <img id="main-image" class="img-polaroid" src="{{ category_context.category_icon_large }}" alt="" style="max-width: 280px;max-height: 280px">
+                </a>
+                <a href="" >
+                    <img id="main-image" class="img-polaroid" src="{{ category_context.category_icon_small }}" alt="" style="max-width: 280px;max-height: 280px">
+                </a>
+            </li>
+        </ul>
+    </div>
     <div>
-        <form class="well form-horizontal" action="{% url 'management.views.edit_category' category_context.category_id  %}" method="POST">
+        <form enctype="multipart/form-data" class="well form-horizontal" action="{% url 'management.views.edit_category' category_context.category_id  %}" method="POST">
             <fieldset>
                 <div class="control-group">
                     <label class="control-label" for="title">名称:</label>
@@ -19,6 +31,12 @@
                                 <option {%if  group.group_id == category_context.group_id%}selected="selected" {%endif%}value="{{ group.group_id }}">{{ group.title }}</option>
                             {% endfor %}
                         </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="image_file">Icon:</label>
+                    <div class="controls">
+		        <input id="image_file" name="image_file" type="file">
                     </div>
                 </div>
             </fieldset>

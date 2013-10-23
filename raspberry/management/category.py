@@ -55,9 +55,19 @@ def edit_category(request, category_id):
     elif request.method == 'POST':
         _group_id = request.POST.get("group_id", None)
         _title = request.POST.get("title", None)
+        _image_file = request.FILES.get("image_file", None)
+        
+        _image_data = None
+        if _image_file != None:
+            if hasattr(_image_file, 'chunks'):
+                _image_data = ''.join(chunk for chunk in _image_file.chunks())
+            else:
+                _image_data = _image_file.read()
+            
         RBCategory(category_id).update(
             title = _title,
-            group_id = _group_id
+            group_id = _group_id,
+            image_data = _image_data
         )
         return HttpResponseRedirect(reverse('management.views.edit_category', kwargs = { "category_id" : category_id })) 
 

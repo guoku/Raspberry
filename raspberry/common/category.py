@@ -2,6 +2,9 @@
 from models import Category_Group as RBCategoryGroupModel
 from models import Category as RBCategoryModel
 from django.conf import settings
+from hashlib import md5
+from pymogile import Client
+from wand.image import Image
 import datetime 
 
 DEFAULT_CATEGORY_ICON_KEY = '03717fa531b23c6f5dbd5522e6eec9a1' 
@@ -17,12 +20,38 @@ class RBCategory(object):
     def get_category_id(self):
         return self.__category_id
     
-    def update(self, title = None, group_id = None):
+    def __resize(self, data, w, h):
+        _img = Image(blob = data)
+        _img.resize(w, h)
+        return _img.make_blob()
+    
+    def update(self, title = None, group_id = None, image_data = None):
         self.__ensure_category_obj()
         if title != None:
             self.__category_obj.title = title
         if group_id != None:
-            self.__category_obj.group_id = group_id 
+            self.__category_obj.group_id = group_id
+
+        if image_data != None:
+            self.__datastore = Client(
+                domain = settings.MOGILEFS_DOMAIN, 
+                trackers = settings.MOGILEFS_TRACKERS 
+            )
+            
+            _key = md5(image_data).hexdigest()
+            
+            _large_data = self.__resize(image_data, 86, 86)
+            _fp = self.__datastore.new_file(_key + '_large')
+            _fp.write(_large_data)
+            _fp.close()
+            
+            _small_data = self.__resize(image_data, 43, 43)
+            _fp = self.__datastore.new_file(_key + '_small')
+            _fp.write(_small_data)
+            _fp.close()
+            
+            self.__category_obj.image_store_hash = _key 
+             
         self.__category_obj.save()
 
     @classmethod
