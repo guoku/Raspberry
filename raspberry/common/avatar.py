@@ -48,10 +48,10 @@ class Avatar(object):
         return _inst
      
     def read_large_link(self):
-        return settings.IMAGE_SERVER + 'image/avatar/' + self.__key + '_large'
+        return settings.IMAGE_SERVER + self.__key + '_large'
     
     def read_small_link(self):
-        return settings.IMAGE_SERVER + 'image/avatar/' + self.__key + '_small'
+        return settings.IMAGE_SERVER + self.__key + '_small'
 
     def write(self, origin_data): 
         self.__ensure_datastore_client()

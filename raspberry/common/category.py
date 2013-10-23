@@ -4,6 +4,7 @@ from models import Category as RBCategoryModel
 from django.conf import settings
 import datetime 
 
+DEFAULT_CATEGORY_ICON_KEY = '03717fa531b23c6f5dbd5522e6eec9a1' 
 class RBCategory(object):
     
     def __init__(self, category_id):
@@ -43,11 +44,11 @@ class RBCategory(object):
         _context['group_id'] = self.__category_obj.group_id
         _context['status'] = self.__category_obj.status
         if self.__category_obj.image_store_hash:
-            _context['category_icon_large'] = settings.IMAGE_SERVER + 'image/category/icon/' + self.__category_obj.image_store_hash + '_large' 
-            _context['category_icon_small'] = settings.IMAGE_SERVER + 'image/category/icon/' + self.__category_obj.image_store_hash + '_small'
+            _context['category_icon_large'] = settings.IMAGE_SERVER + self.__category_obj.image_store_hash + '_large' 
+            _context['category_icon_small'] = settings.IMAGE_SERVER + self.__category_obj.image_store_hash + '_small'
         else:
-            _context['category_icon_large'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
-            _context['category_icon_small'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+            _context['category_icon_large'] = settings.IMAGE_SERVER + DEFAULT_CATEGORY_ICON_KEY + '_large' 
+            _context['category_icon_small'] = settings.IMAGE_SERVER + DEFAULT_CATEGORY_ICON_KEY + '_small'
         return _context
 
     
@@ -90,11 +91,11 @@ class RBCategory(object):
             _group['content'] = []
             for _category_obj in RBCategoryModel.objects.filter(group_id = _group['group_id']):
                 if _category_obj.image_store_hash:
-                    _category_icon_large = settings.IMAGE_SERVER + 'image/category/icon/' + _category_obj.image_store_hash + '_large' 
-                    _category_icon_small = settings.IMAGE_SERVER + 'image/category/icon/' + _category_obj.image_store_hash + '_small'
+                    _category_icon_large = settings.IMAGE_SERVER + _category_obj.image_store_hash + '_large' 
+                    _category_icon_small = settings.IMAGE_SERVER + _category_obj.image_store_hash + '_small'
                 else:
-                    _category_icon_large = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
-                    _category_icon_small = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+                    _category_icon_large = settings.IMAGE_SERVER + DEFAULT_CATEGORY_ICON_KEY + '_large' 
+                    _category_icon_small = settings.IMAGE_SERVER + DEFAULT_CATEGORY_ICON_KEY + '_small'
                 _group['content'].append({
                     'category_id' : _category_obj.id,
                     'category_title' : _category_obj.title,

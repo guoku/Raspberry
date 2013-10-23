@@ -42,7 +42,7 @@ class RBEntity(object):
             return _inst
     
         def read_origin_link(self):
-            return settings.IMAGE_SERVER + 'image/entity/figure/' + self.__key + '_origin'
+            return settings.IMAGE_SERVER + self.__key + '_origin'
     
         def write(self, origin_data): 
             _fp = self.__datastore.new_file(self.__origin_store_key)
