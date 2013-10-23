@@ -57,7 +57,15 @@ class RBEntity(object):
     
         def __ensure_note_obj(self):
             if not hasattr(self, 'note_obj'):
+                print "loading note object..."
                 self.note_obj = RBEntityNoteModel.objects.get(pk = self.note_id)
+        
+        def __ensure_figure_obj(self):
+            if not hasattr(self, 'figure_obj'):
+                self.figure_obj = None
+                for _figure_obj in RBEntityNoteFigureModel.objects.filter(note_id = self.note_id).order_by('-created_time'):
+                    self.figure_obj = _figure_obj
+                    break
     
         @classmethod
         def find(cls, timestamp = None, creator_set = None, offset = 0, count = 30):
@@ -74,8 +82,12 @@ class RBEntity(object):
                 })
             return _list
     
+        def get_creator_id(self):
+            self.__ensure_note_obj()
+            return self.note_obj.creator_id
+        
         @classmethod
-        def create(cls, entity_id, creator_id, score, note_text):
+        def create(cls, entity_id, creator_id, score, note_text, image_data = None):
             _note_obj = RBEntityNoteModel.objects.create(
                 entity_id = entity_id,
                 creator_id = creator_id,
@@ -85,14 +97,39 @@ class RBEntity(object):
 
             _inst = cls(_note_obj.id)
             _inst.note_obj = _note_obj
+        
+            if image_data != None:
+                _figure = RBEntity.Figure.create(image_data)
+                _figure_obj = RBEntityNoteFigureModel.objects.create(
+                    entity_id = entity_id,
+                    note_id = _note_obj.id,
+                    creator_id = creator_id,
+                    store_hash = _figure.get_hash_key()
+                )
+                _inst.figure_obj = _figure_obj
             return _inst
         
-        def update(self, score, note_text):
+        def update(self, score, note_text, image_data):
             _score = int(score)
             self.__ensure_note_obj()
             self.note_obj.note_text = note_text
             self.note_obj.score = _score
             self.note_obj.save()
+            
+            if image_data != None:
+                self.__ensure_figure_obj()
+                _figure = RBEntity.Figure.create(image_data)
+                if self.figure_obj == None:
+                    _figure_obj = RBEntityNoteFigureModel.objects.create(
+                        entity_id = self.__entity_id,
+                        note_id = _note.note_id,
+                        creator_id = creator_id,
+                        store_hash = _figure.get_hash_key()
+                    )
+                    self.figure_obj = _figure_obj
+                else:
+                    self.figure_obj.store_hash = _figure.get_hash_key()
+                    self.figure_obj.save()
         
         def __load_note_context(self):
             self.__ensure_note_obj()
@@ -108,6 +145,11 @@ class RBEntity(object):
             _context["comment_count"] = len(_context["comment_id_list"]) 
             _context["created_time"] = self.note_obj.created_time
             _context["updated_time"] = self.note_obj.updated_time
+            
+            self.__ensure_figure_obj()
+            if self.figure_obj != None:
+                _context['figure'] = RBEntity.Figure(self.figure_obj.store_hash).read_origin_link()
+            
             return _context
             
         def read(self):
@@ -162,6 +204,7 @@ class RBEntity(object):
     
     def __init__(self, entity_id):
         self.__entity_id = entity_id
+        self.notes = {} 
     
     @classmethod
     def cal_entity_hash(cls, entity_hash_string):
@@ -339,56 +382,34 @@ class RBEntity(object):
         return None 
 
     def add_note(self, creator_id, score, note_text, image_data):
+        _creator_id = int(creator_id)
         _note = self.Note.create(
             entity_id = self.__entity_id,
-            creator_id = creator_id,
+            creator_id = _creator_id,
             score = score,
-            note_text = note_text
+            note_text = note_text,
+            image_data = image_data
         )
-        _context = _note.read()
-        
-        if image_data != None:
-            _figure = self.Figure.create(image_data)
-            _figure_obj = RBEntityNoteFigureModel.objects.create(
-                entity_id = self.__entity_id,
-                note_id = _note.note_id,
-                creator_id = creator_id,
-                store_hash = _figure.get_hash_key()
-            )
-            _context['figure'] = _figure.read_origin_link()
+        self.notes[_note.note_id] = _note
+        return _note.note_id
 
-        return _context 
     
     def update_note(self, note_id, score, note_text, image_data = None):
-        _note = self.Note(note_id).update(
+        _note_id = int(note_id)
+        _note = self.Note(_note_id)
+        _note.update(
             score = score,
-            note_text = note_text
+            note_text = note_text,
+            image_data = image_data
         )
+        self.notes[_note.note_id] = _note
         
-        if image_data != None:
-            try:
-                _figure_obj = RBEntityNoteFigureModel.objects.get(
-                    entity_id = self.__entity_id,
-                    note_id = _note_.note_id
-                )
-                _figure = self.Figure.create(image_data)
-                _figure_obj.store_hash = _figure.get_hash_key()
-                _figure_obj.save()
-            except RBEntityNoteFigureModel.DoesNotExist, e: 
-                _figure = self.Figure.create(image_data)
-                _figure_obj = RBEntityNoteFigureModel.objects.create(
-                    entity_id = self.__entity_id,
-                    note_id = _note.note_id,
-                    creator_id = creator_id,
-                    store_hash = _figure.get_hash_key()
-                )
-             
     
     def read_note(self, note_id):
-        _context = self.Note(note_id).read()
-        for _figure_obj in RBEntityNoteFigureModel.objects.filter(note_id = _context['note_id']).order_by('-created_time'):
-            _context['figure'] = self.Figure(_figure_obj.store_hash).read_origin_link()
-            break
+        _note_id = int(note_id)
+        if not self.notes.has_key(_note_id):
+            self.notes[_note_id] = self.Note(_note_id) 
+        _context = self.notes[_note_id].read()
         return _context
      
     def poke_note(self, note_id, user_id):

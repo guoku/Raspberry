@@ -107,6 +107,7 @@ class Entity_Note_Figure(models.Model):
     creator = models.ForeignKey(User)
     store_hash = models.CharField(max_length = 64, db_index = True, null = False, blank = False)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    updated_time = models.DateTimeField(auto_now = True, db_index = True)
     
     class Meta:
         ordering = ['-created_time']

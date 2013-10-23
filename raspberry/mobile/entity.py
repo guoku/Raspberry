@@ -100,14 +100,13 @@ def add_note_for_entity(request, entity_id):
         
         _request_user_id = Session_Key.objects.get_user_id(_session)
         _entity = RBMobileEntity(entity_id)
-        _note_context = _entity.add_note(
+        _note_id = _entity.add_note(
             creator_id = _request_user_id,
             score = _score,
             note_text = _note_text,
             image_data = _image_data,
-            request_user_id = _request_user_id
         )
-        
+        _note_context = _entity.read_note(_note_id) 
         return SuccessJsonResponse(_note_context)
 
 def entity_note_detail(request, entity_id, note_id):
@@ -209,7 +208,7 @@ def user_note(request, user_id):
             _request_user_id = None
         
         _rslt = []
-        for _note_info in RBMobileEntity.note_list_of_user([int(user_id)]):
+        for _note_info in RBMobileEntity.Note.note_list_of_user([int(user_id)]):
             _entity_id = _note_info['entity_id'] 
             _note_id = _note_info['note_id']
             _entity = RBMobileEntity(_entity_id)
@@ -265,7 +264,7 @@ def feed(request):
             _note_id = _note_info['note_id']
             _entity = RBMobileEntity(_note_info['entity_id'])
             _rslt.append({
-                'entity' : _entity.read(),
+                'entity' : _entity.read(_request_user_id),
                 'note' : _entity.read_note(_note_info['note_id'], _request_user_id)
             })
         
