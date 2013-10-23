@@ -57,7 +57,6 @@ class RBEntity(object):
     
         def __ensure_note_obj(self):
             if not hasattr(self, 'note_obj'):
-                print "loading note object..."
                 self.note_obj = RBEntityNoteModel.objects.get(pk = self.note_id)
         
         def __ensure_figure_obj(self):
@@ -180,7 +179,9 @@ class RBEntity(object):
             return False
 
         def poke_already(self, user_id):
-            return RBEntityNotePokeModel.objects.filter(user_id = user_id).count() > 0
+            if RBEntityNotePokeModel.objects.filter(note_id = self.note_id, user_id = user_id).count() > 0:
+                return True
+            return False
 
         def read_comment(self, comment_id):
             _obj = RBEntityNoteCommentModel.objects.get(pk = comment_id)
