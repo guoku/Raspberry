@@ -14,11 +14,12 @@ cur.execute("SET names utf8")
 cur.execute("SELECT id, title from common_category;")
 categories = {}
 for row in cur.fetchall():
-    categories[row[1]] = {
+    title = row[1].replace('/', '')
+    categories[title] = {
         'category_id' : row[0]
     }
 
-image_path = '../../../data/guoku_category_icons'
+image_path = '../../../data/100-icon'
 for root, dirs, files in os.walk(image_path):
     for f in files:
         if '@2x.png' in f:
@@ -65,5 +66,26 @@ for title, obj in categories.items():
         
         cur.execute("UPDATE common_category set image_store_hash='%s' WHERE id=%d;"%(key, obj['category_id'])) 
         print "%s created...[%s]"%(title, key)
+        
+f = open(image_path + '/?@2x.png', 'r')
+large_data = f.read()
+f.close()
+key = md5(large_data).hexdigest()
+
+f = open(image_path + '/?.png', 'r')
+small_data = f.read()
+f.close()
+        
+mgf = datastore.new_file(key + '_large')
+mgf.write(large_data)
+mgf.close() 
+
+mgf = datastore.new_file(key + '_small')
+mgf.write(small_data)
+mgf.close()
+
+print "unkonw key is: [%s]"%key
+        
+
 conn.commit()
 
