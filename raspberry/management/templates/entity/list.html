@@ -8,12 +8,12 @@
                 <li class="nav-header">操作</li>
                 <li>
                     <a href="{% url 'management.views.new_entity' %}?cid={{category_context.category_id}}" target=_blank>
-                        添加商品 - {{ category_context.title }}
+                        添加商品 - {{ category_context.category_title }}
                     </a>
                 </li>
                 <li>
                     <a href="{% url 'management.views.edit_category' category_context.category_id %}" target=_blank>
-                        编辑分类 - {{ category_context.title }}
+                        编辑分类 - {{ category_context.category_title }}
                     </a>
                 </li>
             </ul>
@@ -37,7 +37,7 @@
                 {% for category in categories%}
                     <li{%if category.category_id == category_context.category_id%} class="active"{%endif%}>
                         <a href="{% url 'management.views.entity_list' %}?cid={{category.category_id}}">
-                            {{ category.title }}({{ category.entity_count }})
+                            {{ category.category_title }}({{ category.entity_count }})
                         </a>
                     </li>
                 {% endfor %}
