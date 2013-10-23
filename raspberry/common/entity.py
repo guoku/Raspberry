@@ -121,9 +121,9 @@ class RBEntity(object):
                 _figure = RBEntity.Figure.create(image_data)
                 if self.figure_obj == None:
                     _figure_obj = RBEntityNoteFigureModel.objects.create(
-                        entity_id = self.__entity_id,
-                        note_id = _note.note_id,
-                        creator_id = creator_id,
+                        entity_id = self.note_obj.entity_id,
+                        note_id = self.note_id,
+                        creator_id = self.note_obj.creator_id,
                         store_hash = _figure.get_hash_key()
                     )
                     self.figure_obj = _figure_obj
