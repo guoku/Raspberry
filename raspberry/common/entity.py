@@ -15,7 +15,7 @@ from hashlib import md5
 class RBEntity(object):
 
     def __init__(self, entity_id):
-        self.__entity_id = entity_id
+        self.entity_id = entity_id
         self.notes = {} 
     
     @classmethod
@@ -29,7 +29,7 @@ class RBEntity(object):
         return _hash 
     
     def get_entity_id(self):
-        return self.__entity_id
+        return self.entity_id
     
     @staticmethod
     def check_taobao_item_exist(taobao_id):
@@ -65,12 +65,12 @@ class RBEntity(object):
     
     def add_taobao_item(self, taobao_item_info, image_urls = []):
         _mango_client = MangoApiClient()
-        _item_id = _mango_client.add_taobao_item_for_entity(self.__entity_id, taobao_item_info, image_urls)
+        _item_id = _mango_client.add_taobao_item_for_entity(self.entity_id, taobao_item_info, image_urls)
     
     
     def __ensure_entity_obj(self):
         if not hasattr(self, '__entity_obj'):
-            self.__entity_obj = RBEntityModel.objects.get(entity_id = self.__entity_id)
+            self.__entity_obj = RBEntityModel.objects.get(entity_id = self.entity_id)
 
     def __load_entity_context(self, meta_context):
         self.__ensure_entity_obj()
@@ -84,7 +84,7 @@ class RBEntity(object):
         _context["total_score"] = 0 
         _context["score_count"] = 0 
         _context["note_id_list"] = []
-        for _note_obj in RBEntityNoteModel.objects.filter(entity_id = self.__entity_id):
+        for _note_obj in RBEntityScoreModel.objects.filter(entity_id = self.entity_id):
             _context["note_id_list"].append(_note_obj.note_id)
             _context["total_score"] += _note_obj.score
             _context["score_count"] += 1
@@ -94,7 +94,7 @@ class RBEntity(object):
 
     def read(self):
         _mango_client = MangoApiClient()
-        _meta_context = _mango_client.read_entity(self.__entity_id)
+        _meta_context = _mango_client.read_entity(self.entity_id)
         _context = self.__load_entity_context(_meta_context)
         return _context    
     
@@ -102,11 +102,11 @@ class RBEntity(object):
     def update(self, category_id = None, brand = None, title = None, intro = None, price = None):
         if brand != None or title != None or intro != None:
             _mango_client = MangoApiClient()
-            _base_info = _mango_client.read_entity(self.__entity_id)
+            _base_info = _mango_client.read_entity(self.entity_id)
             
             if brand != None or title != None or intro != None or price != None:
                 _mango_client.update_entity(
-                    entity_id = self.__entity_id, 
+                    entity_id = self.entity_id, 
                     brand = brand, 
                     title = title, 
                     intro = intro,
@@ -148,16 +148,16 @@ class RBEntity(object):
     
     def bind_item(self, item_id):
         _mango_client = MangoApiClient()
-        _mango_client.bind_entity_item(self.__entity_id, item_id)
+        _mango_client.bind_entity_item(self.entity_id, item_id)
     
     def unbind_item(self, item_id):
         _mango_client = MangoApiClient()
-        _mango_client.unbind_entity_item(self.__entity_id, item_id)
+        _mango_client.unbind_entity_item(self.entity_id, item_id)
 
     def like(self, user_id):
         try:
             RBEntityLikeModel.objects.create(
-                entity_id = self.__entity_id,
+                entity_id = self.entity_id,
                 user_id = user_id
             )
             return True
@@ -168,7 +168,7 @@ class RBEntity(object):
     def unlike(self, user_id):
         try:
             _obj = RBEntityLikeModel.objects.get(
-                entity_id = self.__entity_id,
+                entity_id = self.entity_id,
                 user_id = user_id
             )
             _obj.delete()
@@ -178,7 +178,7 @@ class RBEntity(object):
         return False
          
     def like_already(self, user_id):
-        return RBEntityLikeModel.objects.filter(user_id = user_id, entity_id = self.__entity_id).count() > 0 
+        return RBEntityLikeModel.objects.filter(user_id = user_id, entity_id = self.entity_id).count() > 0 
 
     @staticmethod
     def like_list_of_user(user_id):
@@ -187,12 +187,15 @@ class RBEntity(object):
         
     def add_note(self, creator_id, score, note_text, image_data):
         _creator_id = int(creator_id)
-        _note = self.Note.create(
-            entity_id = self.__entity_id,
+        _note = RBNote.create(
             creator_id = _creator_id,
-            score = score,
             note_text = note_text,
             image_data = image_data
+        )
+        _entity_note_obj = RBEntityNoteModel.objects.create(
+            entity_id = self.entity_id,
+            note_id = _note.note_id,
+            creator_id = _creator_id
         )
         self.notes[_note.note_id] = _note
         return _note.note_id
@@ -200,7 +203,7 @@ class RBEntity(object):
     
     def update_note(self, note_id, score, note_text, image_data = None):
         _note_id = int(note_id)
-        _note = self.Note(_note_id)
+        _note = RBNote(_note_id)
         _note.update(
             score = score,
             note_text = note_text,

@@ -80,10 +80,9 @@ class RBNote(object):
         return self.note_obj.creator_id
     
     @classmethod
-    def create(cls, creator_id, score, note_text, image_data = None):
+    def create(cls, creator_id, note_text, image_data = None):
         _note_obj = RBNoteModel.objects.create(
             creator_id = creator_id,
-            score = score,
             note_text = note_text
         )
 
@@ -100,11 +99,9 @@ class RBNote(object):
             _inst.figure_obj = _figure_obj
         return _inst
     
-    def update(self, score, note_text, image_data):
-        _score = int(score)
+    def update(self, note_text, image_data):
         self.__ensure_note_obj()
         self.note_obj.note_text = note_text
-        self.note_obj.score = _score
         self.note_obj.save()
         
         if image_data != None:
@@ -126,7 +123,6 @@ class RBNote(object):
         _context = {} 
         _context["note_id"] = self.note_obj.id
         _context["creator_id"] = self.note_obj.creator_id
-        _context["score"] = self.note_obj.score
         _context["content"] = self.note_obj.note_text
         _context["poker_id_list"] = map(lambda x : x.user_id, RBNotePokeModel.objects.filter(note_id = self.note_id))
         _context["poke_count"] = len(_context["poker_id_list"]) 
