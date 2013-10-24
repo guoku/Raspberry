@@ -9,6 +9,18 @@ import datetime
 
 class RBUser(object):
     
+    class LoginEmailDoesNotExist(Exception):
+        def __init__(self, email):
+            self.__message = "login email %s is not exist" %email
+        def __str__(self):
+            return repr(self.__message)
+    
+    class LoginPasswordIncorrect(Exception):
+        def __init__(self):
+            self.__message = "login password is incorrect"
+        def __str__(self):
+            return repr(self.__message)
+    
     class EmailExistAlready(Exception):
         def __init__(self, email):
             self.__message = "email %s is exist" %email
@@ -55,13 +67,17 @@ class RBUser(object):
     
     @classmethod
     def login(cls, email, password):
-        _user_obj = AuthUser.objects.get(email = email)
+        try:
+            _user_obj = AuthUser.objects.get(email = email)
+        except AuthUser.DoesNotExist, e:
+            raise RBUser.LoginEmailDoesNotExist(email)
+
         _inst = cls(_user_obj.id)
         _inst.__user_obj = _user_obj
         
-        if _inst.check_auth(password): 
-            return _inst
-        return None
+        if not _inst.check_auth(password):
+            raise RBUser.LoginPasswordIncorrect()
+        return _inst
 
     @staticmethod
     def email_exist(email):

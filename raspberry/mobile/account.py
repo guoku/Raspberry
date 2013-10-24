@@ -8,23 +8,41 @@ def login(request):
         _email = request.POST.get('email', None)
         _password = request.POST.get('password', None)
         _api_key = request.POST.get('api_key', None)
-
-        _user = RBMobileUser.login(
-            email = _email, 
-            password = _password
-        )
-        _session = Session_Key.objects.generate_session(
-            user_id = _user.get_user_id(),
-            username = _user.get_username(),
-            email = _email,
-            api_key = _api_key
-        )
         
-        _data = {
-            'user' : _user.read_full_context(_user.get_user_id()),
-            'session' : _session.session_key
-        }
-        return SuccessJsonResponse(_data)
+        try:
+            _user = RBMobileUser.login(
+                email = _email, 
+                password = _password
+            )
+            _session = Session_Key.objects.generate_session(
+                user_id = _user.get_user_id(),
+                username = _user.get_username(),
+                email = _email,
+                api_key = _api_key
+            )
+            
+            _data = {
+                'user' : _user.read_full_context(_user.get_user_id()),
+                'session' : _session.session_key
+            }
+            return SuccessJsonResponse(_data)
+        except RBMobileUser.LoginEmailDoesNotExist, e:
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'email',
+                    'message' : str(e),
+                },
+                status = 400
+            )
+        except RBMobileUser.LoginPasswordIncorrect, e:
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'password',
+                    'message' : str(e),
+                },
+                status = 400
+            )
+            
 
 def register(request):
     _req_uri = request.get_full_path()
