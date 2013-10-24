@@ -41,12 +41,12 @@ class RBCategory(object):
             _key = md5(image_data).hexdigest()
             
             _large_data = self.__resize(image_data, 86, 86)
-            _fp = self.__datastore.new_file(_key + '_large')
+            _fp = self.__datastore.new_file('category/large/' + _key)
             _fp.write(_large_data)
             _fp.close()
             
             _small_data = self.__resize(image_data, 43, 43)
-            _fp = self.__datastore.new_file(_key + '_small')
+            _fp = self.__datastore.new_file('category/small/' + _key)
             _fp.write(_small_data)
             _fp.close()
             
@@ -73,11 +73,11 @@ class RBCategory(object):
         _context['group_id'] = self.__category_obj.group_id
         _context['status'] = self.__category_obj.status
         if self.__category_obj.image_store_hash:
-            _context['category_icon_large'] = settings.IMAGE_SERVER + self.__category_obj.image_store_hash + '_large' 
-            _context['category_icon_small'] = settings.IMAGE_SERVER + self.__category_obj.image_store_hash + '_small'
+            _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + self.__category_obj.image_store_hash 
+            _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + self.__category_obj.image_store_hash
         else:
-            _context['category_icon_large'] = settings.IMAGE_SERVER + DEFAULT_CATEGORY_ICON_KEY + '_large' 
-            _context['category_icon_small'] = settings.IMAGE_SERVER + DEFAULT_CATEGORY_ICON_KEY + '_small'
+            _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
+            _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
         return _context
 
     
@@ -120,11 +120,11 @@ class RBCategory(object):
             _group['content'] = []
             for _category_obj in RBCategoryModel.objects.filter(group_id = _group['group_id']):
                 if _category_obj.image_store_hash:
-                    _category_icon_large = settings.IMAGE_SERVER + _category_obj.image_store_hash + '_large' 
-                    _category_icon_small = settings.IMAGE_SERVER + _category_obj.image_store_hash + '_small'
+                    _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + _category_obj.image_store_hash
+                    _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + _category_obj.image_store_hash
                 else:
-                    _category_icon_large = settings.IMAGE_SERVER + DEFAULT_CATEGORY_ICON_KEY + '_large' 
-                    _category_icon_small = settings.IMAGE_SERVER + DEFAULT_CATEGORY_ICON_KEY + '_small'
+                    _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
+                    _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
                 _group['content'].append({
                     'category_id' : _category_obj.id,
                     'category_title' : _category_obj.title,

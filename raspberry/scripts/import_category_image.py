@@ -55,11 +55,11 @@ for title, obj in categories.items():
         small_data = f.read()
         f.close()
         
-        mgf = datastore.new_file(key + '_large')
+        mgf = datastore.new_file('category/large/' + key)
         mgf.write(large_data)
         mgf.close() 
         
-        mgf = datastore.new_file(key + '_small')
+        mgf = datastore.new_file('category/small/' + key)
         mgf.write(small_data)
         mgf.close()
         
