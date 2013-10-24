@@ -2,207 +2,16 @@
 from models import Entity as RBEntityModel
 from models import Entity_Like as RBEntityLikeModel
 from models import Entity_Note as RBEntityNoteModel
-from models import Entity_Note_Comment as RBEntityNoteCommentModel
-from models import Entity_Note_Figure as RBEntityNoteFigureModel
-from models import Entity_Note_Poke as RBEntityNotePokeModel
 from django.conf import settings
 from django.db.models import Sum
-from hashlib import md5
 import datetime
 import urllib
-from mango.client import MangoApiClient
-from pymogile import Client
+from note import RBNote
 
 
 
 class RBEntity(object):
-   
-    class Figure(object):
-        
-        def __init__(self, key):
-            self.__key = key 
-            self.__origin_store_key = 'entity/origin/' + self.__key
-            self.__datastore = Client(
-                domain = settings.MOGILEFS_DOMAIN, 
-                trackers = settings.MOGILEFS_TRACKERS 
-            )
-        
-        def get_hash_key(self):
-            return self.__key
-   
-        
-        @classmethod
-        def create(cls, origin_data):
-            _key = md5(origin_data).hexdigest()
-            _inst = cls(_key)
-    
-            if len(_inst.__datastore.get_paths(_inst.__origin_store_key)) == 0:
-                _inst.write(origin_data)
-    
-            return _inst
-    
-        def read_origin_link(self):
-            return settings.IMAGE_SERVER + self.__origin_store_key
-    
-        def write(self, origin_data): 
-            _fp = self.__datastore.new_file(self.__origin_store_key)
-            _fp.write(origin_data)
-            _fp.close()
 
-
-    class Note(object):
-    
-        def __init__(self, note_id):
-            self.note_id = note_id
-    
-        def __ensure_note_obj(self):
-            if not hasattr(self, 'note_obj'):
-                self.note_obj = RBEntityNoteModel.objects.get(pk = self.note_id)
-        
-        def __ensure_figure_obj(self):
-            if not hasattr(self, 'figure_obj'):
-                self.figure_obj = None
-                for _figure_obj in RBEntityNoteFigureModel.objects.filter(note_id = self.note_id).order_by('-created_time'):
-                    self.figure_obj = _figure_obj
-                    break
-    
-        @classmethod
-        def find(cls, timestamp = None, creator_set = None, offset = 0, count = 30):
-            _hdl = RBEntityNoteModel.objects
-            if timestamp != None:
-                _hdl = _hdl.filter(created_time__lt = timestamp)
-            if creator_set != None:
-                _hdl = _hdl.filter(creator_id__in = creator_set)
-            _list = []
-            for _note_obj in _hdl.order_by('-created_time')[offset : offset + count]:
-                _list.append({
-                    'entity_id' : _note_obj.entity_id,
-                    'note_id' : _note_obj.id
-                })
-            return _list
-    
-        def get_creator_id(self):
-            self.__ensure_note_obj()
-            return self.note_obj.creator_id
-        
-        @classmethod
-        def create(cls, entity_id, creator_id, score, note_text, image_data = None):
-            _note_obj = RBEntityNoteModel.objects.create(
-                entity_id = entity_id,
-                creator_id = creator_id,
-                score = score,
-                note_text = note_text
-            )
-
-            _inst = cls(_note_obj.id)
-            _inst.note_obj = _note_obj
-        
-            if image_data != None:
-                _figure = RBEntity.Figure.create(image_data)
-                _figure_obj = RBEntityNoteFigureModel.objects.create(
-                    entity_id = entity_id,
-                    note_id = _note_obj.id,
-                    creator_id = creator_id,
-                    store_hash = _figure.get_hash_key()
-                )
-                _inst.figure_obj = _figure_obj
-            return _inst
-        
-        def update(self, score, note_text, image_data):
-            _score = int(score)
-            self.__ensure_note_obj()
-            self.note_obj.note_text = note_text
-            self.note_obj.score = _score
-            self.note_obj.save()
-            
-            if image_data != None:
-                self.__ensure_figure_obj()
-                _figure = RBEntity.Figure.create(image_data)
-                if self.figure_obj == None:
-                    _figure_obj = RBEntityNoteFigureModel.objects.create(
-                        entity_id = self.note_obj.entity_id,
-                        note_id = self.note_id,
-                        creator_id = self.note_obj.creator_id,
-                        store_hash = _figure.get_hash_key()
-                    )
-                    self.figure_obj = _figure_obj
-                else:
-                    self.figure_obj.store_hash = _figure.get_hash_key()
-                    self.figure_obj.save()
-        
-        def __load_note_context(self):
-            self.__ensure_note_obj()
-            _context = {} 
-            _context["note_id"] = self.note_obj.id
-            _context["entity_id"] = self.note_obj.entity_id
-            _context["creator_id"] = self.note_obj.creator_id
-            _context["score"] = self.note_obj.score
-            _context["content"] = self.note_obj.note_text
-            _context["poker_id_list"] = map(lambda x : x.user_id, RBEntityNotePokeModel.objects.filter(note_id = self.note_id))
-            _context["poke_count"] = len(_context["poker_id_list"]) 
-            _context["comment_id_list"] = map(lambda x : x.id, RBEntityNoteCommentModel.objects.filter(note_id = self.note_id))
-            _context["comment_count"] = len(_context["comment_id_list"]) 
-            _context["created_time"] = self.note_obj.created_time
-            _context["updated_time"] = self.note_obj.updated_time
-            
-            self.__ensure_figure_obj()
-            if self.figure_obj != None:
-                _context['figure'] = RBEntity.Figure(self.figure_obj.store_hash).read_origin_link()
-            
-            return _context
-            
-        def read(self):
-            _context = self.__load_note_context()
-            return _context
-
-        def poke(self, user_id):
-            try:
-                RBEntityNotePokeModel.objects.create(
-                    note_id = self.note_id,
-                    user_id = user_id
-                )
-                return True
-            except: 
-                pass
-            return False
-
-        def depoke(self, user_id):
-            try:
-                _obj = RBEntityNotePokeModel.objects.get(
-                    note_id = self.note_id,
-                    user_id = user_id
-                )
-                _obj.delete()
-                return True
-            except: 
-                pass
-            return False
-
-        def poke_already(self, user_id):
-            if RBEntityNotePokeModel.objects.filter(note_id = self.note_id, user_id = user_id).count() > 0:
-                return True
-            return False
-
-        def read_comment(self, comment_id):
-            _obj = RBEntityNoteCommentModel.objects.get(pk = comment_id)
-            _context = {}
-            _context["comment_id"] = _obj.id
-            _context["content"] = _obj.comment_text 
-            _context["creator_id"] = _obj.creator_id
-            _context["reply_to"] = _obj.reply_to
-            _context["created_time"] = _obj.created_time
-            return _context
-        
-        def add_comment(self, comment_text, creator_id, reply_to = None):
-            _obj = RBEntityNoteCommentModel.objects.create(
-                note_id = self.note_id,
-                comment_text = comment_text, 
-                creator_id = creator_id,
-                reply_to = reply_to
-            )
-            return _obj.id
-
-    
     def __init__(self, entity_id):
         self.__entity_id = entity_id
         self.notes = {} 
@@ -274,7 +83,7 @@ class RBEntity(object):
         _context["score_count"] = 0 
         _context["note_id_list"] = []
         for _note_obj in RBEntityNoteModel.objects.filter(entity_id = self.__entity_id):
-            _context["note_id_list"].append(_note_obj.id)
+            _context["note_id_list"].append(_note_obj.note_id)
             _context["total_score"] += _note_obj.score
             _context["score_count"] += 1
 
@@ -374,14 +183,6 @@ class RBEntity(object):
         _user_id = int(user_id)
         return map(lambda x : x.entity_id, RBEntityLikeModel.objects.filter(user_id = _user_id))
         
-    def get_user_note(self, user_id):
-        try:
-            _obj = RBEntityNoteModel.objects.get(creator_id = user_id, entity_id = self.__entity_id)
-            return _obj.id
-        except RBEntityNoteModel.DoesNotExist, e:
-            pass
-        return None 
-
     def add_note(self, creator_id, score, note_text, image_data):
         _creator_id = int(creator_id)
         _note = self.Note.create(

@@ -59,7 +59,6 @@ class Entity(models.Model):
     class Meta:
         ordering = ['-created_time']
  
-
 class Entity_Like(models.Model):
     entity_id = models.CharField(max_length = 32, db_index = True)
     user = models.ForeignKey(User)
@@ -69,21 +68,26 @@ class Entity_Like(models.Model):
         ordering = ['-created_time']
         unique_together = ('entity_id', 'user')
 
-class Entity_Note(models.Model):
+class Entity_Score(models.Model):
     entity_id = models.CharField(max_length = 32, db_index = True)
+    user = models.ForeignKey(User)
+    score = models.IntegerField(db_index = True, default = 0)
+    created_time = models.DateTimeField(auto_now_add = True, db_index=True)
+    
+    class Meta:
+        ordering = ['-created_time']
+
+class Note(models.Model):
     creator = models.ForeignKey(User) 
     note_text = models.TextField(null = True)
-    score = models.IntegerField(db_index = True, default = 0)
-    weight = models.IntegerField(default = 0, db_index = True)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
 
     class Meta:
         ordering = ['-created_time']
-        unique_together = ('entity_id', 'creator')
 
-class Entity_Note_Poke(models.Model):
-    note = models.ForeignKey(Entity_Note)
+class Note_Poke(models.Model):
+    note = models.ForeignKey(Note)
     user = models.ForeignKey(User) 
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     
@@ -91,8 +95,8 @@ class Entity_Note_Poke(models.Model):
         ordering = ['-created_time']
         unique_together = ('note', 'user')
 
-class Entity_Note_Comment(models.Model):
-    note = models.ForeignKey(Entity_Note)
+class Note_Comment(models.Model):
+    note = models.ForeignKey(Note)
     creator = models.ForeignKey(User) 
     comment_text = models.TextField(null = False)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
@@ -101,9 +105,8 @@ class Entity_Note_Comment(models.Model):
     class Meta:
         ordering = ['-created_time']
 
-class Entity_Note_Figure(models.Model):
-    entity_id = models.CharField(max_length = 32, db_index = True)
-    note = models.ForeignKey(Entity_Note)
+class Note_Figure(models.Model):
+    note = models.ForeignKey(Note)
     creator = models.ForeignKey(User)
     store_hash = models.CharField(max_length = 64, db_index = True, null = False, blank = False)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
@@ -111,6 +114,14 @@ class Entity_Note_Figure(models.Model):
     
     class Meta:
         ordering = ['-created_time']
+
+class Entity_Note(models.Model):
+    entity_id = models.CharField(max_length = 32, db_index = True)
+    note = models.ForeignKey(Note)
+    creator = models.ForeignKey(User) 
+    class Meta:
+        unique_together = ('entity_id', 'creator')
+        unique_together = ('entity_id', 'note')
 
 class User_Follow(models.Model):
     follower = models.ForeignKey(User, related_name = "followings")
