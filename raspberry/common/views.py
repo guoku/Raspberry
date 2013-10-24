@@ -5,7 +5,7 @@ from pymogile import Client, MogileFSError
 from avatar import Avatar
 from entity import RBEntity 
 
-def local_image(request, key):
-    _data = Avatar.read_image_data_by_store_key(key)
+def local_image(request, source, size, key):
+    _data = Avatar.read_image_data_by_store_key(source + '/' + size + '/' + key)
     return HttpResponse(_data, content_type = "image/jpeg")
         

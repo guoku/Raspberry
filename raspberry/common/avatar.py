@@ -8,9 +8,9 @@ class Avatar(object):
     
     def __init__(self, key):
         self.__key = key 
-        self.__origin_store_key = self.__key + "_origin"
-        self.__large_store_key = self.__key + "_large"
-        self.__small_store_key = self.__key + "_small"
+        self.__origin_store_key = 'avatar/origin/' + self.__key
+        self.__large_store_key = 'avatar/large/' + self.__key
+        self.__small_store_key = 'avatar/small/' + self.__key
    
     def __ensure_datastore_client(self):
         if not hasattr(self, '__entity_obj'):
@@ -48,10 +48,10 @@ class Avatar(object):
         return _inst
      
     def read_large_link(self):
-        return settings.IMAGE_SERVER + self.__key + '_large'
+        return settings.IMAGE_SERVER + self.__large_store_key
     
     def read_small_link(self):
-        return settings.IMAGE_SERVER + self.__key + '_small'
+        return settings.IMAGE_SERVER + self.__small_store_key
 
     def write(self, origin_data): 
         self.__ensure_datastore_client()

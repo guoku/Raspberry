@@ -21,7 +21,7 @@ class RBEntity(object):
         
         def __init__(self, key):
             self.__key = key 
-            self.__origin_store_key = self.__key + "_origin"
+            self.__origin_store_key = 'entity/origin/' + self.__key
             self.__datastore = Client(
                 domain = settings.MOGILEFS_DOMAIN, 
                 trackers = settings.MOGILEFS_TRACKERS 
@@ -42,7 +42,7 @@ class RBEntity(object):
             return _inst
     
         def read_origin_link(self):
-            return settings.IMAGE_SERVER + self.__key + '_origin'
+            return settings.IMAGE_SERVER + self.__origin_store_key
     
         def write(self, origin_data): 
             _fp = self.__datastore.new_file(self.__origin_store_key)
