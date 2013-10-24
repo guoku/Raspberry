@@ -16,6 +16,25 @@ import json
 from common.category import RBCategory
 
 @login_required
+def category_list(request):
+    _group_id = request.GET.get("gid", None)
+    if _group_id != None:
+        _group_id = int(_group_id)
+    _category_groups = RBCategory.allgroups()
+    _categories = RBCategory.find(group_id = _group_id)
+    return render_to_response( 
+        'category/list.html', 
+        {
+            'active_division' : 'category',
+            'category_groups' : _category_groups,
+            'categories' : _categories,
+            'selected_group_id' : _group_id,
+        },
+        context_instance = RequestContext(request)
+    )
+
+
+@login_required
 def create_category(request):
     if request.method == 'GET':
         _group_id = request.GET.get("gid", None)
@@ -25,8 +44,9 @@ def create_category(request):
         return render_to_response( 
             'category/create.html', 
             {
-              'category_groups' : _category_groups,
-              'selected_group_id' : _group_id,
+                'active_division' : 'category',
+                'category_groups' : _category_groups,
+                'selected_group_id' : _group_id,
             },
             context_instance = RequestContext(request)
         )
@@ -47,8 +67,9 @@ def edit_category(request, category_id):
         return render_to_response( 
             'category/edit.html', 
             {
-              'category_groups' : _category_groups,
-              'category_context' : _category_context,
+                'active_division' : 'category',
+                'category_groups' : _category_groups,
+                'category_context' : _category_context,
             },
             context_instance = RequestContext(request)
         )

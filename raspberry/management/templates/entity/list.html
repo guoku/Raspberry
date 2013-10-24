@@ -20,7 +20,7 @@
         </div>
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                <li class="nav-header">分类</li>
+                <li class="nav-header">分类组</li>
                 {% for group in category_groups %}
                     <li{%if group.group_id == category_context.group_id%} class="active"{%endif%}>
                         <a href="{% url 'management.views.entity_list' %}?gid={{group.group_id}}">

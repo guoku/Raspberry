@@ -2,6 +2,7 @@ __author__ = 'stxiong'
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('management.views',
+    (r'^category/$', 'category_list'),
     (r'^category/create/$', 'create_category'),
     (r'^category/(?P<category_id>\d+)/edit/$', 'edit_category'),
     (r'^entity/$', 'entity_list'),

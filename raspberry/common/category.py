@@ -93,11 +93,19 @@ class RBCategory(object):
             _hdl = RBCategoryModel.objects.all()
         _rslt = []
         for _cat_obj in _hdl:
+            if _cat_obj.image_store_hash:
+                _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + _cat_obj.image_store_hash 
+                _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + _cat_obj.image_store_hash
+            else:
+                _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
+                _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
             _rslt.append({
                 'category_id' : _cat_obj.id,
                 'category_title' : _cat_obj.title,
                 'group_id' : _cat_obj.group_id,
-                'status' : _cat_obj.status
+                'status' : _cat_obj.status,
+                'category_icon_large' : _category_icon_large,
+                'category_icon_small' : _category_icon_small
             })
         return _rslt
             

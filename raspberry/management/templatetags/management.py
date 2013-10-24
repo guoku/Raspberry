@@ -9,6 +9,12 @@ def display_entity_row(entity_context):
     } 
 register.inclusion_tag("entity/partial/row.html")(display_entity_row)
 
+def display_category_row(category_context):
+    return {
+        "category_context" : category_context,
+    } 
+register.inclusion_tag("category/partial/row.html")(display_category_row)
+
 
 def count(value):
     if value == None:

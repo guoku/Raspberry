@@ -19,7 +19,9 @@
                         </p>
                         <ul class="nav">
                             <li class="divider-vertical"></li>
-                            <li{% if active_division == "new" %} class="active"{%endif%}><a href="{% url 'management.views.entity_list' %}">商品</a></li>
+                            <li{% if active_division == "entity" %} class="active"{%endif%}><a href="{% url 'management.views.entity_list' %}">商品</a></li>
+                            <li class="divider-vertical"></li>
+                            <li{% if active_division == "category" %} class="active"{%endif%}><a href="{% url 'management.views.category_list' %}">分类</a></li>
                             <li class="divider-vertical"></li>
                         </ul>
                     </div>

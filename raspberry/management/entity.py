@@ -51,6 +51,7 @@ def new_entity(request):
         return render_to_response(
             "entity/new.html", 
             {
+                'active_division' : 'entity',
                 'selected_category_id' : _cid,
                 'category_list' : _category_list
             },
@@ -69,14 +70,15 @@ def new_entity(request):
                 return render_to_response( 
                     'entity/create.html', 
                     {
-                      'taobao_id' : _taobao_id,
-                      'cid' : _taobao_item_info['cid'], 
-                      'taobao_title' : _taobao_item_info['title'], 
-                      'shop_nick' : _taobao_item_info['shop_nick'], 
-                      'price' : _taobao_item_info['price'], 
-                      'thumb_images' : _taobao_item_info["thumb_images"],
-                      'selected_category_id' : _selected_category_id, 
-                      'category_list' : RBCategory.find(), 
+                        'active_division' : 'entity',
+                        'taobao_id' : _taobao_id,
+                        'cid' : _taobao_item_info['cid'], 
+                        'taobao_title' : _taobao_item_info['title'], 
+                        'shop_nick' : _taobao_item_info['shop_nick'], 
+                        'price' : _taobao_item_info['price'], 
+                        'thumb_images' : _taobao_item_info["thumb_images"],
+                        'selected_category_id' : _selected_category_id, 
+                        'category_list' : RBCategory.find(), 
                     },
                     context_instance = RequestContext(request)
                 )
@@ -135,10 +137,11 @@ def edit_entity(request, entity_id):
         return render_to_response( 
             'entity/edit.html', 
             {
-              'entity_context' : _entity_context,
-              'category_list' : RBCategory.find(), 
-              'item_context_list' : _item_context_list,
-              'message' : _message
+                'active_division' : 'entity',
+                'entity_context' : _entity_context,
+                'category_list' : RBCategory.find(), 
+                'item_context_list' : _item_context_list,
+                'message' : _message
             },
             context_instance = RequestContext(request)
         )
@@ -182,6 +185,7 @@ def entity_list(request):
         return render_to_response( 
             'entity/list.html', 
             {
+                'active_division' : 'entity',
                 'category_context' : _category_context,
                 'category_groups' : _category_groups,
                 'categories' : _categories,
@@ -219,14 +223,15 @@ def load_taobao_item_for_entity(request, entity_id):
             return render_to_response( 
                 'entity/new_taobao_item_info.html', 
                 {
-                  'entity_id' : entity_id,
-                  'taobao_id' : _taobao_id,
-                  'cid' : _taobao_item_info['cid'], 
-                  'taobao_title' : _taobao_item_info['title'], 
-                  'shop_nick' : _taobao_item_info['shop_nick'], 
-                  'price' : _taobao_item_info['price'], 
-                  'thumb_images' : _taobao_item_info["thumb_images"],
-                  'soldout' : 0, 
+                    'active_division' : 'entity',
+                    'entity_id' : entity_id,
+                    'taobao_id' : _taobao_id,
+                    'cid' : _taobao_item_info['cid'], 
+                    'taobao_title' : _taobao_item_info['title'], 
+                    'shop_nick' : _taobao_item_info['shop_nick'], 
+                    'price' : _taobao_item_info['price'], 
+                    'thumb_images' : _taobao_item_info["thumb_images"],
+                    'soldout' : 0, 
                 },
                 context_instance = RequestContext(request)
             )
@@ -240,15 +245,16 @@ def load_taobao_item_for_entity(request, entity_id):
             return render_to_response( 
                 'entity/exist_taobao_item_info.html', 
                 {
-                  'entity_id' : entity_id,
-                  'taobao_id' : _taobao_id,
-                  'item_id' : _item_id,
-                  'cid' : _item_context['cid'], 
-                  'taobao_title' : _item_context['title'], 
-                  'shop_nick' : _item_context['shop_nick'], 
-                  'price' : _item_context['price'], 
-                  'images' : _item_context['images'],
-                  'soldout' : 0, 
+                    'active_division' : 'entity',
+                    'entity_id' : entity_id,
+                    'taobao_id' : _taobao_id,
+                    'item_id' : _item_id,
+                    'cid' : _item_context['cid'], 
+                    'taobao_title' : _item_context['title'], 
+                    'shop_nick' : _item_context['shop_nick'], 
+                    'price' : _item_context['price'], 
+                    'images' : _item_context['images'],
+                    'soldout' : 0, 
                 },
                 context_instance = RequestContext(request)
             )
