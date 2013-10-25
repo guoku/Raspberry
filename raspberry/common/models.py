@@ -59,16 +59,6 @@ class Entity(models.Model):
     class Meta:
         ordering = ['-created_time']
 
-class Candidate(models.Model):
-    brand = models.CharField(max_length = 128, db_index = True)
-    title = models.CharField(max_length = 128, db_index = True)
-    creator = models.ForeignKey(User) 
-    category = models.ForeignKey(Category, null = True)
-    category_text = models.CharField(max_length = 128, db_index = True)
-    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
-    updated_time = models.DateTimeField(auto_now = True, db_index = True)
-    class Meta:
-        ordering = ['-created_time']
  
 class Entity_Like(models.Model):
     entity_id = models.CharField(max_length = 32, db_index = True)
@@ -128,6 +118,30 @@ class Entity_Note(models.Model):
     class Meta:
         ordering = ['-created_time']
         unique_together = ('entity_id', 'creator')
+
+class Candidate(models.Model):
+    brand = models.CharField(max_length = 128, db_index = True)
+    title = models.CharField(max_length = 128, db_index = True)
+    creator = models.ForeignKey(User) 
+    category = models.ForeignKey(Category, null = True)
+    category_text = models.CharField(max_length = 128, db_index = True)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    updated_time = models.DateTimeField(auto_now = True, db_index = True)
+    
+    class Meta:
+        ordering = ['-created_time']
+
+class Candidate_Note(models.Model):
+    candidate = models.ForeignKey(Candidate) 
+    note = models.ForeignKey(Note)
+    score = models.IntegerField(db_index = True, default = 0)
+    creator = models.ForeignKey(User) 
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    updated_time = models.DateTimeField(auto_now = True, db_index = True)
+    
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('candidate', 'creator')
 
 class User_Follow(models.Model):
     follower = models.ForeignKey(User, related_name = "followings")

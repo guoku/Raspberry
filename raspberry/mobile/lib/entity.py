@@ -49,7 +49,7 @@ class RBMobileEntity(RBEntity):
 
         _context['note_list'] = []
         for _note_id in _context['entity']['note_id_list']:
-            _context['note_list'].append(RBMobileNote(_note_id).read_note(request_user_id)) 
+            _context['note_list'].append(RBMobileNote(_note_id).read(request_user_id)) 
         del _context['entity']['note_id_list']
      
         if request_user_id:

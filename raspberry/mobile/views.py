@@ -1,5 +1,6 @@
 # coding=utf8
 from account import *
+from candidate import *
 from category import *
 from entity import *
 from note import *
