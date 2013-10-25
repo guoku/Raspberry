@@ -5,10 +5,11 @@ from models import Entity_Note as RBEntityNoteModel
 from django.conf import settings
 from django.db.models import Sum
 from mango.client import MangoApiClient
-import datetime
-import urllib
 from note import RBNote
 from hashlib import md5
+import datetime
+import urllib
+import time
 
 
 
@@ -84,18 +85,21 @@ class RBEntity(object):
         _context["total_score"] = 0 
         _context["score_count"] = 0 
         _context["note_id_list"] = []
-        for _note_obj in RBEntityScoreModel.objects.filter(entity_id = self.entity_id):
-            _context["note_id_list"].append(_note_obj.note_id)
-            _context["total_score"] += _note_obj.score
+        for _entity_note_obj in RBEntityNoteModel.objects.filter(entity_id = self.entity_id):
+            _context["note_id_list"].append(_entity_note_obj.note_id)
+            _context["total_score"] += _entity_note_obj.score
             _context["score_count"] += 1
 
         return _context
         
 
-    def read(self):
+    def read(self, json = False):
         _mango_client = MangoApiClient()
         _meta_context = _mango_client.read_entity(self.entity_id)
         _context = self.__load_entity_context(_meta_context)
+        if json:
+            _context['created_time'] = time.mktime(_context["created_time"].timetuple())
+            _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
         return _context    
     
     
@@ -187,6 +191,7 @@ class RBEntity(object):
         
     def add_note(self, creator_id, score, note_text, image_data):
         _creator_id = int(creator_id)
+        _score = int(score)
         _note = RBNote.create(
             creator_id = _creator_id,
             note_text = note_text,
@@ -195,6 +200,7 @@ class RBEntity(object):
         _entity_note_obj = RBEntityNoteModel.objects.create(
             entity_id = self.entity_id,
             note_id = _note.note_id,
+            score = _score,
             creator_id = _creator_id
         )
         self.notes[_note.note_id] = _note
@@ -215,18 +221,18 @@ class RBEntity(object):
     def read_note(self, note_id):
         _note_id = int(note_id)
         if not self.notes.has_key(_note_id):
-            self.notes[_note_id] = self.Note(_note_id) 
+            self.notes[_note_id] = RBNote(_note_id) 
         _context = self.notes[_note_id].read()
         return _context
      
     def poke_note(self, note_id, user_id):
-        return self.Note(note_id).poke(user_id)
+        return RBNote(note_id).poke(user_id)
     
     def depoke_note(self, note_id, user_id):
-        return self.Note(note_id).depoke(user_id)
+        return RBNote(note_id).depoke(user_id)
     
     def poke_note_already(self, note_id, user_id):
-        return self.Note(note_id).poke_already(user_id)
+        return RBNote(note_id).poke_already(user_id)
     
     def add_note_comment(self, note_id, comment_text, creator_id, reply_to = None):
         _note = self.Note(note_id)
@@ -240,6 +246,15 @@ class RBEntity(object):
     def read_note_comment(self, note_id, comment_id):
         _note = self.Note(note_id)
         return _note.read_comment(comment_id)
+    
+    def get_entity_note_of_user(self, user_id):
+        _user_id = int(user_id)
+        try:
+            _obj = RBEntityNoteModel.objects.get(entity_id = self.entity_id, creator_id = _user_id)
+            return _obj.note_id
+        except RBEntityNoteModel.DoesNotExist, e:
+            pass
+        return None
     
     @staticmethod
     def get_user_note_count(user_id):

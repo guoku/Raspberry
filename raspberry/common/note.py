@@ -8,6 +8,7 @@ from hashlib import md5
 from mango.client import MangoApiClient
 from pymogile import Client
 import datetime
+import time
 
 
 
@@ -137,8 +138,11 @@ class RBNote(object):
         
         return _context
         
-    def read(self):
+    def read(self, json = False):
         _context = self.__load_note_context()
+        if json:
+            _context['created_time'] = time.mktime(_context["created_time"].timetuple())
+            _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
         return _context
 
     def poke(self, user_id):
