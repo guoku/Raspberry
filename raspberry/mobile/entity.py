@@ -1,5 +1,6 @@
 # coding=utf8
 from lib.entity import RBMobileEntity
+from lib.note import RBMobileNote
 from lib.user import RBMobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key
@@ -110,37 +111,6 @@ def add_note_for_entity(request, entity_id):
         return SuccessJsonResponse(_context)
 
 
-def update_entity_note(request, entity_id, note_id):
-    if request.method == "POST":
-        _session = request.POST.get('session', None)
-        if _session != None:
-            _request_user_id = Session_Key.objects.get_user_id(_session)
-        else:
-            _request_user_id = None
-        _note_text = request.POST.get('note', None)
-        _score = int(request.POST.get('score', None))
-
-        _image_file = request.FILES.get('image', None)
-        if _image_file == None:
-            _image_data = None
-        else:
-            if hasattr(_image_file, 'chunks'):
-                _image_data = ''.join(chunk for chunk in _image_file.chunks())
-            else:
-                _image_data = _image_file.read()
-        
-        ## There's no authorize confirmation yet ##
-
-        _entity = RBMobileEntity(entity_id)
-        _note = _entity.update_note(
-            note_id = note_id,
-            score = _score,
-            note_text = _note_text,
-            image_data = _image_data
-        )
-        _rslt = _note.read(_request_user_id)
-        return SuccessJsonResponse(_rslt)
-
 
 def user_like(request, user_id):
     if request.method == "GET":
@@ -209,20 +179,21 @@ def feed(request):
         else:
             _following_user_id_list = None
 
-        _note_list = RBMobileEntity.Note.find(
+        _note_id_list = RBMobileNote.find(
             timestamp = _timestamp,
             creator_set = _following_user_id_list,
             offset = _offset,
             count = _count
-        ) 
+        )
         
         _rslt = []
-        for _note_info in _note_list: 
-            _note_id = _note_info['note_id']
-            _entity = RBMobileEntity(_note_info['entity_id'])
-            _rslt.append({
-                'entity' : _entity.read(_request_user_id),
-                'note' : _entity.read_note(_note_info['note_id'], _request_user_id)
-            })
+        for _note_id in _note_id_list: 
+            _note_context = RBMobileNote(_note_id).read(_request_user_id)
+            if _note_context.has_key('entity_id'):
+                _entity = RBMobileEntity(_note_context['entity_id'])
+                _rslt.append({
+                    'entity' : _entity.read(_request_user_id),
+                    'note' : _note_context
+                })
         
         return SuccessJsonResponse(_rslt)

@@ -63,20 +63,17 @@ class RBNote(object):
                 self.figure_obj = _figure_obj
                 break
 
-#    @classmethod
-#    def find(cls, timestamp = None, creator_set = None, offset = 0, count = 30):
-#        _hdl = RBEntityNoteModel.objects
-#        if timestamp != None:
-#            _hdl = _hdl.filter(created_time__lt = timestamp)
-#        if creator_set != None:
-#            _hdl = _hdl.filter(creator_id__in = creator_set)
-#        _list = []
-#        for _note_obj in _hdl.order_by('-created_time')[offset : offset + count]:
-#            _list.append({
-#                'entity_id' : _note_obj.entity_id,
-#                'note_id' : _note_obj.id
-#            })
-#        return _list
+    @classmethod
+    def find(cls, timestamp = None, creator_set = None, offset = 0, count = 30):
+        _hdl = RBNoteModel.objects
+        if timestamp != None:
+            _hdl = _hdl.filter(created_time__lt = timestamp)
+        if creator_set != None:
+            _hdl = _hdl.filter(creator_id__in = creator_set)
+        _list = []
+        for _note_obj in _hdl.order_by('-created_time')[offset : offset + count]:
+            _list.append(_note_obj.id)
+        return _list
 
     def get_creator_id(self):
         self.__ensure_note_obj()
@@ -144,10 +141,16 @@ class RBNote(object):
             _context["score"] = _obj.score
         except RBEntityNoteModel.DoesNotExist, e:
             pass
-            
-            
         
         return _context
+
+    def get_entity_of_note(self):
+        try:
+            _obj = RBEntityNoteModel.objects.get(note_id = self.note_id)
+            return _obj.entity_id
+        except RBEntityNoteModel.DoesNotExist, e:
+            pass
+        return None
         
     def read(self, json = False):
         _context = self.__load_note_context()

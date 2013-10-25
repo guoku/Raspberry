@@ -33,8 +33,8 @@ class RBMobileEntity(RBEntity):
             if self.like_already(request_user_id):
                 _context['like_already'] = 1
             _request_user_note_id = self.get_entity_note_of_user(request_user_id)
-            if _note_id != None:
-                _context['my_note'] = RBMobileNote(_note_id).read(request_user_id) 
+            if _request_user_note_id != None:
+                _context['my_note'] = RBMobileNote(_request_user_note_id).read(request_user_id) 
         
         return _context
     

@@ -50,3 +50,6 @@ class RBMobileNote(RBNote):
         del _context['note']['comment_id_list']
         return _context
 
+    def read_comment(self, comment_id, json = False):
+        _context = super(RBMobileNote, self).read_comment(comment_id, json = True)
+        return _context
