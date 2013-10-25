@@ -1,4 +1,5 @@
 # coding=utf8
+from models import Entity_Note as RBEntityNoteModel
 from models import Note as RBNoteModel
 from models import Note_Comment as RBNoteCommentModel
 from models import Note_Figure as RBNoteFigureModel
@@ -91,7 +92,7 @@ class RBNote(object):
         _inst.note_obj = _note_obj
     
         if image_data != None:
-            _figure = self.Figure.create(image_data)
+            _figure = cls.Figure.create(image_data)
             _figure_obj = RBNoteFigureModel.objects.create(
                 note_id = _note_obj.id,
                 creator_id = creator_id,
@@ -135,6 +136,15 @@ class RBNote(object):
         self.__ensure_figure_obj()
         if self.figure_obj != None:
             _context['figure'] = self.Figure(self.figure_obj.store_hash).read_origin_link()
+
+        try:
+            _obj = RBEntityNoteModel.objects.get(note_id = self.note_id)
+            _context["entity_id"] = _obj.entity_id
+            _context["score"] = _obj.score
+        except RBEntityNoteModel.DoesNotExist, e:
+            pass
+            
+            
         
         return _context
         

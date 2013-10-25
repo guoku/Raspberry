@@ -58,4 +58,15 @@ class RBMobileEntity(RBEntity):
                 _context['following_note_list'].append(RBMobileUser(_followee_id).read())
         
         return _context    
+    
+    def add_note(self, creator_id, score, note_text, image_data):
+        _note_origin = super(RBMobileEntity, self).add_note(creator_id, score, note_text, image_data)
+        _note = RBMobileNote.create_by_note(_note_origin)
+        return _note
+    
+    def update_note(self, note_id, score, note_text, image_data):
+        _note_origin = super(RBMobileEntity, self).update_note(note_id, score, note_text, image_data)
+        _note = RBMobileNote.create_by_note(_note_origin)
+        return _note
+        
 

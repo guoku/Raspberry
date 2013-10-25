@@ -100,14 +100,14 @@ def add_note_for_entity(request, entity_id):
         
         _request_user_id = Session_Key.objects.get_user_id(_session)
         _entity = RBMobileEntity(entity_id)
-        _note_id = _entity.add_note(
+        _note = _entity.add_note(
             creator_id = _request_user_id,
             score = _score,
             note_text = _note_text,
             image_data = _image_data,
         )
-        _note_context = _entity.read_note(_note_id) 
-        return SuccessJsonResponse(_note_context)
+        _context = _note.read() 
+        return SuccessJsonResponse(_context)
 
 def entity_note_detail(request, entity_id, note_id):
     if request.method == "GET":
@@ -142,13 +142,13 @@ def update_entity_note(request, entity_id, note_id):
         ## There's no authorize confirmation yet ##
 
         _entity = RBMobileEntity(entity_id)
-        _entity.update_note(
+        _note = _entity.update_note(
             note_id = note_id,
             score = _score,
             note_text = _note_text,
             image_data = _image_data
         )
-        _rslt = _entity.read_note(note_id, _request_user_id)
+        _rslt = _note.read(_request_user_id)
         return SuccessJsonResponse(_rslt)
 
 def poke_entity_note(request, entity_id, note_id, target_status):

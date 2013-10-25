@@ -204,27 +204,27 @@ class RBEntity(object):
             creator_id = _creator_id
         )
         self.notes[_note.note_id] = _note
-        return _note.note_id
+        return _note
 
     
     def update_note(self, note_id, score, note_text, image_data = None):
         _note_id = int(note_id)
+        _score = int(score)
         _note = RBNote(_note_id)
         _note.update(
-            score = score,
             note_text = note_text,
             image_data = image_data
         )
+        _entity_note_obj = RBEntityNoteModel.objects.get(
+            entity_id = self.entity_id,
+            note_id = _note_id
+        )
+        _entity_note_obj.score = _score
+        _entity_note_obj.save()
         self.notes[_note.note_id] = _note
+        return _note
         
     
-    def read_note(self, note_id):
-        _note_id = int(note_id)
-        if not self.notes.has_key(_note_id):
-            self.notes[_note_id] = RBNote(_note_id) 
-        _context = self.notes[_note_id].read()
-        return _context
-     
     def poke_note(self, note_id, user_id):
         return RBNote(note_id).poke(user_id)
     
