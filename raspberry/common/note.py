@@ -50,6 +50,7 @@ class RBNote(object):
 
     def __init__(self, note_id):
         self.note_id = note_id
+        self.comments = {} 
 
     def __ensure_note_obj(self):
         if not hasattr(self, 'note_obj'):
@@ -183,14 +184,17 @@ class RBNote(object):
             return True
         return False
 
-    def read_comment(self, comment_id):
-        _obj = RBNoteCommentModel.objects.get(pk = comment_id)
+    def read_comment(self, comment_id, json = False):
+        if not self.comments.has_key(comment_id):
+            self.comments[comment_id] = RBNoteCommentModel.objects.get(pk = comment_id)
         _context = {}
-        _context["comment_id"] = _obj.id
-        _context["content"] = _obj.comment_text 
-        _context["creator_id"] = _obj.creator_id
-        _context["reply_to"] = _obj.reply_to
-        _context["created_time"] = _obj.created_time
+        _context["comment_id"] = self.comments[comment_id].id
+        _context["content"] = self.comments[comment_id].comment_text 
+        _context["creator_id"] = self.comments[comment_id].creator_id
+        _context["reply_to"] = self.comments[comment_id].reply_to
+        _context["created_time"] = self.comments[comment_id].created_time
+        if json:
+            _context['created_time'] = time.mktime(_context["created_time"].timetuple())
         return _context
     
     def add_comment(self, comment_text, creator_id, reply_to = None):
@@ -200,6 +204,7 @@ class RBNote(object):
             creator_id = creator_id,
             reply_to = reply_to
         )
+        self.comments[_obj.id] = _obj
         return _obj.id
 
 

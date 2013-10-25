@@ -17,7 +17,6 @@ class RBEntity(object):
 
     def __init__(self, entity_id):
         self.entity_id = entity_id
-        self.notes = {} 
     
     @classmethod
     def cal_entity_hash(cls, entity_hash_string):
@@ -203,7 +202,6 @@ class RBEntity(object):
             score = _score,
             creator_id = _creator_id
         )
-        self.notes[_note.note_id] = _note
         return _note
 
     
@@ -221,7 +219,6 @@ class RBEntity(object):
         )
         _entity_note_obj.score = _score
         _entity_note_obj.save()
-        self.notes[_note.note_id] = _note
         return _note
         
     

@@ -38,24 +38,15 @@ class RBMobileNote(RBNote):
         return _context 
     
     def read_note_full_context(self, note_id, request_user_id = None):
-        _entity_context = super(RBMobileEntity, self).read()
-        
         _context = {}
-        _context['note'] = self.read_note(note_id, request_user_id)
-        _context['entity'] = self.read(request_user_id)
+        _context['note'] = self.read(request_user_id)
         _context['poker_list'] = []
         for _poker_id in _context['note']['poker_id_list']: 
             _context['poker_list'].append(RBMobileUser(_poker_id).read(request_user_id))
         del _context['note']['poker_id_list']
         _context['comment_list'] = [] 
         for _comment_id in _context['note']['comment_id_list']: 
-            _context['comment_list'].append(self.read_note_comment(note_id, _comment_id, request_user_id))
+            _context['comment_list'].append(self.read_comment(_comment_id, json = True))
         del _context['note']['comment_id_list']
         return _context
 
-    def read_comment(self, comment_id, request_user_id = None):
-        _comment_context = super(RBMobileNote, self).read_comment(comment_id)
-        _comment_context['creator'] = RBMobileUser(_comment_context['creator_id']).read(request_user_id)
-        del _comment_context['creator_id']
-        _comment_context['created_time'] = time.mktime(_comment_context["created_time"].timetuple())
-        return _comment_context

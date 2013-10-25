@@ -109,16 +109,6 @@ def add_note_for_entity(request, entity_id):
         _context = _note.read() 
         return SuccessJsonResponse(_context)
 
-def entity_note_detail(request, entity_id, note_id):
-    if request.method == "GET":
-        _session = request.GET.get('session', None)
-        if _session != None:
-            _request_user_id = Session_Key.objects.get_user_id(_session)
-        else:
-            _request_user_id = None
-
-        _rslt = RBMobileEntity(entity_id).read_note_full_context(note_id, _request_user_id)
-        return SuccessJsonResponse(_rslt)
 
 def update_entity_note(request, entity_id, note_id):
     if request.method == "POST":
