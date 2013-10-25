@@ -225,15 +225,6 @@ class RBEntity(object):
         return _note
         
     
-    def poke_note(self, note_id, user_id):
-        return RBNote(note_id).poke(user_id)
-    
-    def depoke_note(self, note_id, user_id):
-        return RBNote(note_id).depoke(user_id)
-    
-    def poke_note_already(self, note_id, user_id):
-        return RBNote(note_id).poke_already(user_id)
-    
     def add_note_comment(self, note_id, comment_text, creator_id, reply_to = None):
         _note = self.Note(note_id)
         _comment_id = _note.add_comment(

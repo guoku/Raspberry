@@ -151,39 +151,6 @@ def update_entity_note(request, entity_id, note_id):
         _rslt = _note.read(_request_user_id)
         return SuccessJsonResponse(_rslt)
 
-def poke_entity_note(request, entity_id, note_id, target_status):
-    if request.method == "POST":
-        _session = request.POST.get('session', None)
-        
-        _request_user_id = Session_Key.objects.get_user_id(_session)
-        _rslt = { 
-            'entity_id' : entity_id, 
-            'note_id' : note_id 
-        }
-        if target_status == '1':
-            RBMobileEntity(entity_id).poke_note(note_id, _request_user_id)
-            _rslt['poke_already'] = 1
-        else:
-            RBMobileEntity(entity_id).depoke_note(note_id, _request_user_id)
-            _rslt['poke_already'] = 0
-        return SuccessJsonResponse(_rslt)
-
-def comment_entity_note(request, entity_id, note_id):
-    if request.method == "POST":
-        _session = request.POST.get('session', None)
-        _comment_text = request.POST.get('comment', None)
-        
-        _request_user_id = Session_Key.objects.get_user_id(_session)
-        
-        _comment_context = RBMobileEntity(entity_id).add_note_comment(
-            note_id = note_id, 
-            comment_text = _comment_text, 
-            creator_id = _request_user_id, 
-            reply_to = None,
-            request_user_id = _request_user_id
-        )
-        return SuccessJsonResponse(_comment_context)
-
 
 def user_like(request, user_id):
     if request.method == "GET":
