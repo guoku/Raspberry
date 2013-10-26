@@ -135,14 +135,18 @@ def user_note(request, user_id):
             _request_user_id = None
         
         _rslt = []
-        for _note_info in RBMobileEntity.Note.find(creator_set = [int(user_id)]):
-            _entity_id = _note_info['entity_id'] 
-            _note_id = _note_info['note_id']
-            _entity = RBMobileEntity(_entity_id)
-            _rslt.append({
-                'entity' : _entity.read(_request_user_id),
-                'note' : _entity.read_note(_note_id, _request_user_id)
-            })
+        for _note_id in RBMobileNote.find(creator_set = [int(user_id)]):
+            _note_context = RBMobileNote(_note_id).read(_request_user_id)
+            if _note_context.has_key('entity_id'):
+                _entity = RBMobileEntity(_note_context['entity_id'])
+                _rslt.append({
+                    'entity' : _entity.read(_request_user_id),
+                    'note' : _note_context, 
+                })
+            else:
+                _rslt.append({
+                    'note' : _note_context
+                })
 
         return SuccessJsonResponse(_rslt)
     
@@ -193,6 +197,10 @@ def feed(request):
                 _entity = RBMobileEntity(_note_context['entity_id'])
                 _rslt.append({
                     'entity' : _entity.read(_request_user_id),
+                    'note' : _note_context
+                })
+            else:
+                _rslt.append({
                     'note' : _note_context
                 })
         

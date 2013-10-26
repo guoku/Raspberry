@@ -1,5 +1,6 @@
 # coding=utf8
 from lib.candidate import RBMobileCandidate
+from lib.note import RBMobileNote
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key
 import datetime
@@ -40,7 +41,9 @@ def create_candidate(request):
             note_text = _note_text, 
             image_data = _image_data
         )
-        return SuccessJsonResponse(_candidate.read())
+        _note_id = _candidate.get_note()
+        _note = RBMobileNote(_note_id)
+        return SuccessJsonResponse(_note.read())
             
 
         

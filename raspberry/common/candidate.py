@@ -47,7 +47,7 @@ class RBCandidate(object):
         )
          
         _inst = cls(_candidate_obj.id)
-        _inst.__candidate_obj = _candidate_obj
+        _inst.candidate_obj = _candidate_obj
         return _inst
 
     
@@ -63,12 +63,12 @@ class RBCandidate(object):
     def __load_candidate_context(self):
         self.__ensure_candidate_obj()
         _context = {}
-        _context["category_id"] = self.__candidate_obj.category_id
-        _context["category_text"] = self.__candidate_obj.category_text
-        _context["brand"] = self.__candidate_obj.brand
-        _context["title"] = self.__candidate_obj.title
-        _context["created_time"] = self.__candidate_obj.created_time
-        _context["updated_time"] = self.__candidate_obj.updated_time
+        _context["category_id"] = self.candidate_obj.category_id
+        _context["category_text"] = self.candidate_obj.category_text
+        _context["brand"] = self.candidate_obj.brand
+        _context["title"] = self.candidate_obj.title
+        _context["created_time"] = self.candidate_obj.created_time
+        _context["updated_time"] = self.candidate_obj.updated_time
         
 
         self.__ensure_candidate_note_obj()
@@ -77,6 +77,10 @@ class RBCandidate(object):
 
         return _context
         
+    def get_note(self):
+        self.__ensure_candidate_note_obj()
+        return self.candidate_note_obj.note_id
+    
 
     def read(self, json = False):
         _context = self.__load_candidate_context()
@@ -91,11 +95,11 @@ class RBCandidate(object):
                 
         if category_id != None or category_text != None or brand != None or title != None:
             self.__ensure_candidate_obj()
-            self.__candidate_obj.category_id = int(category_id)
-            self.__candidate_obj.category_text = category_text 
-            self.__candidate_obj.brand = brand 
-            self.__candidate_obj.title = title 
-            self.__candidate_obj.save()
+            self.candidate_obj.category_id = int(category_id)
+            self.candidate_obj.category_text = category_text 
+            self.candidate_obj.brand = brand 
+            self.candidate_obj.title = title 
+            self.candidate_obj.save()
        
         if score != None: 
             self.__ensure_candidate_note_obj()
