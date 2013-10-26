@@ -216,5 +216,15 @@ class RBNote(object):
         )
         self.comments[_obj.id] = _obj
         return _obj.id
+    
+    @staticmethod
+    def get_user_last_note(user_id):
+        _user_id = int(user_id)
+        try:
+            _note = RBNoteModel.objects.filter(creator_id = _user_id).order_by('-created_time')[0]
+            return _note.id
+        except:
+            pass
+        return None
 
 

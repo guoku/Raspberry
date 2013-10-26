@@ -56,13 +56,13 @@ class RBMobileNote(RBNote):
         del _context['note']['poker_id_list']
         _context['comment_list'] = [] 
         for _comment_id in _context['note']['comment_id_list']: 
-            _comment_context = self.read_comment(_comment_id, json = True)
-            _comment_context['creator'] = RBMobileUser(_comment_context['creator_id']).read(request_user_id)
-            del _comment_context['creator_id']
+            _comment_context = self.read_comment(_comment_id, request_user_id) 
             _context['comment_list'].append(_comment_context)
         del _context['note']['comment_id_list']
         return _context
 
-    def read_comment(self, comment_id, json = False):
+    def read_comment(self, comment_id, request_user_id = None):
         _context = super(RBMobileNote, self).read_comment(comment_id, json = True)
+        _context['creator'] = RBMobileUser(_context['creator_id']).read(request_user_id)
+        del _context['creator_id']
         return _context

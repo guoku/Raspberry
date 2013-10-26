@@ -254,18 +254,6 @@ class RBEntity(object):
         _user_id = int(user_id)
         return RBEntityLikeModel.objects.filter(user_id = _user_id).count()
     
-    @staticmethod
-    def get_user_last_note(user_id):
-        _user_id = int(user_id)
-        try:
-            _note = RBEntityNoteModel.objects.filter(creator_id = _user_id).order_by('-created_time')[0]
-            return {
-                'note_id' : _note.id,
-                'entity_id' : _note.entity_id
-            }
-        except:
-            pass
-        return None
     
     @staticmethod
     def get_user_last_like(user_id):
