@@ -222,28 +222,6 @@ class RBEntity(object):
         return _note
         
     
-    def add_note_comment(self, note_id, comment_text, creator_id, reply_to = None):
-        _note = self.Note(note_id)
-        _comment_id = _note.add_comment(
-            comment_text = comment_text,
-            creator_id = creator_id,
-            reply_to = reply_to
-        )
-        return _note.read_comment(_comment_id)
-    
-    def read_note_comment(self, note_id, comment_id):
-        _note = self.Note(note_id)
-        return _note.read_comment(comment_id)
-    
-    def get_entity_note_of_user(self, user_id):
-        _user_id = int(user_id)
-        try:
-            _obj = RBEntityNoteModel.objects.get(entity_id = self.entity_id, creator_id = _user_id)
-            return _obj.note_id
-        except RBEntityNoteModel.DoesNotExist, e:
-            pass
-        return None
-    
     @staticmethod
     def get_user_note_count(user_id):
         _user_id = int(user_id)
