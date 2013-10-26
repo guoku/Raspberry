@@ -123,7 +123,7 @@ class Candidate(models.Model):
     brand = models.CharField(max_length = 128, db_index = True)
     title = models.CharField(max_length = 128, db_index = True)
     creator = models.ForeignKey(User) 
-    category = models.ForeignKey(Category, null = True)
+    category_id = models.IntegerField(db_index = True, default = 0)
     category_text = models.CharField(max_length = 128, db_index = True)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)

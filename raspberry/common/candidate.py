@@ -63,6 +63,7 @@ class RBCandidate(object):
     def __load_candidate_context(self):
         self.__ensure_candidate_obj()
         _context = {}
+        _context["candidate_id"] = self.candidate_obj.id
         _context["category_id"] = self.candidate_obj.category_id
         _context["category_text"] = self.candidate_obj.category_text
         _context["brand"] = self.candidate_obj.brand
@@ -90,7 +91,7 @@ class RBCandidate(object):
         return _context    
     
     
-    def update(cls, category_id = None, category_text = None, brand = None, title = None, 
+    def update(self, category_id = None, category_text = None, brand = None, title = None, 
                score = None, note_text = None, image_data = None):
                 
         if category_id != None or category_text != None or brand != None or title != None:

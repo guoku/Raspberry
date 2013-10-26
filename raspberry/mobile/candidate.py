@@ -17,9 +17,7 @@ def create_candidate(request):
         _score = int(request.POST.get('score', '0'))
         _brand = request.POST.get('brand', '')
         _title = request.POST.get('title', '')
-        _category_id = request.POST.get('category_id', None)
-        if _category_id != None:
-            _category_id = int(_category_id)
+        _category_id = int(request.POST.get('category_id', '0'))
         _category_text = request.POST.get('category_text', '')
         
         _image_file = request.FILES.get('image', None)
@@ -45,5 +43,24 @@ def create_candidate(request):
         _note = RBMobileNote(_note_id)
         return SuccessJsonResponse(_note.read())
             
-
+def category_candidate(request, category_id):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
         
+        _candidate_id_list = RBMobileCandidate.find(
+            category_id = category_id
+        )
+        _rslt = []
+        for _candidate_id in _candidate_id_list:
+            _note_id = RBMobileCandidate(_candidate_id).get_note()
+            _note = RBMobileNote(_note_id)
+            _rslt.append(
+                _note.read(_request_user_id)
+            )
+            
+        return SuccessJsonResponse(_rslt)
+

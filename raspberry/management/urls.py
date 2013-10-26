@@ -3,6 +3,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('management.views',
     (r'^candidate/$', 'candidate_list'),
+    (r'^candidate/(?P<candidate_id>\w+)/edit/$', 'edit_candidate'),
     (r'^category/$', 'category_list'),
     (r'^category/create/$', 'create_category'),
     (r'^category/(?P<category_id>\d+)/edit/$', 'edit_category'),
