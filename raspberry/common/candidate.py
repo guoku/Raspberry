@@ -122,10 +122,12 @@ class RBCandidate(object):
         
    
     @classmethod
-    def find(cls, category_id = None, timestamp = None, offset = 0, count = 30):
+    def find(cls, creator_id = None, category_id = None, timestamp = None, offset = 0, count = 30):
         _hdl = RBCandidateModel.objects
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
+        if creator_id != None:
+            _hdl = _hdl.filter(creator_id = creator_id)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         _hdl = _hdl.order_by('-created_time')[offset : offset + count]

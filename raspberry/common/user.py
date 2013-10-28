@@ -208,11 +208,11 @@ class RBUser(object):
 
         return 0
 
-    def get_following_user_id_list(self):
-        return map(lambda x : x.followee_id, RBUserFollowModel.objects.filter(follower_id = self.__user_id))
+    def get_following_user_id_list(self, offset = 0, count = 30):
+        return map(lambda x : x.followee_id, RBUserFollowModel.objects.filter(follower_id = self.__user_id)[offset : offset + count])
              
-    def get_fan_user_id_list(self):
-        return map(lambda x : x.follower_id, RBUserFollowModel.objects.filter(followee_id = self.__user_id))
+    def get_fan_user_id_list(self, offset = 0, count = 30):
+        return map(lambda x : x.follower_id, RBUserFollowModel.objects.filter(followee_id = self.__user_id)[offset : offset + count])
 
     def upload_avatar(self, data):
         _avatar = Avatar.create(data)

@@ -259,7 +259,7 @@ class RBEntity(object):
         return None
     
     @staticmethod
-    def find_entity_note(entity_id = None, creator_id = None):
+    def find_entity_note(entity_id = None, creator_id = None, offset = 0, count = 30):
         _hdl = RBEntityNoteModel.objects
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
@@ -267,7 +267,7 @@ class RBEntity(object):
             _hdl = _hdl.filter(creator_id = creator_id)
         
         _rslt = []
-        for _obj in _hdl:
+        for _obj in _hdl[offset : offset + count]:
             _rslt.append({
                 'entity_id' : _obj.entity_id,
                 'note_id' : _obj.note_id,
