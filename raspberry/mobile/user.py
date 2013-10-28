@@ -88,3 +88,23 @@ def upload_user_avatar(request):
         _user = RBMobileUser(_request_user_id)
         _user.upload_avatar(_image_data)
         return SuccessJsonResponse(_user.read())
+
+def user_entity_note(request, user_id):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        
+        _rslt = []
+        for _entity_note_obj in RBMobileEntity.find_entity_note(creator_id = user_id):
+            _note_context = RBMobileNote(_entity_note_obj['note_id']).read(_request_user_id)
+            if _note_context.has_key('entity_id'):
+                _entity = RBMobileEntity(_note_context['entity_id'])
+                _rslt.append({
+                    'entity' : _entity.read(_request_user_id),
+                    'note' : _note_context, 
+                })
+
+        return SuccessJsonResponse(_rslt)

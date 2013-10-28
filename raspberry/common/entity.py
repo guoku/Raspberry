@@ -72,7 +72,6 @@ class RBEntity(object):
                 score = _candidate_context['score'], 
                 creator_id = _candidate_context['creator_id'] 
             )
-            _candidate.delete()
         return _inst
 
     
@@ -239,7 +238,7 @@ class RBEntity(object):
         
     
     @staticmethod
-    def get_user_note_count(user_id):
+    def get_user_entity_note_count(user_id):
         _user_id = int(user_id)
         return RBEntityNoteModel.objects.filter(creator_id = _user_id).count()
     
@@ -259,14 +258,23 @@ class RBEntity(object):
             pass
         return None
     
-    def get_entity_note_of_user(self, user_id):
-        _user_id = int(user_id)
-        try:
-            _obj = RBEntityNoteModel.objects.filter(entity_id = self.entity_id, user_id = _user_id).order_by('-created_time')[0]
-            return _obj.note_id
-        except:
-            pass
-        return None
+    @staticmethod
+    def find_entity_note(entity_id = None, creator_id = None):
+        _hdl = RBEntityNoteModel.objects
+        if entity_id != None:
+            _hdl = _hdl.filter(entity_id = entity_id)
+        if creator_id != None:
+            _hdl = _hdl.filter(creator_id = creator_id)
+        
+        _rslt = []
+        for _obj in _hdl:
+            _rslt.append({
+                'entity_id' : _obj.entity_id,
+                'note_id' : _obj.note_id,
+                'score' : _obj.score,
+                'creator_id' : _obj.creator_id
+            })
+        return _rslt 
         
     
     @staticmethod

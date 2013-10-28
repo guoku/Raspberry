@@ -133,7 +133,12 @@ class RBCandidate(object):
         return _candidate_id_list
         
     @classmethod
-    def count(cls, category_id = None):
-        _hdl = RBCandidateModel.objects.filter(category_id = category_id)
+    def count(cls, category_id = None, creator_id = None):
+        _hdl = RBCandidateModel.objects
+        if category_id != None:
+            _hdl = _hdl.filter(category_id = category_id)
+        if creator_id != None:
+            _hdl = _hdl.filter(creator_id = creator_id)
+            
         return _hdl.count()
     
