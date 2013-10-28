@@ -45,6 +45,9 @@ class MangoApiClient(object):
             intro = intro,
             price = price
         )
+    
+    def sort_entity_by_price(self, entity_id_list, reverse = False):
+        return Entity.sort_by_price(entity_id_list, reverse)
          
          
     def bind_entity_item(self, entity_id, item_id):

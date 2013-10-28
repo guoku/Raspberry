@@ -43,13 +43,13 @@
                     <div class="control-group">
                         <label class="control-label" for="brand">品牌</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="brand" name="brand" value="" />
+                            <input class="input-xxlarge" type="text" id="brand" name="brand" value="{{ brand }}" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="title">名称</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="title" name="title" value="" />
+                            <input class="input-xxlarge" type="text" id="title" name="title" value="{{ title }}" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -90,6 +90,27 @@
                     {% for image_url in thumb_images %}
                         <input class="input-xxlarge" type="hidden" id="image_url" name="image_url" value="{{ image_url }}" />
                     {% endfor %}
+                    {% if candidate_context %}
+                        <div class="control-group">
+                            <label class="control-label" for="note_text">点评:</</label>
+                            <div class="controls">
+                                <textarea class="input-xxlarge" style="height:120px" type="text" id="note_text" name="note_text" disabled>{{ note_context.content }}</textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="creator">创建者</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="creator" name="creator" value="{{ note_creator_context.nickname }}" disabled/> 
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="title">评分</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="score" name="score" value="{{ note_context.score }}" disabled/>
+                            </div>
+                        </div>
+                        <input class="input-xxlarge" type="hidden" id="candidate_id" name="candidate_id" value="{{ candidate_context.candidate_id }}" />
+                    {% endif %}
                 </fieldset>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">添加</button>

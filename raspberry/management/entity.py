@@ -13,9 +13,12 @@ import datetime
 import time
 import json
 
+from common.candidate import RBCandidate
 from common.category import RBCategory
 from common.entity import RBEntity
 from common.item import RBItem
+from common.note import RBNote
+from common.user import RBUser
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -59,7 +62,6 @@ def new_entity(request):
         )
     else: 
         _cand_url = request.POST.get("url", None)
-        _selected_category_id = int(request.POST.get("category_id", "1"))
         _hostname = urlparse(_cand_url).hostname
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) != None: 
             _taobao_id = _parse_taobao_id_from_url(_cand_url)
@@ -67,6 +69,25 @@ def new_entity(request):
             _entity_id = RBEntity.check_taobao_item_exist(_taobao_id)
             if _entity_id == None:
                 _taobao_item_info = _load_taobao_item_info(_taobao_id)
+                _selected_category_id = int(request.POST.get("category_id", "1"))
+                _brand = ''
+                _title = ''
+                
+                _candidate_id = request.POST.get("candidate_id", None)
+                if _candidate_id != None:
+                    _candidate_context = RBCandidate(_candidate_id).read()
+                    _brand = _candidate_context['brand']
+                    _title = _candidate_context['title']
+                    if _candidate_context['category_id'] != 0:
+                        _selected_category_id = _candidate_context['category_id']
+                    _note_context = RBNote(_candidate_context['note_id']).read()
+                    _note_creator_context = RBUser(_note_context['creator_id']).read()
+
+                else:
+                    _candidate_context = None
+                    _note_context = None
+                    _note_creator_context = None
+                
                 return render_to_response( 
                     'entity/create.html', 
                     {
@@ -78,7 +99,12 @@ def new_entity(request):
                         'price' : _taobao_item_info['price'], 
                         'thumb_images' : _taobao_item_info["thumb_images"],
                         'selected_category_id' : _selected_category_id, 
-                        'category_list' : RBCategory.find(), 
+                        'category_list' : RBCategory.find(),
+                        'brand' : _brand,
+                        'title' : _title,
+                        'candidate_context' : _candidate_context,
+                        'note_context' : _note_context,
+                        'note_creator_context' : _note_creator_context
                     },
                     context_instance = RequestContext(request)
                 )
@@ -99,6 +125,7 @@ def create_entity_by_taobao_item(request):
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
         _category_id = int(request.POST.get("category_id", None))
+        _candidate_id = int(request.POST.get("candidate_id", None))
         _detail_image_urls = request.POST.getlist("image_url")
         
         if _chief_image_url in _detail_image_urls:
@@ -119,7 +146,8 @@ def create_entity_by_taobao_item(request):
             brand = _brand,
             title = _title,
             intro = _intro,
-            detail_image_urls = _detail_image_urls
+            detail_image_urls = _detail_image_urls,
+            candidate_id = _candidate_id
         )
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))

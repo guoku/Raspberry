@@ -6,6 +6,11 @@
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
                 <li class="nav-header">分类组</li>
+                <li{%if  categories == None %} class="active"{%endif%}>
+                    <a href="{% url 'management.views.candidate_list' %}">
+                        全部
+                    </a>
+                </li>
                 {% for group in category_groups %}
                     <li{%if group.group_id == category_context.group_id%} class="active"{%endif%}>
                         <a href="{% url 'management.views.candidate_list' %}?gid={{group.group_id}}">
@@ -17,20 +22,22 @@
         </div>
     </div>
     <div class="span9">
-        <div class="sub-nav">
-            <ul class="nav nav-pills">
-                {% for category in categories%}
-                    <li{%if category.category_id == category_context.category_id%} class="active"{%endif%}>
-                        <a href="{% url 'management.views.candidate_list' %}?cid={{category.category_id}}">
-                            {{ category.category_title }}({{ category.candidate_count }})
-                        </a>
+        {% if categories %}
+            <div class="sub-nav">
+                <ul class="nav nav-pills">
+                    {% for category in categories%}
+                        <li{%if category.category_id == category_context.category_id%} class="active"{%endif%}>
+                            <a href="{% url 'management.views.candidate_list' %}?cid={{category.category_id}}">
+                                {{ category.category_title }}({{ category.candidate_count }})
+                            </a>
+                        </li>
+                    {% endfor %}
+                    <li>
+                        <a href="{% url 'management.views.create_category' %}?gid={{category_group_id}}">+</a> 
                     </li>
-                {% endfor %}
-                <li>
-                    <a href="{% url 'management.views.create_category' %}?gid={{category_group_id}}">+</a> 
-                </li>
-            </ul>
-        </div>
+                </ul>
+            </div>
+        {% endif %}
         <div>
             <table class="table table-striped table-bordered table-condensed">
                 <thead>

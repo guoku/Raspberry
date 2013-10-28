@@ -42,9 +42,18 @@ def category_entity(request, category_id):
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
             _request_user_id = None
+        _sort_by = request.GET.get('sort', 'new')
+        _reverse = request.GET.get('reverse', '0')
+        if _reverse == '0':
+            _reverse = False
+        else:
+            _reverse = True
+
         
         _entity_id_list = RBMobileEntity.find(
-            category_id = category_id
+            category_id = category_id,
+            sort_by = _sort_by,
+            reverse = _reverse
         )
         _rslt = []
         for _entity_id in _entity_id_list:
@@ -196,12 +205,18 @@ def feed(request):
             if _note_context.has_key('entity_id'):
                 _entity = RBMobileEntity(_note_context['entity_id'])
                 _rslt.append({
-                    'entity' : _entity.read(_request_user_id),
-                    'note' : _note_context
+                    'type' : 'entity',
+                    'object' : {
+                        'entity' : _entity.read(_request_user_id),
+                        'note' : _note_context
+                    }
                 })
             else:
                 _rslt.append({
-                    'note' : _note_context
+                    'type' : 'candidate',
+                    'object' : {
+                        'note' : _note_context
+                    }
                 })
         
         return SuccessJsonResponse(_rslt)

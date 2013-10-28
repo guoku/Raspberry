@@ -13,7 +13,7 @@ import json
 
 from common.category import RBCategory
 from common.candidate import RBCandidate
-from common.candidate import RBNote
+from common.note import RBNote
 from common.user import RBUser
 
 
@@ -22,12 +22,18 @@ def candidate_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id == None:
         _category_groups = RBCategory.allgroups()
-        _category_id = int(request.GET.get("cid", "1"))
-        _category_context = RBCategory(_category_id).read()
-        _category_group_id = _category_context['group_id'] 
-        _categories = RBCategory.find(group_id = _category_context['group_id'])
-        for _category in _categories:
-            _category['candidate_count'] = RBCandidate.count(_category['category_id'])
+        _category_id = request.GET.get("cid", None)
+        if _category_id != None: 
+            _category_id = int(_category_id)
+            _category_context = RBCategory(_category_id).read()
+            _category_group_id = _category_context['group_id'] 
+            _categories = RBCategory.find(group_id = _category_context['group_id'])
+            for _category in _categories:
+                _category['candidate_count'] = RBCandidate.count(_category['category_id'])
+        else:
+            _category_context = None
+            _category_group_id = None
+            _categories = None
     
         _candidate_id_list = RBCandidate.find(_category_id)
         _candidate_context_list = []
@@ -56,6 +62,7 @@ def candidate_list(request):
     else:
         _categories = RBCategory.find(group_id = int(_group_id))
         return HttpResponseRedirect(reverse('management.views.candidate_list') + '?cid=' + str(_categories[0]['category_id'])) 
+
 @login_required
 def edit_candidate(request, candidate_id):
     if request.method == 'GET':

@@ -65,6 +65,7 @@ class RBCandidate(object):
         _context = {}
         _context["candidate_id"] = self.candidate_obj.id
         _context["category_id"] = self.candidate_obj.category_id
+        _context["creator_id"] = self.candidate_obj.creator_id
         _context["category_text"] = self.candidate_obj.category_text
         _context["brand"] = self.candidate_obj.brand
         _context["title"] = self.candidate_obj.title
@@ -114,7 +115,11 @@ class RBCandidate(object):
                 note_text = note_text,
                 image_data = image_data
             )
-            
+    
+    def delete(self):
+        self.__ensure_candidate_obj()
+        self.candidate_obj.delete()
+        
    
     @classmethod
     def find(cls, category_id = None, timestamp = None, offset = 0, count = 30):

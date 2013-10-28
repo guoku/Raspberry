@@ -5,6 +5,7 @@ from models import Entity_Note as RBEntityNoteModel
 from django.conf import settings
 from django.db.models import Sum
 from mango.client import MangoApiClient
+from candidate import RBCandidate
 from note import RBNote
 from hashlib import md5
 import datetime
@@ -38,7 +39,8 @@ class RBEntity(object):
     
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, chief_image_url, 
-                              taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = []):
+                              taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = [],
+                              candidate_id = None):
        
         _mango_client = MangoApiClient()
         _entity_id = _mango_client.create_entity_by_taobao_item(
@@ -60,6 +62,17 @@ class RBEntity(object):
          
         _inst = cls(_entity_obj.entity_id)
         _inst.__entity_obj = _entity_obj
+
+        if candidate_id != None:
+            _candidate = RBCandidate(candidate_id)
+            _candidate_context = _candidate.read()
+            _entity_note_obj = RBEntityNoteModel.objects.create(
+                entity_id = _inst.entity_id,
+                note_id = _candidate_context['note_id'],
+                score = _candidate_context['score'], 
+                creator_id = _candidate_context['creator_id'] 
+            )
+            _candidate.delete()
         return _inst
 
     
@@ -134,7 +147,7 @@ class RBEntity(object):
              
        
     @classmethod
-    def find(cls, category_id = None, timestamp = None, offset = 0, count = 30):
+    def find(cls, category_id = None, timestamp = None, offset = 0, count = 30, sort_by = None, reverse = False):
         _hdl = RBEntityModel.objects
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
@@ -142,6 +155,9 @@ class RBEntity(object):
             _hdl = _hdl.filter(created_time__lt = timestamp)
         _hdl = _hdl.order_by('-created_time')[offset : offset + count]
         _entity_id_list = map(lambda x: x.entity_id, _hdl)
+        if sort_by == 'price':
+            _mango_client = MangoApiClient()
+            _entity_id_list = _mango_client.sort_entity_by_price(_entity_id_list, reverse = reverse)
         return _entity_id_list
         
     @classmethod
@@ -242,6 +258,16 @@ class RBEntity(object):
         except:
             pass
         return None
+    
+    def get_entity_note_of_user(self, user_id):
+        _user_id = int(user_id)
+        try:
+            _obj = RBEntityNoteModel.objects.filter(entity_id = self.entity_id, user_id = _user_id).order_by('-created_time')[0]
+            return _obj.note_id
+        except:
+            pass
+        return None
+        
     
     @staticmethod
     def search(query):

@@ -132,6 +132,15 @@ class Entity(object):
             self.__entity_obj.price = price
         self.__entity_obj.updated_time = datetime.datetime.now()
         self.__entity_obj.save()
+
+    @staticmethod
+    def sort_by_price(entity_id_list, reverse = False):
+        if reverse:
+            _order = '-price'
+        else: 
+            _order = 'price'
+        return map(lambda x: str(x.id), EntityModel.objects.filter(id__in = entity_id_list).order_by(_order))
+    
    
     @staticmethod
     def search(query):
