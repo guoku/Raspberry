@@ -76,7 +76,7 @@ def user_detail(request, user_id):
             
         return SuccessJsonResponse(_rslt)
 
-def upload_user_avatar(request):
+def update_user(request):
     if request.method == "POST":
         _session = request.POST.get('session', None)
         if _session != None:
@@ -84,14 +84,20 @@ def upload_user_avatar(request):
         else:
             _request_user_id = None
     
-        _image_file = request.FILES.get('image', None)
-        if hasattr(_image_file, 'chunks'):
-            _image_data = ''.join(chunk for chunk in _image_file.chunks())
-        else:
-            _image_data = _image_file.read()
-        
         _user = RBMobileUser(_request_user_id)
-        _user.upload_avatar(_image_data)
+        
+        _image_file = request.FILES.get('image', None)
+        if _image_file != None:
+            if hasattr(_image_file, 'chunks'):
+                _image_data = ''.join(chunk for chunk in _image_file.chunks())
+            else:
+                _image_data = _image_file.read()
+            _user.upload_avatar(_image_data)
+
+        _nickname = request.POST.get('nickname', None)
+        if _nickname != None:
+            _user.set_profile(nickname = _nickname)
+        
         return SuccessJsonResponse(_user.read())
 
 def user_entity_note(request, user_id):

@@ -34,19 +34,25 @@ class RBUser(object):
             return repr(self.__message)
     
     def __init__(self, user_id):
-        self.__user_id = int(user_id) 
+        self.user_id = int(user_id) 
     
     def __ensure_user_obj(self):
-        if not hasattr(self, '__user_obj'):
-            self.__user_obj = AuthUser.objects.get(pk = self.__user_id)
+        if not hasattr(self, 'user_obj'):
+            self.user_obj = AuthUser.objects.get(pk = self.user_id)
     
+    def __ensure_user_profile_obj(self):
+        if not hasattr(self, 'user_profile_obj'):
+            try:
+                self.user_profile_obj = RBUserProfileModel.objects.get(user_id = self.user_id)
+            except RBUserProfileModel.DoesNotExist, e:
+                self.user_profile_obj = None
 
     def get_user_id(self):
-        return self.__user_id
+        return self.user_id
     
     def get_username(self):
         self.__ensure_user_obj()
-        return self.__user_obj.username
+        return self.user_obj.username
     
     @classmethod
     def _generate_seed(cls):
@@ -73,7 +79,7 @@ class RBUser(object):
             raise RBUser.LoginEmailDoesNotExist(email)
 
         _inst = cls(_user_obj.id)
-        _inst.__user_obj = _user_obj
+        _inst.user_obj = _user_obj
         
         if not _inst.check_auth(password):
             raise RBUser.LoginPasswordIncorrect()
@@ -98,9 +104,10 @@ class RBUser(object):
         _inst = cls(_user.id)
         return _inst
     
+    
     def delete(self):
         self.__ensure_user_obj()
-        self.__user_obj.delete()
+        self.user_obj.delete()
         
 
     @staticmethod
@@ -110,26 +117,40 @@ class RBUser(object):
         return False
     
     def set_profile(self, nickname, location = 'beijing', gender = 'O', bio = '', website = ''):
-        if RBUser.nickname_exist(nickname):
-            raise RBUser.NicknameExistAlready(nickname) 
+        self.__ensure_user_profile_obj()
         
-        _user_profile = RBUserProfileModel.objects.create(
-            user_id = self.__user_id,
-            nickname = nickname,
-            location = location,
-            gender = gender,
-            bio = bio,
-            website = website
-        )
-        self.__profile = _user_profile
+        if self.user_profile_obj == None:
+            _user_profile = RBUserProfileModel.objects.create(
+                user_id = self.user_id,
+                nickname = nickname,
+                location = location,
+                gender = gender,
+                bio = bio,
+                website = website
+            )
+            self.__profile = _user_profile
+        else:
+            if nickname != None:
+                _nickname = nickname.strip()
+                if RBUser.nickname_exist(_nickname):
+                    raise RBUser.NicknameExistAlready(_nickname)
+                else:
+                    self.user_profile_obj.nickname = _nickname
+            
+            if location != None:
+                _location = location.strip()
+                self.user_profile_obj.location = _location 
+
+            self.user_profile_obj.save()
+            
         
     def __load_user_context(self):
         self.__ensure_user_obj()
         _context = {}
-        _context['user_id'] = self.__user_obj.id
+        _context['user_id'] = self.user_obj.id
         
         try:
-            _profile = RBUserProfileModel.objects.get(user_id = self.__user_id)
+            _profile = RBUserProfileModel.objects.get(user_id = self.user_id)
             _context['nickname'] = _profile.nickname
             _context['verified'] = 0 
             _context['verified_type'] = 'guoku' 
@@ -142,8 +163,8 @@ class RBUser(object):
             _context['verified_reason'] = 'guoku' 
             _context['gender'] = 'O' 
        
-        if RBAvatarModel.objects.filter(user_id = self.__user_id, current = True).count() > 0:
-            _avatar_obj = RBAvatarModel.objects.filter(user_id = self.__user_id, current = True).order_by('-created_time')[0]
+        if RBAvatarModel.objects.filter(user_id = self.user_id, current = True).count() > 0:
+            _avatar_obj = RBAvatarModel.objects.filter(user_id = self.user_id, current = True).order_by('-created_time')[0]
             _avatar = Avatar(_avatar_obj.store_hash)
             _context['avatar_large'] = _avatar.read_large_link() 
             _context['avatar_small'] = _avatar.read_small_link() 
@@ -160,7 +181,7 @@ class RBUser(object):
     def follow(self, followee_id):
         try:
             RBUserFollowModel.objects.create(
-                follower_id = self.__user_id,
+                follower_id = self.user_id,
                 followee_id = followee_id 
             )
             return True
@@ -171,7 +192,7 @@ class RBUser(object):
     def unfollow(self, followee_id):
         try:
             _obj = RBUserFollowModel.objects.get(
-                follower_id = self.__user_id,
+                follower_id = self.user_id,
                 followee_id = followee_id 
             )
             _obj.delete()
@@ -209,19 +230,19 @@ class RBUser(object):
         return 0
 
     def get_following_user_id_list(self, offset = 0, count = 30):
-        return map(lambda x : x.followee_id, RBUserFollowModel.objects.filter(follower_id = self.__user_id)[offset : offset + count])
+        return map(lambda x : x.followee_id, RBUserFollowModel.objects.filter(follower_id = self.user_id)[offset : offset + count])
              
     def get_fan_user_id_list(self, offset = 0, count = 30):
-        return map(lambda x : x.follower_id, RBUserFollowModel.objects.filter(followee_id = self.__user_id)[offset : offset + count])
+        return map(lambda x : x.follower_id, RBUserFollowModel.objects.filter(followee_id = self.user_id)[offset : offset + count])
 
     def upload_avatar(self, data):
         _avatar = Avatar.create(data)
        
         try:
-            _avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, store_hash = _avatar.get_hash_key())
+            _avatar_obj = RBAvatarModel.objects.get(user_id = self.user_id, store_hash = _avatar.get_hash_key())
             if _avatar_obj.current == False:
                 try:
-                    _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, current = True)
+                    _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.user_id, current = True)
                     _current_avatar_obj.current = False
                     _current_avatar_obj.save()
                 except RBAvatarModel.DoesNotExist, e:
@@ -230,14 +251,14 @@ class RBUser(object):
                 _avatar_obj.save()
         except RBAvatarModel.DoesNotExist, e:
             try:
-                _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.__user_id, current = True)
+                _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.user_id, current = True)
                 _current_avatar_obj.current = False
                 _current_avatar_obj.save()
             except RBAvatarModel.DoesNotExist, e:
                 pass
             
             _obj = RBAvatarModel.objects.create(
-                user_id = self.__user_id,
+                user_id = self.user_id,
                 store_hash = _avatar.get_hash_key(),
                 current = True
             )

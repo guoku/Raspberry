@@ -89,6 +89,13 @@ def register(request):
             email = _email,
             api_key = _api_key
         )
+        
+        _image_file = request.FILES.get('image', None)
+        if hasattr(_image_file, 'chunks'):
+            _image_data = ''.join(chunk for chunk in _image_file.chunks())
+        else:
+            _image_data = _image_file.read()
+        _user.upload_avatar(_image_data)
 
         _data = {
             'user' : _user.read(_user.get_user_id()),

@@ -27,6 +27,6 @@ urlpatterns = patterns('mobile.views',
     (r'^user/(?P<user_id>\d+)/share/$', 'user_share'),
     (r'^user/(?P<user_id>\d+)/fan/$', 'user_fan'),
     (r'^user/(?P<user_id>\d+)/following/$', 'user_following'),
-    (r'^avatar/upload/$', 'upload_user_avatar'),
+    (r'^user/update/$', 'update_user'),
 )
 
