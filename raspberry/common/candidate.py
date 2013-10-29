@@ -69,6 +69,7 @@ class RBCandidate(object):
         _context["category_text"] = self.candidate_obj.category_text
         _context["brand"] = self.candidate_obj.brand
         _context["title"] = self.candidate_obj.title
+        _context["entity_id"] = self.candidate_obj.entity_id
         _context["created_time"] = self.candidate_obj.created_time
         _context["updated_time"] = self.candidate_obj.updated_time
         
@@ -93,14 +94,20 @@ class RBCandidate(object):
     
     
     def update(self, category_id = None, category_text = None, brand = None, title = None, 
-               score = None, note_text = None, image_data = None):
+               score = None, note_text = None, entity_id = None, image_data = None):
                 
-        if category_id != None or category_text != None or brand != None or title != None:
+        if category_id != None or category_text != None or brand != None or title != None or entity_id != None:
             self.__ensure_candidate_obj()
-            self.candidate_obj.category_id = int(category_id)
-            self.candidate_obj.category_text = category_text 
-            self.candidate_obj.brand = brand 
-            self.candidate_obj.title = title 
+            if category_id != None: 
+                self.candidate_obj.category_id = int(category_id)
+            if category_text != None: 
+                self.candidate_obj.category_text = category_text
+            if brand != None: 
+                self.candidate_obj.brand = brand 
+            if title != None: 
+                self.candidate_obj.title = title 
+            if entity_id != None:
+                self.candidate_obj.entity_id = entity_id 
             self.candidate_obj.save()
        
         if score != None: 
@@ -122,7 +129,7 @@ class RBCandidate(object):
         
    
     @classmethod
-    def find(cls, creator_id = None, category_id = None, timestamp = None, offset = 0, count = 30):
+    def find(cls, creator_id = None, category_id = None, timestamp = None, offset = 0, count = 30, pending_only = False):
         _hdl = RBCandidateModel.objects
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
@@ -130,6 +137,9 @@ class RBCandidate(object):
             _hdl = _hdl.filter(creator_id = creator_id)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
+        if pending_only == True:
+            _hdl = _hdl.exclude(entity_id = '')
+            
         _hdl = _hdl.order_by('-created_time')[offset : offset + count]
         _candidate_id_list = map(lambda x: x.id, _hdl)
         return _candidate_id_list

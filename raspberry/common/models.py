@@ -112,8 +112,8 @@ class Entity_Note(models.Model):
     note = models.ForeignKey(Note)
     score = models.IntegerField(db_index = True, default = 0)
     creator = models.ForeignKey(User) 
-    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
-    updated_time = models.DateTimeField(auto_now = True, db_index = True)
+    created_time = models.DateTimeField(db_index = True)
+    updated_time = models.DateTimeField(db_index = True)
     
     class Meta:
         ordering = ['-created_time']
@@ -125,6 +125,7 @@ class Candidate(models.Model):
     creator = models.ForeignKey(User) 
     category_id = models.IntegerField(db_index = True, default = 0)
     category_text = models.CharField(max_length = 128, db_index = True)
+    entity_id = models.CharField(max_length = 32, default = '', db_index = True)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
     

@@ -5,6 +5,7 @@ from lib.note import RBMobileNote
 from lib.user import RBMobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
+import datetime
     
 
 def follow_user(request, user_id, target_status):
@@ -109,7 +110,7 @@ def user_entity_note(request, user_id):
             _request_user_id = None
         _timestamp = request.GET.get('timestamp', None)
         if _timestamp != None:
-            _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
+            _timestamp = datetime.datetime.fromtimestamp(float(_timestamp))
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
         

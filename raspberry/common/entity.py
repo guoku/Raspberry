@@ -66,12 +66,16 @@ class RBEntity(object):
         if candidate_id != None:
             _candidate = RBCandidate(candidate_id)
             _candidate_context = _candidate.read()
+            print _candidate_context['created_time']
             _entity_note_obj = RBEntityNoteModel.objects.create(
                 entity_id = _inst.entity_id,
                 note_id = _candidate_context['note_id'],
                 score = _candidate_context['score'], 
-                creator_id = _candidate_context['creator_id'] 
+                creator_id = _candidate_context['creator_id'],
+                created_time = _candidate_context['created_time'],
+                updated_time = _candidate_context['updated_time'],
             )
+            _candidate.update(entity_id = _inst.entity_id)
         return _inst
 
     
@@ -206,7 +210,9 @@ class RBEntity(object):
             entity_id = self.entity_id,
             note_id = _note.note_id,
             score = _score,
-            creator_id = _creator_id
+            creator_id = _creator_id,
+            created_time = datetime.datetime.now(), 
+            updated_time = datetime.datetime.now() 
         )
         return _note
 

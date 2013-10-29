@@ -63,25 +63,35 @@
                             <input class="input-xxlarge" type="text" id="category_text" name="category_text" value="{{ candidate_context.category_text }}" /> 
                         </div>
                     </div>
+                    {% if candidate_context.entity_id != '' %}
+                        <div class="control-group">
+                            <label class="control-label" for="entity_id">已被录入至：</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="entity_id" name="entity_id" value="{{ candidate_context.entity_id }}" disabled/> 
+                            </div>
+                        </div>
+                    {% endif %}
                 </fieldset>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">更新</button>
                 </div>
             </form>
-            <form class="well form-horizontal" action="{% url 'management.views.new_entity' %}" method="POST">
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="url">录入商品库（淘宝url）:</label>
-                        <div class="controls">
-                            <input class="input-xxlarge" type="text" id="url" name="url" value="" />
+            {% if candidate_context.entity_id == '' %}
+                <form class="well form-horizontal" action="{% url 'management.views.new_entity' %}" method="POST">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="url">录入商品库（淘宝url）:</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="url" name="url" value="" />
+                            </div>
                         </div>
+                        <input class="input-xxlarge" type="hidden" id="candidate_id" name="candidate_id" value="{{ candidate_context.candidate_id }}" />
+                    </fieldset>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">创建</button>
                     </div>
-                    <input class="input-xxlarge" type="hidden" id="candidate_id" name="candidate_id" value="{{ candidate_context.candidate_id }}" />
-                </fieldset>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">创建</button>
-                </div>
-            </form>
+                </form>
+            {% endif %}
         </div>
         </div>
     </div>

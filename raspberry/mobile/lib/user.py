@@ -22,7 +22,7 @@ class RBMobileUser(RBUser):
         _context['following_count'] = len(self.get_following_user_id_list())
         _context['fan_count'] = len(self.get_fan_user_id_list())
         _context['like_count'] = RBEntity.get_user_like_count(self.get_user_id())
-        _context['note_count'] = RBEntity.get_user_entity_note_count(self.get_user_id())
+        _context['entity_note_count'] = RBEntity.get_user_entity_note_count(self.get_user_id())
         _context['share_count'] = RBCandidate.count(creator_id = self.get_user_id())
         if request_user_id:
             _context['relation'] = RBUser.get_relation(request_user_id, self.get_user_id())
