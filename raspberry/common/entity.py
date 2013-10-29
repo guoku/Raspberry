@@ -187,9 +187,12 @@ class RBEntity(object):
         return RBEntityLikeModel.objects.filter(user_id = user_id, entity_id = self.entity_id).count() > 0 
 
     @staticmethod
-    def like_list_of_user(user_id):
+    def like_list_of_user(user_id, timestamp = None, offset = 0, count = 30):
         _user_id = int(user_id)
-        return map(lambda x : x.entity_id, RBEntityLikeModel.objects.filter(user_id = _user_id))
+        _hdl = RBEntityLikeModel.objects.filter(user_id = _user_id)
+        if timestamp != None:
+            _hdl = _hdl.filter(created_time__lt = timestamp)
+        return map(lambda x : x.entity_id, _hdl[offset : offset + count])
         
     def add_note(self, creator_id, score, note_text, image_data):
         _creator_id = int(creator_id)
@@ -247,12 +250,14 @@ class RBEntity(object):
         return None
     
     @staticmethod
-    def find_entity_note(entity_id = None, creator_id = None, offset = 0, count = 30):
+    def find_entity_note(entity_id = None, creator_id = None, timestamp = None, offset = 0, count = 30):
         _hdl = RBEntityNoteModel.objects
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
         if creator_id != None:
             _hdl = _hdl.filter(creator_id = creator_id)
+        if timestamp != None:
+            _hdl = _hdl.filter(created_time__lt = timestamp)
         
         _rslt = []
         for _obj in _hdl[offset : offset + count]:
