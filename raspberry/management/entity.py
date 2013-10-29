@@ -161,7 +161,9 @@ def edit_entity(request, entity_id):
         else:
             _message = None
         _entity_context = RBEntity(entity_id).read()
-        _item_context_list = RBItem.read_items(_entity_context['item_id_list'])
+        _item_context_list = []
+        for _item_id in _entity_context['item_id_list']:
+            _item_context_list.append(RBItem(_item_id).read())
         return render_to_response( 
             'entity/edit.html', 
             {
@@ -208,7 +210,17 @@ def entity_list(request):
             _category['entity_count'] = RBEntity.count(_category['category_id'])
     
         _entity_id_list = RBEntity.find(_category_id)
-        _entity_context_list = RBEntity.read_entities(_entity_id_list)
+        _entity_context_list = [] 
+        for _entity_id in _entity_id_list:
+            _entity = RBEntity(_entity_id)
+            _entity_context = _entity.read()
+            if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
+                _item_context = RBItem(_entity_context['item_id_list'][0]).read()
+                _entity_context['buy_link'] = _item_context['buy_link'] 
+            else:
+                _entity_context['buy_link'] = ''
+            _entity_context_list.append(_entity_context)
+        
         
         return render_to_response( 
             'entity/list.html', 

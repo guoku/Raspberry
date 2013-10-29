@@ -133,18 +133,6 @@ class RBEntity(object):
             self.__entity_obj.category_id = int(category_id)
             self.__entity_obj.save()
             
-   
-    @classmethod
-    def read_entities(cls, entity_id_list):
-        _mango_client = MangoApiClient()
-        _context_list = []
-        for _entity_id in entity_id_list:
-            _context = cls(_entity_id).read()
-            _context['base_info'] = _mango_client.read_entity(_entity_id)
-            _context_list.append(_context)
-        return _context_list
-             
-       
     @classmethod
     def find(cls, category_id = None, timestamp = None, offset = 0, count = 30, sort_by = None, reverse = False):
         _hdl = RBEntityModel.objects

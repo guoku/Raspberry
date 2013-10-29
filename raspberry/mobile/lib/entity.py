@@ -10,13 +10,8 @@ class RBMobileItem(RBItem):
     def __init__(self, item_id):
         RBItem.__init__(self, item_id)
 
-    @staticmethod
-    def generate_taobao_item_url(taobao_id):
-        return 'http://item.taobao.com/item.htm?id=' + taobao_id
-
     def read(self):
         _context = super(RBMobileItem, self).read()
-        _context['buy_link'] = RBMobileItem.generate_taobao_item_url(_context['taobao_id'])
         return _context
 
 

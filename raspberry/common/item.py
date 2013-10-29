@@ -9,19 +9,16 @@ class RBItem(object):
     
     def read(self):
         _mango_client = MangoApiClient()
-        return _mango_client.read_item(self.__item_id)
+        _context = _mango_client.read_item(self.__item_id)
+        _context['buy_link'] = RBItem.generate_taobao_item_url(_context['taobao_id'])
+        return _context
     
-    @classmethod
-    def read_items(cls, item_id_list):
-        _mango_client = MangoApiClient()
-        
-        _context_list = []
-        for _item_id in item_id_list:
-            _context = _mango_client.read_item(_item_id)
-            _context_list.append(_context)
-        return _context_list
-             
     @staticmethod
     def get_item_id_by_taobao_id(taobao_id):
         _mango_client = MangoApiClient()
         return _mango_client.get_item_id_by_taobao_id(taobao_id)
+    
+    @staticmethod
+    def generate_taobao_item_url(taobao_id):
+        return 'http://item.taobao.com/item.htm?id=' + taobao_id
+

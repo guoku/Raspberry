@@ -31,7 +31,9 @@ def note_list(request):
             _category['entity_count'] = RBEntity.count(_category['category_id'])
     
         _entity_id_list = RBEntity.find(_category_id)
-        _entity_context_list = RBEntity.read_entities(_entity_id_list)
+        _entity_context_list = [] 
+        for _entity_id in _entity_id_list:
+            _entity_context_list.append(RBEntity(_entity_id).read())
         
         return render_to_response( 
             'entity/list.html', 

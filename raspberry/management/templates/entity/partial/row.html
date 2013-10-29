@@ -2,16 +2,16 @@
 
 <tr class="success">
     <td width="90">
-        <a href="" target=_blank>
+        <a href="{{ entity_context.buy_link }}" target=_blank>
             <img class="img-polaroid" src="{{ entity_context.chief_image }}" style="max-height:80px;max-width:80px;">
         </a>
     </td>
-    <td><p class="text-info">{{ entity_context.base_info.brand }}</p></td>
-    <td><p class="text-info">{{ entity_context.base_info.title }}</p></td>
-    <td><p class="text-info">{{ entity_context.base_info.item_id_list|count }}</p></td>
+    <td><p class="text-info">{{ entity_context.brand }}</p></td>
+    <td><p class="text-info">{{ entity_context.title }}</p></td>
+    <td><p class="text-info">{{ entity_context.item_id_list|count }}</p></td>
     <td width="50">
         <div class="btn-group">
-            <a class="btn" href="{% url 'management.views.edit_entity' entity_context.base_info.entity_id %}">编</a>
+            <a class="btn" href="{% url 'management.views.edit_entity' entity_context.entity_id %}">编</a>
         </div>
     </td>
 </tr>
