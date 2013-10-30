@@ -26,6 +26,10 @@
                             <li{% if active_division == "category" %} class="active"{%endif%}><a href="{% url 'management.views.category_list' %}">Category</a></li>
                             <li class="divider-vertical"></li>
                         </ul>
+                        <form class="navbar-form">
+                            <input class="span2" type="text" placeholder="搜索商品" class="form-control">
+                            <button type="submit" class="btn btn-success">Search</button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -145,6 +145,10 @@ class Entity(object):
     @staticmethod
     def search(query):
         _entity_id_list = []  
-        for _entity_obj in EntityModel.objects.filter(intro__contains = query):
+        for _entity_obj in EntityModel.objects.filter(brand__contains = query):
             _entity_id_list.append(str(_entity_obj.id))
+        for _entity_obj in EntityModel.objects.filter(title__contains = query):
+            _entity_id = str(_entity_obj.id)
+            if not _entity_id in _entity_id_list:
+                _entity_id_list.append(_entity_id)
         return _entity_id_list

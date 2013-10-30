@@ -196,6 +196,33 @@ def edit_entity(request, entity_id):
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : entity_id })) 
 
         
+@login_required
+def search_entity(request):
+    if request.method == 'GET':
+        _category_groups = RBCategory.allgroups()
+        _query = request.GET.get("q", None)
+        _entity_id_list = RBEntity.search(_query)
+        _entity_context_list = [] 
+        for _entity_id in _entity_id_list:
+            _entity = RBEntity(_entity_id)
+            _entity_context = _entity.read()
+            if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
+                _item_context = RBItem(_entity_context['item_id_list'][0]).read()
+                _entity_context['buy_link'] = _item_context['buy_link'] 
+            else:
+                _entity_context['buy_link'] = ''
+            _entity_context_list.append(_entity_context)
+        
+        return render_to_response( 
+            'entity/search.html', 
+            {
+                'active_division' : 'entity',
+                'category_groups' : _category_groups,
+                'entity_context_list' : _entity_context_list,
+            },
+            context_instance = RequestContext(request)
+        )
+
 
 @login_required
 def entity_list(request):
