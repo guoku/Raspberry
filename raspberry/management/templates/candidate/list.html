@@ -39,6 +39,20 @@
             </div>
         {% endif %}
         <div>
+            <div class="sub-nav">
+                <ul class="nav nav-pills">
+                    <li{%if filtering == 'all' %} class="active"{%endif%}>
+                        <a href="{% url 'management.views.candidate_list' %}">全部</a> 
+                    </li>
+                    <li{%if filtering == 'pending' %} class="active"{%endif%}>
+                        <a href="{% url 'management.views.candidate_list' %}?pending=1">待审核</a> 
+                    </li>
+                    <li>
+                    <li{%if filtering == 'approve' %} class="active"{%endif%}>
+                        <a href="{% url 'management.views.candidate_list' %}?approve=1">已收录</a> 
+                    </li>
+                </ul>
+            </div>
             <table class="table table-striped table-bordered table-condensed">
                 <thead>
                     <tr>

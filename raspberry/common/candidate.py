@@ -129,7 +129,7 @@ class RBCandidate(object):
         
    
     @classmethod
-    def find(cls, creator_id = None, category_id = None, timestamp = None, offset = 0, count = 30, pending_only = False):
+    def find(cls, creator_id = None, category_id = None, timestamp = None, offset = 0, count = 30, pending_only = False, approve_already = False):
         _hdl = RBCandidateModel.objects
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
@@ -138,6 +138,8 @@ class RBCandidate(object):
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         if pending_only == True:
+            _hdl = _hdl.filter(entity_id = '')
+        if approve_already == True:
             _hdl = _hdl.exclude(entity_id = '')
             
         _hdl = _hdl.order_by('-created_time')[offset : offset + count]

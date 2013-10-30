@@ -35,8 +35,29 @@ def candidate_list(request):
             _category_context = None
             _category_group_id = None
             _categories = None
-    
-        _candidate_id_list = RBCandidate.find(_category_id)
+        
+        _filtering = 'all' 
+
+        _pending_only = request.GET.get('pending', '0')
+        if _pending_only == '0':
+            _pending_only = False
+        else:
+            _pending_only = True
+            _filtering = 'pending' 
+        
+        _approve_already = request.GET.get('approve', '0')
+        if _approve_already == '0':
+            _approve_already = False
+        else:
+            _approve_already = True
+            _filtering = 'approve' 
+
+
+        _candidate_id_list = RBCandidate.find(
+            category_id = _category_id,
+            pending_only = _pending_only,
+            approve_already = _approve_already
+        )
         _candidate_context_list = []
         for _candidate_id in _candidate_id_list: 
             _candidate_context = RBCandidate(_candidate_id).read()
@@ -52,6 +73,7 @@ def candidate_list(request):
             'candidate/list.html', 
             {
                 'active_division' : 'candidate',
+                'filtering' : _filtering, 
                 'category_context' : _category_context,
                 'category_groups' : _category_groups,
                 'categories' : _categories,
