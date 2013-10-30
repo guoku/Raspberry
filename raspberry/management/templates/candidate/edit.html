@@ -91,6 +91,20 @@
                         <button type="submit" class="btn btn-primary">创建</button>
                     </div>
                 </form>
+                <form class="well form-horizontal" action="{% url 'management.views.shift_candidate_to_entity' candidate_context.candidate_id %}" method="POST">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="url">绑定已有商品（entity_id）:</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="entity_id" name="entity_id" value="" />
+                            </div>
+                        </div>
+                        <input class="input-xxlarge" type="hidden" id="candidate_id" name="candidate_id" value="{{ candidate_context.candidate_id }}" />
+                    </fieldset>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">创建</button>
+                    </div>
+                </form>
             {% endif %}
         </div>
         </div>

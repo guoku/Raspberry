@@ -66,7 +66,6 @@ class RBEntity(object):
         if candidate_id != None:
             _candidate = RBCandidate(candidate_id)
             _candidate_context = _candidate.read()
-            print _candidate_context['created_time']
             _entity_note_obj = RBEntityNoteModel.objects.create(
                 entity_id = _inst.entity_id,
                 note_id = _candidate_context['note_id'],
@@ -215,6 +214,19 @@ class RBEntity(object):
             updated_time = datetime.datetime.now() 
         )
         return _note
+    
+    def bind_note_from_candidate(self, candidate_id):
+        _candidate = RBCandidate(candidate_id)
+        _candidate_context = _candidate.read()
+        _entity_note_obj = RBEntityNoteModel.objects.create(
+            entity_id = self.entity_id,
+            note_id = _candidate_context['note_id'],
+            score = _candidate_context['score'], 
+            creator_id = _candidate_context['creator_id'],
+            created_time = _candidate_context['created_time'],
+            updated_time = _candidate_context['updated_time'],
+        )
+        _candidate.update(entity_id = self.entity_id)
 
     
     def update_note(self, note_id, score, note_text, image_data = None):

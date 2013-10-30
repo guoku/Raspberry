@@ -1,6 +1,5 @@
 import os.path
 DEBUG = True
-IMAGE_LOCAL = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -29,7 +28,12 @@ register_connection('mango', 'mango')
 
 MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
+
+
+IMAGE_LOCAL = True 
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
+#IMAGE_LOCAL = False 
+#IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'

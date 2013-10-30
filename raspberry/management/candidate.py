@@ -13,6 +13,7 @@ import json
 
 from common.category import RBCategory
 from common.candidate import RBCandidate
+from common.entity import RBEntity
 from common.note import RBNote
 from common.user import RBUser
 
@@ -98,5 +99,9 @@ def edit_candidate(request, candidate_id):
         )
         return HttpResponseRedirect(reverse('management.views.edit_candidate', kwargs = { "candidate_id" : candidate_id }))
             
-    
-         
+@login_required
+def shift_candidate_to_entity(request, candidate_id):
+    if request.method == 'POST':
+        _entity_id = request.POST.get('entity_id', None)
+        RBEntity(_entity_id).bind_note_from_candidate(candidate_id)
+        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }))
