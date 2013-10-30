@@ -44,8 +44,11 @@ def note_detail(request, note_id):
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
             _request_user_id = None
-
+        
+        _rslt = {}
         _rslt = RBMobileNote(note_id).read_note_full_context(_request_user_id)
+        if _rslt['note'].has_key('entity_id'):
+            _rslt['entity'] = RBMobileEntity(_rslt['note']['entity_id']).read()
         return SuccessJsonResponse(_rslt)
 
 def poke_note(request, note_id, target_status):
