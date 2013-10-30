@@ -19,7 +19,7 @@
             </ul>
         </div>
         <div>
-            <form class="well form-horizontal" action="" method="POST">
+            <form class="well form-horizontal" action="{% url 'management.views.edit_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="entity_hash">Hash</label>
