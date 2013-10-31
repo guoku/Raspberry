@@ -27,6 +27,14 @@ class Image(object):
         _inst = cls(str(_image_obj.id))
         _inst.__image_obj = _image_obj
         return _inst
+    
+    @classmethod
+    def get_image_id_by_origin_url(cls, origin_url):
+        _image_obj = ImageModel.objects.filter(origin_url = origin_url).first()
+        if _image_obj == None:
+            return None
+        return str(_image_obj.id)
+        
 
     def read(self):
         self.__ensure_image_obj()
