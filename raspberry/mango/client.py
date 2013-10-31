@@ -61,3 +61,5 @@ class MangoApiClient(object):
     def search_entity(self, query):
         return Entity.search(query)
          
+    def find_item(self, offset = 0, count = 30):
+        return Item.find(offset, count)

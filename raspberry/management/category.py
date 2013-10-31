@@ -110,6 +110,3 @@ def edit_category(request, category_id):
         return HttpResponseRedirect(reverse('management.views.edit_category', kwargs = { "category_id" : category_id })) 
 
 
-def sync_category(request):
-    _all_categories = RBCategory.all_group_with_full_category()
-    return HttpResponse(json.dumps(_all_categories))

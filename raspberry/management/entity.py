@@ -372,3 +372,4 @@ def add_taobao_item_for_entity(request, entity_id):
             image_urls = _image_urls
         ) 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+

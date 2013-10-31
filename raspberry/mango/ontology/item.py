@@ -2,6 +2,7 @@
 from models import Item as ItemDocument
 from models import TaobaoItem as TaobaoItemDocument
 import datetime
+import time 
 
 class Item(object):
     
@@ -92,3 +93,19 @@ class Item(object):
         if self.__item_obj.source == 'taobao':
             _context = self.__load_taobao_item()
         return _context    
+    
+    @classmethod
+    def find(cls, offset = 0, count = 30):
+        _hdl = ItemDocument.objects
+        _item_list = []
+        for _doc in _hdl.order_by('-created_time')[offset : offset + count]:
+            _item = {
+                'item_id' : str(_doc.id),
+                'taobao_id' : _doc.taobao_id,
+                'entity_id' : _doc.entity_id
+            }
+            _item_list.append(_item)
+
+        
+        return _item_list
+

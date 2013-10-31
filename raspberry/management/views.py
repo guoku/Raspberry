@@ -8,6 +8,7 @@ from django.template import RequestContext
 from candidate import *
 from category import *
 from entity import *
+from sync import *
 
 def index(request):
     if request.user.is_authenticated():
