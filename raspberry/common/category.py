@@ -54,6 +54,14 @@ class RBCategory(object):
              
         self.__category_obj.save()
 
+    @staticmethod
+    def create_group(title, status = 1):
+        _category_group_obj = RBCategoryGroupModel.objects.create(
+            title = title,
+            status = status
+        )
+        return _category_group_obj.id
+    
     @classmethod
     def create(cls, title, group_id, status = 1):
         _category_obj = RBCategoryModel.objects.create(

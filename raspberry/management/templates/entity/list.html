@@ -3,31 +3,38 @@
 
 {% block content %}
     <div class="span3">
-        <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-                <li class="nav-header">操作</li>
-                <li>
-                    <a href="{% url 'management.views.new_entity' %}?cid={{category_context.category_id}}" target=_blank>
-                        添加商品 - {{ category_context.category_title }}
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'management.views.edit_category' category_context.category_id %}" target=_blank>
-                        编辑分类 - {{ category_context.category_title }}
-                    </a>
-                </li>
-            </ul>
-        </div>
+        {% if category_context != None %}
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li class="nav-header">操作</li>
+                    <li>
+                        <a href="{% url 'management.views.new_entity' %}?cid={{category_context.category_id}}" target=_blank>
+                            添加商品 - {{ category_context.category_title }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'management.views.edit_category' category_context.category_id %}" target=_blank>
+                            编辑分类 - {{ category_context.category_title }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
                 <li class="nav-header">分类组</li>
                 {% for group in category_groups %}
-                    <li{%if group.group_id == category_context.group_id%} class="active"{%endif%}>
+                    <li{%if group.group_id == category_group_id%} class="active"{%endif%}>
                         <a href="{% url 'management.views.entity_list' %}?gid={{group.group_id}}">
                             {{ group.title }}({{ group.category_count }})
                         </a>
                     </li>
                 {% endfor %}
+                <li>
+                    <a href="{% url 'management.views.create_category_group' %}">
+                        +
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

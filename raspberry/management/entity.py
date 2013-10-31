@@ -267,7 +267,22 @@ def entity_list(request):
         )
     else:
         _categories = RBCategory.find(group_id = int(_group_id))
-        return HttpResponseRedirect(reverse('management.views.entity_list') + '?cid=' + str(_categories[0]['category_id'])) 
+        _category_groups = RBCategory.allgroups()
+        if len(_categories) == 0:
+            return render_to_response( 
+                'entity/list.html', 
+                {
+                    'active_division' : 'entity',
+                    'category_context' : None,
+                    'category_groups' : _category_groups,
+                    'categories' : _categories,
+                    'category_group_id' : int(_group_id),
+                    'entity_context_list' : [],
+                },
+                context_instance = RequestContext(request)
+            )
+        else:
+            return HttpResponseRedirect(reverse('management.views.entity_list') + '?cid=' + str(_categories[0]['category_id'])) 
 
 @login_required
 def unbind_taobao_item_from_entity(request, entity_id, item_id):

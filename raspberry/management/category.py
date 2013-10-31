@@ -16,6 +16,23 @@ import json
 from common.category import RBCategory
 
 @login_required
+def create_category_group(request):
+    if request.method == 'GET':
+        return render_to_response( 
+            'category/create_group.html', 
+            {
+                'active_division' : 'category',
+            },
+            context_instance = RequestContext(request)
+        )
+    else:
+        _title = request.POST.get("title", None)
+        _category_group_id = RBCategory.create_group(
+            title = _title
+        )
+        return HttpResponseRedirect(reverse('management.views.entity_list') + '?gid=' + str(_category_group_id))
+
+@login_required
 def category_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id != None:
