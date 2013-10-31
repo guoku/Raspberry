@@ -44,10 +44,16 @@ class RBMobileNote(RBNote):
             _context['title'] = _candidate_context['title']
             _context['category_id'] = _candidate_context['category_id']
             _context['category_text'] = _candidate_context['category_text']
+            if request_user_id and _candidate.ask_already(request_user_id):
+                _context['ask_already'] = 1
+            else:
+                _context['ask_already'] = 0
+                
+                
             
         return _context 
     
-    def read_note_full_context(self, note_id, request_user_id = None):
+    def read_note_full_context(self, request_user_id = None):
         _context = {}
         _context['note'] = self.read(request_user_id)
         _context['poker_list'] = []

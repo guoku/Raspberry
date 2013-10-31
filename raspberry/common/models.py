@@ -132,6 +132,16 @@ class Candidate(models.Model):
     class Meta:
         ordering = ['-created_time']
 
+class Candidate_Ask(models.Model):
+    candidate = models.ForeignKey(Candidate) 
+    user = models.ForeignKey(User)
+    created_time = models.DateTimeField(auto_now_add = True, db_index=True)
+    
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('candidate', 'user')
+
+
 class Candidate_Note(models.Model):
     candidate = models.ForeignKey(Candidate) 
     note = models.ForeignKey(Note)

@@ -64,3 +64,15 @@ def category_candidate(request, category_id):
             
         return SuccessJsonResponse(_rslt)
 
+def ask_link_for_candidate(request, candidate_id, target_status):
+    if request.method == "POST":
+        _session = request.POST.get('session', None)
+        
+        _request_user_id = Session_Key.objects.get_user_id(_session)
+        _rslt = { 
+            'candidate' : candidate_id 
+        }
+        if target_status == '1':
+            RBMobileCandidate(candidate_id).ask(_request_user_id)
+            _rslt['ask_already'] = 1
+        return SuccessJsonResponse(_rslt)

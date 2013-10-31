@@ -1,6 +1,7 @@
 # coding=utf8
 from models import Candidate as RBCandidateModel
 from models import Candidate_Note as RBCandidateNoteModel
+from models import Candidate_Ask as RBCandidateAskModel
 from django.conf import settings
 from django.db.models import Sum
 from mango.client import MangoApiClient
@@ -127,6 +128,20 @@ class RBCandidate(object):
         self.__ensure_candidate_obj()
         self.candidate_obj.delete()
         
+    def ask_already(self, user_id):
+        if RBCandidateAskModel.objects.filter(candidate_id = self.candidate_id, user_id = user_id).count() > 0:
+            return True
+        return False
+    
+    def ask(self, user_id):
+        try:
+            RBCandidateAskModel.objects.create(
+                candidate_id = self.candidate_id,
+                user_id = user_id
+            )
+            return True
+        except: 
+            pass
    
     @classmethod
     def find(cls, creator_id = None, category_id = None, timestamp = None, offset = 0, count = 30, pending_only = False, approve_already = False):
