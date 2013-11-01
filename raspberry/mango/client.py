@@ -38,12 +38,14 @@ class MangoApiClient(object):
         _item = Item(item_id)
         return _item.read()
          
-    def update_entity(self, entity_id, brand = None, title = None, intro = None, price = None):
-        Entity(entity_id).update(
+    def update_entity(self, entity_id, brand = None, title = None, intro = None, price = None, chief_image_id = None):
+        _entity = Entity(entity_id)
+        _entity.update(
             brand = brand,
             title = title,
             intro = intro,
-            price = price
+            price = price,
+            chief_image_id = chief_image_id
         )
     
     def sort_entity_by_price(self, entity_id_list, reverse = False):

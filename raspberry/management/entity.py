@@ -180,6 +180,7 @@ def edit_entity(request, entity_id):
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
         _price = request.POST.get("price", None)
+        _chief_image_id = request.POST.get("chief_image", None)
         if _price:
             _price = float(_price)
         _category_id = request.POST.get("category_id", None)
@@ -191,7 +192,8 @@ def edit_entity(request, entity_id):
             brand = _brand,
             title = _title,
             intro = _intro,
-            price = _price
+            price = _price,
+            chief_image_id = _chief_image_id
         )
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : entity_id })) 
 

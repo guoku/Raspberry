@@ -118,7 +118,7 @@ class RBEntity(object):
         return _context    
     
     
-    def update(self, category_id = None, brand = None, title = None, intro = None, price = None):
+    def update(self, category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None):
         if brand != None or title != None or intro != None:
             _mango_client = MangoApiClient()
             _base_info = _mango_client.read_entity(self.entity_id)
@@ -129,7 +129,8 @@ class RBEntity(object):
                     brand = brand, 
                     title = title, 
                     intro = intro,
-                    price = price
+                    price = price,
+                    chief_image_id = chief_image_id
                 )
         
         if category_id != None:

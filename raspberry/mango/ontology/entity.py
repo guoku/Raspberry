@@ -131,7 +131,7 @@ class Entity(object):
         _context['item_id_list'] = Item.get_item_id_list_by_entity_id(self.__entity_id) 
         return _context    
     
-    def update(self, brand = None, title = None, intro = None, price = None):
+    def update(self, brand = None, title = None, intro = None, price = None, chief_image_id = None):
         self.__ensure_entity_obj()
         if brand != None:
             self.__entity_obj.brand = brand
@@ -141,8 +141,18 @@ class Entity(object):
             self.__entity_obj.intro = intro
         if price != None:
             self.__entity_obj.price = price
+    
+        if chief_image_id != None and chief_image_id != self.__entity_obj.images.chief_id:
+            if self.__entity_obj.images.chief_id not in self.__entity_obj.images.detail_ids:
+                self.__entity_obj.images.detail_ids.insert(0, self.__entity_obj.images.chief_id)
+            if chief_image_id in self.__entity_obj.images.detail_ids:
+                self.__entity_obj.images.detail_ids.remove(chief_image_id)
+            self.__entity_obj.images.chief_id = chief_image_id
+            
+
         self.__entity_obj.updated_time = datetime.datetime.now()
         self.__entity_obj.save()
+        
 
     @staticmethod
     def sort_by_price(entity_id_list, reverse = False):

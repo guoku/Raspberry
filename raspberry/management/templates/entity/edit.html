@@ -27,31 +27,31 @@
             <form class="well form-horizontal" action="{% url 'management.views.edit_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
-                        <label class="control-label" for="entity_hash">Hash</label>
+                        <label class="control-label" for="entity_hash">Hash:</label>
                         <div class="controls">
                             <input class="input-xxlarge" type="text" id="entity_hash" name="entity_hash" value="{{ entity_context.entity_hash }}" disabled/>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="brand">品牌</label>
+                        <label class="control-label" for="brand">品牌:</label>
                         <div class="controls">
                             <input class="input-xxlarge" type="text" id="brand" name="brand" value="{{ entity_context.brand }}" onChange="loadSimilarEntity(null);"/>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="title">名称</label>
+                        <label class="control-label" for="title">名称:</label>
                         <div class="controls">
                             <input class="input-xxlarge" type="text" id="title" name="title" value="{{ entity_context.title }}" />
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="intro">简介</label>
+                        <label class="control-label" for="intro">简介:</label>
                         <div class="controls">
                             <textarea class="input-xxlarge" style="height:120px" type="text" id="intro" name="intro" >{{ entity_context.intro }}</textarea>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="price">价格</label>
+                        <label class="control-label" for="price">价格:</label>
                         <div class="controls">
                             <input class="input-xxlarge" type="text" id="price" name="price" value="{{ entity_context.price }}" />
                         </div>
@@ -62,6 +62,17 @@
                             <select id="catagory" name="category_id">
                                 {% for category in category_list %}
                                     <option {%if category.category_id == entity_context.category_id%}selected="selected" {%endif%}value="{{ category.category_id }}">{{ category.category_title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="chief_image">主图:</label>
+                        <div class="controls">
+                            <select id="catagory" name="chief_image">
+                                <option selected="selected" value="{{ entity_context.chief_image.id }}">1 - {{ entity_context.chief_image.id }}</option>
+                                {% for detail_image in entity_context.detail_images %}
+                                    <option value="{{ detail_image.id }}">{{ forloop.counter|add:1 }} - {{ detail_image.id }}</option>
                                 {% endfor %}
                             </select>
                         </div>
