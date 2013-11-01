@@ -10,6 +10,7 @@ from note import RBNote
 from hashlib import md5
 import datetime
 import urllib
+import random 
 import time
 
 
@@ -149,6 +150,15 @@ class RBEntity(object):
             _mango_client = MangoApiClient()
             _entity_id_list = _mango_client.sort_entity_by_price(_entity_id_list, reverse = reverse)
         return _entity_id_list
+
+    @classmethod
+    def roll(cls, category_id = None, count = 10):
+        _hdl = RBEntityModel.objects.all()
+        if category_id != None:
+            _hdl = _hdl.filter(category_id = category_id)
+        _entity_id_list = map(lambda x: x.entity_id, _hdl)
+        return random.sample(_entity_id_list, count) 
+
         
     @classmethod
     def count(cls, category_id = None):

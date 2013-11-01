@@ -155,3 +155,21 @@ def search(request):
         
         return SuccessJsonResponse(_rslt)
 
+
+def guess_entity(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _category_id = request.GET.get('cid', None)
+        _count = int(request.GET.get('count', '5'))
+        if _category_id != None:
+            _category_id = int(_category_id)
+        _rslt = []
+        for _entity_id in RBMobileEntity.roll(category_id = _category_id, count = _count):
+            _rslt.append(RBMobileEntity(_entity_id).read(_request_user_id))
+        
+        return SuccessJsonResponse(_rslt)
+
