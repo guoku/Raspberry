@@ -3,12 +3,13 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from common.category import RBCategory
 from common.entity import RBEntity
 from mango.client import MangoApiClient
+from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 import datetime
 import json
 
 def sync_category(request):
     _all_categories = RBCategory.all_group_with_full_category()
-    return HttpResponse(json.dumps(_all_categories))
+    return SuccessJsonResponse(_all_categories)
 
 def sync_taobao_item(request):
     _offset = int(request.GET.get('offset', '0'))
@@ -19,7 +20,7 @@ def sync_taobao_item(request):
         offset = _offset,
         count = _count
     )
-    return HttpResponse(json.dumps(_taobao_id_list))
+    return SuccessJsonResponse(_taobao_id_list)
 
 def create_entity_from_offline(request):
     if request.method == 'POST':
@@ -66,11 +67,11 @@ def create_entity_from_offline(request):
                 'entity_id' : _entity.entity_id,
                 'status' : 'success'
             }
-            return HttpResponse(json.dumps(_rslt))
+            return SuccessJsonResponse(_rslt)
         else:
             _rslt = {
                 'message' : 'item_exist', 
                 'status' : 'failed'
             }
-            return HttpResponse(json.dumps(_rslt))
+            return SuccessJsonResponse(_rslt)
 

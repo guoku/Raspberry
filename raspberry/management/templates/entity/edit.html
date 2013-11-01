@@ -9,13 +9,18 @@
         {% endif %}
         <div class="row-fluid" id="chlid-images">
             <ul class="thumbnails">
-                <li class="span4">
-                    <div class="thumbnail">
-                        <a href="" >
-                            <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image }}" alt="" style="max-width: 280px;max-height: 280px">
-                        </a>
-                    </div>
+                <li> 
+                    <a href="" >
+                        <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 220px;max-height: 220px">
+                    </a>
                 </li>
+                {% for detail_image in entity_context.detail_images %}
+                    <li>
+                        <a href="" >
+                            <img id="main-image" class="img-polaroid" src="{{ detail_image.url }}" alt="" style="max-width: 200px;max-height: 200px">
+                        </a>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
         <div>

@@ -22,6 +22,15 @@ class RBMobileEntity(RBEntity):
 
     def read(self, request_user_id = None):
         _context = super(RBMobileEntity, self).read(json = True)
+
+        _context['chief_image'] = _context['chief_image']['url']
+        if _context.has_key('detail_images'):
+            _detail_images_clean = []
+            for image in _context['detail_images']:
+                _detail_images_clean.append(image['url'])
+            _context['detail_images'] = _detail_images_clean
+            
+            
         
         _context['like_already'] = 0
         if request_user_id: 
