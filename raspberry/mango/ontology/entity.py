@@ -26,6 +26,26 @@ class Entity(object):
         )
         return _taobao_item_obj.get_item_id()
     
+    def add_image(self, image_url = None, image_data = None, for_chief = False):
+        _image_obj = Image.create(
+            source = 'gk_management', 
+            origin_url = image_url,
+            image_data = image_data
+        )
+        self.__ensure_entity_obj()
+        if for_chief:
+            if self.__entity_obj.images.chief_id not in self.__entity_obj.images.detail_ids:
+                self.__entity_obj.images.detail_ids.insert(0, self.__entity_obj.images.chief_id)
+            if _image_obj.get_image_id() in self.__entity_obj.images.detail_ids:
+                self.__entity_obj.images.detail_ids.remove(_image_obj.get_image_id())
+            self.__entity_obj.images.chief_id = _image_obj.get_image_id()
+        else:
+            if not _image_obj.get_image_id() in self.__entity_obj.images.detail_ids:
+                self.__entity_obj.images.detail_ids.append(_image_obj.get_image_id())
+        self.__entity_obj.save() 
+        
+    
+    
     def add_taobao_item(self, taobao_item_info, image_urls):
         _image_ids = []
         for _image_url in image_urls:
@@ -72,7 +92,7 @@ class Entity(object):
             _image_id = Image.get_image_id_by_origin_url(_image_url)
             if _image_id == None:
                 _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
-                _image_id = _image_obj.id
+                _image_id = _image_obj.image_id
             _detail_image_ids.append(_image_id)
         
         _price = taobao_item_info['price']

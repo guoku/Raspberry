@@ -26,13 +26,16 @@ class Entity(Document):
 
 class Image(Document):
     source = StringField(required = True)
-    origin_url  = URLField(required = False, unique = True)
+    origin_url  = URLField(required = False)
+    store_hash = StringField(required = False)
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
         'db_alias' : 'mango',
         'indexes' : [ 
-            'source' 
+            'source',
+            'origin_url',
+            'store_hash',
         ],
         'allow_inheritance' : True
     }

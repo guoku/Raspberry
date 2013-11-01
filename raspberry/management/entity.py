@@ -125,7 +125,9 @@ def create_entity_by_taobao_item(request):
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
         _category_id = int(request.POST.get("category_id", None))
-        _candidate_id = int(request.POST.get("candidate_id", None))
+        _candidate_id = request.POST.get("candidate_id", None)
+        if _candidate_id != None:
+            _candidate_id = int(_candidate_id)
         _detail_image_urls = request.POST.getlist("image_url")
         
         if _chief_image_url in _detail_image_urls:
@@ -349,6 +351,21 @@ def load_taobao_item_for_entity(request, entity_id):
         else:
             return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
     
+@login_required
+def add_image_for_entity(request, entity_id):
+    if request.method == "POST":
+        _image_file = request.FILES.get('image', None)
+        if hasattr(_image_file, 'chunks'):
+            _image_data = ''.join(chunk for chunk in _image_file.chunks())
+        else:
+            _image_data = _image_file.read()
+        _entity = RBEntity(entity_id)
+        _entity.add_image(
+            image_data = _image_data
+        )
+    
+    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : entity_id }))
+
 @login_required
 def add_taobao_item_for_entity(request, entity_id):
     if request.method == 'POST':

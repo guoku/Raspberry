@@ -79,6 +79,10 @@ class RBEntity(object):
         return _inst
 
     
+    def add_image(self, image_url = None, image_data = None, for_chief = False):
+        _mango_client = MangoApiClient()
+        _item_id = _mango_client.add_image_for_entity(self.entity_id, image_url, image_data, for_chief) 
+    
     def add_taobao_item(self, taobao_item_info, image_urls = []):
         _mango_client = MangoApiClient()
         _item_id = _mango_client.add_taobao_item_for_entity(self.entity_id, taobao_item_info, image_urls)

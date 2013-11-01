@@ -22,6 +22,13 @@ class MangoApiClient(object):
         return _entity.get_entity_id()
         
 
+    def add_image_for_entity(self, entity_id, image_url = None, image_data = None, for_chief = False): 
+        _item_id = Entity(entity_id).add_image(
+            image_url = image_url,
+            image_data = image_data,
+            for_chief = for_chief
+        )
+    
     def add_taobao_item_for_entity(self, entity_id, taobao_item_info, image_urls):
         _item_id = Entity(entity_id).add_taobao_item(
             taobao_item_info = taobao_item_info,
