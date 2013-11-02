@@ -46,10 +46,23 @@
                     <button type="submit" class="btn btn-primary">更新</button>
                 </div>
             </form>
+            <form class="well form-horizontal" action="{% url 'management.views.add_image_for_entity' entity_context.entity_id %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="image">添加新图片(从链接):</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="image_url" name="image_url" value="" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
             <form class="well form-horizontal" action="{% url 'management.views.add_image_for_entity' entity_context.entity_id %}" method="POST" enctype="multipart/form-data">
                 <fieldset>
                     <div class="control-group">
-                        <label class="control-label" for="image">添加新图片:</label>
+                        <label class="control-label" for="image">上传新图片:</label>
                         <div class="controls">
                             <input type="file" id="image" name="image" value="" />
                         </div>

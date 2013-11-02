@@ -189,7 +189,6 @@ def edit_entity(request, entity_id):
         if _category_id:
             _category_id = int(_category_id)
         _entity = RBEntity(entity_id)
-        print _chief_image_id
         _entity.update(
             category_id = _category_id,
             brand = _brand,
@@ -368,12 +367,17 @@ def load_taobao_item_for_entity(request, entity_id):
 def add_image_for_entity(request, entity_id):
     if request.method == "POST":
         _image_file = request.FILES.get('image', None)
-        if hasattr(_image_file, 'chunks'):
-            _image_data = ''.join(chunk for chunk in _image_file.chunks())
+        if _image_file != None:
+            if hasattr(_image_file, 'chunks'):
+                _image_data = ''.join(chunk for chunk in _image_file.chunks())
+            else:
+                _image_data = _image_file.read()
         else:
-            _image_data = _image_file.read()
+            _image_data = None 
+        _image_url= request.POST.get('image_url', None)
         _entity = RBEntity(entity_id)
         _entity.add_image(
+            image_url = _image_url,
             image_data = _image_data
         )
     
