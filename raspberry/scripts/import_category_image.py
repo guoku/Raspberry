@@ -1,3 +1,4 @@
+# coding=utf8
 import datetime
 import MySQLdb
 import os
@@ -19,19 +20,19 @@ for row in cur.fetchall():
         'category_id' : row[0]
     }
 
-image_path = '../../../data/100-icon'
+image_path = '../../../data/11.3icon'
 for root, dirs, files in os.walk(image_path):
     for f in files:
         if '@2x.png' in f:
             title = f.replace('@2x.png', '')
-            title = title.replace(':', '/')
+            title = title.replace(' ', '')
             if not categories.has_key(title):
                 print title
             else:
                 categories[title]['large'] = f
         else:
             title = f.replace('.png', '')
-            title = title.replace(':', '/')
+            title = title.replace(' ', '/')
             if not categories.has_key(title):
                 print title
             else:
