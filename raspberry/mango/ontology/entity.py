@@ -43,7 +43,15 @@ class Entity(object):
             if not _image_obj.get_image_id() in self.__entity_obj.images.detail_ids:
                 self.__entity_obj.images.detail_ids.append(_image_obj.get_image_id())
         self.__entity_obj.save() 
-        
+    
+    def del_image(self, image_id):
+        self.__ensure_entity_obj()
+        if image_id in self.__entity_obj.images.detail_ids:
+            self.__entity_obj.images.detail_ids.remove(image_id)
+        if image_id == self.__entity_obj.images.chief_id and len(self.__entity_obj.images.detail_ids) > 0:
+            self.__entity_obj.images.chief_id = self.__entity_obj.images.detail_ids[0]
+            del self.__entity_obj.images.detail_ids[0]
+        self.__entity_obj.save()
     
     
     def add_taobao_item(self, taobao_item_info, image_urls):

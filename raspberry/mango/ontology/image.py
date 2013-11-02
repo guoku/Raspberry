@@ -3,6 +3,7 @@ from django.conf import settings
 from models import Image as ImageModel
 from hashlib import md5
 from pymogile import Client
+from wand.image import Image as WandImage
 import datetime
 
 class Image(object):
@@ -19,6 +20,20 @@ class Image(object):
         
         def get_hash_key(self):
             return self.__key
+    
+        def __crop_square(self, data):
+            _img = WandImage(blob = data)
+            _delta = _img.width - _img.height
+            if _delta > 0:
+                _img.crop(_delta / 2 , 0, width = _img.height, height = _img.height)
+            elif _delta < 0:
+                _img.crop(0, -_delta / 2, width = _img.width, height = _img.width)
+            return _img.make_blob()
+        
+        def __resize(self, data, w, h):
+            _img = WandImage(blob = data)
+            _img.resize(w, h)
+            return _img.make_blob()
         
         @classmethod
         def create(cls, origin_data):
@@ -34,8 +49,10 @@ class Image(object):
             return settings.IMAGE_SERVER + self.__origin_store_key
     
         def write(self, origin_data): 
+            _square_data = self.__crop_square(origin_data)
+            _clean_data = self.__resize(_square_data, 310, 310)
             _fp = self.__datastore.new_file(self.__origin_store_key)
-            _fp.write(origin_data)
+            _fp.write(_clean_data)
             _fp.close()
     
     def __init__(self, image_id):

@@ -23,7 +23,7 @@ class Avatar(object):
         _img = Image(blob = data)
         _delta = _img.width - _img.height
         if _delta > 0:
-            _img.crop(delta / 2 , 0, width = _img.height, height = _img.height)
+            _img.crop(_delta / 2 , 0, width = _img.height, height = _img.height)
         elif _delta < 0:
             _img.crop(0, 0, width = _img.width, height = _img.width)
         return _img.make_blob()

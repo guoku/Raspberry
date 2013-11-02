@@ -189,6 +189,7 @@ def edit_entity(request, entity_id):
         if _category_id:
             _category_id = int(_category_id)
         _entity = RBEntity(entity_id)
+        print _chief_image_id
         _entity.update(
             category_id = _category_id,
             brand = _brand,
@@ -197,8 +198,20 @@ def edit_entity(request, entity_id):
             price = _price,
             chief_image_id = _chief_image_id
         )
-        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : entity_id })) 
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+@login_required
+def edit_entity_image(request, entity_id):
+    if request.method == 'GET':
+        _entity_context = RBEntity(entity_id).read()
+        return render_to_response( 
+            'entity/edit_image.html', 
+            {
+                'active_division' : 'entity',
+                'entity_context' : _entity_context,
+            },
+            context_instance = RequestContext(request)
+        )
         
 @login_required
 def search_entity(request):
@@ -364,7 +377,17 @@ def add_image_for_entity(request, entity_id):
             image_data = _image_data
         )
     
-    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : entity_id }))
+    return HttpResponseRedirect(reverse('management.views.edit_entity_image', kwargs = { "entity_id" : entity_id }))
+
+@login_required
+def del_image_from_entity(request, entity_id, image_id):
+    if request.method == "GET":
+        _entity = RBEntity(entity_id)
+        _entity.del_image(
+            image_id = image_id 
+        )
+    
+    return HttpResponseRedirect(reverse('management.views.edit_entity_image', kwargs = { "entity_id" : entity_id }))
 
 @login_required
 def add_taobao_item_for_entity(request, entity_id):

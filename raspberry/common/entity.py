@@ -83,6 +83,10 @@ class RBEntity(object):
         _mango_client = MangoApiClient()
         _item_id = _mango_client.add_image_for_entity(self.entity_id, image_url, image_data, for_chief) 
     
+    def del_image(self, image_id):
+        _mango_client = MangoApiClient()
+        _item_id = _mango_client.del_image_from_entity(self.entity_id, image_id) 
+    
     def add_taobao_item(self, taobao_item_info, image_urls = []):
         _mango_client = MangoApiClient()
         _item_id = _mango_client.add_taobao_item_for_entity(self.entity_id, taobao_item_info, image_urls)
@@ -123,19 +127,16 @@ class RBEntity(object):
     
     
     def update(self, category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None):
-        if brand != None or title != None or intro != None:
+        if brand != None or title != None or intro != None or chief_image_id != None:
             _mango_client = MangoApiClient()
-            _base_info = _mango_client.read_entity(self.entity_id)
-            
-            if brand != None or title != None or intro != None or price != None:
-                _mango_client.update_entity(
-                    entity_id = self.entity_id, 
-                    brand = brand, 
-                    title = title, 
-                    intro = intro,
-                    price = price,
-                    chief_image_id = chief_image_id
-                )
+            _mango_client.update_entity(
+                entity_id = self.entity_id, 
+                brand = brand, 
+                title = title, 
+                intro = intro,
+                price = price,
+                chief_image_id = chief_image_id
+            )
         
         if category_id != None:
             self.__ensure_entity_obj()
