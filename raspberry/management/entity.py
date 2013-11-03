@@ -389,7 +389,7 @@ def add_image_for_entity(request, entity_id):
             image_data = _image_data
         )
     
-    return HttpResponseRedirect(reverse('management.views.edit_entity_image', kwargs = { "entity_id" : entity_id }))
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def del_image_from_entity(request, entity_id, image_id):
@@ -399,7 +399,7 @@ def del_image_from_entity(request, entity_id, image_id):
             image_id = image_id 
         )
     
-    return HttpResponseRedirect(reverse('management.views.edit_entity_image', kwargs = { "entity_id" : entity_id }))
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def add_taobao_item_for_entity(request, entity_id):
