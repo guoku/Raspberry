@@ -71,5 +71,8 @@
                 </tbody>
             </table>
         </div>
+        {% if paginator %}
+            {% display_paginator paginator %}
+        {% endif %}
     </div>
 {% endblock %}

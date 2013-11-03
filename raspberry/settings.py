@@ -109,10 +109,6 @@ INSTALLED_APPS = (
     'mango',
     'mobile',
 )
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.SHA1PasswordHasher',
-)
 
 LOGGING = {
     'version': 1,
