@@ -96,9 +96,9 @@ class RBCandidate(object):
     
     
     def update(self, category_id = None, category_text = None, brand = None, title = None, 
-               score = None, note_text = None, entity_id = None, image_data = None):
+               score = None, note_text = None, entity_id = None, image_data = None, weight = None):
                 
-        if category_id != None or category_text != None or brand != None or title != None or entity_id != None:
+        if category_id != None or category_text != None or brand != None or title != None or entity_id != None or weight != None:
             self.__ensure_candidate_obj()
             if category_id != None: 
                 self.candidate_obj.category_id = int(category_id)
@@ -110,6 +110,8 @@ class RBCandidate(object):
                 self.candidate_obj.title = title 
             if entity_id != None:
                 self.candidate_obj.entity_id = entity_id 
+            if weight != None:
+                self.candidate_obj.weight = int(weight) 
             self.candidate_obj.save()
        
         if score != None: 

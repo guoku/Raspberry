@@ -111,13 +111,15 @@ def edit_candidate(request, candidate_id):
         _category_text = request.POST.get('category_text', None)
         _score = request.POST.get('score', '0')
         _note_text = request.POST.get('note_text', None)
+        _weight = request.POST.get('weight', None)
         RBCandidate(candidate_id).update(
             category_id = _category_id, 
             category_text = _category_text, 
             brand = _brand, 
             title = _title, 
             score = _score, 
-            note_text = _note_text
+            note_text = _note_text,
+            weight = _weight
         )
         return HttpResponseRedirect(reverse('management.views.edit_candidate', kwargs = { "candidate_id" : candidate_id }))
             

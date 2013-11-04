@@ -88,12 +88,13 @@ def feed(request):
                         'note' : _note_context
                     }
                 })
-            else:
-                _rslt.append({
-                    'type' : 'candidate',
-                    'object' : {
-                        'note' : _note_context
-                    }
-                })
+            elif _note_context.has_key('candidate_id'):
+                if _note_context['candidate_weight'] >= 0: 
+                    _rslt.append({
+                        'type' : 'candidate',
+                        'object' : {
+                            'note' : _note_context
+                        }
+                    })
         
         return SuccessJsonResponse(_rslt)
