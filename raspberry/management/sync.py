@@ -62,6 +62,7 @@ def create_entity_from_offline(request):
                 title = _title,
                 intro = _intro,
                 detail_image_urls = _detail_image_urls,
+                weight = -1,
             )
             _rslt = {
                 'entity_id' : _entity.entity_id,

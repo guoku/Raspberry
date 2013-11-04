@@ -183,6 +183,7 @@ def edit_entity(request, entity_id):
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
         _price = request.POST.get("price", None)
+        _weight = int(request.POST.get("weight", '0'))
         _chief_image_id = request.POST.get("chief_image", None)
         if _price:
             _price = float(_price)
@@ -196,7 +197,8 @@ def edit_entity(request, entity_id):
             title = _title,
             intro = _intro,
             price = _price,
-            chief_image_id = _chief_image_id
+            chief_image_id = _chief_image_id,
+            weight = _weight
         )
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -256,14 +258,27 @@ def entity_list(request):
         _page_num = int(request.GET.get("p", "1"))
         _category_groups = RBCategory.allgroups()
         _category_id = int(request.GET.get("cid", "1"))
-        _para = { "cid" : _category_id }
+        _status = request.GET.get("status", "all")
+        _para = { 
+            "cid" : _category_id,
+            "status" : _status
+        }
+        if _status == "freezed":
+            _status_code = -1 
+        elif _status == "normal":
+            _status_code = 1
+        else:
+            _status_code = 0
         _category_context = RBCategory(_category_id).read()
         _category_group_id = _category_context['group_id'] 
         _categories = RBCategory.find(group_id = _category_context['group_id'])
         for _category in _categories:
             _category['entity_count'] = RBEntity.count(_category['category_id'])
     
-        _entity_id_list = RBEntity.find(_category_id)
+        _entity_id_list = RBEntity.find(
+            category_id = _category_id,
+            status = _status_code
+        )
         _paginator = Paginator(_page_num, 30, len(_entity_id_list), _para)
         _entity_context_list = [] 
         for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
@@ -280,6 +295,7 @@ def entity_list(request):
             'entity/list.html', 
             {
                 'active_division' : 'entity',
+                'status_filter' : _status, 
                 'category_context' : _category_context,
                 'category_groups' : _category_groups,
                 'categories' : _categories,

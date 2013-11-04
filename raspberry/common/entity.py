@@ -40,8 +40,8 @@ class RBEntity(object):
     
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, chief_image_url, 
-                              taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = [],
-                              candidate_id = None):
+                              taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = [], 
+                              weight = 0, candidate_id = None):
        
         _mango_client = MangoApiClient()
         _entity_id = _mango_client.create_entity_by_taobao_item(
@@ -58,7 +58,8 @@ class RBEntity(object):
             entity_id = _entity_id,
             entity_hash = _entity_hash,
             category_id = category_id,
-            creator_id = creator_id
+            creator_id = creator_id,
+            weight = weight
         )
          
         _inst = cls(_entity_obj.entity_id)
@@ -103,6 +104,7 @@ class RBEntity(object):
         _context["category_id"] = self.__entity_obj.category_id
         _context["created_time"] = self.__entity_obj.created_time
         _context["updated_time"] = self.__entity_obj.updated_time
+        _context["weight"] = self.__entity_obj.weight
         
 
         _context["total_score"] = 0 
@@ -126,7 +128,7 @@ class RBEntity(object):
         return _context    
     
     
-    def update(self, category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None):
+    def update(self, category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None):
         if brand != None or title != None or intro != None or chief_image_id != None:
             _mango_client = MangoApiClient()
             _mango_client.update_entity(
@@ -138,18 +140,24 @@ class RBEntity(object):
                 chief_image_id = chief_image_id
             )
         
-        if category_id != None:
+        if category_id != None or weight != None:
             self.__ensure_entity_obj()
             self.__entity_obj.category_id = int(category_id)
+            self.__entity_obj.weight = int(weight)
             self.__entity_obj.save()
             
     @classmethod
-    def find(cls, category_id = None, timestamp = None, offset = 0, count = 30, sort_by = None, reverse = False):
+    def find(cls, category_id = None, timestamp = None, status = 0, offset = 0, count = 30, sort_by = None, reverse = False):
         _hdl = RBEntityModel.objects
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
+        if status < 0:
+            _hdl = _hdl.filter(weight__lt = 0)
+        elif status > 0:
+            _hdl = _hdl.filter(weight__gte = 0)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
+            
         _hdl = _hdl.order_by('-created_time')[offset : offset + count]
         _entity_id_list = map(lambda x: x.entity_id, _hdl)
         if sort_by == 'price':
