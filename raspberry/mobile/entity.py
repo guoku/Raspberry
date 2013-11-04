@@ -52,6 +52,7 @@ def category_entity(request, category_id):
         
         _entity_id_list = RBMobileEntity.find(
             category_id = category_id,
+            status = 1,
             sort_by = _sort_by,
             reverse = _reverse
         )

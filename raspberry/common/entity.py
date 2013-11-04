@@ -167,10 +167,12 @@ class RBEntity(object):
 
     @classmethod
     def roll(cls, category_id = None, count = 10):
-        _hdl = RBEntityModel.objects.all()
+        _hdl = RBEntityModel.objects.filter(weight__gte = 0)
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
         _entity_id_list = map(lambda x: x.entity_id, _hdl)
+        if len(_entity_id_list) <= count:
+            return _entity_id_list
         return random.sample(_entity_id_list, count) 
 
         
