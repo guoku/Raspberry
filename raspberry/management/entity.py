@@ -19,6 +19,7 @@ from common.entity import RBEntity
 from common.item import RBItem
 from common.note import RBNote
 from common.user import RBUser
+from utils.paginator import Paginator
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -233,12 +234,16 @@ def search_entity(request):
             _entity_context['buy_link'] = ''
         _entity_context_list.append(_entity_context)
     
+    _category_context_list = RBCategory.find(like_word = _query)
+    
     return render_to_response( 
         'entity/search.html', 
         {
             'active_division' : 'entity',
+            'query' : _query,
             'category_groups' : _category_groups,
             'entity_context_list' : _entity_context_list,
+            'category_context_list' : _category_context_list,
         },
         context_instance = RequestContext(request)
     )
@@ -248,8 +253,10 @@ def search_entity(request):
 def entity_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id == None:
+        _page_num = int(request.GET.get("p", "1"))
         _category_groups = RBCategory.allgroups()
         _category_id = int(request.GET.get("cid", "1"))
+        _para = { "cid" : _category_id }
         _category_context = RBCategory(_category_id).read()
         _category_group_id = _category_context['group_id'] 
         _categories = RBCategory.find(group_id = _category_context['group_id'])
@@ -257,8 +264,9 @@ def entity_list(request):
             _category['entity_count'] = RBEntity.count(_category['category_id'])
     
         _entity_id_list = RBEntity.find(_category_id)
+        _paginator = Paginator(_page_num, 30, len(_entity_id_list), _para)
         _entity_context_list = [] 
-        for _entity_id in _entity_id_list:
+        for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
             _entity = RBEntity(_entity_id)
             _entity_context = _entity.read()
             if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
@@ -267,7 +275,6 @@ def entity_list(request):
             else:
                 _entity_context['buy_link'] = ''
             _entity_context_list.append(_entity_context)
-        
         
         return render_to_response( 
             'entity/list.html', 
@@ -278,6 +285,7 @@ def entity_list(request):
                 'categories' : _categories,
                 'category_group_id' : _category_group_id,
                 'entity_context_list' : _entity_context_list,
+                'paginator' : _paginator
             },
             context_instance = RequestContext(request)
         )
@@ -381,7 +389,7 @@ def add_image_for_entity(request, entity_id):
             image_data = _image_data
         )
     
-    return HttpResponseRedirect(reverse('management.views.edit_entity_image', kwargs = { "entity_id" : entity_id }))
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def del_image_from_entity(request, entity_id, image_id):
@@ -391,7 +399,7 @@ def del_image_from_entity(request, entity_id, image_id):
             image_id = image_id 
         )
     
-    return HttpResponseRedirect(reverse('management.views.edit_entity_image', kwargs = { "entity_id" : entity_id }))
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def add_taobao_item_for_entity(request, entity_id):

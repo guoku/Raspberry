@@ -28,3 +28,9 @@ def count(value):
     return len(value)
 register.filter(count)
 
+def display_paginator(paginator):
+    return {
+        "paginator" : paginator,
+    }
+register.inclusion_tag("partial_paginator.html")(display_paginator)
+

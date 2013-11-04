@@ -2,6 +2,7 @@
 from models import Category_Group as RBCategoryGroupModel
 from models import Category as RBCategoryModel
 from django.conf import settings
+from django.db.models import Q
 from hashlib import md5
 from pymogile import Client
 from wand.image import Image
@@ -94,11 +95,13 @@ class RBCategory(object):
         
     
     @staticmethod
-    def find(group_id = None):
+    def find(group_id = None, like_word = None):
+        _hdl = RBCategoryModel.objects.all()
         if group_id != None: 
             _hdl = RBCategoryModel.objects.filter(group_id = group_id)
-        else:
-            _hdl = RBCategoryModel.objects.all()
+        if like_word != None: 
+            _q = Q(title__icontains = like_word)
+            _hdl = RBCategoryModel.objects.filter(_q)
         _rslt = []
         for _cat_obj in _hdl:
             if _cat_obj.image_store_hash:
