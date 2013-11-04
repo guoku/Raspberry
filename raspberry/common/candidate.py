@@ -73,6 +73,7 @@ class RBCandidate(object):
         _context["entity_id"] = self.candidate_obj.entity_id
         _context["created_time"] = self.candidate_obj.created_time
         _context["updated_time"] = self.candidate_obj.updated_time
+        _context["weight"] = self.candidate_obj.weight
         
 
         self.__ensure_candidate_note_obj()

@@ -121,13 +121,13 @@ class Entity(object):
         _inst = cls(str(_entity_obj.id))
         _inst.__entity_obj = _entity_obj
         
-        try:
-            _item_images = _detail_image_ids
-            _item_images.append(_chief_image_id)
-            _taobao_item_id = _inst._insert_taobao_item(taobao_item_info, _item_images)
-        except Exception, e:
-            _entity_obj.delete()
-            raise e
+#        try:
+        _item_images = _detail_image_ids
+        _item_images.append(_chief_image_id)
+        _taobao_item_id = _inst._insert_taobao_item(taobao_item_info, _item_images)
+#        except Exception, e:
+#            _entity_obj.delete()
+#            raise e
 
         return _inst
 

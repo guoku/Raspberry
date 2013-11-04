@@ -52,7 +52,7 @@ class Category(models.Model):
 class Entity(models.Model):
     entity_id = models.CharField(max_length = 32, unique = True, db_index = True)
     entity_hash = models.CharField(max_length = 32, unique = True, db_index = True)
-    creator = models.ForeignKey(User) 
+    creator = models.ForeignKey(User, null = True) 
     category = models.ForeignKey(Category)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
@@ -129,6 +129,7 @@ class Candidate(models.Model):
     entity_id = models.CharField(max_length = 32, default = '', db_index = True)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
+    weight = models.IntegerField(default = 0, db_index = True)
     
     class Meta:
         ordering = ['-created_time']

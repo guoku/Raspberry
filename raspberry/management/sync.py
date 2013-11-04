@@ -66,6 +66,7 @@ def create_entity_from_offline(request):
             )
             _rslt = {
                 'entity_id' : _entity.entity_id,
+                'item_id' : _entity.read()['item_id_list'][0],
                 'status' : 'success'
             }
             return SuccessJsonResponse(_rslt)

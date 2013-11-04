@@ -63,6 +63,13 @@
                             <input class="input-xxlarge" type="text" id="category_text" name="category_text" value="{{ candidate_context.category_text }}" /> 
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label class="control-label" for="weight">状态:</label>
+                        <div class="controls">
+                            <input class="input-xlarge" type="text" id="weight" name="weight" value="{{ entity_context.weight }}" />
+                            <span class="help-inline">小于0表示冻结</span>
+                        </div>
+                    </div>
                     {% if candidate_context.entity_id != '' %}
                         <div class="control-group">
                             <label class="control-label" for="entity_id">已被录入至：</label>
