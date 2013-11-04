@@ -71,6 +71,7 @@ def comment_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
         _comment_text = request.POST.get('comment', None)
+        _reply_to = request.POST.get('reply_to', None)
         
         _request_user_id = Session_Key.objects.get_user_id(_session)
         
@@ -78,7 +79,7 @@ def comment_note(request, note_id):
         _comment_id = _note.add_comment(
             comment_text = _comment_text, 
             creator_id = _request_user_id, 
-            reply_to = None,
+            reply_to = _reply_to,
         )
         _context = _note.read_comment(_comment_id)
         return SuccessJsonResponse(_context)

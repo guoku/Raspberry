@@ -71,4 +71,8 @@ class RBMobileNote(RBNote):
         _context = super(RBMobileNote, self).read_comment(comment_id, json = True)
         _context['creator'] = RBMobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
+        if _context.has_key('reply_to_user_id'):
+            _context['reply_to_user'] = RBMobileUser(_context['reply_to_user_id']).read(request_user_id)
+            del _context['reply_to_user_id']
+            
         return _context

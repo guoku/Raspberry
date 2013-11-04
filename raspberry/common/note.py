@@ -201,7 +201,14 @@ class RBNote(object):
         _context["comment_id"] = self.comments[comment_id].id
         _context["content"] = self.comments[comment_id].comment_text 
         _context["creator_id"] = self.comments[comment_id].creator_id
-        _context["reply_to"] = self.comments[comment_id].reply_to
+       
+        _reply_to_comment_id = self.comments[comment_id].reply_to
+        if _reply_to_comment_id != None:
+            if not self.comments.has_key(_reply_to_comment_id):
+                self.comments[_reply_to_comment_id] = RBNoteCommentModel.objects.get(pk = _reply_to_comment_id) 
+            _context["reply_to_comment_id"] = _reply_to_comment_id 
+            _context["reply_to_user_id"] = self.comments[_reply_to_comment_id].creator_id 
+        
         _context["created_time"] = self.comments[comment_id].created_time
         if json:
             _context['created_time'] = time.mktime(_context["created_time"].timetuple())
