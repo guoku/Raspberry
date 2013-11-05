@@ -23,6 +23,11 @@
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
                 <li class="nav-header">分类组</li>
+                <li{%if  categories == None %} class="active"{%endif%}>
+                    <a href="{% url 'management.views.entity_list' %}">
+                        全部
+                    </a>
+                </li>
                 {% for group in category_groups %}
                     <li{%if group.group_id == category_group_id%} class="active"{%endif%}>
                         <a href="{% url 'management.views.entity_list' %}?gid={{group.group_id}}">
@@ -39,6 +44,7 @@
         </div>
     </div>
     <div class="span9">
+        {% if categories != None %}
         <div class="sub-nav">
             <ul class="nav nav-pills">
                 {% for category in categories%}
@@ -53,20 +59,21 @@
                 </li>
             </ul>
         </div>
+        {% endif %}
         <div class="sub-nav">
             <ul class="nav nav-pills">
                 <li{%if status_filter == "all"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.entity_list' %}?cid={{category_context.category_id}}&status=all">
+                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=all">
                         全部
                     </a>
                 </li>
                 <li{%if status_filter == "normal"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.entity_list' %}?cid={{category_context.category_id}}&status=normal">
+                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=normal">
                         正常 
                     </a>
                 </li>
                 <li{%if status_filter == "freezed"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.entity_list' %}?cid={{category_context.category_id}}&status=freezed">
+                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=freezed">
                         冻结 
                     </a>
                 </li>
@@ -78,6 +85,7 @@
                     <tr>
                         <th>图片</th>
                         <th>id</th>
+                        <th>分类</th>
                         <th>品牌</th>
                         <th>名称</th>
                         <th>购买链接</th>

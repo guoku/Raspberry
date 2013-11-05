@@ -7,6 +7,7 @@ from django.db.models import Sum
 from mango.client import MangoApiClient
 from candidate import RBCandidate
 from note import RBNote
+from item import RBItem
 from hashlib import md5
 import datetime
 import urllib
@@ -80,6 +81,16 @@ class RBEntity(object):
         return _inst
 
     
+    def merge(self, target_entity_id):
+        _mango_client = MangoApiClient()
+        _item_id_list = _mango_client.get_item_id_list_by_entity_id(target_entity_id)
+        for _item_id in _item_id_list:
+            _item = RBItem(_item_id)
+            _item.bind(self.entity_id)
+        
+        _target_entity = RBEntity(target_entity_id)
+        _target_entity.delete()
+    
     def add_image(self, image_url = None, image_data = None, for_chief = False):
         _mango_client = MangoApiClient()
         _item_id = _mango_client.add_image_for_entity(self.entity_id, image_url, image_data, for_chief) 
@@ -128,6 +139,13 @@ class RBEntity(object):
         return _context    
     
     
+    def delete(self):
+        _mango_client = MangoApiClient()
+        _mango_client.delete_entity(self.entity_id)
+        
+        self.__ensure_entity_obj()
+        self.__entity_obj.delete()
+    
     def update(self, category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None):
         if brand != None or title != None or intro != None or chief_image_id != None:
             _mango_client = MangoApiClient()
@@ -147,7 +165,7 @@ class RBEntity(object):
             self.__entity_obj.save()
             
     @classmethod
-    def find(cls, category_id = None, timestamp = None, status = 0, offset = 0, count = 30, sort_by = None, reverse = False):
+    def find(cls, category_id = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
         _hdl = RBEntityModel.objects
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
@@ -157,8 +175,10 @@ class RBEntity(object):
             _hdl = _hdl.filter(weight__gte = 0)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
-            
-        _hdl = _hdl.order_by('-created_time')[offset : offset + count]
+        
+        _hdl = _hdl.order_by('-created_time')
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
         _entity_id_list = map(lambda x: x.entity_id, _hdl)
         if sort_by == 'price':
             _mango_client = MangoApiClient()
@@ -294,7 +314,7 @@ class RBEntity(object):
         return None
     
     @staticmethod
-    def find_entity_note(entity_id = None, creator_id_set = None, timestamp = None, offset = 0, count = 30):
+    def find_entity_note(entity_id = None, creator_id_set = None, timestamp = None, offset = None, count = None):
         _hdl = RBEntityNoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
@@ -303,8 +323,10 @@ class RBEntity(object):
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
         _rslt = []
-        for _obj in _hdl[offset : offset + count]:
+        for _obj in _hdl:
             _rslt.append({
                 'entity_id' : _obj.entity_id,
                 'note_id' : _obj.note_id,

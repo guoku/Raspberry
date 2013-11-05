@@ -10,6 +10,9 @@ class MangoApiClient(object):
     def get_item_id_by_taobao_id(self, taobao_id):
         return Item.get_item_id_by_taobao_id(taobao_id)
         
+    def get_item_id_list_by_entity_id(self, entity_id):
+        return Item.get_item_id_list_by_entity_id(entity_id)
+        
     def create_entity_by_taobao_item(self, taobao_item_info, chief_image_url, brand = "", title = "", intro = "", detail_image_urls = []):
         _entity = Entity.create_by_taobao_item(
             brand = brand,
@@ -50,6 +53,10 @@ class MangoApiClient(object):
         _item = Item(item_id)
         return _item.read()
          
+    def delete_entity(self, entity_id):
+        _entity = Entity(entity_id)
+        _entity.delete()
+    
     def update_entity(self, entity_id, brand = None, title = None, intro = None, price = None, chief_image_id = None):
         _entity = Entity(entity_id)
         _entity.update(

@@ -13,6 +13,10 @@ class RBItem(object):
         _context['buy_link'] = RBItem.generate_taobao_item_url(_context['taobao_id'])
         return _context
     
+    def bind(self, entity_id):
+        _mango_client = MangoApiClient()
+        _mango_client.bind_entity_item(entity_id, self.__item_id)
+    
     @staticmethod
     def get_item_id_by_taobao_id(taobao_id):
         _mango_client = MangoApiClient()

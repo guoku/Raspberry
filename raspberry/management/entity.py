@@ -226,9 +226,11 @@ def search_entity(request):
     _category_groups = RBCategory.allgroups()
     _entity_id_list = RBEntity.search(_query)
     _entity_context_list = [] 
+    _category_title_dict = RBCategory.get_category_title_dict()
     for _entity_id in _entity_id_list:
         _entity = RBEntity(_entity_id)
         _entity_context = _entity.read()
+        _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
         if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
             _item_context = RBItem(_entity_context['item_id_list'][0]).read()
             _entity_context['buy_link'] = _item_context['buy_link'] 
@@ -255,35 +257,46 @@ def search_entity(request):
 def entity_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id == None:
-        _page_num = int(request.GET.get("p", "1"))
-        _category_groups = RBCategory.allgroups()
-        _category_id = int(request.GET.get("cid", "1"))
         _status = request.GET.get("status", "all")
-        _para = { 
-            "cid" : _category_id,
-            "status" : _status
-        }
         if _status == "freezed":
             _status_code = -1 
         elif _status == "normal":
             _status_code = 1
         else:
             _status_code = 0
-        _category_context = RBCategory(_category_id).read()
-        _category_group_id = _category_context['group_id'] 
-        _categories = RBCategory.find(group_id = _category_context['group_id'])
-        for _category in _categories:
-            _category['entity_count'] = RBEntity.count(_category['category_id'])
     
+        _para = { 
+            "status" : _status
+        }
+        
+        _page_num = int(request.GET.get("p", "1"))
+        _category_id = request.GET.get("cid", None)
+        if _category_id != None:
+            _category_id = int(_category_id)
+            _category_context = RBCategory(_category_id).read()
+            _category_group_id = _category_context['group_id']
+            _categories = RBCategory.find(group_id = _category_context['group_id'])
+            for _category in _categories:
+                _category['entity_count'] = RBEntity.count(_category['category_id'])
+            _para['cid'] = _category_id
+        else:
+            _category_context = None
+            _category_group_id = None 
+            _categories = None
+        
+        
+        _category_groups = RBCategory.allgroups()
         _entity_id_list = RBEntity.find(
             category_id = _category_id,
             status = _status_code
         )
-        _paginator = Paginator(_page_num, 30, len(_entity_id_list), _para)
-        _entity_context_list = [] 
+        _paginator = Paginator(_page_num, 100, len(_entity_id_list), _para)
+        _entity_context_list = []
+        _category_title_dict = RBCategory.get_category_title_dict()
         for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
             _entity = RBEntity(_entity_id)
             _entity_context = _entity.read()
+            _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
             if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
                 _item_context = RBItem(_entity_context['item_id_list'][0]).read()
                 _entity_context['buy_link'] = _item_context['buy_link'] 
@@ -443,3 +456,10 @@ def add_taobao_item_for_entity(request, entity_id):
         ) 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
 
+@login_required
+def merge_entity(request, entity_id):
+    if request.method == 'POST':
+        _target_entity_id = request.POST.get("target_entity_id", None)
+        _entity = RBEntity(entity_id)
+        _entity.merge(_target_entity_id)
+        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))

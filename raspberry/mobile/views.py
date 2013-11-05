@@ -6,6 +6,7 @@ from category import *
 from entity import *
 from note import *
 from user import *
+import time
 
 
 
@@ -130,6 +131,7 @@ def message(request):
             if isinstance(_message, UserFollowMessage):
                 _context = {
                     'type' : 'user_follow',
+                    'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content': {
                         'follower' : RBMobileUser(_message.follower_id).read(_request_user_id)
                     }
@@ -138,6 +140,7 @@ def message(request):
             elif isinstance(_message, NotePokeMessage):
                 _context = {
                     'type' : 'note_poke_message',
+                    'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content' : {
                         'note' : RBMobileNote(_message.note_id).read(_request_user_id),
                         'poker' : RBMobileUser(_message.poker_id).read(_request_user_id)
@@ -147,9 +150,10 @@ def message(request):
             elif isinstance(_message, NoteCommentMessage):
                 _context = {
                     'type' : 'note_comment_message',
+                    'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content' : {
                         'note' : RBMobileNote(_message.note_id).read(_request_user_id),
-                        'comment_id' : _message.comment_id,
+                        #'comment_id' : _message.comment_id,
                         'comment_user' : RBMobileUser(_message.comment_creator_id).read(_request_user_id)
                     }
                 }
@@ -157,9 +161,10 @@ def message(request):
             elif isinstance(_message, NoteCommentReplyMessage):
                 _context = {
                     'type' : 'note_comment_reply_message',
+                    'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content' : {
                         'note' : RBMobileNote(_message.note_id).read(_request_user_id),
-                        'comment_id' : _message.comment_id,
+                        #'comment_id' : _message.comment_id,
                         'replying_user' : RBMobileUser(_message.replying_user_id).read(_request_user_id)
                     }
                 }

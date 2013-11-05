@@ -180,6 +180,10 @@ class Entity(object):
 
         self.__entity_obj.updated_time = datetime.datetime.now()
         self.__entity_obj.save()
+    
+    def delete(self):
+        self.__ensure_entity_obj()
+        self.__entity_obj.delete()
         
 
     @staticmethod

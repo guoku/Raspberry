@@ -48,12 +48,15 @@ def category_entity(request, category_id):
             _reverse = False
         else:
             _reverse = True
-
+        _offset = int(request.GET.get('offset', '0'))
+        _count = int(request.GET.get('count', '30'))
         
         _entity_id_list = RBMobileEntity.find(
             category_id = category_id,
             status = 1,
             sort_by = _sort_by,
+            offset = _offset,
+            count = _count,
             reverse = _reverse
         )
         _rslt = []

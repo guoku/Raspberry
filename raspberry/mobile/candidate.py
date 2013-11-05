@@ -50,9 +50,13 @@ def category_candidate(request, category_id):
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
             _request_user_id = None
+        _offset = int(request.GET.get('offset', '0'))
+        _count = int(request.GET.get('count', '30'))
         
         _candidate_id_list = RBMobileCandidate.find(
-            category_id = category_id
+            category_id = category_id,
+            offset = _offset,
+            count = _count
         )
         _rslt = []
         for _candidate_id in _candidate_id_list:
@@ -64,15 +68,3 @@ def category_candidate(request, category_id):
             
         return SuccessJsonResponse(_rslt)
 
-def ask_link_for_candidate(request, candidate_id, target_status):
-    if request.method == "POST":
-        _session = request.POST.get('session', None)
-        
-        _request_user_id = Session_Key.objects.get_user_id(_session)
-        _rslt = { 
-            'candidate' : candidate_id 
-        }
-        if target_status == '1':
-            RBMobileCandidate(candidate_id).ask(_request_user_id)
-            _rslt['ask_already'] = 1
-        return SuccessJsonResponse(_rslt)

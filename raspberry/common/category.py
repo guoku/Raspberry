@@ -84,15 +84,21 @@ class RBCategory(object):
         if self.__category_obj.image_store_hash:
             _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + self.__category_obj.image_store_hash 
             _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + self.__category_obj.image_store_hash
-        else:
-            _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
-            _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
+        #else:
+        #    _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
+        #    _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
         return _context
 
     
     def read(self):
         return self.__load_category_context()
-        
+    
+    @staticmethod
+    def get_category_title_dict():
+        _dict = {}
+        for _obj in RBCategoryModel.objects.all():
+            _dict[_obj.id] = _obj.title
+        return _dict
     
     @staticmethod
     def find(group_id = None, like_word = None):
@@ -104,20 +110,16 @@ class RBCategory(object):
             _hdl = RBCategoryModel.objects.filter(_q)
         _rslt = []
         for _cat_obj in _hdl:
-            if _cat_obj.image_store_hash:
-                _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + _cat_obj.image_store_hash 
-                _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + _cat_obj.image_store_hash
-            else:
-                _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
-                _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
-            _rslt.append({
+            _context = {
                 'category_id' : _cat_obj.id,
                 'category_title' : _cat_obj.title,
                 'group_id' : _cat_obj.group_id,
                 'status' : _cat_obj.status,
-                'category_icon_large' : _category_icon_large,
-                'category_icon_small' : _category_icon_small
-            })
+            }
+            if _cat_obj.image_store_hash:
+                _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + _cat_obj.image_store_hash 
+                _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + _cat_obj.image_store_hash
+            _rslt.append(_context)
         return _rslt
             
     @staticmethod
@@ -141,9 +143,9 @@ class RBCategory(object):
                 if _category_obj.image_store_hash:
                     _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + _category_obj.image_store_hash
                     _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + _category_obj.image_store_hash
-                else:
-                    _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
-                    _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
+                #else:
+                #    _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
+                #    _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
                 _group['content'].append({
                     'category_id' : _category_obj.id,
                     'category_title' : _category_obj.title,
