@@ -39,6 +39,13 @@
 		        <input id="image_file" name="image_file" type="file">
                     </div>
                 </div>
+                <div class="control-group">
+                    <label class="control-label" for="status">状态:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" id="status" name="status" value="{{ category_context.status }}" />
+                        <span class="help-inline">0不会在发现页出现</span>
+                    </div>
+                </div>
             </fieldset>
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">更新</button>

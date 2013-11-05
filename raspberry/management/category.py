@@ -93,6 +93,7 @@ def edit_category(request, category_id):
     elif request.method == 'POST':
         _group_id = request.POST.get("group_id", None)
         _title = request.POST.get("title", None)
+        _status = request.POST.get("status", None)
         _image_file = request.FILES.get("image_file", None)
         
         _image_data = None
@@ -105,7 +106,8 @@ def edit_category(request, category_id):
         RBCategory(category_id).update(
             title = _title,
             group_id = _group_id,
-            image_data = _image_data
+            image_data = _image_data,
+            status = _status
         )
         return HttpResponseRedirect(reverse('management.views.edit_category', kwargs = { "category_id" : category_id })) 
 

@@ -290,7 +290,10 @@ def entity_list(request):
             category_id = _category_id,
             status = _status_code
         )
-        _paginator = Paginator(_page_num, 100, len(_entity_id_list), _para)
+        if _category_id != None and _status_code == -1:
+            _paginator = Paginator(_page_num, 2000, len(_entity_id_list), _para)
+        else:
+            _paginator = Paginator(_page_num, 100, len(_entity_id_list), _para)
         _entity_context_list = []
         _category_title_dict = RBCategory.get_category_title_dict()
         for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:

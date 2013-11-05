@@ -26,12 +26,14 @@ class RBCategory(object):
         _img.resize(w, h)
         return _img.make_blob()
     
-    def update(self, title = None, group_id = None, image_data = None):
+    def update(self, title = None, group_id = None, image_data = None, status = None):
         self.__ensure_category_obj()
         if title != None:
             self.__category_obj.title = title
         if group_id != None:
             self.__category_obj.group_id = group_id
+        if status != None:
+            self.__category_obj.status = int(status)
 
         if image_data != None:
             self.__datastore = Client(
@@ -84,9 +86,6 @@ class RBCategory(object):
         if self.__category_obj.image_store_hash:
             _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + self.__category_obj.image_store_hash 
             _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + self.__category_obj.image_store_hash
-        #else:
-        #    _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
-        #    _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
         return _context
 
     
@@ -101,7 +100,7 @@ class RBCategory(object):
         return _dict
     
     @staticmethod
-    def find(group_id = None, like_word = None):
+    def find(group_id = None, like_word = None, status = None):
         _hdl = RBCategoryModel.objects.all()
         if group_id != None: 
             _hdl = RBCategoryModel.objects.filter(group_id = group_id)
@@ -142,7 +141,8 @@ class RBCategory(object):
             for _category_obj in RBCategoryModel.objects.filter(group_id = _group['group_id']):
                 _context = {
                     'category_id' : _category_obj.id,
-                    'category_title' : _category_obj.title
+                    'category_title' : _category_obj.title,
+                    'status' : _category_obj.status
                 }
                 if _category_obj.image_store_hash:
                     _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + _category_obj.image_store_hash
