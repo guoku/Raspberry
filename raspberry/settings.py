@@ -21,7 +21,20 @@ DATABASES = {
             'init_command':'SET storage_engine=INNODB',
         }
     },
+    'auth': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'guoku_08_03_slim',
+        'USER': 'root',                      
+        'PASSWORD': '123456',                  
+        'HOST': 'localhost',                      
+        'PORT': '',                      
+        'OPTIONS': {
+            'use_unicode':'utf-8',
+            'init_command':'SET storage_engine=INNODB',
+        }
+    }
 }
+DATABASE_ROUTERS = ['router.AuthRouter'] 
 
 from mongoengine import register_connection 
 register_connection('mango', 'mango')
