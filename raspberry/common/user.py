@@ -5,6 +5,7 @@ from avatar import Avatar
 from models import Avatar as RBAvatarModel 
 from models import User_Profile as RBUserProfileModel 
 from models import User_Follow as RBUserFollowModel
+from message import UserFollowMessage 
 import datetime
 
 class RBUser(object):
@@ -184,6 +185,14 @@ class RBUser(object):
                 follower_id = self.user_id,
                 followee_id = followee_id 
             )
+            
+            _message = UserFollowMessage(
+                user_id = followee_id,
+                follower_id = self.user_id,
+                created_time = datetime.datetime.now()
+            )
+            _message.save()
+            
             return True
         except:
             pass

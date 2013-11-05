@@ -5,6 +5,7 @@ from models import Note as RBNoteModel
 from models import Note_Comment as RBNoteCommentModel
 from models import Note_Figure as RBNoteFigureModel
 from models import Note_Poke as RBNotePokeModel
+from message import NotePokeMessage, NoteCommentReplyMessage, NoteCommentMessage
 from django.conf import settings
 from hashlib import md5
 from mango.client import MangoApiClient
@@ -172,6 +173,15 @@ class RBNote(object):
                 note_id = self.note_id,
                 user_id = user_id
             )
+            
+            self.__ensure_note_obj()
+            _message = NotePokeMessage(
+                user_id = self.note_obj.creator_id,
+                note_id = self.note_id, 
+                poker_id = user_id, 
+                created_time = datetime.datetime.now()
+            )
+            _message.save()
             return True
         except: 
             pass
@@ -222,6 +232,30 @@ class RBNote(object):
             reply_to = reply_to
         )
         self.comments[_obj.id] = _obj
+            
+        self.__ensure_note_obj()
+        _message = NoteCommentMessage(
+            user_id = self.note_obj.creator_id,
+            note_id = self.note_id, 
+            comment_id =  _obj.id, 
+            comment_creator_id = creator_id, 
+            created_time = datetime.datetime.now()
+        )
+        _message.save()
+
+        if reply_to != None:
+            if not self.comments.has_key(reply_to):
+                self.comments[reply_to] = RBNoteCommentModel.objects.get(pk = reply_to)
+            if self.comments[reply_to].creator_id != creator_id:
+                _message = NoteCommentReplyMessage(
+                    user_id = self.comments[reply_to].creator_id,
+                    note_id = self.note_id, 
+                    comment_id = reply_to, 
+                    replying_user_id = creator_id, 
+                    created_time = datetime.datetime.now()
+                )
+                _message.save()
+        
         return _obj.id
     
     @staticmethod
