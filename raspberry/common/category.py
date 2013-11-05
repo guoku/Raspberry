@@ -140,18 +140,14 @@ class RBCategory(object):
         for _group in _rslt: 
             _group['content'] = []
             for _category_obj in RBCategoryModel.objects.filter(group_id = _group['group_id']):
-                if _category_obj.image_store_hash:
-                    _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + _category_obj.image_store_hash
-                    _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + _category_obj.image_store_hash
-                #else:
-                #    _category_icon_large = settings.IMAGE_SERVER + 'category/large/' + DEFAULT_CATEGORY_ICON_KEY
-                #    _category_icon_small = settings.IMAGE_SERVER + 'category/small/' + DEFAULT_CATEGORY_ICON_KEY
-                _group['content'].append({
+                _context = {
                     'category_id' : _category_obj.id,
-                    'category_title' : _category_obj.title,
-                    'category_icon_large' : _category_icon_large,
-                    'category_icon_small' : _category_icon_small
-                })
+                    'category_title' : _category_obj.title
+                }
+                if _category_obj.image_store_hash:
+                    _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + _category_obj.image_store_hash
+                    _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + _category_obj.image_store_hash
+                _group['content'].append(_context)
         return _rslt
             
         
