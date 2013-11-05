@@ -55,7 +55,8 @@ def homepage(request):
 def feed(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
-        _type = request.GET.get('type', 'all')
+        _type = request.GET.get('type', 'entity')
+        _scale = request.GET.get('scale', 'all')
         if _session != None:
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
@@ -66,17 +67,27 @@ def feed(request):
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
 
-        if _type == 'friend':
+        if _scale == 'friend':
             _following_user_id_list = RBMobileUser(_request_user_id).get_following_user_id_list()
         else:
             _following_user_id_list = None
+        
+        if _type == 'candidate':
+            _note_id_list = RBMobileCandidate.find_candidate_note(
+                timestamp = _timestamp,
+                creator_id_set = _following_user_id_list,
+                offset = _offset,
+                count = _count
+            )
+        else:
+            _note_list = RBMobileEntity.find_entity_note(
+                timestamp = _timestamp,
+                creator_id_set = _following_user_id_list,
+                offset = _offset,
+                count = _count
+            )
+            _note_id_list = map(lambda x: x['note_id'], _note_list)
 
-        _note_id_list = RBMobileNote.find(
-            timestamp = _timestamp,
-            creator_set = _following_user_id_list,
-            offset = _offset,
-            count = _count
-        )
         
         _rslt = []
         for _note_id in _note_id_list: 
@@ -90,14 +101,14 @@ def feed(request):
                         'note' : _note_context
                     }
                 })
-#            elif _note_context.has_key('candidate_id'):
-#                if _note_context['candidate_weight'] >= 0: 
-#                    _rslt.append({
-#                        'type' : 'candidate',
-#                        'object' : {
-#                            'note' : _note_context
-#                        }
-#                    })
+            elif _note_context.has_key('candidate_id'):
+                if _note_context['candidate_weight'] >= 0: 
+                    _rslt.append({
+                        'type' : 'candidate',
+                        'object' : {
+                            'note' : _note_context
+                        }
+                    })
         
         return SuccessJsonResponse(_rslt)
 
@@ -119,30 +130,38 @@ def message(request):
             if isinstance(_message, UserFollowMessage):
                 _context = {
                     'type' : 'user_follow',
-                    'follower' : RBMobileUser(_message.follower_id).read(_request_user_id)
+                    'content': {
+                        'follower' : RBMobileUser(_message.follower_id).read(_request_user_id)
+                    }
                 }
                 _rslt.append(_context)
             elif isinstance(_message, NotePokeMessage):
                 _context = {
                     'type' : 'note_poke_message',
-                    'note' : RBMobileNote(_message.note_id).read(_request_user_id),
-                    'poker' : RBMobileUser(_message.poker_id).read(_request_user_id)
+                    'content' : {
+                        'note' : RBMobileNote(_message.note_id).read(_request_user_id),
+                        'poker' : RBMobileUser(_message.poker_id).read(_request_user_id)
+                    }
                 }
                 _rslt.append(_context)
             elif isinstance(_message, NoteCommentMessage):
                 _context = {
                     'type' : 'note_comment_message',
-                    'note' : RBMobileNote(_message.note_id).read(_request_user_id),
-                    'comment_id' : _message.comment_id,
-                    'comment_user' : RBMobileUser(_message.comment_creator_id).read(_request_user_id)
+                    'content' : {
+                        'note' : RBMobileNote(_message.note_id).read(_request_user_id),
+                        'comment_id' : _message.comment_id,
+                        'comment_user' : RBMobileUser(_message.comment_creator_id).read(_request_user_id)
+                    }
                 }
                 _rslt.append(_context)
             elif isinstance(_message, NoteCommentReplyMessage):
                 _context = {
                     'type' : 'note_comment_reply_message',
-                    'note' : RBMobileNote(_message.note_id).read(_request_user_id),
-                    'comment_id' : _message.comment_id,
-                    'replying_user' : RBMobileUser(_message.replying_user_id).read(_request_user_id)
+                    'content' : {
+                        'note' : RBMobileNote(_message.note_id).read(_request_user_id),
+                        'comment_id' : _message.comment_id,
+                        'replying_user' : RBMobileUser(_message.replying_user_id).read(_request_user_id)
+                    }
                 }
                 _rslt.append(_context)
                 

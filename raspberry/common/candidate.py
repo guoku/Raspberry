@@ -148,6 +148,19 @@ class RBCandidate(object):
         _candidate_id_list = map(lambda x: x.id, _hdl)
         return _candidate_id_list
         
+    @staticmethod
+    def find_candidate_note(creator_id_set = None, timestamp = None, offset = 0, count = 30):
+        _hdl = RBCandidateNoteModel.objects.all()
+        if creator_id_set != None:
+            _hdl = _hdl.filter(creator_id__in = creator_id_set)
+        if timestamp != None:
+            _hdl = _hdl.filter(created_time__lt = timestamp)
+        
+        _rslt = []
+        for _obj in _hdl[offset : offset + count]:
+            _rslt.append(_obj.note_id)
+        return _rslt 
+    
     @classmethod
     def count(cls, category_id = None, creator_id = None):
         _hdl = RBCandidateModel.objects

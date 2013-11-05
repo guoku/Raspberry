@@ -294,12 +294,12 @@ class RBEntity(object):
         return None
     
     @staticmethod
-    def find_entity_note(entity_id = None, creator_id = None, timestamp = None, offset = 0, count = 30):
-        _hdl = RBEntityNoteModel.objects
+    def find_entity_note(entity_id = None, creator_id_set = None, timestamp = None, offset = 0, count = 30):
+        _hdl = RBEntityNoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
-        if creator_id != None:
-            _hdl = _hdl.filter(creator_id = creator_id)
+        if creator_id_set != None:
+            _hdl = _hdl.filter(creator_id__in = creator_id_set)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         
