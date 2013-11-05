@@ -45,11 +45,6 @@ class RBMobileNote(RBNote):
             _context['category_id'] = _candidate_context['category_id']
             _context['category_text'] = _candidate_context['category_text']
             _context['candidate_weight'] = _candidate_context['weight']
-            if request_user_id and _candidate.ask_already(request_user_id):
-                _context['ask_already'] = 1
-            else:
-                _context['ask_already'] = 0
-                
                 
             
         return _context 

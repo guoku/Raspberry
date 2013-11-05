@@ -1,10 +1,12 @@
 # coding=utf8
+from common.message import *
 from account import *
 from candidate import *
 from category import *
 from entity import *
 from note import *
 from user import *
+
 
 
 def homepage(request):
@@ -88,13 +90,61 @@ def feed(request):
                         'note' : _note_context
                     }
                 })
-            elif _note_context.has_key('candidate_id'):
-                if _note_context['candidate_weight'] >= 0: 
-                    _rslt.append({
-                        'type' : 'candidate',
-                        'object' : {
-                            'note' : _note_context
-                        }
-                    })
+#            elif _note_context.has_key('candidate_id'):
+#                if _note_context['candidate_weight'] >= 0: 
+#                    _rslt.append({
+#                        'type' : 'candidate',
+#                        'object' : {
+#                            'note' : _note_context
+#                        }
+#                    })
+        
+        return SuccessJsonResponse(_rslt)
+
+def message(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        _timestamp = request.GET.get('timestamp', None)
+        if _timestamp != None:
+            _timestamp = datetime.datetime.fromtimestamp(float(_timestamp))
+        else:
+            _timestamp = datetime.datetime.now()
+        _count = int(request.GET.get('count', '30'))
+
+
+        _rslt = []
+        for _message in Message.objects.filter(user_id = _request_user_id, created_time__lt = _timestamp):
+            if isinstance(_message, UserFollowMessage):
+                _context = {
+                    'type' : 'user_follow',
+                    'follower' : RBMobileUser(_message.follower_id).read(_request_user_id)
+                }
+                _rslt.append(_context)
+            elif isinstance(_message, NotePokeMessage):
+                _context = {
+                    'type' : 'note_poke_message',
+                    'note' : RBMobileNote(_message.note_id).read(_request_user_id),
+                    'poker' : RBMobileUser(_message.poker_id).read(_request_user_id)
+                }
+                _rslt.append(_context)
+            elif isinstance(_message, NoteCommentMessage):
+                _context = {
+                    'type' : 'note_comment_message',
+                    'note' : RBMobileNote(_message.note_id).read(_request_user_id),
+                    'comment_id' : _message.comment_id,
+                    'comment_user' : RBMobileUser(_message.comment_creator_id).read(_request_user_id)
+                }
+                _rslt.append(_context)
+            elif isinstance(_message, NoteCommentReplyMessage):
+                _context = {
+                    'type' : 'note_comment_reply_message',
+                    'note' : RBMobileNote(_message.note_id).read(_request_user_id),
+                    'comment_id' : _message.comment_id,
+                    'replying_user' : RBMobileUser(_message.replying_user_id).read(_request_user_id)
+                }
+                _rslt.append(_context)
+                
         
         return SuccessJsonResponse(_rslt)
