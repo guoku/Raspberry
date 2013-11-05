@@ -103,10 +103,12 @@ class RBCategory(object):
     def find(group_id = None, like_word = None, status = None):
         _hdl = RBCategoryModel.objects.all()
         if group_id != None: 
-            _hdl = RBCategoryModel.objects.filter(group_id = group_id)
+            _hdl = _hdl.filter(group_id = group_id)
         if like_word != None: 
             _q = Q(title__icontains = like_word)
-            _hdl = RBCategoryModel.objects.filter(_q)
+            _hdl = _hdl.filter(_q)
+        if status != None: 
+            _hdl = _hdl.filter(status = status)
         _rslt = []
         for _cat_obj in _hdl:
             _context = {

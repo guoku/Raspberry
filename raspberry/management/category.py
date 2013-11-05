@@ -37,8 +37,11 @@ def category_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id != None:
         _group_id = int(_group_id)
+    _status = request.GET.get("status", None)
+    if _status != None:
+        _status = int(_status)
     _category_groups = RBCategory.allgroups()
-    _categories = RBCategory.find(group_id = _group_id)
+    _categories = RBCategory.find(group_id = _group_id, status = _status)
     return render_to_response( 
         'category/list.html', 
         {
@@ -46,6 +49,7 @@ def category_list(request):
             'category_groups' : _category_groups,
             'categories' : _categories,
             'selected_group_id' : _group_id,
+            'status' : _status
         },
         context_instance = RequestContext(request)
     )
