@@ -21,24 +21,21 @@ class User_Profile(models.Model):
     email_verified = models.BooleanField(default = False)
 
     def __unicode__(self):
-        app_label = 'auth'
         return self.nickname
     
+    class Meta:
+        app_label = 'base'
+    
 class Avatar(models.Model):
-#    user = models.ForeignKey(User)
-#    store_hash = models.CharField(max_length = 64, db_index = True, null = False, blank = False)
-#    current = models.BooleanField(default = False)
-#    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     avatar_origin = models.CharField(max_length = 1024, db_index = True, null = False, blank = False)
     avatar_small = models.CharField(max_length = 1024, db_index = True, null = False, blank = False)
     avatar_large = models.CharField(max_length = 1024, db_index = True, null = False, blank = False)
     uploaded_time = models.DateTimeField(auto_now_add = True, db_index = True)
     
     class Meta:
-        app_label = 'auth'
+        app_label = 'base'
         ordering = ['-uploaded_time']
-#        unique_together = ('user', 'store_hash')
 
 class Category_Group(models.Model):
     title = models.CharField(max_length = 128, db_index = True)
@@ -156,8 +153,9 @@ class Candidate_Note(models.Model):
 class User_Follow(models.Model):
     follower = models.ForeignKey(User, related_name = "followings")
     followee = models.ForeignKey(User, related_name = "fans")
-    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    followed_time = models.DateTimeField(auto_now_add = True, db_index = True)
     class Meta:
-        ordering = ['-created_time']
+        app_label = 'base'
+        ordering = ['-followed_time']
         unique_together = ("follower", "followee")
 

@@ -15,14 +15,14 @@ def login(request):
                 password = _password
             )
             _session = Session_Key.objects.generate_session(
-                user_id = _user.get_user_id(),
+                user_id = _user.user_id,
                 username = _user.get_username(),
                 email = _email,
                 api_key = _api_key
             )
             
             _data = {
-                'user' : _user.read_full_context(_user.get_user_id()),
+                'user' : _user.read_full_context(_user.user_id),
                 'session' : _session.session_key
             }
             return SuccessJsonResponse(_data)
@@ -84,7 +84,7 @@ def register(request):
             )
         
         _session = Session_Key.objects.generate_session(
-            user_id = _user.get_user_id(),
+            user_id = _user.user_id,
             username = _user.get_username(),
             email = _email,
             api_key = _api_key
@@ -99,7 +99,7 @@ def register(request):
             _user.upload_avatar(_image_data)
 
         _data = {
-            'user' : _user.read(_user.get_user_id()),
+            'user' : _user.read(_user.user_id),
             'session' : _session.session_key
         }
         return SuccessJsonResponse(_data)

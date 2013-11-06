@@ -7,7 +7,7 @@ from wand.image import Image
 class Avatar(object):
     
     def __init__(self, key):
-        self.__key = key 
+        self.key = key 
         self.__origin_store_key = 'avatar/origin/' + self.__key
         self.__large_store_key = 'avatar/large/' + self.__key
         self.__small_store_key = 'avatar/small/' + self.__key

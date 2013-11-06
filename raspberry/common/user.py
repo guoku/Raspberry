@@ -1,15 +1,111 @@
 # coding=utf8
 from django.contrib.auth.models import User as AuthUser
 from django.contrib.auth import authenticate
-from avatar import Avatar
-from models import Avatar as RBAvatarModel 
-from models import User_Profile as RBUserProfileModel 
-from models import User_Follow as RBUserFollowModel
+from django.conf import settings
+from models import Avatar as AvatarModel 
+from models import User_Profile as UserProfileModel 
+from models import User_Follow as UserFollowModel
 from message import UserFollowMessage 
+from hashlib import md5
+from pymogile import Client
+from wand.image import Image
 import datetime
 
-class RBUser(object):
+class User(object):
     
+
+    class Avatar(object):
+        
+        def __init__(self, user_id):
+            self.user_id = user_id
+            try:
+                self.avatar_obj = AvatarModel.objects.get(user_id = self.user_id)
+            except AvatarModel.DoesNotExist, e:
+                self.avatar_obj = None
+       
+        
+        @staticmethod
+        def crop_square(data):
+            _img = Image(blob = data)
+            _delta = _img.width - _img.height
+            if _delta > 0:
+                _img.crop(_delta / 2 , 0, width = _img.height, height = _img.height)
+            elif _delta < 0:
+                _img.crop(0, 0, width = _img.width, height = _img.width)
+            return _img.make_blob()
+        
+        @staticmethod
+        def resize(data, w, h):
+            _img = Image(blob = data)
+            _img.resize(w, h)
+            return _img.make_blob()
+    
+        def get_large_link(self):
+            if self.avatar_obj != None: 
+                return settings.IMAGE_SERVER + self.avatar_obj.avatar_large
+            return 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+        
+        def get_small_link(self):
+            if self.avatar_obj != None:
+                return settings.IMAGE_SERVER + self.avatar_obj.avatar_small
+            return 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+        
+        @classmethod
+        def create(cls, user_id, origin_data):
+            _key = md5(origin_data).hexdigest()
+            
+            _datastore = Client(
+                domain = settings.MOGILEFS_DOMAIN, 
+                trackers = settings.MOGILEFS_TRACKERS 
+            )
+            
+            _origin_link = 'avatar/origin/' + _key
+            _fp = _datastore.new_file(_origin_link)
+            _fp.write(origin_data)
+            _fp.close()
+    
+            _square_data = cls.crop_square(origin_data)
+            _large_link = 'avatar/large/' + _key
+            _large_data = cls.resize(_square_data, 180, 180)
+            _fp = _datastore.new_file(_large_link)
+            _fp.write(_large_data)
+            _fp.close()
+            
+             
+            _small_link = 'avatar/small/' + _key
+            _small_data = cls.resize(_square_data, 50, 50)
+            _fp = _datastore.new_file(_small_link)
+            _fp.write(_small_data)
+            _fp.close()
+           
+            _inst = cls(user_id)
+            if _inst.avatar_obj == None:
+                _avatar_obj = AvatarModel.objects.create(
+                    user_id = user_id,
+                    avatar_origin = _origin_link,
+                    avatar_small = _small_link,
+                    avatar_large = _large_link
+                )
+                _inst.avatar_obj = _avatar_obj
+            else:
+                _inst.avatar_obj.avatar_origin = _origin_link
+                _inst.avatar_obj.avatar_large = _large_link
+                _inst.avatar_obj.avatar_small = _small_link
+                _inst.avatar_obj.save()
+
+            return _inst
+
+        
+        @staticmethod
+        def read_image_data_by_store_key(store_key): 
+            _datastore = Client(
+                domain = settings.MOGILEFS_DOMAIN, 
+                trackers = settings.MOGILEFS_TRACKERS 
+            )
+            return _datastore.get_file_data(store_key)
+
+
+
     class LoginEmailDoesNotExist(Exception):
         def __init__(self, email):
             self.__message = "login email %s is not exist" %email
@@ -44,13 +140,10 @@ class RBUser(object):
     def __ensure_user_profile_obj(self):
         if not hasattr(self, 'user_profile_obj'):
             try:
-                self.user_profile_obj = RBUserProfileModel.objects.get(user_id = self.user_id)
-            except RBUserProfileModel.DoesNotExist, e:
+                self.user_profile_obj = UserProfileModel.objects.get(user_id = self.user_id)
+            except UserProfileModel.DoesNotExist, e:
                 self.user_profile_obj = None
 
-    def get_user_id(self):
-        return self.user_id
-    
     def get_username(self):
         self.__ensure_user_obj()
         return self.user_obj.username
@@ -77,13 +170,13 @@ class RBUser(object):
         try:
             _user_obj = AuthUser.objects.get(email = email)
         except AuthUser.DoesNotExist, e:
-            raise RBUser.LoginEmailDoesNotExist(email)
+            raise User.LoginEmailDoesNotExist(email)
 
         _inst = cls(_user_obj.id)
         _inst.user_obj = _user_obj
         
         if not _inst.check_auth(password):
-            raise RBUser.LoginPasswordIncorrect()
+            raise User.LoginPasswordIncorrect()
         return _inst
 
     @staticmethod
@@ -94,8 +187,8 @@ class RBUser(object):
 
     @classmethod
     def create(cls, email, password, username = None):
-        if RBUser.email_exist(email):
-            raise RBUser.EmailExistAlready(email) 
+        if User.email_exist(email):
+            raise User.EmailExistAlready(email) 
 
         _username = cls._generate_username()
         _user = AuthUser.objects.create(username = _username, email = email)
@@ -113,7 +206,7 @@ class RBUser(object):
 
     @staticmethod
     def nickname_exist(nickname):
-        if RBUserProfileModel.objects.filter(nickname = nickname).count() > 0:
+        if UserProfileModel.objects.filter(nickname = nickname).count() > 0:
             return True
         return False
     
@@ -121,7 +214,7 @@ class RBUser(object):
         self.__ensure_user_profile_obj()
         
         if self.user_profile_obj == None:
-            _user_profile = RBUserProfileModel.objects.create(
+            _user_profile_obj = UserProfileModel.objects.create(
                 user_id = self.user_id,
                 nickname = nickname,
                 location = location,
@@ -129,12 +222,12 @@ class RBUser(object):
                 bio = bio,
                 website = website
             )
-            self.__profile = _user_profile
+            self.user_profile_obj = _user_profile_obj
         else:
             if nickname != None:
                 _nickname = nickname.strip()
-                if RBUser.nickname_exist(_nickname):
-                    raise RBUser.NicknameExistAlready(_nickname)
+                if User.nickname_exist(_nickname):
+                    raise User.NicknameExistAlready(_nickname)
                 else:
                     self.user_profile_obj.nickname = _nickname
             
@@ -143,35 +236,28 @@ class RBUser(object):
                 self.user_profile_obj.location = _location 
 
             self.user_profile_obj.save()
-            
+           
+    
+    def __ensure_avatar_obj(self):
+        if not hasattr(self, 'avatar_obj'):
+            self.avatar_obj = self.Avatar(self.user_id)
+
         
     def __load_user_context(self):
         self.__ensure_user_obj()
         _context = {}
         _context['user_id'] = self.user_obj.id
         
-        try:
-            _profile = RBUserProfileModel.objects.get(user_id = self.user_id)
-            _context['nickname'] = _profile.nickname
-            _context['verified'] = 0 
-            _context['verified_type'] = 'guoku' 
-            _context['verified_reason'] = 'guoku' 
-            _context['gender'] = _profile.gender 
-        except RBUserProfileModel.DoesNotExist, e:
-            _context['nickname'] = 'unknown' 
-            _context['verified'] = 0 
-            _context['verified_type'] = 'guoku' 
-            _context['verified_reason'] = 'guoku' 
-            _context['gender'] = 'O' 
-       
-#        if RBAvatarModel.objects.filter(user_id = self.user_id, current = True).count() > 0:
-#            _avatar_obj = RBAvatarModel.objects.filter(user_id = self.user_id, current = True).order_by('-created_time')[0]
-#            _avatar = Avatar(_avatar_obj.store_hash)
-#            _context['avatar_large'] = _avatar.read_large_link() 
-#            _context['avatar_small'] = _avatar.read_small_link() 
-#        else:
-        _context['avatar_large'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
-        _context['avatar_small'] = 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+        _profile = UserProfileModel.objects.get(user_id = self.user_id)
+        _context['nickname'] = _profile.nickname
+        _context['verified'] = 0 
+        _context['verified_type'] = 'guoku' 
+        _context['verified_reason'] = 'guoku' 
+        _context['gender'] = _profile.gender 
+        
+        self.__ensure_avatar_obj()
+        _context['avatar_large'] = self.avatar_obj.get_large_link() 
+        _context['avatar_small'] = self.avatar_obj.get_small_link() 
             
         return _context
     
@@ -181,7 +267,7 @@ class RBUser(object):
 
     def follow(self, followee_id):
         try:
-            RBUserFollowModel.objects.create(
+            UserFollowModel.objects.create(
                 follower_id = self.user_id,
                 followee_id = followee_id 
             )
@@ -200,7 +286,7 @@ class RBUser(object):
          
     def unfollow(self, followee_id):
         try:
-            _obj = RBUserFollowModel.objects.get(
+            _obj = UserFollowModel.objects.get(
                 follower_id = self.user_id,
                 followee_id = followee_id 
             )
@@ -217,12 +303,12 @@ class RBUser(object):
         if _sub_user_id == _obj_user_id: 
             return 4
         
-        _is_following = RBUserFollowModel.objects.filter(
+        _is_following = UserFollowModel.objects.filter(
                 follower_id = _sub_user_id, 
                 followee_id = _obj_user_id, 
         ).count()
         
-        _is_followed = RBUserFollowModel.objects.filter(
+        _is_followed = UserFollowModel.objects.filter(
                 follower_id = _obj_user_id,
                 followee_id = _sub_user_id, 
         ).count()
@@ -239,37 +325,12 @@ class RBUser(object):
         return 0
 
     def get_following_user_id_list(self, offset = 0, count = 30):
-        return map(lambda x : x.followee_id, RBUserFollowModel.objects.filter(follower_id = self.user_id)[offset : offset + count])
+        return map(lambda x : x.followee_id, UserFollowModel.objects.filter(follower_id = self.user_id)[offset : offset + count])
              
     def get_fan_user_id_list(self, offset = 0, count = 30):
-        return map(lambda x : x.follower_id, RBUserFollowModel.objects.filter(followee_id = self.user_id)[offset : offset + count])
+        return map(lambda x : x.follower_id, UserFollowModel.objects.filter(followee_id = self.user_id)[offset : offset + count])
 
     def upload_avatar(self, data):
-        _avatar = Avatar.create(data)
+        self.avatar_obj = self.Avatar.create(self.user_id, data)
        
-        try:
-            _avatar_obj = RBAvatarModel.objects.get(user_id = self.user_id, store_hash = _avatar.get_hash_key())
-            if _avatar_obj.current == False:
-                try:
-                    _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.user_id, current = True)
-                    _current_avatar_obj.current = False
-                    _current_avatar_obj.save()
-                except RBAvatarModel.DoesNotExist, e:
-                    pass
-                _avatar_obj.current = True
-                _avatar_obj.save()
-        except RBAvatarModel.DoesNotExist, e:
-            try:
-                _current_avatar_obj = RBAvatarModel.objects.get(user_id = self.user_id, current = True)
-                _current_avatar_obj.current = False
-                _current_avatar_obj.save()
-            except RBAvatarModel.DoesNotExist, e:
-                pass
-            
-            _obj = RBAvatarModel.objects.create(
-                user_id = self.user_id,
-                store_hash = _avatar.get_hash_key(),
-                current = True
-            )
-
         
