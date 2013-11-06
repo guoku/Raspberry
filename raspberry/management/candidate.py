@@ -15,7 +15,7 @@ from common.category import RBCategory
 from common.candidate import RBCandidate
 from common.entity import RBEntity
 from common.note import RBNote
-from common.user import RBUser
+from common.user import User
 
 
 @login_required
@@ -62,7 +62,7 @@ def candidate_list(request):
         for _candidate_id in _candidate_id_list: 
             _candidate_context = RBCandidate(_candidate_id).read()
             _note_context = RBNote(_candidate_context['note_id']).read()
-            _creator_context = RBUser(_note_context['creator_id']).read()
+            _creator_context = User(_note_context['creator_id']).read()
             _candidate_context_list.append({
                 'candidate' : _candidate_context,
                 'note' : _note_context,
@@ -91,7 +91,7 @@ def edit_candidate(request, candidate_id):
     if request.method == 'GET':
         _candidate_context = RBCandidate(candidate_id).read()
         _note_context = RBNote(_candidate_context['note_id']).read()
-        _creator_context = RBUser(_note_context['creator_id']).read()
+        _creator_context = User(_note_context['creator_id']).read()
         _category_list = RBCategory.find()
         return render_to_response( 
             'candidate/edit.html', 

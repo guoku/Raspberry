@@ -210,14 +210,14 @@ class RBEntity(object):
         _mango_client.unbind_entity_item(self.entity_id, item_id)
 
     def like(self, user_id):
-        try:
-            RBEntityLikeModel.objects.create(
-                entity_id = self.entity_id,
-                user_id = user_id
-            )
-            return True
-        except:
-            pass
+        #try:
+        RBEntityLikeModel.objects.create(
+            entity_id = self.entity_id,
+            user_id = user_id
+        )
+        return True
+        #except:
+        #    pass
         return False
          
     def unlike(self, user_id):

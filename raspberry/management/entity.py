@@ -18,7 +18,7 @@ from common.category import RBCategory
 from common.entity import RBEntity
 from common.item import RBItem
 from common.note import RBNote
-from common.user import RBUser
+from common.user import User
 from utils.paginator import Paginator
 
 def _parse_taobao_id_from_url(url):
@@ -82,7 +82,7 @@ def new_entity(request):
                     if _candidate_context['category_id'] != 0:
                         _selected_category_id = _candidate_context['category_id']
                     _note_context = RBNote(_candidate_context['note_id']).read()
-                    _note_creator_context = RBUser(_note_context['creator_id']).read()
+                    _note_creator_context = User(_note_context['creator_id']).read()
 
                 else:
                     _candidate_context = None
