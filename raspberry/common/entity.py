@@ -160,8 +160,10 @@ class RBEntity(object):
         
         if category_id != None or weight != None:
             self.__ensure_entity_obj()
-            self.__entity_obj.category_id = int(category_id)
-            self.__entity_obj.weight = int(weight)
+            if category_id != None:
+                self.__entity_obj.category_id = int(category_id)
+            if weight != None:
+                self.__entity_obj.weight = int(weight)
             self.__entity_obj.save()
             
     @classmethod
