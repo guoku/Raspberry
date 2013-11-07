@@ -23,7 +23,7 @@ DATABASES = {
     },
     'auth': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_08_03_slim',
+        'NAME': 'guoku_11_06_slim',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
@@ -140,6 +140,11 @@ LOGGING = {
         },
     }
 }
+
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+)
 
 # taobao api key and sercet
 TAOBAO_APP_KEY = '12313170'

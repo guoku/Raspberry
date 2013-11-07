@@ -22,7 +22,8 @@ def entity_list(request):
         _entity_id_list = RBMobileEntity.find(
             timestamp = _timestamp,
             offset = _offset,
-            count = _count
+            count = _count,
+            status = 1
         )
         _rslt = []
         for _entity_id in _entity_id_list:

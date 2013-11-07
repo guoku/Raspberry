@@ -10,6 +10,7 @@
     <td width="100"><a href="{% url 'management.views.entity_list' %}?cid={{entity_context.category_id}}" target="_blank"><p class="text-info">{{ entity_context.category_title }}</p></a></td>
     <td width="200"><p class="text-info">{{ entity_context.brand }}</p></td>
     <td><p class="text-info">{{ entity_context.title }}</p></td>
+    <td><p class="text-info">{{ entity_context.taobao_title }}</p></td>
     <td><p class="text-info">{{ entity_context.item_id_list|count }}</p></td>
     <td width="50">
         <div class="btn-group">

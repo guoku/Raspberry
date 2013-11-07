@@ -166,7 +166,10 @@ def edit_entity(request, entity_id):
         _entity_context = RBEntity(entity_id).read()
         _item_context_list = []
         for _item_id in _entity_context['item_id_list']:
-            _item_context_list.append(RBItem(_item_id).read())
+            _item_context = RBItem(_item_id).read()
+            if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
+                _entity_context['recommend_title'] = _item_context['title']
+            _item_context_list.append(_item_context)
         return render_to_response( 
             'entity/edit.html', 
             {
@@ -234,8 +237,10 @@ def search_entity(request):
         if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
             _item_context = RBItem(_entity_context['item_id_list'][0]).read()
             _entity_context['buy_link'] = _item_context['buy_link'] 
+            _entity_context['taobao_title'] = _item_context['title'] 
         else:
             _entity_context['buy_link'] = ''
+            _entity_context['taobao_title'] = ''
         _entity_context_list.append(_entity_context)
     
     _category_context_list = RBCategory.find(like_word = _query)
@@ -303,8 +308,10 @@ def entity_list(request):
             if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
                 _item_context = RBItem(_entity_context['item_id_list'][0]).read()
                 _entity_context['buy_link'] = _item_context['buy_link'] 
+                _entity_context['taobao_title'] = _item_context['title'] 
             else:
                 _entity_context['buy_link'] = ''
+                _entity_context['taobao_title'] = ''
             _entity_context_list.append(_entity_context)
         
         return render_to_response( 

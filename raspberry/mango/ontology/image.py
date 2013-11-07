@@ -122,4 +122,6 @@ class Image(object):
             _link = self.Figure(self.image_obj.store_hash).read_origin_link()
         elif self.image_obj.origin_url != None:
             _link = self.image_obj.origin_url
+        else:
+            _link = None
         return _link
