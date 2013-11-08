@@ -1,28 +1,102 @@
 # coding=utf8
+from models import Item as ItemModel
 import urllib
-from mango.client import MangoApiClient
 
-class RBItem(object):
+class Item(object):
     
     def __init__(self, item_id):
-        self.__item_id = item_id
+        self.item_id = item_id
     
+    def __ensure_item_obj(self):
+        if not hasattr(self, 'item_obj'):
+            self.item_obj = ItemModel.objects.filter(id = self.item_id).first()
+    
+    def get_entity_id(self):
+        self.__ensure_item_obj()
+        return self.item_obj.entity_id
+    
+    @classmethod
+    def create_taobao_item(cls, entity_id, images, taobao_id, cid, title, shop_nick, price, soldout): 
+        _taobao_id = taobao_id.strip()
+        _title = title.strip()
+        _shop_nick = shop_nick.strip()
+        
+        _item_obj = TaobaoItemDocument( 
+            entity_id = entity_id,
+            images = images,
+            source = 'taobao',
+            taobao_id = _taobao_id,
+            cid = cid,
+            title = _title,
+            shop_nick = _shop_nick,
+            price = price,
+            soldout = soldout,
+            created_time = datetime.datetime.now(),
+            updated_time = datetime.datetime.now() 
+        )
+        _item_obj.save()
+
+        _inst = cls(_item_obj.id)
+        _inst.item_obj = _item_obj
+        return _inst
+
+    
+    def __load_taobao_item(self):
+        _context = {}
+        _context["item_id"] = str(self.item_obj.id)
+        _context["entity_id"] = self.item_obj.entity_id
+        _context["source"] = self.item_obj.source
+        _context["taobao_id"] = self.item_obj.taobao_id
+        _context["cid"] = self.item_obj.cid
+        _context["title"] = self.item_obj.title
+        _context["shop_nick"] = self.item_obj.shop_nick
+        _context["price"] = float(self.item_obj.price)
+        _context["soldout"] = self.item_obj.soldout
+        _context['buy_link'] = Item.generate_taobao_item_url(_context['taobao_id'])
+        _context["volume"] = 0 
+        return _context
+
     def read(self):
-        _mango_client = MangoApiClient()
-        _context = _mango_client.read_item(self.__item_id)
-        _context['buy_link'] = RBItem.generate_taobao_item_url(_context['taobao_id'])
+        self.__ensure_item_obj()
+        if self.item_obj.source == 'taobao':
+            _context = self.__load_taobao_item()
         return _context
     
+    @classmethod
+    def find(cls, offset = 0, count = 30):
+        _hdl = ItemDocument.objects
+        _item_list = []
+        for _doc in _hdl.order_by('-created_time')[offset : offset + count]:
+            _item = {
+                'item_id' : str(_doc.id),
+                'taobao_id' : _doc.taobao_id,
+                'entity_id' : _doc.entity_id
+            }
+            _item_list.append(_item)
+
+        
+        return _item_list
+
+    
     def bind(self, entity_id):
-        _mango_client = MangoApiClient()
-        _mango_client.bind_entity_item(entity_id, self.__item_id)
+        self.__ensure_item_obj()
+        self.item_obj.entity_id = entity_id 
+        self.item_obj.save()
     
     @staticmethod
     def get_item_id_by_taobao_id(taobao_id):
-        _mango_client = MangoApiClient()
-        return _mango_client.get_item_id_by_taobao_id(taobao_id)
+        _taobao_item_obj = TaobaoItemModel.objects.filter(taobao_id = taobao_id).first()
+        if _taobao_item_obj != None:
+            return _taobao_item_obj.entity_id
+        return None
     
     @staticmethod
     def generate_taobao_item_url(taobao_id):
         return 'http://item.taobao.com/item.htm?id=' + taobao_id
 
+    @staticmethod
+    def get_item_id_list_by_entity_id(entity_id):
+        _list = []
+        for _item in ItemDocument.objects.filter(entity_id = entity_id):
+            _list.append(str(_item.id))
+        return _list

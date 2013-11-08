@@ -17,10 +17,9 @@ cur.execute('ALTER TABLE common_entity ADD COLUMN `brand` varchar(256) DEFAULT N
 cur.execute('ALTER TABLE common_entity ADD COLUMN `title` varchar(256) DEFAULT NULL;')
 cur.execute('ALTER TABLE common_entity ADD COLUMN `price` decimal(20,2) NOT NULL;')
 cur.execute('ALTER TABLE common_entity ADD KEY `common_entity_price` (`price`);')
-cur.execute('ALTER TABLE common_entity ADD COLUMN `intro` longtext;')
+cur.execute('ALTER TABLE common_entity ADD COLUMN `intro` longtext NOT NULL;')
 cur.execute('ALTER TABLE common_entity ADD COLUMN `chief_image` varchar(64) NOT NULL;')
 cur.execute('ALTER TABLE common_entity ADD COLUMN `detail_images` varchar(1024) DEFAULT NULL;')
-cur.execute('ALTER TABLE common_entity ADD COLUMN `is_candidate` tinyint(1) NOT NULL;')
 cur.execute('ALTER TABLE common_entity ADD KEY `common_entity_e4b99077` (`is_candidate`);')
 
 

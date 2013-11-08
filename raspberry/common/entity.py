@@ -1,13 +1,12 @@
 # coding=utf8
-from models import Entity as RBEntityModel
-from models import Entity_Like as RBEntityLikeModel
-from models import Entity_Note as RBEntityNoteModel
+from models import Entity as EntityModel
+from models import Entity_Like as EntityLikeModel
+from models import Entity_Note as EntityNoteModel
 from django.conf import settings
 from django.db.models import Sum
-from mango.client import MangoApiClient
-from candidate import RBCandidate
-from note import RBNote
-from item import RBItem
+from mongoengine import *
+from note import Note
+from item import Item
 from hashlib import md5
 import datetime
 import urllib
@@ -16,10 +15,15 @@ import time
 
 
 
-class RBEntity(object):
+class Entity(object):
 
-    def __init__(self, entity_id):
+    def __init__(self, id):
         self.entity_id = entity_id
+    
+    def __ensure_entity_obj(self):
+        if not hasattr(self, 'entity_obj'):
+            self.entity_obj = EntityModel.objects.get(entity_id = self.entity_id)
+
     
     @classmethod
     def cal_entity_hash(cls, entity_hash_string):
@@ -31,97 +35,132 @@ class RBEntity(object):
                 break
         return _hash 
     
-    def get_entity_id(self):
-        return self.entity_id
-    
-    @staticmethod
-    def check_taobao_item_exist(taobao_id):
-        _mango_client = MangoApiClient()
-        return _mango_client.check_taobao_item_exist(taobao_id)
+    def __insert_taobao_item(self, taobao_item_info, images):
+        _taobao_item = Item.create_taobao_item( 
+            entity_id = self.entity_id,
+            images = images,
+            taobao_id = taobao_item_info["taobao_id"],
+            cid = taobao_item_info["cid"],
+            title = taobao_item_info["title"],
+            shop_nick = taobao_item_info["shop_nick"], 
+            price = taobao_item_info["price"], 
+            soldout = taobao_item_info["soldout"], 
+        )
+        return _taobao_item.item_id
     
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, chief_image_url, 
                               taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = [], 
                               weight = 0, candidate_id = None):
-       
-        _mango_client = MangoApiClient()
-        _entity_id = _mango_client.create_entity_by_taobao_item(
-            taobao_item_info = taobao_item_info,
-            chief_image_url = chief_image_url,
+        
+        _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
+        if _chief_image_id == None:
+            _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
+            _chief_image_id = _chief_image_obj.image_id
+        _detail_image_ids = []
+        for _image_url in detail_image_urls:
+            _image_id = Image.get_image_id_by_origin_url(_image_url)
+            if _image_id == None:
+                _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
+                _image_id = _image_obj.image_id
+            _detail_image_ids.append(_image_id)
+            
+        
+        _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'])
+        _entity_obj = EntityModel.objects.create( 
+            entity_hash = _entity_hash,
+            creator_id = creator_id,
+            category_id = category_id,
             brand = brand,
             title = title,
             intro = intro,
-            detail_image_urls = detail_image_urls
-        )
-       
-        _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'])
-        _entity_obj = RBEntityModel.objects.create( 
-            entity_id = _entity_id,
-            entity_hash = _entity_hash,
-            category_id = category_id,
-            creator_id = creator_id,
+            chief_image = _chief_image_id,
+            detail_images = "#".join(_detail_image_ids),
             weight = weight
         )
          
+        _item_images = _detail_image_ids
+        _item_images.append(_chief_image_id)
+        _taobao_item_id = _inst.__insert_taobao_item(taobao_item_info, _item_images)
+        
         _inst = cls(_entity_obj.entity_id)
-        _inst.__entity_obj = _entity_obj
+        _inst.entity_obj = _entity_obj
 
-        if candidate_id != None:
-            _candidate = RBCandidate(candidate_id)
-            _candidate_context = _candidate.read()
-            _entity_note_obj = RBEntityNoteModel.objects.create(
-                entity_id = _inst.entity_id,
-                note_id = _candidate_context['note_id'],
-                score = _candidate_context['score'], 
-                creator_id = _candidate_context['creator_id'],
-                created_time = _candidate_context['created_time'],
-                updated_time = _candidate_context['updated_time'],
-            )
-            _candidate.update(entity_id = _inst.entity_id)
         return _inst
 
     
     def merge(self, target_entity_id):
-        _mango_client = MangoApiClient()
-        _item_id_list = _mango_client.get_item_id_list_by_entity_id(target_entity_id)
+        _item_id_list = Item.get_item_id_list_by_entity_id(target_entity_id)
         for _item_id in _item_id_list:
             _item = RBItem(_item_id)
             _item.bind(self.entity_id)
         
-        _target_entity = RBEntity(target_entity_id)
+        _target_entity = Entity(target_entity_id)
         _target_entity.delete()
     
     def add_image(self, image_url = None, image_data = None, for_chief = False):
-        _mango_client = MangoApiClient()
-        _item_id = _mango_client.add_image_for_entity(self.entity_id, image_url, image_data, for_chief) 
+        _image_obj = Image.create(
+            source = 'gk_management', 
+            origin_url = image_url,
+            image_data = image_data
+        )
+        self.__ensure_entity_obj()
+#        if for_chief:
+#            if self.entity_obj.chief_image not in self.entity_obj.images.detail_ids:
+#                self.entity_obj.images.detail_ids.insert(0, self.entity_obj.images.chief_id)
+#            if _image_obj.get_image_id() in self.entity_obj.images.detail_ids:
+#                self.entity_obj.images.detail_ids.remove(_image_obj.get_image_id())
+#            self.entity_obj.images.chief_id = _image_obj.get_image_id()
+#        else:
+#            if not _image_obj.get_image_id() in self.entity_obj.images.detail_ids:
+#                self.entity_obj.images.detail_ids.append(_image_obj.get_image_id())
+#        self.entity_obj.save() 
+    
+    
     
     def del_image(self, image_id):
-        _mango_client = MangoApiClient()
-        _item_id = _mango_client.del_image_from_entity(self.entity_id, image_id) 
+        self.__ensure_entity_obj()
+#        if image_id in self.entity_obj.images.detail_ids:
+#            self.entity_obj.images.detail_ids.remove(image_id)
+#        if image_id == self.entity_obj.images.chief_id and len(self.entity_obj.images.detail_ids) > 0:
+#            self.entity_obj.images.chief_id = self.entity_obj.images.detail_ids[0]
+#            del self.entity_obj.images.detail_ids[0]
+#        self.entity_obj.save()
+    
+    
     
     def add_taobao_item(self, taobao_item_info, image_urls = []):
-        _mango_client = MangoApiClient()
-        _item_id = _mango_client.add_taobao_item_for_entity(self.entity_id, taobao_item_info, image_urls)
+        _image_ids = []
+        for _image_url in image_urls:
+            _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
+            _image_ids.append(_image_obj.get_image_id())
+        
+        _item_id = self._insert_taobao_item( 
+            taobao_item_info = taobao_item_info,
+            images = _image_ids
+        )
+        
+        self.__ensure_entity_obj()
+        if taobao_item_info['price'] < self.entity_obj.price:
+            self.entity_obj.price = taobao_item_info['price']
+            self.entity_obj.save()
+        return _item_id 
     
     
-    def __ensure_entity_obj(self):
-        if not hasattr(self, '__entity_obj'):
-            self.__entity_obj = RBEntityModel.objects.get(entity_id = self.entity_id)
-
     def __load_entity_context(self, meta_context):
         self.__ensure_entity_obj()
         _context = meta_context 
-        _context["entity_hash"] = self.__entity_obj.entity_hash
-        _context["category_id"] = self.__entity_obj.category_id
-        _context["created_time"] = self.__entity_obj.created_time
-        _context["updated_time"] = self.__entity_obj.updated_time
-        _context["weight"] = self.__entity_obj.weight
+        _context["entity_hash"] = self.entity_obj.entity_hash
+        _context["category_id"] = self.entity_obj.category_id
+        _context["created_time"] = self.entity_obj.created_time
+        _context["updated_time"] = self.entity_obj.updated_time
+        _context["weight"] = self.entity_obj.weight
         
 
         _context["total_score"] = 0 
         _context["score_count"] = 0 
         _context["note_id_list"] = []
-        for _entity_note_obj in RBEntityNoteModel.objects.filter(entity_id = self.entity_id):
+        for _entity_note_obj in EntityNoteModel.objects.filter(entity_id = self.entity_id):
             _context["note_id_list"].append(_entity_note_obj.note_id)
             _context["total_score"] += _entity_note_obj.score
             _context["score_count"] += 1
@@ -140,35 +179,38 @@ class RBEntity(object):
     
     
     def delete(self):
-        _mango_client = MangoApiClient()
-        _mango_client.delete_entity(self.entity_id)
-        
         self.__ensure_entity_obj()
-        self.__entity_obj.delete()
+        self.entity_obj.delete()
+
+        # TODO: removing entity_id in item
     
     def update(self, category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None):
-        if brand != None or title != None or intro != None or chief_image_id != None:
-            _mango_client = MangoApiClient()
-            _mango_client.update_entity(
-                entity_id = self.entity_id, 
-                brand = brand, 
-                title = title, 
-                intro = intro,
-                price = price,
-                chief_image_id = chief_image_id
-            )
-        
-        if category_id != None or weight != None:
-            self.__ensure_entity_obj()
-            if category_id != None:
-                self.__entity_obj.category_id = int(category_id)
-            if weight != None:
-                self.__entity_obj.weight = int(weight)
-            self.__entity_obj.save()
+        self.__ensure_entity_obj()
+        if brand != None:
+            self.__entity_obj.brand = brand
+        if title != None:
+            self.__entity_obj.title = title
+        if intro != None:
+            self.__entity_obj.intro = intro
+        if price != None:
+            self.__entity_obj.price = price
+        if category_id != None:
+            self.entity_obj.category_id = int(category_id)
+        if weight != None:
+            self.entity_obj.weight = int(weight)
+#        
+#        if chief_image_id != None and chief_image_id != self.__entity_obj.images.chief_id:
+#            if self.__entity_obj.images.chief_id not in self.__entity_obj.images.detail_ids:
+#                self.__entity_obj.images.detail_ids.insert(0, self.__entity_obj.images.chief_id)
+#            if chief_image_id in self.__entity_obj.images.detail_ids:
+#                self.__entity_obj.images.detail_ids.remove(chief_image_id)
+#            self.__entity_obj.images.chief_id = chief_image_id
+            
+        self.entity_obj.save()
             
     @classmethod
     def find(cls, category_id = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
-        _hdl = RBEntityModel.objects
+        _hdl = EntityModel.objects
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
         if status < 0:
@@ -178,18 +220,23 @@ class RBEntity(object):
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         
-        _hdl = _hdl.order_by('-created_time')
+        if sort_by == 'price':
+            if reverse:
+                _hdl = _hdl.order_by('-price')
+            else:
+                _hdl = _hdl.order_by('price')
+        else:
+            _hdl = _hdl.order_by('-created_time')
+        
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
+        
         _entity_id_list = map(lambda x: x.entity_id, _hdl)
-        if sort_by == 'price':
-            _mango_client = MangoApiClient()
-            _entity_id_list = _mango_client.sort_entity_by_price(_entity_id_list, reverse = reverse)
         return _entity_id_list
 
     @classmethod
     def roll(cls, category_id = None, count = 10):
-        _hdl = RBEntityModel.objects.filter(weight__gte = 0)
+        _hdl = EntityModel.objects.filter(weight__gte = 0)
         if category_id != None:
             _hdl = _hdl.filter(category_id = category_id)
         _entity_id_list = map(lambda x: x.entity_id, _hdl)
@@ -200,20 +247,21 @@ class RBEntity(object):
         
     @classmethod
     def count(cls, category_id = None):
-        _hdl = RBEntityModel.objects.filter(category_id = category_id)
+        _hdl = EntityModel.objects.filter(category_id = category_id)
         return _hdl.count()
     
     def bind_item(self, item_id):
-        _mango_client = MangoApiClient()
-        _mango_client.bind_entity_item(self.entity_id, item_id)
+        _item_obj = Item(item_id)
+        _item_obj.bind_entity(self.__entity_id)
     
     def unbind_item(self, item_id):
-        _mango_client = MangoApiClient()
-        _mango_client.unbind_entity_item(self.entity_id, item_id)
+        _item_obj = Item(item_id)
+        if _item_obj.get_entity_id() == self.__entity_id:
+            _item_obj.bind_entity("")
 
     def like(self, user_id):
         #try:
-        RBEntityLikeModel.objects.create(
+        EntityLikeModel.objects.create(
             entity_id = self.entity_id,
             user_id = user_id
         )
@@ -224,7 +272,7 @@ class RBEntity(object):
          
     def unlike(self, user_id):
         try:
-            _obj = RBEntityLikeModel.objects.get(
+            _obj = EntityLikeModel.objects.get(
                 entity_id = self.entity_id,
                 user_id = user_id
             )
@@ -235,12 +283,12 @@ class RBEntity(object):
         return False
          
     def like_already(self, user_id):
-        return RBEntityLikeModel.objects.filter(user_id = user_id, entity_id = self.entity_id).count() > 0 
+        return EntityLikeModel.objects.filter(user_id = user_id, entity_id = self.entity_id).count() > 0 
 
     @staticmethod
     def like_list_of_user(user_id, timestamp = None, offset = 0, count = 30):
         _user_id = int(user_id)
-        _hdl = RBEntityLikeModel.objects.filter(user_id = _user_id)
+        _hdl = EntityLikeModel.objects.filter(user_id = _user_id)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         return map(lambda x : x.entity_id, _hdl[offset : offset + count])
@@ -253,7 +301,7 @@ class RBEntity(object):
             note_text = note_text,
             image_data = image_data
         )
-        _entity_note_obj = RBEntityNoteModel.objects.create(
+        _entity_note_obj = EntityNoteModel.objects.create(
             entity_id = self.entity_id,
             note_id = _note.note_id,
             score = _score,
@@ -263,19 +311,6 @@ class RBEntity(object):
         )
         return _note
     
-    def bind_note_from_candidate(self, candidate_id):
-        _candidate = RBCandidate(candidate_id)
-        _candidate_context = _candidate.read()
-        _entity_note_obj = RBEntityNoteModel.objects.create(
-            entity_id = self.entity_id,
-            note_id = _candidate_context['note_id'],
-            score = _candidate_context['score'], 
-            creator_id = _candidate_context['creator_id'],
-            created_time = _candidate_context['created_time'],
-            updated_time = _candidate_context['updated_time'],
-        )
-        _candidate.update(entity_id = self.entity_id)
-
     
     def update_note(self, note_id, score, note_text, image_data = None):
         _note_id = int(note_id)
@@ -285,7 +320,7 @@ class RBEntity(object):
             note_text = note_text,
             image_data = image_data
         )
-        _entity_note_obj = RBEntityNoteModel.objects.get(
+        _entity_note_obj = EntityNoteModel.objects.get(
             entity_id = self.entity_id,
             note_id = _note_id
         )
@@ -297,19 +332,19 @@ class RBEntity(object):
     @staticmethod
     def get_user_entity_note_count(user_id):
         _user_id = int(user_id)
-        return RBEntityNoteModel.objects.filter(creator_id = _user_id).count()
+        return EntityNoteModel.objects.filter(creator_id = _user_id).count()
     
     @staticmethod
     def get_user_like_count(user_id):
         _user_id = int(user_id)
-        return RBEntityLikeModel.objects.filter(user_id = _user_id).count()
+        return EntityLikeModel.objects.filter(user_id = _user_id).count()
     
     
     @staticmethod
     def get_user_last_like(user_id):
         _user_id = int(user_id)
         try:
-            _obj = RBEntityLikeModel.objects.filter(user_id = _user_id).order_by('-created_time')[0]
+            _obj = EntityLikeModel.objects.filter(user_id = _user_id).order_by('-created_time')[0]
             return _obj.entity_id
         except:
             pass
@@ -317,7 +352,7 @@ class RBEntity(object):
     
     @staticmethod
     def find_entity_note(entity_id = None, creator_id_set = None, timestamp = None, offset = None, count = None):
-        _hdl = RBEntityNoteModel.objects.all()
+        _hdl = EntityNoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
         if creator_id_set != None:
@@ -340,8 +375,14 @@ class RBEntity(object):
     
     @staticmethod
     def search(query):
-        _mango_client = MangoApiClient()
-        return _mango_client.search_entity(query)
+        _entity_id_list = []  
+        for _entity_obj in EntityModel.objects.filter(brand__contains = query):
+            _entity_id_list.append(str(_entity_obj.id))
+        for _entity_obj in EntityModel.objects.filter(title__contains = query):
+            _entity_id = str(_entity_obj.id)
+            if not _entity_id in _entity_id_list:
+                _entity_id_list.append(_entity_id)
+        return _entity_id_list
     
     @staticmethod
     def read_entity_note_figure_data_by_store_key(store_key): 
