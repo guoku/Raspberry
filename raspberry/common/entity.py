@@ -161,7 +161,6 @@ class Entity(object):
         _context["updated_time"] = self.entity_obj.updated_time
         _context["weight"] = self.entity_obj.weight
        
-        print self.entity_obj.id
         _context['chief_image'] = {
             'id' : self.entity_obj.chief_image,
             'url' : Image(self.entity_obj.chief_image).getlink(),
@@ -172,9 +171,7 @@ class Entity(object):
 #                'id' : _image_id,
 #                'url' : Image(_image_id).getlink()
 #            })
-        _context['item_id_list'] = Item.get_item_id_list_by_entity_id(self.__entity_id) 
-        
-
+        _context['item_id_list'] = Item.find(entity_id = self.entity_id) 
         _context["total_score"] = 0 
         _context["score_count"] = 0 
         _context["note_id_list"] = []

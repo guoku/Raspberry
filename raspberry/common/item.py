@@ -1,5 +1,5 @@
 # coding=utf8
-from models import Item as ItemModel
+from models import Item as ItemDocument
 import urllib
 
 class Item(object):
@@ -9,7 +9,7 @@ class Item(object):
     
     def __ensure_item_obj(self):
         if not hasattr(self, 'item_obj'):
-            self.item_obj = ItemModel.objects.filter(id = self.item_id).first()
+            self.item_obj = ItemDocument.objects.filter(id = self.item_id).first()
     
     def get_entity_id(self):
         self.__ensure_item_obj()
@@ -63,18 +63,14 @@ class Item(object):
         return _context
     
     @classmethod
-    def find(cls, offset = 0, count = 30):
-        _hdl = ItemDocument.objects
+    def find(cls, entity_id = None, offset = 0, count = 30):
+        _hdl = ItemDocument.objects.all()
+        if entity_id != None:
+            _entity_id = int(entity_id)
+            _hdl = _hdl.filter(entity_id = _entity_id)
         _item_list = []
         for _doc in _hdl.order_by('-created_time')[offset : offset + count]:
-            _item = {
-                'item_id' : str(_doc.id),
-                'taobao_id' : _doc.taobao_id,
-                'entity_id' : _doc.entity_id
-            }
-            _item_list.append(_item)
-
-        
+            _item_list.append(str(_doc.id))
         return _item_list
 
     
