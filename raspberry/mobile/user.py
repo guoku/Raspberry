@@ -1,5 +1,4 @@
 # coding=utf8
-from lib.candidate import RBMobileCandidate
 from lib.entity import RBMobileEntity
 from lib.note import RBMobileNote
 from lib.user import RBMobileUser
@@ -126,23 +125,3 @@ def user_entity_note(request, user_id):
 
         return SuccessJsonResponse(_rslt)
 
-def user_share(request, user_id):
-    if request.method == "GET":
-        _session = request.GET.get('session', None)
-        if _session != None:
-            _request_user_id = Session_Key.objects.get_user_id(_session)
-        else:
-            _request_user_id = None
-        _timestamp = request.GET.get('timestamp', None)
-        if _timestamp != None:
-            _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
-        _offset = int(request.GET.get('offset', '0'))
-        _count = int(request.GET.get('count', '30'))
-        
-        _rslt = []
-        for _candidate_id in RBMobileCandidate.find(creator_id = user_id, timestamp = _timestamp, offset = _offset, count = _count):
-            _candidate_context = RBMobileCandidate(_candidate_id).read()
-            _note_context = RBMobileNote(_candidate_context['note_id']).read(_request_user_id)
-            _rslt.append(_note_context)
-
-        return SuccessJsonResponse(_rslt)

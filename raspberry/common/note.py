@@ -1,5 +1,4 @@
 # coding=utf8
-from models import Candidate_Note as RBCandidateNoteModel
 from models import Entity_Note as RBEntityNoteModel
 from models import Note as RBNoteModel
 from models import Note_Comment as RBNoteCommentModel
@@ -142,12 +141,7 @@ class RBNote(object):
             _context["entity_id"] = _obj.entity_id
             _context["score"] = _obj.score
         except RBEntityNoteModel.DoesNotExist, e:
-            try:
-                _obj = RBCandidateNoteModel.objects.get(note_id = self.note_id)
-                _context["candidate_id"] = _obj.candidate_id
-                _context["score"] = _obj.score
-            except RBCandidateNoteModel.DoesNotExist, e:
-                pass
+            pass
 
         
         return _context

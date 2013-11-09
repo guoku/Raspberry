@@ -1,6 +1,5 @@
 # coding=utf8
 from common.item import RBItem
-from common.candidate import RBCandidate
 from common.entity import RBEntity
 from common.note import RBNote
 from user import RBMobileUser
@@ -37,15 +36,6 @@ class RBMobileNote(RBNote):
             _context['title'] = _entity_context['title']
             _context['chief_image'] = _entity_context['chief_image']
             _context['category_id'] = _entity_context['category_id']
-        elif _context.has_key('candidate_id') and _context['candidate_id'] != None:
-            _candidate = RBCandidate(_context['candidate_id'])
-            _candidate_context = _candidate.read()
-            _context['brand'] = _candidate_context['brand']
-            _context['title'] = _candidate_context['title']
-            _context['category_id'] = _candidate_context['category_id']
-            _context['category_text'] = _candidate_context['category_text']
-            _context['candidate_weight'] = _candidate_context['weight']
-                
             
         return _context 
     

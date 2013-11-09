@@ -21,8 +21,6 @@
                             <li class="divider-vertical"></li>
                             <li{% if active_division == "entity" %} class="active"{%endif%}><a href="{% url 'management.views.entity_list' %}">Entity</a></li>
                             <li class="divider-vertical"></li>
-                            <li{% if active_division == "candidate" %} class="active"{%endif%}><a href="{% url 'management.views.candidate_list' %}">Candidate</a></li>
-                            <li class="divider-vertical"></li>
                             <li{% if active_division == "category" %} class="active"{%endif%}><a href="{% url 'management.views.category_list' %}">Category</a></li>
                             <li class="divider-vertical"></li>
                         </ul>

@@ -1,7 +1,6 @@
 # coding=utf8
 from common.message import *
 from account import *
-from candidate import *
 from category import *
 from entity import *
 from note import *
@@ -29,13 +28,6 @@ def homepage(request):
                 'type' : 'entity',
                 'object' : {
                     'entity' : _entity.read(_request_user_id),
-                    'note' : _note_context
-                }
-            })
-        else:
-            _rslt['hot'].append({
-                'type' : 'candidate',
-                'object' : {
                     'note' : _note_context
                 }
             })
@@ -73,21 +65,13 @@ def feed(request):
         else:
             _following_user_id_list = None
         
-        if _type == 'candidate':
-            _note_id_list = RBMobileCandidate.find_candidate_note(
-                timestamp = _timestamp,
-                creator_id_set = _following_user_id_list,
-                offset = _offset,
-                count = _count
-            )
-        else:
-            _note_list = RBMobileEntity.find_entity_note(
-                timestamp = _timestamp,
-                creator_id_set = _following_user_id_list,
-                offset = _offset,
-                count = _count
-            )
-            _note_id_list = map(lambda x: x['note_id'], _note_list)
+        _note_list = RBMobileEntity.find_entity_note(
+            timestamp = _timestamp,
+            creator_id_set = _following_user_id_list,
+            offset = _offset,
+            count = _count
+        )
+        _note_id_list = map(lambda x: x['note_id'], _note_list)
 
         
         _rslt = []
@@ -102,14 +86,6 @@ def feed(request):
                         'note' : _note_context
                     }
                 })
-            elif _note_context.has_key('candidate_id'):
-                if _note_context['candidate_weight'] >= 0: 
-                    _rslt.append({
-                        'type' : 'candidate',
-                        'object' : {
-                            'note' : _note_context
-                        }
-                    })
         
         return SuccessJsonResponse(_rslt)
 

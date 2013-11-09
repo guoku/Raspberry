@@ -51,7 +51,7 @@ class Entity(object):
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, chief_image_url, 
                               taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = [], 
-                              weight = 0, candidate_id = None):
+                              weight = 0):
         
         _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
         if _chief_image_id == None:

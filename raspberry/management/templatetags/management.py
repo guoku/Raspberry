@@ -4,12 +4,6 @@ from django.conf import settings
 register = template.Library()
 
 
-def display_candidate_row(candidate_context):
-    return {
-        "candidate_context" : candidate_context,
-    } 
-register.inclusion_tag("candidate/partial/row.html")(display_candidate_row)
-
 def display_entity_row(entity_context):
     return {
         "entity_context" : entity_context,

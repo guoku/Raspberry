@@ -13,7 +13,6 @@ import datetime
 import time
 import json
 
-from common.candidate import RBCandidate
 from common.category import RBCategory
 from common.entity import RBEntity
 from common.item import RBItem
@@ -74,21 +73,6 @@ def new_entity(request):
                 _brand = ''
                 _title = ''
                 
-                _candidate_id = request.POST.get("candidate_id", None)
-                if _candidate_id != None:
-                    _candidate_context = RBCandidate(_candidate_id).read()
-                    _brand = _candidate_context['brand']
-                    _title = _candidate_context['title']
-                    if _candidate_context['category_id'] != 0:
-                        _selected_category_id = _candidate_context['category_id']
-                    _note_context = RBNote(_candidate_context['note_id']).read()
-                    _note_creator_context = User(_note_context['creator_id']).read()
-
-                else:
-                    _candidate_context = None
-                    _note_context = None
-                    _note_creator_context = None
-                
                 return render_to_response( 
                     'entity/create.html', 
                     {
@@ -103,9 +87,6 @@ def new_entity(request):
                         'category_list' : RBCategory.find(),
                         'brand' : _brand,
                         'title' : _title,
-                        'candidate_context' : _candidate_context,
-                        'note_context' : _note_context,
-                        'note_creator_context' : _note_creator_context
                     },
                     context_instance = RequestContext(request)
                 )
@@ -126,9 +107,6 @@ def create_entity_by_taobao_item(request):
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
         _category_id = int(request.POST.get("category_id", None))
-        _candidate_id = request.POST.get("candidate_id", None)
-        if _candidate_id != None:
-            _candidate_id = int(_candidate_id)
         _detail_image_urls = request.POST.getlist("image_url")
         
         if _chief_image_url in _detail_image_urls:
@@ -150,7 +128,6 @@ def create_entity_by_taobao_item(request):
             title = _title,
             intro = _intro,
             detail_image_urls = _detail_image_urls,
-            candidate_id = _candidate_id
         )
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
