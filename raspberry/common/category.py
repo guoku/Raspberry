@@ -1,6 +1,6 @@
 # coding=utf8
-from models import Category_Group as RBCategoryGroupModel
-from models import Category as RBCategoryModel
+from models import Category_Group as CategoryGroupModel
+from models import Category as CategoryModel
 from django.conf import settings
 from django.db.models import Q
 from hashlib import md5
@@ -9,14 +9,14 @@ from wand.image import Image
 import datetime 
 
 DEFAULT_CATEGORY_ICON_KEY = '03717fa531b23c6f5dbd5522e6eec9a1' 
-class RBCategory(object):
+class Category(object):
     
     def __init__(self, category_id):
         self.__category_id= int(category_id)
     
     def __ensure_category_obj(self):
         if not hasattr(self, '__category_obj'):
-            self.__category_obj = RBCategoryModel.objects.get(pk = self.__category_id)
+            self.__category_obj = CategoryModel.objects.get(pk = self.__category_id)
     
     def get_category_id(self):
         return self.__category_id
@@ -59,7 +59,7 @@ class RBCategory(object):
 
     @staticmethod
     def create_group(title, status = 1):
-        _category_group_obj = RBCategoryGroupModel.objects.create(
+        _category_group_obj = CategoryGroupModel.objects.create(
             title = title,
             status = status
         )
@@ -67,7 +67,7 @@ class RBCategory(object):
     
     @classmethod
     def create(cls, title, group_id, status = 1):
-        _category_obj = RBCategoryModel.objects.create(
+        _category_obj = CategoryModel.objects.create(
             title = title,
             group_id = group_id,
             status = status
@@ -95,13 +95,13 @@ class RBCategory(object):
     @staticmethod
     def get_category_title_dict():
         _dict = {}
-        for _obj in RBCategoryModel.objects.all():
+        for _obj in CategoryModel.objects.all():
             _dict[_obj.id] = _obj.title
         return _dict
     
     @staticmethod
     def find(group_id = None, like_word = None, status = None):
-        _hdl = RBCategoryModel.objects.all()
+        _hdl = CategoryModel.objects.all()
         if group_id != None: 
             _hdl = _hdl.filter(group_id = group_id)
         if like_word != None: 
@@ -126,21 +126,21 @@ class RBCategory(object):
     @staticmethod
     def allgroups():
         _rslt = []
-        for _group_obj in RBCategoryGroupModel.objects.all():
+        for _group_obj in CategoryGroupModel.objects.all():
             _rslt.append({
                 'group_id' : _group_obj.id,
                 'title' : _group_obj.title,
                 'status' : _group_obj.status,
-                'category_count' : RBCategoryModel.objects.filter(group_id = _group_obj.id).count()
+                'category_count' : CategoryModel.objects.filter(group_id = _group_obj.id).count()
             })
         return _rslt
 
     @staticmethod
     def all_group_with_full_category():
-        _rslt = RBCategory.allgroups()
+        _rslt = Category.allgroups()
         for _group in _rslt: 
             _group['content'] = []
-            for _category_obj in RBCategoryModel.objects.filter(group_id = _group['group_id']):
+            for _category_obj in CategoryModel.objects.filter(group_id = _group['group_id']):
                 _context = {
                     'category_id' : _category_obj.id,
                     'category_title' : _category_obj.title,

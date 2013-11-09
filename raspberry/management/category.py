@@ -13,7 +13,7 @@ import datetime
 import time
 import json
 
-from common.category import RBCategory
+from common.category import Category
 
 @login_required
 def create_category_group(request):
@@ -27,7 +27,7 @@ def create_category_group(request):
         )
     else:
         _title = request.POST.get("title", None)
-        _category_group_id = RBCategory.create_group(
+        _category_group_id = Category.create_group(
             title = _title
         )
         return HttpResponseRedirect(reverse('management.views.entity_list') + '?gid=' + str(_category_group_id))
@@ -40,8 +40,8 @@ def category_list(request):
     _status = request.GET.get("status", None)
     if _status != None:
         _status = int(_status)
-    _category_groups = RBCategory.allgroups()
-    _categories = RBCategory.find(group_id = _group_id, status = _status)
+    _category_groups = Category.allgroups()
+    _categories = Category.find(group_id = _group_id, status = _status)
     return render_to_response( 
         'category/list.html', 
         {
@@ -61,7 +61,7 @@ def create_category(request):
         _group_id = request.GET.get("gid", None)
         if _group_id != None:
             _group_id = int(_group_id)
-        _category_groups = RBCategory.allgroups()
+        _category_groups = Category.allgroups()
         return render_to_response( 
             'category/create.html', 
             {
@@ -74,7 +74,7 @@ def create_category(request):
     elif request.method == 'POST':
         _group_id = request.POST.get("group_id", None)
         _title = request.POST.get("title", None)
-        _category = RBCategory.create(
+        _category = Category.create(
             title = _title,
             group_id = _group_id
         )
@@ -83,8 +83,8 @@ def create_category(request):
 @login_required
 def edit_category(request, category_id):
     if request.method == 'GET':
-        _category_groups = RBCategory.allgroups()
-        _category_context = RBCategory(category_id).read()
+        _category_groups = Category.allgroups()
+        _category_context = Category(category_id).read()
         return render_to_response( 
             'category/edit.html', 
             {
@@ -107,7 +107,7 @@ def edit_category(request, category_id):
             else:
                 _image_data = _image_file.read()
             
-        RBCategory(category_id).update(
+        Category(category_id).update(
             title = _title,
             group_id = _group_id,
             image_data = _image_data,

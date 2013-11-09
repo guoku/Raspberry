@@ -1,7 +1,6 @@
 # coding=utf8
 from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
-from models import Entity_Note as EntityNoteModel
 from django.conf import settings
 from django.db.models import Sum
 from mongoengine import *
@@ -92,7 +91,7 @@ class Entity(object):
     def merge(self, target_entity_id):
         _item_id_list = Item.get_item_id_list_by_entity_id(target_entity_id)
         for _item_id in _item_id_list:
-            _item = RBItem(_item_id)
+            _item = Item(_item_id)
             _item.bind(self.entity_id)
         
         _target_entity = Entity(target_entity_id)
@@ -160,10 +159,6 @@ class Entity(object):
         _context["total_score"] = 0 
         _context["score_count"] = 0 
         _context["note_id_list"] = []
-        for _entity_note_obj in EntityNoteModel.objects.filter(entity_id = self.entity_id):
-            _context["note_id_list"].append(_entity_note_obj.note_id)
-            _context["total_score"] += _entity_note_obj.score
-            _context["score_count"] += 1
 
         return _context
         
@@ -293,46 +288,46 @@ class Entity(object):
             _hdl = _hdl.filter(created_time__lt = timestamp)
         return map(lambda x : x.entity_id, _hdl[offset : offset + count])
         
-    def add_note(self, creator_id, score, note_text, image_data):
-        _creator_id = int(creator_id)
-        _score = int(score)
-        _note = RBNote.create(
-            creator_id = _creator_id,
-            note_text = note_text,
-            image_data = image_data
-        )
-        _entity_note_obj = EntityNoteModel.objects.create(
-            entity_id = self.entity_id,
-            note_id = _note.note_id,
-            score = _score,
-            creator_id = _creator_id,
-            created_time = datetime.datetime.now(), 
-            updated_time = datetime.datetime.now() 
-        )
-        return _note
-    
-    
-    def update_note(self, note_id, score, note_text, image_data = None):
-        _note_id = int(note_id)
-        _score = int(score)
-        _note = RBNote(_note_id)
-        _note.update(
-            note_text = note_text,
-            image_data = image_data
-        )
-        _entity_note_obj = EntityNoteModel.objects.get(
-            entity_id = self.entity_id,
-            note_id = _note_id
-        )
-        _entity_note_obj.score = _score
-        _entity_note_obj.save()
-        return _note
+#    def add_note(self, creator_id, score, note_text, image_data):
+#        _creator_id = int(creator_id)
+#        _score = int(score)
+#        _note = Note.create(
+#            creator_id = _creator_id,
+#            note_text = note_text,
+#            image_data = image_data
+#        )
+#        _entity_note_obj = EntityNoteModel.objects.create(
+#            entity_id = self.entity_id,
+#            note_id = _note.note_id,
+#            score = _score,
+#            creator_id = _creator_id,
+#            created_time = datetime.datetime.now(), 
+#            updated_time = datetime.datetime.now() 
+#        )
+#        return _note
+#    
+#    
+#    def update_note(self, note_id, score, note_text, image_data = None):
+#        _note_id = int(note_id)
+#        _score = int(score)
+#        _note = Note(_note_id)
+#        _note.update(
+#            note_text = note_text,
+#            image_data = image_data
+#        )
+#        _entity_note_obj = EntityNoteModel.objects.get(
+#            entity_id = self.entity_id,
+#            note_id = _note_id
+#        )
+#        _entity_note_obj.score = _score
+#        _entity_note_obj.save()
+#        return _note
         
     
-    @staticmethod
-    def get_user_entity_note_count(user_id):
-        _user_id = int(user_id)
-        return EntityNoteModel.objects.filter(creator_id = _user_id).count()
+#    @staticmethod
+#    def get_user_entity_note_count(user_id):
+#        _user_id = int(user_id)
+#        return EntityNoteModel.objects.filter(creator_id = _user_id).count()
     
     @staticmethod
     def get_user_like_count(user_id):
@@ -350,40 +345,40 @@ class Entity(object):
             pass
         return None
     
-    @staticmethod
-    def find_entity_note(entity_id = None, creator_id_set = None, timestamp = None, offset = None, count = None):
-        _hdl = EntityNoteModel.objects.all()
-        if entity_id != None:
-            _hdl = _hdl.filter(entity_id = entity_id)
-        if creator_id_set != None:
-            _hdl = _hdl.filter(creator_id__in = creator_id_set)
-        if timestamp != None:
-            _hdl = _hdl.filter(created_time__lt = timestamp)
-        
-        if offset != None and count != None:
-            _hdl = _hdl[offset : offset + count]
-        _rslt = []
-        for _obj in _hdl:
-            _rslt.append({
-                'entity_id' : _obj.entity_id,
-                'note_id' : _obj.note_id,
-                'score' : _obj.score,
-                'creator_id' : _obj.creator_id
-            })
-        return _rslt 
-        
-    
-    @staticmethod
-    def search(query):
-        _entity_id_list = []  
-        for _entity_obj in EntityModel.objects.filter(brand__contains = query):
-            _entity_id_list.append(str(_entity_obj.id))
-        for _entity_obj in EntityModel.objects.filter(title__contains = query):
-            _entity_id = str(_entity_obj.id)
-            if not _entity_id in _entity_id_list:
-                _entity_id_list.append(_entity_id)
-        return _entity_id_list
-    
+#    @staticmethod
+#    def find_entity_note(entity_id = None, creator_id_set = None, timestamp = None, offset = None, count = None):
+#        _hdl = EntityNoteModel.objects.all()
+#        if entity_id != None:
+#            _hdl = _hdl.filter(entity_id = entity_id)
+#        if creator_id_set != None:
+#            _hdl = _hdl.filter(creator_id__in = creator_id_set)
+#        if timestamp != None:
+#            _hdl = _hdl.filter(created_time__lt = timestamp)
+#        
+#        if offset != None and count != None:
+#            _hdl = _hdl[offset : offset + count]
+#        _rslt = []
+#        for _obj in _hdl:
+#            _rslt.append({
+#                'entity_id' : _obj.entity_id,
+#                'note_id' : _obj.note_id,
+#                'score' : _obj.score,
+#                'creator_id' : _obj.creator_id
+#            })
+#        return _rslt 
+#        
+#    
+#    @staticmethod
+#    def search(query):
+#        _entity_id_list = []  
+#        for _entity_obj in EntityModel.objects.filter(brand__contains = query):
+#            _entity_id_list.append(str(_entity_obj.id))
+#        for _entity_obj in EntityModel.objects.filter(title__contains = query):
+#            _entity_id = str(_entity_obj.id)
+#            if not _entity_id in _entity_id_list:
+#                _entity_id_list.append(_entity_id)
+#        return _entity_id_list
+#    
     @staticmethod
     def read_entity_note_figure_data_by_store_key(store_key): 
         _datastore = Client(

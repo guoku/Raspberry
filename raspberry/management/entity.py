@@ -13,10 +13,10 @@ import datetime
 import time
 import json
 
-from common.category import RBCategory
-from common.entity import RBEntity
-from common.item import RBItem
-from common.note import RBNote
+from common.category import Category
+from common.entity import Entity
+from common.item import Item
+from common.note import Note
 from common.user import User
 from utils.paginator import Paginator
 
@@ -50,7 +50,7 @@ def _load_taobao_item_info(taobao_id):
 def new_entity(request):
     if request.method == 'GET':
         _cid = int(request.GET.get("cid", "1"))
-        _category_list = RBCategory.find()
+        _category_list = Category.find()
         return render_to_response(
             "entity/new.html", 
             {
@@ -66,7 +66,7 @@ def new_entity(request):
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) != None: 
             _taobao_id = _parse_taobao_id_from_url(_cand_url)
 
-            _entity_id = RBEntity.check_taobao_item_exist(_taobao_id)
+            _entity_id = Entity.check_taobao_item_exist(_taobao_id)
             if _entity_id == None:
                 _taobao_item_info = _load_taobao_item_info(_taobao_id)
                 _selected_category_id = int(request.POST.get("category_id", "1"))
@@ -84,7 +84,7 @@ def new_entity(request):
                         'price' : _taobao_item_info['price'], 
                         'thumb_images' : _taobao_item_info["thumb_images"],
                         'selected_category_id' : _selected_category_id, 
-                        'category_list' : RBCategory.find(),
+                        'category_list' : Category.find(),
                         'brand' : _brand,
                         'title' : _title,
                     },
@@ -112,7 +112,7 @@ def create_entity_by_taobao_item(request):
         if _chief_image_url in _detail_image_urls:
             _detail_image_urls.remove(_chief_image_url)
         
-        _entity = RBEntity.create_by_taobao_item(
+        _entity = Entity.create_by_taobao_item(
             creator_id = request.user.id,
             category_id = _category_id,
             chief_image_url = _chief_image_url,
@@ -140,10 +140,10 @@ def edit_entity(request, entity_id):
             _message = "淘宝商品已被创建至本entity" 
         else:
             _message = None
-        _entity_context = RBEntity(entity_id).read()
+        _entity_context = Entity(entity_id).read()
         _item_context_list = []
         for _item_id in _entity_context['item_id_list']:
-            _item_context = RBItem(_item_id).read()
+            _item_context = Item(_item_id).read()
             if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
                 _entity_context['recommend_title'] = _item_context['title']
             _item_context_list.append(_item_context)
@@ -152,7 +152,7 @@ def edit_entity(request, entity_id):
             {
                 'active_division' : 'entity',
                 'entity_context' : _entity_context,
-                'category_list' : RBCategory.find(), 
+                'category_list' : Category.find(), 
                 'item_context_list' : _item_context_list,
                 'message' : _message
             },
@@ -170,7 +170,7 @@ def edit_entity(request, entity_id):
         _category_id = request.POST.get("category_id", None)
         if _category_id:
             _category_id = int(_category_id)
-        _entity = RBEntity(entity_id)
+        _entity = Entity(entity_id)
         _entity.update(
             category_id = _category_id,
             brand = _brand,
@@ -185,7 +185,7 @@ def edit_entity(request, entity_id):
 @login_required
 def edit_entity_image(request, entity_id):
     if request.method == 'GET':
-        _entity_context = RBEntity(entity_id).read()
+        _entity_context = Entity(entity_id).read()
         return render_to_response( 
             'entity/edit_image.html', 
             {
@@ -203,16 +203,16 @@ def search_entity(request):
         _query = request.GET.get("q", None)
         
     
-    _category_groups = RBCategory.allgroups()
-    _entity_id_list = RBEntity.search(_query)
+    _category_groups = Category.allgroups()
+    _entity_id_list = Entity.search(_query)
     _entity_context_list = [] 
-    _category_title_dict = RBCategory.get_category_title_dict()
+    _category_title_dict = Category.get_category_title_dict()
     for _entity_id in _entity_id_list:
-        _entity = RBEntity(_entity_id)
+        _entity = Entity(_entity_id)
         _entity_context = _entity.read()
         _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
         if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
-            _item_context = RBItem(_entity_context['item_id_list'][0]).read()
+            _item_context = Item(_entity_context['item_id_list'][0]).read()
             _entity_context['buy_link'] = _item_context['buy_link'] 
             _entity_context['taobao_title'] = _item_context['title'] 
         else:
@@ -220,7 +220,7 @@ def search_entity(request):
             _entity_context['taobao_title'] = ''
         _entity_context_list.append(_entity_context)
     
-    _category_context_list = RBCategory.find(like_word = _query)
+    _category_context_list = Category.find(like_word = _query)
     
     return render_to_response( 
         'entity/search.html', 
@@ -255,11 +255,11 @@ def entity_list(request):
         _category_id = request.GET.get("cid", None)
         if _category_id != None:
             _category_id = int(_category_id)
-            _category_context = RBCategory(_category_id).read()
+            _category_context = Category(_category_id).read()
             _category_group_id = _category_context['group_id']
-            _categories = RBCategory.find(group_id = _category_context['group_id'])
+            _categories = Category.find(group_id = _category_context['group_id'])
             for _category in _categories:
-                _category['entity_count'] = RBEntity.count(_category['category_id'])
+                _category['entity_count'] = Entity.count(_category['category_id'])
             _para['cid'] = _category_id
         else:
             _category_context = None
@@ -267,8 +267,8 @@ def entity_list(request):
             _categories = None
         
         
-        _category_groups = RBCategory.allgroups()
-        _entity_id_list = RBEntity.find(
+        _category_groups = Category.allgroups()
+        _entity_id_list = Entity.find(
             category_id = _category_id,
             status = _status_code
         )
@@ -277,13 +277,13 @@ def entity_list(request):
         else:
             _paginator = Paginator(_page_num, 100, len(_entity_id_list), _para)
         _entity_context_list = []
-        _category_title_dict = RBCategory.get_category_title_dict()
+        _category_title_dict = Category.get_category_title_dict()
         for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
-            _entity = RBEntity(_entity_id)
+            _entity = Entity(_entity_id)
             _entity_context = _entity.read()
             _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
             if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
-                _item_context = RBItem(_entity_context['item_id_list'][0]).read()
+                _item_context = Item(_entity_context['item_id_list'][0]).read()
                 _entity_context['buy_link'] = _item_context['buy_link'] 
                 _entity_context['taobao_title'] = _item_context['title'] 
             else:
@@ -306,8 +306,8 @@ def entity_list(request):
             context_instance = RequestContext(request)
         )
     else:
-        _categories = RBCategory.find(group_id = int(_group_id))
-        _category_groups = RBCategory.allgroups()
+        _categories = Category.find(group_id = int(_group_id))
+        _category_groups = Category.allgroups()
         if len(_categories) == 0:
             return render_to_response( 
                 'entity/list.html', 
@@ -326,14 +326,14 @@ def entity_list(request):
 
 @login_required
 def unbind_taobao_item_from_entity(request, entity_id, item_id):
-    _entity = RBEntity(entity_id)
+    _entity = Entity(entity_id)
     _entity.unbind_item(item_id)
 
     return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
 
 @login_required
 def bind_taobao_item_to_entity(request, entity_id, item_id):
-    _entity = RBEntity(entity_id)
+    _entity = Entity(entity_id)
     _entity.bind_item(item_id)
     return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
 
@@ -343,7 +343,7 @@ def load_taobao_item_for_entity(request, entity_id):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
             
-        _entity_id = RBEntity.check_taobao_item_exist(_taobao_id)
+        _entity_id = Entity.check_taobao_item_exist(_taobao_id)
         if _entity_id == None:
             _taobao_item_info = _load_taobao_item_info(_taobao_id)
             return render_to_response( 
@@ -362,8 +362,8 @@ def load_taobao_item_for_entity(request, entity_id):
                 context_instance = RequestContext(request)
             )
         elif _entity_id == "":
-            _item_id = RBItem.get_item_id_by_taobao_id(_taobao_id)
-            _item = RBItem(_item_id)
+            _item_id = Item.get_item_id_by_taobao_id(_taobao_id)
+            _item = Item(_item_id)
             _item_context = _item.read()
             
             if not _item_context.has_key('images'):
@@ -399,7 +399,7 @@ def add_image_for_entity(request, entity_id):
         else:
             _image_data = None 
         _image_url= request.POST.get('image_url', None)
-        _entity = RBEntity(entity_id)
+        _entity = Entity(entity_id)
         _entity.add_image(
             image_url = _image_url,
             image_data = _image_data
@@ -410,7 +410,7 @@ def add_image_for_entity(request, entity_id):
 @login_required
 def del_image_from_entity(request, entity_id, image_id):
     if request.method == "GET":
-        _entity = RBEntity(entity_id)
+        _entity = Entity(entity_id)
         _entity.del_image(
             image_id = image_id 
         )
@@ -429,7 +429,7 @@ def add_taobao_item_for_entity(request, entity_id):
         _image_urls = request.POST.getlist("image_url")
             
         
-        _entity = RBEntity(entity_id)
+        _entity = Entity(entity_id)
         _entity.add_taobao_item(
             taobao_item_info = {
                 'taobao_id' : _taobao_id,
@@ -447,6 +447,6 @@ def add_taobao_item_for_entity(request, entity_id):
 def merge_entity(request, entity_id):
     if request.method == 'POST':
         _target_entity_id = request.POST.get("target_entity_id", None)
-        _entity = RBEntity(entity_id)
+        _entity = Entity(entity_id)
         _entity.merge(_target_entity_id)
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))

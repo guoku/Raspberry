@@ -1,14 +1,14 @@
 #coding=utf-8
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
-from common.category import RBCategory
-from common.entity import RBEntity
+from common.category import Category
+from common.entity import Entity
 from mango.client import MangoApiClient
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 import datetime
 import json
 
 def sync_category(request):
-    _all_categories = RBCategory.all_group_with_full_category()
+    _all_categories = Category.all_group_with_full_category()
     return SuccessJsonResponse(_all_categories)
 
 def sync_taobao_item(request):
@@ -44,9 +44,9 @@ def create_entity_from_offline(request):
         if _chief_image_url in _detail_image_urls:
             _detail_image_urls.remove(_chief_image_url)
             
-        _entity_id = RBEntity.check_taobao_item_exist(_taobao_id)
+        _entity_id = Entity.check_taobao_item_exist(_taobao_id)
         if _entity_id == None:
-            _entity = RBEntity.create_by_taobao_item(
+            _entity = Entity.create_by_taobao_item(
                 creator_id = request.user.id,
                 category_id = _category_id,
                 chief_image_url = _chief_image_url,

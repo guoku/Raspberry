@@ -1,7 +1,6 @@
 # coding=utf8
 from django.contrib.auth.models import User
 from django.db import models
-from mongoengine import Document 
 
 class User_Profile(models.Model):
     Man = u'M'
@@ -120,6 +119,7 @@ class User_Follow(models.Model):
         ordering = ['-followed_time']
         unique_together = ("follower", "followee")
 
+from mongoengine import * 
 class Image(Document):
     source = StringField(required = True)
     origin_url  = URLField(required = False)

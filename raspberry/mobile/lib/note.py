@@ -1,12 +1,12 @@
 # coding=utf8
-from common.item import RBItem
-from common.entity import RBEntity
-from common.note import RBNote
-from user import RBMobileUser
+from common.item import Item
+from common.entity import Entity
+from common.note import Note
+from user import MobileUser
 import time
 
 
-class RBMobileNote(RBNote):
+class MobileNote(Note):
     
     @classmethod
     def create_by_note(cls, note):
@@ -19,9 +19,9 @@ class RBMobileNote(RBNote):
         
     
     def read(self, request_user_id = None):
-        _context = super(RBMobileNote, self).read(json = True)
+        _context = super(MobileNote, self).read(json = True)
         
-        _context['creator'] = RBMobileUser(_context['creator_id']).read(request_user_id)
+        _context['creator'] = MobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
         
         if request_user_id and self.poke_already(request_user_id):
@@ -30,7 +30,7 @@ class RBMobileNote(RBNote):
             _context['poke_already'] = 0
 
         if _context.has_key('entity_id') and _context['entity_id'] != None:
-            _entity = RBEntity(_context['entity_id'])
+            _entity = Entity(_context['entity_id'])
             _entity_context = _entity.read()
             _context['brand'] = _entity_context['brand']
             _context['title'] = _entity_context['title']
@@ -44,7 +44,7 @@ class RBMobileNote(RBNote):
         _context['note'] = self.read(request_user_id)
         _context['poker_list'] = []
         for _poker_id in _context['note']['poker_id_list']: 
-            _context['poker_list'].append(RBMobileUser(_poker_id).read(request_user_id))
+            _context['poker_list'].append(MobileUser(_poker_id).read(request_user_id))
         del _context['note']['poker_id_list']
         _context['comment_list'] = [] 
         for _comment_id in _context['note']['comment_id_list']: 
@@ -54,11 +54,11 @@ class RBMobileNote(RBNote):
         return _context
 
     def read_comment(self, comment_id, request_user_id = None):
-        _context = super(RBMobileNote, self).read_comment(comment_id, json = True)
-        _context['creator'] = RBMobileUser(_context['creator_id']).read(request_user_id)
+        _context = super(MobileNote, self).read_comment(comment_id, json = True)
+        _context['creator'] = MobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
         if _context.has_key('reply_to_user_id'):
-            _context['reply_to_user'] = RBMobileUser(_context['reply_to_user_id']).read(request_user_id)
+            _context['reply_to_user'] = MobileUser(_context['reply_to_user_id']).read(request_user_id)
             del _context['reply_to_user_id']
             
         return _context

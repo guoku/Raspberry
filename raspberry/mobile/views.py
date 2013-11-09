@@ -17,13 +17,13 @@ def homepage(request):
         _request_user_id = None
     _rslt = {}
     _rslt['hot'] = []
-    _note_id_list = RBMobileNote.find(
+    _note_id_list = MobileNote.find(
         count = 3
     )
     for _note_id in _note_id_list: 
-        _note_context = RBMobileNote(_note_id).read(_request_user_id)
+        _note_context = MobileNote(_note_id).read(_request_user_id)
         if _note_context.has_key('entity_id'):
-            _entity = RBMobileEntity(_note_context['entity_id'])
+            _entity = MobileEntity(_note_context['entity_id'])
             _rslt['hot'].append({
                 'type' : 'entity',
                 'object' : {
@@ -33,15 +33,15 @@ def homepage(request):
             })
     
     _rslt['discover'] = []
-    _rslt['discover'].append(RBCategory(103).read())
-    _rslt['discover'].append(RBCategory(4).read())
-    _rslt['discover'].append(RBCategory(83).read())
-    _rslt['discover'].append(RBCategory(12).read())
-    _rslt['discover'].append(RBCategory(91).read())
-    _rslt['discover'].append(RBCategory(65).read())
-    _rslt['discover'].append(RBCategory(116).read())
-    _rslt['discover'].append(RBCategory(85).read())
-    _rslt['discover'].append(RBCategory(10).read())
+    _rslt['discover'].append(Category(103).read())
+    _rslt['discover'].append(Category(4).read())
+    _rslt['discover'].append(Category(83).read())
+    _rslt['discover'].append(Category(12).read())
+    _rslt['discover'].append(Category(91).read())
+    _rslt['discover'].append(Category(65).read())
+    _rslt['discover'].append(Category(116).read())
+    _rslt['discover'].append(Category(85).read())
+    _rslt['discover'].append(Category(10).read())
     
     return SuccessJsonResponse(_rslt)
      
@@ -61,11 +61,11 @@ def feed(request):
         _count = int(request.GET.get('count', '30'))
 
         if _scale == 'friend':
-            _following_user_id_list = RBMobileUser(_request_user_id).get_following_user_id_list()
+            _following_user_id_list = MobileUser(_request_user_id).get_following_user_id_list()
         else:
             _following_user_id_list = None
         
-        _note_list = RBMobileEntity.find_entity_note(
+        _note_list = MobileEntity.find_entity_note(
             timestamp = _timestamp,
             creator_id_set = _following_user_id_list,
             offset = _offset,
@@ -76,9 +76,9 @@ def feed(request):
         
         _rslt = []
         for _note_id in _note_id_list: 
-            _note_context = RBMobileNote(_note_id).read(_request_user_id)
+            _note_context = MobileNote(_note_id).read(_request_user_id)
             if _note_context.has_key('entity_id'):
-                _entity = RBMobileEntity(_note_context['entity_id'])
+                _entity = MobileEntity(_note_context['entity_id'])
                 _rslt.append({
                     'type' : 'entity',
                     'object' : {
@@ -109,7 +109,7 @@ def message(request):
                     'type' : 'user_follow',
                     'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content': {
-                        'follower' : RBMobileUser(_message.follower_id).read(_request_user_id)
+                        'follower' : MobileUser(_message.follower_id).read(_request_user_id)
                     }
                 }
                 _rslt.append(_context)
@@ -118,8 +118,8 @@ def message(request):
                     'type' : 'note_poke_message',
                     'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content' : {
-                        'note' : RBMobileNote(_message.note_id).read(_request_user_id),
-                        'poker' : RBMobileUser(_message.poker_id).read(_request_user_id)
+                        'note' : MobileNote(_message.note_id).read(_request_user_id),
+                        'poker' : MobileUser(_message.poker_id).read(_request_user_id)
                     }
                 }
                 _rslt.append(_context)
@@ -128,9 +128,9 @@ def message(request):
                     'type' : 'note_comment_message',
                     'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content' : {
-                        'note' : RBMobileNote(_message.note_id).read(_request_user_id),
+                        'note' : MobileNote(_message.note_id).read(_request_user_id),
                         #'comment_id' : _message.comment_id,
-                        'comment_user' : RBMobileUser(_message.comment_creator_id).read(_request_user_id)
+                        'comment_user' : MobileUser(_message.comment_creator_id).read(_request_user_id)
                     }
                 }
                 _rslt.append(_context)
@@ -139,9 +139,9 @@ def message(request):
                     'type' : 'note_comment_reply_message',
                     'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content' : {
-                        'note' : RBMobileNote(_message.note_id).read(_request_user_id),
+                        'note' : MobileNote(_message.note_id).read(_request_user_id),
                         #'comment_id' : _message.comment_id,
-                        'replying_user' : RBMobileUser(_message.replying_user_id).read(_request_user_id)
+                        'replying_user' : MobileUser(_message.replying_user_id).read(_request_user_id)
                     }
                 }
                 _rslt.append(_context)

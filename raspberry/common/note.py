@@ -1,9 +1,7 @@
 # coding=utf8
-from models import Entity_Note as RBEntityNoteModel
-from models import Note as RBNoteModel
-from models import Note_Comment as RBNoteCommentModel
-from models import Note_Figure as RBNoteFigureModel
-from models import Note_Poke as RBNotePokeModel
+from models import Note as NoteModel
+from models import Note_Comment as NoteCommentModel
+from models import Note_Poke as NotePokeModel
 from message import NotePokeMessage, NoteCommentReplyMessage, NoteCommentMessage
 from django.conf import settings
 from hashlib import md5
@@ -14,7 +12,7 @@ import time
 
 
 
-class RBNote(object):
+class Note(object):
     
     class Figure(object):
         
@@ -55,18 +53,18 @@ class RBNote(object):
 
     def __ensure_note_obj(self):
         if not hasattr(self, 'note_obj'):
-            self.note_obj = RBNoteModel.objects.get(pk = self.note_id)
+            self.note_obj = NoteModel.objects.get(pk = self.note_id)
     
     def __ensure_figure_obj(self):
         if not hasattr(self, 'figure_obj'):
             self.figure_obj = None
-            for _figure_obj in RBNoteFigureModel.objects.filter(note_id = self.note_id).order_by('-created_time'):
-                self.figure_obj = _figure_obj
-                break
+#            for _figure_obj in NoteFigureModel.objects.filter(note_id = self.note_id).order_by('-created_time'):
+#                self.figure_obj = _figure_obj
+#                break
 
     @classmethod
     def find(cls, timestamp = None, creator_set = None, offset = 0, count = 30):
-        _hdl = RBNoteModel.objects
+        _hdl = NoteModel.objects
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         if creator_set != None:
@@ -82,7 +80,7 @@ class RBNote(object):
     
     @classmethod
     def create(cls, creator_id, note_text, image_data = None):
-        _note_obj = RBNoteModel.objects.create(
+        _note_obj = NoteModel.objects.create(
             creator_id = creator_id,
             note_text = note_text
         )
@@ -92,7 +90,7 @@ class RBNote(object):
     
         if image_data != None:
             _figure = cls.Figure.create(image_data)
-            _figure_obj = RBNoteFigureModel.objects.create(
+            _figure_obj = NoteFigureModel.objects.create(
                 note_id = _note_obj.id,
                 creator_id = creator_id,
                 store_hash = _figure.get_hash_key()
@@ -109,7 +107,7 @@ class RBNote(object):
             self.__ensure_figure_obj()
             _figure = self.Figure.create(image_data)
             if self.figure_obj == None:
-                _figure_obj = RBNoteFigureModel.objects.create(
+                _figure_obj = NoteFigureModel.objects.create(
                     note_id = self.note_id,
                     creator_id = self.note_obj.creator_id,
                     store_hash = _figure.get_hash_key()
@@ -123,11 +121,13 @@ class RBNote(object):
         self.__ensure_note_obj()
         _context = {} 
         _context["note_id"] = self.note_obj.id
+        _context["entity_id"] = self.note_obj.entity_id
         _context["creator_id"] = self.note_obj.creator_id
         _context["content"] = self.note_obj.note_text
-        _context["poker_id_list"] = map(lambda x : x.user_id, RBNotePokeModel.objects.filter(note_id = self.note_id))
+        _context["score"] = self.note_obj.score
+        _context["poker_id_list"] = map(lambda x : x.user_id, NotePokeModel.objects.filter(note_id = self.note_id))
         _context["poke_count"] = len(_context["poker_id_list"]) 
-        _context["comment_id_list"] = map(lambda x : x.id, RBNoteCommentModel.objects.filter(note_id = self.note_id))
+        _context["comment_id_list"] = map(lambda x : x.id, NoteCommentModel.objects.filter(note_id = self.note_id))
         _context["comment_count"] = len(_context["comment_id_list"]) 
         _context["created_time"] = self.note_obj.created_time
         _context["updated_time"] = self.note_obj.updated_time
@@ -136,23 +136,15 @@ class RBNote(object):
         if self.figure_obj != None:
             _context['figure'] = self.Figure(self.figure_obj.store_hash).read_origin_link()
 
-        try:
-            _obj = RBEntityNoteModel.objects.get(note_id = self.note_id)
-            _context["entity_id"] = _obj.entity_id
-            _context["score"] = _obj.score
-        except RBEntityNoteModel.DoesNotExist, e:
-            pass
-
-        
         return _context
 
-    def get_entity_of_note(self):
-        try:
-            _obj = RBEntityNoteModel.objects.get(note_id = self.note_id)
-            return _obj.entity_id
-        except RBEntityNoteModel.DoesNotExist, e:
-            pass
-        return None
+#    def get_entity_of_note(self):
+#        try:
+#            _obj = EntityNoteModel.objects.get(note_id = self.note_id)
+#            return _obj.entity_id
+#        except EntityNoteModel.DoesNotExist, e:
+#            pass
+#        return None
         
     def read(self, json = False):
         _context = self.__load_note_context()
@@ -163,7 +155,7 @@ class RBNote(object):
 
     def poke(self, user_id):
         try:
-            RBNotePokeModel.objects.create(
+            NotePokeModel.objects.create(
                 note_id = self.note_id,
                 user_id = user_id
             )
@@ -183,7 +175,7 @@ class RBNote(object):
 
     def depoke(self, user_id):
         try:
-            _obj = RBNotePokeModel.objects.get(
+            _obj = NotePokeModel.objects.get(
                 note_id = self.note_id,
                 user_id = user_id
             )
@@ -194,13 +186,13 @@ class RBNote(object):
         return False
 
     def poke_already(self, user_id):
-        if RBNotePokeModel.objects.filter(note_id = self.note_id, user_id = user_id).count() > 0:
+        if NotePokeModel.objects.filter(note_id = self.note_id, user_id = user_id).count() > 0:
             return True
         return False
 
     def read_comment(self, comment_id, json = False):
         if not self.comments.has_key(comment_id):
-            self.comments[comment_id] = RBNoteCommentModel.objects.get(pk = comment_id)
+            self.comments[comment_id] = NoteCommentModel.objects.get(pk = comment_id)
         _context = {}
         _context["comment_id"] = self.comments[comment_id].id
         _context["content"] = self.comments[comment_id].comment_text 
@@ -209,7 +201,7 @@ class RBNote(object):
         _reply_to_comment_id = self.comments[comment_id].reply_to
         if _reply_to_comment_id != None:
             if not self.comments.has_key(_reply_to_comment_id):
-                self.comments[_reply_to_comment_id] = RBNoteCommentModel.objects.get(pk = _reply_to_comment_id) 
+                self.comments[_reply_to_comment_id] = NoteCommentModel.objects.get(pk = _reply_to_comment_id) 
             _context["reply_to_comment_id"] = _reply_to_comment_id 
             _context["reply_to_user_id"] = self.comments[_reply_to_comment_id].creator_id 
         
@@ -219,7 +211,7 @@ class RBNote(object):
         return _context
     
     def add_comment(self, comment_text, creator_id, reply_to = None):
-        _obj = RBNoteCommentModel.objects.create(
+        _obj = NoteCommentModel.objects.create(
             note_id = self.note_id,
             comment_text = comment_text, 
             creator_id = creator_id,
@@ -239,7 +231,7 @@ class RBNote(object):
 
         if reply_to != None:
             if not self.comments.has_key(reply_to):
-                self.comments[reply_to] = RBNoteCommentModel.objects.get(pk = reply_to)
+                self.comments[reply_to] = NoteCommentModel.objects.get(pk = reply_to)
             if self.comments[reply_to].creator_id != creator_id:
                 _message = NoteCommentReplyMessage(
                     user_id = self.comments[reply_to].creator_id,
@@ -256,7 +248,7 @@ class RBNote(object):
     def get_user_last_note(user_id):
         _user_id = int(user_id)
         try:
-            _note = RBNoteModel.objects.filter(creator_id = _user_id).order_by('-created_time')[0]
+            _note = NoteModel.objects.filter(creator_id = _user_id).order_by('-created_time')[0]
             return _note.id
         except:
             pass

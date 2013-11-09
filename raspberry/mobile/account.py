@@ -1,5 +1,5 @@
 # coding=utf8
-from lib.user import RBMobileUser
+from lib.user import MobileUser
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
 
@@ -10,7 +10,7 @@ def login(request):
         _api_key = request.POST.get('api_key', None)
         
         try:
-            _user = RBMobileUser.login(
+            _user = MobileUser.login(
                 email = _email, 
                 password = _password
             )
@@ -26,7 +26,7 @@ def login(request):
                 'session' : _session.session_key
             }
             return SuccessJsonResponse(_data)
-        except RBMobileUser.LoginEmailDoesNotExist, e:
+        except MobileUser.LoginEmailDoesNotExist, e:
             return ErrorJsonResponse(
                 data = {
                     'type' : 'email',
@@ -34,7 +34,7 @@ def login(request):
                 },
                 status = 400
             )
-        except RBMobileUser.LoginPasswordIncorrect, e:
+        except MobileUser.LoginPasswordIncorrect, e:
             return ErrorJsonResponse(
                 data = {
                     'type' : 'password',
@@ -55,11 +55,11 @@ def register(request):
         #_dev_token = request.POST.get('dev_token', None)
         
         try:
-            _user = RBMobileUser.create(
+            _user = MobileUser.create(
                 email = _email, 
                 password = _password
             )
-        except RBMobileUser.EmailExistAlready, e:
+        except MobileUser.EmailExistAlready, e:
             return ErrorJsonResponse(
                 data = {
                     'type' : 'email',
@@ -73,7 +73,7 @@ def register(request):
             _user.set_profile(
                 nickname = _nickname
             )
-        except RBMobileUser.NicknameExistAlready, e:
+        except MobileUser.NicknameExistAlready, e:
             _user.delete()
             return ErrorJsonResponse(
                 data = {

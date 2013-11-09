@@ -13,27 +13,27 @@ import datetime
 import time
 import json
 
-from common.category import RBCategory
-from common.entity import RBEntity
-from common.item import RBItem
+from common.category import Category
+from common.entity import Entity
+from common.item import Item
 
 
 @login_required
 def note_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id == None:
-        _category_groups = RBCategory.allgroups()
+        _category_groups = Category.allgroups()
         _category_id = int(request.GET.get("cid", "1"))
-        _category_context = RBCategory(_category_id).read()
+        _category_context = Category(_category_id).read()
         _category_group_id = _category_context['group_id'] 
-        _categories = RBCategory.find(group_id = _category_context['group_id'])
+        _categories = Category.find(group_id = _category_context['group_id'])
         for _category in _categories:
-            _category['entity_count'] = RBEntity.count(_category['category_id'])
+            _category['entity_count'] = Entity.count(_category['category_id'])
     
-        _entity_id_list = RBEntity.find(_category_id)
+        _entity_id_list = Entity.find(_category_id)
         _entity_context_list = [] 
         for _entity_id in _entity_id_list:
-            _entity_context_list.append(RBEntity(_entity_id).read())
+            _entity_context_list.append(Entity(_entity_id).read())
         
         return render_to_response( 
             'entity/list.html', 
@@ -48,7 +48,7 @@ def note_list(request):
             context_instance = RequestContext(request)
         )
     else:
-        _categories = RBCategory.find(group_id = int(_group_id))
+        _categories = Category.find(group_id = int(_group_id))
         return HttpResponseRedirect(reverse('management.views.entity_list') + '?cid=' + str(_categories[0]['category_id'])) 
 
             )
