@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'raspberry_11_08',
+        'NAME': 'raspberry_11_09',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
         'HOST': 'localhost',                      

@@ -6,6 +6,7 @@ from django.db.models import Sum
 from mongoengine import *
 from note import Note
 from item import Item
+from image import Image
 from hashlib import md5
 import datetime
 import urllib
@@ -16,12 +17,12 @@ import time
 
 class Entity(object):
 
-    def __init__(self, id):
+    def __init__(self, entity_id):
         self.entity_id = entity_id
     
     def __ensure_entity_obj(self):
         if not hasattr(self, 'entity_obj'):
-            self.entity_obj = EntityModel.objects.get(entity_id = self.entity_id)
+            self.entity_obj = EntityModel.objects.get(pk = self.entity_id)
 
     
     @classmethod
@@ -69,7 +70,7 @@ class Entity(object):
         _entity_obj = EntityModel.objects.create( 
             entity_hash = _entity_hash,
             creator_id = creator_id,
-            category_id = category_id,
+            neo_category_id = category_id,
             brand = brand,
             title = title,
             intro = intro,
@@ -146,14 +147,32 @@ class Entity(object):
         return _item_id 
     
     
-    def __load_entity_context(self, meta_context):
+    def __load_entity_context(self):
         self.__ensure_entity_obj()
-        _context = meta_context 
+        _context = {}
+        _context['entity_id'] = self.entity_obj.id
+        _context['brand'] = self.entity_obj.brand 
+        _context['title'] = self.entity_obj.title
+        _context['intro'] = self.entity_obj.intro
+        _context['price'] = self.entity_obj.price
         _context["entity_hash"] = self.entity_obj.entity_hash
-        _context["category_id"] = self.entity_obj.category_id
+        _context["category_id"] = self.entity_obj.neo_category_id
         _context["created_time"] = self.entity_obj.created_time
         _context["updated_time"] = self.entity_obj.updated_time
         _context["weight"] = self.entity_obj.weight
+       
+        print self.entity_obj.id
+        _context['chief_image'] = {
+            'id' : self.entity_obj.chief_image,
+            'url' : Image(self.entity_obj.chief_image).getlink(),
+        }
+#        _context['detail_images'] = []
+#        for _image_id in self.entity_obj.images.detail_ids:
+#            _context['detail_images'].append({
+#                'id' : _image_id,
+#                'url' : Image(_image_id).getlink()
+#            })
+        _context['item_id_list'] = Item.get_item_id_list_by_entity_id(self.__entity_id) 
         
 
         _context["total_score"] = 0 
@@ -164,9 +183,7 @@ class Entity(object):
         
 
     def read(self, json = False):
-        _mango_client = MangoApiClient()
-        _meta_context = _mango_client.read_entity(self.entity_id)
-        _context = self.__load_entity_context(_meta_context)
+        _context = self.__load_entity_context()
         if json:
             _context['created_time'] = time.mktime(_context["created_time"].timetuple())
             _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
@@ -181,25 +198,27 @@ class Entity(object):
     
     def update(self, category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None):
         self.__ensure_entity_obj()
+        if category_id != None:
+            self.entity_obj.neo_category_id = category_id 
         if brand != None:
-            self.__entity_obj.brand = brand
+            self.entity_obj.brand = brand
         if title != None:
-            self.__entity_obj.title = title
+            self.entity_obj.title = title
         if intro != None:
-            self.__entity_obj.intro = intro
+            self.entity_obj.intro = intro
         if price != None:
-            self.__entity_obj.price = price
+            self.entity_obj.price = price
         if category_id != None:
             self.entity_obj.category_id = int(category_id)
         if weight != None:
             self.entity_obj.weight = int(weight)
 #        
-#        if chief_image_id != None and chief_image_id != self.__entity_obj.images.chief_id:
-#            if self.__entity_obj.images.chief_id not in self.__entity_obj.images.detail_ids:
-#                self.__entity_obj.images.detail_ids.insert(0, self.__entity_obj.images.chief_id)
-#            if chief_image_id in self.__entity_obj.images.detail_ids:
-#                self.__entity_obj.images.detail_ids.remove(chief_image_id)
-#            self.__entity_obj.images.chief_id = chief_image_id
+#        if chief_image_id != None and chief_image_id != self.entity_obj.images.chief_id:
+#            if self.entity_obj.images.chief_id not in self.entity_obj.images.detail_ids:
+#                self.entity_obj.images.detail_ids.insert(0, self.entity_obj.images.chief_id)
+#            if chief_image_id in self.entity_obj.images.detail_ids:
+#                self.entity_obj.images.detail_ids.remove(chief_image_id)
+#            self.entity_obj.images.chief_id = chief_image_id
             
         self.entity_obj.save()
             
@@ -207,7 +226,7 @@ class Entity(object):
     def find(cls, category_id = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
         _hdl = EntityModel.objects
         if category_id != None:
-            _hdl = _hdl.filter(category_id = category_id)
+            _hdl = _hdl.filter(neo_category_id = category_id)
         if status < 0:
             _hdl = _hdl.filter(weight__lt = 0)
         elif status > 0:
@@ -226,14 +245,14 @@ class Entity(object):
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
         
-        _entity_id_list = map(lambda x: x.entity_id, _hdl)
+        _entity_id_list = map(lambda x: x.id, _hdl)
         return _entity_id_list
 
     @classmethod
     def roll(cls, category_id = None, count = 10):
         _hdl = EntityModel.objects.filter(weight__gte = 0)
         if category_id != None:
-            _hdl = _hdl.filter(category_id = category_id)
+            _hdl = _hdl.filter(neo_category_id = category_id)
         _entity_id_list = map(lambda x: x.entity_id, _hdl)
         if len(_entity_id_list) <= count:
             return _entity_id_list
@@ -242,16 +261,16 @@ class Entity(object):
         
     @classmethod
     def count(cls, category_id = None):
-        _hdl = EntityModel.objects.filter(category_id = category_id)
+        _hdl = EntityModel.objects.filter(neo_category_id = category_id)
         return _hdl.count()
     
     def bind_item(self, item_id):
         _item_obj = Item(item_id)
-        _item_obj.bind_entity(self.__entity_id)
+        _item_obj.bind_entity(self.entity_id)
     
     def unbind_item(self, item_id):
         _item_obj = Item(item_id)
-        if _item_obj.get_entity_id() == self.__entity_id:
+        if _item_obj.get_entity_id() == self.entity_id:
             _item_obj.bind_entity("")
 
     def like(self, user_id):

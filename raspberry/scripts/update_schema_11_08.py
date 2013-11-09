@@ -21,6 +21,9 @@ cur.execute('ALTER TABLE common_entity ADD COLUMN `intro` longtext NOT NULL;')
 cur.execute('ALTER TABLE common_entity ADD COLUMN `chief_image` varchar(64) NOT NULL;')
 cur.execute('ALTER TABLE common_entity ADD COLUMN `detail_images` varchar(1024) DEFAULT NULL;')
 cur.execute('ALTER TABLE common_entity ADD KEY `common_entity_e4b99077` (`is_candidate`);')
+cur.execute('ALTER TABLE common_entity DROP FOREIGN KEY category_id_refs_id_f49cef23;')
+cur.execute('ALTER TABLE common_entity CHANGE category_id neo_category_id int(11) NOT NULL;')
+cur.execute('ALTER TABLE common_entity ADD FOREIGN KEY (`neo_category_id`) REFERENCES `common_neo_category` (`id`);')
 
 
 mango_entities = [] 

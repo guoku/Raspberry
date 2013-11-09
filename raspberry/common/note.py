@@ -5,7 +5,6 @@ from models import Note_Poke as NotePokeModel
 from message import NotePokeMessage, NoteCommentReplyMessage, NoteCommentMessage
 from django.conf import settings
 from hashlib import md5
-from mango.client import MangoApiClient
 from pymogile import Client
 import datetime
 import time

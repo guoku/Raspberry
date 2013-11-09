@@ -37,15 +37,15 @@ class Avatar(models.Model):
         app_label = 'base'
         ordering = ['-uploaded_time']
 
-class Category_Group(models.Model):
+class Neo_Category_Group(models.Model):
     title = models.CharField(max_length = 128, db_index = True)
     status = models.IntegerField(default = 1, db_index = True)
     class Meta:
         ordering = ['id']
 
 
-class Category(models.Model):
-    group = models.ForeignKey(Category_Group)
+class Neo_Category(models.Model):
+    group = models.ForeignKey(Neo_Category_Group)
     title = models.CharField(max_length = 128, db_index = True, unique = True)
     image_store_hash = models.CharField(max_length = 64, db_index = True, null = True, default = None)
     status = models.IntegerField(default = 1, db_index = True)
@@ -56,7 +56,7 @@ class Category(models.Model):
 class Entity(models.Model):
     entity_hash = models.CharField(max_length = 32, unique = True, db_index = True)
     creator_id = models.IntegerField(default = None, null = True, db_index = True)
-    category = models.ForeignKey(Category)
+    neo_category = models.ForeignKey(Neo_Category)
     brand = models.CharField(max_length = 256, null = False, default = '')
     title = models.CharField(max_length = 256, null = False, default = '')
     intro = models.TextField(null = False, default = '')

@@ -1,6 +1,6 @@
 # coding=utf8
-from models import Category_Group as CategoryGroupModel
-from models import Category as CategoryModel
+from models import Neo_Category_Group as CategoryGroupModel
+from models import Neo_Category as CategoryModel
 from django.conf import settings
 from django.db.models import Q
 from hashlib import md5
