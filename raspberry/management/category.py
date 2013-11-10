@@ -78,7 +78,7 @@ def create_category(request):
             title = _title,
             group_id = _group_id
         )
-        return HttpResponseRedirect(reverse('management.views.entity_list') + '?cid=' + str(_category.get_category_id())) 
+        return HttpResponseRedirect(reverse('management.views.entity_list') + '?cid=' + str(_category.category_id)) 
 
 @login_required
 def edit_category(request, category_id):

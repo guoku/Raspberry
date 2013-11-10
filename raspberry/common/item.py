@@ -1,6 +1,7 @@
 # coding=utf8
 from models import Item as ItemDocument
 from models import TaobaoItem as TaobaoItemDocument
+import datetime
 import urllib
 
 class Item(object):
@@ -81,10 +82,12 @@ class Item(object):
         self.item_obj.save()
     
     @staticmethod
-    def get_item_id_by_taobao_id(taobao_id):
-        _taobao_item_obj = TaobaoItemModel.objects.filter(taobao_id = taobao_id).first()
+    def get_item_by_taobao_id(taobao_id):
+        _taobao_item_obj = TaobaoItemDocument.objects.filter(taobao_id = taobao_id).first()
         if _taobao_item_obj != None:
-            return _taobao_item_obj.entity_id
+            _inst = cls(_item_obj.id)
+            _inst.item_obj = _taobao_item_obj
+            return _inst 
         return None
     
     @staticmethod

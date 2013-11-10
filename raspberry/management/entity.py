@@ -66,8 +66,8 @@ def new_entity(request):
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) != None: 
             _taobao_id = _parse_taobao_id_from_url(_cand_url)
 
-            _entity_id = Entity.check_taobao_item_exist(_taobao_id)
-            if _entity_id == None:
+            _item = Item.get_item_by_taobao_id(_taobao_id)
+            if _item == None:
                 _taobao_item_info = _load_taobao_item_info(_taobao_id)
                 _selected_category_id = int(request.POST.get("category_id", "1"))
                 _brand = ''
@@ -90,6 +90,9 @@ def new_entity(request):
                     },
                     context_instance = RequestContext(request)
                 )
+            elif _item.get_entity_id() == -1:
+                #TODO: bind an exist item to entity
+                pass
             else:
                 return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
                 
@@ -130,7 +133,7 @@ def create_entity_by_taobao_item(request):
             detail_image_urls = _detail_image_urls,
         )
 
-        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
 def edit_entity(request, entity_id):

@@ -67,7 +67,6 @@ for entity in mango_entities:
             item_coll.update({ "_id" : ObjectId(item_id) }, { "$set" : { "entity_id" : entity_id_new }})
             print "item [%s] set to [%s]..."%(item_id, entity_id_new)
         
-conn.commit()
 
 cur.execute('DROP TABLE common_note_poke;')
 cur.execute('DROP TABLE common_note_figure;')
@@ -78,3 +77,5 @@ cur.execute('DROP TABLE common_candidate_ask;')
 cur.execute('DROP TABLE common_candidate;')
 cur.execute('DROP TABLE common_note;')
 cur.execute('DROP TABLE common_entity_like;')
+cur.execute('ALTER TABLE common_entity DROP COLUMN entity_id;')
+conn.commit()

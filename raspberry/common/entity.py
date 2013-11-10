@@ -81,10 +81,10 @@ class Entity(object):
          
         _item_images = _detail_image_ids
         _item_images.append(_chief_image_id)
-        _taobao_item_id = _inst.__insert_taobao_item(taobao_item_info, _item_images)
         
-        _inst = cls(_entity_obj.entity_id)
+        _inst = cls(_entity_obj.id)
         _inst.entity_obj = _entity_obj
+        _taobao_item_id = _inst.__insert_taobao_item(taobao_item_info, _item_images)
 
         return _inst
 

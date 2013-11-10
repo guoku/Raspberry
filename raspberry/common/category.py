@@ -12,14 +12,11 @@ DEFAULT_CATEGORY_ICON_KEY = '03717fa531b23c6f5dbd5522e6eec9a1'
 class Category(object):
     
     def __init__(self, category_id):
-        self.__category_id= int(category_id)
+        self.category_id= int(category_id)
     
     def __ensure_category_obj(self):
-        if not hasattr(self, '__category_obj'):
-            self.__category_obj = CategoryModel.objects.get(pk = self.__category_id)
-    
-    def get_category_id(self):
-        return self.__category_id
+        if not hasattr(self, 'category_obj'):
+            self.category_obj = CategoryModel.objects.get(pk = self.category_id)
     
     def __resize(self, data, w, h):
         _img = Image(blob = data)
@@ -29,11 +26,11 @@ class Category(object):
     def update(self, title = None, group_id = None, image_data = None, status = None):
         self.__ensure_category_obj()
         if title != None:
-            self.__category_obj.title = title
+            self.category_obj.title = title
         if group_id != None:
-            self.__category_obj.group_id = group_id
+            self.category_obj.group_id = group_id
         if status != None:
-            self.__category_obj.status = int(status)
+            self.category_obj.status = int(status)
 
         if image_data != None:
             self.__datastore = Client(
@@ -53,9 +50,9 @@ class Category(object):
             _fp.write(_small_data)
             _fp.close()
             
-            self.__category_obj.image_store_hash = _key 
+            self.category_obj.image_store_hash = _key 
              
-        self.__category_obj.save()
+        self.category_obj.save()
 
     @staticmethod
     def create_group(title, status = 1):
@@ -73,19 +70,19 @@ class Category(object):
             status = status
         )
         _inst = cls(_category_obj.id)
-        _inst.__category_obj = _category_obj
+        _inst.category_obj = _category_obj
         return _inst
     
     def __load_category_context(self):
         self.__ensure_category_obj()
         _context = {}
-        _context['category_id'] = self.__category_obj.id
-        _context['category_title'] = self.__category_obj.title
-        _context['group_id'] = self.__category_obj.group_id
-        _context['status'] = self.__category_obj.status
-        if self.__category_obj.image_store_hash:
-            _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + self.__category_obj.image_store_hash 
-            _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + self.__category_obj.image_store_hash
+        _context['category_id'] = self.category_obj.id
+        _context['category_title'] = self.category_obj.title
+        _context['group_id'] = self.category_obj.group_id
+        _context['status'] = self.category_obj.status
+        if self.category_obj.image_store_hash:
+            _context['category_icon_large'] = settings.IMAGE_SERVER + 'category/large/' + self.category_obj.image_store_hash 
+            _context['category_icon_small'] = settings.IMAGE_SERVER + 'category/small/' + self.category_obj.image_store_hash
         return _context
 
     

@@ -19,6 +19,17 @@
                     </li>
                 </ul>
             </div>
+        {% else %}
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li class="nav-header">操作</li>
+                    <li>
+                        <a href="{% url 'management.views.new_entity' %}" target=_blank>
+                            添加商品
+                        </a>
+                    </li>
+                </ul>
+            </div>
         {% endif %}
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
