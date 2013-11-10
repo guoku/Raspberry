@@ -119,7 +119,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'common',
     'management',
-    'mango',
     'mobile',
 )
 

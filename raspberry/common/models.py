@@ -137,7 +137,7 @@ class Image(Document):
     }
 
 class Item(Document):
-    entity_id = StringField(required = True) 
+    entity_id = IntField(required = True) 
     source = StringField(required = True)
     images = ListField(required = False)
     created_time = DateTimeField(required = True)

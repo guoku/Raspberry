@@ -18,7 +18,7 @@ import time
 class Entity(object):
 
     def __init__(self, entity_id):
-        self.entity_id = entity_id
+        self.entity_id = int(entity_id)
     
     def __ensure_entity_obj(self):
         if not hasattr(self, 'entity_obj'):
@@ -268,7 +268,7 @@ class Entity(object):
     def unbind_item(self, item_id):
         _item_obj = Item(item_id)
         if _item_obj.get_entity_id() == self.entity_id:
-            _item_obj.bind_entity("")
+            _item_obj.bind(-1)
 
     def like(self, user_id):
         #try:

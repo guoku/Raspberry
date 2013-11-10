@@ -2,7 +2,6 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from common.category import Category
 from common.entity import Entity
-from mango.client import MangoApiClient
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 import datetime
 import json
@@ -15,11 +14,11 @@ def sync_taobao_item(request):
     _offset = int(request.GET.get('offset', '0'))
     _count = int(request.GET.get('count', '100'))
     
-    _mango_client = MangoApiClient()
-    _taobao_id_list = _mango_client.find_item(
-        offset = _offset,
-        count = _count
-    )
+#    _mango_client = MangoApiClient()
+#    _taobao_id_list = _mango_client.find_item(
+#        offset = _offset,
+#        count = _count
+#    )
     return SuccessJsonResponse(_taobao_id_list)
 
 def create_entity_from_offline(request):

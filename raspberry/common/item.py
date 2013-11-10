@@ -1,5 +1,6 @@
 # coding=utf8
 from models import Item as ItemDocument
+from models import TaobaoItem as TaobaoItemDocument
 import urllib
 
 class Item(object):

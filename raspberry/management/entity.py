@@ -329,7 +329,7 @@ def unbind_taobao_item_from_entity(request, entity_id, item_id):
     _entity = Entity(entity_id)
     _entity.unbind_item(item_id)
 
-    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
 def bind_taobao_item_to_entity(request, entity_id, item_id):
