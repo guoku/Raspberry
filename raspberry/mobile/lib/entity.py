@@ -36,9 +36,9 @@ class MobileEntity(Entity):
         if request_user_id: 
             if self.like_already(request_user_id):
                 _context['like_already'] = 1
-            _request_user_note_id_list = Entity.find_entity_note(entity_id = self.entity_id, creator_id_set = [request_user_id])
+            _request_user_note_id_list = MobileNote.find(entity_id = self.entity_id, creator_set = [request_user_id])
             if _request_user_note_id_list != None and len(_request_user_note_id_list) > 0:
-                _context['my_note'] = MobileNote(_request_user_note_id_list[0]['note_id']).read(request_user_id) 
+                _context['my_note'] = MobileNote(_request_user_note_id_list[0]).read(request_user_id) 
         
         return _context
     
@@ -63,14 +63,3 @@ class MobileEntity(Entity):
         
         return _context    
     
-    def add_note(self, creator_id, score, note_text, image_data):
-        _note_origin = super(MobileEntity, self).add_note(creator_id, score, note_text, image_data)
-        _note = MobileNote.create_by_note(_note_origin)
-        return _note
-    
-    def update_note(self, note_id, score, note_text, image_data):
-        _note_origin = super(MobileEntity, self).update_note(note_id, score, note_text, image_data)
-        _note = MobileNote.create_by_note(_note_origin)
-        return _note
-        
-

@@ -62,8 +62,21 @@ class Note(object):
 #                break
 
     @classmethod
-    def find(cls, timestamp = None, creator_set = None, offset = 0, count = 30):
+    def count(cls, timestamp = None, entity_id = None, creator_set = None, offset = 0, count = 30):
         _hdl = NoteModel.objects
+        if entity_id != None:
+            _hdl = _hdl.filter(entity_id = entity_id)
+        if timestamp != None:
+            _hdl = _hdl.filter(created_time__lt = timestamp)
+        if creator_set != None:
+            _hdl = _hdl.filter(creator_id__in = creator_set)
+        return _hdl.count() 
+    
+    @classmethod
+    def find(cls, timestamp = None, entity_id = None, creator_set = None, offset = 0, count = 30):
+        _hdl = NoteModel.objects
+        if entity_id != None:
+            _hdl = _hdl.filter(entity_id = entity_id)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         if creator_set != None:
@@ -72,21 +85,14 @@ class Note(object):
         for _note_obj in _hdl.order_by('-created_time')[offset : offset + count]:
             _list.append(_note_obj.id)
         return _list
-
+    
+    
     def get_creator_id(self):
         self.__ensure_note_obj()
         return self.note_obj.creator_id
     
     @classmethod
-    def create(cls, creator_id, note_text, image_data = None):
-        _note_obj = NoteModel.objects.create(
-            creator_id = creator_id,
-            note_text = note_text
-        )
-
-        _inst = cls(_note_obj.id)
-        _inst.note_obj = _note_obj
-    
+    def create(cls, entity_id, creator_id, note_text, score = 0, image_data = None):
         if image_data != None:
             _figure = cls.Figure.create(image_data)
             _figure_obj = NoteFigureModel.objects.create(
@@ -94,8 +100,22 @@ class Note(object):
                 creator_id = creator_id,
                 store_hash = _figure.get_hash_key()
             )
-            _inst.figure_obj = _figure_obj
+            _figure = _figure_obj.image_id
+        else:
+            _figure = ''
+        print score
+        _note_obj = NoteModel.objects.create(
+            entity_id = entity_id,
+            creator_id = creator_id,
+            note = note_text,
+            score = int(score),
+            figure = _figure
+        )
+
+        _inst = cls(_note_obj.id)
+        _inst.note_obj = _note_obj
         return _inst
+    
     
     def update(self, note_text, image_data):
         self.__ensure_note_obj()
@@ -122,7 +142,7 @@ class Note(object):
         _context["note_id"] = self.note_obj.id
         _context["entity_id"] = self.note_obj.entity_id
         _context["creator_id"] = self.note_obj.creator_id
-        _context["content"] = self.note_obj.note_text
+        _context["content"] = self.note_obj.note
         _context["score"] = self.note_obj.score
         _context["poker_id_list"] = map(lambda x : x.user_id, NotePokeModel.objects.filter(note_id = self.note_id))
         _context["poke_count"] = len(_context["poker_id_list"]) 
@@ -194,27 +214,24 @@ class Note(object):
             self.comments[comment_id] = NoteCommentModel.objects.get(pk = comment_id)
         _context = {}
         _context["comment_id"] = self.comments[comment_id].id
-        _context["content"] = self.comments[comment_id].comment_text 
+        _context["content"] = self.comments[comment_id].comment
         _context["creator_id"] = self.comments[comment_id].creator_id
        
-        _reply_to_comment_id = self.comments[comment_id].reply_to
-        if _reply_to_comment_id != None:
-            if not self.comments.has_key(_reply_to_comment_id):
-                self.comments[_reply_to_comment_id] = NoteCommentModel.objects.get(pk = _reply_to_comment_id) 
-            _context["reply_to_comment_id"] = _reply_to_comment_id 
-            _context["reply_to_user_id"] = self.comments[_reply_to_comment_id].creator_id 
+        _context['reply_to_comment_id'] = self.comments[comment_id].reply_to_comment_id
+        _context['reply_to_user_id'] = self.comments[comment_id].reply_to_user_id
         
         _context["created_time"] = self.comments[comment_id].created_time
         if json:
             _context['created_time'] = time.mktime(_context["created_time"].timetuple())
         return _context
     
-    def add_comment(self, comment_text, creator_id, reply_to = None):
+    def add_comment(self, comment_text, creator_id, reply_to_comment_id = None, reply_to_user_id = None):
         _obj = NoteCommentModel.objects.create(
             note_id = self.note_id,
-            comment_text = comment_text, 
+            comment = comment_text, 
             creator_id = creator_id,
-            reply_to = reply_to
+            reply_to_comment_id = reply_to_comment_id,
+            reply_to_user_id = reply_to_user_id
         )
         self.comments[_obj.id] = _obj
             
@@ -228,18 +245,15 @@ class Note(object):
         )
         _message.save()
 
-        if reply_to != None:
-            if not self.comments.has_key(reply_to):
-                self.comments[reply_to] = NoteCommentModel.objects.get(pk = reply_to)
-            if self.comments[reply_to].creator_id != creator_id:
-                _message = NoteCommentReplyMessage(
-                    user_id = self.comments[reply_to].creator_id,
-                    note_id = self.note_id, 
-                    comment_id = reply_to, 
-                    replying_user_id = creator_id, 
-                    created_time = datetime.datetime.now()
-                )
-                _message.save()
+        if reply_to_user_id != None:
+            _message = NoteCommentReplyMessage(
+                user_id = reply_to_user_id,
+                note_id = self.note_id, 
+                comment_id = reply_to_comment_id, 
+                replying_user_id = creator_id, 
+                created_time = datetime.datetime.now()
+            )
+            _message.save()
         
         return _obj.id
     

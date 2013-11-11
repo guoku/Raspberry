@@ -144,18 +144,27 @@ class Entity(object):
         return _item_id 
     
     
-    def __load_entity_context(self):
+    def __load_entity_context(self, json = False):
         self.__ensure_entity_obj()
         _context = {}
         _context['entity_id'] = self.entity_obj.id
         _context['brand'] = self.entity_obj.brand 
         _context['title'] = self.entity_obj.title
         _context['intro'] = self.entity_obj.intro
-        _context['price'] = self.entity_obj.price
+        if json:
+            _context['price'] = unicode(self.entity_obj.price)
+        else: 
+            _context['price'] = self.entity_obj.price
         _context["entity_hash"] = self.entity_obj.entity_hash
         _context["category_id"] = self.entity_obj.neo_category_id
-        _context["created_time"] = self.entity_obj.created_time
-        _context["updated_time"] = self.entity_obj.updated_time
+        if json:
+            _context['created_time'] = time.mktime(self.entity_obj.created_time.timetuple())
+        else:
+            _context["created_time"] = self.entity_obj.created_time
+        if json:
+            _context['updated_time'] = time.mktime(self.entity_obj.updated_time.timetuple())
+        else:
+            _context["updated_time"] = self.entity_obj.updated_time
         _context["weight"] = self.entity_obj.weight
        
         _context['chief_image'] = {
@@ -178,10 +187,7 @@ class Entity(object):
         
 
     def read(self, json = False):
-        _context = self.__load_entity_context()
-        if json:
-            _context['created_time'] = time.mktime(_context["created_time"].timetuple())
-            _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
+        _context = self.__load_entity_context(json)
         return _context    
     
     
@@ -222,6 +228,9 @@ class Entity(object):
         _hdl = EntityModel.objects.all()
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
+        if like_word != None: 
+            _q = Q(title__icontains = like_word)
+            _hdl = _hdl.filter(_q)
         if status < 0:
             _hdl = _hdl.filter(weight__lt = 0)
         elif status > 0:
@@ -248,7 +257,7 @@ class Entity(object):
         _hdl = EntityModel.objects.filter(weight__gte = 0)
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
-        _entity_id_list = map(lambda x: x.entity_id, _hdl)
+        _entity_id_list = map(lambda x: x.id, _hdl)
         if len(_entity_id_list) <= count:
             return _entity_id_list
         return random.sample(_entity_id_list, count) 
@@ -302,25 +311,16 @@ class Entity(object):
             _hdl = _hdl.filter(created_time__lt = timestamp)
         return map(lambda x : x.entity_id, _hdl[offset : offset + count])
         
-#    def add_note(self, creator_id, score, note_text, image_data):
-#        _creator_id = int(creator_id)
-#        _score = int(score)
-#        _note = Note.create(
-#            creator_id = _creator_id,
-#            note_text = note_text,
-#            image_data = image_data
-#        )
-#        _entity_note_obj = EntityNoteModel.objects.create(
-#            entity_id = self.entity_id,
-#            note_id = _note.note_id,
-#            score = _score,
-#            creator_id = _creator_id,
-#            created_time = datetime.datetime.now(), 
-#            updated_time = datetime.datetime.now() 
-#        )
-#        return _note
-#    
-#    
+    def add_note(self, creator_id, note_text, score = 0, image_data = None):
+        _note = Note.create(
+            entity_id = self.entity_id,
+            creator_id = creator_id,
+            note_text = note_text,
+            score = score,
+            image_data = image_data
+        )
+        return _note
+    
 #    def update_note(self, note_id, score, note_text, image_data = None):
 #        _note_id = int(note_id)
 #        _score = int(score)

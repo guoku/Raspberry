@@ -117,11 +117,11 @@ def add_note_for_entity(request, entity_id):
         _entity = MobileEntity(entity_id)
         _note = _entity.add_note(
             creator_id = _request_user_id,
-            score = _score,
             note_text = _note_text,
+            score = _score,
             image_data = _image_data,
         )
-        _context = _note.read() 
+        _context = _note.read(json = True) 
         return SuccessJsonResponse(_context)
 
 

@@ -83,13 +83,14 @@ class Note(models.Model):
     entity = models.ForeignKey(Entity)
     note = models.TextField(null = True)
     score = models.IntegerField(db_index = True, default = 0)
-    figures = models.CharField(max_length = 1024, null = True)
+    figure = models.CharField(max_length = 256, null = False, default = '')
     creator_id = models.IntegerField(null = False, db_index = True)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
 
     class Meta:
         ordering = ['-created_time']
+        unique_together = ('entity', 'creator_id')
 
 class Note_Poke(models.Model):
     note = models.ForeignKey(Note)

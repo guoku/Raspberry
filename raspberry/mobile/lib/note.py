@@ -57,7 +57,8 @@ class MobileNote(Note):
         _context = super(MobileNote, self).read_comment(comment_id, json = True)
         _context['creator'] = MobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
-        if _context.has_key('reply_to_user_id'):
+        print _context
+        if _context.has_key('reply_to_user_id') and _context['reply_to_user_id'] != None:
             _context['reply_to_user'] = MobileUser(_context['reply_to_user_id']).read(request_user_id)
             del _context['reply_to_user_id']
             
