@@ -39,7 +39,7 @@ class Image(object):
         def create(cls, origin_data):
             _key = md5(origin_data).hexdigest()
             _inst = cls(_key)
-    
+            
             if len(_inst.__datastore.get_paths(_inst.__origin_store_key)) == 0:
                 _inst.write(origin_data)
     
@@ -58,16 +58,17 @@ class Image(object):
     def __init__(self, image_id):
         self.image_id = image_id 
     
-    def get_image_id(self):
-        return self.image_id
-    
     def __ensure_image_obj(self):
         if not hasattr(self, 'image_obj'):
             self.image_obj = ImageModel.objects.filter(id = self.image_id).first()
     
     @classmethod
-    def create(cls, source, origin_url = None, image_data = None): 
-        if image_data != None:
+    def create(cls, source, origin_url = None, image_data = None):
+        if origin_url != None:
+            _image_id = Image.get_image_id_by_origin_url(origin_url)
+            if _image_id != None:
+                return cls(_image_id)
+        elif image_data != None:
             _figure = cls.Figure.create(image_data)
             _store_hash = _figure.get_hash_key()
             _image_id = Image.get_image_id_by_store_hash(_store_hash)

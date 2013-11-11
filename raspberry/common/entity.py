@@ -98,34 +98,31 @@ class Entity(object):
         _target_entity = Entity(target_entity_id)
         _target_entity.delete()
     
-    def add_image(self, image_url = None, image_data = None, for_chief = False):
+    def add_image(self, image_url = None, image_data = None):
         _image_obj = Image.create(
             source = 'gk_management', 
             origin_url = image_url,
             image_data = image_data
         )
         self.__ensure_entity_obj()
-#        if for_chief:
-#            if self.entity_obj.chief_image not in self.entity_obj.images.detail_ids:
-#                self.entity_obj.images.detail_ids.insert(0, self.entity_obj.images.chief_id)
-#            if _image_obj.get_image_id() in self.entity_obj.images.detail_ids:
-#                self.entity_obj.images.detail_ids.remove(_image_obj.get_image_id())
-#            self.entity_obj.images.chief_id = _image_obj.get_image_id()
-#        else:
-#            if not _image_obj.get_image_id() in self.entity_obj.images.detail_ids:
-#                self.entity_obj.images.detail_ids.append(_image_obj.get_image_id())
-#        self.entity_obj.save() 
+        if not _image_obj.image_id in self.entity_obj.detail_images:
+            if len(self.entity_obj.detail_images) > 0:
+                self.entity_obj.detail_images += '#'
+            self.entity_obj.detail_images += _image_obj.image_id
+        self.entity_obj.save() 
     
     
     
     def del_image(self, image_id):
         self.__ensure_entity_obj()
-#        if image_id in self.entity_obj.images.detail_ids:
-#            self.entity_obj.images.detail_ids.remove(image_id)
-#        if image_id == self.entity_obj.images.chief_id and len(self.entity_obj.images.detail_ids) > 0:
-#            self.entity_obj.images.chief_id = self.entity_obj.images.detail_ids[0]
-#            del self.entity_obj.images.detail_ids[0]
-#        self.entity_obj.save()
+        if image_id in self.entity_obj.detail_images:
+            self.entity_obj.detail_images = self.entity_obj.detail_images.replace(image_id, '')
+            self.entity_obj.detail_images = self.entity_obj.detail_images.replace('##', '#')
+            if self.entity_obj.detail_images[0] == '#':
+                self.entity_obj.detail_images = self.entity_obj.detail_images[1:]
+            if self.entity_obj.detail_images[-1] == '#':
+                self.entity_obj.detail_images = self.entity_obj.detail_images[:-1]
+        self.entity_obj.save()
     
     
     
@@ -165,12 +162,13 @@ class Entity(object):
             'id' : self.entity_obj.chief_image,
             'url' : Image(self.entity_obj.chief_image).getlink(),
         }
-#        _context['detail_images'] = []
-#        for _image_id in self.entity_obj.images.detail_ids:
-#            _context['detail_images'].append({
-#                'id' : _image_id,
-#                'url' : Image(_image_id).getlink()
-#            })
+        _context['detail_images'] = []
+        for _image_id in self.entity_obj.detail_images.split('#'):
+            if len(_image_id) > 0:
+                _context['detail_images'].append({
+                    'id' : _image_id,
+                    'url' : Image(_image_id).getlink()
+                })
         _context['item_id_list'] = Item.find(entity_id = self.entity_id) 
         _context["total_score"] = 0 
         _context["score_count"] = 0 
