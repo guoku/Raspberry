@@ -181,7 +181,7 @@ class Entity(object):
         _context['item_id_list'] = Item.find(entity_id = self.entity_id) 
         _context["total_score"] = 0 
         _context["score_count"] = 0 
-        _context["note_id_list"] = []
+        _context["note_id_list"] = Note.find(entity_id = self.entity_id)
 
         return _context
         

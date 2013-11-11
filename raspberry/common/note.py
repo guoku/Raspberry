@@ -16,32 +16,28 @@ class Note(object):
     class Figure(object):
         
         def __init__(self, key):
-            self.__key = key 
-            self.__origin_store_key = 'note/origin/' + self.__key
+            self.key = key 
+            self.origin_store_key = 'note/origin/' + self.key
             self.__datastore = Client(
                 domain = settings.MOGILEFS_DOMAIN, 
                 trackers = settings.MOGILEFS_TRACKERS 
             )
-        
-        def get_hash_key(self):
-            return self.__key
-   
         
         @classmethod
         def create(cls, origin_data):
             _key = md5(origin_data).hexdigest()
             _inst = cls(_key)
     
-            if len(_inst.__datastore.get_paths(_inst.__origin_store_key)) == 0:
+            if len(_inst.__datastore.get_paths(_inst.origin_store_key)) == 0:
                 _inst.write(origin_data)
     
             return _inst
     
         def read_origin_link(self):
-            return settings.IMAGE_SERVER + self.__origin_store_key
+            return settings.IMAGE_SERVER + self.origin_store_key
     
         def write(self, origin_data): 
-            _fp = self.__datastore.new_file(self.__origin_store_key)
+            _fp = self.__datastore.new_file(self.origin_store_key)
             _fp.write(origin_data)
             _fp.close()
 
@@ -54,13 +50,6 @@ class Note(object):
         if not hasattr(self, 'note_obj'):
             self.note_obj = NoteModel.objects.get(pk = self.note_id)
     
-    def __ensure_figure_obj(self):
-        if not hasattr(self, 'figure_obj'):
-            self.figure_obj = None
-#            for _figure_obj in NoteFigureModel.objects.filter(note_id = self.note_id).order_by('-created_time'):
-#                self.figure_obj = _figure_obj
-#                break
-
     @classmethod
     def count(cls, timestamp = None, entity_id = None, creator_set = None, offset = 0, count = 30):
         _hdl = NoteModel.objects
@@ -73,10 +62,12 @@ class Note(object):
         return _hdl.count() 
     
     @classmethod
-    def find(cls, timestamp = None, entity_id = None, creator_set = None, offset = 0, count = 30):
+    def find(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, offset = 0, count = 30):
         _hdl = NoteModel.objects
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
+        if category_id != None:
+            _hdl = _hdl.filter(entity__neo_category_id = category_id)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         if creator_set != None:
@@ -94,16 +85,10 @@ class Note(object):
     @classmethod
     def create(cls, entity_id, creator_id, note_text, score = 0, image_data = None):
         if image_data != None:
-            _figure = cls.Figure.create(image_data)
-            _figure_obj = NoteFigureModel.objects.create(
-                note_id = _note_obj.id,
-                creator_id = creator_id,
-                store_hash = _figure.get_hash_key()
-            )
-            _figure = _figure_obj.image_id
+            _figure_obj = cls.Figure.create(image_data)
+            _figure = _figure_obj.key
         else:
             _figure = ''
-        print score
         _note_obj = NoteModel.objects.create(
             entity_id = entity_id,
             creator_id = creator_id,
@@ -150,10 +135,8 @@ class Note(object):
         _context["comment_count"] = len(_context["comment_id_list"]) 
         _context["created_time"] = self.note_obj.created_time
         _context["updated_time"] = self.note_obj.updated_time
-        
-        self.__ensure_figure_obj()
-        if self.figure_obj != None:
-            _context['figure'] = self.Figure(self.figure_obj.store_hash).read_origin_link()
+        if len(self.note_obj.figure) > 0:
+            _context['figure'] = self.Figure(self.note_obj.figure).read_origin_link()
 
         return _context
 

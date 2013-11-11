@@ -65,9 +65,9 @@ def feed(request):
         else:
             _following_user_id_list = None
         
-        _note_list = MobileEntity.find_entity_note(
+        _note_list = MobileNote.find(
             timestamp = _timestamp,
-            creator_id_set = _following_user_id_list,
+            creator_set = _following_user_id_list,
             offset = _offset,
             count = _count
         )

@@ -114,8 +114,8 @@ def user_entity_note(request, user_id):
         _count = int(request.GET.get('count', '30'))
         
         _rslt = []
-        for _entity_note_obj in MobileEntity.find_entity_note(creator_id_set = [user_id], timestamp = _timestamp, offset = _offset, count = _count):
-            _note_context = MobileNote(_entity_note_obj['note_id']).read(_request_user_id)
+        for _note_id in MobileNote.find(creator_set = [user_id], timestamp = _timestamp, offset = _offset, count = _count):
+            _note_context = MobileNote(_note_id).read(_request_user_id)
             if _note_context.has_key('entity_id'):
                 _entity = MobileEntity(_note_context['entity_id'])
                 _rslt.append({

@@ -50,7 +50,7 @@ class MobileEntity(Entity):
         for _item_id in _context['entity']['item_id_list']:
             _context['entity']['item_list'].append(MobileItem(_item_id).read())
         del _context['entity']['item_id_list']
-
+    
         _context['note_list'] = []
         for _note_id in _context['entity']['note_id_list']:
             _context['note_list'].append(MobileNote(_note_id).read(request_user_id)) 
@@ -63,3 +63,12 @@ class MobileEntity(Entity):
         
         return _context    
     
+    def add_note(self, creator_id, note_text, score = 0, image_data = None):
+        _note = super(MobileEntity, self).add_note(
+            creator_id = creator_id,
+            note_text = note_text,
+            score = score,
+            image_data = image_data
+        )
+        _note = MobileNote.create_by_note(_note)
+        return _note

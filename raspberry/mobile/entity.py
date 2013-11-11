@@ -121,7 +121,7 @@ def add_note_for_entity(request, entity_id):
             score = _score,
             image_data = _image_data,
         )
-        _context = _note.read(json = True) 
+        _context = _note.read(request_user_id = _request_user_id) 
         return SuccessJsonResponse(_context)
 
 

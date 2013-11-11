@@ -5,6 +5,39 @@ from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key
 import datetime
 
+def category_entity_note(request, category_id):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _sort_by = request.GET.get('sort', 'new')
+        _reverse = request.GET.get('reverse', '0')
+        if _reverse == '0':
+            _reverse = False
+        else:
+            _reverse = True
+        _offset = int(request.GET.get('offset', '0'))
+        _count = int(request.GET.get('count', '30'))
+        
+        _note_id_list = MobileNote.find(
+            category_id = category_id,
+            offset = _offset,
+            count = _count,
+        )
+        _rslt = []
+        for _note_id in _note_id_list:
+            _note_context = MobileNote(_note_id).read(_request_user_id)
+            if _note_context.has_key('entity_id'):
+                _entity = MobileEntity(_note_context['entity_id'])
+                _rslt.append({
+                    'entity' : _entity.read(_request_user_id),
+                    'note' : _note_context,
+                })
+            
+        return SuccessJsonResponse(_rslt)
+
 def update_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)

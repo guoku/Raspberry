@@ -13,8 +13,6 @@ class MobileNote(Note):
         _inst = cls(note.note_id)
         if hasattr(note, 'note_obj'):
             _inst.note_obj = note.note_obj
-        if hasattr(note, 'figure_obj'):
-            _inst.figure_obj = note.figure_obj
         return _inst
         
     
@@ -57,7 +55,6 @@ class MobileNote(Note):
         _context = super(MobileNote, self).read_comment(comment_id, json = True)
         _context['creator'] = MobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
-        print _context
         if _context.has_key('reply_to_user_id') and _context['reply_to_user_id'] != None:
             _context['reply_to_user'] = MobileUser(_context['reply_to_user_id']).read(request_user_id)
             del _context['reply_to_user_id']
