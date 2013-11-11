@@ -130,9 +130,9 @@ class Entity(object):
         _image_ids = []
         for _image_url in image_urls:
             _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
-            _image_ids.append(_image_obj.get_image_id())
+            _image_ids.append(_image_obj.image_id)
         
-        _item_id = self._insert_taobao_item( 
+        _item_id = self.__insert_taobao_item( 
             taobao_item_info = taobao_item_info,
             images = _image_ids
         )

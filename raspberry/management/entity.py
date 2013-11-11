@@ -338,7 +338,7 @@ def unbind_taobao_item_from_entity(request, entity_id, item_id):
 def bind_taobao_item_to_entity(request, entity_id, item_id):
     _entity = Entity(entity_id)
     _entity.bind_item(item_id)
-    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 
 @login_required
@@ -346,8 +346,8 @@ def load_taobao_item_for_entity(request, entity_id):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
             
-        _entity_id = Entity.check_taobao_item_exist(_taobao_id)
-        if _entity_id == None:
+        _item = Item.get_item_by_taobao_id(_taobao_id)
+        if _item == None:
             _taobao_item_info = _load_taobao_item_info(_taobao_id)
             return render_to_response( 
                 'entity/new_taobao_item_info.html', 
@@ -364,9 +364,7 @@ def load_taobao_item_for_entity(request, entity_id):
                 },
                 context_instance = RequestContext(request)
             )
-        elif _entity_id == "":
-            _item_id = Item.get_item_id_by_taobao_id(_taobao_id)
-            _item = Item(_item_id)
+        elif _item.get_entity_id() == -1:
             _item_context = _item.read()
             
             if not _item_context.has_key('images'):
@@ -444,7 +442,7 @@ def add_taobao_item_for_entity(request, entity_id):
             },
             image_urls = _image_urls
         ) 
-        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
 def merge_entity(request, entity_id):
@@ -452,4 +450,4 @@ def merge_entity(request, entity_id):
         _target_entity_id = request.POST.get("target_entity_id", None)
         _entity = Entity(entity_id)
         _entity.merge(_target_entity_id)
-        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.get_entity_id() }))
+        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))

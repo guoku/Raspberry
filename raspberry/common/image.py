@@ -74,9 +74,8 @@ class Image(object):
             _image_id = Image.get_image_id_by_store_hash(_store_hash)
             if _image_id != None:
                 return cls(_image_id)
-        else:
-            _store_hash = None 
         
+        _store_hash = None 
         _image_obj = ImageModel( 
             source = source, 
             created_time = datetime.datetime.now(),
@@ -84,7 +83,7 @@ class Image(object):
         )
         if origin_url != None:
             _image_obj.origin_url = origin_url
-        if _store_hash!= None:
+        if _store_hash != None:
             _image_obj.store_hash = _store_hash 
 
         _image_obj.save()
