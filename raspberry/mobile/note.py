@@ -59,7 +59,7 @@ def update_note(request, note_id):
         
         ## There's no authorize confirmation yet ##
         
-        _entity_id = MobileNote(note_id).get_entity_of_note()
+        _entity_id = MobileNote(note_id).get_entity_id()
         _entity = MobileEntity(_entity_id)
         _note = _entity.update_note(
             note_id = note_id,

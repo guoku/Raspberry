@@ -329,12 +329,6 @@ class Entity(object):
 #            note_text = note_text,
 #            image_data = image_data
 #        )
-#        _entity_note_obj = EntityNoteModel.objects.get(
-#            entity_id = self.entity_id,
-#            note_id = _note_id
-#        )
-#        _entity_note_obj.score = _score
-#        _entity_note_obj.save()
 #        return _note
         
     

@@ -140,13 +140,9 @@ class Note(object):
 
         return _context
 
-#    def get_entity_of_note(self):
-#        try:
-#            _obj = EntityNoteModel.objects.get(note_id = self.note_id)
-#            return _obj.entity_id
-#        except EntityNoteModel.DoesNotExist, e:
-#            pass
-#        return None
+    def get_entity_id(self):
+        self.__ensure_note_obj()
+        return self.note_obj.entity_id 
         
     def read(self, json = False):
         _context = self.__load_note_context()

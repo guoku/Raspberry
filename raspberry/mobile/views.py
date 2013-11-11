@@ -65,13 +65,12 @@ def feed(request):
         else:
             _following_user_id_list = None
         
-        _note_list = MobileNote.find(
+        _note_id_list = MobileNote.find(
             timestamp = _timestamp,
             creator_set = _following_user_id_list,
             offset = _offset,
             count = _count
         )
-        _note_id_list = map(lambda x: x['note_id'], _note_list)
 
         
         _rslt = []
