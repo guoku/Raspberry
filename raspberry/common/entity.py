@@ -218,8 +218,8 @@ class Entity(object):
         self.entity_obj.save()
             
     @classmethod
-    def find(cls, category_id = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
-        _hdl = EntityModel.objects
+    def find(cls, category_id = None, like_word = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
+        _hdl = EntityModel.objects.all()
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
         if status < 0:
