@@ -38,7 +38,7 @@ def category_entity_note(request, category_id):
             
         return SuccessJsonResponse(_rslt)
 
-def update_note(request, note_id):
+def update_entity_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
         if _session != None:
@@ -47,7 +47,6 @@ def update_note(request, note_id):
             _request_user_id = None
         _note_text = request.POST.get('note', None)
         _score = int(request.POST.get('score', None))
-
         _image_file = request.FILES.get('image', None)
         if _image_file == None:
             _image_data = None
@@ -59,10 +58,8 @@ def update_note(request, note_id):
         
         ## There's no authorize confirmation yet ##
         
-        _entity_id = MobileNote(note_id).get_entity_id()
-        _entity = MobileEntity(_entity_id)
-        _note = _entity.update_note(
-            note_id = note_id,
+        _note = MobileNote(note_id)
+        _note.update(
             score = _score,
             note_text = _note_text,
             image_data = _image_data
@@ -70,7 +67,7 @@ def update_note(request, note_id):
         _rslt = _note.read(_request_user_id)
         return SuccessJsonResponse(_rslt)
 
-def note_detail(request, note_id):
+def entity_note_detail(request, note_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -84,7 +81,7 @@ def note_detail(request, note_id):
             _rslt['entity'] = MobileEntity(_rslt['note']['entity_id']).read(_request_user_id)
         return SuccessJsonResponse(_rslt)
 
-def poke_note(request, note_id, target_status):
+def poke_entity_note(request, note_id, target_status):
     if request.method == "POST":
         _session = request.POST.get('session', None)
         
@@ -100,7 +97,7 @@ def poke_note(request, note_id, target_status):
             _rslt['poke_already'] = 0
         return SuccessJsonResponse(_rslt)
 
-def comment_note(request, note_id):
+def comment_entity_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
         _comment_text = request.POST.get('comment', None)

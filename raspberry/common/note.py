@@ -102,24 +102,18 @@ class Note(object):
         return _inst
     
     
-    def update(self, note_text, image_data):
+    def update(self, score = None, note_text = None, image_data = None):
         self.__ensure_note_obj()
-        self.note_obj.note_text = note_text
+        if image_data != None:
+            _figure_obj = self.Figure.create(image_data)
+            if _figure_obj.key != self.note_obj.figure:
+                self.note_obj.figure = _figure_obj.key
+        if score != None:
+            self.note_obj.score = score 
+        if note_text != None:
+            self.note_obj.note = note_text
         self.note_obj.save()
         
-        if image_data != None:
-            self.__ensure_figure_obj()
-            _figure = self.Figure.create(image_data)
-            if self.figure_obj == None:
-                _figure_obj = NoteFigureModel.objects.create(
-                    note_id = self.note_id,
-                    creator_id = self.note_obj.creator_id,
-                    store_hash = _figure.get_hash_key()
-                )
-                self.figure_obj = _figure_obj
-            else:
-                self.figure_obj.store_hash = _figure.get_hash_key()
-                self.figure_obj.save()
     
     def __load_note_context(self):
         self.__ensure_note_obj()
@@ -193,6 +187,8 @@ class Note(object):
             self.comments[comment_id] = NoteCommentModel.objects.get(pk = comment_id)
         _context = {}
         _context["comment_id"] = self.comments[comment_id].id
+        _context["entity_id"] = self.get_entity_id()
+        _context["note_id"] = self.comments[comment_id].note_id
         _context["content"] = self.comments[comment_id].comment
         _context["creator_id"] = self.comments[comment_id].creator_id
        

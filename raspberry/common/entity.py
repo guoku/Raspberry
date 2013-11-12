@@ -1,6 +1,7 @@
 # coding=utf8
 from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
+from models import Note as NoteModel
 from django.conf import settings
 from django.db.models import Sum
 from mongoengine import *
@@ -179,9 +180,15 @@ class Entity(object):
                     'url' : Image(_image_id).getlink()
                 })
         _context['item_id_list'] = Item.find(entity_id = self.entity_id) 
-        _context["total_score"] = 0 
-        _context["score_count"] = 0 
-        _context["note_id_list"] = Note.find(entity_id = self.entity_id)
+
+        _context['total_score'] = 0 
+        _context['score_count'] = 0 
+        _context['note_id_list'] = []
+        for _note_obj in NoteModel.objects.filter(entity_id = self.entity_id):
+            _context['note_id_list'].append(_note_obj.id)
+            if _note_obj.score != 0:
+                _context['total_score'] += _note_obj.score
+                _context['score_count'] += 1
 
         return _context
         
