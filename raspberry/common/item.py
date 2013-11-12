@@ -92,7 +92,7 @@ class Item(object):
     def get_item_by_taobao_id(cls, taobao_id):
         _taobao_item_obj = TaobaoItemDocument.objects.filter(taobao_id = taobao_id).first()
         if _taobao_item_obj != None:
-            _inst = cls(_taobao_item_obj.id)
+            _inst = cls(str(_taobao_item_obj.id))
             _inst.item_obj = _taobao_item_obj
             return _inst 
         return None

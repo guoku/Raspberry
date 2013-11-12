@@ -72,7 +72,8 @@ def create_entity_from_offline(request):
             return SuccessJsonResponse(_rslt)
         else:
             _rslt = {
-                'message' : 'item_exist', 
+                'message' : 'item_exist',
+                'item_id' : _item.item_id,
                 'status' : 'failed'
             }
             return SuccessJsonResponse(_rslt)
