@@ -2,6 +2,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from common.category import Category
 from common.entity import Entity
+from common.item import Item 
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 import datetime
 import json
@@ -14,11 +15,11 @@ def sync_taobao_item(request):
     _offset = int(request.GET.get('offset', '0'))
     _count = int(request.GET.get('count', '100'))
     
-#    _mango_client = MangoApiClient()
-#    _taobao_id_list = _mango_client.find_item(
-#        offset = _offset,
-#        count = _count
-#    )
+    _taobao_id_list = Item.find(
+        offset = _offset,
+        count = _count,
+        full_info = True
+    )
     return SuccessJsonResponse(_taobao_id_list)
 
 def create_entity_from_offline(request):
@@ -43,8 +44,8 @@ def create_entity_from_offline(request):
         if _chief_image_url in _detail_image_urls:
             _detail_image_urls.remove(_chief_image_url)
             
-        _entity_id = Entity.check_taobao_item_exist(_taobao_id)
-        if _entity_id == None:
+        _item = Item.get_item_by_taobao_id(_taobao_id)
+        if _item == None:
             _entity = Entity.create_by_taobao_item(
                 creator_id = request.user.id,
                 category_id = _category_id,

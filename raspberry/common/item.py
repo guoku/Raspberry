@@ -65,14 +65,21 @@ class Item(object):
         return _context
     
     @classmethod
-    def find(cls, entity_id = None, offset = 0, count = 30):
+    def find(cls, entity_id = None, offset = 0, count = 30, full_info = False):
         _hdl = ItemDocument.objects.all()
         if entity_id != None:
             _entity_id = int(entity_id)
             _hdl = _hdl.filter(entity_id = _entity_id)
         _item_list = []
         for _doc in _hdl.order_by('-created_time')[offset : offset + count]:
-            _item_list.append(str(_doc.id))
+            if full_info:
+                _item_list.append({
+                    'item_id' : str(_doc.id),
+                    'taobao_id' : _doc.taobao_id,
+                    'entity_id' : _doc.entity_id,
+                })
+            else:
+                _item_list.append(str(_doc.id))
         return _item_list
 
     
@@ -81,11 +88,11 @@ class Item(object):
         self.item_obj.entity_id = entity_id 
         self.item_obj.save()
     
-    @staticmethod
-    def get_item_by_taobao_id(taobao_id):
+    @classmethod
+    def get_item_by_taobao_id(cls, taobao_id):
         _taobao_item_obj = TaobaoItemDocument.objects.filter(taobao_id = taobao_id).first()
         if _taobao_item_obj != None:
-            _inst = cls(_item_obj.id)
+            _inst = cls(_taobao_item_obj.id)
             _inst.item_obj = _taobao_item_obj
             return _inst 
         return None
