@@ -1,5 +1,5 @@
 # coding=utf8
-from common.category import Category
+from base.category import Category
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 
 def all_category(request):

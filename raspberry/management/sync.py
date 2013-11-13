@@ -1,8 +1,8 @@
 #coding=utf-8
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
-from common.category import Category
-from common.entity import Entity
-from common.item import Item 
+from base.category import Category
+from base.entity import Entity
+from base.item import Item 
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 import datetime
 import json

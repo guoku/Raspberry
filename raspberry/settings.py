@@ -11,18 +11,6 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'raspberry_11_12',
-        'USER': 'root',                      
-        'PASSWORD': '123456',                  
-        'HOST': 'localhost',                      
-        'PORT': '',                      
-        'OPTIONS': {
-            'use_unicode':'utf-8',
-            'init_command':'SET storage_engine=INNODB',
-        }
-    },
-    'auth': {
-        'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'guoku_11_06_slim',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
@@ -32,12 +20,12 @@ DATABASES = {
             'use_unicode':'utf-8',
             'init_command':'SET storage_engine=INNODB',
         }
-    }
+    },
 }
-DATABASE_ROUTERS = ['router.AuthRouter'] 
+#DATABASE_ROUTERS = ['router.AuthRouter'] 
 
-from mongoengine import register_connection 
-register_connection('mango', 'mango')
+from mongoengine import connect 
+connect('guoku')
 
 MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
@@ -117,7 +105,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'common',
+    'base',
     'management',
     'mobile',
 )

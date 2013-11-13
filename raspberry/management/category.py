@@ -13,7 +13,7 @@ import datetime
 import time
 import json
 
-from common.category import Category
+from base.category import Category
 
 @login_required
 def create_category_group(request):

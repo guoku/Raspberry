@@ -1,7 +1,7 @@
 # coding=utf8
-from common.entity import Entity
-from common.note import Note 
-from common.user import User
+from base.entity import Entity
+from base.note import Note 
+from base.user import User
 
 
 class MobileUser(User):

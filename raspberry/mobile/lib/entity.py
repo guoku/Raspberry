@@ -1,6 +1,6 @@
 # coding=utf8
-from common.item import Item
-from common.entity import Entity
+from base.item import Item
+from base.entity import Entity
 from user import MobileUser
 from note import MobileNote
 import time

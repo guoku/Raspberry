@@ -1,5 +1,5 @@
 # coding=utf8
-from common.message import *
+from base.message import *
 from account import *
 from category import *
 from entity import *

@@ -13,11 +13,11 @@ import datetime
 import time
 import json
 
-from common.category import Category
-from common.entity import Entity
-from common.item import Item
-from common.note import Note
-from common.user import User
+from base.category import Category
+from base.entity import Entity
+from base.item import Item
+from base.note import Note
+from base.user import User
 from utils.paginator import Paginator
 
 def _parse_taobao_id_from_url(url):
@@ -282,17 +282,20 @@ def entity_list(request):
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
         for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
-            _entity = Entity(_entity_id)
-            _entity_context = _entity.read()
-            _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
-            if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
-                _item_context = Item(_entity_context['item_id_list'][0]).read()
-                _entity_context['buy_link'] = _item_context['buy_link'] 
-                _entity_context['taobao_title'] = _item_context['title'] 
-            else:
-                _entity_context['buy_link'] = ''
-                _entity_context['taobao_title'] = ''
-            _entity_context_list.append(_entity_context)
+            try:
+                _entity = Entity(_entity_id)
+                _entity_context = _entity.read()
+                _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
+                if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
+                    _item_context = Item(_entity_context['item_id_list'][0]).read()
+                    _entity_context['buy_link'] = _item_context['buy_link'] 
+                    _entity_context['taobao_title'] = _item_context['title'] 
+                else:
+                    _entity_context['buy_link'] = ''
+                    _entity_context['taobao_title'] = ''
+                _entity_context_list.append(_entity_context)
+            except:
+                pass
         
         return render_to_response( 
             'entity/list.html', 

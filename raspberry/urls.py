@@ -18,5 +18,5 @@ if settings.DEBUG:
 
 if settings.IMAGE_LOCAL:
     urlpatterns += patterns('',
-        (r'^image/local/(?P<source>\w+)/(?P<size>\w+)/(?P<key>\w+)$', 'common.views.local_image'),
+        (r'^image/local/(?P<source>\w+)/(?P<size>\w+)/(?P<key>\w+)$', 'base.views.local_image'),
     )

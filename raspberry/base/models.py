@@ -128,7 +128,6 @@ class Image(Document):
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
-        'db_alias' : 'mango',
         'indexes' : [ 
             'source',
             'origin_url',
@@ -144,7 +143,6 @@ class Item(Document):
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
-        'db_alias' : 'mango',
         'indexes' : [ 
             'entity_id' 
         ],
@@ -160,7 +158,6 @@ class TaobaoItem(Item):
     soldout = BooleanField(required = True) 
 
     meta = {
-        'db_alias' : 'mango',
         'indexes' : [ 
             'taobao_id',
             'cid',
