@@ -220,13 +220,13 @@ class Entity(object):
             self.entity_obj.category_id = int(category_id)
         if weight != None:
             self.entity_obj.weight = int(weight)
-#        
-#        if chief_image_id != None and chief_image_id != self.entity_obj.images.chief_id:
-#            if self.entity_obj.images.chief_id not in self.entity_obj.images.detail_ids:
-#                self.entity_obj.images.detail_ids.insert(0, self.entity_obj.images.chief_id)
-#            if chief_image_id in self.entity_obj.images.detail_ids:
-#                self.entity_obj.images.detail_ids.remove(chief_image_id)
-#            self.entity_obj.images.chief_id = chief_image_id
+        
+        if chief_image_id != None and chief_image_id != self.entity_obj.chief_image:
+            if not self.entity_obj.chief_image in self.entity_obj.detail_images:
+                if len(self.entity_obj.detail_images) > 0:
+                    self.entity_obj.detail_images = '#'
+                self.entity_obj.detail_images = self.entity_obj.chief_image + self.entity_obj.detail_images
+            self.entity_obj.chief_image = chief_image_id
             
         self.entity_obj.save()
             
