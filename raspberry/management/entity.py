@@ -243,7 +243,7 @@ def entity_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id == None:
         _status = request.GET.get("status", "all")
-        if _status == "freezed":
+        if _status == "freeze":
             _status_code = -1 
         elif _status == "normal":
             _status_code = 1
@@ -272,7 +272,7 @@ def entity_list(request):
         
         _category_groups = Category.allgroups()
         _normal_entity_count = Entity.count(category_id = _category_id, status = 0) 
-        _freeze_entity_count = Entity.count(category_id = _category_id, status = -1) 
+        _freeze_entity_count = Entity.count(category_id = _category_id, status = -1)
         _entity_id_list = Entity.find(
             category_id = _category_id,
             status = _status_code
@@ -316,6 +316,8 @@ def entity_list(request):
         _categories = Category.find(group_id = int(_group_id))
         _category_groups = Category.allgroups()
         if len(_categories) == 0:
+            _normal_entity_count = 0 
+            _freeze_entity_count = 0 
             return render_to_response( 
                 'entity/list.html', 
                 {
@@ -324,6 +326,8 @@ def entity_list(request):
                     'category_groups' : _category_groups,
                     'categories' : _categories,
                     'category_group_id' : int(_group_id),
+                    'normal_entity_count' : _normal_entity_count,
+                    'freeze_entity_count' : _freeze_entity_count,
                     'entity_context_list' : [],
                 },
                 context_instance = RequestContext(request)

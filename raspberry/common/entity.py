@@ -271,14 +271,15 @@ class Entity(object):
 
         
     @classmethod
-    def count(cls, category_id = None, status = 0):
+    def count(cls, category_id = None, status = None):
         _hdl = EntityModel.objects.all()
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
-        if status < 0:
-            _hdl = _hdl.filter(weight__lt = 0)
-        elif status >= 0:
-            _hdl = _hdl.filter(weight__gte = 0)
+        if status != None:
+            if status < 0:
+                _hdl = _hdl.filter(weight__lt = 0)
+            elif status >= 0:
+                _hdl = _hdl.filter(weight__gte = 0)
         return _hdl.count()
     
     def bind_item(self, item_id):
