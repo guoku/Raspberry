@@ -192,8 +192,8 @@ class Note(object):
         _context["content"] = self.comments[comment_id].comment
         _context["creator_id"] = self.comments[comment_id].creator_id
        
-        _context['reply_to_comment_id'] = self.comments[comment_id].reply_to_comment_id
-        _context['reply_to_user_id'] = self.comments[comment_id].reply_to_user_id
+        _context['reply_to_comment_id'] = self.comments[comment_id].replied_comment_id
+        _context['reply_to_user_id'] = self.comments[comment_id].replied_user_id
         
         _context["created_time"] = self.comments[comment_id].created_time
         if json:
@@ -205,8 +205,8 @@ class Note(object):
             note_id = self.note_id,
             comment = comment_text, 
             creator_id = creator_id,
-            reply_to_comment_id = reply_to_comment_id,
-            reply_to_user_id = reply_to_user_id
+            replied_comment_id = reply_to_comment_id,
+            replied_user_id = reply_to_user_id
         )
         self.comments[_obj.id] = _obj
             

@@ -76,6 +76,7 @@ class Entity_Like(models.Model):
     created_time = models.DateTimeField(auto_now_add = True, db_index=True)
     
     class Meta:
+        db_table = 'guoku_entity_like'
         ordering = ['-created_time']
         unique_together = ('entity', 'user_id')
 
@@ -105,8 +106,8 @@ class Note_Comment(models.Model):
     note = models.ForeignKey(Note)
     creator_id = models.IntegerField(null = False, db_index = True)
     comment = models.TextField(null = False)
-    reply_to_comment_id = models.IntegerField(default = None, null = True, db_index = True)
-    reply_to_user_id = models.IntegerField(default = None, null = True, db_index = True)
+    replied_comment_id = models.IntegerField(default = None, null = True, db_index = True)
+    replied_user_id = models.IntegerField(default = None, null = True, db_index = True)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     class Meta:
         ordering = ['-created_time']

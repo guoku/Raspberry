@@ -1,5 +1,6 @@
 # coding=utf8
 from base.message import *
+from base.selection import *
 from account import *
 from category import *
 from entity import *
@@ -141,6 +142,37 @@ def message(request):
                         'note' : MobileNote(_message.note_id).read(_request_user_id),
                         #'comment_id' : _message.comment_id,
                         'replying_user' : MobileUser(_message.replying_user_id).read(_request_user_id)
+                    }
+                }
+                _rslt.append(_context)
+                
+        
+        return SuccessJsonResponse(_rslt)
+
+def selection(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _timestamp = request.GET.get('timestamp', None)
+        if _timestamp != None:
+            _timestamp = datetime.datetime.fromtimestamp(float(_timestamp))
+        else:
+            _timestamp = datetime.datetime.now()
+        _count = int(request.GET.get('count', '30'))
+
+
+        _rslt = []
+        for _selection in Selection.objects.filter(post_time__lt = _timestamp)[0:30]:
+            if isinstance(_selection, NoteSelection):
+                _context = {
+                    'type' : 'note_selection',
+                    'post_time' : time.mktime(_selection.post_time.timetuple()),
+                    'content': {
+                        'entity' : MobileEntity(_selection.entity_id).read(_request_user_id),
+                        'note' : MobileNote(_selection.note_id).read(_request_user_id),
                     }
                 }
                 _rslt.append(_context)
