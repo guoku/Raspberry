@@ -75,17 +75,17 @@
             <ul class="nav nav-pills">
                 <li{%if status_filter == "all"%} class="active"{%endif%}>
                     <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=all">
-                        全部
+                        全部({{ normal_entity_count|add:freeze_entity_count }})
                     </a>
                 </li>
                 <li{%if status_filter == "normal"%} class="active"{%endif%}>
                     <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=normal">
-                        正常 
+                        正常({{ normal_entity_count }}) 
                     </a>
                 </li>
-                <li{%if status_filter == "freezed"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=freezed">
-                        冻结 
+                <li{%if status_filter == "freeze"%} class="active"{%endif%}>
+                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=freeze">
+                        冻结({{ freeze_entity_count }}) 
                     </a>
                 </li>
             </ul>

@@ -271,6 +271,8 @@ def entity_list(request):
         
         
         _category_groups = Category.allgroups()
+        _normal_entity_count = Entity.count(category_id = _category_id, status = 0) 
+        _freeze_entity_count = Entity.count(category_id = _category_id, status = -1) 
         _entity_id_list = Entity.find(
             category_id = _category_id,
             status = _status_code
@@ -303,6 +305,8 @@ def entity_list(request):
                 'category_groups' : _category_groups,
                 'categories' : _categories,
                 'category_group_id' : _category_group_id,
+                'normal_entity_count' : _normal_entity_count,
+                'freeze_entity_count' : _freeze_entity_count,
                 'entity_context_list' : _entity_context_list,
                 'paginator' : _paginator
             },
