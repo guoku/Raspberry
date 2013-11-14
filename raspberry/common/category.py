@@ -8,6 +8,45 @@ from pymogile import Client
 from wand.image import Image
 import datetime 
 
+class Category_Group(object):
+    
+    def __init__(self, category_group_id):
+        self.category_group_id= int(category_group_id)
+    
+    def __ensure_category_group_obj(self):
+        if not hasattr(self, 'category_group_obj'):
+            self.category_group_obj = CategoryGroupModel.objects.get(pk = self.category_group_id)
+    
+    @classmethod
+    def create(cls, title, status = 1):
+        _category_group_obj = CategoryGroupModel.objects.create(
+            title = title,
+            status = status
+        )
+        return cls(_category_group_obj.id)
+    
+   
+    def __load_category_group_context(self):
+        self.__ensure_category_group_obj()
+        _context = {}
+        _context['category_group_id'] = self.category_group_obj.id
+        _context['title'] = self.category_group_obj.title
+        _context['status'] = self.category_group_obj.status
+        return _context
+   
+    def read(self):
+        return self.__load_category_group_context()
+    
+    def update(self, title = None, status = None):
+        self.__ensure_category_group_obj()
+        if title != None:
+            self.category_group_obj.title = title
+        if status != None:
+            self.category_group_obj.status = status 
+        self.category_group_obj.save() 
+
+
+
 DEFAULT_CATEGORY_ICON_KEY = '03717fa531b23c6f5dbd5522e6eec9a1' 
 class Category(object):
     
@@ -54,14 +93,6 @@ class Category(object):
              
         self.category_obj.save()
 
-    @staticmethod
-    def create_group(title, status = 1):
-        _category_group_obj = CategoryGroupModel.objects.create(
-            title = title,
-            status = status
-        )
-        return _category_group_obj.id
-    
     @classmethod
     def create(cls, title, group_id, status = 1):
         _category_obj = CategoryModel.objects.create(

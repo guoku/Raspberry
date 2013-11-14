@@ -13,7 +13,7 @@ import datetime
 import time
 import json
 
-from common.category import Category
+from common.category import Category_Group, Category
 
 @login_required
 def create_category_group(request):
@@ -27,10 +27,34 @@ def create_category_group(request):
         )
     else:
         _title = request.POST.get("title", None)
-        _category_group_id = Category.create_group(
+        _category_group = Category_Group.create(
             title = _title
         )
-        return HttpResponseRedirect(reverse('management.views.entity_list') + '?gid=' + str(_category_group_id))
+        return HttpResponseRedirect(reverse('management.views.entity_list') + '?gid=' + str(_category_group.category_group_id))
+
+@login_required
+def edit_category_group(request, category_group_id):
+    if request.method == 'GET':
+        _category_group_context = Category_Group(category_group_id).read()
+        return render_to_response( 
+            'category/edit_group.html', 
+            {
+                'active_division' : 'category',
+                'category_group_context' : _category_group_context,
+            },
+            context_instance = RequestContext(request)
+        )
+    elif request.method == 'POST':
+        _title = request.POST.get("title", None)
+        _status = request.POST.get("status", None)
+        
+        Category_Group(category_group_id).update(
+            title = _title,
+            status = _status
+        )
+        return HttpResponseRedirect(reverse('management.views.category_list') + '?gid=' + str(category_group_id)) 
+
+
 
 @login_required
 def category_list(request):
