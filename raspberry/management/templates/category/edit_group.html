@@ -1,0 +1,27 @@
+{% extends "management_base.html" %}
+
+{% block content %}
+<div class="container">
+    <div>
+        <form enctype="multipart/form-data" class="well form-horizontal" action="{% url 'management.views.edit_category_group' category_group_context.category_group_id  %}" method="POST">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="title">名称:</label>
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="title" name="title" value="{{ category_group_context.title }}" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="status">状态:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" id="status" name="status" value="{{ category_group_context.status }}" />
+                        <span class="help-inline">0不会在发现页出现</span>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">更新</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
