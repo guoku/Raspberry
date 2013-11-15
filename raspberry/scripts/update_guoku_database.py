@@ -49,18 +49,18 @@ class TaobaoItem(Item):
     }
     
 
-conn_gk = MySQLdb.Connection("localhost", "root", "123456", "guoku_11_06_slim")
+conn_gk = MySQLdb.Connection("localhost", "root", "123456", "guoku")
 cur_gk = conn_gk.cursor()
 cur_gk.execute("SET names utf8")
 
 #cur_gk.execute('CREATE TABLE base_neo_category_group AS (SELECT * FROM raspberry_11_13.common_neo_category_group);')
-##cur_gk.execute('ALTER TABLE base_neo_category_group ENGINE=InnoDB;')
+#cur_gk.execute('ALTER TABLE base_neo_category_group ENGINE=InnoDB;')
 #cur_gk.execute('ALTER TABLE base_neo_category_group CHANGE id id INT(11) AUTO_INCREMENT PRIMARY KEY;')
 #cur_gk.execute('ALTER TABLE base_neo_category_group ADD KEY `common_category_group_title` (`title`);')
 #cur_gk.execute('ALTER TABLE base_neo_category_group ADD KEY `common_category_group_status` (`status`);')
 #
 #cur_gk.execute('CREATE TABLE base_neo_category AS (SELECT * FROM raspberry_11_13.common_neo_category);')
-##cur_gk.execute('ALTER TABLE base_neo_category ENGINE=InnoDB;')
+#cur_gk.execute('ALTER TABLE base_neo_category ENGINE=InnoDB;')
 #cur_gk.execute('ALTER TABLE base_neo_category CHANGE id id INT(11) AUTO_INCREMENT PRIMARY KEY;')
 #cur_gk.execute('ALTER TABLE base_neo_category ADD KEY `common_category_group_id` (`group_id`);')
 #cur_gk.execute('ALTER TABLE base_neo_category ADD KEY `common_category_title` (`title`);')
@@ -68,20 +68,20 @@ cur_gk.execute("SET names utf8")
 #cur_gk.execute('ALTER TABLE base_neo_category ADD KEY `common_category_image_store_hash` (`image_store_hash`);')
 #cur_gk.execute('ALTER TABLE base_neo_category ADD CONSTRAINT `group_id_refs_id_ce893429` FOREIGN KEY (`group_id`) REFERENCES `base_neo_category_group` (`id`);')
 #
-#cur_gk.execute('ALTER TABLE base_entity `neo_category_id` int(11) NOT NULL;')
-#cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `intro` longtext NOT NULL;')
-#cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `price` decimal(20,2) NOT NULL;')
-#cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `chief_image` varchar(64) NOT NULL;')
-#cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `detail_images` varchar(1024) NOT NULL;')
-#cur_gk.execute('ALTER TABLE base_entity ADD KEY `common_entity_neo_category_id` (`neo_category_id`);')
-#cur_gk.execute('ALTER TABLE base_entity ADD KEY `common_entity_price` (`price`);')
-#
-#cur_gk.execute('ALTER TABLE base_note ADD COLUMN `entity_id` int(11) NOT NULL;')
-#cur_gk.execute('UPDATE base_note LEFT JOIN base_entity_note ON base_note.id=base_entity_note.note_id SET base_note.entity_id=base_entity_note.entity_id;')
-#cur_gk.execute('ALTER TABLE base_note ADD KEY `base_note_entity_id` (`entity_id`);')
-#cur_gk.execute('ALTER TABLE base_note ADD COLUMN `score` int(11) NOT NULL;')
-#cur_gk.execute('ALTER TABLE base_note ADD KEY `base_note_score` (`score`);')
-#cur_gk.execute('ALTER TABLE base_note ADD COLUMN `figure` varchar(256) NOT NULL;')
+cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `neo_category_id` int(11) NOT NULL;')
+cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `intro` longtext NOT NULL;')
+cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `price` decimal(20,2) NOT NULL;')
+cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `chief_image` varchar(64) NOT NULL;')
+cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `detail_images` varchar(1024) NOT NULL;')
+cur_gk.execute('ALTER TABLE base_entity ADD KEY `common_entity_neo_category_id` (`neo_category_id`);')
+cur_gk.execute('ALTER TABLE base_entity ADD KEY `common_entity_price` (`price`);')
+
+cur_gk.execute('ALTER TABLE base_note ADD COLUMN `entity_id` int(11) NOT NULL;')
+cur_gk.execute('UPDATE base_note LEFT JOIN base_entity_note ON base_note.id=base_entity_note.note_id SET base_note.entity_id=base_entity_note.entity_id;')
+cur_gk.execute('ALTER TABLE base_note ADD KEY `base_note_entity_id` (`entity_id`);')
+cur_gk.execute('ALTER TABLE base_note ADD COLUMN `score` int(11) NOT NULL;')
+cur_gk.execute('ALTER TABLE base_note ADD KEY `base_note_score` (`score`);')
+cur_gk.execute('ALTER TABLE base_note ADD COLUMN `figure` varchar(256) NOT NULL;')
 
 
 fi = open('cats_matching.txt', 'r')
