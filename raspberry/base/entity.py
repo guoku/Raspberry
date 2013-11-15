@@ -167,7 +167,7 @@ class Entity(object):
         else:
             _context["updated_time"] = self.entity_obj.updated_time
         _context["weight"] = self.entity_obj.weight
-       
+        
         _context['chief_image'] = {
             'id' : self.entity_obj.chief_image,
             'url' : Image(self.entity_obj.chief_image).getlink(),

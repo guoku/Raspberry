@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_11_06_slim',
+        'NAME': 'guoku',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
