@@ -53,13 +53,13 @@ conn_gk = MySQLdb.Connection("localhost", "root", "123456", "guoku")
 cur_gk = conn_gk.cursor()
 cur_gk.execute("SET names utf8")
 
-cur_gk.execute('CREATE TABLE base_neo_category_group AS (SELECT * FROM raspberry_11_13.common_neo_category_group);')
+cur_gk.execute('CREATE TABLE base_neo_category_group AS (SELECT * FROM raspberry.common_neo_category_group);')
 cur_gk.execute('ALTER TABLE base_neo_category_group ENGINE=InnoDB;')
 cur_gk.execute('ALTER TABLE base_neo_category_group CHANGE id id INT(11) AUTO_INCREMENT PRIMARY KEY;')
 cur_gk.execute('ALTER TABLE base_neo_category_group ADD KEY `common_category_group_title` (`title`);')
 cur_gk.execute('ALTER TABLE base_neo_category_group ADD KEY `common_category_group_status` (`status`);')
 
-cur_gk.execute('CREATE TABLE base_neo_category AS (SELECT * FROM raspberry_11_13.common_neo_category);')
+cur_gk.execute('CREATE TABLE base_neo_category AS (SELECT * FROM raspberry.common_neo_category);')
 cur_gk.execute('ALTER TABLE base_neo_category ENGINE=InnoDB;')
 cur_gk.execute('ALTER TABLE base_neo_category CHANGE id id INT(11) AUTO_INCREMENT PRIMARY KEY;')
 cur_gk.execute('ALTER TABLE base_neo_category ADD KEY `common_category_group_id` (`group_id`);')
@@ -107,6 +107,7 @@ Image.drop_collection()
 count = 0
 for entity_id in entity_dict.keys():
     neo_category_id = 0
+    price = 0.0 
     for item_id in entity_dict[entity_id]:
         cur_gk.execute("select taobao_id, taobao_category_id, title, shop_nick, price, soldout, created_time, updated_time FROM base_taobao_item WHERE item_id=%d"%item_id)
         row = cur_gk.fetchone()
@@ -135,6 +136,8 @@ for entity_id in entity_dict.keys():
                 item_obj.save() 
                 if neo_category_id == 0 and tb_cat_match.has_key(row[1]):
                     neo_category_id = tb_cat_match[row[1]]
+                if price == 0.0 or row[4] < price:
+                    price = row[4]
             else:
                 print "entity[%d] item[%d] has no category..."%(entity_id, item_id)
         else:
@@ -153,17 +156,19 @@ for entity_id in entity_dict.keys():
                 updated_time = datetime.datetime.now() 
             )
             image_obj.save()
-        cur_gk.execute("UPDATE base_entity SET neo_category_id=%d, chief_image='%s' WHERE id=%d"%(neo_category_id, str(image_obj.id), entity_id))
+        cur_gk.execute("UPDATE base_entity SET neo_category_id=%d, chief_image='%s', price=%f  WHERE id=%d"%(neo_category_id, str(image_obj.id), price, entity_id))
     count += 1
     if count % 1000 == 0:
         print "%d entities processed..."%count
     
 cur_gk.execute('update base_entity set neo_category_id=300 where neo_category_id=0;')
-#cur_gk.execute('INSERT INTO base_entity (id, brand, title, category_id, creator_id, created_time, updated_time, weight, entity_hash, neo_category_id, intro, price, chief_image, detail_images) SELECT id, brand, title, 12, creator_id, created_time, updated_time, weight, entity_hash, neo_category_id, intro, price, chief_image, detail_images FROM raspberry_11_12.common_entity;')
+#cur_gk.execute('ALTER TABLE base_entity DROP INDEX entity_hash;')
+#cur_gk.execute('INSERT INTO base_entity (id, brand, title, category_id, creator_id, created_time, updated_time, weight, entity_hash, neo_category_id, intro, price, chief_image, detail_images) SELECT id, brand, title, 12, creator_id, created_time, updated_time, weight, CONCAT(entity_hash, 'rb'), neo_category_id, intro, price, chief_image, detail_images FROM raspberry.common_entity;')
 conn_gk.commit()
 
 
 
 ########## TRANSPORT MANGO IMAGE DATA ########
 ########## TRANSPORT MANGO ITEM DATA ########
+########## INITIAL SELECTION DATA ########
 

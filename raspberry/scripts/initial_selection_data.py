@@ -18,7 +18,7 @@ else:
     mysql_host = "localhost" 
     mysql_user = "root" 
     mysql_password = "123456" 
-    mysql_database = "guoku_11_06_slim" 
+    mysql_database = "guoku" 
     mongo_database = "guoku" 
     mongo_host = "localhost" 
 
