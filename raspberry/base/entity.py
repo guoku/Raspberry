@@ -181,14 +181,19 @@ class Entity(object):
                 })
         _context['item_id_list'] = Item.find(entity_id = self.entity_id) 
 
+        _context['like_count'] = EntityLikeModel.objects.filter(entity_id = self.entity_id).count()
+        
+        
         _context['total_score'] = 0 
         _context['score_count'] = 0 
         _context['note_id_list'] = []
+        _context['note_count'] = 0 
         for _note_obj in NoteModel.objects.filter(entity_id = self.entity_id):
             _context['note_id_list'].append(_note_obj.id)
             if _note_obj.score != 0:
                 _context['total_score'] += _note_obj.score
                 _context['score_count'] += 1
+            _context['note_count'] += 1
 
         return _context
         
