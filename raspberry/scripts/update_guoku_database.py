@@ -80,9 +80,18 @@ cur_gk.execute('ALTER TABLE base_entity CHANGE creator_id `creator_id` int(11);'
 cur_gk.execute('ALTER TABLE base_note ADD COLUMN `entity_id` int(11) NOT NULL;')
 cur_gk.execute('UPDATE base_note LEFT JOIN base_entity_note ON base_note.id=base_entity_note.note_id SET base_note.entity_id=base_entity_note.entity_id;')
 cur_gk.execute('ALTER TABLE base_note ADD KEY `base_note_entity_id` (`entity_id`);')
-cur_gk.execute('ALTER TABLE base_note ADD COLUMN `score` int(11) NOT NULL;')
+cur_gk.execute('ALTER TABLE base_note ADD COLUMN `score` int(11) NOT NULL DEFAULT 0;')
 cur_gk.execute('ALTER TABLE base_note ADD KEY `base_note_score` (`score`);')
 cur_gk.execute('ALTER TABLE base_note ADD COLUMN `figure` varchar(256) NOT NULL;')
+cur_gk.execute('ALTER TABLE base_note ADD COLUMN `post_time` datetime DEFAULT NULL;')
+cur_gk.execute('ALTER TABLE base_note ADD COLUMN `selector_id` int(11) DEFAULT NULL;')
+cur_gk.execute('ALTER TABLE base_note ADD COLUMN `selected_time` datetime DEFAULT NULL;')
+cur_gk.execute('ALTER TABLE base_note ADD COLUMN `weight` int(11) NOT NULL DEFAULT 0;')
+cur_gk.execute('ALTER TABLE base_note ADD KEY `base_entity_note_post_time` (`post_time`);')
+cur_gk.execute('ALTER TABLE base_note ADD KEY `base_entity_note_selector_id` (`selector_id`);')
+cur_gk.execute('ALTER TABLE base_note ADD KEY `base_entity_note_selected_time` (`selected_time`);')
+cur_gk.execute('ALTER TABLE base_note ADD KEY `base_entity_note_weight` (`weight`);')
+cur_gk.execute('UPDATE base_note INNER JOIN base_entity_note ON base_note.id=base_entity_note.note_id SET base_note.post_time=base_entity_note.post_time, base_note.selector_id=base_entity_note.selector_id, base_note.selected_time=base_entity_note.selected_time, base_note.weight=base_entity_note.weight;')
 
 
 fi = open('cats_matching.txt', 'r')
@@ -162,8 +171,8 @@ for entity_id in entity_dict.keys():
         print "%d entities processed..."%count
     
 cur_gk.execute('update base_entity set neo_category_id=300 where neo_category_id=0;')
-#cur_gk.execute('ALTER TABLE base_entity DROP INDEX entity_hash;')
-#cur_gk.execute('INSERT INTO base_entity (id, brand, title, category_id, creator_id, created_time, updated_time, weight, entity_hash, neo_category_id, intro, price, chief_image, detail_images) SELECT id, brand, title, 12, creator_id, created_time, updated_time, weight, CONCAT(entity_hash, 'rb'), neo_category_id, intro, price, chief_image, detail_images FROM raspberry.common_entity;')
+cur_gk.execute('ALTER TABLE base_entity DROP INDEX entity_hash;')
+cur_gk.execute("INSERT INTO base_entity (id, brand, title, category_id, creator_id, created_time, updated_time, weight, entity_hash, neo_category_id, intro, price, chief_image, detail_images) SELECT id, brand, title, 12, creator_id, created_time, updated_time, weight, CONCAT(entity_hash, 'rb'), neo_category_id, intro, price, chief_image, detail_images FROM raspberry.common_entity;")
 conn_gk.commit()
 
 
