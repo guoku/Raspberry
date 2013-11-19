@@ -74,6 +74,7 @@ class Avatar(object):
     
     @staticmethod
     def read_image_data_by_store_key(store_key):
+        print store_key
         _datastore = Client(
             domain = settings.MOGILEFS_DOMAIN, 
             trackers = settings.MOGILEFS_TRACKERS 

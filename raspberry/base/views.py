@@ -6,7 +6,7 @@ from avatar import Avatar
 from entity import Entity 
 
 def local_avatar_image(request, size, key):
-    _data = Avatar.read_image_data_by_store_key(source + '/' + size + '/' + key)
+    _data = Avatar.read_image_data_by_store_key('avatar/' + size + '/' + key)
     return HttpResponse(_data, content_type = "image/jpeg")
         
 def local_entity_image(request, key, image_format):
