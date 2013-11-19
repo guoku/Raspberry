@@ -180,4 +180,6 @@ conn_gk.commit()
 ########## TRANSPORT MANGO IMAGE DATA ########
 ########## TRANSPORT MANGO ITEM DATA ########
 ########## INITIAL SELECTION DATA ########
+########## REMOVE MARIA IN AVOCADO SETTING ########
+########## REMOVE MARIA_WEB IN AVOCADO SETTING ########
 

@@ -58,6 +58,7 @@ class Entity(object):
         if _chief_image_id == None:
             _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
             _chief_image_id = _chief_image_obj.image_id
+        
         _detail_image_ids = []
         for _image_url in detail_image_urls:
             _image_id = Image.get_image_id_by_origin_url(_image_url)
