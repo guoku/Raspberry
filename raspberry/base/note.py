@@ -4,44 +4,14 @@ from models import Note_Comment as NoteCommentModel
 from models import Note_Poke as NotePokeModel
 from message import NotePokeMessage, NoteCommentReplyMessage, NoteCommentMessage
 from django.conf import settings
-from hashlib import md5
-from pymogile import Client
 import datetime
 import time
+from image import Image
 
 
 
 class Note(object):
     
-    class Figure(object):
-        
-        def __init__(self, key):
-            self.key = key 
-            self.origin_store_key = 'note/origin/' + self.key
-            self.__datastore = Client(
-                domain = settings.MOGILEFS_DOMAIN, 
-                trackers = settings.MOGILEFS_TRACKERS 
-            )
-        
-        @classmethod
-        def create(cls, origin_data):
-            _key = md5(origin_data).hexdigest()
-            _inst = cls(_key)
-    
-            if len(_inst.__datastore.get_paths(_inst.origin_store_key)) == 0:
-                _inst.write(origin_data)
-    
-            return _inst
-    
-        def read_origin_link(self):
-            return settings.IMAGE_SERVER + self.origin_store_key
-    
-        def write(self, origin_data): 
-            _fp = self.__datastore.new_file(self.origin_store_key)
-            _fp.write(origin_data)
-            _fp.close()
-
-
     def __init__(self, note_id):
         self.note_id = note_id
         self.comments = {} 
@@ -85,10 +55,14 @@ class Note(object):
     @classmethod
     def create(cls, entity_id, creator_id, note_text, score = 0, image_data = None):
         if image_data != None:
-            _figure_obj = cls.Figure.create(image_data)
-            _figure = _figure_obj.key
+            _image_obj = Image.create(
+                source = 'note_uploaded', 
+                image_data = image_data
+            )
+            _figure = _image_obj.image_id
         else:
             _figure = ''
+        
         _note_obj = NoteModel.objects.create(
             entity_id = entity_id,
             creator_id = creator_id,
@@ -105,9 +79,12 @@ class Note(object):
     def update(self, score = None, note_text = None, image_data = None):
         self.__ensure_note_obj()
         if image_data != None:
-            _figure_obj = self.Figure.create(image_data)
-            if _figure_obj.key != self.note_obj.figure:
-                self.note_obj.figure = _figure_obj.key
+            _image_obj = Image.create(
+                source = 'note_uploaded', 
+                image_data = image_data
+            )
+            if _image_obj.image_id != self.note_obj.figure:
+                self.note_obj.figure = _image_obj.image_id
         if score != None:
             self.note_obj.score = score 
         if note_text != None:
@@ -133,8 +110,11 @@ class Note(object):
         _context["comment_count"] = len(_context["comment_id_list"]) 
         _context["created_time"] = self.note_obj.created_time
         _context["updated_time"] = self.note_obj.updated_time
+        print self.note_obj.figure
+        print self.note_obj.entity_id
+        print self.note_id
         if len(self.note_obj.figure) > 0:
-            _context['figure'] = self.Figure(self.note_obj.figure).read_origin_link()
+            _context['figure'] = Image(self.note_obj.figure).getlink()
 
         return _context
 

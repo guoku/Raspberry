@@ -102,7 +102,7 @@ def add_note_for_entity(request, entity_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
         _note_text = request.POST.get('note', None)
-        _score = int(request.POST.get('score', None))
+        _score = int(request.POST.get('score', '0'))
         
         _image_file = request.FILES.get('image', None)
         if _image_file == None:
