@@ -228,10 +228,12 @@ class Entity(object):
             self.entity_obj.weight = int(weight)
         
         if chief_image_id != None and chief_image_id != self.entity_obj.chief_image:
-            if not self.entity_obj.chief_image in self.entity_obj.detail_images:
-                if len(self.entity_obj.detail_images) > 0:
-                    self.entity_obj.detail_images = '#'
-                self.entity_obj.detail_images = self.entity_obj.chief_image + self.entity_obj.detail_images
+            _detail_image_ids = self.entity_obj.detail_images.split('#')
+            if chief_image_id in _detail_image_ids:
+                _detail_image_ids.remove(chief_image_id)
+            if self.entity_obj.chief_image not in _detail_image_ids:
+                _detail_image_ids.insert(0, self.entity_obj.chief_image)
+            self.entity_obj.detail_images =  "#".join(_detail_image_ids)
             self.entity_obj.chief_image = chief_image_id
             
         self.entity_obj.save()

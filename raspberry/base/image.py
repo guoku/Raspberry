@@ -40,13 +40,13 @@ class Image(object):
             trackers = settings.MOGILEFS_TRACKERS 
         )
         _square_data = cls.crop_square(image_data)
-        _fp = _datastore.new_file('entity/' + store_hash + '.jpg')
+        _fp = _datastore.new_file('img/' + store_hash + '.jpg')
         _fp.write(_square_data)
         _fp.close()
         
         for _size in _image_sizes:
             _data_resized = cls.resize(_square_data, _size, _size)
-            _fp = _datastore.new_file('entity/' + store_hash + '.jpg_' + str(_size) + 'x' + str(_size) + '.jpg')
+            _fp = _datastore.new_file('img/' + store_hash + '.jpg_' + str(_size) + 'x' + str(_size) + '.jpg')
             _fp.write(_data_resized)
             _fp.close()
     
@@ -106,7 +106,7 @@ class Image(object):
     def getlink(self):
         self.__ensure_image_obj()
         if self.image_obj.store_hash != None:
-            _link = settings.IMAGE_SERVER + 'entity/' + self.image_obj.store_hash + '.jpg'
+            _link = settings.IMAGE_SERVER + 'img/' + self.image_obj.store_hash + '.jpg'
         elif self.image_obj.origin_url != None:
             _link = self.image_obj.origin_url
         else:

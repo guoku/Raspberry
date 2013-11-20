@@ -10,10 +10,10 @@ def local_avatar_image(request, size, key):
     return HttpResponse(_data, content_type = "image/jpeg")
         
 def local_entity_image(request, key, image_format):
-    _data = Avatar.read_image_data_by_store_key('entity/' + key + '.' + image_format)
+    _data = Avatar.read_image_data_by_store_key('img/' + key + '.' + image_format)
     return HttpResponse(_data, content_type = "image/jpeg")
         
 def local_entity_image_extend(request, key1, key2, key3):
-    _data = Avatar.read_image_data_by_store_key('entity/' + key1 + '.' + key2 + '.' + key3)
+    _data = Avatar.read_image_data_by_store_key('img/' + key1 + '.' + key2 + '.' + key3)
     return HttpResponse(_data, content_type = "image/jpeg")
         
