@@ -88,6 +88,10 @@ class Note(models.Model):
     creator_id = models.IntegerField(null = False, db_index = True)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
+    post_time = models.DateTimeField(null = True, db_index = True)
+    selector = models.ForeignKey(User, null = True, db_index = True, related_name = "selected_note") 
+    selected_time = models.DateTimeField(null = True)
+    weight = models.IntegerField(default = 0, db_index = True)
 
     class Meta:
         ordering = ['-created_time']
