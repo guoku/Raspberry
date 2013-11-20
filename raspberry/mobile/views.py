@@ -1,6 +1,7 @@
 # coding=utf8
 from base.message import *
 from base.selection import *
+import base.popularity as popularity 
 from account import *
 from category import *
 from entity import *
@@ -177,5 +178,32 @@ def selection(request):
                 }
                 _rslt.append(_context)
                 
+        
+        return SuccessJsonResponse(_rslt)
+
+def popular(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _scale = request.GET.get('scale', 'daily')
+
+        _popular_entities = popularity.get_popular_entity(scale = _scale, json = True) 
+        _rslt = {
+            'scale' : _scale,
+            'updated_time' : _popular_entities['updated_time'],
+            'content' : []
+        }
+        for _row in _popular_entities['data']:
+            _entity_id = _row[0]
+            _hotness = _row[1] 
+            _entity_context = MobileEntity(_entity_id).read(_request_user_id)
+            _rslt['content'].append({
+                'entity' : _entity_context,
+                'hotness' : _hotness
+            })
+        
         
         return SuccessJsonResponse(_rslt)
