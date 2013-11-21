@@ -101,9 +101,9 @@ class Note(object):
         _context["content"] = self.note_obj.note
         _context["score"] = self.note_obj.score
         if self.note_obj.selector_id != None:
-            _context["is_selected"] = "1"
+            _context["is_selected"] = 1
         else:
-            _context["is_selected"] = "0" 
+            _context["is_selected"] = 0 
         _context["poker_id_list"] = map(lambda x : x.user_id, NotePokeModel.objects.filter(note_id = self.note_id))
         _context["poke_count"] = len(_context["poker_id_list"]) 
         _context["comment_id_list"] = map(lambda x : x.id, NoteCommentModel.objects.filter(note_id = self.note_id))
