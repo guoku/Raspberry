@@ -22,7 +22,7 @@ def report_entity(request, entity_id):
             updated_time = datetime.datetime.now(),
         )
         _report.save()
-        return SuccessJsonResponse("1")
+        return SuccessJsonResponse({ "status" : 1 })
 
             
 def report_entity_note(request, note_id):
@@ -42,6 +42,6 @@ def report_entity_note(request, note_id):
             updated_time = datetime.datetime.now(),
         )
         _report.save()
-        return SuccessJsonResponse("1")
+        return SuccessJsonResponse({ "status" : 1 })
 
             
