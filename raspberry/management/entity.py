@@ -210,18 +210,18 @@ def search_entity(request):
     _entity_id_list = Entity.find(like_word = _query)
     _entity_context_list = [] 
     _category_title_dict = Category.get_category_title_dict()
-    for _entity_id in _entity_id_list:
-        _entity = Entity(_entity_id)
-        _entity_context = _entity.read()
-        _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
-        if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
-            _item_context = Item(_entity_context['item_id_list'][0]).read()
-            _entity_context['buy_link'] = _item_context['buy_link'] 
-            _entity_context['taobao_title'] = _item_context['title'] 
-        else:
-            _entity_context['buy_link'] = ''
-            _entity_context['taobao_title'] = ''
-        _entity_context_list.append(_entity_context)
+#    for _entity_id in _entity_id_list:
+#        _entity = Entity(_entity_id)
+#        _entity_context = _entity.read()
+#        _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
+#        if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
+#            _item_context = Item(_entity_context['item_id_list'][0]).read()
+#            _entity_context['buy_link'] = _item_context['buy_link'] 
+#            _entity_context['taobao_title'] = _item_context['title'] 
+#        else:
+#            _entity_context['buy_link'] = ''
+#            _entity_context['taobao_title'] = ''
+#        _entity_context_list.append(_entity_context)
     
     _category_context_list = Category.find(like_word = _query)
     
@@ -231,7 +231,8 @@ def search_entity(request):
             'active_division' : 'entity',
             'query' : _query,
             'category_groups' : _category_groups,
-            'entity_context_list' : _entity_context_list,
+            #'entity_context_list' : _entity_context_list,
+            'entity_context_list' : [],
             'category_context_list' : _category_context_list,
         },
         context_instance = RequestContext(request)
@@ -277,10 +278,7 @@ def entity_list(request):
             category_id = _category_id,
             status = _status_code
         )
-#        if _category_id != None and _status_code == -1:
-#            _paginator = Paginator(_page_num, 2000, len(_entity_id_list), _para)
-#        else:
-        _paginator = Paginator(_page_num, 100, len(_entity_id_list), _para)
+        _paginator = Paginator(_page_num, 30, len(_entity_id_list), _para)
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
         for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
