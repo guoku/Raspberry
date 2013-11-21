@@ -243,9 +243,9 @@ class Entity(object):
         _hdl = EntityModel.objects.all()
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
-        if like_word != None: 
-            _q = Q(title__icontains = like_word)
-            _hdl = _hdl.filter(_q)
+#        if like_word != None: 
+#            _q = Q(title__icontains = like_word)
+#            _hdl = _hdl.filter(_q)
         if status < 0:
             _hdl = _hdl.filter(weight__lt = 0)
         elif status >= 0:
