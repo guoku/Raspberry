@@ -274,14 +274,22 @@ def entity_list(request):
         _category_groups = Category.allgroups()
         _normal_entity_count = Entity.count(category_id = _category_id, status = 0) 
         _freeze_entity_count = Entity.count(category_id = _category_id, status = -1)
-        _entity_id_list = Entity.find(
+        
+        _entity_count = Entity.count(
             category_id = _category_id,
             status = _status_code
         )
-        _paginator = Paginator(_page_num, 30, len(_entity_id_list), _para)
+
+        _paginator = Paginator(_page_num, 30, _entity_count, _para)
+        _entity_id_list = Entity.find(
+            category_id = _category_id,
+            status = _status_code,
+            offset = _paginator.offset,
+            count = _paginator.count_in_one_page,
+        )
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
-        for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
+        for _entity_id in _entity_id_list:
             _entity = Entity(_entity_id)
             _entity_context = _entity.read()
             _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
