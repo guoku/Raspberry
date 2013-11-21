@@ -7,6 +7,7 @@ from django.template import RequestContext
 
 from category import *
 from entity import *
+from report import *
 from sync import *
 
 def index(request):
