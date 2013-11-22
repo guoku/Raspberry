@@ -209,4 +209,3 @@ def popular(request):
         
         return SuccessJsonResponse(_rslt)
 
-def popular(request):
