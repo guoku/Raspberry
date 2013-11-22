@@ -53,6 +53,7 @@ conn_gk = MySQLdb.Connection("localhost", "root", "123456", "guoku")
 cur_gk = conn_gk.cursor()
 cur_gk.execute("SET names utf8")
 
+print 'adding base_neo_category & base_neo_category_group...'
 cur_gk.execute('CREATE TABLE base_neo_category_group AS (SELECT * FROM raspberry.common_neo_category_group);')
 cur_gk.execute('ALTER TABLE base_neo_category_group ENGINE=InnoDB;')
 cur_gk.execute('ALTER TABLE base_neo_category_group CHANGE id id INT(11) AUTO_INCREMENT PRIMARY KEY;')
@@ -68,15 +69,20 @@ cur_gk.execute('ALTER TABLE base_neo_category ADD KEY `common_category_status` (
 cur_gk.execute('ALTER TABLE base_neo_category ADD KEY `common_category_image_store_hash` (`image_store_hash`);')
 cur_gk.execute('ALTER TABLE base_neo_category ADD CONSTRAINT `group_id_refs_id_ce893429` FOREIGN KEY (`group_id`) REFERENCES `base_neo_category_group` (`id`);')
 
+print 'updating base_entity...'
 cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `neo_category_id` int(11) NOT NULL;')
 cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `intro` longtext NOT NULL;')
 cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `price` decimal(20,2) NOT NULL;')
+cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `like_count` int(11) NOT NULL DEFAULT 0;')
 cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `chief_image` varchar(64) NOT NULL;')
 cur_gk.execute('ALTER TABLE base_entity ADD COLUMN `detail_images` varchar(1024) NOT NULL;')
 cur_gk.execute('ALTER TABLE base_entity ADD KEY `common_entity_neo_category_id` (`neo_category_id`);')
 cur_gk.execute('ALTER TABLE base_entity ADD KEY `common_entity_price` (`price`);')
+cur_gk.execute('ALTER TABLE base_entity ADD KEY `common_entity_like_count` (`like_count`);')
 cur_gk.execute('ALTER TABLE base_entity CHANGE creator_id `creator_id` int(11);')
+cur_gk.execute("UPDATE base_entity INNER JOIN ( SELECT entity_id, COUNT(*) AS tot FROM guoku_entity_like GROUP BY entity_id ) AS elt ON base_entity.id=elt.entity_id SET base_entity.like_count=elt.tot;")
 
+print 'updating base_note...'
 cur_gk.execute('ALTER TABLE base_note ADD COLUMN `entity_id` int(11) NOT NULL;')
 cur_gk.execute('UPDATE base_note LEFT JOIN base_entity_note ON base_note.id=base_entity_note.note_id SET base_note.entity_id=base_entity_note.entity_id;')
 cur_gk.execute('ALTER TABLE base_note ADD KEY `base_note_entity_id` (`entity_id`);')

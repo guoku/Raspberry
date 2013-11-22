@@ -3,6 +3,7 @@ from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
 from models import Note as NoteModel
 from django.conf import settings
+from django.core.cache import cache
 from django.db.models import Sum
 from mongoengine import *
 from note import Note
@@ -159,6 +160,7 @@ class Entity(object):
             _context['price'] = self.entity_obj.price
         _context["entity_hash"] = self.entity_obj.entity_hash
         _context["category_id"] = self.entity_obj.neo_category_id
+        _context['like_count'] = self.entity_obj.like_count 
         if json:
             _context['created_time'] = time.mktime(self.entity_obj.created_time.timetuple())
         else:
@@ -182,7 +184,6 @@ class Entity(object):
                 })
         _context['item_id_list'] = Item.find(entity_id = self.entity_id) 
 
-        _context['like_count'] = EntityLikeModel.objects.filter(entity_id = self.entity_id).count()
         
         
         _context['total_score'] = 0 
@@ -258,6 +259,11 @@ class Entity(object):
                 _hdl = _hdl.order_by('-price')
             else:
                 _hdl = _hdl.order_by('price')
+        elif sort_by == 'like':
+            if reverse:
+                _hdl = _hdl.order_by('like_count')
+            else:
+                _hdl = _hdl.order_by('-like_count')
         else:
             _hdl = _hdl.order_by('-created_time')
         
@@ -299,15 +305,24 @@ class Entity(object):
         if _item_obj.get_entity_id() == self.entity_id:
             _item_obj.bind(-1)
 
+    def update_like_count(self):
+        self.__ensure_entity_obj()
+        _like_count = EntityLikeModel.objects.filter(entity_id = self.entity_id).count()
+        self.entity_obj.like_count = _like_count
+        self.entity_obj.save()
+
+
     def like(self, user_id):
-        #try:
-        EntityLikeModel.objects.create(
-            entity_id = self.entity_id,
-            user_id = user_id
-        )
-        return True
-        #except:
-        #    pass
+        try:
+            EntityLikeModel.objects.create(
+                entity_id = self.entity_id,
+                user_id = user_id
+            )
+            self.update_like_count()
+
+            return True
+        except:
+            pass
         return False
          
     def unlike(self, user_id):

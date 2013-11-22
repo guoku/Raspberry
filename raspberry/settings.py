@@ -27,6 +27,19 @@ DATABASES = {
 from mongoengine import connect 
 connect('guoku')
 
+CACHES = {
+    "default": {
+        "BACKEND": "redis_cache.cache.RedisCache",
+        "LOCATION": [
+            "localhost:6379:3",
+        ],
+        "OPTIONS": {
+            "PARSER_CLASS": "redis.connection.HiredisParser",
+            "CLIENT_CLASS": "redis_cache.client.ShardClient",
+        }
+    }
+}
+
 MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
 
