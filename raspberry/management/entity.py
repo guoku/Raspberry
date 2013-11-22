@@ -207,7 +207,7 @@ def search_entity(request):
         
     
     _category_groups = Category.allgroups()
-    _entity_id_list = Entity.find(like_word = _query)
+#    _entity_id_list = Entity.find(like_word = _query)
     _entity_context_list = [] 
     _category_title_dict = Category.get_category_title_dict()
 #    for _entity_id in _entity_id_list:
