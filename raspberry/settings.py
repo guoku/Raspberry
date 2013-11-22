@@ -31,6 +31,7 @@ MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
 
 
+JUMP_TO_TAOBAO = True 
 IMAGE_LOCAL = True 
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
 #IMAGE_LOCAL = False 

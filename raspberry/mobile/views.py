@@ -2,6 +2,8 @@
 from base.message import *
 from base.selection import *
 import base.popularity as popularity 
+from django.core.urlresolvers import reverse
+from django.conf import settings
 from account import *
 from category import *
 from entity import *
@@ -45,6 +47,43 @@ def homepage(request):
     _rslt['discover'].append(Category(116).read())
     _rslt['discover'].append(Category(85).read())
     _rslt['discover'].append(Category(10).read())
+    
+    _rslt['banner'] = []
+    _rslt['banner'].append({
+        'url' : 'guoku://category/9', 
+        'img' : Category(9).read()['category_icon_large'],
+        'intro' : u'爱护你的颈椎',
+    })
+    _rslt['banner'].append({
+        'url' : 'guoku://user/79761', 
+        'img' : MobileUser(79761).read()['avatar_large'],
+        'intro' : u'向大家介绍一位诗人。',
+    })
+        
+    _entity_context = MobileEntity(121097).read()
+    _rslt['banner'].append({
+        'url' : 'guoku://entity/121097', 
+        'img' : _entity_context['chief_image'], 
+        'intro' : _entity_context['brand'] + ' - ' + _entity_context['title'] 
+    })
+    _entity_context = MobileEntity(105167).read()
+    _rslt['banner'].append({
+        'url' : 'guoku://entity/105167', 
+        'img' : _entity_context['chief_image'], 
+        'intro' : _entity_context['brand'] + ' - ' + _entity_context['title'] 
+    })
+    _entity_context = MobileEntity(104681).read()
+    _rslt['banner'].append({
+        'url' : 'http://www.baidu.com', 
+        'img' : _entity_context['chief_image'], 
+        'intro' : _entity_context['brand'] + ' - ' + _entity_context['title'] 
+    })
+    
+    if settings.JUMP_TO_TAOBAO: 
+        _rslt['jump_to_taobao'] = 1
+    else:
+        _rslt['jump_to_taobao'] = 0
+        
     
     return SuccessJsonResponse(_rslt)
      
