@@ -5,6 +5,7 @@ from django.conf import settings
 from models import Avatar as AvatarModel 
 from models import User_Profile as UserProfileModel 
 from models import User_Follow as UserFollowModel
+from models import Sina_Token as SinaTokenModel 
 from message import UserFollowMessage 
 from hashlib import md5
 from pymogile import Client
@@ -334,3 +335,15 @@ class User(object):
         self.avatar_obj = self.Avatar.create(self.user_id, data)
        
         
+    @staticmethod
+    def check_sina_id(sina_id_list):
+        _rslt = [] 
+        for _sina_token_obj in SinaTokenModel.objects.filter(sina_id__in = sina_id_list):
+            if _sina_token_obj.user_id != None:
+                _rslt.append({
+                    'sina_id' : _sina_token_obj.sina_id,
+                    'user_id' : _sina_token_obj.user_id
+                })
+        return _rslt
+
+

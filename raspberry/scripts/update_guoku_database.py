@@ -100,6 +100,11 @@ cur_gk.execute('ALTER TABLE base_note ADD KEY `base_entity_note_weight` (`weight
 cur_gk.execute('UPDATE base_note INNER JOIN base_entity_note ON base_note.id=base_entity_note.note_id SET base_note.post_time=base_entity_note.post_time, base_note.selector_id=base_entity_note.selector_id, base_note.selected_time=base_entity_note.selected_time, base_note.weight=base_entity_note.weight;')
 
 
+print 'updating base_sina_token...'
+cur_gk.execute('ALTER TABLE base_sina_token ADD KEY `base_sina_token_sina_id` (`sina_id`);')
+cur_gk.execute('ALTER TABLE base_sina_token ADD KEY `base_sina_token_screen_name` (`screen_name`);')
+
+
 fi = open('cats_matching.txt', 'r')
 tb_cat_match = {}
 for line in fi.readlines():

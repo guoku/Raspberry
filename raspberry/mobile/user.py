@@ -125,3 +125,18 @@ def user_entity_note(request, user_id):
 
         return SuccessJsonResponse(_rslt)
 
+def check_sina_user(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _sina_id_list = request.GET.getlist('sid[]')
+        _sina_user_list = MobileUser.check_sina_id(_sina_id_list)
+        _rslt = [] 
+        for _sina_user in _sina_user_list[0:100]:
+            _user_id = _sina_user['user_id']
+            _rslt.append(MobileUser(_user_id).read(_request_user_id))
+        
+        return SuccessJsonResponse(_rslt)
