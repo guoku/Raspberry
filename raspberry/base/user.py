@@ -248,6 +248,7 @@ class User(object):
         self.__ensure_user_obj()
         _context = {}
         _context['user_id'] = self.user_obj.id
+        _context['email'] = self.user_obj.email
         
         _profile = UserProfileModel.objects.get(user_id = self.user_id)
         _context['nickname'] = _profile.nickname
