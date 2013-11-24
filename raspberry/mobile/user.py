@@ -95,6 +95,16 @@ def update_user(request):
             _user.upload_avatar(_image_data)
 
         _nickname = request.POST.get('nickname', None)
+        _email = request.POST.get('email', None)
+        _username = request.POST.get('username', None)
+        _password = request.POST.get('password', None)
+        if _email != None or _username != None or _password != None:
+            _user.reset_account(
+                username = _username,
+                password = _password,
+                email = _email
+            )
+        
         if _nickname != None:
             _user.set_profile(nickname = _nickname)
         

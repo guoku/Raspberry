@@ -106,6 +106,11 @@ class User(object):
             return _datastore.get_file_data(store_key)
 
 
+    class PasswordLessIllegal(Exception):
+        def __init__(self):
+            self.__message = "password illegal"
+        def __str__(self):
+            return repr(self.__message)
 
     class LoginEmailDoesNotExist(Exception):
         def __init__(self, email):
@@ -210,6 +215,27 @@ class User(object):
         if UserProfileModel.objects.filter(nickname = nickname).count() > 0:
             return True
         return False
+    
+    def reset_account(self, username = None, password = None, email = None): 
+        self.__ensure_user_obj()
+        
+        if email != None:
+            if self.email_exist(email) and self.user_obj.email != email:
+                raise self.EmailExistAlready(email) 
+        
+            self.user_obj.email = email
+        
+        if username != None:
+            self.user_obj.username = username
+        
+        if password != None:
+            if len(password) < 6:
+                raise self.PasswordLessIllegal() 
+        
+            self.user_obj.set_password(password)
+
+        self.user_obj.save()
+    
     
     def set_profile(self, nickname, location = 'beijing', gender = 'O', bio = '', website = ''):
         self.__ensure_user_profile_obj()
