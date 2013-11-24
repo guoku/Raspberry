@@ -32,7 +32,7 @@ class Note(object):
         return _hdl.count() 
     
     @classmethod
-    def find(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, offset = 0, count = 30):
+    def find(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, offset = 0, count = 30, sort_by = None):
         _hdl = NoteModel.objects
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
@@ -42,8 +42,15 @@ class Note(object):
             _hdl = _hdl.filter(created_time__lt = timestamp)
         if creator_set != None:
             _hdl = _hdl.filter(creator_id__in = creator_set)
+        
+        if sort_by == 'poke':
+            _hdl = _hdl.order_by('-poke_count')
+        else:
+            _hdl = _hdl.order_by('-created_time')
+            
+        
         _list = []
-        for _note_obj in _hdl.order_by('-created_time')[offset : offset + count]:
+        for _note_obj in _hdl[offset : offset + count]:
             _list.append(_note_obj.id)
         return _list
     

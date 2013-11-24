@@ -13,11 +13,6 @@ def category_entity_note(request, category_id):
         else:
             _request_user_id = None
         _sort_by = request.GET.get('sort', 'new')
-        _reverse = request.GET.get('reverse', '0')
-        if _reverse == '0':
-            _reverse = False
-        else:
-            _reverse = True
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
         
@@ -25,6 +20,7 @@ def category_entity_note(request, category_id):
             category_id = category_id,
             offset = _offset,
             count = _count,
+            sort_by = _sort_by
         )
         _rslt = []
         for _note_id in _note_id_list:

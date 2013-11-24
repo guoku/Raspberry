@@ -93,11 +93,14 @@ cur_gk.execute('ALTER TABLE base_note ADD COLUMN `post_time` datetime DEFAULT NU
 cur_gk.execute('ALTER TABLE base_note ADD COLUMN `selector_id` int(11) DEFAULT NULL;')
 cur_gk.execute('ALTER TABLE base_note ADD COLUMN `selected_time` datetime DEFAULT NULL;')
 cur_gk.execute('ALTER TABLE base_note ADD COLUMN `weight` int(11) NOT NULL DEFAULT 0;')
+cur_gk.execute('ALTER TABLE base_note ADD COLUMN `poke_count` int(11) NOT NULL DEFAULT 0;')
 cur_gk.execute('ALTER TABLE base_note ADD KEY `base_entity_note_post_time` (`post_time`);')
 cur_gk.execute('ALTER TABLE base_note ADD KEY `base_entity_note_selector_id` (`selector_id`);')
 cur_gk.execute('ALTER TABLE base_note ADD KEY `base_entity_note_selected_time` (`selected_time`);')
 cur_gk.execute('ALTER TABLE base_note ADD KEY `base_entity_note_weight` (`weight`);')
+cur_gk.execute('ALTER TABLE base_note ADD KEY `common_entity_poke_count` (`poke_count`);')
 cur_gk.execute('UPDATE base_note INNER JOIN base_entity_note ON base_note.id=base_entity_note.note_id SET base_note.post_time=base_entity_note.post_time, base_note.selector_id=base_entity_note.selector_id, base_note.selected_time=base_entity_note.selected_time, base_note.weight=base_entity_note.weight;')
+cur_gk.execute('UPDATE base_note INNER JOIN ( SELECT note_id, COUNT(*) AS tot FROM base_note_poke GROUP BY note_id ) AS npt ON base_note.id=npt.note_id SET base_note.poke_count=npt.tot;')
 
 
 print 'updating base_sina_token...'

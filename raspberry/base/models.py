@@ -92,6 +92,7 @@ class Note(models.Model):
     post_time = models.DateTimeField(null = True, db_index = True)
     selector = models.ForeignKey(User, null = True, db_index = True, related_name = "selected_note") 
     selected_time = models.DateTimeField(null = True)
+    poke_count = models.IntegerField(default = 0, db_index = True)
     weight = models.IntegerField(default = 0, db_index = True)
 
     class Meta:
