@@ -272,6 +272,7 @@ class Entity(object):
         
         _entity_id_list = map(lambda x: x.id, _hdl)
         return _entity_id_list
+    
 
     @classmethod
     def roll(cls, category_id = None, count = 10):

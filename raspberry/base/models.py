@@ -1,4 +1,5 @@
 # coding=utf8
+from djangosphinx.models import SphinxSearch
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -67,6 +68,18 @@ class Entity(models.Model):
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
     weight = models.IntegerField(default = 0, db_index = True)
+    
+    search = SphinxSearch( 
+        index = 'entities',
+        weights = { 
+            'entity_title' : 20,
+            'entity_brand' : 10,
+            'entity_intro' : 5,
+        }, 
+        mode = 'SPH_MATCH_ALL',
+        rankmode = 'SPH_RANK_NONE',
+    )
+
     class Meta:
         ordering = ['-created_time']
 
@@ -94,6 +107,12 @@ class Note(models.Model):
     selected_time = models.DateTimeField(null = True)
     poke_count = models.IntegerField(default = 0, db_index = True)
     weight = models.IntegerField(default = 0, db_index = True)
+    
+    search = SphinxSearch( 
+        index = 'notes',
+        mode = 'SPH_MATCH_ALL',
+        rankmode = 'SPH_RANK_NONE',
+    )
 
     class Meta:
         ordering = ['-created_time']
