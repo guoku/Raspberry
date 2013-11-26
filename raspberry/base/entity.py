@@ -273,6 +273,13 @@ class Entity(object):
         _entity_id_list = map(lambda x: x.id, _hdl)
         return _entity_id_list
     
+    @classmethod
+    def search(cls, query_string, offset = 0, count = 30):
+        _query_set = EntityModel.search.query(query_string).filter(like_count__gte = 0)
+        _entity_id_list = []
+        for _result in _query_set[offset : offset + count]:
+            _entity_id_list.append(int(_result._sphinx["id"]))
+        return _entity_id_list 
 
     @classmethod
     def roll(cls, category_id = None, count = 10):
@@ -414,17 +421,7 @@ class Entity(object):
 #        return _rslt 
 #        
 #    
-#    @staticmethod
-#    def search(query):
-#        _entity_id_list = []  
-#        for _entity_obj in EntityModel.objects.filter(brand__contains = query):
-#            _entity_id_list.append(str(_entity_obj.id))
-#        for _entity_obj in EntityModel.objects.filter(title__contains = query):
-#            _entity_id = str(_entity_obj.id)
-#            if not _entity_id in _entity_id_list:
-#                _entity_id_list.append(_entity_id)
-#        return _entity_id_list
-#    
+    
     @staticmethod
     def read_entity_note_figure_data_by_store_key(store_key): 
         _datastore = Client(

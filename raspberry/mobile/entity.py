@@ -34,6 +34,28 @@ def entity_list(request):
         return SuccessJsonResponse(_rslt)
     
 
+def search_entity(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        
+        _query_string = request.GET.get('q')
+        _offset = int(request.GET.get('offset', '0'))
+        _count = int(request.GET.get('count', '30'))
+        
+        _entity_id_list = MobileEntity.search(
+            query_string = _query_string
+        )
+        _rslt = []
+        for _entity_id in _entity_id_list:
+            _entity = MobileEntity(_entity_id)
+            _rslt.append(
+                _entity.read(_request_user_id)
+            )
+        return SuccessJsonResponse(_rslt)
 
 
 def category_entity(request, category_id):

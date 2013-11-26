@@ -21,6 +21,12 @@ class User_Profile(models.Model):
     website = models.CharField(max_length = 1024, null = True, blank = True)
     email_verified = models.BooleanField(default = False)
 
+    search = SphinxSearch( 
+        index = 'users',
+        mode = 'SPH_MATCH_ALL',
+        rankmode = 'SPH_RANK_NONE',
+    )
+    
     def __unicode__(self):
         return self.nickname
     
@@ -72,9 +78,9 @@ class Entity(models.Model):
     search = SphinxSearch( 
         index = 'entities',
         weights = { 
-            'entity_title' : 20,
-            'entity_brand' : 10,
-            'entity_intro' : 5,
+            'title' : 20,
+            'brand' : 10,
+            'intro' : 5,
         }, 
         mode = 'SPH_MATCH_ALL',
         rankmode = 'SPH_RANK_NONE',

@@ -54,6 +54,13 @@ class Note(object):
             _list.append(_note_obj.id)
         return _list
     
+    @classmethod
+    def search(cls, query_string, offset = 0, count = 30):
+        _query_set = NoteModel.search.query(query_string)
+        _note_id_list = []
+        for _result in _query_set[offset : offset + count]:
+            _note_id_list.append(int(_result._sphinx["id"]))
+        return _note_id_list
     
     def get_creator_id(self):
         self.__ensure_note_obj()

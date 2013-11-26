@@ -85,6 +85,7 @@ def homepage(request):
         _rslt['jump_to_taobao'] = 0
         
     
+    MobileEntity.search(u'水')
     return SuccessJsonResponse(_rslt)
      
 def feed(request):

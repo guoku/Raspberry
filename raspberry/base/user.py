@@ -357,6 +357,12 @@ class User(object):
              
     def get_fan_user_id_list(self, offset = 0, count = 30):
         return map(lambda x : x.follower_id, UserFollowModel.objects.filter(followee_id = self.user_id)[offset : offset + count])
+    
+    def get_following_count(self):
+        return UserFollowModel.objects.filter(follower_id = self.user_id).count()
+
+    def get_fan_count(self):
+        return UserFollowModel.objects.filter(followee_id = self.user_id).count()
 
     def upload_avatar(self, data):
         self.avatar_obj = self.Avatar.create(self.user_id, data)
@@ -373,4 +379,12 @@ class User(object):
                 })
         return _rslt
 
+    @classmethod
+    def search(cls, query_string, offset = 0, count = 30):
+        _query_set = UserProfileModel.search.query(query_string).order_by('-fans_count')
+        _user_id_list = []
+        for _result in _query_set[offset : offset + count]:
+            _user_id_list.append(int(_result._sphinx['attrs']['user_id']))
+        return _user_id_list
+    
 

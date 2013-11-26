@@ -150,3 +150,24 @@ def check_sina_user(request):
             _rslt.append(MobileUser(_user_id).read(_request_user_id))
         
         return SuccessJsonResponse(_rslt)
+
+def search_user(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+
+        _query_string = request.GET.get('q')
+        _offset = int(request.GET.get('offset', '0'))
+        _count = int(request.GET.get('count', '30'))
+        _user_id_list = MobileUser.search(
+            query_string = _query_string
+        )
+        _rslt = [] 
+        for _user_id in _user_id_list: 
+            _rslt.append(MobileUser(_user_id).read_full_context(_request_user_id))
+        
+        return SuccessJsonResponse(_rslt)
+        
