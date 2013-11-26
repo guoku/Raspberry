@@ -145,63 +145,83 @@ class Entity(object):
             self.entity_obj.price = taobao_item_info['price']
             self.entity_obj.save()
         return _item_id 
+
+
     
-    
-    def __load_entity_context(self, json = False):
+    def __load_entity_basic_info(self, json = False):
         self.__ensure_entity_obj()
-        _context = {}
-        _context['entity_id'] = self.entity_obj.id
-        _context['brand'] = self.entity_obj.brand 
-        _context['title'] = self.entity_obj.title
-        _context['intro'] = self.entity_obj.intro
-        if json:
-            _context['price'] = unicode(self.entity_obj.price)
-        else: 
-            _context['price'] = self.entity_obj.price
-        _context["entity_hash"] = self.entity_obj.entity_hash
-        _context["category_id"] = self.entity_obj.neo_category_id
-        _context['like_count'] = self.entity_obj.like_count 
-        if json:
-            _context['created_time'] = time.mktime(self.entity_obj.created_time.timetuple())
-        else:
-            _context["created_time"] = self.entity_obj.created_time
-        if json:
-            _context['updated_time'] = time.mktime(self.entity_obj.updated_time.timetuple())
-        else:
-            _context["updated_time"] = self.entity_obj.updated_time
-        _context["weight"] = self.entity_obj.weight
+        _basic_info = {}
+        _basic_info['entity_id'] = self.entity_obj.id
+        _basic_info['brand'] = self.entity_obj.brand 
+        _basic_info['title'] = self.entity_obj.title
+        _basic_info['intro'] = self.entity_obj.intro
         
-        _context['chief_image'] = {
+        if json:
+            _basic_info['price'] = unicode(self.entity_obj.price)
+        else: 
+            _basic_info['price'] = self.entity_obj.price
+        _basic_info["entity_hash"] = self.entity_obj.entity_hash
+        _basic_info["category_id"] = self.entity_obj.neo_category_id
+        _basic_info['like_count'] = self.entity_obj.like_count 
+        if json:
+            _basic_info['created_time'] = time.mktime(self.entity_obj.created_time.timetuple())
+        else:
+            _basic_info["created_time"] = self.entity_obj.created_time
+        if json:
+            _basic_info['updated_time'] = time.mktime(self.entity_obj.updated_time.timetuple())
+        else:
+            _basic_info["updated_time"] = self.entity_obj.updated_time
+        _basic_info["weight"] = self.entity_obj.weight
+        
+        _basic_info['chief_image'] = {
             'id' : self.entity_obj.chief_image,
             'url' : Image(self.entity_obj.chief_image).getlink(),
         }
-        _context['detail_images'] = []
+        _basic_info['detail_images'] = []
         for _image_id in self.entity_obj.detail_images.split('#'):
             if len(_image_id) > 0:
-                _context['detail_images'].append({
+                _basic_info['detail_images'].append({
                     'id' : _image_id,
                     'url' : Image(_image_id).getlink()
                 })
-        _context['item_id_list'] = Item.find(entity_id = self.entity_id) 
+        return _basic_info
+        
+        
+    
+    def __load_item_info(self):
+        _item_info = { 'item_id_list' : Item.find(entity_id = self.entity_id) } 
+        return _item_info
 
-        
-        
-        _context['total_score'] = 0 
-        _context['score_count'] = 0 
-        _context['note_id_list'] = []
-        _context['note_count'] = 0 
-        for _note_obj in NoteModel.objects.filter(entity_id = self.entity_id):
-            _context['note_id_list'].append(_note_obj.id)
-            if _note_obj.score != 0:
-                _context['total_score'] += _note_obj.score
-                _context['score_count'] += 1
-            _context['note_count'] += 1
+    def __load_note_info(self):
+        _cache_key = 'entity_%s_note_info'%self.entity_id
+        _note_info = cache.get(_cache_key)
+        print _note_info
+        if _note_info == None:
+            _note_info = {
+                'total_score' : 0, 
+                'score_count' : 0, 
+                'note_count' : 0, 
+                'note_id_list' : [],
+            }
+            for _note_obj in NoteModel.objects.filter(entity_id = self.entity_id):
+                _note_info['note_id_list'].append(_note_obj.id)
+                if _note_obj.score != 0:
+                    _note_info['total_score'] += _note_obj.score
+                    _note_info['score_count'] += 1
+                _note_info['note_count'] += 1
+            cache.set(_cache_key, _note_info, 864000)
 
-        return _context
+        return _note_info
         
+    def __update_note_info(self, note_info):
+        _cache_key = 'entity_%s_note_info'%self.entity_id
+        cache.set(_cache_key, note_info, 864000)
 
     def read(self, json = False):
-        _context = self.__load_entity_context(json)
+        _context = self.__load_entity_basic_info(json)
+        _context.update(self.__load_item_info())
+        _context.update(self.__load_note_info())
+
         return _context    
     
     
@@ -364,6 +384,16 @@ class Entity(object):
             score = score,
             image_data = image_data
         )
+
+        _note_info = self.__load_note_info()
+        if _note_info != None:
+            _note_info['note_count'] += 1
+            _note_info['note_id_list'].append(_note.note_id) 
+            if score != 0:
+                _note_info['total_score'] += score
+                _note_info['score_count'] += 1
+            self.__update_note_info(_note_info)
+        
         return _note
     
 #    def update_note(self, note_id, score, note_text, image_data = None):
