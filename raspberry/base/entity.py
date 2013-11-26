@@ -147,43 +147,49 @@ class Entity(object):
         return _item_id 
 
 
+    def __update_basic_info(self, basic_info):
+        _cache_key = 'entity_%s_basic_info'%self.entity_id
+        cache.set(_cache_key, basic_info, 864000)
     
-    def __load_entity_basic_info(self, json = False):
-        self.__ensure_entity_obj()
-        _basic_info = {}
-        _basic_info['entity_id'] = self.entity_obj.id
-        _basic_info['brand'] = self.entity_obj.brand 
-        _basic_info['title'] = self.entity_obj.title
-        _basic_info['intro'] = self.entity_obj.intro
+    def __load_basic_info(self, json = False):
+        _cache_key = 'entity_%s_basic_info'%self.entity_id
+        _basic_info = cache.get(_cache_key)
         
-        if json:
-            _basic_info['price'] = unicode(self.entity_obj.price)
-        else: 
+        if _basic_info == None:
+            self.__ensure_entity_obj()
+            _basic_info = {}
+            _basic_info['entity_id'] = self.entity_obj.id
+            _basic_info['brand'] = self.entity_obj.brand 
+            _basic_info['title'] = self.entity_obj.title
+            _basic_info['intro'] = self.entity_obj.intro
             _basic_info['price'] = self.entity_obj.price
-        _basic_info["entity_hash"] = self.entity_obj.entity_hash
-        _basic_info["category_id"] = self.entity_obj.neo_category_id
-        _basic_info['like_count'] = self.entity_obj.like_count 
-        if json:
-            _basic_info['created_time'] = time.mktime(self.entity_obj.created_time.timetuple())
-        else:
+            _basic_info["entity_hash"] = self.entity_obj.entity_hash
+            _basic_info["category_id"] = self.entity_obj.neo_category_id
+            _basic_info['like_count'] = self.entity_obj.like_count 
             _basic_info["created_time"] = self.entity_obj.created_time
-        if json:
-            _basic_info['updated_time'] = time.mktime(self.entity_obj.updated_time.timetuple())
-        else:
             _basic_info["updated_time"] = self.entity_obj.updated_time
-        _basic_info["weight"] = self.entity_obj.weight
+            _basic_info["weight"] = self.entity_obj.weight
+            
+            _basic_info['chief_image'] = {
+                'id' : self.entity_obj.chief_image,
+                'url' : Image(self.entity_obj.chief_image).getlink(),
+            }
+            
+            _basic_info['detail_images'] = []
+            for _image_id in self.entity_obj.detail_images.split('#'):
+                if len(_image_id) > 0:
+                    _basic_info['detail_images'].append({
+                        'id' : _image_id,
+                        'url' : Image(_image_id).getlink()
+                    })
+            cache.set(_cache_key, _basic_info, 864000)
         
-        _basic_info['chief_image'] = {
-            'id' : self.entity_obj.chief_image,
-            'url' : Image(self.entity_obj.chief_image).getlink(),
-        }
-        _basic_info['detail_images'] = []
-        for _image_id in self.entity_obj.detail_images.split('#'):
-            if len(_image_id) > 0:
-                _basic_info['detail_images'].append({
-                    'id' : _image_id,
-                    'url' : Image(_image_id).getlink()
-                })
+        if json:
+            _basic_info['price'] = unicode(_basic_info['price'])
+            _basic_info['created_time'] = time.mktime(_basic_info['created_time'].timetuple())
+            _basic_info['updated_time'] = time.mktime(_basic_info['updated_time'].timetuple())
+        
+        
         return _basic_info
         
         
@@ -192,10 +198,18 @@ class Entity(object):
         _item_info = { 'item_id_list' : Item.find(entity_id = self.entity_id) } 
         return _item_info
 
-    def __load_note_info(self):
+    def __load_note_info_from_cache(self):
         _cache_key = 'entity_%s_note_info'%self.entity_id
         _note_info = cache.get(_cache_key)
         print _note_info
+        return _note_info
+    
+    def __set_note_info_to_cache(self, note_info):
+        _cache_key = 'entity_%s_note_info'%self.entity_id
+        cache.set(_cache_key, note_info, 864000)
+    
+    def __load_note_info(self):
+        _note_info = self.__load_note_info_from_cache()
         if _note_info == None:
             _note_info = {
                 'total_score' : 0, 
@@ -209,16 +223,12 @@ class Entity(object):
                     _note_info['total_score'] += _note_obj.score
                     _note_info['score_count'] += 1
                 _note_info['note_count'] += 1
-            cache.set(_cache_key, _note_info, 864000)
+            self.__set_note_info_to_cache(_note_info)
 
         return _note_info
         
-    def __update_note_info(self, note_info):
-        _cache_key = 'entity_%s_note_info'%self.entity_id
-        cache.set(_cache_key, note_info, 864000)
-
     def read(self, json = False):
-        _context = self.__load_entity_basic_info(json)
+        _context = self.__load_basic_info(json)
         _context.update(self.__load_item_info())
         _context.update(self.__load_note_info())
 
@@ -232,6 +242,7 @@ class Entity(object):
         # TODO: removing entity_id in item
     
     def update(self, category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None):
+
         self.__ensure_entity_obj()
         if category_id != None:
             self.entity_obj.neo_category_id = category_id 
@@ -385,14 +396,14 @@ class Entity(object):
             image_data = image_data
         )
 
-        _note_info = self.__load_note_info()
+        _note_info = self.__load_note_info_from_cache()
         if _note_info != None:
             _note_info['note_count'] += 1
             _note_info['note_id_list'].append(_note.note_id) 
             if score != 0:
                 _note_info['total_score'] += score
                 _note_info['score_count'] += 1
-            self.__update_note_info(_note_info)
+            self.__set_note_info_to_cache(_note_info)
         
         return _note
     
