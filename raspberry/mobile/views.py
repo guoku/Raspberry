@@ -13,9 +13,6 @@ from user import *
 import time
 
 
-from django.db.models import Count 
-from base.models import Entity_Like as EntityLikeModel
-
 def homepage(request):
 
     _session = request.GET.get('session', None)

@@ -8,6 +8,7 @@ from django.core.cache import cache
 import datetime
 import time
 from image import Image
+from user import User 
 
 
 
@@ -129,7 +130,7 @@ class Note(object):
                 _context["is_selected"] = 0 
             _context["poker_id_list"] = map(lambda x : x.user_id, NotePokeModel.objects.filter(note_id = self.note_id))
             _context["poke_count"] = len(_context["poker_id_list"]) 
-            _context["comment_id_list"] = map(lambda x : x.id, NoteCommentModel.objects.filter(note_id = self.note_id))
+            _context["comment_id_list"] = map(lambda x : x.id, NoteCommentModel.objects.filter(note_id = self.note_id).order_by('created_time'))
             _context["comment_count"] = len(_context["comment_id_list"]) 
             _context["created_time"] = self.note_obj.created_time
             _context["updated_time"] = self.note_obj.updated_time
@@ -172,6 +173,7 @@ class Note(object):
                     _context['poker_id_list'].append(_user_id)
                     _context['poke_count'] = len(_context['poker_id_list'])
                     _context = self.__reset_note_context_to_cache(_context)
+            User(user_id).update_user_entity_note_poke_count(delta = 1)
             
             self.__ensure_note_obj()
             _message = NotePokeMessage(
@@ -194,6 +196,7 @@ class Note(object):
                 user_id = user_id
             )
             _obj.delete()
+            User(user_id).update_user_entity_note_poke_count(delta = -1)
             
             _context = self.__load_note_context_from_cache()
             if _context != None:
