@@ -2,10 +2,13 @@
 from django.contrib.auth.models import User as AuthUser
 from django.contrib.auth import authenticate
 from django.conf import settings
+from django.core.cache import cache
 from models import Avatar as AvatarModel 
+from models import Entity_Like as EntityLikeModel
+from models import Note as NoteModel
+from models import Sina_Token as SinaTokenModel 
 from models import User_Profile as UserProfileModel 
 from models import User_Follow as UserFollowModel
-from models import Sina_Token as SinaTokenModel 
 from message import UserFollowMessage 
 from hashlib import md5
 from pymogile import Client
@@ -222,7 +225,6 @@ class User(object):
         if email != None:
             if self.email_exist(email) and self.user_obj.email != email:
                 raise self.EmailExistAlready(email) 
-        
             self.user_obj.email = email
         
         if username != None:
@@ -235,6 +237,11 @@ class User(object):
             self.user_obj.set_password(password)
 
         self.user_obj.save()
+        
+        _basic_info = self.__load_basic_info_from_cache()
+        if _basic_info != None:
+            _basic_info = self.__reset_basic_info_to_cache()
+           
     
     
     def set_profile(self, nickname, location = 'beijing', gender = 'O', bio = '', website = ''):
@@ -263,34 +270,111 @@ class User(object):
                 self.user_profile_obj.location = _location 
 
             self.user_profile_obj.save()
+        
+        _basic_info = self.__load_basic_info_from_cache()
+        if _basic_info != None:
+            _basic_info = self.__reset_basic_info_to_cache()
            
     
     def __ensure_avatar_obj(self):
         if not hasattr(self, 'avatar_obj'):
             self.avatar_obj = self.Avatar(self.user_id)
 
+    def __load_basic_info_from_cache(self):
+        _cache_key = 'user_%s_basic_info'%self.user_id
+        _basic_info = cache.get(_cache_key)
+        #if self.user_id == 79761:
+        #    print _basic_info
+        return _basic_info
         
-    def __load_user_context(self):
+    def __reset_basic_info_to_cache(self):
+        _cache_key = 'user_%s_basic_info'%self.user_id
         self.__ensure_user_obj()
-        _context = {}
-        _context['user_id'] = self.user_obj.id
-        _context['email'] = self.user_obj.email
+        _basic_info = {}
+        _basic_info['user_id'] = self.user_obj.id
+        _basic_info['email'] = self.user_obj.email
         
         _profile = UserProfileModel.objects.get(user_id = self.user_id)
-        _context['nickname'] = _profile.nickname
-        _context['verified'] = 0 
-        _context['verified_type'] = 'guoku' 
-        _context['verified_reason'] = 'guoku' 
-        _context['gender'] = _profile.gender 
+        _basic_info['nickname'] = _profile.nickname
+        _basic_info['verified'] = 0 
+        _basic_info['verified_type'] = 'guoku' 
+        _basic_info['verified_reason'] = 'guoku' 
+        _basic_info['gender'] = _profile.gender 
         
         self.__ensure_avatar_obj()
-        _context['avatar_large'] = self.avatar_obj.get_large_link() 
-        _context['avatar_small'] = self.avatar_obj.get_small_link() 
+        _basic_info['avatar_large'] = self.avatar_obj.get_large_link() 
+        _basic_info['avatar_small'] = self.avatar_obj.get_small_link() 
+        
+        cache.set(_cache_key, _basic_info, 864000)
             
-        return _context
+        return _basic_info
+    
+    def __read_basic_info(self):
+        _basic_info = self.__load_basic_info_from_cache()
+        if _basic_info == None:
+            _basic_info = self.__reset_basic_info_to_cache()
+        return _basic_info 
+    
+    def __load_user_stat_info_from_cache(self):
+        _cache_key = 'user_%s_stat_info'%self.user_id
+        _stat_info = cache.get(_cache_key)
+        return _stat_info
+    
+    def __reset_user_stat_info_to_cache(self, stat_info = None):
+        _cache_key = 'user_%s_stat_info'%self.user_id
+        if stat_info == None:
+            _stat_info = {}
+            _stat_info['following_count'] = UserFollowModel.objects.filter(follower_id = self.user_id).count()
+            _stat_info['fan_count'] = UserFollowModel.objects.filter(followee_id = self.user_id).count()
+            _stat_info['like_count'] = EntityLikeModel.objects.filter(user_id = self.user_id).count()
+            _stat_info['entity_note_count'] = NoteModel.objects.filter(creator_id = self.user_id).count()
+        else:
+            _stat_info = stat_info
+        cache.set(_cache_key, _stat_info, 864000)
+        return _stat_info
+    
+    def update_user_following_count(self, delta):
+        _stat_info = self.__load_user_stat_info_from_cache()
+        if _stat_info != None:
+            _stat_info['following_count'] += delta
+            if _stat_info['following_count'] < 0:
+                _stat_info['following_count'] = 0
+            self.__reset_user_stat_info_to_cache(_stat_info)
+    
+    def update_user_fan_count(self, delta):
+        _stat_info = self.__load_user_stat_info_from_cache()
+        if _stat_info != None:
+            _stat_info['fan_count'] += delta
+            if _stat_info['fan_count'] < 0:
+                _stat_info['fan_count'] = 0
+            self.__reset_user_stat_info_to_cache(_stat_info)
+    
+    def update_user_like_count(self, delta):
+        _stat_info = self.__load_user_stat_info_from_cache()
+        if _stat_info != None:
+            _stat_info['like_count'] += delta
+            if _stat_info['like_count'] < 0:
+                _stat_info['like_count'] = 0
+            self.__reset_user_stat_info_to_cache(_stat_info)
+    
+    def update_user_entity_note_count(self, delta):
+        _stat_info = self.__load_user_stat_info_from_cache()
+        if _stat_info != None:
+            _stat_info['entity_note_count'] += delta
+            if _stat_info['entity_note_count'] < 0:
+                _stat_info['entity_note_count'] = 0
+            self.__reset_user_stat_info_to_cache(_stat_info)
+            
+    
+    def __read_user_stat_info(self):
+        _stat_info = self.__load_user_stat_info_from_cache()
+        if _stat_info == None:
+            _stat_info = self.__reset_user_stat_info_to_cache()
+        return _stat_info
     
     def read(self):
-        _context = self.__load_user_context()
+        _context = self.__read_basic_info()
+        _context.update(self.__read_user_stat_info())
         return _context
 
     def follow(self, followee_id):
@@ -299,6 +383,8 @@ class User(object):
                 follower_id = self.user_id,
                 followee_id = followee_id 
             )
+            self.update_user_following_count(delta = 1)
+            User(followee_id).update_user_fan_count(delta = 1)
             
             _message = UserFollowMessage(
                 user_id = followee_id,
@@ -319,6 +405,8 @@ class User(object):
                 followee_id = followee_id 
             )
             _obj.delete()
+            self.update_user_following_count(delta = -1)
+            User(followee_id).update_user_fan_count(delta = -1)
             return True
         except:
             pass
@@ -358,12 +446,6 @@ class User(object):
     def get_fan_user_id_list(self, offset = 0, count = 30):
         return map(lambda x : x.follower_id, UserFollowModel.objects.filter(followee_id = self.user_id)[offset : offset + count])
     
-    def get_following_count(self):
-        return UserFollowModel.objects.filter(follower_id = self.user_id).count()
-
-    def get_fan_count(self):
-        return UserFollowModel.objects.filter(followee_id = self.user_id).count()
-
     def upload_avatar(self, data):
         self.avatar_obj = self.Avatar.create(self.user_id, data)
        

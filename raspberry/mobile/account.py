@@ -22,7 +22,7 @@ def login(request):
             )
             
             _data = {
-                'user' : _user.read_full_context(_user.user_id),
+                'user' : _user.read(_user.user_id),
                 'session' : _session.session_key
             }
             return SuccessJsonResponse(_data)

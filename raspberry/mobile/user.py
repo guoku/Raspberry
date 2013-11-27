@@ -66,7 +66,7 @@ def user_detail(request, user_id):
             _request_user_id = None
             
         _rslt = {}
-        _rslt['user'] = MobileUser(user_id).read_full_context(_request_user_id)
+        _rslt['user'] = MobileUser(user_id).read(_request_user_id)
         _last_note_id = MobileNote.get_user_last_note(user_id)
         if _last_note_id != None:
             _rslt['last_note'] = MobileNote(_last_note_id).read(_request_user_id)
@@ -167,7 +167,7 @@ def search_user(request):
         )
         _rslt = [] 
         for _user_id in _user_id_list: 
-            _rslt.append(MobileUser(_user_id).read_full_context(_request_user_id))
+            _rslt.append(MobileUser(_user_id).read(_request_user_id))
         
         return SuccessJsonResponse(_rslt)
         

@@ -9,6 +9,7 @@ from mongoengine import *
 from note import Note
 from item import Item
 from image import Image
+from user import User 
 from hashlib import md5
 import datetime
 import urllib
@@ -236,7 +237,6 @@ class Entity(object):
     
     def read(self, json = False):
         _context = self.__read_basic_info()
-        print _context
         if json:
             _context['price'] = unicode(_context['price'])
             _context['created_time'] = time.mktime(_context['created_time'].timetuple())
@@ -373,6 +373,7 @@ class Entity(object):
                 user_id = user_id
             )
             self.update_like_count()
+            User(user_id).update_user_like_count(delta = 1)
 
             return True
         except:
@@ -386,6 +387,7 @@ class Entity(object):
                 user_id = user_id
             )
             _obj.delete()
+            User(user_id).update_user_like_count(delta = -1)
             return True
         except:
             pass
@@ -419,6 +421,8 @@ class Entity(object):
                 _note_info['total_score'] += score
                 _note_info['score_count'] += 1
             self.__reset_note_info_to_cache(_note_info)
+
+        User(creator_id).update_user_entity_note_count(delta = 1)
         
         return _note
     
