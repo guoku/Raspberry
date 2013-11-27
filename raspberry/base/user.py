@@ -468,32 +468,38 @@ class User(object):
             pass
         return False
     
+    def is_following(self, followee_user_id):
+        _followee_user_id = int(followee_user_id)
+        _list = self.read_following_user_id_list()
+        if _followee_user_id in _list:
+            return True
+        return False
+    
+    
     @staticmethod
     def get_relation(sub_user_id, obj_user_id):
         _sub_user_id = int(sub_user_id)
         _obj_user_id = int(obj_user_id)
-        if _sub_user_id == _obj_user_id: 
+        if _sub_user_id == _obj_user_id:
+            print "%d %d 4"%(_sub_user_id, _obj_user_id)
             return 4
         
-        _is_following = UserFollowModel.objects.filter(
-                follower_id = _sub_user_id, 
-                followee_id = _obj_user_id, 
-        ).count()
+        _is_following = User(_sub_user_id).is_following(_obj_user_id) 
+        _is_fan = User(_obj_user_id).is_following(_sub_user_id) 
         
-        _is_followed = UserFollowModel.objects.filter(
-                follower_id = _obj_user_id,
-                followee_id = _sub_user_id, 
-        ).count()
-        
-        if _is_following > 0 and _is_followed > 0:
+        if _is_following and _is_fan:
+            print "%d %d 3"%(_sub_user_id, _obj_user_id)
             return 3
 
         if _is_following > 0:
+            print "%d %d 1"%(_sub_user_id, _obj_user_id)
             return 1
 
-        if _is_followed > 0:
+        if _is_fan > 0:
+            print "%d %d 2"%(_sub_user_id, _obj_user_id)
             return 2
 
+        print "%d %d 0"%(_sub_user_id, _obj_user_id)
         return 0
 
     def __load_following_user_id_list_from_cache(self):
@@ -508,7 +514,7 @@ class User(object):
         else:
             _list = user_id_list
         cache.set(_cache_key, _list, 864000)
-
+        return _list
     
     def read_following_user_id_list(self):
         _list = self.__load_following_user_id_list_from_cache() 
@@ -528,6 +534,8 @@ class User(object):
         else:
             _list = user_id_list
         cache.set(_cache_key, _list, 864000)
+        return _list
+    
     
     def read_fan_user_id_list(self):
         _list = self.__load_fan_user_id_list_from_cache() 
