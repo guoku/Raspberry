@@ -34,8 +34,8 @@ def user_following(request, user_id):
         _count = int(request.GET.get('count', '30'))
             
         _rslt = []
-        _following_user_id_list = MobileUser(user_id).get_following_user_id_list(offset = _offset, count = _count)
-        for _following_user_id in _following_user_id_list: 
+        _following_user_id_list = MobileUser(user_id).read_following_user_id_list()
+        for _following_user_id in _following_user_id_list[_offset : _offset + _count]: 
             _rslt.append(MobileUser(_following_user_id).read(_request_user_id))
     
         return SuccessJsonResponse(_rslt)
@@ -51,8 +51,8 @@ def user_fan(request, user_id):
         _count = int(request.GET.get('count', '30'))
             
         _rslt = []
-        _fan_user_id_list = MobileUser(user_id).get_fan_user_id_list(offset = _offset, count = _count)
-        for _fan_user_id in _fan_user_id_list: 
+        _fan_user_id_list = MobileUser(user_id).read_fan_user_id_list()
+        for _fan_user_id in _fan_user_id_list[_offset : _offset + _count]: 
             _rslt.append(MobileUser(_fan_user_id).read(_request_user_id))
     
         return SuccessJsonResponse(_rslt)

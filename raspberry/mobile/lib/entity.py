@@ -1,7 +1,6 @@
 # coding=utf8
 from base.item import Item
 from base.entity import Entity
-from user import MobileUser
 from note import MobileNote
 import time
 
@@ -56,11 +55,6 @@ class MobileEntity(Entity):
             _context['note_list'].append(MobileNote(_note_id).read(request_user_id)) 
         del _context['entity']['note_id_list']
      
-        if request_user_id:
-            _context['following_note_list'] = []
-            for _followee_id in MobileUser(request_user_id).get_following_user_id_list():
-                _context['following_note_list'].append(MobileUser(_followee_id).read())
-        
         return _context    
     
     def add_note(self, creator_id, note_text, score = 0, image_data = None):

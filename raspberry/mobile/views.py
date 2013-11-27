@@ -104,7 +104,7 @@ def feed(request):
         _count = int(request.GET.get('count', '30'))
 
         if _scale == 'friend':
-            _following_user_id_list = MobileUser(_request_user_id).get_following_user_id_list()
+            _following_user_id_list = MobileUser(_request_user_id).read_following_user_id_list()
         else:
             _following_user_id_list = None
         

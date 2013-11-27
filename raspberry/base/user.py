@@ -333,7 +333,7 @@ class User(object):
         cache.set(_cache_key, _stat_info, 864000)
         return _stat_info
     
-    def update_user_following_count(self, delta):
+    def __update_user_following_count(self, delta):
         _stat_info = self.__load_user_stat_info_from_cache()
         if _stat_info != None:
             _stat_info['following_count'] += delta
@@ -341,7 +341,7 @@ class User(object):
                 _stat_info['following_count'] = 0
             self.__reset_user_stat_info_to_cache(_stat_info)
     
-    def update_user_fan_count(self, delta):
+    def __update_user_fan_count(self, delta):
         _stat_info = self.__load_user_stat_info_from_cache()
         if _stat_info != None:
             _stat_info['fan_count'] += delta
@@ -379,12 +379,20 @@ class User(object):
 
     def follow(self, followee_id):
         try:
+            _followee_id = int(followee_id)
             UserFollowModel.objects.create(
                 follower_id = self.user_id,
-                followee_id = followee_id 
+                followee_id = _followee_id 
             )
-            self.update_user_following_count(delta = 1)
-            User(followee_id).update_user_fan_count(delta = 1)
+            self.__update_user_following_count(delta = 1)
+
+            _list = self.__load_following_user_id_list_from_cache()
+            if _list != None:
+                if not _followee_id in _list:
+                    _list.append(_followee_id)
+                    self.__reset_following_user_id_list_to_cache(user_id_list = _list)
+
+            User(_followee_id).add_fan(self.user_id)
             
             _message = UserFollowMessage(
                 user_id = followee_id,
@@ -400,13 +408,22 @@ class User(object):
          
     def unfollow(self, followee_id):
         try:
+            _followee_id = int(followee_id)
             _obj = UserFollowModel.objects.get(
                 follower_id = self.user_id,
                 followee_id = followee_id 
             )
             _obj.delete()
-            self.update_user_following_count(delta = -1)
-            User(followee_id).update_user_fan_count(delta = -1)
+            self.__update_user_following_count(delta = -1)
+            
+            _list = self.__load_following_user_id_list_from_cache()
+            if _list != None:
+                if _followee_id in _list:
+                    _list.remove(_followee_id)
+                    self.__reset_following_user_id_list_to_cache(user_id_list = _list)
+            
+            User(_followee_id).remove_fan(self.user_id)
+            
             return True
         except:
             pass
@@ -440,11 +457,62 @@ class User(object):
 
         return 0
 
-    def get_following_user_id_list(self, offset = 0, count = 30):
-        return map(lambda x : x.followee_id, UserFollowModel.objects.filter(follower_id = self.user_id)[offset : offset + count])
+    def __load_following_user_id_list_from_cache(self):
+        _cache_key = 'user_%s_following_list'%self.user_id
+        _list = cache.get(_cache_key)
+        return _list
+    
+    def __reset_following_user_id_list_to_cache(self, user_id_list = None):
+        _cache_key = 'user_%s_following_list'%self.user_id
+        if user_id_list == None:
+            _list = map(lambda x : x.followee_id, UserFollowModel.objects.filter(follower_id = self.user_id))
+        else:
+            _list = user_id_list
+        cache.set(_cache_key, _list, 864000)
+
+    
+    def read_following_user_id_list(self):
+        _list = self.__load_following_user_id_list_from_cache() 
+        if _list == None:
+            _list = self.__reset_following_user_id_list_to_cache()
+        return _list
              
-    def get_fan_user_id_list(self, offset = 0, count = 30):
-        return map(lambda x : x.follower_id, UserFollowModel.objects.filter(followee_id = self.user_id)[offset : offset + count])
+    def __load_fan_user_id_list_from_cache(self):
+        _cache_key = 'user_%s_fan_list'%self.user_id
+        _list = cache.get(_cache_key)
+        return _list
+    
+    def __reset_fan_user_id_list_to_cache(self, user_id_list = None):
+        _cache_key = 'user_%s_fan_list'%self.user_id
+        if user_id_list == None:
+            _list = map(lambda x : x.follower_id, UserFollowModel.objects.filter(followee_id = self.user_id))
+        else:
+            _list = user_id_list
+        cache.set(_cache_key, _list, 864000)
+    
+    def read_fan_user_id_list(self):
+        _list = self.__load_fan_user_id_list_from_cache() 
+        if _list == None:
+            _list = self.__reset_fan_user_id_list_to_cache() 
+        return _list
+
+    def add_fan(self, user_id):
+        _user_id = int(user_id)
+        _list = self.__load_fan_user_id_list_from_cache()
+        if _list != None:
+            if not _user_id in _list:
+                _list.append(_user_id)
+                self.__reset_fan_user_id_list_to_cache(user_id_list = _list)
+                self.__update_user_fan_count(delta = 1)
+         
+    def remove_fan(self, user_id):
+        _user_id = int(user_id)
+        _list = self.__load_fan_user_id_list_from_cache()
+        if _list != None:
+            if _user_id in _list:
+                _list.remove(_user_id)
+                self.__reset_fan_user_id_list_to_cache(user_id_list = _list)
+                self.__update_user_fan_count(delta = -1)
     
     def upload_avatar(self, data):
         self.avatar_obj = self.Avatar.create(self.user_id, data)
