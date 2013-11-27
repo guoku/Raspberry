@@ -328,10 +328,13 @@ class User(object):
             _stat_info['fan_count'] = UserFollowModel.objects.filter(followee_id = self.user_id).count()
             _stat_info['like_count'] = EntityLikeModel.objects.filter(user_id = self.user_id).count()
             _stat_info['entity_note_count'] = NoteModel.objects.filter(creator_id = self.user_id).count()
+        
         else:
             _stat_info = stat_info
         cache.set(_cache_key, _stat_info, 864000)
         return _stat_info
+    
+    
     
     def __update_user_following_count(self, delta):
         _stat_info = self.__load_user_stat_info_from_cache()
@@ -365,6 +368,32 @@ class User(object):
                 _stat_info['entity_note_count'] = 0
             self.__reset_user_stat_info_to_cache(_stat_info)
             
+    def entity_like_count(self, category_id):
+        return EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id).count()
+        
+    def find_like_entity(self, category_id, offset = None, count = 30, sort_by = None, reverse = False):
+        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id)
+        if sort_by == 'price':
+            if reverse:
+                _hdl = _hdl.order_by('-entity__price')
+            else:
+                _hdl = _hdl.order_by('entity__price')
+        elif sort_by == 'like':
+            if reverse:
+                _hdl = _hdl.order_by('entity__like_count')
+            else:
+                _hdl = _hdl.order_by('-entity__like_count')
+        else:
+            _hdl = _hdl.order_by('-created_time')
+       
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+
+        _entity_id_list = map(lambda x: x.entity_id, _hdl)
+        return _entity_id_list
+    
+
+        
     
     def __read_user_stat_info(self):
         _stat_info = self.__load_user_stat_info_from_cache()

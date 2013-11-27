@@ -7,6 +7,40 @@ from mobile.models import Session_Key
 import datetime
     
 
+def category_user_like(request, category_id, user_id):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        
+        _offset = int(request.GET.get('offset', '0'))
+        _count = int(request.GET.get('count', '30'))
+        _sort_by = request.GET.get('sort', 'new')
+        _reverse = request.GET.get('reverse', '0')
+        if _reverse == '0':
+            _reverse = False
+        else:
+            _reverse = True
+        
+        _entity_id_list = MobileUser(user_id).find_like_entity(
+            category_id = category_id,
+            offset = _offset,
+            count = _count,
+            sort_by = _sort_by,
+            reverse = _reverse
+        )
+        _rslt = []
+        for _entity_id in _entity_id_list:
+            _entity = MobileEntity(_entity_id)
+            _rslt.append(
+                _entity.read(_request_user_id)
+            )
+        return SuccessJsonResponse(_rslt)
+
+
+
 def follow_user(request, user_id, target_status):
     if request.method == "POST":
         _session = request.POST.get('session', None)

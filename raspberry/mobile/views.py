@@ -13,8 +13,11 @@ from user import *
 import time
 
 
+from django.db.models import Count 
+from base.models import Entity_Like as EntityLikeModel
 
 def homepage(request):
+
     _session = request.GET.get('session', None)
     if _session != None:
         _request_user_id = Session_Key.objects.get_user_id(_session)

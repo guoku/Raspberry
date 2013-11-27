@@ -22,10 +22,12 @@ class Note(object):
             self.note_obj = NoteModel.objects.get(pk = self.note_id)
     
     @classmethod
-    def count(cls, timestamp = None, entity_id = None, creator_set = None, offset = 0, count = 30):
+    def count(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None):
         _hdl = NoteModel.objects
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
+        if category_id != None:
+            _hdl = _hdl.filter(entity__neo_category_id = category_id)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         if creator_set != None:
