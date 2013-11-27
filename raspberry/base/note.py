@@ -211,21 +211,27 @@ class Note(object):
         return False
 
     def read_comment(self, comment_id, json = False):
-        if not self.comments.has_key(comment_id):
-            self.comments[comment_id] = NoteCommentModel.objects.get(pk = comment_id)
-        _context = {}
-        _context["comment_id"] = self.comments[comment_id].id
-        _context["entity_id"] = self.get_entity_id()
-        _context["note_id"] = self.comments[comment_id].note_id
-        _context["content"] = self.comments[comment_id].comment
-        _context["creator_id"] = self.comments[comment_id].creator_id
-       
-        _context['reply_to_comment_id'] = self.comments[comment_id].replied_comment_id
-        _context['reply_to_user_id'] = self.comments[comment_id].replied_user_id
+        _cache_key = 'note_comment_%s_context'%comment_id
+        _context = cache.get(_cache_key)
+        if _context == None: 
+            if not self.comments.has_key(comment_id):
+                self.comments[comment_id] = NoteCommentModel.objects.get(pk = comment_id)
+            _context = {}
+            _context["comment_id"] = self.comments[comment_id].id
+            _context["entity_id"] = self.get_entity_id()
+            _context["note_id"] = self.comments[comment_id].note_id
+            _context["content"] = self.comments[comment_id].comment
+            _context["creator_id"] = self.comments[comment_id].creator_id
+           
+            _context['reply_to_comment_id'] = self.comments[comment_id].replied_comment_id
+            _context['reply_to_user_id'] = self.comments[comment_id].replied_user_id
+            
+            _context["created_time"] = self.comments[comment_id].created_time
+            cache.set(_cache_key, _context, 864000)
         
-        _context["created_time"] = self.comments[comment_id].created_time
         if json:
             _context['created_time'] = time.mktime(_context["created_time"].timetuple())
+        
         return _context
     
     def add_comment(self, comment_text, creator_id, reply_to_comment_id = None, reply_to_user_id = None):
