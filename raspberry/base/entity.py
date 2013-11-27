@@ -113,6 +113,10 @@ class Entity(object):
                 self.entity_obj.detail_images += '#'
             self.entity_obj.detail_images += _image_obj.image_id
         self.entity_obj.save() 
+        
+        _basic_info = self.__load_basic_info_from_cache()
+        if _basic_info != None:
+            _basic_info = self.__reset_basic_info_to_cache()
     
     
     
@@ -127,6 +131,9 @@ class Entity(object):
                 self.entity_obj.detail_images = self.entity_obj.detail_images[:-1]
         self.entity_obj.save()
     
+        _basic_info = self.__load_basic_info_from_cache()
+        if _basic_info != None:
+            _basic_info = self.__reset_basic_info_to_cache()
     
     
     def add_taobao_item(self, taobao_item_info, image_urls = []):
@@ -229,6 +236,7 @@ class Entity(object):
     
     def read(self, json = False):
         _context = self.__read_basic_info()
+        print _context
         if json:
             _context['price'] = unicode(_context['price'])
             _context['created_time'] = time.mktime(_context['created_time'].timetuple())

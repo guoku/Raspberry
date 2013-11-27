@@ -54,6 +54,7 @@ class Image(object):
     def create(cls, source, origin_url = None, image_data = None):
         if origin_url != None:
             _image_id = Image.get_image_id_by_origin_url(origin_url)
+            _store_hash = None
             if _image_id != None:
                 return cls(_image_id)
         elif image_data != None:
