@@ -6,7 +6,6 @@ class Message(Document):
     user_id = IntField(required = True) 
     created_time = DateTimeField(required = True)
     meta = {
-        'db_alias' : 'mango',
         "indexes" : [ 
             "user_id",
             "created_time",
@@ -18,7 +17,6 @@ class Message(Document):
 class UserFollowMessage(Message):
     follower_id = IntField(required = True) 
     meta = {
-        'db_alias' : 'mango',
         "indexes" : [ 
             "follower_id" 
         ]
@@ -28,7 +26,6 @@ class NotePokeMessage(Message):
     note_id = IntField(required = True)
     poker_id = IntField(required = True)
     meta = {
-        'db_alias' : 'mango',
         "indexes" : [ 
             "note_id", 
             "poker_id", 
@@ -40,7 +37,6 @@ class NoteCommentMessage(Message):
     comment_id = IntField(required = True)
     comment_creator_id = IntField(required = True)
     meta = {
-        'db_alias' : 'mango',
         "indexes" : [ 
             "note_id", 
             "comment_id", 
@@ -53,7 +49,6 @@ class NoteCommentReplyMessage(Message):
     comment_id = IntField(required = True)
     replying_user_id = IntField(required = True)
     meta = {
-        'db_alias' : 'mango',
         "indexes" : [ 
             "note_id", 
             "comment_id", 

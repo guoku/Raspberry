@@ -188,7 +188,6 @@ class Entity(object):
     def __load_note_info_from_cache(self):
         _cache_key = 'entity_%s_note_info'%self.entity_id
         _note_info = cache.get(_cache_key)
-        print _note_info
         return _note_info
     
     def __reset_note_info_to_cache(self, note_info = None):

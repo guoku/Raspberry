@@ -140,6 +140,7 @@ class Note_Comment(models.Model):
     replied_comment_id = models.IntegerField(default = None, null = True, db_index = True)
     replied_user_id = models.IntegerField(default = None, null = True, db_index = True)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    updated_time = models.DateTimeField(auto_now = True, db_index = True)
     class Meta:
         ordering = ['-created_time']
 
