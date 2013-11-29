@@ -231,13 +231,13 @@ def popular(request):
             _request_user_id = None
         _scale = request.GET.get('scale', 'daily')
 
-        _popular_entities = popularity.get_popular_entity(scale = _scale, json = True) 
+        _popular_entities = popularity.read_popular_entity_to_cache(scale = _scale, json = True) 
         _rslt = {
             'scale' : _scale,
             'updated_time' : _popular_entities['updated_time'],
             'content' : []
         }
-        for _row in _popular_entities['data']:
+        for _row in _popular_entities['data'][0:60]:
             _entity_id = _row[0]
             _hotness = _row[1] 
             _entity_context = MobileEntity(_entity_id).read(_request_user_id)
