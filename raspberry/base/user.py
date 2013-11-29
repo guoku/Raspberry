@@ -284,8 +284,6 @@ class User(object):
     def __load_basic_info_from_cache(self):
         _cache_key = 'user_%s_basic_info'%self.user_id
         _basic_info = cache.get(_cache_key)
-        #if self.user_id == 79761:
-        #    print _basic_info
         return _basic_info
         
     def __reset_basic_info_to_cache(self):
@@ -481,25 +479,20 @@ class User(object):
         _sub_user_id = int(sub_user_id)
         _obj_user_id = int(obj_user_id)
         if _sub_user_id == _obj_user_id:
-            print "%d %d 4"%(_sub_user_id, _obj_user_id)
             return 4
         
         _is_following = User(_sub_user_id).is_following(_obj_user_id) 
         _is_fan = User(_obj_user_id).is_following(_sub_user_id) 
         
         if _is_following and _is_fan:
-            print "%d %d 3"%(_sub_user_id, _obj_user_id)
             return 3
 
         if _is_following > 0:
-            print "%d %d 1"%(_sub_user_id, _obj_user_id)
             return 1
 
         if _is_fan > 0:
-            print "%d %d 2"%(_sub_user_id, _obj_user_id)
             return 2
 
-        print "%d %d 0"%(_sub_user_id, _obj_user_id)
         return 0
 
     def __load_following_user_id_list_from_cache(self):

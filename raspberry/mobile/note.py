@@ -3,6 +3,7 @@ from lib.entity import MobileEntity
 from lib.note import MobileNote
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key
+from tasks import PokeEntityNoteTask, DepokeEntityNoteTask 
 import datetime
 
 def category_entity_note(request, category_id):
@@ -113,10 +114,10 @@ def poke_entity_note(request, note_id, target_status):
             'note_id' : note_id 
         }
         if target_status == '1':
-            MobileNote(note_id).poke(_request_user_id)
+            PokeEntityNoteTask.delay(note_id, _request_user_id)
             _rslt['poke_already'] = 1
         else:
-            MobileNote(note_id).depoke(_request_user_id)
+            DepokeEntityNoteTask.delay(note_id, _request_user_id)
             _rslt['poke_already'] = 0
         return SuccessJsonResponse(_rslt)
 

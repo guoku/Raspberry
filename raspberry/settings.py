@@ -58,6 +58,17 @@ LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1
 USE_I18N = False
 
+#CELERY_RESULT_BACKEND = "redis"
+#CELERY_REDIS_HOST = "localhost"
+#CELERY_REDIS_PORT = 6379
+
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/guoku"
+BROKER_POOL_LIMIT = 10
+
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'static')
@@ -122,6 +133,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'djcelery',
     'base',
     'management',
     'mobile',

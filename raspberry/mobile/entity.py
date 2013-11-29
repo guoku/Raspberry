@@ -4,6 +4,7 @@ from lib.note import MobileNote
 from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key
+from tasks import LikeEntityTask, UnlikeEntityTask
 import datetime
 
 def entity_list(request):
@@ -112,10 +113,10 @@ def like_entity(request, entity_id, target_status):
         _request_user_id = Session_Key.objects.get_user_id(_session)
         _rslt = { 'entity_id' : entity_id }
         if target_status == '1':
-            MobileEntity(entity_id).like(_request_user_id)
+            LikeEntityTask.delay(entity_id, _request_user_id)
             _rslt['like_already'] = 1
         else:
-            MobileEntity(entity_id).unlike(_request_user_id)
+            UnlikeEntityTask.delay(entity_id, _request_user_id)
             _rslt['like_already'] = 0
         return SuccessJsonResponse(_rslt)
             
