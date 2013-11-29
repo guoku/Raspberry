@@ -20,6 +20,12 @@ def display_category_row(category_context):
     } 
 register.inclusion_tag("category/partial/row.html")(display_category_row)
 
+def display_note_row(note_context):
+    return {
+        "note_context" : note_context['note'],
+        "entity_context" : note_context['entity'],
+    } 
+register.inclusion_tag("note/partial/row.html")(display_note_row)
 
 def count(value):
     if value == None:

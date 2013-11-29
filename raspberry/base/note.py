@@ -24,7 +24,7 @@ class Note(object):
     
     @classmethod
     def count(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None):
-        _hdl = NoteModel.objects
+        _hdl = NoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
         if category_id != None:
@@ -36,8 +36,8 @@ class Note(object):
         return _hdl.count() 
     
     @classmethod
-    def find(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, offset = 0, count = 30, sort_by = None):
-        _hdl = NoteModel.objects
+    def find(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, offset = None, count = None, sort_by = None):
+        _hdl = NoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
         if category_id != None:
@@ -53,9 +53,10 @@ class Note(object):
             _hdl = _hdl.order_by('-created_time')
             
         
-        _list = []
-        for _note_obj in _hdl[offset : offset + count]:
-            _list.append(_note_obj.id)
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
+        _list = map(lambda x: x.id, _hdl)
         return _list
     
     @classmethod

@@ -1,0 +1,16 @@
+{% load management %}
+
+<tr class="success">
+    <td width="90">
+        <a href="{{ entity_context.buy_link }}" target=_blank>
+            <img class="img-polaroid" src="{{ entity_context.chief_image.url }}" style="max-height:80px;max-width:80px;">
+        </a>
+    </td>
+    <td width="200"><p class="text-info">{{ note_context.note_id }}</p></td>
+    <td><p class="text-info">{{ note_context.content }}</p></td>
+    <td width="50">
+        <div class="btn-group">
+            <a class="btn" href="{% url 'management.views.edit_entity' entity_context.entity_id %}">编</a>
+        </div>
+    </td>
+</tr>
