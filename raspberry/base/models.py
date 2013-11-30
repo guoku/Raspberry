@@ -162,6 +162,17 @@ class Sina_Token(models.Model):
     expires_in = models.PositiveIntegerField(default = 0)
     updated_time = models.DateTimeField(auto_now = True, null = True) 
 
+class Taobao_Token(models.Model):
+    user = models.OneToOneField(User)
+    taobao_id = models.CharField(max_length = 64, null = True, db_index = True)
+    screen_name = models.CharField(max_length = 64, null = True, db_index = True)
+    access_token = models.CharField(max_length = 255, null = True, db_index = True)
+    refresh_token = models.CharField(max_length = 255, null = True, db_index = True)
+    create_time = models.DateTimeField(auto_now_add = True)
+    expires_in = models.PositiveIntegerField(default = 0)
+    re_expires_in = models.PositiveIntegerField(default = 0)
+    updated_time = models.DateTimeField(auto_now = True, null = True)
+
 
 from mongoengine import * 
 class Image(Document):

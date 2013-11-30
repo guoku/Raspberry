@@ -67,15 +67,47 @@ def login_by_sina(request):
                 'session' : _session.session_key
             }
             return SuccessJsonResponse(_data)
-        except MobileUser.LoginEmailDoesNotExist, e:
+        except MobileUser.LoginSinaIdDoesNotExist, e:
             return ErrorJsonResponse(
                 data = {
-                    'type' : 'email',
+                    'type' : 'sina_id',
                     'message' : str(e),
                 },
                 status = 400
             )
 
+
+def login_by_taobao(request):
+    if request.method == "POST":
+        _taobao_id = request.POST.get('taobao_id', None)
+        _taobao_token = request.POST.get('taobao_token', None)
+        _api_key = request.POST.get('api_key', None)
+        
+        try:
+            _user = MobileUser.login_by_taobao(
+                taobao_id = _taobao_id,
+                taobao_token = _taobao_token
+            )
+            _session = Session_Key.objects.generate_session(
+                user_id = _user.user_id,
+                username = _user.get_username(),
+                email = _user.get_email(),
+                api_key = _api_key
+            )
+            
+            _data = {
+                'user' : _user.read(_user.user_id),
+                'session' : _session.session_key
+            }
+            return SuccessJsonResponse(_data)
+        except MobileUser.LoginTaobaoIdDoesNotExist, e:
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'taobao_id',
+                    'message' : str(e),
+                },
+                status = 400
+            )
 
 
 def register(request):

@@ -8,6 +8,7 @@ from models import Entity_Like as EntityLikeModel
 from models import Note as NoteModel
 from models import Note_Poke as NotePokeModel
 from models import Sina_Token as SinaTokenModel 
+from models import Taobao_Token as TaobaoTokenModel 
 from models import User_Profile as UserProfileModel 
 from models import User_Follow as UserFollowModel
 from message import UserFollowMessage 
@@ -134,6 +135,12 @@ class User(object):
         def __str__(self):
             return repr(self.__message)
     
+    class LoginTaobaoIdDoesNotExist(Exception):
+        def __init__(self, taobao_id):
+            self.__message = "login taobao_id %s is not exist" %taobao_id
+        def __str__(self):
+            return repr(self.__message)
+    
     class EmailExistAlready(Exception):
         def __init__(self, email):
             self.__message = "email %s is exist" %email
@@ -203,13 +210,27 @@ class User(object):
     def login_by_sina(cls, sina_id, sina_token = None):
         try:
             _sina_token_obj = SinaTokenModel.objects.get(sina_id = sina_id)
-        except AuthUser.DoesNotExist, e:
-            raise User.LoginSinaIdDoesNotExist(email)
+        except SinaTokenModel.DoesNotExist, e:
+            raise User.LoginSinaIdDoesNotExist(sina_id)
     
         if sina_token != None:
             _sina_token_obj.access_token = sina_token
             _sina_token_obj.save()
         _inst = cls(_sina_token_obj.user_id)
+        
+        return _inst
+    
+    @classmethod
+    def login_by_taobao(cls, taobao_id, taobao_token = None):
+        try:
+            _taobao_token_obj = TaobaoTokenModel.objects.get(taobao_id = taobao_id)
+        except TaobaoTokenModel.DoesNotExist, e:
+            raise User.LoginTaobaoIdDoesNotExist(taobao_id)
+    
+        if taobao_token != None:
+            _taobao_token_obj.access_token = taobao_token
+            _taobao_token_obj.save()
+        _inst = cls(_taobao_token_obj.user_id)
         
         return _inst
     
