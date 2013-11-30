@@ -146,6 +146,18 @@ class User(object):
             self.__message = "email %s is exist" %email
         def __str__(self):
             return repr(self.__message)
+    
+    class SinaIdExistAlready(Exception):
+        def __init__(self, sina_id):
+            self.__message = "sina_id %s is exist" %sina_id
+        def __str__(self):
+            return repr(self.__message)
+
+    class TaobaoIdExistAlready(Exception):
+        def __init__(self, taobao_id):
+            self.__message = "taobao_id %s is exist" %taobao_id
+        def __str__(self):
+            return repr(self.__message)
 
     class NicknameExistAlready(Exception):
         def __init__(self, nickname):
@@ -253,6 +265,46 @@ class User(object):
         _inst = cls(_user.id)
         return _inst
     
+    @classmethod
+    def create_by_sina(cls, sina_id, screen_name, sina_token, email, password, username = None):
+        if SinaTokenModel.objects.filter(sina_id = sina_id).count() > 0:
+            raise User.SinaIdExistAlready(sina_id)
+
+        _user_inst = cls.create(
+            email = email,
+            password = password,
+            username = username
+        )
+
+        SinaTokenModel.objects.create(
+            user_id = _user_inst.user_id,
+            sina_id = sina_id,
+            screen_name = screen_name,
+            access_token = sina_token
+        )
+
+        return _user_inst
+    
+    @classmethod
+    def create_by_taobao(cls, taobao_id, screen_name, taobao_token, email, password, username = None):
+        if TaobaoTokenModel.objects.filter(taobao_id = taobao_id).count() > 0:
+            raise User.TaobaoIdExistAlready(taobao_id)
+
+        _user_inst = cls.create(
+            email = email,
+            password = password,
+            username = username
+        )
+
+        TaobaoTokenModel.objects.create(
+            user_id = _user_inst.user_id,
+            taobao_id = taobao_id,
+            screen_name = screen_name,
+            access_token = taobao_token
+        )
+
+        return _user_inst
+            
     
     def delete(self):
         self.__ensure_user_obj()
@@ -293,6 +345,11 @@ class User(object):
     def set_profile(self, nickname, location = 'beijing', gender = 'O', bio = '', website = ''):
         self.__ensure_user_profile_obj()
         
+        if nickname != None:
+            _nickname = nickname.strip()
+            if User.nickname_exist(_nickname):
+                raise User.NicknameExistAlready(_nickname)
+        
         if self.user_profile_obj == None:
             _user_profile_obj = UserProfileModel.objects.create(
                 user_id = self.user_id,
@@ -306,10 +363,7 @@ class User(object):
         else:
             if nickname != None:
                 _nickname = nickname.strip()
-                if User.nickname_exist(_nickname):
-                    raise User.NicknameExistAlready(_nickname)
-                else:
-                    self.user_profile_obj.nickname = _nickname
+                self.user_profile_obj.nickname = _nickname
             
             if location != None:
                 _location = location.strip()
