@@ -128,6 +128,12 @@ class User(object):
         def __str__(self):
             return repr(self.__message)
     
+    class LoginSinaIdDoesNotExist(Exception):
+        def __init__(self, sina_id):
+            self.__message = "login sina_id %s is not exist" %sina_id
+        def __str__(self):
+            return repr(self.__message)
+    
     class EmailExistAlready(Exception):
         def __init__(self, email):
             self.__message = "email %s is exist" %email
@@ -157,6 +163,10 @@ class User(object):
     def get_username(self):
         self.__ensure_user_obj()
         return self.user_obj.username
+    
+    def get_email(self):
+        self.__ensure_user_obj()
+        return self.user_obj.email
     
     @classmethod
     def _generate_seed(cls):
@@ -189,6 +199,20 @@ class User(object):
             raise User.LoginPasswordIncorrect()
         return _inst
 
+    @classmethod
+    def login_by_sina(cls, sina_id, sina_token = None):
+        try:
+            _sina_token_obj = SinaTokenModel.objects.get(sina_id = sina_id)
+        except AuthUser.DoesNotExist, e:
+            raise User.LoginSinaIdDoesNotExist(email)
+    
+        if sina_token != None:
+            _sina_token_obj.access_token = sina_token
+            _sina_token_obj.save()
+        _inst = cls(_sina_token_obj.user_id)
+        
+        return _inst
+    
     @staticmethod
     def email_exist(email):
         if AuthUser.objects.filter(email = email).count() > 0:

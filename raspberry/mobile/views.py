@@ -21,22 +21,6 @@ def homepage(request):
     else:
         _request_user_id = None
     _rslt = {}
-    _rslt['hot'] = []
-    _note_id_list = MobileNote.find(
-        count = 3
-    )
-    for _note_id in _note_id_list: 
-        _note_context = MobileNote(_note_id).read(_request_user_id)
-        if _note_context.has_key('entity_id'):
-            _entity = MobileEntity(_note_context['entity_id'])
-            _rslt['hot'].append({
-                'type' : 'entity',
-                'object' : {
-                    'entity' : _entity.read(_request_user_id),
-                    'note' : _note_context
-                }
-            })
-    
     _rslt['discover'] = []
     _rslt['discover'].append(Category(103).read())
     _rslt['discover'].append(Category(4).read())
@@ -85,7 +69,6 @@ def homepage(request):
         _rslt['jump_to_taobao'] = 0
         
     
-    MobileEntity.search(u'水')
     return SuccessJsonResponse(_rslt)
      
 def feed(request):

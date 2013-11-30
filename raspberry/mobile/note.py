@@ -111,7 +111,7 @@ def poke_entity_note(request, note_id, target_status):
         
         _request_user_id = Session_Key.objects.get_user_id(_session)
         _rslt = { 
-            'note_id' : note_id 
+            'note_id' : int(note_id) 
         }
         if target_status == '1':
             PokeEntityNoteTask.delay(note_id, _request_user_id)

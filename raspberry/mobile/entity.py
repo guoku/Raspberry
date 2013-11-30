@@ -111,7 +111,7 @@ def like_entity(request, entity_id, target_status):
         _session = request.POST.get('session', None)
         
         _request_user_id = Session_Key.objects.get_user_id(_session)
-        _rslt = { 'entity_id' : entity_id }
+        _rslt = { 'entity_id' : int(entity_id) }
         if target_status == '1':
             LikeEntityTask.delay(entity_id, _request_user_id)
             _rslt['like_already'] = 1

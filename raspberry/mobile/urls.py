@@ -3,6 +3,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('mobile.views',
     (r'^login/$', 'login'),
+    (r'^sina/login/$', 'login_by_sina'),
     (r'^logout/$', 'logout'),
     (r'^register/$', 'register'),
     (r'^homepage/$', 'homepage'),

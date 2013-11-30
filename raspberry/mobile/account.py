@@ -44,6 +44,40 @@ def login(request):
             )
             
 
+def login_by_sina(request):
+    if request.method == "POST":
+        _sina_id = request.POST.get('sina_id', None)
+        _sina_token = request.POST.get('sina_token', None)
+        _api_key = request.POST.get('api_key', None)
+        
+        try:
+            _user = MobileUser.login_by_sina(
+                sina_id = _sina_id,
+                sina_token = _sina_token
+            )
+            _session = Session_Key.objects.generate_session(
+                user_id = _user.user_id,
+                username = _user.get_username(),
+                email = _user.get_email(),
+                api_key = _api_key
+            )
+            
+            _data = {
+                'user' : _user.read(_user.user_id),
+                'session' : _session.session_key
+            }
+            return SuccessJsonResponse(_data)
+        except MobileUser.LoginEmailDoesNotExist, e:
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'email',
+                    'message' : str(e),
+                },
+                status = 400
+            )
+
+
+
 def register(request):
     _req_uri = request.get_full_path()
 
