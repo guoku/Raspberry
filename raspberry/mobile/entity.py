@@ -147,6 +147,14 @@ def add_note_for_entity(request, entity_id):
         _context = _note.read(request_user_id = _request_user_id) 
         return SuccessJsonResponse(_context)
 
+def delete_entity_note(request, entity_id, note_id):
+    if request.method == "POST":
+        _session = request.POST.get('session', None)
+        _entity = MobileEntity(entity_id)
+        _entity.del_note(note_id)
+        
+        return SuccessJsonResponse({ 'delete_already' : 1 })
+
 
 
 def user_like(request, user_id):

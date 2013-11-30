@@ -138,4 +138,19 @@ def comment_entity_note(request, note_id):
         _context = _note.read_comment(_comment_id, _request_user_id)
         return SuccessJsonResponse(_context)
 
+def delete_entity_note_comment(request, note_id, comment_id):
+    if request.method == "POST":
+        _session = request.POST.get('session', None)
+        _note = MobileNote(note_id)
+        try:
+            _note.del_comment(comment_id)
+        except MobileNote.CommentDoesNotExist, e:
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'comment',
+                    'message' : str(e),
+                },
+                status = 400
+            )
+        return SuccessJsonResponse({ 'delete_already' : 1 })
 

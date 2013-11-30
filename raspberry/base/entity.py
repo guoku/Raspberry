@@ -426,6 +426,24 @@ class Entity(object):
         
         return _note
     
+    def del_note(self, note_id):
+        _note_id = int(note_id)
+        _note = Note(note_id)
+        _note_context = _note.read()
+        _note.delete()  
+        
+        _note_info = self.__load_note_info_from_cache()
+        if _note_info != None:
+            if _note.note_id in _note_info['note_id_list']:
+                _note_info['note_count'] -= 1
+                _note_info['note_id_list'].remove(_note.note_id)
+                if _note_context['score'] != 0:
+                    _note_inf['total_score'] -= _note_context['score']
+                    _note_inf['score_count'] -= 1 
+            self.__reset_note_info_to_cache(_note_info)
+        
+        User(_note_context['creator_id']).update_user_entity_note_count(delta = -1)
+
 #    def update_note(self, note_id, score, note_text, image_data = None):
 #        _note_id = int(note_id)
 #        _score = int(score)

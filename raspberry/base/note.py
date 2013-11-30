@@ -14,8 +14,14 @@ from user import User
 
 class Note(object):
     
+    class CommentDoesNotExist(Exception):
+        def __init__(self, comment_id):
+            self.__message = "comment %s does not exist"%comment_id
+        def __str__(self):
+            return repr(self.__message)
+    
     def __init__(self, note_id):
-        self.note_id = note_id
+        self.note_id = int(note_id)
         self.comments = {} 
 
     def __ensure_note_obj(self):
@@ -110,6 +116,10 @@ class Note(object):
             self.note_obj.note = note_text
         self.note_obj.save()
         
+    def delete(self):
+        self.__ensure_note_obj()
+        self.note_obj.delete() 
+    
     def __load_note_context_from_cache(self):
         _cache_key = 'note_%s_context'%self.note_id
         _context = cache.get(_cache_key)
@@ -277,6 +287,22 @@ class Note(object):
             _message.save()
         
         return _obj.id
+    
+    def del_comment(self, comment_id):
+        _comment_id = int(comment_id)
+        if not self.comments.has_key(_comment_id):
+            try:
+                self.comments[_comment_id] = NoteCommentModel.objects.get(pk = _comment_id)
+            except NoteCommentModel.DoesNotExist, e:
+                raise Note.CommentDoesNotExist(_comment_id)
+                
+        self.comments[_comment_id].delete()
+        
+        _context = self.__load_note_context_from_cache()
+        if comment_id in _context['comment_id_list']:
+            _context['comment_id_list'].remove(comment_id)
+            self.__reset_note_context_to_cache(_context)
+         
     
     @staticmethod
     def get_user_last_note(user_id):

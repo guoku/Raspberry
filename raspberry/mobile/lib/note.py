@@ -45,9 +45,12 @@ class MobileNote(Note):
             _context['poker_list'].append(MobileUser(_poker_id).read(request_user_id))
         del _context['note']['poker_id_list']
         _context['comment_list'] = [] 
-        for _comment_id in _context['note']['comment_id_list']: 
-            _comment_context = self.read_comment(_comment_id, request_user_id) 
-            _context['comment_list'].append(_comment_context)
+        for _comment_id in _context['note']['comment_id_list']:
+            try:
+                _comment_context = self.read_comment(_comment_id, request_user_id) 
+                _context['comment_list'].append(_comment_context)
+            except:
+                print "comment [%d] failed when reading note [%d]"%(_comment_id, self.note_id) 
         del _context['note']['comment_id_list']
         return _context
 
