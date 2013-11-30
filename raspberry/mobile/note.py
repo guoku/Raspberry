@@ -70,7 +70,6 @@ def update_entity_note(request, note_id):
         else:
             _request_user_id = None
         _note_text = request.POST.get('note', None)
-        _score = int(request.POST.get('score', None))
         _image_file = request.FILES.get('image', None)
         if _image_file == None:
             _image_data = None
@@ -84,7 +83,6 @@ def update_entity_note(request, note_id):
         
         _note = MobileNote(note_id)
         _note.update(
-            score = _score,
             note_text = _note_text,
             image_data = _image_data
         )
