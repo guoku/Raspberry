@@ -56,3 +56,13 @@ class NoteCommentReplyMessage(Message):
         ]
     }
 
+class EntityLikeMessage(Message):
+    entity_id = IntField(required = True)
+    liker_id  = IntField(required = True)
+    meta = {
+        "indexes" : [ 
+            "entity_id", 
+            "liker_id", 
+        ]
+    }
+

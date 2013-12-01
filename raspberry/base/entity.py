@@ -2,6 +2,7 @@
 from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
 from models import Note as NoteModel
+from message import EntityLikeMessage 
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Sum
@@ -368,12 +369,20 @@ class Entity(object):
 
     def like(self, user_id):
         try:
+            _user_id = int(user_id)
             EntityLikeModel.objects.create(
                 entity_id = self.entity_id,
-                user_id = user_id
+                user_id = _user_id
             )
             self.update_like_count()
-            User(user_id).update_user_like_count(delta = 1)
+            User(_user_id).update_user_like_count(delta = 1)
+            
+            _message = EntityLikeModel(
+                entity_id = self.entity_id,
+                liker_id = _user_id, 
+                created_time = datetime.datetime.now()
+            )
+            _message.save()
 
             return True
         except:
