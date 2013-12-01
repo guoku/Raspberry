@@ -66,7 +66,7 @@ class EntityLikeMessage(Message):
         ]
     }
 
-class EntityNewNoteMessage(Message):
+class EntityNoteMessage(Message):
     entity_id = IntField(required = True)
     note_id = IntField(required = True)
     meta = {
