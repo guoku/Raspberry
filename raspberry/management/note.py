@@ -96,7 +96,6 @@ def note_list(request):
         'note/list.html', 
         {
             'active_division' : 'note',
-#                'status_filter' : _status, 
             'note_context_list' : _note_context_list,
             'paginator' : _paginator
         },
@@ -104,3 +103,17 @@ def note_list(request):
     )
 
 
+@login_required
+def edit_note(request, note_id):
+    if request.method == 'GET':
+        _note_context = Note(note_id).read()
+        _entity_context = Entity(_note_context['entity_id']).read()
+        return render_to_response( 
+            'note/edit.html', 
+            {
+                'active_division' : 'note',
+                'entity_context' : _entity_context,
+                'note_context' : _note_context,
+            },
+            context_instance = RequestContext(request)
+        )

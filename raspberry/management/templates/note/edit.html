@@ -1,0 +1,48 @@
+{% extends "management_base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row-fluid" id="chlid-images">
+            <div class="thumbnail">
+                <a href="" >
+                    <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 220px;max-height: 220px">
+                </a>
+            </div>
+        </div>
+        <div>
+            <form class="well form-horizontal" action="{% url 'management.views.edit_entity' note_context.note_id %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="entity_id">entity_id:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="entity_id" name="entity_id" value="{{ entity_context.entity_id }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="note_id">note_id:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="note_id" name="note_id" value="{{ note_context.note_id }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="intro">note:</label>
+                        <div class="controls">
+                            <textarea class="input-xxlarge" style="height:120px" type="text" id="intro" name="intro" >{{ note_context.content }}</textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="weight">状态:</label>
+                        <div class="controls">
+                            <input class="input-xlarge" type="text" id="weight" name="weight" value="{{ note_context.weight }}" />
+                            <span class="help-inline">小于0表示冻结</span>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">更新</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
