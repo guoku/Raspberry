@@ -2,7 +2,7 @@
 from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
 from models import Note as NoteModel
-from message import EntityLikeMessage 
+from message import EntityLikeMessage, EntityNewNoteMessage
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Sum
@@ -444,6 +444,15 @@ class Entity(object):
             self.__reset_note_info_to_cache(_note_info)
 
         User(creator_id).update_user_entity_note_count(delta = 1)
+                
+        _basic_info = self.__read_basic_info()
+        _message = EntityNewNoteMessage(
+            user_id = _basic_info['creator_id'],
+            entity_id = self.entity_id,
+            note_id = _note.note_id, 
+            created_time = datetime.datetime.now()
+        )
+        _message.save()
         
         return _note
     
@@ -464,6 +473,8 @@ class Entity(object):
             self.__reset_note_info_to_cache(_note_info)
         
         User(_note_context['creator_id']).update_user_entity_note_count(delta = -1)
+        for _doc in EntityNewNoteMessage.objects.filter(entity_id = self.entity_id, note_id = _note_id):
+            _doc.delete()
 
 #    def update_note(self, note_id, score, note_text, image_data = None):
 #        _note_id = int(note_id)

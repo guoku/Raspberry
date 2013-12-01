@@ -66,3 +66,13 @@ class EntityLikeMessage(Message):
         ]
     }
 
+class EntityNewNoteMessage(Message):
+    entity_id = IntField(required = True)
+    note_id = IntField(required = True)
+    meta = {
+        "indexes" : [ 
+            "entity_id", 
+            "note_id", 
+        ]
+    }
+
