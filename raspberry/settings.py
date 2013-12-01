@@ -27,6 +27,9 @@ DATABASES = {
 from mongoengine import connect 
 connect('guoku')
 
+#from mongoengine import register_connection 
+#register_connection('guoku', 'guoku')
+
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.cache.RedisCache",

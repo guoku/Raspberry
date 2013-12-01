@@ -170,6 +170,7 @@ class Entity(object):
         _basic_info['title'] = self.entity_obj.title
         _basic_info['intro'] = self.entity_obj.intro
         _basic_info['price'] = self.entity_obj.price
+        _basic_info['creator_id'] = self.entity_obj.creator_id
         _basic_info["entity_hash"] = self.entity_obj.entity_hash
         _basic_info["category_id"] = self.entity_obj.neo_category_id
         _basic_info['like_count'] = self.entity_obj.like_count 
@@ -377,12 +378,16 @@ class Entity(object):
             self.update_like_count()
             User(_user_id).update_user_like_count(delta = 1)
             
-            _message = EntityLikeModel(
-                entity_id = self.entity_id,
-                liker_id = _user_id, 
-                created_time = datetime.datetime.now()
-            )
-            _message.save()
+            _basic_info = self.__read_basic_info()
+            if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None:
+                if EntityLikeMessage.objects.filter(user_id = _basic_info['creator_id'], entity_id = self.entity_id, liker_id = _user_id).count() == 0: 
+                    _message = EntityLikeMessage(
+                        user_id = _basic_info['creator_id'],
+                        entity_id = self.entity_id,
+                        liker_id = _user_id, 
+                        created_time = datetime.datetime.now()
+                    )
+                    _message.save()
 
             return True
         except:
@@ -391,12 +396,19 @@ class Entity(object):
          
     def unlike(self, user_id):
         try:
+            _user_id = int(user_id)
             _obj = EntityLikeModel.objects.get(
                 entity_id = self.entity_id,
-                user_id = user_id
+                user_id = _user_id
             )
             _obj.delete()
-            User(user_id).update_user_like_count(delta = -1)
+            User(_user_id).update_user_like_count(delta = -1)
+            
+            _basic_info = self.__read_basic_info()
+            if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None:
+                for _doc in EntityLikeMessage.objects.filter(user_id = _basic_info['creator_id'], entity_id = self.entity_id, liker_id = _user_id):
+                    _doc.delete()
+            
             return True
         except:
             pass
