@@ -56,3 +56,23 @@ class DepokeEntityNoteTask(Task):
         _note_id = int(note_id)
         _request_user_id = int(request_user_id)
         MobileNote(note_id).depoke(_request_user_id)
+
+class DeleteEntityNoteTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, entity_id, note_id):
+        _entity = MobileEntity(entity_id)
+        _entity.del_note(note_id)
+
+class DeleteEntityNoteCommentTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, note_id, comment_id):
+        _note = MobileNote(note_id)
+        _note.del_comment(comment_id)

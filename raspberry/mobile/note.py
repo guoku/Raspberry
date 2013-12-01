@@ -3,7 +3,7 @@ from lib.entity import MobileEntity
 from lib.note import MobileNote
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key
-from tasks import PokeEntityNoteTask, DepokeEntityNoteTask 
+from tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask 
 import datetime
 
 def category_entity_note(request, category_id):
@@ -141,16 +141,6 @@ def comment_entity_note(request, note_id):
 def delete_entity_note_comment(request, note_id, comment_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
-        _note = MobileNote(note_id)
-        try:
-            _note.del_comment(comment_id)
-        except MobileNote.CommentDoesNotExist, e:
-            return ErrorJsonResponse(
-                data = {
-                    'type' : 'comment',
-                    'message' : str(e),
-                },
-                status = 400
-            )
+        DeleteEntityNoteCommentTask.delay(note_id, comment_id)
         return SuccessJsonResponse({ 'delete_already' : 1 })
 

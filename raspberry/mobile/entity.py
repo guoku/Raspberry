@@ -4,7 +4,7 @@ from lib.note import MobileNote
 from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key
-from tasks import LikeEntityTask, UnlikeEntityTask
+from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 import datetime
 
 def entity_list(request):
@@ -150,8 +150,7 @@ def add_note_for_entity(request, entity_id):
 def delete_entity_note(request, entity_id, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
-        _entity = MobileEntity(entity_id)
-        _entity.del_note(note_id)
+        DeleteEntityNoteTask.delay(entity_id, note_id)
         
         return SuccessJsonResponse({ 'delete_already' : 1 })
 
