@@ -143,7 +143,6 @@ def edit_entity(request, entity_id):
             _message = "淘宝商品已被创建至本entity" 
         else:
             _message = None
-        
         _entity_context = Entity(entity_id).read()
         _item_context_list = []
         for _item_id in _entity_context['item_id_list']:

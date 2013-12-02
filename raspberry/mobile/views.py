@@ -170,6 +170,27 @@ def message(request):
                     }
                 }
                 _rslt.append(_context)
+            elif isinstance(_message, EntityLikeMessage):
+                _context = {
+                    'type' : 'entity_like_message',
+                    'created_time' : time.mktime(_message.created_time.timetuple()),
+                    'content' : {
+                        'liker' : MobileUser(_message.liker_id).read(_request_user_id),
+                        'entity' : MobileEntity(_message.entity_id).read(_request_user_id)
+                    }
+                }
+                _rslt.append(_context)
+            elif isinstance(_message, EntityNoteMessage):
+                _context = {
+                    'type' : 'entity_note_message',
+                    'created_time' : time.mktime(_message.created_time.timetuple()),
+                    'content' : {
+                        'note' : MobileNote(_message.note_id).read(_request_user_id),
+                        'entity' : MobileEntity(_message.entity_id).read(_request_user_id)
+                    }
+                }
+                _rslt.append(_context)
+                
                 
         
         return SuccessJsonResponse(_rslt)

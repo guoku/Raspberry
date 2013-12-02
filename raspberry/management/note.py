@@ -19,58 +19,6 @@ from base.user import User
 from utils.paginator import Paginator
 
 
-#@login_required
-#def edit_entity(request, entity_id):
-#    if request.method == 'GET':
-#        _code = request.GET.get("code", None)
-#        if _code == "1":
-#            _message = "淘宝商品已被创建至本entity" 
-#        else:
-#            _message = None
-#        _entity_context = Entity(entity_id).read()
-#        _item_context_list = []
-#        for _item_id in _entity_context['item_id_list']:
-#            _item_context = Item(_item_id).read()
-#            if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
-#                _entity_context['recommend_title'] = _item_context['title']
-#            _item_context_list.append(_item_context)
-#        return render_to_response( 
-#            'entity/edit.html', 
-#            {
-#                'active_division' : 'entity',
-#                'entity_context' : _entity_context,
-#                'category_list' : Category.find(), 
-#                'item_context_list' : _item_context_list,
-#                'message' : _message
-#            },
-#            context_instance = RequestContext(request)
-#        )
-#    elif request.method == 'POST':
-#        _brand = request.POST.get("brand", None)
-#        _title = request.POST.get("title", None)
-#        _intro = request.POST.get("intro", None)
-#        _price = request.POST.get("price", None)
-#        _weight = int(request.POST.get("weight", '0'))
-#        _chief_image_id = request.POST.get("chief_image", None)
-#        if _price:
-#            _price = float(_price)
-#        _category_id = request.POST.get("category_id", None)
-#        if _category_id:
-#            _category_id = int(_category_id)
-#        _entity = Entity(entity_id)
-#        _entity.update(
-#            category_id = _category_id,
-#            brand = _brand,
-#            title = _title,
-#            intro = _intro,
-#            price = _price,
-#            chief_image_id = _chief_image_id,
-#            weight = _weight
-#        )
-#        return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-
-
 @login_required
 def note_list(request):
     _page_num = int(request.GET.get("p", "1"))

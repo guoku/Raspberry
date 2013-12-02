@@ -145,6 +145,7 @@ class Note(object):
             _context["comment_count"] = len(_context["comment_id_list"]) 
             _context["created_time"] = self.note_obj.created_time
             _context["updated_time"] = self.note_obj.updated_time
+            _context["weight"] = self.note_obj.weight
             if len(self.note_obj.figure) > 0:
                 _context['figure'] = Image(self.note_obj.figure).getlink()
         else:

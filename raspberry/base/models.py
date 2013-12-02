@@ -38,7 +38,7 @@ class Avatar(models.Model):
     avatar_origin = models.CharField(max_length = 1024, db_index = True, null = False, blank = False)
     avatar_small = models.CharField(max_length = 1024, db_index = True, null = False, blank = False)
     avatar_large = models.CharField(max_length = 1024, db_index = True, null = False, blank = False)
-    uploaded_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    uploaded_time = models.DateField(auto_now_add = True, db_index = True)
     
     class Meta:
         app_label = 'base'
