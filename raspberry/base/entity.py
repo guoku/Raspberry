@@ -331,14 +331,39 @@ class Entity(object):
         return _entity_id_list 
 
     @classmethod
-    def roll(cls, category_id = None, count = 10):
+    def _load_entity_pool(cls, category_id):
+        if category_id == None:
+            _cache_key = 'entity_pool_all'
+        else:
+            _cache_key = 'entity_pool_%s'%category_id
+        _pool = cache.get(_cache_key)
+        return _pool
+    
+    @classmethod
+    def _reset_entity_pool(cls, category_id):
+        if category_id == None:
+            _cache_key = 'entity_pool_all'
+        else:
+            _cache_key = 'entity_pool_%s'%category_id
+        
         _hdl = EntityModel.objects.filter(weight__gte = 0)
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
-        _entity_id_list = map(lambda x: x.id, _hdl)
-        if len(_entity_id_list) <= count:
-            return _entity_id_list
-        return random.sample(_entity_id_list, count) 
+        _pool = map(lambda x: x.id, _hdl)
+        
+        cache.set(_cache_key, _pool, 86400)
+        return _pool
+    
+    
+    @classmethod
+    def roll(cls, category_id = None, count = 10):
+        _pool = cls._load_entity_pool(category_id)
+        if _pool == None:
+            _pool = cls._reset_entity_pool(category_id)
+        
+        if len(_pool) <= count:
+            return _pool 
+        return random.sample(_pool, count) 
 
         
     @classmethod

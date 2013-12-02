@@ -7,12 +7,12 @@ import os
 #alter table common_category add column `image_store_hash` varchar(64) DEFAULT NULL;
 #alter table common_category add KEY `common_category_f192161f` (`image_store_hash`);
 
-conn = MySQLdb.Connection('localhost', 'root', '123456', 'raspberry')
+conn = MySQLdb.Connection('localhost', 'root', '123456', 'guoku_11_21')
 cur = conn.cursor()
 cur.execute("SET names utf8")
 
 
-cur.execute("SELECT id, title from common_category;")
+cur.execute("SELECT id, title from base_neo_category;")
 categories = {}
 for row in cur.fetchall():
     title = row[1].replace('/', '')
@@ -65,7 +65,7 @@ for title, obj in categories.items():
         mgf.close()
         
         
-        cur.execute("UPDATE common_category set image_store_hash='%s' WHERE id=%d;"%(key, obj['category_id'])) 
+        cur.execute("UPDATE base_neo_category set image_store_hash='%s' WHERE id=%d;"%(key, obj['category_id'])) 
         print "%s created...[%s]"%(title, key)
         
 f = open(image_path + '/?@2x.png', 'r')

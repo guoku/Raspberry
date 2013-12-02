@@ -21,4 +21,5 @@ if settings.IMAGE_LOCAL:
         (r'^image/local/avatar/(?P<size>\w+)/(?P<key>\w+)$', 'base.views.local_avatar_image'),
         (r'^image/local/img/(?P<key>\w+).(?P<image_format>\w+)$', 'base.views.local_entity_image'),
         (r'^image/local/img/(?P<key1>\w+).(?P<key2>\w+).(?P<key3>\w+)$', 'base.views.local_entity_image_extend'),
+        (r'^image/local/category/(?P<key1>\w+)/(?P<key2>\w+)$', 'base.views.local_category_image'),
     )

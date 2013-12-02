@@ -17,3 +17,7 @@ def local_entity_image_extend(request, key1, key2, key3):
     _data = Avatar.read_image_data_by_store_key('img/' + key1 + '.' + key2 + '.' + key3)
     return HttpResponse(_data, content_type = "image/jpeg")
         
+def local_category_image(request, key1, key2):
+    _data = Avatar.read_image_data_by_store_key('category/' + key1 + '/' + key2) 
+    return HttpResponse(_data, content_type = "image/jpeg")
+        
