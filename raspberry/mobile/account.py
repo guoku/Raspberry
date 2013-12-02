@@ -177,7 +177,6 @@ def register_by_sina(request):
         _sina_id = request.POST.get('sina_id', None)
         _sina_token = request.POST.get('sina_token', None)
         _screen_name = request.POST.get('screen_name', None)
-        
 
         try:
             _user = MobileUser.create_by_sina(
@@ -218,20 +217,31 @@ def register_by_sina(request):
                 status = 409
             )
         
+        try:
+            _image_file = request.FILES.get('image', None)
+            if _image_file != None:
+                if hasattr(_image_file, 'chunks'):
+                    _image_data = ''.join(chunk for chunk in _image_file.chunks())
+                else:
+                    _image_data = _image_file.read()
+                _user.upload_avatar(_image_data)
+        except Exception, e: 
+            _user.delete()
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'avatar',
+                    'message' : str(e),
+                },
+                status = 409
+            )
+        
+        
         _session = Session_Key.objects.generate_session(
             user_id = _user.user_id,
             username = _user.get_username(),
             email = _email,
             api_key = _api_key
         )
-        
-        _image_file = request.FILES.get('image', None)
-        if _image_file != None:
-            if hasattr(_image_file, 'chunks'):
-                _image_data = ''.join(chunk for chunk in _image_file.chunks())
-            else:
-                _image_data = _image_file.read()
-            _user.upload_avatar(_image_data)
         
         _data = {
             'user' : _user.read(_user.user_id),
@@ -289,20 +299,31 @@ def register_by_taobao(request):
                 status = 409
             )
         
+        
+        try:
+            _image_file = request.FILES.get('image', None)
+            if _image_file != None:
+                if hasattr(_image_file, 'chunks'):
+                    _image_data = ''.join(chunk for chunk in _image_file.chunks())
+                else:
+                    _image_data = _image_file.read()
+                _user.upload_avatar(_image_data)
+        except Exception, e: 
+            _user.delete()
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'avatar',
+                    'message' : str(e),
+                },
+                status = 409
+            )
+        
         _session = Session_Key.objects.generate_session(
             user_id = _user.user_id,
             username = _user.get_username(),
             email = _email,
             api_key = _api_key
         )
-        
-        _image_file = request.FILES.get('image', None)
-        if _image_file != None:
-            if hasattr(_image_file, 'chunks'):
-                _image_data = ''.join(chunk for chunk in _image_file.chunks())
-            else:
-                _image_data = _image_file.read()
-            _user.upload_avatar(_image_data)
         
         _data = {
             'user' : _user.read(_user.user_id),
