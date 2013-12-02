@@ -65,3 +65,12 @@ def edit_note(request, note_id):
             },
             context_instance = RequestContext(request)
         )
+    elif request.method == 'POST':
+        _note_text = request.POST.get("note", None)
+        _weight = int(request.POST.get("weight", '0'))
+        _note = Note(note_id)
+        _note.update(
+            note_text = _note_text, 
+            weight = _weight
+        )
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])

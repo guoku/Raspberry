@@ -101,8 +101,10 @@ class Note(object):
         return _inst
     
     
-    def update(self, score = None, note_text = None, image_data = None):
+    def update(self, score = None, note_text = None, image_data = None, weight = None):
+        _context = self.__load_note_context_from_cache()
         self.__ensure_note_obj()
+        
         if image_data != None:
             _image_obj = Image.create(
                 source = 'note_uploaded', 
@@ -110,11 +112,27 @@ class Note(object):
             )
             if _image_obj.image_id != self.note_obj.figure:
                 self.note_obj.figure = _image_obj.image_id
+            if _context != None:
+                _context['figure'] = Image(_image_obj.image_id).getlink()
+        
         if score != None:
             self.note_obj.score = score 
+        
         if note_text != None:
             self.note_obj.note = note_text
+            if _context != None:
+                _context['content'] = note_text 
+        
+        if weight != None:
+            _weight = int(weight)
+            self.note_obj.weight = _weight 
+            if _context != None:
+                _context['weight'] = _weight  
         self.note_obj.save()
+       
+        if _context != None:
+            self.__reset_note_context_to_cache(_context)
+            
         
     def delete(self):
         self.__ensure_note_obj()

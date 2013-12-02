@@ -10,7 +10,7 @@
             </div>
         </div>
         <div>
-            <form class="well form-horizontal" action="{% url 'management.views.edit_entity' note_context.note_id %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management.views.edit_note' note_context.note_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="entity_id">entity_id:</label>
@@ -25,9 +25,9 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="intro">note:</label>
+                        <label class="control-label" for="note">note:</label>
                         <div class="controls">
-                            <textarea class="input-xxlarge" style="height:120px" type="text" id="intro" name="intro" >{{ note_context.content }}</textarea>
+                            <textarea class="input-xxlarge" style="height:120px" type="text" id="note" name="note" >{{ note_context.content }}</textarea>
                         </div>
                     </div>
                     <div class="control-group">
