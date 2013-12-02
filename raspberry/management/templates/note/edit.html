@@ -40,6 +40,10 @@
                 </fieldset>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">更新</button>
+                    {% if note_context.selector_id == None %}
+                        <a class="btn btn-success btn-small" href="{% url 'management.views.post_selection_instant' entity_context.entity_id note_context.note_id %}">精选-即时发布</a>
+                        <a class="btn btn-info btn-small" href="">精选-延迟发布</a>
+                    {% endif %}
                 </div>
             </form>
         </div>

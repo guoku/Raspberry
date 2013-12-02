@@ -58,11 +58,20 @@ class Neo_Category(models.Model):
     status = models.IntegerField(default = 1, db_index = True)
     class Meta:
         ordering = ['id']
+
+class Category(models.Model):
+    pid = models.IntegerField(default = 0)
+    title = models.CharField(max_length = 256)
+    english_title = models.CharField(max_length = 256)
+    level = models.IntegerField(default = 0)
+    status = models.IntegerField(default = 1, db_index = True)
+
  
 
 class Entity(models.Model):
     entity_hash = models.CharField(max_length = 32, unique = True, db_index = True)
     creator_id = models.IntegerField(default = None, null = True, db_index = True)
+    category = models.ForeignKey(Category)
     neo_category = models.ForeignKey(Neo_Category)
     brand = models.CharField(max_length = 256, null = False, default = '')
     title = models.CharField(max_length = 256, null = False, default = '')

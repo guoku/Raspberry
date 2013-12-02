@@ -74,3 +74,20 @@ def edit_note(request, note_id):
             weight = _weight
         )
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@login_required
+def post_selection_instant(request, entity_id, note_id):
+    _request_user_id = request.user.id
+    _selected_time = datetime.datetime.now()
+    _post_time = datetime.datetime.now()
+    Entity(entity_id).update_note_selection_info(
+        note_id = note_id,
+        selector_id = _request_user_id,
+        selected_time = _selected_time,
+        post_time = _post_time
+    )
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+
+

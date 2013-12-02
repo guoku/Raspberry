@@ -2,7 +2,8 @@
 from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
 from models import Note as NoteModel
-from message import EntityLikeMessage, EntityNoteMessage
+from message import EntityLikeMessage, EntityNoteMessage, NoteSelectionMessage
+from selection import NoteSelection
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Sum
@@ -475,6 +476,55 @@ class Entity(object):
         User(_note_context['creator_id']).update_user_entity_note_count(delta = -1)
         for _doc in EntityNoteMessage.objects.filter(entity_id = self.entity_id, note_id = _note_id):
             _doc.delete()
+    
+    def update_note_selection_info(self, note_id, selector_id, selected_time, post_time):
+        _note_id = int(note_id)
+        if selector_id != None:
+            _selector_id = int(selector_id)
+        else:
+            _selector_id = None 
+        
+        _note = Note(note_id)
+        _note.update_selection_info(
+            selector_id = _selector_id,
+            selected_time = selected_time,
+            post_time = post_time
+        )
+
+        if _selector_id == None:
+            for _doc in NoteSelection.objects.filter(note_id = _note_id):
+                _doc.delete()
+        else: 
+            _doc = NoteSelection.objects.filter(note_id = _note_id).first()
+            if _doc == None:
+                self.__ensure_entity_obj()
+                _doc = NoteSelection(
+                    selector_id = _selector_id,
+                    selected_time = selected_time,
+                    post_time = post_time,
+                    entity_id = self.entity_id, 
+                    note_id = _note_id,
+                    root_category_id = 12,
+                    category_id = self.entity_obj.category_id,
+                    neo_category_group_id = 1, 
+                    neo_category_id = self.entity_obj.neo_category_id, 
+                )
+                _doc.save()
+                
+                _note_context = _note.read()
+                _message = NoteSelectionMessage(
+                    user_id = _note_context['creator_id'], 
+                    entity_id = self.entity_id,
+                    note_id = _note_id, 
+                    created_time = datetime.datetime.now()
+                )
+                _message.save()
+            else:
+                _doc.selector_id = _selector_id 
+                _doc.selected_time = selected_time
+                _doc.post_time = post_time
+            _doc.save()
+
 
 #    def update_note(self, note_id, score, note_text, image_data = None):
 #        _note_id = int(note_id)

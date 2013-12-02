@@ -190,6 +190,16 @@ def message(request):
                     }
                 }
                 _rslt.append(_context)
+            elif isinstance(_message, NoteSelectionMessage):
+                _context = {
+                    'type' : 'note_selection_message',
+                    'created_time' : time.mktime(_message.created_time.timetuple()),
+                    'content' : {
+                        'note' : MobileNote(_message.note_id).read(_request_user_id),
+                        'entity' : MobileEntity(_message.entity_id).read(_request_user_id)
+                    }
+                }
+                _rslt.append(_context)
                 
                 
         

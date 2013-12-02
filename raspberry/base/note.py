@@ -101,6 +101,29 @@ class Note(object):
         return _inst
     
     
+    def update_selection_info(self, selector_id, selected_time, post_time):
+        if selector_id != None:
+            _selector_id = int(selector_id)
+        else:
+            _selector_id = None 
+
+        self.__ensure_note_obj()
+        self.note_obj.selector_id = _selector_id 
+        self.note_obj.selected_time = selected_time 
+        self.note_obj.post_time = post_time
+        self.note_obj.save()
+
+        
+        _context = self.__load_note_context_from_cache()
+        if _context != None:
+            _context['selector_id'] = _selector_id 
+            _context['selected_time'] = selected_time 
+            _context['post_time'] = post_time 
+            self.__reset_note_context_to_cache(_context)
+
+
+        
+    
     def update(self, score = None, note_text = None, image_data = None, weight = None):
         _context = self.__load_note_context_from_cache()
         self.__ensure_note_obj()
@@ -166,6 +189,10 @@ class Note(object):
             _context["weight"] = self.note_obj.weight
             if len(self.note_obj.figure) > 0:
                 _context['figure'] = Image(self.note_obj.figure).getlink()
+            
+            _context["selector_id"] = self.note_obj.selector_id
+            _context["selected_time"] = self.note_obj.selected_time
+            _context["post_time"] = self.note_obj.post_time
         else:
             _context = context
         cache.set(_cache_key, _context, 864000)
@@ -187,6 +214,10 @@ class Note(object):
         if json:
             _context['created_time'] = time.mktime(_context["created_time"].timetuple())
             _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())
+            if _context['selected_time'] != None:
+                _context['selected_time'] = time.mktime(_context["selected_time"].timetuple())
+            if _context['post_time'] != None:
+                _context['post_time'] = time.mktime(_context["post_time"].timetuple())
         return _context
 
     def poke(self, user_id):
