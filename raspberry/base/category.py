@@ -1,12 +1,26 @@
 # coding=utf8
 from models import Neo_Category_Group as CategoryGroupModel
 from models import Neo_Category as CategoryModel
+from models import Category as OldCategoryModel
 from django.conf import settings
 from django.db.models import Q
 from hashlib import md5
 from pymogile import Client
 from wand.image import Image
 import datetime 
+
+class Old_Category(object):
+    
+    @staticmethod
+    def find():
+        _rslt = []
+        for _obj in OldCategoryModel.objects.all():
+            _rslt.append({
+                'category_id' : _obj.id,
+                'category_title' : _obj.title
+            })
+        return _rslt
+
 
 class Category_Group(object):
     

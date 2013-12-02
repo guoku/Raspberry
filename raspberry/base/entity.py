@@ -184,6 +184,7 @@ class Entity(object):
         _basic_info['price'] = self.entity_obj.price
         _basic_info['creator_id'] = self.entity_obj.creator_id
         _basic_info["entity_hash"] = self.entity_obj.entity_hash
+        _basic_info["old_category_id"] = self.entity_obj.category_id
         _basic_info["category_id"] = self.entity_obj.neo_category_id
         _basic_info['like_count'] = self.entity_obj.like_count 
         _basic_info["created_time"] = self.entity_obj.created_time
@@ -267,11 +268,9 @@ class Entity(object):
 
         # TODO: removing entity_id in item
     
-    def update(self, category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None):
+    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None):
         
         self.__ensure_entity_obj()
-        if category_id != None:
-            self.entity_obj.neo_category_id = category_id 
         if brand != None:
             self.entity_obj.brand = brand
         if title != None:
@@ -281,7 +280,9 @@ class Entity(object):
         if price != None:
             self.entity_obj.price = price
         if category_id != None:
-            self.entity_obj.category_id = int(category_id)
+            self.entity_obj.neo_category_id = int(category_id)
+        if old_category_id != None:
+            self.entity_obj.category_id = int(old_category_id) 
         if weight != None:
             self.entity_obj.weight = int(weight)
         

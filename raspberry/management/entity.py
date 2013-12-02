@@ -11,7 +11,7 @@ import datetime
 import time
 import json
 
-from base.category import Category
+from base.category import Category, Old_Category
 from base.entity import Entity
 from base.item import Item
 from base.note import Note
@@ -29,7 +29,6 @@ def _parse_taobao_id_from_url(url):
 
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = fetcher.fetch(taobao_id)
-    print taobao_item_info
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:
@@ -144,12 +143,14 @@ def edit_entity(request, entity_id):
             if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
                 _entity_context['recommend_title'] = _item_context['title']
             _item_context_list.append(_item_context)
+        
         return render_to_response( 
             'entity/edit.html', 
             {
                 'active_division' : 'entity',
                 'entity_context' : _entity_context,
                 'category_list' : Category.find(), 
+                'old_category_list' : Old_Category.find(), 
                 'item_context_list' : _item_context_list,
                 'message' : _message
             },
@@ -167,9 +168,13 @@ def edit_entity(request, entity_id):
         _category_id = request.POST.get("category_id", None)
         if _category_id:
             _category_id = int(_category_id)
+        _old_category_id = request.POST.get("old_category_id", None)
+        if _old_category_id:
+            _old_category_id = int(_old_category_id)
         _entity = Entity(entity_id)
         _entity.update(
             category_id = _category_id,
+            old_category_id = _old_category_id,
             brand = _brand,
             title = _title,
             intro = _intro,
