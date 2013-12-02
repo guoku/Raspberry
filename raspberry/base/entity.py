@@ -1,6 +1,7 @@
 # coding=utf8
 from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
+from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
 from models import Note as NoteModel
 from message import EntityLikeMessage, EntityNoteMessage, NoteSelectionMessage
 from selection import NoteSelection
@@ -8,6 +9,8 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Sum
 from mongoengine import *
+
+from category import Category 
 from note import Note
 from item import Item
 from image import Image
@@ -73,9 +76,17 @@ class Entity(object):
             
         
         _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'])
+        
+        try:
+            _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = taobao_item_info["cid"])
+            _old_category_id = _obj.guoku_category_id
+        except:
+            _old_category_id = 12
+            
         _entity_obj = EntityModel.objects.create( 
             entity_hash = _entity_hash,
             creator_id = creator_id,
+            category_id = _old_category_id,
             neo_category_id = category_id,
             brand = brand,
             title = title,
@@ -531,7 +542,7 @@ class Entity(object):
                     note_id = _note_id,
                     root_category_id = 12,
                     category_id = self.entity_obj.category_id,
-                    neo_category_group_id = 1, 
+                    neo_category_group_id = Category(self.entity_obj.neo_category_id).get_group_id(), 
                     neo_category_id = self.entity_obj.neo_category_id, 
                 )
                 _doc.save()

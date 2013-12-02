@@ -5,8 +5,6 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from urlparse import urlparse
-from taobaoapi.utils import load_taobao_item_info_from_api
-from taobaoapi.client import TaobaoApiClient
 import HTMLParser
 import re 
 import datetime
@@ -19,6 +17,7 @@ from base.item import Item
 from base.note import Note
 from base.user import User
 from utils.paginator import Paginator
+from base import fetcher 
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -29,20 +28,15 @@ def _parse_taobao_id_from_url(url):
     return None
 
 def _load_taobao_item_info(taobao_id):
-    taobao_item_info = load_taobao_item_info_from_api(taobao_id)
+    taobao_item_info = fetcher.fetch(taobao_id)
+    print taobao_item_info
     thumb_images = []
     image_url = None
-    for thumb_img in taobao_item_info["item_imgs"]["item_img"]:
-        thumb_images.append(thumb_img["url"])
+    for _img_url in taobao_item_info["imgs"]:
+        thumb_images.append(_img_url)
     taobao_item_info["thumb_images"] = thumb_images
-    taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["title"])
+    taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
     
-    location = taobao_item_info['location']
-    if location['city'] == location['state']:
-        location = location['city']
-    else:
-        location = "%s %s" % (location['state'], location['city'])
-    taobao_item_info["location"] = location
     taobao_item_info["shop_nick"] = taobao_item_info["nick"] 
     return taobao_item_info 
 

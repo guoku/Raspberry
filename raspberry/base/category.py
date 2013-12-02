@@ -104,6 +104,10 @@ class Category(object):
         _inst.category_obj = _category_obj
         return _inst
     
+    def get_group_id(self):
+        self.__ensure_category_obj()
+        return self.category_obj.group_id
+    
     def __load_category_context(self):
         self.__ensure_category_obj()
         _context = {}

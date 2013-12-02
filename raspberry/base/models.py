@@ -66,6 +66,11 @@ class Category(models.Model):
     level = models.IntegerField(default = 0)
     status = models.IntegerField(default = 1, db_index = True)
 
+class Taobao_Item_Category_Mapping(models.Model):
+    taobao_category_id = models.IntegerField(db_index = True, unique = True)
+    parent_id = models.IntegerField(default = 0)
+    title = models.CharField(max_length = 256)
+    guoku_category = models.ForeignKey(Category)
  
 
 class Entity(models.Model):

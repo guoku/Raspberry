@@ -5,8 +5,6 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from urlparse import urlparse
-from taobaoapi.utils import load_taobao_item_info_from_api
-from taobaoapi.client import TaobaoApiClient
 import HTMLParser
 import re 
 import datetime
