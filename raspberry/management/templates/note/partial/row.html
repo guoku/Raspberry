@@ -1,17 +1,36 @@
+{% load common %}
 {% load management %}
 
-<tr class="success">
+<tr {% if note_context.weight < 0 %}class="info"{% else %}class="success"{% endif %}>
+    <td width="60"><p class="text-info">{{ note_context.note_id }}</p></td>
     <td width="90">
         <a href="{{ entity_context.buy_link }}" target=_blank>
             <img class="img-polaroid" src="{{ entity_context.chief_image.url }}" style="max-height:80px;max-width:80px;">
         </a>
     </td>
-    <td width="200"><p class="text-info">{{ note_context.note_id }}</p></td>
-    <td width="200"><p class="text-info">{{ note_context.creator_id }}</p></td>
+    <td width="90">
+        {% if note_context.figure %}
+            <img class="img-polaroid" src="{{ note_context.figure }}" style="max-height:80px;max-width:80px;">
+        {% else %}
+            <p class="text-info"></p> 
+        {% endif %}
+    </td>
+    <td width="200"><p class="text-info">{{ creator_context.nickname }}</p></td>
     <td><p class="text-info">{{ note_context.content }}</p></td>
+    <td width="150">
+        {% if note_context.selected_time %}
+            <p class="text-info">{{ note_context.selected_time|date_format }}</p> 
+        {% else %}
+            No
+        {% endif %}
+    </td>
     <td width="50">
         <div class="btn-group">
             <a class="btn" href="{% url 'management.views.edit_note' note_context.note_id %}">编</a>
+            {% if not note_context.selected_time %}
+                <a class="btn" href="{% url 'management.views.post_selection_instant' note_context.entity_id note_context.note_id %}">当</a>
+                <a class="btn" href="{% url 'management.views.post_selection_delay' note_context.entity_id note_context.note_id %}">迟</a>
+            {% endif %}
         </div>
     </td>
 </tr>

@@ -2,16 +2,17 @@
 
 {% block content %}
     <div class="container">
-        <div class="row-fluid" id="chlid-images">
-            <div class="thumbnail">
-                <a href="" >
-                    <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 220px;max-height: 220px">
-                </a>
-            </div>
-        </div>
+        {% if note_context.figure %}
+            <img id="main-image" class="img-polaroid" src="{{ note_context.figure }}" alt="" style="max-width: 220px;max-height: 220px">
+        {% endif %}
         <div>
             <form class="well form-horizontal" action="{% url 'management.views.edit_note' note_context.note_id %}" method="POST">
                 <fieldset>
+                    <div class="control-group">
+                        <div class="controls">
+                            <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 100px;max-height: 100px">
+                        </div>
+                    </div>
                     <div class="control-group">
                         <label class="control-label" for="entity_id">entity_id:</label>
                         <div class="controls">
@@ -42,7 +43,7 @@
                     <button type="submit" class="btn btn-primary">更新</button>
                     {% if note_context.selector_id == None %}
                         <a class="btn btn-success btn-small" href="{% url 'management.views.post_selection_instant' entity_context.entity_id note_context.note_id %}">精选-即时发布</a>
-                        <a class="btn btn-info btn-small" href="">精选-延迟发布</a>
+                        <a class="btn btn-success btn-small" href="{% url 'management.views.post_selection_delay' entity_context.entity_id note_context.note_id %}">精选-延迟发布</a>
                     {% endif %}
                 </div>
             </form>

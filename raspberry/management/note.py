@@ -19,30 +19,52 @@ from utils.paginator import Paginator
 
 @login_required
 def note_list(request):
+    _selection = request.GET.get("selection", None)
+    _nav_filter = 'all'
+    if _selection == 'only':
+        _selection = 1 
+        _nav_filter = 'selection_only'
+    elif _selection == 'none':
+        _selection = -1 
+        _nav_filter = 'selection_none'
+    else:
+        _selection = 0
+    
+    _freezed = request.GET.get("freeze", None)
+    if _freezed == '1':
+        _status = -1 
+        _nav_filter = 'freezed'
+    else:
+        _status = 1
+        
     _page_num = int(request.GET.get("p", "1"))
-    _note_count = Note.count()
+    _note_count = Note.count(selection = _selection, status = _status)
     _paginator = Paginator(_page_num, 30, _note_count)
     _note_id_list = Note.find(
         offset = _paginator.offset,
         count = _paginator.count_in_one_page,
+        selection = _selection,
+        status = _status
     )
         
-    _note_context_list = []
+    _context_list = []
     for _note_id in _note_id_list:
         _note = Note(_note_id)
         _note_context = _note.read()
         _entity_id = _note_context['entity_id'] 
-        _entity_context = Entity(_entity_id).read() 
-        _note_context_list.append({
+        _entity_context = Entity(_entity_id).read()
+        _context_list.append({
             'entity' : _entity_context,
-            'note' : _note_context
+            'note' : _note_context,
+            'creator' : User(_note_context['creator_id']).read() 
         })
         
     return render_to_response( 
         'note/list.html', 
         {
             'active_division' : 'note',
-            'note_context_list' : _note_context_list,
+            'nav_filter' : _nav_filter, 
+            'context_list' : _context_list,
             'paginator' : _paginator
         },
         context_instance = RequestContext(request)
@@ -85,6 +107,22 @@ def post_selection_instant(request, entity_id, note_id):
         post_time = _post_time
     )
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+def post_selection_delay(request, entity_id, note_id):
+    _request_user_id = request.user.id
+    _selected_time = datetime.datetime.now()
+    _post_time = datetime.datetime(2100, 1, 1)
+    Entity(entity_id).update_note_selection_info(
+        note_id = note_id,
+        selector_id = _request_user_id,
+        selected_time = _selected_time,
+        post_time = _post_time
+    )
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
 
 
 

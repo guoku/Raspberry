@@ -42,6 +42,10 @@ def top(array, count):
     return array[::-1][0 : 0 + count] 
 register.filter(top)
 
+def date_format(value):
+    return "%d-%d-%d %d:%d:%d"%(value.year, value.month, value.day, value.hour, value.minute, value.second)  
+register.filter(date_format)
+
 def html_unescape(text):
     return HTMLParser.HTMLParser().unescape(text) 
 register.filter(html_unescape)

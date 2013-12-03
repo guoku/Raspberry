@@ -29,7 +29,7 @@ class Note(object):
             self.note_obj = NoteModel.objects.get(pk = self.note_id)
     
     @classmethod
-    def count(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None):
+    def count(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, selection = 0, status = 0):
         _hdl = NoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
@@ -39,10 +39,18 @@ class Note(object):
             _hdl = _hdl.filter(created_time__lt = timestamp)
         if creator_set != None:
             _hdl = _hdl.filter(creator_id__in = creator_set)
+        if selection > 0:
+            _hdl = _hdl.filter(selector_id__isnull = False)
+        elif selection < 0:
+            _hdl = _hdl.filter(selector_id__isnull = True)
+        if status < 0:
+            _hdl = _hdl.filter(weight__lt = 0)
+        elif status > 0:
+            _hdl = _hdl.filter(weight__gte = 0)
         return _hdl.count() 
     
     @classmethod
-    def find(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, offset = None, count = None, sort_by = None):
+    def find(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, offset = None, count = None, sort_by = None, selection = 0, status = 0):
         _hdl = NoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
@@ -52,9 +60,20 @@ class Note(object):
             _hdl = _hdl.filter(created_time__lt = timestamp)
         if creator_set != None:
             _hdl = _hdl.filter(creator_id__in = creator_set)
+        if selection > 0:
+            _hdl = _hdl.filter(selector_id__isnull = False)
+        elif selection < 0:
+            _hdl = _hdl.filter(selector_id__isnull = True)
+        if status < 0:
+            _hdl = _hdl.filter(weight__lt = 0)
+        elif status > 0:
+            _hdl = _hdl.filter(weight__gte = 0)
+            
         
         if sort_by == 'poke':
             _hdl = _hdl.order_by('-poke_count')
+        elif sort_by == 'selection_post_time':
+            _hdl = _hdl.order_by('-post_time')
         else:
             _hdl = _hdl.order_by('-created_time')
             
@@ -189,6 +208,8 @@ class Note(object):
             _context["weight"] = self.note_obj.weight
             if len(self.note_obj.figure) > 0:
                 _context['figure'] = Image(self.note_obj.figure).getlink()
+            else:
+                _context['figure'] = None
             
             _context["selector_id"] = self.note_obj.selector_id
             _context["selected_time"] = self.note_obj.selected_time

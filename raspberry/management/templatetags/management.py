@@ -20,10 +20,11 @@ def display_category_row(category_context):
     } 
 register.inclusion_tag("category/partial/row.html")(display_category_row)
 
-def display_note_row(note_context):
+def display_note_row(context):
     return {
-        "note_context" : note_context['note'],
-        "entity_context" : note_context['entity'],
+        "note_context" : context['note'],
+        "entity_context" : context['entity'],
+        "creator_context" : context['creator'],
     } 
 register.inclusion_tag("note/partial/row.html")(display_note_row)
 
@@ -32,6 +33,10 @@ def count(value):
         return 0
     return len(value)
 register.filter(count)
+
+def format_time(value):
+    return value.isoformat()
+register.filter(format_time)
 
 def display_paginator(paginator):
     return {
