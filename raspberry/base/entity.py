@@ -226,6 +226,9 @@ class Entity(object):
         else:
             _note_info = note_info
         cache.set(_cache_key, _note_info, 864000)
+        
+        ## CLEAN_OLD_CACHE ## 
+        cache.delete("entity_note_context_list_%s"%self.entity_id)
 
         return _note_info
         
