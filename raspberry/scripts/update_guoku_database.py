@@ -196,4 +196,5 @@ conn_gk.commit()
 ########## INITIAL SELECTION DATA ########
 ########## REMOVE MARIA IN AVOCADO SETTING ########
 ########## REMOVE MARIA_WEB IN AVOCADO SETTING ########
+########## UPDATE NEW GUOKU ENTITY OLD CATEGORY DATA ########
 
