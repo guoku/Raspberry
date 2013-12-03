@@ -1,4 +1,5 @@
 {% extends "management_base.html" %}
+{% load common %}
 
 {% block content %}
     <div class="container">
@@ -47,6 +48,21 @@
                     {% endif %}
                 </div>
             </form>
+            {% if note_context.selector_id != None %}
+                <form class="well form-horizontal" action="{% url 'management.views.update_note_selection_info' entity_context.entity_id note_context.note_id %}" method="POST">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="post_time">日期:</label>
+                            <div class="controls vDateClass">
+                                <input type="text" id="post_time" name="post_time" value="{{ note_context.post_time|date_format }}" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">更新</button>
+                    </div>
+                </form>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

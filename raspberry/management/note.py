@@ -72,6 +72,20 @@ def note_list(request):
 
 
 @login_required
+def freeze_note(request, note_id):
+    if request.method == 'GET':
+        _note = Note(note_id)
+        _entity_id = _note.get_entity_id()
+        _entity = Entity(_entity_id)
+        _entity.update_note(
+            note_id = note_id,
+            weight = -1 
+        )
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+
+@login_required
 def edit_note(request, note_id):
     if request.method == 'GET':
         _note_context = Note(note_id).read()
@@ -97,6 +111,25 @@ def edit_note(request, note_id):
             weight = _weight
         )
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@login_required
+def update_note_selection_info(request, entity_id, note_id):
+    _post_time = request.POST.get("post_time")
+    _post_time = datetime.datetime.strptime(_post_time, "%Y-%m-%d %H:%M:%S")
+    _request_user_id = request.user.id
+    _selected_time = datetime.datetime.now()
+    
+    Entity(entity_id).update_note_selection_info(
+        note_id = note_id,
+        selector_id = _request_user_id,
+        selected_time = _selected_time,
+        post_time = _post_time
+    )
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    
+
+
+
 
 @login_required
 def post_selection_instant(request, entity_id, note_id):
