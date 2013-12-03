@@ -89,7 +89,10 @@ def edit_note(request, note_id):
         _note_text = request.POST.get("note", None)
         _weight = int(request.POST.get("weight", '0'))
         _note = Note(note_id)
-        _note.update(
+        _entity_id = _note.get_entity_id()
+        _entity = Entity(_entity_id)
+        _entity.update_note(
+            note_id = note_id,
             note_text = _note_text, 
             weight = _weight
         )

@@ -216,18 +216,13 @@ class Entity(object):
     def __reset_note_info_to_cache(self, note_info = None):
         _cache_key = 'entity_%s_note_info'%self.entity_id
         if note_info == None:
+            _note_id_list = Note.find(entity_id = self.entity_id, status = 1)
             _note_info = {
                 'total_score' : 0, 
                 'score_count' : 0, 
-                'note_count' : 0, 
-                'note_id_list' : [],
+                'note_id_list' : _note_id_list,
+                'note_count' : len(_note_id_list)
             }
-            for _note_obj in NoteModel.objects.filter(entity_id = self.entity_id):
-                _note_info['note_id_list'].append(_note_obj.id)
-                if _note_obj.score != 0:
-                    _note_info['total_score'] += _note_obj.score
-                    _note_info['score_count'] += 1
-                _note_info['note_count'] += 1
         else:
             _note_info = note_info
         cache.set(_cache_key, _note_info, 864000)
@@ -476,9 +471,6 @@ class Entity(object):
         if _note_info != None:
             _note_info['note_count'] += 1
             _note_info['note_id_list'].append(_note.note_id) 
-            if score != 0:
-                _note_info['total_score'] += score
-                _note_info['score_count'] += 1
             self.__reset_note_info_to_cache(_note_info)
 
         User(creator_id).update_user_entity_note_count(delta = 1)
@@ -505,9 +497,6 @@ class Entity(object):
             if _note.note_id in _note_info['note_id_list']:
                 _note_info['note_count'] -= 1
                 _note_info['note_id_list'].remove(_note.note_id)
-                if _note_context['score'] != 0:
-                    _note_inf['total_score'] -= _note_context['score']
-                    _note_inf['score_count'] -= 1 
             self.__reset_note_info_to_cache(_note_info)
         
         User(_note_context['creator_id']).update_user_entity_note_count(delta = -1)
@@ -563,21 +552,25 @@ class Entity(object):
             _doc.save()
 
 
-#    def update_note(self, note_id, score, note_text, image_data = None):
-#        _note_id = int(note_id)
-#        _score = int(score)
-#        _note = Note(_note_id)
-#        _note.update(
-#            note_text = note_text,
-#            image_data = image_data
-#        )
-#        return _note
+    def update_note(self, note_id, score = None, note_text = None, image_data = None, weight = None):
+        _note = Note(note_id)
+        _note.update(
+            score = score,
+            note_text = note_text,
+            image_data = image_data,
+            weight = weight
+        )
+
+        if weight != None:
+            if int(weight) < 0:
+                self.update_note_selection_info(
+                    note_id = note_id,
+                    selector_id = None,
+                    selected_time = None, 
+                    post_time = None
+                )
+            self.__reset_note_info_to_cache()
         
-    
-#    @staticmethod
-#    def get_user_entity_note_count(user_id):
-#        _user_id = int(user_id)
-#        return EntityNoteModel.objects.filter(creator_id = _user_id).count()
     
     @staticmethod
     def get_user_like_count(user_id):
@@ -594,30 +587,6 @@ class Entity(object):
         except:
             pass
         return None
-    
-#    @staticmethod
-#    def find_entity_note(entity_id = None, creator_id_set = None, timestamp = None, offset = None, count = None):
-#        _hdl = EntityNoteModel.objects.all()
-#        if entity_id != None:
-#            _hdl = _hdl.filter(entity_id = entity_id)
-#        if creator_id_set != None:
-#            _hdl = _hdl.filter(creator_id__in = creator_id_set)
-#        if timestamp != None:
-#            _hdl = _hdl.filter(created_time__lt = timestamp)
-#        
-#        if offset != None and count != None:
-#            _hdl = _hdl[offset : offset + count]
-#        _rslt = []
-#        for _obj in _hdl:
-#            _rslt.append({
-#                'entity_id' : _obj.entity_id,
-#                'note_id' : _obj.note_id,
-#                'score' : _obj.score,
-#                'creator_id' : _obj.creator_id
-#            })
-#        return _rslt 
-#        
-#    
     
     @staticmethod
     def read_entity_note_figure_data_by_store_key(store_key): 
