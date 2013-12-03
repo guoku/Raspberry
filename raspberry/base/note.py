@@ -368,10 +368,12 @@ class Note(object):
                 raise Note.CommentDoesNotExist(_comment_id)
                 
         self.comments[_comment_id].delete()
-        
+       
+
         _context = self.__load_note_context_from_cache()
-        if comment_id in _context['comment_id_list']:
-            _context['comment_id_list'].remove(comment_id)
+        if _comment_id in _context['comment_id_list']:
+            _context['comment_id_list'].remove(_comment_id)
+            _context['comment_count'] = len(_context['comment_id_list'])
             self.__reset_note_context_to_cache(_context)
          
     

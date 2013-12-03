@@ -218,10 +218,15 @@ def selection(request):
         else:
             _timestamp = datetime.datetime.now()
         _count = int(request.GET.get('count', '30'))
+        _root_cat_id = int(request.GET.get('rcat', '0'))
 
+        _hdl = NoteSelection.objects.filter(post_time__lt = _timestamp)
+        if _root_cat_id > 0 and _root_cat_id < 12:
+            _hdl = _hdl.filter(root_category_id = _root_cat_id)
+        
 
         _rslt = []
-        for _selection in Selection.objects.filter(post_time__lt = _timestamp).order_by('-post_time')[0:30]:
+        for _selection in _hdl.order_by('-post_time')[0:30]:
             if isinstance(_selection, NoteSelection):
                 _context = {
                     'type' : 'note_selection',
