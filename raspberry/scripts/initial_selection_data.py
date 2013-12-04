@@ -1,10 +1,37 @@
-import sys
-sys.path.append("..")
-from base.selection import NoteSelection 
-from mongoengine import connect
+from mongoengine import * 
 import datetime
+import sys
 import MySQLdb
 
+class Selection(Document):
+    selector_id = IntField(required = True) 
+    selected_time = DateTimeField(required = True)
+    post_time = DateTimeField(required = True)
+    meta = {
+        "indexes" : [ 
+            "selector_id", 
+            "post_time" 
+        ],
+        "allow_inheritance" : True
+    }
+
+class NoteSelection(Selection):
+    entity_id = IntField(required = True) 
+    note_id = IntField(required = True) 
+    root_category_id = IntField(required = True) 
+    neo_category_group_id = IntField(required = True) 
+    neo_category_id = IntField(required = True) 
+    category_id = IntField(required = True) 
+    meta = {
+        "indexes" : [ 
+            "entity_id", 
+            "note_id",
+            "root_category_id",
+            "neo_category_group_id",
+            "neo_category_id",
+            "category_id" 
+        ]
+    }
 
 _start_time = datetime.datetime.now()
 if len(sys.argv) >= 6:
@@ -46,7 +73,7 @@ for row in cur.fetchall():
     root_category_mapping[category_id] = pid
 
 NoteSelection.drop_collection()
-cur.execute("SELECT base_entity_note.note_id, base_entity_note.entity_id, base_entity_note.selector_id, base_entity_note.post_time, base_entity_note.selected_time, base_entity.category_id, base_entity.neo_category_id FROM base_entity_note INNER JOIN base_entity WHERE base_entity_note.selector_id is not NULL AND base_entity_note.entity_id=base_entity.id ORDER BY base_entity_note.post_time DESC LIMIT 20000;")
+cur.execute("SELECT base_note.id, base_note.entity_id, base_note.selector_id, base_note.post_time, base_note.selected_time, base_entity.category_id, base_entity.neo_category_id FROM base_note INNER JOIN base_entity WHERE base_note.selector_id is not NULL AND base_note.entity_id=base_entity.id ORDER BY base_note.post_time DESC limit 20000;")
 count = 0
 for row in cur.fetchall():
     try:

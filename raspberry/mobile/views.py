@@ -1,6 +1,6 @@
 # coding=utf8
 from base.message import *
-from base.selection import *
+from base.models import Selection, NoteSelection 
 import base.popularity as popularity 
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -15,7 +15,8 @@ import time
 
 
 def homepage(request):
-
+    
+    
     _session = request.GET.get('session', None)
     if _session != None:
         _request_user_id = Session_Key.objects.get_user_id(_session)

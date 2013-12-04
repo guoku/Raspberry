@@ -4,7 +4,7 @@ from models import Entity_Like as EntityLikeModel
 from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
 from models import Note as NoteModel
 from message import EntityLikeMessage, EntityNoteMessage, NoteSelectionMessage
-from selection import NoteSelection
+from models import NoteSelection
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Sum
