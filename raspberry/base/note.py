@@ -371,10 +371,11 @@ class Note(object):
        
 
         _context = self.__load_note_context_from_cache()
-        if _comment_id in _context['comment_id_list']:
-            _context['comment_id_list'].remove(_comment_id)
-            _context['comment_count'] = len(_context['comment_id_list'])
-            self.__reset_note_context_to_cache(_context)
+        if _context != None:
+            if _comment_id in _context['comment_id_list']:
+                _context['comment_id_list'].remove(_comment_id)
+                _context['comment_count'] = len(_context['comment_id_list'])
+                self.__reset_note_context_to_cache(_context)
          
     
     @staticmethod
