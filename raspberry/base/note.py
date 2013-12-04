@@ -77,7 +77,8 @@ class Note(object):
         else:
             _hdl = _hdl.order_by('-created_time')
             
-        
+
+
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
         

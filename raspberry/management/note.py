@@ -21,12 +21,17 @@ from utils.paginator import Paginator
 def note_list(request):
     _selection = request.GET.get("selection", None)
     _nav_filter = 'all'
+    _sort_by = None
+    _para = {}
     if _selection == 'only':
         _selection = 1 
         _nav_filter = 'selection_only'
+        _sort_by = 'selection_post_time' 
+        _para['selection'] = 'only' 
     elif _selection == 'none':
         _selection = -1 
         _nav_filter = 'selection_none'
+        _para['selection'] = 'none' 
     else:
         _selection = 0
     
@@ -34,17 +39,20 @@ def note_list(request):
     if _freezed == '1':
         _status = -1 
         _nav_filter = 'freezed'
+        _para['freeze'] = '1' 
     else:
         _status = 1
         
+    
     _page_num = int(request.GET.get("p", "1"))
     _note_count = Note.count(selection = _selection, status = _status)
-    _paginator = Paginator(_page_num, 30, _note_count)
+    _paginator = Paginator(_page_num, 30, _note_count, _para)
     _note_id_list = Note.find(
         offset = _paginator.offset,
         count = _paginator.count_in_one_page,
         selection = _selection,
-        status = _status
+        status = _status,
+        sort_by = _sort_by
     )
         
     _context_list = []
