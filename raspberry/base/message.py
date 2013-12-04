@@ -2,7 +2,7 @@
 from mongoengine import *
 import datetime
 
-class Message(Document):
+class NeoMessage(Document):
     user_id = IntField(required = True) 
     created_time = DateTimeField(required = True)
     meta = {
@@ -14,7 +14,7 @@ class Message(Document):
     }
 
 
-class UserFollowMessage(Message):
+class UserFollowMessage(NeoMessage):
     follower_id = IntField(required = True) 
     meta = {
         "indexes" : [ 
@@ -22,7 +22,7 @@ class UserFollowMessage(Message):
         ]
     }
 
-class NotePokeMessage(Message):
+class NotePokeMessage(NeoMessage):
     note_id = IntField(required = True)
     poker_id = IntField(required = True)
     meta = {
@@ -32,7 +32,7 @@ class NotePokeMessage(Message):
         ]
     }
 
-class NoteCommentMessage(Message):
+class NoteCommentMessage(NeoMessage):
     note_id = IntField(required = True)
     comment_id = IntField(required = True)
     comment_creator_id = IntField(required = True)
@@ -44,7 +44,7 @@ class NoteCommentMessage(Message):
         ]
     }
 
-class NoteCommentReplyMessage(Message):
+class NoteCommentReplyMessage(NeoMessage):
     note_id = IntField(required = True)
     comment_id = IntField(required = True)
     replying_user_id = IntField(required = True)
@@ -56,7 +56,7 @@ class NoteCommentReplyMessage(Message):
         ]
     }
 
-class EntityLikeMessage(Message):
+class EntityLikeMessage(NeoMessage):
     entity_id = IntField(required = True)
     liker_id  = IntField(required = True)
     meta = {
@@ -66,7 +66,7 @@ class EntityLikeMessage(Message):
         ]
     }
 
-class EntityNoteMessage(Message):
+class EntityNoteMessage(NeoMessage):
     entity_id = IntField(required = True)
     note_id = IntField(required = True)
     meta = {
@@ -76,7 +76,7 @@ class EntityNoteMessage(Message):
         ]
     }
 
-class NoteSelectionMessage(Message):
+class NoteSelectionMessage(NeoMessage):
     entity_id = IntField(required = True)
     note_id = IntField(required = True)
     meta = {
