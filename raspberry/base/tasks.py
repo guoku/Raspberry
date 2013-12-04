@@ -8,7 +8,7 @@ import popularity
 import datetime
 import time
 
-POPULAR_ENTITY_RUN_INTERVAL_SECS = getattr(settings, 'POPULAR_ENTITY_RUN_INTERVAL_SECS', 900)
+POPULAR_ENTITY_RUN_INTERVAL_SECS = getattr(settings, 'POPULAR_ENTITY_RUN_INTERVAL_SECS', 600)
 class CalPopularEntity(PeriodicTask):
     ignore_result = True
     time_limit = 600

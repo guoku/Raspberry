@@ -150,7 +150,7 @@ def add_note_for_entity(request, entity_id):
 def delete_entity_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
-        _entity_id = Note(note_id).get_entity_id()
+        _entity_id = MobileNote(note_id).get_entity_id()
         DeleteEntityNoteTask.delay(_entity_id, note_id)
         
         return SuccessJsonResponse({ 'delete_already' : 1 })
