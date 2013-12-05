@@ -59,11 +59,11 @@ def category_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id != None:
         _group_id = int(_group_id)
-    _status = request.GET.get("status", None)
+    _status = request.GET.get("status", "0")
     if _status != None:
         _status = int(_status)
     _category_groups = Category.allgroups()
-    _categories = Category.find(group_id = _group_id, status = _status)
+    _categories = Category.find(group_id = _group_id, status = _status, order_by = '-status')
     return render_to_response( 
         'category/list.html', 
         {

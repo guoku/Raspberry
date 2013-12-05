@@ -146,15 +146,28 @@ class Category(object):
         return _dict
     
     @staticmethod
-    def find(group_id = None, like_word = None, status = None):
+    def find(group_id = None, like_word = None, status = None, offset = None, count = None, order_by = None):
         _hdl = CategoryModel.objects.all()
         if group_id != None: 
             _hdl = _hdl.filter(group_id = group_id)
         if like_word != None: 
             _q = Q(title__icontains = like_word)
             _hdl = _hdl.filter(_q)
-        if status != None: 
-            _hdl = _hdl.filter(status = status)
+
+        if status == None:
+            pass
+        elif status > 0:
+            _hdl = _hdl.filter(status__gt = 0)
+        elif status == 0:
+            _hdl = _hdl.filter(status__gte = 0)
+        elif status < 0:
+            _hdl = _hdl.filter(status__lt = 0)
+            
+        if order_by == '-status':
+            _hdl = _hdl.order_by('-status')
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
         _rslt = []
         for _cat_obj in _hdl:
             _context = {
@@ -186,7 +199,7 @@ class Category(object):
         _rslt = Category.allgroups()
         for _group in _rslt: 
             _group['content'] = []
-            for _category_obj in CategoryModel.objects.filter(group_id = _group['group_id']):
+            for _category_obj in CategoryModel.objects.filter(group_id = _group['group_id'], status__gte = 0):
                 _context = {
                     'category_id' : _category_obj.id,
                     'category_title' : _category_obj.title,

@@ -24,16 +24,7 @@ def homepage(request):
     else:
         _request_user_id = None
     _rslt = {}
-    _rslt['discover'] = []
-    _rslt['discover'].append(Category(103).read())
-    _rslt['discover'].append(Category(4).read())
-    _rslt['discover'].append(Category(83).read())
-    _rslt['discover'].append(Category(12).read())
-    _rslt['discover'].append(Category(91).read())
-    _rslt['discover'].append(Category(65).read())
-    _rslt['discover'].append(Category(116).read())
-    _rslt['discover'].append(Category(85).read())
-    _rslt['discover'].append(Category(10).read())
+    _rslt['discover'] = Category.find(offset = 0, count = 8, order_by = '-status') 
     
     _rslt['banner'] = []
     for _banner_context in Banner.find():
