@@ -146,25 +146,35 @@ def register(request):
                 status = 409
             )
         
-        _session = Session_Key.objects.generate_session(
-            user_id = _user.user_id,
-            username = _user.get_username(),
-            email = _email,
-            api_key = _api_key
-        )
-        
-        _image_file = request.FILES.get('image', None)
-        if _image_file != None:
-            if hasattr(_image_file, 'chunks'):
-                _image_data = ''.join(chunk for chunk in _image_file.chunks())
-            else:
-                _image_data = _image_file.read()
-            _user.upload_avatar(_image_data)
-
-        _data = {
-            'user' : _user.read(_user.user_id),
-            'session' : _session.session_key
-        }
+        try:
+            _session = Session_Key.objects.generate_session(
+                user_id = _user.user_id,
+                username = _user.get_username(),
+                email = _email,
+                api_key = _api_key
+            )
+            
+            _image_file = request.FILES.get('image', None)
+            if _image_file != None:
+                if hasattr(_image_file, 'chunks'):
+                    _image_data = ''.join(chunk for chunk in _image_file.chunks())
+                else:
+                    _image_data = _image_file.read()
+                _user.upload_avatar(_image_data)
+    
+            _data = {
+                'user' : _user.read(_user.user_id),
+                'session' : _session.session_key
+            }
+        except Exception, e: 
+            _user.delete()
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'image',
+                    'message' : str(e),
+                },
+                status = 409
+            )
         return SuccessJsonResponse(_data)
 
 
