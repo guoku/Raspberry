@@ -23,7 +23,7 @@ class CalPopularEntity(PeriodicTask):
 class ArrangeSelection(PeriodicTask):
     ignore_result = True
     time_limit = 1800
-    run_every = crontab(minute = 0, hour = 1) #run at 2:30 am every day
+    run_every = crontab(minute = 0, hour = 12) #run at 2:30 am every day
     
     def run(self):
         _t_start = datetime.datetime.now() + datetime.timedelta(days = 1) 
@@ -35,5 +35,6 @@ class ArrangeSelection(PeriodicTask):
             start_time = datetime.datetime(_year, _month, _date, 8, 0, 0),
             interval_secs = 600 
         )
+        print "selection arranged...%s secs cost" % str(datetime.datetime.now() - t_start)
     
 
