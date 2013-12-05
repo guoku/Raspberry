@@ -197,4 +197,5 @@ conn_gk.commit()
 ########## REMOVE MARIA IN AVOCADO SETTING ########
 ########## REMOVE MARIA_WEB IN AVOCADO SETTING ########
 ########## UPDATE NEW GUOKU ENTITY OLD CATEGORY DATA ########
+########## RASPBERRY SYNCDB ########
 
