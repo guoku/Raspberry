@@ -218,6 +218,10 @@ class Note(object):
         else:
             _context = context
         cache.set(_cache_key, _context, 864000)
+        
+        
+        ## CLEAN_OLD_CACHE ## 
+        cache.delete("note_context_%s"%self.note_id)
 
         return _context
     
