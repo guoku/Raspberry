@@ -106,10 +106,12 @@ class Image(object):
 
     def getlink(self):
         self.__ensure_image_obj()
-        if self.image_obj.store_hash != None:
-            _link = settings.IMAGE_SERVER + 'img/' + self.image_obj.store_hash + '.jpg'
-        elif self.image_obj.origin_url != None:
-            _link = self.image_obj.origin_url
-        else:
-            _link = None
-        return _link
+        if self.image_obj != None:
+            if self.image_obj.store_hash != None:
+                _link = settings.IMAGE_SERVER + 'img/' + self.image_obj.store_hash + '.jpg'
+            elif self.image_obj.origin_url != None:
+                _link = self.image_obj.origin_url
+            else:
+                _link = None
+            return _link
+        return ''
