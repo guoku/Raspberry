@@ -352,7 +352,8 @@ class Note(object):
             _message = NoteCommentReplyMessage(
                 user_id = reply_to_user_id,
                 note_id = self.note_id, 
-                comment_id = reply_to_comment_id, 
+                comment_id = reply_to_comment_id,
+                replying_comment_id = _obj.id, 
                 replying_user_id = creator_id, 
                 created_time = datetime.datetime.now()
             )

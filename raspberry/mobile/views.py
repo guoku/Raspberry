@@ -124,7 +124,7 @@ def message(request):
                     'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content' : {
                         'note' : MobileNote(_message.note_id).read(_request_user_id),
-                        #'comment_id' : _message.comment_id,
+                        'comment' : MobileNote(_message.note_id).read_comment(_message.comment_id),
                         'comment_user' : MobileUser(_message.comment_creator_id).read(_request_user_id)
                     }
                 }
@@ -135,7 +135,8 @@ def message(request):
                     'created_time' : time.mktime(_message.created_time.timetuple()),
                     'content' : {
                         'note' : MobileNote(_message.note_id).read(_request_user_id),
-                        #'comment_id' : _message.comment_id,
+                        'comment' : MobileNote(_message.note_id).read_comment(_message.comment_id),
+                        'replying_comment' : MobileNote(_message.note_id).read_comment(_message.replying_comment_id),
                         'replying_user' : MobileUser(_message.replying_user_id).read(_request_user_id)
                     }
                 }

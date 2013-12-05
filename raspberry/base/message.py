@@ -47,11 +47,13 @@ class NoteCommentMessage(NeoMessage):
 class NoteCommentReplyMessage(NeoMessage):
     note_id = IntField(required = True)
     comment_id = IntField(required = True)
+    replying_comment_id = IntField(required = True)
     replying_user_id = IntField(required = True)
     meta = {
         "indexes" : [ 
             "note_id", 
             "comment_id", 
+            "replying_comment_id", 
             "replying_user_id", 
         ]
     }
