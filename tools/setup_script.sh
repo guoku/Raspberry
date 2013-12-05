@@ -23,7 +23,7 @@ sudo pip install mysql-python
 sudo pip install django==1.5.3
 sudo pip install django-celery==3.0.17
 sudo pip install django-haystack==1.2.6
-sudo pip install mongoengine
+sudo pip install mongoengine==0.8.4
 sudo pip install django-debug-toolbar
 sudo pip install pysolr
 sudo pip install django-mailgun
