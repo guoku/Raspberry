@@ -45,7 +45,7 @@ def new_entity(request):
         _cid = int(request.GET.get("cid", "1"))
         _category_list = Category.find()
         return render_to_response(
-            "entity/new.html", 
+            'entity/new.html', 
             {
                 'active_division' : 'entity',
                 'selected_category_id' : _cid,

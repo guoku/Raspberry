@@ -29,6 +29,10 @@ urlpatterns = patterns('management.views',
     (r'^note/(?P<note_id>\w+)/edit/$', 'edit_note'),
     (r'^note/(?P<note_id>\w+)/freeze/$', 'freeze_note'),
     (r'^report/$', 'report_list'),
+    (r'^banner/$', 'banner_list'),
+    (r'^banner/new/$', 'new_banner'),
+    (r'^banner/create/$', 'create_banner'),
+    (r'^banner/(?P<banner_id>\w+)/delete/$', 'delete_banner'),
     (r'^taobao/item/sync/$', 'sync_taobao_item'),
 )
 

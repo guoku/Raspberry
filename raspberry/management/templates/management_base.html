@@ -25,6 +25,8 @@
                             <li class="divider-vertical"></li>
                             <li{% if active_division == "note" %} class="active"{%endif%}><a href="{% url 'management.views.note_list' %}">Note</a></li>
                             <li class="divider-vertical"></li>
+                            <li{% if active_division == "banner" %} class="active"{%endif%}><a href="{% url 'management.views.banner_list' %}">Banner</a></li>
+                            <li class="divider-vertical"></li>
                             <li{% if active_division == "report" %} class="active"{%endif%}><a href="{% url 'management.views.report_list' %}">Report</a></li>
                             <li class="divider-vertical"></li>
                         </ul>

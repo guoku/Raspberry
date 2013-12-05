@@ -73,6 +73,17 @@ class Taobao_Item_Category_Mapping(models.Model):
     guoku_category = models.ForeignKey(Category)
  
 
+class Banner(models.Model):
+    content_type = models.CharField(max_length = 64, null = False)
+    key = models.CharField(max_length = 1024, null = False)
+    image = models.CharField(max_length = 64, null = False)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    updated_time = models.DateTimeField(auto_now = True, db_index = True)
+    weight = models.IntegerField(default = 0, db_index = True)
+    class Meta:
+        ordering = ['-created_time']
+
+
 class Entity(models.Model):
     entity_hash = models.CharField(max_length = 32, unique = True, db_index = True)
     creator_id = models.IntegerField(default = None, null = True, db_index = True)

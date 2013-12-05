@@ -39,10 +39,10 @@ class Image(object):
             domain = settings.MOGILEFS_DOMAIN, 
             trackers = settings.MOGILEFS_TRACKERS 
         )
-        _square_data = cls.crop_square(image_data)
         _fp = _datastore.new_file('img/' + store_hash + '.jpg')
-        _fp.write(_square_data)
+        _fp.write(image_data)
         _fp.close()
+        _square_data = cls.crop_square(image_data)
         
         for _size in _image_sizes:
             _data_resized = cls.resize(_square_data, _size, _size)
