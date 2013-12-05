@@ -35,6 +35,6 @@ class ArrangeSelection(PeriodicTask):
             start_time = datetime.datetime(_year, _month, _date, 8, 0, 0),
             interval_secs = 600 
         )
-        print "selection arranged...%s secs cost" % str(datetime.datetime.now() - t_start)
+        print "selection arranged...%s secs cost" % str(datetime.datetime.now() - _t_start)
     
 
