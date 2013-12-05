@@ -257,15 +257,16 @@ class Note(object):
                     _context['poke_count'] = len(_context['poker_id_list'])
                     _context = self.__reset_note_context_to_cache(_context)
             User(user_id).update_user_entity_note_poke_count(delta = 1)
-            
+           
             self.__ensure_note_obj()
-            _message = NotePokeMessage(
-                user_id = self.note_obj.creator_id,
-                note_id = self.note_id, 
-                poker_id = user_id, 
-                created_time = datetime.datetime.now()
-            )
-            _message.save()
+            if self.note_obj.creator_id != user_id:
+                _message = NotePokeMessage(
+                    user_id = self.note_obj.creator_id,
+                    note_id = self.note_id, 
+                    poker_id = user_id, 
+                    created_time = datetime.datetime.now()
+                )
+                _message.save()
             return True
         except: 
             pass

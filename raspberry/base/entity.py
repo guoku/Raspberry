@@ -415,7 +415,7 @@ class Entity(object):
             User(_user_id).update_user_like_count(delta = 1)
             
             _basic_info = self.__read_basic_info()
-            if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None:
+            if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None and _basic_info['creator_id'] != user_id:
                 if EntityLikeMessage.objects.filter(user_id = _basic_info['creator_id'], entity_id = self.entity_id, liker_id = _user_id).count() == 0: 
                     _message = EntityLikeMessage(
                         user_id = _basic_info['creator_id'],
@@ -479,13 +479,15 @@ class Entity(object):
         User(creator_id).update_user_entity_note_count(delta = 1)
                 
         _basic_info = self.__read_basic_info()
-        _message = EntityNoteMessage(
-            user_id = _basic_info['creator_id'],
-            entity_id = self.entity_id,
-            note_id = _note.note_id, 
-            created_time = datetime.datetime.now()
-        )
-        _message.save()
+
+        if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None and _basic_info['creator_id'] != int(creator_id):
+            _message = EntityNoteMessage(
+                user_id = _basic_info['creator_id'],
+                entity_id = self.entity_id,
+                note_id = _note.note_id, 
+                created_time = datetime.datetime.now()
+            )
+            _message.save()
         
         return _note
     
