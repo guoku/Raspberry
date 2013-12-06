@@ -173,36 +173,39 @@ class Entity(object):
         _basic_info = cache.get(_cache_key)
         return _basic_info
         
-    def __reset_basic_info_to_cache(self):
+    def __reset_basic_info_to_cache(self, basic_info = None):
         _cache_key = 'entity_%s_basic_info'%self.entity_id
-        self.__ensure_entity_obj()
-        _basic_info = {}
-        _basic_info['entity_id'] = self.entity_obj.id
-        _basic_info['brand'] = self.entity_obj.brand 
-        _basic_info['title'] = self.entity_obj.title
-        _basic_info['intro'] = self.entity_obj.intro
-        _basic_info['price'] = self.entity_obj.price
-        _basic_info['creator_id'] = self.entity_obj.creator_id
-        _basic_info["entity_hash"] = self.entity_obj.entity_hash
-        _basic_info["old_category_id"] = self.entity_obj.category_id
-        _basic_info["category_id"] = self.entity_obj.neo_category_id
-        _basic_info['like_count'] = self.entity_obj.like_count 
-        _basic_info["created_time"] = self.entity_obj.created_time
-        _basic_info["updated_time"] = self.entity_obj.updated_time
-        _basic_info["weight"] = self.entity_obj.weight
-        
-        _basic_info['chief_image'] = {
-            'id' : self.entity_obj.chief_image,
-            'url' : Image(self.entity_obj.chief_image).getlink(),
-        }
-        
-        _basic_info['detail_images'] = []
-        for _image_id in self.entity_obj.detail_images.split('#'):
-            if len(_image_id) > 0:
-                _basic_info['detail_images'].append({
-                    'id' : _image_id,
-                    'url' : Image(_image_id).getlink()
-                })
+        if basic_info == None:
+            self.__ensure_entity_obj()
+            _basic_info = {}
+            _basic_info['entity_id'] = self.entity_obj.id
+            _basic_info['brand'] = self.entity_obj.brand 
+            _basic_info['title'] = self.entity_obj.title
+            _basic_info['intro'] = self.entity_obj.intro
+            _basic_info['price'] = self.entity_obj.price
+            _basic_info['creator_id'] = self.entity_obj.creator_id
+            _basic_info["entity_hash"] = self.entity_obj.entity_hash
+            _basic_info["old_category_id"] = self.entity_obj.category_id
+            _basic_info["category_id"] = self.entity_obj.neo_category_id
+            _basic_info['like_count'] = self.entity_obj.like_count 
+            _basic_info["created_time"] = self.entity_obj.created_time
+            _basic_info["updated_time"] = self.entity_obj.updated_time
+            _basic_info["weight"] = self.entity_obj.weight
+            
+            _basic_info['chief_image'] = {
+                'id' : self.entity_obj.chief_image,
+                'url' : Image(self.entity_obj.chief_image).getlink(),
+            }
+            
+            _basic_info['detail_images'] = []
+            for _image_id in self.entity_obj.detail_images.split('#'):
+                if len(_image_id) > 0:
+                    _basic_info['detail_images'].append({
+                        'id' : _image_id,
+                        'url' : Image(_image_id).getlink()
+                    })
+        else:
+            _basic_info = basic_info
         cache.set(_cache_key, _basic_info, 864000)
         
         return _basic_info
@@ -402,6 +405,12 @@ class Entity(object):
         _like_count = EntityLikeModel.objects.filter(entity_id = self.entity_id).count()
         self.entity_obj.like_count = _like_count
         self.entity_obj.save()
+        
+        _basic_info = self.__load_basic_info_from_cache()
+        if _basic_info != None:
+            _basic_info['like_count'] = _like_count
+            self.__reset_basic_info_to_cache(_basic_info)
+
 
 
     def like(self, user_id):
