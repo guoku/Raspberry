@@ -11,7 +11,7 @@ import datetime
 import time
 import json
 
-from base.category import Category
+from base.category import Category, Category_Group
 
 @login_required
 def create_category_group(request):
