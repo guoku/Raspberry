@@ -57,15 +57,18 @@ def note_list(request):
         
     _context_list = []
     for _note_id in _note_id_list:
-        _note = Note(_note_id)
-        _note_context = _note.read()
-        _entity_id = _note_context['entity_id'] 
-        _entity_context = Entity(_entity_id).read()
-        _context_list.append({
-            'entity' : _entity_context,
-            'note' : _note_context,
-            'creator' : User(_note_context['creator_id']).read() 
-        })
+        try:
+            _note = Note(_note_id)
+            _note_context = _note.read()
+            _entity_id = _note_context['entity_id']
+            _entity_context = Entity(_entity_id).read()
+            _context_list.append({
+                'entity' : _entity_context,
+                'note' : _note_context,
+                'creator' : User(_note_context['creator_id']).read() 
+            })
+        except Exception, e:
+            pass
         
     return render_to_response( 
         'note/list.html', 
