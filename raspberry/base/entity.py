@@ -542,6 +542,10 @@ class Entity(object):
                 )
                 _doc.save()
                 
+                if self.entity_obj.weight < 0:
+                    self.update(weight = 0)
+               
+
                 _note_context = _note.read()
                 _message = NoteSelectionMessage(
                     user_id = _note_context['creator_id'], 
