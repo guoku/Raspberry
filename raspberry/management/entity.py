@@ -289,17 +289,20 @@ def entity_list(request):
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
         for _entity_id in _entity_id_list:
-            _entity = Entity(_entity_id)
-            _entity_context = _entity.read()
-            _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
-            if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
-                _item_context = Item(_entity_context['item_id_list'][0]).read()
-                _entity_context['buy_link'] = _item_context['buy_link'] 
-                _entity_context['taobao_title'] = _item_context['title'] 
-            else:
-                _entity_context['buy_link'] = ''
-                _entity_context['taobao_title'] = ''
-            _entity_context_list.append(_entity_context)
+            try:
+                _entity = Entity(_entity_id)
+                _entity_context = _entity.read()
+                _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
+                if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
+                    _item_context = Item(_entity_context['item_id_list'][0]).read()
+                    _entity_context['buy_link'] = _item_context['buy_link'] 
+                    _entity_context['taobao_title'] = _item_context['title'] 
+                else:
+                    _entity_context['buy_link'] = ''
+                    _entity_context['taobao_title'] = ''
+                _entity_context_list.append(_entity_context)
+            except Exception, e:
+                pass
         
         return render_to_response( 
             'entity/list.html', 

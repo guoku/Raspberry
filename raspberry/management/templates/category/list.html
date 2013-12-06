@@ -11,6 +11,9 @@
                         <a href="{% url 'management.views.edit_category_group' selected_group_id %}" target=_blank>
                             编辑本分类组  
                         </a>
+                        <a href="{% url 'management.views.create_category' %}?gid={{ selected_group_id }}" target=_blank>
+                            添加分类到本分类组
+                        </a>
                     </li>
                 </ul>
             </div>
