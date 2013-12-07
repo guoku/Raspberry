@@ -34,6 +34,8 @@ urlpatterns = patterns('management.views',
     (r'^banner/create/$', 'create_banner'),
     (r'^banner/(?P<banner_id>\w+)/delete/$', 'delete_banner'),
     (r'^taobao/item/sync/$', 'sync_taobao_item'),
+    (r'^entity/without/title/sync/$', 'sync_entity_without_title'),
+    (r'^update/entity/(?P<entity_id>\w+)/title/sync/$', 'sync_update_entity_title'),
 )
 
 
