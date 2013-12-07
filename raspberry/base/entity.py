@@ -534,6 +534,10 @@ class Entity(object):
             selected_time = selected_time,
             post_time = post_time
         )
+        
+        ## CLEAN_OLD_CACHE ## 
+        cache.delete("entity_key_note_id_%s"%self.entity_id)
+        cache.delete("note_context_%s"%note_id)
 
         if _selector_id == None:
             for _doc in NoteSelection.objects.filter(note_id = _note_id):
