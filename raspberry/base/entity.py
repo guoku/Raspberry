@@ -207,6 +207,8 @@ class Entity(object):
         else:
             _basic_info = basic_info
         cache.set(_cache_key, _basic_info, 864000)
+        ## CLEAN_OLD_CACHE ## 
+        cache.delete("entity_context_%s"%self.entity_id)
         
         return _basic_info
         
