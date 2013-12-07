@@ -4,7 +4,7 @@
 <tr {% if note_context.weight < 0 %}class="info"{% else %}class="success"{% endif %}>
     <td width="60"><p class="text-info">{{ note_context.note_id }}</p></td>
     <td width="90">
-        <a href="{{ entity_context.buy_link }}" target=_blank>
+        <a href="http://www.guoku.com/detail/{{ entity_context.entity_hash }}/" target="_blank">
             <img class="img-polaroid" src="{{ entity_context.chief_image.url }}" style="max-height:80px;max-width:80px;">
         </a>
     </td>

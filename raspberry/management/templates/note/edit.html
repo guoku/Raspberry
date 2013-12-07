@@ -11,14 +11,16 @@
                 <fieldset>
                     <div class="control-group">
                         <div class="controls">
-                            <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 100px;max-height: 100px">
+                            <a href="http://www.guoku.com/detail/{{ entity_context.entity_hash }}/" target="_blank">
+                                <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 100px;max-height: 100px">
+                            </a>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="entity_id">entity_id:</label>
                         <div class="controls">
                             <input class="input-xxlarge" type="text" id="entity_id" name="entity_id" value="{{ entity_context.entity_id }}" disabled/>
-                            <a href="http://www.guoku.com/detail/{{ entity_context.entity_hash }}/" target="_blank">
+                            <a href="{% url 'management.views.edit_entity' entity_context.entity_id %}" target="_blank">
                                 去看看 > 
                             </a>
                         </div>
@@ -55,7 +57,7 @@
                 <form class="well form-horizontal" action="{% url 'management.views.update_note_selection_info' entity_context.entity_id note_context.note_id %}" method="POST">
                     <fieldset>
                         <div class="control-group">
-                            <label class="control-label" for="post_time">日期:</label>
+                            <label class="control-label" for="post_time">精选发布时间:</label>
                             <div class="controls vDateClass">
                                 <input type="text" id="post_time" name="post_time" value="{{ note_context.post_time|date_format }}" />
                             </div>

@@ -17,7 +17,7 @@ class Banner(object):
         self.banner_id = int(banner_id)
    
     def read(self):
-        _obj = BannerModel.objects.get(pk = self.banner_id)
+        _obj = BannerModel.objects.get(pk = self.banner_id).order_by('-weight')
         return {
             'banner_id' : _obj.id,
             'image' : Image(_obj.image).getlink(),
@@ -52,7 +52,7 @@ class Banner(object):
     @classmethod
     def find(cls, offset = None, count = None):
         _hdl = BannerModel.objects.all()
-        _hdl = _hdl.order_by('-created_time')
+        _hdl = _hdl.order_by('-weight')
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]    
         _banner_context_list = []

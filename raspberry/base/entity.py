@@ -207,6 +207,8 @@ class Entity(object):
         else:
             _basic_info = basic_info
         cache.set(_cache_key, _basic_info, 864000)
+        ## CLEAN_OLD_CACHE ## 
+        cache.delete("entity_context_%s"%self.entity_id)
         
         return _basic_info
         
@@ -302,8 +304,10 @@ class Entity(object):
             _basic_info = self.__reset_basic_info_to_cache()
             
     @classmethod
-    def find(cls, category_id = None, like_word = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
+    def find(cls, root_old_category_id = None, category_id = None, like_word = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
         _hdl = EntityModel.objects.all()
+        if root_old_category_id != None and root_old_category_id >= 1 and root_old_category_id <= 11:
+            _hdl = _hdl.filter(category__pid = root_old_category_id)
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
         if like_word != None: 
