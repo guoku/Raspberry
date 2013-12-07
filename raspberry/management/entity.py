@@ -467,3 +467,19 @@ def merge_entity(request, entity_id):
         _entity = Entity(entity_id)
         _entity.merge(_target_entity_id)
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
+
+@login_required
+def get_all_categories(request):
+    result = {}
+    groups_and_categories = Category.all_group_with_full_category()
+
+    for g_a_c in groups_and_categories:
+        categories = []
+        for cat in g_a_c['content']:
+            category = {}
+            category['category_title'] = cat['category_title']
+            category['category_id'] = cat['category_id']
+            categories.append(category)
+        result[g_a_c['title']] = categories
+
+    return HttpResponse(json.dumps(result))
