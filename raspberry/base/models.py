@@ -169,6 +169,32 @@ class Note_Comment(models.Model):
     class Meta:
         ordering = ['-created_time']
 
+class Tag(models.Model):
+    tag = models.CharField(max_length = 128, null = False, unique = True, db_index = True)
+    tag_hash = models.CharField(max_length = 32, unique = True, db_index = True)
+    status = models.IntegerField(default = 0, db_index = True)
+    creator = models.ForeignKey(User)
+    created_time = models.DateTimeField(auto_now_add = True, db_index=True)
+    updated_time = models.DateTimeField(auto_now = True, db_index = True)
+
+    class Meta:
+        ordering = ['-created_time']
+
+class Entity_Tag(models.Model):
+    entity = models.ForeignKey(Entity)
+    user = models.ForeignKey(User) 
+    tag = models.ForeignKey(Tag)
+    count = models.IntegerField(default = 0)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    last_tagged_time = models.DateTimeField(db_index = True)
+    
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('entity', 'user', 'tag')
+
+    def __unicode__(self):
+        return self.tag
+
 class User_Follow(models.Model):
     follower = models.ForeignKey(User, related_name = "followings")
     followee = models.ForeignKey(User, related_name = "fans")
