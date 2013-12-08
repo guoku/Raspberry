@@ -537,6 +537,7 @@ class Entity(object):
         
         ## CLEAN_OLD_CACHE ## 
         cache.delete("entity_key_note_id_%s"%self.entity_id)
+        cache.delete("entity_note_context_list_%s"%self.entity_id)
         cache.delete("note_context_%s"%note_id)
 
         if _selector_id == None:
