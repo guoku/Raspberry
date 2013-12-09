@@ -3,6 +3,7 @@ from models import Tag as TagModel
 from models import Entity_Tag as EntityTagModel
 from django.conf import settings
 from django.core.cache import cache
+from django.db.models import Count 
 
 import datetime
 import urllib
@@ -15,15 +16,39 @@ class Tag(object):
     
 
     @classmethod
-    def user_tags(cls, user_id): 
+    def user_tag_stat(cls, user_id):
+        _user_id = int(user_id)
+        _tag_id_mapping = {}
+        _user_tags = []
         
-        for _tag_obj in EntityTagModel.objects.filter(creator_id = user_id):
-        
-        
-                'key' : _obj.key,
-                'content_type' : _obj.content_type,
-                'weight' : _obj.weight
+        for _data in EntityTagModel.objects.filter(user_id = _user_id).values('tag').annotate(entity_count = Count('entity')).order_by('-created_time'):
+            _user_tags.append({
+                'tag' : TagModel.objects.get(pk = _data['tag']).tag,
+                'tag_id' : _data['tag'],
+                'entity_count' : _data['entity_count'],
             })
 
-        return _banner_context_list
+#        for _tag_obj in EntityTagModel.objects.filter(user_id = user_id):
+#            _entity_id = _tag_obj.entity_id
+#            if not _tag_obj.tag_id in _tag_id_mapping:
+#                _tag = _tag_obj.tag.tag
+#                _tag_id_mapping[_tag_obj.tag_id] = len(_user_tags)
+#                _user_tags.append({
+#                    'tag_id' : _tag_obj.tag_id,
+#                    'tag' : _tag,
+#                    'entity_id_list' : []
+#                })
+#            _user_tags[_tag_id_mapping[_tag_obj.tag_id]]['entity_id_list'].append(_entity_id)
+        
+        return _user_tags 
+                
+    
+    @classmethod
+    def find_user_tag_entity(cls, user_id, tag_id):
+        _user_id = int(user_id)
+        _tag_id = int(tag_id)
+        _entity_id_list = map(lambda x: x.entity_id, EntityTagModel.objects.filter(user_id = _user_id, tag_id = tag_id).order_by('-created_time'))
+        print _entity_id_list 
+       
+        return _entity_id_list
     

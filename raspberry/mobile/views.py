@@ -17,6 +17,7 @@ import time
 
 def homepage(request):
     
+    Tag.user_tags(79761)
     
     _session = request.GET.get('session', None)
     if _session != None:
