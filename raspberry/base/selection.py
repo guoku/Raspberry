@@ -51,5 +51,5 @@ def arrange(select_count, start_time, interval_secs):
             post_time = _post_time
         )
         _post_time += datetime.timedelta(seconds = interval_secs)
-        print "[%s:%s] arraged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _post_time)
+        print "[%s:%s] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _post_time)
 
