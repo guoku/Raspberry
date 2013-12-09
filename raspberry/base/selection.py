@@ -50,6 +50,7 @@ def arrange(select_count, start_time, interval_secs):
             selected_time = _selection['selected_time'],
             post_time = _post_time
         )
+        print "[%s:%s] [%d] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _selection['root_category_id'], _post_time)
         _post_time += datetime.timedelta(seconds = interval_secs)
-        print "[%s:%s] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _post_time)
+    print "%d selection arranged in total"%len(_selected)
 
