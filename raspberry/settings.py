@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_11_21',
+        'NAME': 'guoku_12_09',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
@@ -69,7 +69,7 @@ BROKER_HOST = "localhost"
 BROKER_PORT = 5672
 BROKER_USER = "guest"
 BROKER_PASSWORD = "guest"
-BROKER_VHOST = "/guoku"
+BROKER_VHOST = "/"
 BROKER_POOL_LIMIT = 10
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.

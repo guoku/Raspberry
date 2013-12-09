@@ -6,7 +6,7 @@ import datetime
 
 def _available_for_selection(selected, cand):
     i = len(selected) - 1
-    while (i >= len(selected) - 3) and (i >= 0):
+    while (i > len(selected) - 3) and (i >= 0):
         if cand['root_category_id'] == selected[i]['root_category_id']:
             return False
         i -= 1
@@ -50,6 +50,7 @@ def arrange(select_count, start_time, interval_secs):
             selected_time = _selection['selected_time'],
             post_time = _post_time
         )
+        print "[%s:%s] [%d] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _selection['root_category_id'], _post_time)
         _post_time += datetime.timedelta(seconds = interval_secs)
-        print "[%s:%s] arraged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _post_time)
+    print "%d selection arranged in total"%len(_selected)
 
