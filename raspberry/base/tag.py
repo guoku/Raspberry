@@ -44,11 +44,10 @@ class Tag(object):
                 
     
     @classmethod
-    def find_user_tag_entity(cls, user_id, tag_id):
+    def find_user_tag_entity(cls, user_id, tag):
         _user_id = int(user_id)
-        _tag_id = int(tag_id)
-        _entity_id_list = map(lambda x: x.entity_id, EntityTagModel.objects.filter(user_id = _user_id, tag_id = tag_id).order_by('-created_time'))
-        print _entity_id_list 
+        _tag_id = TagModel.objects.get(tag = tag).id 
+        _entity_id_list = map(lambda x: x.entity_id, EntityTagModel.objects.filter(user_id = _user_id, tag_id = _tag_id).order_by('-created_time'))
        
         return _entity_id_list
     

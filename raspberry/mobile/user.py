@@ -192,7 +192,7 @@ def user_tag_list(request, user_id):
     return SuccessJsonResponse(_rslt)
 
 
-def user_tag_entity(request, user_id, tag_id):
+def user_tag_entity(request, user_id, tag):
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -200,7 +200,7 @@ def user_tag_entity(request, user_id, tag_id):
         else:
             _request_user_id = None
         
-        _entity_id_list = Tag.find_user_tag_entity(user_id, tag_id)
+        _entity_id_list = Tag.find_user_tag_entity(user_id, tag)
         _rslt = [] 
         for _entity_id in _entity_id_list: 
             _rslt.append(MobileEntity(_entity_id).read(_request_user_id))
