@@ -6,7 +6,7 @@ import datetime
 
 def _available_for_selection(selected, cand):
     i = len(selected) - 1
-    while (i >= len(selected) - 3) and (i >= 0):
+    while (i > len(selected) - 3) and (i >= 0):
         if cand['root_category_id'] == selected[i]['root_category_id']:
             return False
         i -= 1
