@@ -139,6 +139,10 @@ class Note(object):
             _context['selector_id'] = _selector_id 
             _context['selected_time'] = selected_time 
             _context['post_time'] = post_time 
+            if _selector_id != None:
+                _context["is_selected"] = 1
+            else:
+                _context["is_selected"] = 0 
             self.__reset_note_context_to_cache(_context)
 
 
