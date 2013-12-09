@@ -4,13 +4,16 @@
 
     var category_group = $("#category_group");
     var category = $("#category_id");
+    var init_category = category.attr("data-init");
+
     var all_categories = [];
 
     $.post(url, function (data) {
         groups_and_categories = $.parseJSON(data);
 
         for (var group_title in groups_and_categories) {
-            $("<option>" + group_title + "</option>").val(group_title).appendTo(category_group);
+            var group_option = $("<option>" + group_title + "</option>");
+            group_option.val(group_title).appendTo(category_group);
 
             var categories = groups_and_categories[group_title];
 
@@ -23,7 +26,13 @@
                     "id": category_id
                 });
 
-                $("<option >" + category_title + "</option>").val(category_id).appendTo(category);
+                var cat_option = $("<option >" + category_title + "</option>");
+                cat_option.val(category_id).appendTo(category);
+
+                if (init_category == category_id) {
+                    group_option.attr("selected", "selected");
+                    cat_option.attr("selected", "selected");
+                }
             }
         }
     });
