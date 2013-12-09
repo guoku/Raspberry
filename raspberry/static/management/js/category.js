@@ -1,38 +1,50 @@
-;(function ($) {
+;
+(function ($) {
     var url = "/management/entity/categories";
     var groups_and_categories;
-
     var category_group = $("#category_group");
     var category = $("#category_id");
-    var init_category = category.attr("data-init");
 
-    var all_categories = [];
-
+    // initial groups and categories
     $.post(url, function (data) {
         groups_and_categories = $.parseJSON(data);
+        var init_category = category.attr("data-init");
+        var init_group;
+        var group_titles = [];
 
-        for (var group_title in groups_and_categories) {
+        for (var title in groups_and_categories) {
+            group_titles.push(title);
+
+            var categories = groups_and_categories[title];
+            for (var i = 0; i < categories.length; i++) {
+                if (categories[i]["category_id"] == init_category) {
+                    init_group = title;
+                }
+            }
+        }
+        group_titles.sort();
+
+        for (var j = 0; j < group_titles.length; j++) {
+            var group_title = group_titles[j];
+
             var group_option = $("<option>" + group_title + "</option>");
             group_option.val(group_title).appendTo(category_group);
+            
+            if (group_title == init_group) {
+                group_option.attr("selected", "selected");
+            }
+        }
 
-            var categories = groups_and_categories[group_title];
+        var categories = groups_and_categories[init_group];
+        for (var i = 0; i < categories.length; i++) {
+            var category_title = categories[i]["category_title"];
+            var category_id = categories[i]["category_id"];
 
-            for (var i = 0; i < categories.length; i++) {
-                var category_title = categories[i]["category_title"];
-                var category_id = categories[i]["category_id"];
+            var cat_option = $("<option >" + category_title + "</option>");
+            cat_option.val(category_id).appendTo(category);
 
-                all_categories.push({
-                    "title": category_title,
-                    "id": category_id
-                });
-
-                var cat_option = $("<option >" + category_title + "</option>");
-                cat_option.val(category_id).appendTo(category);
-
-                if (init_category == category_id) {
-                    group_option.attr("selected", "selected");
-                    cat_option.attr("selected", "selected");
-                }
+            if (init_category == category_id) {
+                cat_option.attr("selected", "selected");
             }
         }
     });
@@ -43,21 +55,13 @@
         });
 
         var group_title = category_group.val();
+        var categories = groups_and_categories[group_title];
 
-        if (group_title === "all") {
-            for (var i = 0; i < all_categories.length; i++) {
-                $("<option >" + all_categories[i].title + "</option>").val(all_categories[i].id).appendTo(category);
-            }
+        for (var j = 0; j < categories.length; j++) {
+            var category_title = categories[j]["category_title"];
+            var category_id = categories[j]["category_id"];
 
-        } else {
-            var categories = groups_and_categories[group_title];
-
-            for (var j = 0; j < categories.length; j++) {
-                var category_title = categories[j]["category_title"];
-                var category_id = categories[j]["category_id"];
-
-                $("<option >" + category_title + "</option>").val(category_id).appendTo(category);
-            }
+            $("<option >" + category_title + "</option>").val(category_id).appendTo(category);
         }
     });
 
