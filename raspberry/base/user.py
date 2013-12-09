@@ -529,6 +529,11 @@ class User(object):
                     self.__reset_following_user_id_list_to_cache(user_id_list = _list)
 
             User(_followee_id).add_fan(self.user_id)
+        
+        
+            ## CLEAN_OLD_CACHE ## 
+            cache.delete("user_fan_id_list_%s"%followee_id)
+            cache.delete("user_following_id_list_%s"%self.user_id)
             
             _message = UserFollowMessage(
                 user_id = followee_id,
@@ -559,6 +564,10 @@ class User(object):
                     self.__reset_following_user_id_list_to_cache(user_id_list = _list)
             
             User(_followee_id).remove_fan(self.user_id)
+             
+            ## CLEAN_OLD_CACHE ## 
+            cache.delete("user_fan_id_list_%s"%followee_id)
+            cache.delete("user_following_id_list_%s"%self.user_id)
             
             return True
         except:
