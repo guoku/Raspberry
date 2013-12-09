@@ -3,8 +3,10 @@ from django.contrib.auth.models import User as AuthUser
 from django.contrib.auth import authenticate
 from django.conf import settings
 from django.core.cache import cache
+from django.db.models import Count 
 from models import Avatar as AvatarModel 
 from models import Entity_Like as EntityLikeModel
+from models import Entity_Tag as EntityTagModel
 from models import Note as NoteModel
 from models import Note_Poke as NotePokeModel
 from models import Sina_Token as SinaTokenModel 
@@ -425,6 +427,7 @@ class User(object):
             _stat_info['following_count'] = UserFollowModel.objects.filter(follower_id = self.user_id).count()
             _stat_info['fan_count'] = UserFollowModel.objects.filter(followee_id = self.user_id).count()
             _stat_info['like_count'] = EntityLikeModel.objects.filter(user_id = self.user_id).count()
+            _stat_info['tag_count'] = EntityTagModel.objects.filter(user_id = self.user_id).values('tag').annotate(entity_count = Count('entity')).count()
             _stat_info['entity_note_count'] = NoteModel.objects.filter(creator_id = self.user_id).count()
             _stat_info['entity_note_poke_count'] = NotePokeModel.objects.filter(note__creator_id = self.user_id).count()
         

@@ -21,7 +21,8 @@ class Tag(object):
         _tag_id_mapping = {}
         _user_tags = []
         
-        for _data in EntityTagModel.objects.filter(user_id = _user_id).values('tag').annotate(entity_count = Count('entity')).order_by('-created_time'):
+        
+        for _data in EntityTagModel.objects.filter(user_id = _user_id).values('tag').annotate(entity_count = Count('entity')).order_by('-entity_count'):
             _user_tags.append({
                 'tag' : TagModel.objects.get(pk = _data['tag']).tag,
                 'tag_id' : _data['tag'],
