@@ -31,6 +31,7 @@ def display_note_row(context):
         "note_context" : context['note'],
         "entity_context" : context['entity'],
         "creator_context" : context['creator'],
+        "is_future": context['is_future']
     } 
 register.inclusion_tag("note/partial/row.html")(display_note_row)
 

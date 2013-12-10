@@ -1,7 +1,13 @@
 {% load common %}
 {% load management %}
 
-<tr {% if note_context.weight < 0 %}class="info"{% else %}class="success"{% endif %}>
+<tr {% if note_context.weight < 0 %} class="info"
+    {% elif not note_context.post_time %} class=""
+    {% elif is_future %} class="success"
+    {% elif note_context.post_time %} class="warning"
+    {% endif %}
+>
+    <td width="60" style="text-align: center" class="note-select"><input type="checkbox"></td>
     <td width="60"><p class="text-info">{{ note_context.note_id }}</p></td>
     <td width="90">
         <a href="http://www.guoku.com/detail/{{ entity_context.entity_hash }}/" target="_blank">
@@ -19,7 +25,7 @@
     <td><p class="text-info">{{ note_context.content }}</p></td>
     <td width="150">
         {% if note_context.post_time %}
-            <p class="text-info">{{ note_context.post_time|date_format }}</p> 
+            <p class="text-info">{{ note_context.post_time|date_format }}</p>
         {% else %}
             No
         {% endif %}
