@@ -553,7 +553,7 @@ class Entity(object):
                     post_time = post_time,
                     entity_id = self.entity_id, 
                     note_id = _note_id,
-                    root_category_id = 12,
+                    root_category_id = self.entity_obj.category.pid,
                     category_id = self.entity_obj.category_id,
                     neo_category_group_id = Category(self.entity_obj.neo_category_id).get_group_id(), 
                     neo_category_id = self.entity_obj.neo_category_id, 
