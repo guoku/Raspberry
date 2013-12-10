@@ -62,6 +62,11 @@ class Banner(object):
                 _url = 'guoku://entity/%s'%(_obj.key)
             elif _obj.content_type == 'user':
                 _url = 'guoku://user/%s'%(_obj.key)
+            elif _obj.content_type == 'user_tag':
+                _tokens = _obj.key.split(':')
+                _user_id = _tokens[0]
+                _tag = _tokens[1]
+                _url = 'guoku://user/%s/tag/%s'%(_user_id, _tag)
             elif _obj.content_type == 'category':
                 _url = 'guoku://category/%s'%(_obj.key)
             else:
