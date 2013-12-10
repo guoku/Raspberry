@@ -62,10 +62,17 @@ def note_list(request):
             _note_context = _note.read()
             _entity_id = _note_context['entity_id']
             _entity_context = Entity(_entity_id).read()
+
+            if _note_context['post_time'] == datetime.datetime(2100, 1, 1):
+                _is_future = 1
+            else:
+                _is_future = 0
+
             _context_list.append({
                 'entity' : _entity_context,
                 'note' : _note_context,
-                'creator' : User(_note_context['creator_id']).read() 
+                'creator' : User(_note_context['creator_id']).read(),
+                'is_future': _is_future
             })
         except Exception, e:
             pass

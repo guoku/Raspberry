@@ -2,53 +2,68 @@
 {% load management %}
 
 {% block content %}
-    <div class="span9">
-        <div class="sub-nav">
-            <ul class="nav nav-pills">
-                <li{%if nav_filter == "all"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.note_list' %}">
-                        全部
-                    </a>
-                </li>
-                <li{%if nav_filter == "selection_only"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.note_list' %}?selection=only">
-                        精选
-                    </a>
-                </li>
-                <li{%if nav_filter == "selection_none"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.note_list' %}?selection=none">
-                        未入精选 
-                    </a>
-                </li>
-                <li{%if nav_filter == "freezed"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.note_list' %}?freeze=1">
-                        冻结 
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <table class="table table-striped table-bordered table-condensed">
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>商品图片</th>
-                        <th>用户晒图</th>
-                        <th>用户</th>
-                        <th>点评</th>
-                        <th>精选</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for context in context_list %}
-                        {% display_note_row context %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% if paginator %}
-            {% display_paginator paginator %}
-        {% endif %}
+<div class="span9">
+    <div class="sub-nav">
+        <ul class="nav nav-pills">
+            <li{%if nav_filter == "all"%} class="active"{%endif%}>
+                <a href="{% url 'management.views.note_list' %}">全部</a>
+            </li>
+            <li{%if nav_filter == "selection_only"%} class="active"{%endif%}>
+                <a href="{% url 'management.views.note_list' %}?selection=only">精选</a>
+            </li>
+            <li{%if nav_filter == "selection_none"%} class="active"{%endif%}>
+                <a href="{% url 'management.views.note_list' %}?selection=none">未入精选</a>
+            </li>
+            <li{%if nav_filter == "freezed"%} class="active"{%endif%}>
+                <a href="{% url 'management.views.note_list' %}?freeze=1">冻结</a>
+            </li>
+        </ul>
     </div>
+    <div>
+        <table class="table table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th style="text-align: center"><input type="checkbox" id="check_all"></th>
+                <th>id</th>
+                <th>商品图片</th>
+                <th>用户晒图</th>
+                <th>用户</th>
+                <th>点评</th>
+                <th>精选</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for context in context_list %}
+                {% display_note_row context %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if paginator %}
+        {% display_paginator paginator %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra %}
+<script>
+    (function ($) {
+        var check_all = $("#check_all");
+        var checkboxes = $("input[type='checkbox']");
+
+        $("#check_all").click(function () {
+            if ($(this).attr("checked")) {
+                checkboxes.each(function () {
+                    $(this).attr("checked", "checked");
+                });
+            } else {
+                checkboxes.each(function () {
+                    $(this).removeAttr("checked");
+                });
+            }
+        });
+    })(jQuery);
+</script>
 {% endblock %}
