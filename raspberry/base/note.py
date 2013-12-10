@@ -216,7 +216,18 @@ class Note(object):
         
     def delete(self):
         self.__ensure_note_obj()
+        _note_text = self.note_obj.note
+        _entity_id = self.note_obj.entity_id
+        _creator_id = self.note_obj.creator_id
         self.note_obj.delete() 
+        
+        _tags = Tag.Parser.parse(_note_text)
+        for _tag in _tags:
+            Tag.del_entity_tag(
+                entity_id = _entity_id, 
+                user_id = _creator_id,
+                tag = _tag
+            )
     
     def __load_note_context_from_cache(self):
         _cache_key = 'note_%s_context'%self.note_id
