@@ -143,7 +143,9 @@ def edit_entity(request, entity_id):
             if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
                 _entity_context['recommend_title'] = _item_context['title']
             _item_context_list.append(_item_context)
-        
+
+        _note_count = Note.count(entity_id=entity_id)
+
         return render_to_response( 
             'entity/edit.html', 
             {
@@ -152,7 +154,8 @@ def edit_entity(request, entity_id):
                 'category_list' : Category.find(), 
                 'old_category_list' : Old_Category.find(), 
                 'item_context_list' : _item_context_list,
-                'message' : _message
+                'message' : _message,
+                'note_count': _note_count
             },
             context_instance = RequestContext(request)
         )

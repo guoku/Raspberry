@@ -40,17 +40,23 @@
             <form class="well form-horizontal" action="{% url 'management.views.edit_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
-                        <label class="control-label" for="entity_hash">entity_id:</label>
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">entity_id:</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="entity_id" name="entity_id" value="{{ entity_context.entity_id }}" disabled/>
+                            <a href="http://www.guoku.com/detail/{{ entity_context.entity_hash }}/" target="_blank">{{ entity_context.entity_id }}</a>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="entity_hash">Hash:</label>
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">Hash:</label>
+                        <div class="controls">{{ entity_context.entity_hash }}</div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">评论: </label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="entity_hash" name="entity_hash" value="{{ entity_context.entity_hash }}" disabled/>
+                            <a href="{% url 'management.views.note_list' %}?entity_id={{ entity_context.entity_id }}">{{ note_count }} 条</a>
                         </div>
                     </div>
+
                     <div class="control-group">
                         <label class="control-label" for="brand">品牌:</label>
                         <div class="controls">

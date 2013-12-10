@@ -20,6 +20,7 @@ from utils.paginator import Paginator
 @login_required
 def note_list(request):
     _selection = request.GET.get("selection", None)
+    _select_entity_id = request.GET.get("entity_id", None)
     _nav_filter = 'all'
     _sort_by = None
     _para = {}
@@ -42,18 +43,22 @@ def note_list(request):
         _para['freeze'] = '1' 
     else:
         _status = 1
-        
-    
+
     _page_num = int(request.GET.get("p", "1"))
-    _note_count = Note.count(selection = _selection, status = _status)
-    _paginator = Paginator(_page_num, 30, _note_count, _para)
-    _note_id_list = Note.find(
-        offset = _paginator.offset,
-        count = _paginator.count_in_one_page,
-        selection = _selection,
-        status = _status,
-        sort_by = _sort_by
-    )
+    if not _select_entity_id:
+        _note_count = Note.count(selection = _selection, status = _status)
+        _paginator = Paginator(_page_num, 30, _note_count, _para)
+        _note_id_list = Note.find(
+            offset = _paginator.offset,
+            count = _paginator.count_in_one_page,
+            selection = _selection,
+            status = _status,
+            sort_by = _sort_by
+        )
+    else:
+        _note_count = Note.count(entity_id=_select_entity_id)
+        _paginator = Paginator(_page_num, 30, _note_count, _para)
+        _note_id_list = Note.find(entity_id=_select_entity_id)
         
     _context_list = []
     for _note_id in _note_id_list:
@@ -69,21 +74,22 @@ def note_list(request):
                 _is_future = 0
 
             _context_list.append({
-                'entity' : _entity_context,
-                'note' : _note_context,
-                'creator' : User(_note_context['creator_id']).read(),
-                'is_future': _is_future
+                'entity': _entity_context,
+                'note': _note_context,
+                'creator': User(_note_context['creator_id']).read(),
+                'is_future': _is_future,
             })
         except Exception, e:
             pass
-        
+
     return render_to_response( 
         'note/list.html', 
         {
             'active_division' : 'note',
             'nav_filter' : _nav_filter, 
             'context_list' : _context_list,
-            'paginator' : _paginator
+            'paginator' : _paginator,
+            'select_entity_id': _select_entity_id
         },
         context_instance = RequestContext(request)
     )
@@ -176,9 +182,3 @@ def post_selection_delay(request, entity_id, note_id):
         post_time = _post_time
     )
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-
-
-
-
-
