@@ -100,6 +100,7 @@ class Note(object):
     
     @classmethod
     def create(cls, entity_id, creator_id, note_text, score = 0, image_data = None):
+        _note_text = note_text.replace(u"＃", "#")
         if image_data != None:
             _image_obj = Image.create(
                 source = 'note_uploaded', 
@@ -112,13 +113,22 @@ class Note(object):
         _note_obj = NoteModel.objects.create(
             entity_id = entity_id,
             creator_id = creator_id,
-            note = note_text,
+            note = _note_text,
             score = int(score),
             figure = _figure
         )
 
         _inst = cls(_note_obj.id)
         _inst.note_obj = _note_obj
+        
+        _tags = Tag.Parser.parse(_note_text)
+        for _tag in _tags:
+            Tag.add_entity_tag(
+                entity_id = _note_obj.entity_id,
+                user_id = creator_id,
+                tag = _tag
+            )
+        
         return _inst
     
     
@@ -167,9 +177,31 @@ class Note(object):
             self.note_obj.score = score 
         
         if note_text != None:
-            self.note_obj.note = note_text
+            _note_text = note_text.replace(u"＃", "#")
+            _old_text = self.note_obj.note
+            _new_text = _note_text
+
+            self.note_obj.note = _note_text
             if _context != None:
-                _context['content'] = note_text 
+                _context['content'] = _note_text 
+        
+            _new_tags = Tag.Parser.parse(_new_text)
+            _old_tags = Tag.Parser.parse(_old_text)
+            for _tag in _new_tags:
+                if not _tag in _old_tags:
+                    Tag.add_entity_tag(
+                        entity_id = self.note_obj.entity_id,
+                        user_id = self.note_obj.creator_id,
+                        tag = _tag
+                    )
+            for _tag in _old_tags:
+                if not _tag in _new_tags:
+                    Tag.del_entity_tag(
+                        entity_id = self.note_obj.entity_id,
+                        user_id = self.note_obj.creator_id,
+                        tag = _tag
+                    )
+                    
         
         if weight != None:
             _weight = int(weight)
