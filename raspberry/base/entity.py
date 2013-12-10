@@ -537,6 +537,7 @@ class Entity(object):
         
         ## CLEAN_OLD_CACHE ## 
         cache.delete("entity_key_note_id_%s"%self.entity_id)
+        cache.delete("entity_note_context_list_%s"%self.entity_id)
         cache.delete("note_context_%s"%note_id)
 
         if _selector_id == None:
@@ -552,7 +553,7 @@ class Entity(object):
                     post_time = post_time,
                     entity_id = self.entity_id, 
                     note_id = _note_id,
-                    root_category_id = 12,
+                    root_category_id = self.entity_obj.category.pid,
                     category_id = self.entity_obj.category_id,
                     neo_category_group_id = Category(self.entity_obj.neo_category_id).get_group_id(), 
                     neo_category_id = self.entity_obj.neo_category_id, 
