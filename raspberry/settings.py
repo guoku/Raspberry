@@ -51,6 +51,7 @@ SPHINX_SERVER = 'localhost'
 SPHINX_port = 3312 
 
 JUMP_TO_TAOBAO = True 
+
 IMAGE_LOCAL = True 
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
 #IMAGE_LOCAL = False 

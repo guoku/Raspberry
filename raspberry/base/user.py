@@ -311,6 +311,22 @@ class User(object):
     def delete(self):
         self.__ensure_user_obj()
         self.user_obj.delete()
+    
+    @classmethod
+    def count(cls): 
+        _hdl = AuthUser.objects.all()
+        return _hdl.count() 
+    
+    
+    @classmethod
+    def find(cls, offset = None, count = None):
+        _hdl = AuthUser.objects.all()
+        
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
+        _list = map(lambda x: x.id, _hdl)
+        return _list
         
 
     @staticmethod
@@ -393,6 +409,7 @@ class User(object):
         _basic_info = {}
         _basic_info['user_id'] = self.user_obj.id
         _basic_info['email'] = self.user_obj.email
+        _basic_info['username'] = self.user_obj.username 
         
         _profile = UserProfileModel.objects.get(user_id = self.user_id)
         _basic_info['nickname'] = _profile.nickname
