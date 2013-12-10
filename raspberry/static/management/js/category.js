@@ -29,7 +29,7 @@
 
             var group_option = $("<option>" + group_title + "</option>");
             group_option.val(group_title).appendTo(category_group);
-            
+
             if (group_title == init_group) {
                 group_option.attr("selected", "selected");
             }
