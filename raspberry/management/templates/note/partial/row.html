@@ -1,10 +1,10 @@
 {% load common %}
 {% load management %}
 
-<tr {% if note_context.weight < 0 %} class="warning"
+<tr {% if note_context.weight < 0 %} class="info"
     {% elif not note_context.post_time %} class=""
-    {% elif is_future %} class="info"
-    {% elif note_context.post_time %} class="success"
+    {% elif is_future %} class="success"
+    {% elif note_context.post_time %} class="warning"
     {% endif %}
 >
     <td width="60" style="text-align: center" class="note-select"><input type="checkbox"></td>
