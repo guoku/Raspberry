@@ -219,7 +219,7 @@ def popular(request):
             _request_user_id = None
         _scale = request.GET.get('scale', 'daily')
 
-        _popular_entities = popularity.read_popular_entity_to_cache(scale = _scale, json = True)
+        _popular_entities = popularity.read_popular_entity_from_cache(scale = _scale, json = True)
         if _popular_entities != None:
             _rslt = {
                 'scale' : _scale,
