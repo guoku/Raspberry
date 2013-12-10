@@ -33,6 +33,7 @@ class Banner(object):
         _image_obj = Image.create(
             source = 'banner', 
             image_data = image_data,
+            save_in_origin = True
         )
         
         _banner_obj = BannerModel.objects.create(
