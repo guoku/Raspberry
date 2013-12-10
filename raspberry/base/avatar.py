@@ -57,9 +57,9 @@ class Avatar(object):
         self.__ensure_datastore_client()
         _square_data = self.__crop_square(origin_data)
          
-        _fp = self.__datastore.new_file(self.__origin_store_key)
-        _fp.write(origin_data)
-        _fp.close()
+        #_fp = self.__datastore.new_file(self.__origin_store_key)
+        #_fp.write(origin_data)
+        #_fp.close()
 
         _large_data = self.__resize(_square_data, 180, 180)
         _fp = self.__datastore.new_file(self.__large_store_key)
