@@ -2,6 +2,7 @@
 {% load management %}
 
 {% block content %}
+<div class="span12">
 <div class="span9">
     {% if not select_entity_id %}
         <div class="sub-nav">
@@ -26,7 +27,7 @@
         <table class="table table-bordered table-condensed">
             <thead>
             <tr>
-                <th style="text-align: center"><input type="checkbox" id="check_all"></th>
+                <th style="text-align: center"><input type="checkbox" class="note-checkbox note-all-checkbox"></th>
                 <th>id</th>
                 <th>商品图片</th>
                 <th>用户晒图</th>
@@ -48,25 +49,40 @@
         {% display_paginator paginator %}
     {% endif %}
 </div>
+<div class="span2" style="margin-top: 100px">
+    <div class="hero-unit">
+        <div class="btn-group">
+            <a class="btn" href="">藏</a>
+            <a class="btn" href="">当</a>
+            <a class="btn" href="">迟</a>
+        </div>
+    </div>
+</div>
+</div>
 {% endblock %}
 
 {% block extra %}
 <script>
     (function ($) {
-        var check_all = $("#check_all");
-        var checkboxes = $("input[type='checkbox']");
+        var check_all = $(".note-all-checkbox");
+        var checkbox = $(".note-checkbox");
 
-        $("#check_all").click(function () {
+        check_all.click(function () {
             if ($(this).attr("checked")) {
-                checkboxes.each(function () {
+                checkbox.each(function () {
                     $(this).attr("checked", "checked");
                 });
             } else {
-                checkboxes.each(function () {
+                checkbox.each(function () {
                     $(this).removeAttr("checked");
                 });
             }
         });
+
+        checkbox.click(function () {
+
+        });
+
     })(jQuery);
 </script>
 {% endblock %}

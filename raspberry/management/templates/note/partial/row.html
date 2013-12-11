@@ -7,7 +7,9 @@
     {% elif note_context.post_time %} class="warning"
     {% endif %}
 >
-    <td width="60" style="text-align: center" class="note-select"><input type="checkbox"></td>
+    <td width="60" style="text-align: center" class="note-select">
+        <input type="checkbox" class="note-checkbox">
+    </td>
     <td width="60"><p class="text-info">{{ note_context.note_id }}</p></td>
     <td width="90">
         <a href="http://www.guoku.com/detail/{{ entity_context.entity_hash }}/" target="_blank">
