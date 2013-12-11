@@ -62,9 +62,9 @@ def new_entity(request):
             _item = Item.get_item_by_taobao_id(_taobao_id)
             if _item == None:
                 _taobao_item_info = _load_taobao_item_info(_taobao_id)
-                _selected_category_id = int(request.POST.get("category_id", "1"))
                 _brand = ''
                 _title = ''
+                _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
                 
                 return render_to_response( 
                     'entity/create.html', 
