@@ -6,8 +6,7 @@
         #batch {
             margin-top: 100px;
             display: none;
-            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 0, 0, 0.3);
+            border: 1px solid #ddd;
             background-color: #fff;
             padding: 20px 30px;
         }
@@ -68,12 +67,12 @@
 
     <div class="span2 well" id="batch" style="">
         <div class="text-info">选择了 <span id="selected_count" class="badge"></span> 项：</div>
-        <div id="selected_list" class="text-success"></div>
+        <div id="selected_list" class="text-info"></div>
 
         <div class="btn-group">
-            <a class="btn btn-info" href="javascript:;">藏</a>
-            <a class="btn btn-warning" href="javascript:;">当</a>
-            <a class="btn btn-success" href="javascript:;">迟</a>
+            <a class="btn" href="javascript:;">藏</a>
+            <a class="btn" href="javascript:;">当</a>
+            <a class="btn" href="javascript:;">迟</a>
         </div>
     </div>
 </div>
@@ -134,9 +133,41 @@
             }
         });
 
-        
+        var exec_button = $("a", batch);
+        var exec_freeze = exec_button.eq(0);
+        var exec_instant = exec_button.eq(1);
+        var exec_delay = exec_button.eq(2);
 
+        exec_freeze.click(function () {
+            exec_request(urls, "freeze_url");
+        });
 
+        exec_instant.click(function () {
+            exec_request(urls, "instant_url");
+        });
+
+        exec_delay.click(function () {
+            exec_request(urls, "delay_url");
+        });
+
+        function exec_request(urls, urlType) {
+            var count = 0;
+            for (var id in urls) {
+                if (id !== "len") {
+                    var r_url = urls[id][urlType];
+                    if (r_url) {
+                        $.get(r_url, function () {
+                            count++;
+                            if (count === urls.len) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        count++;
+                    }
+                }
+            }
+        }
     })(jQuery);
 </script>
 {% endblock %}
