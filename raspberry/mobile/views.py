@@ -38,7 +38,8 @@ def homepage(request):
         
     
     return SuccessJsonResponse(_rslt)
-     
+
+from base.models import Seed_User
 def feed(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -53,11 +54,12 @@ def feed(request):
             _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
+        
 
         if _scale == 'friend':
             _following_user_id_list = MobileUser(_request_user_id).read_following_user_id_list()
         else:
-            _following_user_id_list = None
+            _following_user_id_list = map(lambda x: x.user_id, Seed_User.objects.all())
         
         _note_id_list = MobileNote.find(
             timestamp = _timestamp,
