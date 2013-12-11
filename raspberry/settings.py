@@ -11,9 +11,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku',
+        'NAME': 'guoku_11_21',
         'USER': 'root',                      
-        'PASSWORD': 'cw12345',                  
+        'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
         'PORT': '',                      
         'OPTIONS': {
@@ -33,10 +33,12 @@ connect('guoku')
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION":"localhost:6379",
+        "LOCATION": [
+            "localhost:6379:1",
+        ],
         "OPTIONS": {
-	    "DB": 1,
             "PARSER_CLASS": "redis.connection.HiredisParser",
+            "CLIENT_CLASS": "redis_cache.client.ShardClient",
         }
     }
 }
