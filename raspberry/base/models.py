@@ -76,6 +76,9 @@ class Taobao_Item_Category_Mapping(models.Model):
     title = models.CharField(max_length = 256)
     guoku_category = models.ForeignKey(Category)
  
+class Taobao_Item_Neo_Category_Mapping(models.Model):
+    taobao_category_id = models.IntegerField(db_index = True, unique = True)
+    neo_category_id = models.IntegerField(db_index = True)
 
 class Banner(models.Model):
     content_type = models.CharField(max_length = 64, null = False)
