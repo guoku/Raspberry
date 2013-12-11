@@ -9,6 +9,7 @@ from models import Entity_Like as EntityLikeModel
 from models import Entity_Tag as EntityTagModel
 from models import Note as NoteModel
 from models import Note_Poke as NotePokeModel
+from models import Seed_User as SeedUserModel 
 from models import Sina_Token as SinaTokenModel 
 from models import Taobao_Token as TaobaoTokenModel 
 from models import User_Profile as UserProfileModel 
@@ -704,5 +705,16 @@ class User(object):
         for _result in _query_set[offset : offset + count]:
             _user_id_list.append(int(_result._sphinx['attrs']['user_id']))
         return _user_id_list
+    
+    @classmethod
+    def read_seed_users(cls): 
+        _cache_key = 'seed_user_id_list'
+        _seed_user_id_list = cache.get(_cache_key)
+        if _seed_user_id_list == None:
+            _seed_user_id_list = map(lambda x: x.user_id, SeedUserModel.objects.all())
+            cache.set(_cache_key, _seed_user_id_list, 86400)
+        return _seed_user_id_list
+
+            
     
 

@@ -2,6 +2,7 @@
 from models import Neo_Category_Group as CategoryGroupModel
 from models import Neo_Category as CategoryModel
 from models import Category as OldCategoryModel
+from models import Taobao_Item_Neo_Category_Mapping as TaobaoItemNeoCategoryMappingModel 
 from django.conf import settings
 from django.db.models import Q
 from hashlib import md5
@@ -213,3 +214,12 @@ class Category(object):
         return _rslt
             
         
+    @staticmethod
+    def get_category_by_taobao_cid(cid):
+        _cid = int(cid)
+        try:
+            _obj = TaobaoItemNeoCategoryMappingModel.objects.get(taobao_category_id = _cid)
+            return _obj.neo_category_id
+        except TaobaoItemNeoCategoryMappingModel.DoesNotExist: 
+            pass
+        return 300 
