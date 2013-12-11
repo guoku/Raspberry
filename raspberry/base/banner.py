@@ -66,7 +66,7 @@ class Banner(object):
                 _tokens = _obj.key.split(':')
                 _user_id = _tokens[0]
                 _tag = _tokens[1]
-                _url = 'guoku://user/%s/tag/%s'%(_user_id, _tag)
+                _url = 'guoku://user/%s/tag/%s'%(_user_id, urllib.quote(_tag.encode('utf-8')))
             elif _obj.content_type == 'category':
                 _url = 'guoku://category/%s'%(_obj.key)
             else:
