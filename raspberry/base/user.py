@@ -685,6 +685,13 @@ class User(object):
     
     def upload_avatar(self, data):
         self.avatar_obj = self.Avatar.create(self.user_id, data)
+        
+        _basic_info = self.__load_basic_info_from_cache()
+        if _basic_info != None:
+            _basic_info = self.__reset_basic_info_to_cache()
+        
+        cache.delete("avatar_%s"%self.user_id)
+
        
         
     @staticmethod
