@@ -17,7 +17,8 @@ class Old_Category(object):
         for _obj in OldCategoryModel.objects.all():
             _rslt.append({
                 'category_id' : _obj.id,
-                'category_title' : _obj.title
+                'category_title' : _obj.title,
+                'category_pid': _obj.pid
             })
         return _rslt
 
