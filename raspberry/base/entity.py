@@ -7,7 +7,7 @@ from message import EntityLikeMessage, EntityNoteMessage, NoteSelectionMessage
 from models import NoteSelection
 from django.conf import settings
 from django.core.cache import cache
-from django.db.models import Sum
+from django.db.models import Count, Sum
 from mongoengine import *
 
 from category import Category 
@@ -330,8 +330,16 @@ class Entity(object):
                 _hdl = _hdl.order_by('like_count')
             else:
                 _hdl = _hdl.order_by('-like_count')
+        elif sort_by == 'note':
+            if reverse:
+                _hdl = _hdl.annotate(note_count = Count('note')).order_by('note_count')
+            else:
+                _hdl = _hdl.annotate(note_count = Count('note')).order_by('-note_count')
         else:
-            _hdl = _hdl.order_by('-created_time')
+            if reverse:
+                _hdl = _hdl.order_by('created_time')
+            else:
+                _hdl = _hdl.order_by('-created_time')
         
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
