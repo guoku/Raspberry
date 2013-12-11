@@ -3,8 +3,10 @@ from django.contrib.auth.models import User as AuthUser
 from django.contrib.auth import authenticate
 from django.conf import settings
 from django.core.cache import cache
+from django.db.models import Count 
 from models import Avatar as AvatarModel 
 from models import Entity_Like as EntityLikeModel
+from models import Entity_Tag as EntityTagModel
 from models import Note as NoteModel
 from models import Note_Poke as NotePokeModel
 from models import Sina_Token as SinaTokenModel 
@@ -309,6 +311,22 @@ class User(object):
     def delete(self):
         self.__ensure_user_obj()
         self.user_obj.delete()
+    
+    @classmethod
+    def count(cls): 
+        _hdl = AuthUser.objects.all()
+        return _hdl.count() 
+    
+    
+    @classmethod
+    def find(cls, offset = None, count = None):
+        _hdl = AuthUser.objects.all()
+        
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
+        _list = map(lambda x: x.id, _hdl)
+        return _list
         
 
     @staticmethod
@@ -391,6 +409,7 @@ class User(object):
         _basic_info = {}
         _basic_info['user_id'] = self.user_obj.id
         _basic_info['email'] = self.user_obj.email
+        _basic_info['username'] = self.user_obj.username 
         
         _profile = UserProfileModel.objects.get(user_id = self.user_id)
         _basic_info['nickname'] = _profile.nickname
@@ -425,6 +444,7 @@ class User(object):
             _stat_info['following_count'] = UserFollowModel.objects.filter(follower_id = self.user_id).count()
             _stat_info['fan_count'] = UserFollowModel.objects.filter(followee_id = self.user_id).count()
             _stat_info['like_count'] = EntityLikeModel.objects.filter(user_id = self.user_id).count()
+            _stat_info['tag_count'] = EntityTagModel.objects.filter(user_id = self.user_id).values('tag').annotate(entity_count = Count('entity')).count()
             _stat_info['entity_note_count'] = NoteModel.objects.filter(creator_id = self.user_id).count()
             _stat_info['entity_note_poke_count'] = NotePokeModel.objects.filter(note__creator_id = self.user_id).count()
         
@@ -529,6 +549,11 @@ class User(object):
                     self.__reset_following_user_id_list_to_cache(user_id_list = _list)
 
             User(_followee_id).add_fan(self.user_id)
+        
+        
+            ## CLEAN_OLD_CACHE ## 
+            cache.delete("user_fan_id_list_%s"%followee_id)
+            cache.delete("user_following_id_list_%s"%self.user_id)
             
             _message = UserFollowMessage(
                 user_id = followee_id,
@@ -559,6 +584,10 @@ class User(object):
                     self.__reset_following_user_id_list_to_cache(user_id_list = _list)
             
             User(_followee_id).remove_fan(self.user_id)
+             
+            ## CLEAN_OLD_CACHE ## 
+            cache.delete("user_fan_id_list_%s"%followee_id)
+            cache.delete("user_following_id_list_%s"%self.user_id)
             
             return True
         except:

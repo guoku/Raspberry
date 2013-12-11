@@ -19,8 +19,12 @@ def entity_list(request):
             _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
+        _root_old_cat_id = request.GET.get('rcat', None)
+        if _root_old_cat_id != None:
+            _root_old_cat_id = int(_root_old_cat_id)
         
         _entity_id_list = MobileEntity.find(
+            root_old_category_id = _root_old_cat_id,
             timestamp = _timestamp,
             offset = _offset,
             count = _count,

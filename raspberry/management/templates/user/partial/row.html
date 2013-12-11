@@ -1,0 +1,18 @@
+{% load common %}
+{% load management %}
+
+<tr class="success">
+    <td width="60"><p class="text-info">{{ user_context.user_id }}</p></td>
+    <td width="90">
+        <img class="img-polaroid" src="{{ user_context.avatar_large }}" style="max-height:80px;max-width:80px;">
+    </td>
+    <td width="90">
+        {{ user_context.username }}
+    </td>
+    <td width="200"><p class="text-info">{{ user_context.nickname }}</p></td>
+    <td width="50">
+        <div class="btn-group">
+            <a class="btn" href="{% url 'management.views.edit_user' user_context.user_id %}">编</a>
+        </div>
+    </td>
+</tr>

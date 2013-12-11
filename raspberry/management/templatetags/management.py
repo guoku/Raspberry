@@ -10,6 +10,12 @@ def display_entity_row(entity_context):
     } 
 register.inclusion_tag("entity/partial/row.html")(display_entity_row)
 
+def display_user_row(user_context):
+    return {
+        "user_context" : user_context,
+    } 
+register.inclusion_tag("user/partial/row.html")(display_user_row)
+
 DEFAULT_CATEGORY_ICON_KEY = '03717fa531b23c6f5dbd5522e6eec9a1' 
 def display_category_row(category_context):
     if not category_context.has_key('category_icon_large'):

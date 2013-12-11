@@ -17,7 +17,7 @@ class Banner(object):
         self.banner_id = int(banner_id)
    
     def read(self):
-        _obj = BannerModel.objects.get(pk = self.banner_id)
+        _obj = BannerModel.objects.get(pk = self.banner_id).order_by('-weight')
         return {
             'banner_id' : _obj.id,
             'image' : Image(_obj.image).getlink(),
@@ -33,6 +33,7 @@ class Banner(object):
         _image_obj = Image.create(
             source = 'banner', 
             image_data = image_data,
+            save_in_origin = True
         )
         
         _banner_obj = BannerModel.objects.create(
@@ -52,7 +53,7 @@ class Banner(object):
     @classmethod
     def find(cls, offset = None, count = None):
         _hdl = BannerModel.objects.all()
-        _hdl = _hdl.order_by('-created_time')
+        _hdl = _hdl.order_by('-weight')
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]    
         _banner_context_list = []
@@ -61,6 +62,11 @@ class Banner(object):
                 _url = 'guoku://entity/%s'%(_obj.key)
             elif _obj.content_type == 'user':
                 _url = 'guoku://user/%s'%(_obj.key)
+            elif _obj.content_type == 'user_tag':
+                _tokens = _obj.key.split(':')
+                _user_id = _tokens[0]
+                _tag = _tokens[1]
+                _url = 'guoku://user/%s/tag/%s'%(_user_id, _tag)
             elif _obj.content_type == 'category':
                 _url = 'guoku://category/%s'%(_obj.key)
             else:

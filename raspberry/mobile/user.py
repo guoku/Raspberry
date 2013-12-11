@@ -1,4 +1,5 @@
 # coding=utf8
+from base.tag import *
 from lib.entity import MobileEntity
 from lib.note import MobileNote
 from lib.user import MobileUser
@@ -90,6 +91,17 @@ def user_fan(request, user_id):
             _rslt.append(MobileUser(_fan_user_id).read(_request_user_id))
     
         return SuccessJsonResponse(_rslt)
+
+def user_info(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _rslt = MobileUser(_request_user_id).read()
+        return SuccessJsonResponse(_rslt)
+
 
 def user_detail(request, user_id):
     if request.method == "GET":
@@ -184,6 +196,27 @@ def check_sina_user(request):
             _rslt.append(MobileUser(_user_id).read(_request_user_id))
         
         return SuccessJsonResponse(_rslt)
+
+def user_tag_list(request, user_id):
+    if request.method == "GET":
+        _rslt = Tag.user_tag_stat(user_id)
+    return SuccessJsonResponse(_rslt)
+
+
+def user_tag_entity(request, user_id, tag):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        
+        _entity_id_list = Tag.find_user_tag_entity(user_id, tag)
+        _rslt = [] 
+        for _entity_id in _entity_id_list: 
+            _rslt.append(MobileEntity(_entity_id).read(_request_user_id))
+    return SuccessJsonResponse(_rslt)
+
 
 def search_user(request):
     if request.method == "GET":
