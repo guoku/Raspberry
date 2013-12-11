@@ -8,7 +8,8 @@
     {% endif %}
 >
     <td width="60" style="text-align: center" class="note-select">
-        <input type="checkbox" class="note-checkbox">
+        <input type="checkbox" class="note-checkbox" data-noteid="{{ note_context.note_id }}" data-entityid="{{ note_context.entity_id }}"
+                data-selecttime="{{ note_context.selected_time }}">
     </td>
     <td width="60"><p class="text-info">{{ note_context.note_id }}</p></td>
     <td width="90">

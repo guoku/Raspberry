@@ -1,8 +1,24 @@
 {% extends "management_base.html" %}
 {% load management %}
 
+{% block cssstyle %}
+    <style>
+        #batch {
+            margin-top: 100px;
+            display: none;
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            background-color: #fff;
+            padding: 20px 30px;
+        }
+        #batch #selected_list {
+            margin: 20px 0 30px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-<div class="span12">
+<div class="span11">
 <div class="span9">
     {% if not select_entity_id %}
         <div class="sub-nav">
@@ -27,7 +43,7 @@
         <table class="table table-bordered table-condensed">
             <thead>
             <tr>
-                <th style="text-align: center"><input type="checkbox" class="note-checkbox note-all-checkbox"></th>
+                <th></th>
                 <th>id</th>
                 <th>商品图片</th>
                 <th>用户晒图</th>
@@ -49,39 +65,77 @@
         {% display_paginator paginator %}
     {% endif %}
 </div>
-<div class="span2" style="margin-top: 100px">
-    <div class="hero-unit">
+
+    <div class="span2 well" id="batch" style="">
+        <div class="text-info">选择了 <span id="selected_count" class="badge"></span> 项：</div>
+        <div id="selected_list" class="text-success"></div>
+
         <div class="btn-group">
-            <a class="btn" href="">藏</a>
-            <a class="btn" href="">当</a>
-            <a class="btn" href="">迟</a>
+            <a class="btn btn-info" href="javascript:;">藏</a>
+            <a class="btn btn-warning" href="javascript:;">当</a>
+            <a class="btn btn-success" href="javascript:;">迟</a>
         </div>
     </div>
-</div>
 </div>
 {% endblock %}
 
 {% block extra %}
 <script>
     (function ($) {
-        var check_all = $(".note-all-checkbox");
+        var urls = {};
+        urls["len"] = 0;
+        var batch = $("#batch");
         var checkbox = $(".note-checkbox");
+        var selected_count = $("#selected_count");
+        var selected_list = $("#selected_list");
 
-        check_all.click(function () {
-            if ($(this).attr("checked")) {
-                checkbox.each(function () {
-                    $(this).attr("checked", "checked");
-                });
+        function show_select(urls, count) {
+            selected_count.text(count);
+            $("span", selected_list).remove();
+
+            for (var i in urls) {
+                if (i != "len") {
+                    $("<span> " + i + " </span>").appendTo(selected_list);
+                }
+            }
+        }
+
+        checkbox.click(function () {
+            var $this = $(this);
+            var checked = $this.attr("checked");
+            var select_time = $this.attr("data-selecttime");
+            var note_id = $this.attr("data-noteid");
+            var entity_id = $this.attr("data-entityid");
+            var instant_url = "/management/entity/" + entity_id + "/note/" + note_id + "/post/selection/instant/";
+            var delay_url = "/management/entity/" + entity_id + "/note/" + note_id + "/post/selection/delay/";
+            var freeze_url = "/management/note/" + note_id + "/freeze/";
+
+            if (select_time != "None") {
+                delay_url = undefined;
+                instant_url = undefined;
+            }
+
+            if (checked == "checked") {
+                urls.len++;
+                urls[note_id] = {
+                    instant_url: instant_url,
+                    delay_url: delay_url,
+                    freeze_url: freeze_url
+                };
+                show_select(urls, urls.len);
+                batch.show();
             } else {
-                checkbox.each(function () {
-                    $(this).removeAttr("checked");
-                });
+                urls.len--;
+                delete urls[note_id];
+                show_select(urls, urls.len);
+                if (!urls.len) {
+                    batch.hide();
+                }
             }
         });
 
-        checkbox.click(function () {
+        
 
-        });
 
     })(jQuery);
 </script>
