@@ -33,7 +33,8 @@ class APNSWrapper(object):
         self.notifications['aps']['message'] = message
 
     def push(self):
-        user_apns = User_Apns.objects.filter(user=self.user_id)
+        user_apns = User_Apns.objects.filter(user = self.user_id)
+        
         for apns in user_apns:
             print "token %s"%apns.device.dev_token
 
