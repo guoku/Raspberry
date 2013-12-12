@@ -235,9 +235,12 @@ class Taobao_Token(models.Model):
 class One_Time_Token(models.Model):
     user = models.ForeignKey(User, related_name = "one_time_token") 
     token = models.CharField(max_length = 255, db_index = True)
-    created_time = models.DateTimeField(auto_now = True)
     token_type = models.CharField(max_length = 30, db_index = True)
     is_used = models.BooleanField(default = False)
+
+class User_Read_Message_Record(models.Model):
+    user = models.ForeignKey(User)
+    last_read_time = models.DateTimeField(db_index = True)
 
 
 from mongoengine import * 

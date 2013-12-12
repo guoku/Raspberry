@@ -172,7 +172,7 @@ def message(request):
                 }
                 _rslt.append(_context)
                 
-                
+            MobileUser(_request_user_id).mark_read_message()
         
         return SuccessJsonResponse(_rslt)
 

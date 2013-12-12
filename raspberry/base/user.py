@@ -16,6 +16,7 @@ from models import Taobao_Token as TaobaoTokenModel
 from models import One_Time_Token as OneTimeTokenModel 
 from models import User_Profile as UserProfileModel 
 from models import User_Follow as UserFollowModel
+from models import User_Read_Message_Record as UserReadMessageRecordModel 
 from message import UserFollowMessage 
 from utils.mail import Mail
 from hashlib import md5
@@ -775,5 +776,27 @@ class User(object):
         )
     
          
+    def mark_read_message(self):
+        try:
+            _record = UserReadMessageRecordModel.objects.get(user_id = self.user_id)
+            _record.last_read_time = datetime.datetime.now()
+            _record.save()
+        except UserReadMessageRecordModel.DoesNotExist:
+            _record = UserReadMessageRecordModel.objects.create(
+                user_id = self.user_id,
+                last_read_time = datetime.datetime.now()
+            )
+            
+    def get_last_read_message_time(self):
+        try:
+            _record = UserReadMessageRecordModel.objects.get(user_id = self.user_id)
+            return _record.last_read_time
+        except UserReadMessageRecordModel.DoesNotExist:
+            pass
+        return None 
+    
+         
+    
+
     
 
