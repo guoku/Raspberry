@@ -92,6 +92,17 @@ def user_fan(request, user_id):
     
         return SuccessJsonResponse(_rslt)
 
+def user_info(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _rslt = MobileUser(_request_user_id).read()
+        return SuccessJsonResponse(_rslt)
+
+
 def user_detail(request, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)

@@ -33,6 +33,7 @@ class Banner(object):
         _image_obj = Image.create(
             source = 'banner', 
             image_data = image_data,
+            save_in_origin = True
         )
         
         _banner_obj = BannerModel.objects.create(
@@ -61,6 +62,11 @@ class Banner(object):
                 _url = 'guoku://entity/%s'%(_obj.key)
             elif _obj.content_type == 'user':
                 _url = 'guoku://user/%s'%(_obj.key)
+            elif _obj.content_type == 'user_tag':
+                _tokens = _obj.key.split(':')
+                _user_id = _tokens[0]
+                _tag = _tokens[1]
+                _url = 'guoku://user/%s/tag/%s'%(_user_id, urllib.quote(_tag.encode('utf-8')))
             elif _obj.content_type == 'category':
                 _url = 'guoku://category/%s'%(_obj.key)
             else:

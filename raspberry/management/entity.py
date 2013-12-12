@@ -62,9 +62,9 @@ def new_entity(request):
             _item = Item.get_item_by_taobao_id(_taobao_id)
             if _item == None:
                 _taobao_item_info = _load_taobao_item_info(_taobao_id)
-                _selected_category_id = int(request.POST.get("category_id", "1"))
                 _brand = ''
                 _title = ''
+                _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
                 
                 return render_to_response( 
                     'entity/create.html', 
@@ -143,7 +143,9 @@ def edit_entity(request, entity_id):
             if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
                 _entity_context['recommend_title'] = _item_context['title']
             _item_context_list.append(_item_context)
-        
+
+        _note_count = Note.count(entity_id=entity_id)
+
         return render_to_response( 
             'entity/edit.html', 
             {
@@ -152,7 +154,8 @@ def edit_entity(request, entity_id):
                 'category_list' : Category.find(), 
                 'old_category_list' : Old_Category.find(), 
                 'item_context_list' : _item_context_list,
-                'message' : _message
+                'message' : _message,
+                'note_count': _note_count
             },
             context_instance = RequestContext(request)
         )
@@ -467,3 +470,22 @@ def merge_entity(request, entity_id):
         _entity = Entity(entity_id)
         _entity.merge(_target_entity_id)
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
+
+@login_required
+def get_all_categories(request):
+    result = {}
+    new_category = {}
+    result['new_category'] = new_category
+    result['old_category'] = Old_Category.find()
+    groups_and_categories = Category.all_group_with_full_category()
+
+    for g_a_c in groups_and_categories:
+        categories = []
+        for cat in g_a_c['content']:
+            category = {}
+            category['category_title'] = cat['category_title']
+            category['category_id'] = cat['category_id']
+            categories.append(category)
+        new_category[g_a_c['title']] = categories
+
+    return HttpResponse(json.dumps(result))

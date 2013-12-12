@@ -1,0 +1,36 @@
+{% extends "management_base.html" %}
+{% load common %}
+
+{% block content %}
+    <div class="container">
+        <img id="main-image" class="img-polaroid" src="{{ user_context.avatar_large }}" alt="" style="max-width: 220px;max-height: 220px">
+        <div>
+            <form class="well form-horizontal" action="{% url 'management.views.edit_note' user_context.user_id %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="user_id">user_id:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="user_id" name="user_id" value="{{ user_context.user_id }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="username">username:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="username" name="username" value="{{ user_context.username }}" disabled/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="nickname">nickname:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="nickname" name="nickname" value="{{ user_context.nickname }}" disabled/>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">更新</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

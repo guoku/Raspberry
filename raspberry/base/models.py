@@ -44,6 +44,10 @@ class Avatar(models.Model):
         app_label = 'base'
         ordering = ['-uploaded_time']
 
+class Seed_User(models.Model):
+    user_id = models.IntegerField(null = False, db_index = True, unique = True)
+    weight = models.IntegerField(default = 0, db_index = True)
+
 class Neo_Category_Group(models.Model):
     title = models.CharField(max_length = 128, db_index = True)
     status = models.IntegerField(default = 1, db_index = True)
@@ -72,6 +76,9 @@ class Taobao_Item_Category_Mapping(models.Model):
     title = models.CharField(max_length = 256)
     guoku_category = models.ForeignKey(Category)
  
+class Taobao_Item_Neo_Category_Mapping(models.Model):
+    taobao_category_id = models.IntegerField(db_index = True, unique = True)
+    neo_category_id = models.IntegerField(db_index = True)
 
 class Banner(models.Model):
     content_type = models.CharField(max_length = 64, null = False)

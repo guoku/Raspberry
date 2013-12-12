@@ -8,6 +8,7 @@ from django.core.cache import cache
 import datetime
 import time
 from image import Image
+from tag import Tag 
 from user import User 
 
 
@@ -99,6 +100,7 @@ class Note(object):
     
     @classmethod
     def create(cls, entity_id, creator_id, note_text, score = 0, image_data = None):
+        _note_text = note_text.replace(u"＃", "#")
         if image_data != None:
             _image_obj = Image.create(
                 source = 'note_uploaded', 
@@ -111,13 +113,22 @@ class Note(object):
         _note_obj = NoteModel.objects.create(
             entity_id = entity_id,
             creator_id = creator_id,
-            note = note_text,
+            note = _note_text,
             score = int(score),
             figure = _figure
         )
 
         _inst = cls(_note_obj.id)
         _inst.note_obj = _note_obj
+        
+        _tags = Tag.Parser.parse(_note_text)
+        for _tag in _tags:
+            Tag.add_entity_tag(
+                entity_id = _note_obj.entity_id,
+                user_id = creator_id,
+                tag = _tag
+            )
+        
         return _inst
     
     
@@ -166,9 +177,31 @@ class Note(object):
             self.note_obj.score = score 
         
         if note_text != None:
-            self.note_obj.note = note_text
+            _note_text = note_text.replace(u"＃", "#")
+            _old_text = self.note_obj.note
+            _new_text = _note_text
+
+            self.note_obj.note = _note_text
             if _context != None:
-                _context['content'] = note_text 
+                _context['content'] = _note_text 
+        
+            _new_tags = Tag.Parser.parse(_new_text)
+            _old_tags = Tag.Parser.parse(_old_text)
+            for _tag in _new_tags:
+                if not _tag in _old_tags:
+                    Tag.add_entity_tag(
+                        entity_id = self.note_obj.entity_id,
+                        user_id = self.note_obj.creator_id,
+                        tag = _tag
+                    )
+            for _tag in _old_tags:
+                if not _tag in _new_tags:
+                    Tag.del_entity_tag(
+                        entity_id = self.note_obj.entity_id,
+                        user_id = self.note_obj.creator_id,
+                        tag = _tag
+                    )
+                    
         
         if weight != None:
             _weight = int(weight)
@@ -183,7 +216,18 @@ class Note(object):
         
     def delete(self):
         self.__ensure_note_obj()
+        _note_text = self.note_obj.note
+        _entity_id = self.note_obj.entity_id
+        _creator_id = self.note_obj.creator_id
         self.note_obj.delete() 
+        
+        _tags = Tag.Parser.parse(_note_text)
+        for _tag in _tags:
+            Tag.del_entity_tag(
+                entity_id = _entity_id, 
+                user_id = _creator_id,
+                tag = _tag
+            )
     
     def __load_note_context_from_cache(self):
         _cache_key = 'note_%s_context'%self.note_id
@@ -332,9 +376,10 @@ class Note(object):
         return _context
     
     def add_comment(self, comment_text, creator_id, reply_to_comment_id = None, reply_to_user_id = None):
+        _comment_text = comment_text.replace(u"＃", "#")
         _obj = NoteCommentModel.objects.create(
             note_id = self.note_id,
-            comment = comment_text, 
+            comment = _comment_text, 
             creator_id = creator_id,
             replied_comment_id = reply_to_comment_id,
             replied_user_id = reply_to_user_id
@@ -346,8 +391,16 @@ class Note(object):
             _context['comment_id_list'].append(_obj.id)
             _context['comment_count'] = len(_context['comment_id_list'])
             _context = self.__reset_note_context_to_cache(_context)
-            
+
         self.__ensure_note_obj()
+        _tags = Tag.Parser.parse(_comment_text)
+        for _tag in _tags:
+            Tag.add_entity_tag(
+                entity_id = self.note_obj.entity_id,
+                user_id = creator_id,
+                tag = _tag
+            )
+            
         _message = NoteCommentMessage(
             user_id = self.note_obj.creator_id,
             note_id = self.note_id, 
@@ -377,7 +430,9 @@ class Note(object):
                 self.comments[_comment_id] = NoteCommentModel.objects.get(pk = _comment_id)
             except NoteCommentModel.DoesNotExist, e:
                 raise Note.CommentDoesNotExist(_comment_id)
-                
+        
+        _comment_text = self.comments[_comment_id].comment
+        _creator_id = self.comments[_comment_id].creator_id
         self.comments[_comment_id].delete()
        
 
@@ -387,6 +442,17 @@ class Note(object):
                 _context['comment_id_list'].remove(_comment_id)
                 _context['comment_count'] = len(_context['comment_id_list'])
                 self.__reset_note_context_to_cache(_context)
+        
+        self.__ensure_note_obj()
+        _tags = Tag.Parser.parse(_comment_text)
+        for _tag in _tags:
+            Tag.del_entity_tag(
+                entity_id = self.note_obj.entity_id,
+                user_id = _creator_id,
+                tag = _tag
+            )
+            
+            
          
     
     @staticmethod

@@ -37,7 +37,7 @@ def banner_list(request):
 @login_required
 def new_banner(request):
     if request.method == 'GET':
-        _content_type_list = ['entity', 'category', 'user', 'outlink']
+        _content_type_list = ['entity', 'category', 'user', 'user_tag', 'outlink']
         return render_to_response(
             'banner/new.html', 
             {

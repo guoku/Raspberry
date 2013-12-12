@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="entity_id">entity_id:</label>
+                        <label class="control-label" for="entity_id" style="padding-top: 0">entity_id:</label>
                         <div class="controls">
                             <input class="input-xxlarge" type="text" id="entity_id" name="entity_id" value="{{ entity_context.entity_id }}" disabled/>
                             <a href="{% url 'management.views.edit_entity' entity_context.entity_id %}" target="_blank">
@@ -25,11 +25,20 @@
                             </a>
                         </div>
                     </div>
+
                     <div class="control-group">
-                        <label class="control-label" for="note_id">note_id:</label>
+                        <label class="control-label" for="entity_id">creator: </label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="note_id" name="note_id" value="{{ note_context.note_id }}" disabled/>
+                            <a href="#">
+                                <img class="img-polaroid" src="{{ creator.avatar_large }}" alt="" style="max-width: 100px;max-height: 100px">
+                                <span>{{ creator.nickname }}</span>
+                            </a>
                         </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="note_id" style="padding-top: 0">note_id:</label>
+                        <div class="controls">{{ note_context.note_id }}</div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="note">note:</label>

@@ -9,7 +9,7 @@
         {% endif %}
         <div class="row-fluid" id="chlid-images">
             <ul class="thumbnails">
-                <li> 
+                <li>
                     <div class="thumbnail">
                         <a href="" >
                             <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 220px;max-height: 220px">
@@ -28,7 +28,7 @@
                             <div style="text-align:center">
                                 细节图{{ forloop.counter }}
                                 <a href="{% url 'management.views.del_image_from_entity' entity_context.entity_id detail_image.id %}">
-                                    - 删除 
+                                    - 删除
                                 </a>
                             </div>
                         </div>
@@ -40,17 +40,23 @@
             <form class="well form-horizontal" action="{% url 'management.views.edit_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
-                        <label class="control-label" for="entity_hash">entity_id:</label>
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">entity_id:</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="entity_id" name="entity_id" value="{{ entity_context.entity_id }}" disabled/>
+                            <a href="http://www.guoku.com/detail/{{ entity_context.entity_hash }}/" target="_blank">{{ entity_context.entity_id }}</a>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="entity_hash">Hash:</label>
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">Hash:</label>
+                        <div class="controls">{{ entity_context.entity_hash }}</div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">点评: </label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="entity_hash" name="entity_hash" value="{{ entity_context.entity_hash }}" disabled/>
+                            <a href="{% url 'management.views.note_list' %}?entity_id={{ entity_context.entity_id }}">{{ note_count }} 条</a>
                         </div>
                     </div>
+
                     <div class="control-group">
                         <label class="control-label" for="brand">品牌:</label>
                         <div class="controls">
@@ -83,26 +89,32 @@
                             <input class="input-xxlarge" type="text" id="price" name="price" value="{{ entity_context.price }}" />
                         </div>
                     </div>
+
                     <div class="control-group">
-                        <label class="control-label" for="catagory_id">分类:</label>
+                        <label class="control-label" for="category_group">分类组:</label>
                         <div class="controls">
-                            <select id="catagory" name="category_id">
-                                {% for category in category_list %}
-                                    <option {%if category.category_id == entity_context.category_id%}selected="selected" {%endif%}value="{{ category.category_id }}">{{ category.category_title }}</option>
-                                {% endfor %}
-                            </select>
+                            <select id="category_group" name="category_group"></select>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="old_catagory_id">老分类:</label>
+                        <label class="control-label" for="category">分类:</label>
                         <div class="controls">
-                            <select id="old_catagory" name="old_category_id">
-                                {% for category in old_category_list %}
-                                    <option {%if category.category_id == entity_context.old_category_id%}selected="selected" {%endif%}value="{{ category.category_id }}">{{ category.category_title }}</option>
-                                {% endfor %}
-                            </select>
+                            <select id="category" name="category_id" data-init="{{ entity_context.category_id }}"></select>
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label class="control-label" for="old_category_group">老分类组:</label>
+                        <div class="controls">
+                            <select id="old_category_group" name="old_category_group"></select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="old_category">老分类:</label>
+                        <div class="controls">
+                            <select id="old_category" name="old_category_id" data-oldinit="{{ entity_context.old_category_id }}"></select>
+                        </div>
+                    </div>
+
                     <div class="control-group">
                         <label class="control-label" for="chief_image">主图:</label>
                         <div class="controls">
@@ -113,7 +125,7 @@
                                 {% endfor %}
                             </select>
                             <a href="{% url 'management.views.edit_entity_image' entity_context.entity_id %}" target="_blank">
-                                管理图片 > 
+                                管理图片 >
                             </a>
                         </div>
                     </div>
@@ -137,7 +149,7 @@
                             <div class="controls">
                                 <input class="input-xxlarge" type="text" id="item_id_display" name="item_id_display" value="{{ item_context.item_id }}" disabled/>
                                 <a href="{{ item_context.buy_link }}" target="_blank">
-                                    去看看 > 
+                                    去看看 >
                                 </a>
                             </div>
                         </div>
@@ -207,3 +219,6 @@
     </div>
 {% endblock %}
 
+{% block extra %}
+    <script type="text/javascript" src="{{ STATIC_URL }}management/js/category.js"></script>
+{% endblock %}

@@ -4,7 +4,7 @@
 <head>
     <link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css" />
     <link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" />
-
+    {% block cssstyle %}{% endblock %}
     <title>后台</title>
 </head>
 <body style="padding-bottom:40px;padding-top:60px;">
@@ -26,6 +26,8 @@
                             <li{% if active_division == "note" %} class="active"{%endif%}><a href="{% url 'management.views.note_list' %}">Note</a></li>
                             <li class="divider-vertical"></li>
                             <li{% if active_division == "banner" %} class="active"{%endif%}><a href="{% url 'management.views.banner_list' %}">Banner</a></li>
+                            <li class="divider-vertical"></li>
+                            <li{% if active_division == "user" %} class="active"{%endif%}><a href="{% url 'management.views.user_list' %}">User</a></li>
                             <li class="divider-vertical"></li>
                             <li{% if active_division == "report" %} class="active"{%endif%}><a href="{% url 'management.views.report_list' %}">Report</a></li>
                             <li class="divider-vertical"></li>
@@ -49,7 +51,7 @@
     </div>
     
     {% block js %}
-        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}management/js/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}management/js/misc.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}management/js/date.format.js"></script>
