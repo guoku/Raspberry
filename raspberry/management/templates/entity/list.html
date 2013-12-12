@@ -100,9 +100,19 @@
         </div>
 
         <div class="sub-nav">
-            <ul class="nav nav-pills">
-                <li><a href="javascript:;" id="date-order">按创建时间排序</a></li>
-                <li><a href="javascript:;" id="note-order">按点评数排序</a></li>
+            <ul class="nav nav-pills" id="sort-entity">
+                <li {% if sort_by == None or sort_by == "date" and reverse == False %}class="active"{% endif %}>
+                    <a href="javascript:;" id="date-order">创建时间降序</a>
+                </li>
+                <li {% if sort_by == "date" and reverse %}class="active"{% endif %}>
+                    <a href="javascript:;" id="date-order">创建时间升序</a>
+                </li>
+                <li {% if sort_by == "note" and reverse == False %}class="active"{% endif %}>
+                    <a href="javascript:;" id="note-order">点评数降序</a>
+                </li>
+                <li {% if sort_by == "note" and reverse %}class="active"{% endif %}>
+                    <a href="javascript:;" id="note-order">点评数升序</a>
+                </li>
             </ul>
         </div>
 
@@ -139,22 +149,27 @@
 {% block extra %}
     <script>
         (function ($) {
-            var dateSort = $("#date-order");
-            var noteSort = $("#note-order");
+            var sortButtons = $("#sort-entity a");
 
-            dateSort.click(function () {
-                sort("date");
+            sortButtons.eq(0).click(function () {
+                sort("date", 0);
             });
-            noteSort.click(function () {
-                sort("note");
+            sortButtons.eq(1).click(function () {
+                sort("date", 1);
+            });
+            sortButtons.eq(2).click(function () {
+                sort("note", 0);
+            });
+            sortButtons.eq(3).click(function () {
+                sort("note", 1);
             });
 
-            function sort(type) {
+            function sort(type, order) {
                 var originUrl = location.href;
                 var qIndex = originUrl.indexOf("?");
                 var urlPath = originUrl;
-                var paras = {};
 
+                var paras = {};
                 if (qIndex !== -1) {
                     urlPath = originUrl.slice(0, qIndex);
                     var pStr = originUrl.slice(qIndex + 1);
@@ -164,18 +179,8 @@
                         paras[para[0]] = para[1];
                     }
                 }
-
-                if (type === "date") {
-                    paras["sort_by"] = "date";
-                } else {
-                    paras["sort_by"] = "note";
-                }
-
-                if (paras["reverse"] == 1) {
-                    paras["reverse"] = 0;
-                } else {
-                    paras["reverse"] = 1;
-                }
+                paras["sort_by"] = type;
+                paras["reverse"] = order;
 
                 location.href = urlPath + "?" + $.param(paras);
             }

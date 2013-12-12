@@ -61,23 +61,34 @@ def new_entity(request):
                 _brand = ''
                 _title = ''
                 _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
-                
-                return render_to_response( 
+
+                users = None
+                if request.user.username == "发炎君":
+                    users = [{'name': '发炎君', 'id': '22045'}, {'name': '小骚瑞', 'id': '149556'},
+                             {'name': '亚飞', 'id': '14'}, {'name': '亚基', 'id': '149308'},
+                             {'name': '爱卿你可知罪', 'id': '195580'}, {'name': '粗粗桑', 'id': '68310'},
+                             {'name': '一小撮梨花', 'id': '209071'}, {'name': '拜拜北鼻', 'id': '105'},
+                             {'name': '胡阿尤 ', 'id': '173660'}, {'name': '泡饭', 'id': '95424'},
+                             {'name': '喵S ', 'id': '215653'}, {'name': '最高', 'id': '218336'},
+                             {'name': '我不娘', 'id': '216902'}]
+
+                return render_to_response(
                     'entity/create.html', 
                     {
-                        'active_division' : 'entity',
-                        'taobao_id' : _taobao_id,
-                        'cid' : _taobao_item_info['cid'], 
-                        'taobao_title' : _taobao_item_info['title'], 
-                        'shop_nick' : _taobao_item_info['shop_nick'], 
-                        'price' : _taobao_item_info['price'], 
-                        'thumb_images' : _taobao_item_info["thumb_images"],
-                        'selected_category_id' : _selected_category_id, 
-                        'category_list' : Category.find(),
-                        'brand' : _brand,
-                        'title' : _title,
+                        'active_division': 'entity',
+                        'taobao_id': _taobao_id,
+                        'cid': _taobao_item_info['cid'],
+                        'taobao_title': _taobao_item_info['title'],
+                        'shop_nick': _taobao_item_info['shop_nick'],
+                        'price': _taobao_item_info['price'],
+                        'thumb_images': _taobao_item_info["thumb_images"],
+                        'selected_category_id': _selected_category_id,
+                        'category_list': Category.find(),
+                        'brand': _brand,
+                        'title': _title,
+                        'users': users
                     },
-                    context_instance = RequestContext(request)
+                    context_instance=RequestContext(request)
                 )
             elif _item.get_entity_id() == -1:
                 #TODO: bind an exist item to entity
@@ -97,7 +108,11 @@ def create_entity_by_taobao_item(request):
         _chief_image_url = request.POST.get("chief_image_url", None)
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
-        _intro = request.POST.get("intro", None)
+        _intro = ""
+
+        _note = request.POST.get("note", None)
+        _user_id = request.POST.get("user_id", None)
+
         _category_id = int(request.POST.get("category_id", None))
         _detail_image_urls = request.POST.getlist("image_url")
         
@@ -121,6 +136,10 @@ def create_entity_by_taobao_item(request):
             intro = _intro,
             detail_image_urls = _detail_image_urls,
         )
+
+        if _user_id:
+            print(_user_id + _note)
+            _entity.add_note(creator_id=_user_id, note_text=_note)
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
@@ -278,14 +297,17 @@ def entity_list(request):
             status = _status_code
         )
 
-        _paginator = Paginator(_page_num, 30, _entity_count, _para)
+        _sort_by = request.GET.get("sort_by", None)
+        _reverse = request.GET.get("reverse", None)
+        if _sort_by:
+            _para["sort_by"] = _sort_by
+            _para["reverse"] = _reverse
+            if _reverse == '1':
+                _reverse = True
+            else:
+                _reverse = False
 
-        _sort_by = request.GET.get("sort_by", Note)
-        _reverse = request.GET.get("reverse", False)
-        if _reverse and int(_reverse) == 1:
-            _reverse = True
-        else:
-            _reverse = False
+        _paginator = Paginator(_page_num, 30, _entity_count, _para)
 
         _entity_id_list = Entity.find(
             category_id=_category_id,
@@ -316,18 +338,20 @@ def entity_list(request):
         return render_to_response( 
             'entity/list.html', 
             {
-                'active_division' : 'entity',
-                'status_filter' : _status, 
-                'category_context' : _category_context,
-                'category_groups' : _category_groups,
-                'categories' : _categories,
-                'category_group_id' : _category_group_id,
-                'normal_entity_count' : _normal_entity_count,
-                'freeze_entity_count' : _freeze_entity_count,
-                'entity_context_list' : _entity_context_list,
-                'paginator' : _paginator
+                'active_division': 'entity',
+                'status_filter': _status,
+                'category_context': _category_context,
+                'category_groups': _category_groups,
+                'categories': _categories,
+                'category_group_id': _category_group_id,
+                'normal_entity_count': _normal_entity_count,
+                'freeze_entity_count': _freeze_entity_count,
+                'entity_context_list': _entity_context_list,
+                'paginator': _paginator,
+                'sort_by': _sort_by,
+                'reverse': _reverse
             },
-            context_instance = RequestContext(request)
+            context_instance=RequestContext(request)
         )
     else:
         _categories = Category.find(group_id = int(_group_id))
