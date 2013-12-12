@@ -42,14 +42,10 @@ def _load_taobao_item_info(taobao_id):
 @login_required
 def new_entity(request):
     if request.method == 'GET':
-        _cid = int(request.GET.get("cid", "1"))
-        _category_list = Category.find()
         return render_to_response(
             'entity/new.html', 
             {
-                'active_division' : 'entity',
-                'selected_category_id' : _cid,
-                'category_list' : _category_list
+                'active_division': 'entity'
             },
             context_instance=RequestContext(request)
         )
