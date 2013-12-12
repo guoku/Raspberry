@@ -58,12 +58,28 @@
                             <input class="input-xxlarge" type="text" id="title" name="title" value="{{ title }}" />
                         </div>
                     </div>
+
+                    {% if users %}
+                        <div class="control-group">
+                            <label class="control-label" for="user">点评者</label>
+
+                            <div class="controls">
+                                <select name="user_id" id="user">
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    {% endif %}
+
                     <div class="control-group">
-                        <label class="control-label" for="intro">简介</label>
+                        <label class="control-label" for="note">点评</label>
                         <div class="controls">
-                            <textarea class="input-xxlarge" style="height:120px" type="text" id="intro" name="intro" ></textarea>
+                            <textarea class="input-xxlarge" rows="5" type="text" id="note" name="note" ></textarea>
                         </div>
                     </div>
+
                     <div class="control-group">
                         <label class="control-label" for="chief_image_url">选图</label>
                         <div class="controls">
