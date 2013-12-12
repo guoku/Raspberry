@@ -283,11 +283,21 @@ def entity_list(request):
         )
 
         _paginator = Paginator(_page_num, 30, _entity_count, _para)
+
+        _sort_by = request.GET.get("sort_by", Note)
+        _reverse = request.GET.get("reverse", False)
+        if _reverse and int(_reverse) == 1:
+            _reverse = True
+        else:
+            _reverse = False
+
         _entity_id_list = Entity.find(
-            category_id = _category_id,
-            status = _status_code,
-            offset = _paginator.offset,
-            count = _paginator.count_in_one_page,
+            category_id=_category_id,
+            status=_status_code,
+            offset=_paginator.offset,
+            count=_paginator.count_in_one_page,
+            sort_by=_sort_by,
+            reverse=_reverse
         )
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
