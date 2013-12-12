@@ -11,9 +11,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku',
+        'NAME': 'guoku_11_21',
         'USER': 'root',                      
-        'PASSWORD': 'cw12345',                  
+        'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
         'PORT': '',                      
         'OPTIONS': {
@@ -33,11 +33,12 @@ connect('guoku')
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION": "localhost:6379",
-        "TIMEOUT": 864000,
+        "LOCATION": [
+            "localhost:6379:1",
+        ],
         "OPTIONS": {
-            "DB": 1,
             "PARSER_CLASS": "redis.connection.HiredisParser",
+            "CLIENT_CLASS": "redis_cache.client.ShardClient",
         }
     }
 }
@@ -71,12 +72,6 @@ BROKER_USER = "guest"
 BROKER_PASSWORD = "guest"
 BROKER_VHOST = "/"
 BROKER_POOL_LIMIT = 10
-
-#mail configure
-EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-MAILGUN_ACCESS_KEY = 'key-7n8gut3y8rpk1u-0edgmgaj7vs50gig8'
-MAILGUN_SERVER_NAME = 'post.guoku.com'
-EMAIL_SUBJECT_PREFIX = '[guoku]'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
