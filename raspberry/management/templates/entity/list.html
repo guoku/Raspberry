@@ -1,6 +1,20 @@
 {% extends "management_base.html" %}
 {% load management %}
 
+{% block cssstyle %}
+    <style>
+    #date-order, #note-order {
+        cursor: pointer;
+    }
+    #date-order:hover, #note-order:hover {
+        background-color: #eee;
+    }
+    .table th, .table td {
+        text-align: center;
+    }
+    </style>
+{% endblock %}
+
 {% block content %}
     <div class="span3">
         {% if category_context != None %}
@@ -100,7 +114,8 @@
                         <th>品牌</th>
                         <th>名称</th>
                         <th>淘宝标题</th>
-                        <th>点评数</th>
+                        <th id="date-order">创建时间</th>
+                        <th id="note-order">点评数</th>
                         <th>购买链接</th>
                         <th>操作</th>
                     </tr>
@@ -116,4 +131,51 @@
             {% display_paginator paginator %}
         {% endif %}
     </div>
+{% endblock %}
+
+{% block extra %}
+    <script>
+        (function ($) {
+            var dateSort = $("#date-order");
+            var noteSort = $("#note-order");
+
+            dateSort.click(function () {
+                sort("date");
+            });
+            noteSort.click(function () {
+                sort("note");
+            });
+
+            function sort(type) {
+                var originUrl = location.href;
+                var qIndex = originUrl.indexOf("?");
+                var urlPath = originUrl;
+                var paras = {};
+
+                if (qIndex !== -1) {
+                    urlPath = originUrl.slice(0, qIndex);
+                    var pStr = originUrl.slice(qIndex + 1);
+                    var pArr = pStr.split("&");
+                    for (var i = 0; i < pArr.length; i++) {
+                        var para = pArr[i].split("=");
+                        paras[para[0]] = para[1];
+                    }
+                }
+
+                if (type === "date") {
+                    paras["sort_by"] = "date";
+                } else {
+                    paras["sort_by"] = "note";
+                }
+
+                if (paras["reverse"] == 1) {
+                    paras["reverse"] = 0;
+                } else {
+                    paras["reverse"] = 1;
+                }
+
+                location.href = urlPath + "?" + $.param(paras);
+            }
+        })(jQuery)
+    </script>
 {% endblock %}
