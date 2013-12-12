@@ -17,7 +17,8 @@ from models import One_Time_Token as OneTimeTokenModel
 from models import User_Profile as UserProfileModel 
 from models import User_Follow as UserFollowModel
 from models import User_Read_Message_Record as UserReadMessageRecordModel 
-from message import UserFollowMessage 
+from utils.apns_notification import APNSWrapper
+from message import NeoMessage, UserFollowMessage 
 from utils.mail import Mail
 from hashlib import md5
 from pymogile import Client
@@ -543,6 +544,10 @@ class User(object):
         _context = self.__read_basic_info()
         _context.update(self.__read_user_stat_info())
         return _context
+    
+    def get_nickname(self):
+        _context = self.__read_basic_info()
+        return _context['nickname']
 
     def follow(self, followee_id):
         try:
@@ -559,7 +564,8 @@ class User(object):
                     _list.append(_followee_id)
                     self.__reset_following_user_id_list_to_cache(user_id_list = _list)
 
-            User(_followee_id).add_fan(self.user_id)
+            _followee = User(_followee_id)
+            _followee.add_fan(self.user_id)
         
         
             ## CLEAN_OLD_CACHE ## 
@@ -567,11 +573,23 @@ class User(object):
             cache.delete("user_following_id_list_%s"%self.user_id)
             
             _message = UserFollowMessage(
-                user_id = followee_id,
+                user_id = _followee_id,
                 follower_id = self.user_id,
                 created_time = datetime.datetime.now()
             )
             _message.save()
+           
+            _apns = APNSWrapper(user_id = followee_id)
+            _apns.badge(badge = _followee.get_unread_message_count())
+            _apns.alert(u"%s开始关注你"%_followee.get_nickname())
+            _apns.message(message = {
+                'followee_id' : _followee_id,
+                'follower_id' : self.user_id,
+                'type' : 'user_follow' 
+            })
+            _apns.push()
+
+
             
             return True
         except:
@@ -743,7 +761,7 @@ class User(object):
         except OneTimeTokenModel.DoesNotExist:
             _record = OneTimeTokenModel.objects.create(
                 user_id = self.user_id, 
-                token = token, 
+                token = _token, 
                 token_type = token_type
             )
         return _token
@@ -787,13 +805,14 @@ class User(object):
                 last_read_time = datetime.datetime.now()
             )
             
-    def get_last_read_message_time(self):
+    def get_unread_message_count(self):
         try:
             _record = UserReadMessageRecordModel.objects.get(user_id = self.user_id)
-            return _record.last_read_time
+            _unread_message_count = NeoMessage.objects.filter(user_id = self.user_id, created_time__gt = _record.last_read_time).count()
+            return _unread_message_count
         except UserReadMessageRecordModel.DoesNotExist:
             pass
-        return None 
+        return 0 
     
          
     

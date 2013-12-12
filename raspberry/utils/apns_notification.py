@@ -2,7 +2,6 @@
 __author__ = 'edison'
 
 from django.conf import settings
-from django.utils.log import logger
 from pyapns import configure, provision, notify
 
 from mobile.models import User_Apns
@@ -14,20 +13,15 @@ class APNSWrapper(object):
     guoku_apns_dir = GUOKU_APNS_KEY
 
     def __init__(self, user_id):
-        # print "user user %s" % kwargs['user_id']
-        # print kwargs
         configure(PyAPNS_Server)
         self.user_id = user_id
-        # self.msg_type = kwargs['msg_type']
-        self.notifications = {'aps':{
-            'alert':None,
-            'sound':'default',
-            'badge':1,
-            # 'message': {
-                # 'user_id':self.user_id,
-                # 'msg_type':msg_type,
-            # },
-        }}
+        self.notifications = {
+            'aps':{
+                'alert' : None,
+                'sound' : 'default',
+                'badge' : 1,
+            }
+        }
 
     def badge(self, badge):
         self.notifications['aps']['badge'] = badge
@@ -41,7 +35,7 @@ class APNSWrapper(object):
     def push(self):
         user_apns = User_Apns.objects.filter(user=self.user_id)
         for apns in user_apns:
-            logger.info("token %s" % apns.device.dev_token)
+            print "token %s"%apns.device.dev_token
 
             if settings.DEBUG:
                 if 'iPad' in apns.device.dev_name:
