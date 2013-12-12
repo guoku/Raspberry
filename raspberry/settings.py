@@ -182,3 +182,6 @@ TAOBAO_APP_INFO = {
     "web_app_secret" : "df91464ae934bacca326450f8ade67f7" 
 }
 
+# apns 
+GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
+APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
