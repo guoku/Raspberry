@@ -6,6 +6,7 @@ from django.conf import settings
 
 from lib.entity import MobileEntity
 from lib.note import MobileNote
+from lib.user import MobileUser
 
 import datetime
 import time
@@ -76,3 +77,13 @@ class DeleteEntityNoteCommentTask(Task):
     def run(self, note_id, comment_id):
         _note = MobileNote(note_id)
         _note.del_comment(comment_id)
+
+class RetrievePasswordTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, user_id):
+        _user = MobileUser(user_id)
+        _user.retrieve_password() 

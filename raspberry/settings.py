@@ -73,6 +73,12 @@ BROKER_PASSWORD = "guest"
 BROKER_VHOST = "/"
 BROKER_POOL_LIMIT = 10
 
+#mail configure
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+MAILGUN_ACCESS_KEY = 'key-7n8gut3y8rpk1u-0edgmgaj7vs50gig8'
+MAILGUN_SERVER_NAME = 'post.guoku.com'
+EMAIL_SUBJECT_PREFIX = '[guoku]'
+
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'static')

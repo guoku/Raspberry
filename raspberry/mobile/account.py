@@ -1,5 +1,6 @@
 # coding=utf8
 from lib.user import MobileUser
+from tasks import RetrievePasswordTask 
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
 
@@ -351,14 +352,18 @@ def logout(request):
         return SuccessJsonResponse("1")
 
 
-#def forget_passwd(request):
-#    _req_uri = request.get_full_path()
-#    _host = request.get_host()
-#    if request.method == "POST":
-#        _email = request.POST.get('email', None)
-#        try:
-#            _user = Account(email=_email)
-#            _user.forget_passwd(host=_host)
-#            return SuccessV2JsonResponse(req_uri=_req_uri)
-#        except Account.AbsentEmailError, e:
-#            return ErrorJsonResponse(ecode=EMAIL_NOT_EXIST, emsg=e.message, req_uri=_req_uri)
+def forget_password(request):
+    if request.method == "POST":
+        _email = request.POST.get('email', None)
+        _user_id = MobileUser.get_user_id_by_email(_email)
+        if _user_id == None:
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'email',
+                    'message' : 'email does not exist', 
+                },
+                status = 400
+            )
+        RetrievePasswordTask.delay(_user_id)
+
+        return SuccessJsonResponse("1")

@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Count 
+from django.template.loader import render_to_string
 from models import Avatar as AvatarModel 
 from models import Entity_Like as EntityLikeModel
 from models import Entity_Tag as EntityTagModel
@@ -12,9 +13,11 @@ from models import Note_Poke as NotePokeModel
 from models import Seed_User as SeedUserModel 
 from models import Sina_Token as SinaTokenModel 
 from models import Taobao_Token as TaobaoTokenModel 
+from models import One_Time_Token as OneTimeTokenModel 
 from models import User_Profile as UserProfileModel 
 from models import User_Follow as UserFollowModel
 from message import UserFollowMessage 
+from utils.mail import Mail
 from hashlib import md5
 from pymogile import Client
 from wand.image import Image
@@ -147,6 +150,12 @@ class User(object):
     class EmailExistAlready(Exception):
         def __init__(self, email):
             self.__message = "email %s is exist" %email
+        def __str__(self):
+            return repr(self.__message)
+    
+    class EmailDoesNotExist(Exception):
+        def __init__(self, email):
+            self.__message = "email %s does not exist" %email
         def __str__(self):
             return repr(self.__message)
     
@@ -722,6 +731,49 @@ class User(object):
             cache.set(_cache_key, _seed_user_id_list, 86400)
         return _seed_user_id_list
 
-            
+    def __create_one_time_token(self, token_type):
+        _token = md5(self.user_obj.email + unicode(str(self.user_obj.id)) + unicode(self.user_obj.username) + unicode(datetime.datetime.now())).hexdigest()
+        try:
+            _record = OneTimeTokenModel.objects.get(user = self.user_id, token_type = token_type)
+            _record.created_time = datetime.datetime.now() 
+            _record.token = _token
+            _record.is_used = False
+            _record.save()
+        except OneTimeTokenModel.DoesNotExist:
+            _record = OneTimeTokenModel.objects.create(
+                user_id = self.user_id, 
+                token = token, 
+                token_type = token_type
+            )
+        return _token
+
+    @staticmethod
+    def get_user_id_by_email(email):
+        try:
+            _user_obj = AuthUser.objects.get(email = email)
+            return _user_obj.id
+        except Exception: 
+            pass
+        return None
+        
+
+    def retrieve_password(self):
+        self.__ensure_user_obj()
+        self.__ensure_user_profile_obj()
+        _token = self.__create_one_time_token('reset_password')
+        _url = 'http://www.guoku.com/reset_password/?token=' + _token
+        _message = render_to_string(
+            'mail/forget_password.html',
+            { 
+                'url' : _url, 
+                'nickname' : self.user_profile_obj.nickname 
+            }
+        )
+        _mail = Mail(u"重设果库帐号密码", _message)
+        _mail.send(
+            address = self.user_obj.email
+        )
+    
+         
     
 
