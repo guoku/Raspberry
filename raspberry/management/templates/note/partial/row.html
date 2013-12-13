@@ -7,11 +7,11 @@
     {% elif note_context.post_time %} class="warning"
     {% endif %}
 >
-    <td width="60" style="text-align: center" class="note-select">
+    <td width="50" style="text-align: center" class="note-select">
         <input type="checkbox" class="note-checkbox" data-noteid="{{ note_context.note_id }}" data-entityid="{{ note_context.entity_id }}"
                 data-selecttime="{{ note_context.selected_time }}">
     </td>
-    <td width="60"><p class="text-info">{{ note_context.note_id }}</p></td>
+    <td width="50"><p class="text-info">{{ note_context.note_id }}</p></td>
     <td width="90">
         <a href="http://www.guoku.com/detail/{{ entity_context.entity_hash }}/" target="_blank">
             <img class="img-polaroid" src="{{ entity_context.chief_image.url }}" style="max-height:80px;max-width:80px;">
@@ -24,9 +24,9 @@
             <p class="text-info"></p> 
         {% endif %}
     </td>
-    <td width="200"><p class="text-info">{{ creator_context.nickname }}</p></td>
+    <td width="80"><p class="text-info">{{ creator_context.nickname }}</p></td>
     <td><p class="text-info">{{ note_context.content }}</p></td>
-    <td width="150">
+    <td width="120">
         {% if note_context.post_time %}
             <p class="text-info">{{ note_context.post_time|date_format }}</p>
         {% else %}

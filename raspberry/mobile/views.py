@@ -58,8 +58,10 @@ def feed(request):
 
         if _scale == 'friend':
             _following_user_id_list = MobileUser(_request_user_id).read_following_user_id_list()
+            MobileUser(_request_user_id).mark_footprint(friend_feed = True)
         else:
             _following_user_id_list = map(lambda x: x.user_id, Seed_User.objects.all())
+            MobileUser(_request_user_id).mark_footprint(social_feed = True)
         
         _note_id_list = MobileNote.find(
             timestamp = _timestamp,
@@ -99,81 +101,83 @@ def message(request):
 
         _rslt = []
         for _message in NeoMessage.objects.filter(user_id = _request_user_id, created_time__lt = _timestamp).order_by('-created_time'):
-            if isinstance(_message, UserFollowMessage):
-                _context = {
-                    'type' : 'user_follow',
-                    'created_time' : time.mktime(_message.created_time.timetuple()),
-                    'content': {
-                        'follower' : MobileUser(_message.follower_id).read(_request_user_id)
+            try:
+                if isinstance(_message, UserFollowMessage):
+                    _context = {
+                        'type' : 'user_follow',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content': {
+                            'follower' : MobileUser(_message.follower_id).read(_request_user_id)
+                        }
                     }
-                }
-                _rslt.append(_context)
-            elif isinstance(_message, NotePokeMessage):
-                _context = {
-                    'type' : 'note_poke_message',
-                    'created_time' : time.mktime(_message.created_time.timetuple()),
-                    'content' : {
-                        'note' : MobileNote(_message.note_id).read(_request_user_id),
-                        'poker' : MobileUser(_message.poker_id).read(_request_user_id)
+                    _rslt.append(_context)
+                elif isinstance(_message, NotePokeMessage):
+                    _context = {
+                        'type' : 'note_poke_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'note' : MobileNote(_message.note_id).read(_request_user_id),
+                            'poker' : MobileUser(_message.poker_id).read(_request_user_id)
+                        }
                     }
-                }
-                _rslt.append(_context)
-            elif isinstance(_message, NoteCommentMessage):
-                _context = {
-                    'type' : 'note_comment_message',
-                    'created_time' : time.mktime(_message.created_time.timetuple()),
-                    'content' : {
-                        'note' : MobileNote(_message.note_id).read(_request_user_id),
-                        'comment' : MobileNote(_message.note_id).read_comment(_message.comment_id),
-                        'comment_user' : MobileUser(_message.comment_creator_id).read(_request_user_id)
+                    _rslt.append(_context)
+                elif isinstance(_message, NoteCommentMessage):
+                    _context = {
+                        'type' : 'note_comment_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'note' : MobileNote(_message.note_id).read(_request_user_id),
+                            'comment' : MobileNote(_message.note_id).read_comment(_message.comment_id),
+                            'comment_user' : MobileUser(_message.comment_creator_id).read(_request_user_id)
+                        }
                     }
-                }
-                _rslt.append(_context)
-            elif isinstance(_message, NoteCommentReplyMessage):
-                _context = {
-                    'type' : 'note_comment_reply_message',
-                    'created_time' : time.mktime(_message.created_time.timetuple()),
-                    'content' : {
-                        'note' : MobileNote(_message.note_id).read(_request_user_id),
-                        'comment' : MobileNote(_message.note_id).read_comment(_message.comment_id),
-                        'replying_comment' : MobileNote(_message.note_id).read_comment(_message.replying_comment_id),
-                        'replying_user' : MobileUser(_message.replying_user_id).read(_request_user_id)
+                    _rslt.append(_context)
+                elif isinstance(_message, NoteCommentReplyMessage):
+                    _context = {
+                        'type' : 'note_comment_reply_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'note' : MobileNote(_message.note_id).read(_request_user_id),
+                            'comment' : MobileNote(_message.note_id).read_comment(_message.comment_id),
+                            'replying_comment' : MobileNote(_message.note_id).read_comment(_message.replying_comment_id),
+                            'replying_user' : MobileUser(_message.replying_user_id).read(_request_user_id)
+                        }
                     }
-                }
-                _rslt.append(_context)
-            elif isinstance(_message, EntityLikeMessage):
-                _context = {
-                    'type' : 'entity_like_message',
-                    'created_time' : time.mktime(_message.created_time.timetuple()),
-                    'content' : {
-                        'liker' : MobileUser(_message.liker_id).read(_request_user_id),
-                        'entity' : MobileEntity(_message.entity_id).read(_request_user_id)
+                    _rslt.append(_context)
+                elif isinstance(_message, EntityLikeMessage):
+                    _context = {
+                        'type' : 'entity_like_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'liker' : MobileUser(_message.liker_id).read(_request_user_id),
+                            'entity' : MobileEntity(_message.entity_id).read(_request_user_id)
+                        }
                     }
-                }
-                _rslt.append(_context)
-            elif isinstance(_message, EntityNoteMessage):
-                _context = {
-                    'type' : 'entity_note_message',
-                    'created_time' : time.mktime(_message.created_time.timetuple()),
-                    'content' : {
-                        'note' : MobileNote(_message.note_id).read(_request_user_id),
-                        'entity' : MobileEntity(_message.entity_id).read(_request_user_id)
+                    _rslt.append(_context)
+                elif isinstance(_message, EntityNoteMessage):
+                    _context = {
+                        'type' : 'entity_note_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'note' : MobileNote(_message.note_id).read(_request_user_id),
+                            'entity' : MobileEntity(_message.entity_id).read(_request_user_id)
+                        }
                     }
-                }
-                _rslt.append(_context)
-            elif isinstance(_message, NoteSelectionMessage):
-                _context = {
-                    'type' : 'note_selection_message',
-                    'created_time' : time.mktime(_message.created_time.timetuple()),
-                    'content' : {
-                        'note' : MobileNote(_message.note_id).read(_request_user_id),
-                        'entity' : MobileEntity(_message.entity_id).read(_request_user_id)
+                    _rslt.append(_context)
+                elif isinstance(_message, NoteSelectionMessage):
+                    _context = {
+                        'type' : 'note_selection_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'note' : MobileNote(_message.note_id).read(_request_user_id),
+                            'entity' : MobileEntity(_message.entity_id).read(_request_user_id)
+                        }
                     }
-                }
-                _rslt.append(_context)
-                
-                
-        
+                    _rslt.append(_context)
+            except:
+                # TODO : logger
+                pass
+               
         return SuccessJsonResponse(_rslt)
 
 def selection(request):
@@ -208,7 +212,8 @@ def selection(request):
                     }
                 }
                 _rslt.append(_context)
-                
+        
+        MobileUser(_request_user_id).mark_footprint(selection = True)
         
         return SuccessJsonResponse(_rslt)
 
@@ -246,3 +251,11 @@ def popular(request):
                 status = 400
             )
 
+def unread_message_count(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        _request_user_id = Session_Key.objects.get_user_id(_session)
+        return SuccessJsonResponse({
+            'count' : MobileUser(_request_user_id).get_unread_message_count()
+        })
+        

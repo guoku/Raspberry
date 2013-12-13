@@ -4,7 +4,8 @@ from lib.entity import MobileEntity
 from lib.note import MobileNote
 from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
-from mobile.models import Session_Key 
+from mobile.models import Session_Key
+from tasks import FollowUserTask, UnfollowUserTask
 import datetime
     
 
@@ -50,11 +51,19 @@ def follow_user(request, user_id, target_status):
         
         _user_id = int(user_id)
         _rslt = { 'user_id' : _user_id }
-        if target_status == '1':
-            MobileUser(_request_user_id).follow(_user_id)
-        else:
-            MobileUser(_request_user_id).unfollow(_user_id)
         _rslt['relation'] = MobileUser.get_relation(_request_user_id, _user_id)
+        if target_status == '1':
+            FollowUserTask.delay(_request_user_id, _user_id)
+            if _rslt['relation'] == 0:
+                _rslt['relation'] = 1
+            elif _rslt['relation'] == 2:
+                _rslt['relation'] = 3
+        else:
+            UnfollowUserTask.delay(_request_user_id, _user_id)
+            if _rslt['relation'] == 3:
+                _rslt['relation'] = 2
+            elif _rslt['relation'] == 1:
+                _rslt['relation'] = 0
         return SuccessJsonResponse(_rslt)
 
 
@@ -199,7 +208,12 @@ def check_sina_user(request):
 
 def user_tag_list(request, user_id):
     if request.method == "GET":
-        _rslt = Tag.user_tag_stat(user_id)
+        _user_context = MobileUser(user_id).read()
+        _tag_list = Tag.user_tag_stat(user_id)
+        _rslt = {
+            'user' : _user_context,
+            'tags' : _tag_list
+        }
     return SuccessJsonResponse(_rslt)
 
 

@@ -12,7 +12,7 @@
                 <li>
                     <div class="thumbnail">
                         <a href="" >
-                            <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 220px;max-height: 220px">
+                            <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 300px;">
                         </a>
                         <div style="text-align:center">
                             当前主图
@@ -50,12 +50,6 @@
                         <div class="controls">{{ entity_context.entity_hash }}</div>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="entity_hash" style="padding-top: 0">点评: </label>
-                        <div class="controls">
-                            <a href="{% url 'management.views.note_list' %}?entity_id={{ entity_context.entity_id }}">{{ note_count }} 条</a>
-                        </div>
-                    </div>
 
                     <div class="control-group">
                         <label class="control-label" for="brand">品牌:</label>
@@ -80,9 +74,38 @@
                     <div class="control-group">
                         <label class="control-label" for="intro">简介:</label>
                         <div class="controls">
-                            <textarea class="input-xxlarge" style="height:120px" type="text" id="intro" name="intro" >{{ entity_context.intro }}</textarea>
+                            <textarea class="input-xxlarge" rows="1" type="text" id="intro" name="intro" >{{ entity_context.intro }}</textarea>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">点评: </label>
+                        <div class="controls">
+                            <a href="{% url 'management.views.note_list' %}?entity_id={{ entity_context.entity_id }}">{{ note_count }} 条</a>
+                        </div>
+                    </div>
+                    
+                    {% if note_count == 0 %}
+                        <div class="control-group">
+                            <label class="control-label" for="user">点评者</label>
+    
+                            <div class="controls">
+                                <select name="user_id" id="user">
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="note">追加点评</label>
+    
+                            <div class="controls">
+                                <textarea class="input-xxlarge" rows="5" type="text" id="note" name="note"></textarea>
+                            </div>
+                        </div>
+                    {% endif %}
+
                     <div class="control-group">
                         <label class="control-label" for="price">价格:</label>
                         <div class="controls">

@@ -44,7 +44,7 @@ def fetch(itemid):
     for tag in imgtags:
         imgurl = tag['src']
         #imgurl = imgurl.replace('_70x70.jpg','')
-        imgurl = re.sub('_\d+x\d+\.jpg','',imgurl)
+        imgurl = re.sub('_\d+x\d+\.jpg|_b.jpg','',imgurl)
         imgurls.append(imgurl)
 
             

@@ -173,23 +173,23 @@ function initDeleteCatalog() {
     })
 }
 
-function initImageSelect() {
-    var _thumbnails = jQuery('#chlid-images ul');
-    var _images = _thumbnails.find("li a");
-//    console.log(_images)
-    _images.each(function(){
-        var _image = $(this);
-        _image.click(function(){
-            var _img_link = $(this).find('img').attr('src');
-            var _update_link = jQuery('#img_url');
-            var _main_image_link = jQuery('#main-image');
-            _update_link.val(_img_link);
-            _main_image_link.attr('src', _img_link);
-//            console.log(_img_link);
-            return false;
-        })
-    });
-}
+//function initImageSelect() {
+//    var _thumbnails = jQuery('#chlid-images ul');
+//    var _images = _thumbnails.find("li a");
+////    console.log(_images)
+//    _images.each(function(){
+//        var _image = $(this);
+//        _image.click(function(){
+//            var _img_link = $(this).find('img').attr('src');
+//            var _update_link = jQuery('#img_url');
+//            var _main_image_link = jQuery('#main-image');
+//            _update_link.val(_img_link);
+//            _main_image_link.attr('src', _img_link);
+////            console.log(_img_link);
+//            return false;
+//        })
+//    });
+//}
 
 function initPubCandidate(){
     var _unpass = 'label-warning';

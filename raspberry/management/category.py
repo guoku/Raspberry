@@ -10,6 +10,7 @@ import re
 import datetime
 import time
 import json
+from base.entity import Entity
 
 from base.category import Category, Category_Group
 
@@ -107,12 +108,14 @@ def edit_category(request, category_id):
     if request.method == 'GET':
         _category_groups = Category.allgroups()
         _category_context = Category(category_id).read()
+        _category_entity_count = Entity.count(category_id)
         return render_to_response( 
             'category/edit.html', 
             {
                 'active_division' : 'category',
                 'category_groups' : _category_groups,
                 'category_context' : _category_context,
+                'category_entity_count' : _category_entity_count
             },
             context_instance = RequestContext(request)
         )

@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Count 
+from django.template.loader import render_to_string
 from models import Avatar as AvatarModel 
 from models import Entity_Like as EntityLikeModel
 from models import Entity_Tag as EntityTagModel
@@ -12,9 +13,14 @@ from models import Note_Poke as NotePokeModel
 from models import Seed_User as SeedUserModel 
 from models import Sina_Token as SinaTokenModel 
 from models import Taobao_Token as TaobaoTokenModel 
+from models import One_Time_Token as OneTimeTokenModel 
 from models import User_Profile as UserProfileModel 
 from models import User_Follow as UserFollowModel
-from message import UserFollowMessage 
+from models import User_Footprint as UserFootprintModel
+from utils.apns_notification import APNSWrapper
+from message import NeoMessage, UserFollowMessage 
+from models import Selection 
+from utils.mail import Mail
 from hashlib import md5
 from pymogile import Client
 from wand.image import Image
@@ -147,6 +153,12 @@ class User(object):
     class EmailExistAlready(Exception):
         def __init__(self, email):
             self.__message = "email %s is exist" %email
+        def __str__(self):
+            return repr(self.__message)
+    
+    class EmailDoesNotExist(Exception):
+        def __init__(self, email):
+            self.__message = "email %s does not exist" %email
         def __str__(self):
             return repr(self.__message)
     
@@ -366,13 +378,14 @@ class User(object):
         
         if nickname != None:
             _nickname = nickname.strip()
-            if User.nickname_exist(_nickname):
-                raise User.NicknameExistAlready(_nickname)
+            if self.user_profile_obj != None and _nickname != self.user_profile_obj.nickname:
+                if User.nickname_exist(_nickname):
+                    raise User.NicknameExistAlready(_nickname)
         
         if self.user_profile_obj == None:
             _user_profile_obj = UserProfileModel.objects.create(
                 user_id = self.user_id,
-                nickname = nickname,
+                nickname = nickname.strip(),
                 location = location,
                 gender = gender,
                 bio = bio,
@@ -533,6 +546,10 @@ class User(object):
         _context = self.__read_basic_info()
         _context.update(self.__read_user_stat_info())
         return _context
+    
+    def get_nickname(self):
+        _context = self.__read_basic_info()
+        return _context['nickname']
 
     def follow(self, followee_id):
         try:
@@ -549,7 +566,8 @@ class User(object):
                     _list.append(_followee_id)
                     self.__reset_following_user_id_list_to_cache(user_id_list = _list)
 
-            User(_followee_id).add_fan(self.user_id)
+            _followee = User(_followee_id)
+            _followee.add_fan(self.user_id)
         
         
             ## CLEAN_OLD_CACHE ## 
@@ -557,11 +575,23 @@ class User(object):
             cache.delete("user_following_id_list_%s"%self.user_id)
             
             _message = UserFollowMessage(
-                user_id = followee_id,
+                user_id = _followee_id,
                 follower_id = self.user_id,
                 created_time = datetime.datetime.now()
             )
             _message.save()
+           
+            _apns = APNSWrapper(user_id = followee_id)
+            _apns.badge(badge = _followee.get_unread_message_count())
+            _apns.alert(u"%s开始关注你"%_followee.get_nickname())
+            _apns.message(message = {
+                'followee_id' : _followee_id,
+                'follower_id' : self.user_id,
+                'type' : 'user_follow' 
+            })
+            _apns.push()
+
+
             
             return True
         except:
@@ -722,6 +752,78 @@ class User(object):
             cache.set(_cache_key, _seed_user_id_list, 86400)
         return _seed_user_id_list
 
-            
-    
+    def __create_one_time_token(self, token_type):
+        _token = md5(self.user_obj.email + unicode(str(self.user_obj.id)) + unicode(self.user_obj.username) + unicode(datetime.datetime.now())).hexdigest()
+        try:
+            _record = OneTimeTokenModel.objects.get(user = self.user_id, token_type = token_type)
+            _record.created_time = datetime.datetime.now() 
+            _record.token = _token
+            _record.is_used = False
+            _record.save()
+        except OneTimeTokenModel.DoesNotExist:
+            _record = OneTimeTokenModel.objects.create(
+                user_id = self.user_id, 
+                token = _token, 
+                token_type = token_type
+            )
+        return _token
 
+    @staticmethod
+    def get_user_id_by_email(email):
+        try:
+            _user_obj = AuthUser.objects.get(email = email)
+            return _user_obj.id
+        except Exception: 
+            pass
+        return None
+        
+
+    def retrieve_password(self):
+        self.__ensure_user_obj()
+        self.__ensure_user_profile_obj()
+        _token = self.__create_one_time_token('reset_password')
+        _url = 'http://www.guoku.com/reset_password/?token=' + _token
+        _message = render_to_string(
+            'mail/forget_password.html',
+            { 
+                'url' : _url, 
+                'nickname' : self.user_profile_obj.nickname 
+            }
+        )
+        _mail = Mail(u"重设果库帐号密码", _message)
+        _mail.send(
+            address = self.user_obj.email
+        )
+    
+         
+    def mark_footprint(self, selection = False, message = False, social_feed = False, friend_feed = False):
+        try:
+            _record = UserFootprintModel.objects.get(user_id = self.user_id)
+        except UserFootprintModel.DoesNotExist:
+            _record = UserFootprintModel.objects.create(
+                user_id = self.user_id,
+                last_read_selection_time = None, 
+                last_read_message_time = None,
+                last_read_social_feed_time = None, 
+                last_read_friend_feed_time = None
+            )
+        if selection:
+            _record.last_read_selection_time = datetime.datetime.now()
+        if message:
+            _record.last_read_message_time = datetime.datetime.now()
+        if social_feed:
+            _record.last_read_social_feed_time = datetime.datetime.now()
+        if friend_feed:
+            _record.last_read_friend_feed_time = datetime.datetime.now()
+        _record.save()
+            
+    def get_unread_message_count(self):
+        try:
+            _record = UserFootprintModel.objects.get(user_id = self.user_id)
+            if _record.last_read_message_time != None:
+                _unread_message_count = NeoMessage.objects.filter(user_id = self.user_id, created_time__gt = _record.last_read_message_time).count()
+                return _unread_message_count
+        except UserFootprintModel.DoesNotExist:
+            pass
+        return 0 
+    
