@@ -435,17 +435,18 @@ class Entity(object):
             )
             self.update_like_count()
             User(_user_id).update_user_like_count(delta = 1)
-            
-            _basic_info = self.__read_basic_info()
-            if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None and _basic_info['creator_id'] != user_id:
-                if EntityLikeMessage.objects.filter(user_id = _basic_info['creator_id'], entity_id = self.entity_id, liker_id = _user_id).count() == 0: 
-                    _message = EntityLikeMessage(
-                        user_id = _basic_info['creator_id'],
-                        entity_id = self.entity_id,
-                        liker_id = _user_id, 
-                        created_time = datetime.datetime.now()
-                    )
-                    _message.save()
+
+#########################   REMOVE LIKE MESSAGE AT FIRST ##########################
+#            _basic_info = self.__read_basic_info()
+#            if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None and _basic_info['creator_id'] != user_id:
+#                if EntityLikeMessage.objects.filter(user_id = _basic_info['creator_id'], entity_id = self.entity_id, liker_id = _user_id).count() == 0: 
+#                    _message = EntityLikeMessage(
+#                        user_id = _basic_info['creator_id'],
+#                        entity_id = self.entity_id,
+#                        liker_id = _user_id, 
+#                        created_time = datetime.datetime.now()
+#                    )
+#                    _message.save()
 
             return True
         except:
