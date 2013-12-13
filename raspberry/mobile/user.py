@@ -199,7 +199,12 @@ def check_sina_user(request):
 
 def user_tag_list(request, user_id):
     if request.method == "GET":
-        _rslt = Tag.user_tag_stat(user_id)
+        _user_context = MobileUser(user_id).read()
+        _tag_list = Tag.user_tag_stat(user_id)
+        _rslt = {
+            'user' : _user_context,
+            'tags' : _tag_list
+        }
     return SuccessJsonResponse(_rslt)
 
 
