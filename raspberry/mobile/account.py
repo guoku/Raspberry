@@ -372,7 +372,10 @@ def forget_password(request):
 def apns_token(request):
     if request.method == "POST":
         _session = request.POST.get('session', None)
-        _request_user_id = Session_Key.objects.get_user_id(_session)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
         
         _dev_token = request.POST.get('dev_token', None)
         _dev_name = request.POST.get('dev_name', None)

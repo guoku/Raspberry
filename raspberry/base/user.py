@@ -377,13 +377,14 @@ class User(object):
         
         if nickname != None:
             _nickname = nickname.strip()
-            if User.nickname_exist(_nickname):
-                raise User.NicknameExistAlready(_nickname)
+            if _nickname != self.user_obj.nickname:
+                if User.nickname_exist(_nickname):
+                    raise User.NicknameExistAlready(_nickname)
         
         if self.user_profile_obj == None:
             _user_profile_obj = UserProfileModel.objects.create(
                 user_id = self.user_id,
-                nickname = nickname,
+                nickname = nickname.strip(),
                 location = location,
                 gender = gender,
                 bio = bio,
