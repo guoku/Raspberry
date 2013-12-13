@@ -37,7 +37,34 @@ def _load_taobao_item_info(taobao_id):
     taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
     
     taobao_item_info["shop_nick"] = taobao_item_info["nick"] 
-    return taobao_item_info 
+    return taobao_item_info
+
+
+def _get_special_names(request_user_id):
+    if request_user_id in [22045, 19, 10]:
+        if request_user_id == 22045:
+            _id_list = ['22045', '149556', '14', '149308', '195580', '68310', '209071', '105', '173660',
+                        '95424', '215653', '218336', '216902']
+        else:
+            _id_list = ['19', '10', '79761']
+
+        _users = []
+        for _id in _id_list:
+            _user_context = User(_id).read()
+            _users.append({
+                'id' : _id,
+                'name' : _user_context['nickname']
+            })
+    else:
+        _request_user_context = User(request_user_id).read()
+        _users = [
+            {
+                'name': _request_user_context['nickname'],
+                'id': str(request_user_id)
+            }
+        ]
+    return _users
+
 
 @login_required
 def new_entity(request):
@@ -62,29 +89,7 @@ def new_entity(request):
                 _title = ''
                 _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
 
-                _request_user_id = request.user.id
-                if _request_user_id in [22045, 19, 10]:
-                    if _request_user_id == 22045:
-                        _id_list = ['22045', '149556', '14', '149308', '195580', '68310', '209071', '105', '173660',
-                                    '95424', '215653', '218336', '216902']
-                    else:
-                        _id_list = ['19', '10', '79761']
-
-                    _users = []
-                    for _id in _id_list:
-                        _user_context = User(_id).read()
-                        _users.append({
-                            'id' : _id,
-                            'name' : _user_context['nickname']
-                        })
-                else:
-                    _request_user_context = User(request.user.id).read()
-                    _users = [
-                        {
-                            'name' : _request_user_context['nickname'], 
-                            'id': str(request.user.id) 
-                        }
-                    ]
+                _users = _get_special_names(request.user.id)
 
                 return render_to_response(
                     'entity/create.html', 
@@ -123,10 +128,6 @@ def create_entity_by_taobao_item(request):
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
         _intro = ""
-
-        _note = request.POST.get("note", None)
-        _user_id = request.POST.get("user_id", None)
-
         _category_id = int(request.POST.get("category_id", None))
         _detail_image_urls = request.POST.getlist("image_url")
         
@@ -151,9 +152,9 @@ def create_entity_by_taobao_item(request):
             detail_image_urls = _detail_image_urls,
         )
 
-        if _user_id:
-            print(_user_id + _note)
-            _entity.add_note(creator_id=_user_id, note_text=_note)
+        _note = request.POST.get("note", None)
+        _user_id = request.POST.get("user_id", None)
+        _entity.add_note(creator_id=_user_id, note_text=_note)
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
@@ -175,6 +176,8 @@ def edit_entity(request, entity_id):
 
         _note_count = Note.count(entity_id=entity_id)
 
+        _users = _get_special_names(request.user.id)
+
         return render_to_response( 
             'entity/edit.html', 
             {
@@ -184,7 +187,8 @@ def edit_entity(request, entity_id):
                 'old_category_list' : Old_Category.find(), 
                 'item_context_list' : _item_context_list,
                 'message' : _message,
-                'note_count': _note_count
+                'note_count': _note_count,
+                'users' : _users
             },
             context_instance = RequestContext(request)
         )
@@ -214,6 +218,11 @@ def edit_entity(request, entity_id):
             chief_image_id = _chief_image_id,
             weight = _weight
         )
+
+        _note = request.POST.get("note", None)
+        _user_id = request.POST.get("user_id", None)
+        _entity.add_note(creator_id=_user_id, note_text=_note)
+
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
