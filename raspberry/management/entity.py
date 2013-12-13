@@ -66,6 +66,20 @@ def _get_special_names(request_user_id):
     return _users
 
 
+def _add_note_and_select_delay(entity, user_id, note):
+    if len(note.strip()) > 0:
+        _note = entity.add_note(creator_id=user_id, note_text=note)
+
+        if user_id in ['22045', '149556', '14', '149308', '195580', '68310', '209071', '105', '173660',
+                       '95424', '215653', '218336', '216902', '19', '10', '79761']:
+            Entity(entity.read()['entity_id']).update_note_selection_info(
+                note_id=_note.read()['note_id'],
+                selector_id=user_id,
+                selected_time=datetime.datetime.now(),
+                post_time=datetime.datetime(2100, 1, 1)
+            )
+
+
 @login_required
 def new_entity(request):
     if request.method == 'GET':
@@ -154,7 +168,7 @@ def create_entity_by_taobao_item(request):
 
         _note = request.POST.get("note", None)
         _user_id = request.POST.get("user_id", None)
-        _entity.add_note(creator_id=_user_id, note_text=_note)
+        _add_note_and_select_delay(_entity, _user_id, _note)
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
@@ -221,7 +235,7 @@ def edit_entity(request, entity_id):
 
         _note = request.POST.get("note", None)
         _user_id = request.POST.get("user_id", None)
-        _entity.add_note(creator_id=_user_id, note_text=_note)
+        _add_note_and_select_delay(_entity, _user_id, _note)
 
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
