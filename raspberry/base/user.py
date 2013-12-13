@@ -19,6 +19,7 @@ from models import User_Follow as UserFollowModel
 from models import User_Footprint as UserFootprintModel
 from utils.apns_notification import APNSWrapper
 from message import NeoMessage, UserFollowMessage 
+from models import Selection 
 from utils.mail import Mail
 from hashlib import md5
 from pymogile import Client
@@ -826,8 +827,3 @@ class User(object):
             pass
         return 0 
     
-         
-    
-
-    
-

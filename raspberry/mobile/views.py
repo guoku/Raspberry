@@ -177,9 +177,7 @@ def message(request):
             except:
                 # TODO : logger
                 pass
-                
-        MobileUser(_request_user_id).mark_footprint(message = True)
-        
+               
         return SuccessJsonResponse(_rslt)
 
 def selection(request):
@@ -253,3 +251,11 @@ def popular(request):
                 status = 400
             )
 
+def unread_message_count(request):
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        _request_user_id = Session_Key.objects.get_user_id(_session)
+        return SuccessJsonResponse({
+            'count' : MobileUser(_request_user_id).get_unread_message_count()
+        })
+        
