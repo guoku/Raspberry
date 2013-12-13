@@ -62,62 +62,17 @@ def new_entity(request):
                 _title = ''
                 _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
 
-                _users = None
                 if request.user.id == 22045:
-                    _users = [
-                        {
-                            'name' : '发炎君', 
-                            'id': '22045'
-                        }, 
-                        {
-                            'name' : '小骚瑞', 
-                            'id': '149556'
-                        },
-                        {
-                            'name' : '亚飞', 
-                            'id' : '14'
-                        }, 
-                        {
-                            'name' : '亚基', 
-                            'id': '149308'
-                        },
-                        {
-                            'name' : '爱卿你可知罪', 
-                            'id' : '195580'
-                        }, 
-                        {
-                            'name' : '粗粗桑', 
-                            'id' : '68310'
-                        },
-                        {
-                            'name' : '一小撮梨花', 
-                            'id' : '209071'
-                        }, 
-                        {
-                            'name' : '拜拜北鼻', 
-                            'id' : '105'
-                        },
-                        {
-                            'name' : '胡阿尤', 
-                            'id' : '173660'
-                        }, 
-                        {
-                            'name' : '泡饭', 
-                            'id' : '95424'
-                        },
-                        {
-                            'name' : '喵S ', 
-                            'id' : '215653'
-                        }, 
-                        {
-                            'name' : '最高', 
-                            'id' : '218336'
-                        },
-                        {
-                            'name' : '我不娘', 
-                            'id': '216902'
-                        }
-                    ]
+                    _id_list = ['22045', '149556', '14', '149308', '195580', '68310', '209071', '105', '173660',
+                                '95424', '215653', '218336', '216902']
+                    _users = []
+                    for _id in _id_list:
+                        _user_context = User(_id).read()
+                        _users.append({
+                            'id' : _id,
+                            'name' : _user_context['nickname']
+                        })
+
                 else:
                     _request_user_context = User(request.user.id).read()
                     _users = [
