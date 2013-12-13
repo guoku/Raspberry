@@ -36,6 +36,24 @@ class UnlikeEntityTask(Task):
         _request_user_id = int(request_user_id)
         MobileEntity(_entity_id).unlike(_request_user_id)
 
+class FollowUserTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, follower_id, followee_id):
+        MobileUser(follower_id).follow(followee_id)
+
+class UnfollowUserTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, follower_id, followee_id):
+        MobileUser(follower_id).unfollow(followee_id)
+
 class PokeEntityNoteTask(Task):
     ignore_result = True
     time_limit = 60
