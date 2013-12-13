@@ -41,12 +41,15 @@ def _load_taobao_item_info(taobao_id):
 
 
 def _get_special_names(request_user_id):
-    if request_user_id in [22045, 19, 10]:
+    if request_user_id in [22045, 19, 10, 79761, 66400]:
         if request_user_id == 22045:
             _id_list = ['22045', '149556', '14', '149308', '195580', '68310', '209071', '105', '173660',
                         '95424', '215653', '218336', '216902']
-        else:
-            _id_list = ['19', '10', '79761']
+        elif request_user_id in [10, 19]:
+            _id_list = [19, 10, 79761]
+        elif request_user_id in [79761, 66400]:
+            _id_list = [ 66400, 79761 ]
+            
 
         _users = []
         for _id in _id_list:
@@ -71,7 +74,7 @@ def _add_note_and_select_delay(entity, user_id, note):
         _note = entity.add_note(creator_id=user_id, note_text=note)
 
         if user_id in ['22045', '149556', '14', '149308', '195580', '68310', '209071', '105', '173660',
-                       '95424', '215653', '218336', '216902', '19', '10', '79761']:
+                       '95424', '215653', '218336', '216902', '19', '10', '79761', '66400']:
             Entity(entity.read()['entity_id']).update_note_selection_info(
                 note_id=_note.read()['note_id'],
                 selector_id=user_id,

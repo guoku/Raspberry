@@ -175,8 +175,10 @@ def post_selection_delay(request, entity_id, note_id):
     _request_user_id = request.user.id
     _selected_time = datetime.datetime.now()
     _post_time = datetime.datetime(2100, 1, 1)
-    Entity(entity_id).update_note_selection_info(
-        note_id = note_id,
+    _entity_id = int(entity_id)
+    _note_id = int(note_id)
+    Entity(_entity_id).update_note_selection_info(
+        note_id = _note_id,
         selector_id = _request_user_id,
         selected_time = _selected_time,
         post_time = _post_time
