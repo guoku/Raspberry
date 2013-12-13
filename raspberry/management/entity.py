@@ -62,9 +62,14 @@ def new_entity(request):
                 _title = ''
                 _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
 
-                if request.user.id == 22045:
-                    _id_list = ['22045', '149556', '14', '149308', '195580', '68310', '209071', '105', '173660',
-                                '95424', '215653', '218336', '216902']
+                _request_user_id = request.user.id
+                if _request_user_id in [22045, 19, 10]:
+                    if _request_user_id == 22045:
+                        _id_list = ['22045', '149556', '14', '149308', '195580', '68310', '209071', '105', '173660',
+                                    '95424', '215653', '218336', '216902']
+                    else:
+                        _id_list = ['19', '10', '79761']
+
                     _users = []
                     for _id in _id_list:
                         _user_context = User(_id).read()
@@ -72,7 +77,6 @@ def new_entity(request):
                             'id' : _id,
                             'name' : _user_context['nickname']
                         })
-
                 else:
                     _request_user_context = User(request.user.id).read()
                     _users = [
