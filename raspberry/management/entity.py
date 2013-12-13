@@ -113,7 +113,7 @@ def new_entity(request):
                 #TODO: bind an exist item to entity
                 pass
             else:
-                return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
+                return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _item.get_entity_id() }) + '?code=1')
                 
                 
 @login_required

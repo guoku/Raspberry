@@ -238,9 +238,12 @@ class One_Time_Token(models.Model):
     token_type = models.CharField(max_length = 30, db_index = True)
     is_used = models.BooleanField(default = False)
 
-class User_Read_Message_Record(models.Model):
+class User_Footprint(models.Model):
     user = models.ForeignKey(User)
-    last_read_time = models.DateTimeField(db_index = True)
+    last_read_selection_time = models.DateTimeField(null = True, db_index = True)
+    last_read_message_time = models.DateTimeField(null = True, db_index = True)
+    last_read_social_feed_time = models.DateTimeField(null = True, db_index = True)
+    last_read_friend_feed_time = models.DateTimeField(null = True, db_index = True)
 
 
 from mongoengine import * 
