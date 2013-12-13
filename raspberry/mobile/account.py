@@ -1,6 +1,7 @@
 # coding=utf8
 from lib.user import MobileUser
 from tasks import RetrievePasswordTask 
+from mobile.lib.apns import Apns 
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
 
@@ -367,3 +368,34 @@ def forget_password(request):
         RetrievePasswordTask.delay(_user_id)
 
         return SuccessJsonResponse("1")
+
+def apns_token(request):
+    if request.method == "POST":
+        _session = request.POST.get('session', None)
+        _request_user_id = Session_Key.objects.get_user_id(_session)
+        
+        _dev_token = request.POST.get('dev_token', None)
+        _dev_name = request.POST.get('dev_name', None)
+        _dev_model = request.POST.get('dev_model', None)
+        _sys_ver = request.POST.get('sys_ver', None)
+        _app_name = request.POST.get('app_name', None)
+        _app_ver = request.POST.get('app_ver', None)
+        _push_badge = request.POST.get('push_badge', False)
+        _push_alert = request.POST.get('push_alert', False)
+        _push_sound = request.POST.get('push_sound', False)
+        _development = request.POST.get('development', False)
+        
+        _apns = Apns(_dev_token)
+        _apns.create( 
+            user_id = _request_user_id,
+            dev_name = _dev_name,
+            dev_models = _dev_model,
+            sys_ver = _sys_ver,
+            app_ver = _app_ver,
+            push_badge = _push_badge,
+            push_alert = _push_alert,
+            push_sound = _push_sound,
+            development = _development
+        )
+
+        return SuccessJsonResponse({ 'success' : '1' }) 

@@ -66,6 +66,7 @@ class Session_Key(models.Model):
         app_label = 'mobile'
 
 class Device(models.Model):
+    app = models.ForeignKey(Apps, related_name="device")
     app_version = models.CharField(u'app版本', max_length = 25)
     dev_token = models.CharField(max_length = 64, db_index = True)
     dev_name = models.CharField(max_length = 255)

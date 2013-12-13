@@ -16,7 +16,7 @@ from models import Taobao_Token as TaobaoTokenModel
 from models import One_Time_Token as OneTimeTokenModel 
 from models import User_Profile as UserProfileModel 
 from models import User_Follow as UserFollowModel
-from models import User_Read_Message_Record as UserReadMessageRecordModel 
+from models import User_Footprint as UserFootprintModel
 from utils.apns_notification import APNSWrapper
 from message import NeoMessage, UserFollowMessage 
 from utils.mail import Mail
@@ -794,23 +794,34 @@ class User(object):
         )
     
          
-    def mark_read_message(self):
+    def mark_footprint(self, selection = False, message = False, social_feed = False, friend_feed = False):
         try:
-            _record = UserReadMessageRecordModel.objects.get(user_id = self.user_id)
-            _record.last_read_time = datetime.datetime.now()
-            _record.save()
-        except UserReadMessageRecordModel.DoesNotExist:
-            _record = UserReadMessageRecordModel.objects.create(
+            _record = UserFootprintModel.objects.get(user_id = self.user_id)
+        except UserFootprintModel.DoesNotExist:
+            _record = UserFootprintModel.objects.create(
                 user_id = self.user_id,
-                last_read_time = datetime.datetime.now()
+                last_read_selection_time = None, 
+                last_read_message_time = None,
+                last_read_social_feed_time = None, 
+                last_read_friend_feed_time = None
             )
+        if selection:
+            _record.last_read_selection_time = datetime.datetime.now()
+        if message:
+            _record.last_read_message_time = datetime.datetime.now()
+        if social_feed:
+            _record.last_read_social_feed_time = datetime.datetime.now()
+        if friend_feed:
+            _record.last_read_friend_feed_time = datetime.datetime.now()
+        _record.save()
             
     def get_unread_message_count(self):
         try:
-            _record = UserReadMessageRecordModel.objects.get(user_id = self.user_id)
-            _unread_message_count = NeoMessage.objects.filter(user_id = self.user_id, created_time__gt = _record.last_read_time).count()
-            return _unread_message_count
-        except UserReadMessageRecordModel.DoesNotExist:
+            _record = UserFootprintModel.objects.get(user_id = self.user_id)
+            if _record.last_read_message_time != None:
+                _unread_message_count = NeoMessage.objects.filter(user_id = self.user_id, created_time__gt = _record.last_read_message_time).count()
+                return _unread_message_count
+        except UserFootprintModel.DoesNotExist:
             pass
         return 0 
     
