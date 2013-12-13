@@ -91,6 +91,7 @@ class Entity(object):
             brand = brand,
             title = title,
             intro = intro,
+            price = taobao_item_info["price"], 
             chief_image = _chief_image_id,
             detail_images = "#".join(_detail_image_ids),
             weight = weight

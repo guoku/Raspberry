@@ -377,7 +377,7 @@ class User(object):
         
         if nickname != None:
             _nickname = nickname.strip()
-            if _nickname != self.user_obj.nickname:
+            if self.user_profile_obj != None and _nickname != self.user_profile_obj.nickname:
                 if User.nickname_exist(_nickname):
                     raise User.NicknameExistAlready(_nickname)
         
