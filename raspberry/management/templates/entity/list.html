@@ -16,12 +16,12 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">操作</li>
                     <li>
-                        <a href="{% url 'management.views.new_entity' %}?cid={{category_context.category_id}}" target=_blank>
+                        <a href="{% url 'management.views.new_entity' %}?cid={{category_context.category_id}}">
                             添加商品 - {{ category_context.category_title }}
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'management.views.edit_category' category_context.category_id %}" target=_blank>
+                        <a href="{% url 'management.views.edit_category' category_context.category_id %}">
                             编辑分类 - {{ category_context.category_title }}
                         </a>
                     </li>
@@ -32,7 +32,7 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">操作</li>
                     <li>
-                        <a href="{% url 'management.views.new_entity' %}" target=_blank>
+                        <a href="{% url 'management.views.new_entity' %}">
                             添加商品
                         </a>
                     </li>

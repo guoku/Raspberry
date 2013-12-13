@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_12_12',
+        'NAME': 'guoku_11_21',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
@@ -72,6 +72,9 @@ BROKER_USER = "guest"
 BROKER_PASSWORD = "guest"
 BROKER_VHOST = "/"
 BROKER_POOL_LIMIT = 10
+
+GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
+APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -179,6 +182,3 @@ TAOBAO_APP_INFO = {
     "web_app_secret" : "df91464ae934bacca326450f8ade67f7" 
 }
 
-# apns 
-GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
-APNS_SERVER = { 'HOST' : 'http://10.0.2.218:7077/' }

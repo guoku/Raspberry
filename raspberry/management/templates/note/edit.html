@@ -27,12 +27,14 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label" for="entity_id">creator: </label>
+                        <label class="control-label" for="entity_id" style="padding-top: 0">creator: </label>
+
                         <div class="controls">
-                            <a href="#">
-                                <img class="img-polaroid" src="{{ creator.avatar_large }}" alt="" style="max-width: 100px;max-height: 100px">
-                                <span>{{ creator.nickname }}</span>
-                            </a>
+                            <a href="{% url 'management.views.edit_user' creator.user_id %}">
+                                <span style="margin-right: 10px">{{ creator.nickname }}</span></a>
+                            <a href="{% url 'management.views.edit_user' creator.user_id %}"><img class="img-polaroid" src="{{ creator.avatar_large }}" alt=""
+                                                style="max-width: 100px;max-height: 100px;vertical-align: top"></a>
+
                         </div>
                     </div>
 

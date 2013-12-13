@@ -80,9 +80,29 @@
                     <div class="control-group">
                         <label class="control-label" for="intro">简介:</label>
                         <div class="controls">
-                            <textarea class="input-xxlarge" style="height:120px" type="text" id="intro" name="intro" >{{ entity_context.intro }}</textarea>
+                            <textarea class="input-xxlarge" rows="1" type="text" id="intro" name="intro" >{{ entity_context.intro }}</textarea>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="user">点评者</label>
+
+                        <div class="controls">
+                            <select name="user_id" id="user">
+                                {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="note">点评</label>
+
+                        <div class="controls">
+                            <textarea class="input-xxlarge" rows="5" type="text" id="note" name="note"></textarea>
+                        </div>
+                    </div>
+
                     <div class="control-group">
                         <label class="control-label" for="price">价格:</label>
                         <div class="controls">

@@ -1,36 +1,102 @@
 {% extends "management_base.html" %}
 {% load common %}
 
+{% block cssstyle %}
+    <style>
+    .stat-info {
+        display: inline-block;
+        margin-right: 20px;
+    }
+    img {
+        max-width: 220px;
+        max-height: 220px;
+        margin-right: 30px;
+    }
+    </style>
+{% endblock %}
+
 {% block content %}
     <div class="container">
-        <img id="main-image" class="img-polaroid" src="{{ user_context.avatar_large }}" alt="" style="max-width: 220px;max-height: 220px">
-        <div>
-            <form class="well form-horizontal" action="{% url 'management.views.edit_note' user_context.user_id %}" method="POST">
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="user_id">user_id:</label>
-                        <div class="controls">
-                            <input class="input-xxlarge" type="text" id="user_id" name="user_id" value="{{ user_context.user_id }}" disabled/>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="username">username:</label>
-                        <div class="controls">
-                            <input class="input-xxlarge" type="text" id="username" name="username" value="{{ user_context.username }}" disabled/>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="nickname">nickname:</label>
-                        <div class="controls">
-                            <input class="input-xxlarge" type="text" id="nickname" name="nickname" value="{{ user_context.nickname }}" disabled/>
-                        </div>
-                    </div>
-                </fieldset>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">更新</button>
-                </div>
-            </form>
+        <div class="well">
+            <img id="main-image" class="img-polaroid" src="{{ user_context.avatar_large }}" alt="">
+
+            <div class="stat-info stat-info-first"><span>关注: </span><span>{{ user_context.following_count }}</span>
+            </div>
+            <div class="stat-info"><span>关注者: </span><span>{{ user_context.fan_count }}</span></div>
+            <div class="stat-info"><span>喜爱: </span><span>{{ user_context.like_count }}</span></div>
+            <div class="stat-info"><span>标签: </span><span>{{ user_context.tag_count }}</span></div>
+            <div class="stat-info"><span>添加: </span><span>{{ user_context.entity_note_count }}</span></div>
+            <div class="stat-info"><span>赞: </span><span>{{ user_context.entity_note_poke_count }}</span></div>
         </div>
+
+        <form class="well form-horizontal" action="{% url 'management.views.edit_user' user_context.user_id %}"
+              method="POST">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="user_id">用户ID:</label>
+
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="user_id" name="user_id"
+                               value="{{ user_context.user_id }}" disabled/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="username">用户名:</label>
+
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="username" name="username"
+                               value="{{ user_context.username }}"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="nickname">昵称:</label>
+
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="nickname" name="nickname"
+                               value="{{ user_context.nickname }}"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="gender">性别:</label>
+
+                    <div class="controls">
+                        <select id="gender" name="gender">
+                            <option value="M" {% if user_context.gender == "M" %}selected="selected" {% endif %}>男
+                            </option>
+                            <option value="F" {% if user_context.gender == "F" %}selected="selected" {% endif %}>女</option>
+                            <option value="O" {% if user_context.gender == "O" %}selected="selected" {% endif %}>其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="email">登录邮箱:</label>
+
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="email" name="email"
+                               value="{{ user_context.email }}"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="bio">个人简介:</label>
+
+                    <div class="controls">
+                        <textarea id="bio" name="bio" rows="3" class="input-xxlarge">{{ user_context.bio }}</textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="website">网址:</label>
+
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="website" name="website"
+                               value="{{ user_context.website }}"/>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">更新</button>
+            </div>
+        </form>
     </div>
 {% endblock %}
 

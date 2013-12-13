@@ -59,19 +59,17 @@
                         </div>
                     </div>
 
-                    {% if users %}
-                        <div class="control-group">
-                            <label class="control-label" for="user">点评者</label>
+                    <div class="control-group">
+                        <label class="control-label" for="user">点评者</label>
 
-                            <div class="controls">
-                                <select name="user_id" id="user">
-                                    {% for user in users %}
-                                        <option value="{{ user.id }}">{{ user.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                        <div class="controls">
+                            <select name="user_id" id="user">
+                                {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                    {% endif %}
+                    </div>
 
                     <div class="control-group">
                         <label class="control-label" for="note">点评</label>
