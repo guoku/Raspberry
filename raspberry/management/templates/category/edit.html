@@ -18,9 +18,10 @@
         <form enctype="multipart/form-data" class="well form-horizontal" action="{% url 'management.views.edit_category' category_context.category_id  %}" method="POST">
             <fieldset>
                 <div class="control-group">
-                    <label class="control-label" for="title" style="padding-top: 0">名称:</label>
+                    <label class="control-label" for="title">名称:</label>
                     <div class="controls">
-                        <a href="{% url 'management.views.entity_list' %}?cid={{ category_context.category_id }}">{{ category_context.category_title }} ({{ category_entity_count }})</a>
+                        <input class="input-xlarge" type="text" id="title" name="title" value="{{ category_context.category_title }}" />
+                        <a href="{% url 'management.views.entity_list' %}?cid={{ category_context.category_id }}" style="margin-left: 20px">({{ category_entity_count }})</a>
                     </div>
                 </div>
                 <div class="control-group">
