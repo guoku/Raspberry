@@ -59,8 +59,12 @@
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">更新</button>
                     {% if note_context.selector_id == None %}
-                        <a class="btn btn-success btn-small" href="{% url 'management.views.post_selection_instant' entity_context.entity_id note_context.note_id %}">精选-即时发布</a>
-                        <a class="btn btn-success btn-small" href="{% url 'management.views.post_selection_delay' entity_context.entity_id note_context.note_id %}">精选-延迟发布</a>
+                        {% if note_context.weight < 0 %}
+                            该点评处于冻结状态不能发精选 
+                        {% else %}
+                            <a class="btn btn-success btn-small" href="{% url 'management.views.post_selection_instant' entity_context.entity_id note_context.note_id %}">精选-即时发布</a>
+                            <a class="btn btn-success btn-small" href="{% url 'management.views.post_selection_delay' entity_context.entity_id note_context.note_id %}">精选-延迟发布</a>
+                        {% endif %}
                     {% endif %}
                 </div>
             </form>
