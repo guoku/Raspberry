@@ -394,13 +394,15 @@ class User(object):
             self.user_profile_obj = _user_profile_obj
         else:
             if nickname != None:
-                _nickname = nickname.strip()
-                self.user_profile_obj.nickname = _nickname
-            
+                self.user_profile_obj.nickname = nickname.strip()
             if location != None:
-                _location = location.strip()
-                self.user_profile_obj.location = _location 
-
+                self.user_profile_obj.location = location.strip()
+            if bio != None:
+                self.user_profile_obj.bio = bio.strip()
+            if website != None:
+                self.user_profile_obj.website = website.strip()
+            if gender != None:
+                self.user_profile_obj.gender = gender.strip()
             self.user_profile_obj.save()
         
         _basic_info = self.__load_basic_info_from_cache()
