@@ -97,6 +97,25 @@
                 <button type="submit" class="btn btn-primary">更新</button>
             </div>
         </form>
+        <form class="well form-horizontal" action="{% url 'management.views.push_message_to_user' user_context.user_id %}" method="POST">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="badge">数字:</label>
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="badge" name="badge" value="1" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="message">消息文本:</label>
+                    <div class="controls">
+                        <input class="input-xxlarge" type="text" id="message" name="message" value="果库果库我爱你，就像老鼠爱大米！" />
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">推送</button>
+            </div>
+        </form>
     </div>
 {% endblock %}
 

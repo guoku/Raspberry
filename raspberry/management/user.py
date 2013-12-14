@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from tasks import PushMessageToUserTask
 from urlparse import urlparse
 import HTMLParser
 import re 
@@ -69,6 +70,23 @@ def edit_user(request, user_id):
         _user.set_profile(_nickname, gender=_gender, bio=_bio, website=_website)
 
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+def push_message_to_user(request, user_id):
+    if request.method == 'POST':
+        _user_id = int(user_id)
+        _badge = int(request.POST.get("badge", "1"))
+        _message = request.POST.get("message", None)
+        
+        PushMessageToUserTask.delay(
+            user_id = _user_id,
+            badge = _badge,
+            message = _message,
+            testor_id = request.user.id
+        )
+        
+        return HttpResponseRedirect(request.META['HTTP_REFERER'] + "?apns=1")
 
 
 
