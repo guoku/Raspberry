@@ -171,7 +171,9 @@ def create_entity_by_taobao_item(request):
 
         _note = request.POST.get("note", None)
         _user_id = request.POST.get("user_id", None)
-        _add_note_and_select_delay(_entity, _user_id, _note)
+        
+        if _note != None and len(_note) > 0:
+            _add_note_and_select_delay(_entity, _user_id, _note)
 
         return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
@@ -238,7 +240,8 @@ def edit_entity(request, entity_id):
 
         _note = request.POST.get("note", None)
         _user_id = request.POST.get("user_id", None)
-        _add_note_and_select_delay(_entity, _user_id, _note)
+        if _note != None and len(_note) > 0:
+            _add_note_and_select_delay(_entity, _user_id, _note)
 
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
