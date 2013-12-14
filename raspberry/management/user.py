@@ -14,6 +14,8 @@ import json
 
 from base.user import User
 from utils.paginator import Paginator
+import logging
+logger = logging.getLogger('django.request')
 
 @login_required
 def user_list(request):
