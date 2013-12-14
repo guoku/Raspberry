@@ -431,6 +431,7 @@ class User(object):
         _basic_info['verified_type'] = 'guoku' 
         _basic_info['verified_reason'] = 'guoku' 
         _basic_info['gender'] = _profile.gender 
+        _basic_info['bio'] = _profile.bio
         
         self.__ensure_avatar_obj()
         _basic_info['avatar_large'] = self.avatar_obj.get_large_link() 
