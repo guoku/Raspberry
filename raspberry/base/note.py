@@ -99,6 +99,13 @@ class Note(object):
         self.__ensure_note_obj()
         return self.note_obj.creator_id
     
+    @staticmethod
+    def user_add_note_already(entity_id, user_id):
+        if NoteModel.objects.filter(entity_id = entity_id, creator_id = user_id).count() > 0:
+            return True
+        return False
+    
+    
     @classmethod
     def create(cls, entity_id, creator_id, note_text, score = 0, image_data = None):
         _note_text = note_text.replace(u"＃", "#")
