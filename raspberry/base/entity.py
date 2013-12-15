@@ -15,6 +15,7 @@ from note import Note
 from item import Item
 from image import Image
 from user import User 
+from utils.apns_notification import APNSWrapper
 from hashlib import md5
 import datetime
 import urllib
@@ -463,10 +464,10 @@ class Entity(object):
             _obj.delete()
             User(_user_id).update_user_like_count(delta = -1)
             
-            _basic_info = self.__read_basic_info()
-            if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None:
-                for _doc in EntityLikeMessage.objects.filter(user_id = _basic_info['creator_id'], entity_id = self.entity_id, liker_id = _user_id):
-                    _doc.delete()
+#            _basic_info = self.__read_basic_info()
+#            if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None:
+#                for _doc in EntityLikeMessage.objects.filter(user_id = _basic_info['creator_id'], entity_id = self.entity_id, liker_id = _user_id):
+#                    _doc.delete()
             
             return True
         except:
@@ -499,10 +500,10 @@ class Entity(object):
             _note_info['note_id_list'].append(_note.note_id) 
             self.__reset_note_info_to_cache(_note_info)
 
-        User(creator_id).update_user_entity_note_count(delta = 1)
+        _creator = User(creator_id)
+        _creator.update_user_entity_note_count(delta = 1)
                 
         _basic_info = self.__read_basic_info()
-
         if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None and _basic_info['creator_id'] != int(creator_id):
             _message = EntityNoteMessage(
                 user_id = _basic_info['creator_id'],
@@ -511,6 +512,17 @@ class Entity(object):
                 created_time = datetime.datetime.now()
             )
             _message.save()
+            
+            _entity_creator = User(_basic_info['creator_id'])
+            _apns = APNSWrapper(user_id = _entity_creator.user_id)
+            _apns.badge(badge = _entity_creator.get_unread_message_count())
+            _apns.alert(u"你添加的商品收到了一条新点评")
+            _apns.message(message = {
+                'entity_id' : self.entity_id, 
+                'note_id' : _note.note_id, 
+                'type' : 'new_note' 
+            })
+            _apns.push()
         
         return _note
     
@@ -582,6 +594,18 @@ class Entity(object):
                     created_time = datetime.datetime.now()
                 )
                 _message.save()
+            
+                _creator = User(_note_context['creator_id'])
+                _apns = APNSWrapper(user_id = _creator.user_id)
+                _apns.badge(badge = _creator.get_unread_message_count())
+                _apns.alert(u"你的点评被收录了精选")
+                _apns.message(message = {
+                    'entity_id' : self.entity_id, 
+                    'note_id' : _note.note_id, 
+                    'type' : 'note_selected' 
+                })
+                _apns.push()
+            
             else:
                 _doc.selector_id = _selector_id 
                 _doc.selected_time = selected_time

@@ -10,6 +10,7 @@ import time
 from image import Image
 from tag import Tag 
 from user import User 
+from utils.apns_notification import APNSWrapper
 
 
 
@@ -319,6 +320,15 @@ class Note(object):
                     created_time = datetime.datetime.now()
                 )
                 _message.save()
+            
+                _note_creator = User(self.note_obj.creator_id)
+                _apns = APNSWrapper(user_id = _note_creator.user_id)
+                _apns.badge(badge = _note_creator.get_unread_message_count())
+                _apns.alert(u"你的点评收到了一个赞")
+                _apns.message(message = {
+                    'note_id' : _note.note_id, 
+                    'type' : 'note_poke' 
+                })
             return True
         except: 
             pass
@@ -409,6 +419,16 @@ class Note(object):
             created_time = datetime.datetime.now()
         )
         _message.save()
+                
+        _note_creator = User(self.note_obj.creator_id)
+        _apns = APNSWrapper(user_id = _note_creator.user_id)
+        _apns.badge(badge = _note_creator.get_unread_message_count())
+        _apns.alert(u"你的点评收到了一条新评论")
+        _apns.message(message = {
+            'note_id' : _note.note_id, 
+            'comment_id' : _obj.id, 
+            'type' : 'note_poke' 
+        })
 
         if reply_to_user_id != None:
             _message = NoteCommentReplyMessage(
@@ -420,6 +440,15 @@ class Note(object):
                 created_time = datetime.datetime.now()
             )
             _message.save()
+        
+            _replied_user = User(reply_to_user_id)
+            _apns = APNSWrapper(user_id = _replied_user.user_id) 
+            _apns.badge(badge = _replied_user.get_unread_message_count())
+            _apns.alert(u"你的评论收到了一条回应")
+            _apns.message(message = {
+                'comment_id' : reply_to_comment_id, 
+                'type' : 'note_poke' 
+            })
         
         return _obj.id
     
