@@ -48,6 +48,14 @@ class Seed_User(models.Model):
     user_id = models.IntegerField(null = False, db_index = True, unique = True)
     weight = models.IntegerField(default = 0, db_index = True)
 
+#class User_Censor(models.Model):
+#    user = models.OneToOneField(User) 
+#    censor = models.ForeignKey(User, related_name = "censor") 
+#    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+#    class Meta:
+#        ordering = ['-created_time']
+
+
 class Neo_Category_Group(models.Model):
     title = models.CharField(max_length = 128, db_index = True)
     status = models.IntegerField(default = 1, db_index = True)

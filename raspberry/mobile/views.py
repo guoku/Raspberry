@@ -58,10 +58,10 @@ def feed(request):
 
         if _scale == 'friend':
             _following_user_id_list = MobileUser(_request_user_id).read_following_user_id_list()
-            MobileUser(_request_user_id).mark_footprint(friend_feed = True)
+            #MobileUser(_request_user_id).mark_footprint(friend_feed = True)
         else:
             _following_user_id_list = map(lambda x: x.user_id, Seed_User.objects.all())
-            MobileUser(_request_user_id).mark_footprint(social_feed = True)
+            #MobileUser(_request_user_id).mark_footprint(social_feed = True)
         
         _note_id_list = MobileNote.find(
             timestamp = _timestamp,
@@ -213,7 +213,7 @@ def selection(request):
                 }
                 _rslt.append(_context)
         
-        MobileUser(_request_user_id).mark_footprint(selection = True)
+        #MobileUser(_request_user_id).mark_footprint(selection = True)
         
         return SuccessJsonResponse(_rslt)
 
