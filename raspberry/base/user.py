@@ -10,6 +10,7 @@ from models import Entity_Like as EntityLikeModel
 from models import Entity_Tag as EntityTagModel
 from models import Note as NoteModel
 from models import Note_Poke as NotePokeModel
+from models import User_Censor as UserCensorModel 
 from models import Seed_User as SeedUserModel 
 from models import Sina_Token as SinaTokenModel 
 from models import Taobao_Token as TaobaoTokenModel 
@@ -394,13 +395,15 @@ class User(object):
             self.user_profile_obj = _user_profile_obj
         else:
             if nickname != None:
-                _nickname = nickname.strip()
-                self.user_profile_obj.nickname = _nickname
-            
+                self.user_profile_obj.nickname = nickname.strip()
             if location != None:
-                _location = location.strip()
-                self.user_profile_obj.location = _location 
-
+                self.user_profile_obj.location = location.strip()
+            if bio != None:
+                self.user_profile_obj.bio = bio.strip()
+            if website != None:
+                self.user_profile_obj.website = website.strip()
+            if gender != None:
+                self.user_profile_obj.gender = gender.strip()
             self.user_profile_obj.save()
         
         _basic_info = self.__load_basic_info_from_cache()
@@ -425,17 +428,28 @@ class User(object):
         _basic_info['email'] = self.user_obj.email
         _basic_info['username'] = self.user_obj.username 
         
-        _profile = UserProfileModel.objects.get(user_id = self.user_id)
-        _basic_info['nickname'] = _profile.nickname
-        _basic_info['verified'] = 0 
-        _basic_info['verified_type'] = 'guoku' 
-        _basic_info['verified_reason'] = 'guoku' 
-        _basic_info['gender'] = _profile.gender 
-        _basic_info['bio'] = _profile.bio
-        
-        self.__ensure_avatar_obj()
-        _basic_info['avatar_large'] = self.avatar_obj.get_large_link() 
-        _basic_info['avatar_small'] = self.avatar_obj.get_small_link() 
+        if UserCensorModel.objects.filter(user = self.user_id).count() > 0:
+            _basic_info['is_censor'] = True 
+            _basic_info['nickname'] = u'我是一只小白兔'
+            _basic_info['bio'] = u'内心温柔，人畜无害' 
+            _basic_info['website'] = ''
+            _basic_info['gender'] = 'O' 
+            _basic_info['avatar_large'] = 'http://imgcdn.guoku.com/avatar/large_191181_a9b257239f709958650cd28f400dd7fe.jpg' 
+            _basic_info['avatar_small'] = 'http://imgcdn.guoku.com/avatar/small_191181_e8fe39377fc03cae8d9e3deec45c5443.jpg' 
+              
+        else:
+            _profile = UserProfileModel.objects.get(user_id = self.user_id)
+            _basic_info['nickname'] = _profile.nickname
+            _basic_info['verified'] = 0 
+            _basic_info['verified_type'] = 'guoku' 
+            _basic_info['verified_reason'] = 'guoku' 
+            _basic_info['gender'] = _profile.gender 
+            _basic_info['bio'] = _profile.bio
+            _basic_info['is_censor'] = False
+            
+            self.__ensure_avatar_obj()
+            _basic_info['avatar_large'] = self.avatar_obj.get_large_link() 
+            _basic_info['avatar_small'] = self.avatar_obj.get_small_link()
         
         cache.set(_cache_key, _basic_info, 864000)
             
@@ -752,6 +766,7 @@ class User(object):
             _seed_user_id_list = map(lambda x: x.user_id, SeedUserModel.objects.all())
             cache.set(_cache_key, _seed_user_id_list, 86400)
         return _seed_user_id_list
+
 
     def __create_one_time_token(self, token_type):
         _token = md5(self.user_obj.email + unicode(str(self.user_obj.id)) + unicode(self.user_obj.username) + unicode(datetime.datetime.now())).hexdigest()
