@@ -10,10 +10,17 @@ import time
 from image import Image
 from tag import Tag 
 from user import User 
+from utils.apns_notification import APNSWrapper
 
 
 
 class Note(object):
+    
+    class UserAddNoteForEntityAlready(Exception):
+        def __init__(self, user_id, entity_id):
+            self.__message = "user %s add note for entity %s already"%(user_id, entity_id)
+        def __str__(self):
+            return repr(self.__message)
     
     class CommentDoesNotExist(Exception):
         def __init__(self, comment_id):
@@ -98,8 +105,18 @@ class Note(object):
         self.__ensure_note_obj()
         return self.note_obj.creator_id
     
+    @staticmethod
+    def user_add_note_already(entity_id, user_id):
+        if NoteModel.objects.filter(entity_id = entity_id, creator_id = user_id).count() > 0:
+            return True
+        return False
+    
+    
     @classmethod
     def create(cls, entity_id, creator_id, note_text, score = 0, image_data = None):
+        if Note.user_add_note_already(entity_id, creator_id):
+            raise Note.UserAddNoteForEntityAlready(entity_id, creator_id)
+
         _note_text = note_text.replace(u"＃", "#")
         if image_data != None:
             _image_obj = Image.create(
@@ -319,6 +336,15 @@ class Note(object):
                     created_time = datetime.datetime.now()
                 )
                 _message.save()
+            
+                _note_creator = User(self.note_obj.creator_id)
+                _apns = APNSWrapper(user_id = _note_creator.user_id)
+                _apns.badge(badge = _note_creator.get_unread_message_count())
+                _apns.alert(u"你的点评收到了一个赞")
+                _apns.message(message = {
+                    'note_id' : _note.note_id, 
+                    'type' : 'note_poke' 
+                })
             return True
         except: 
             pass
@@ -409,6 +435,16 @@ class Note(object):
             created_time = datetime.datetime.now()
         )
         _message.save()
+                
+        _note_creator = User(self.note_obj.creator_id)
+        _apns = APNSWrapper(user_id = _note_creator.user_id)
+        _apns.badge(badge = _note_creator.get_unread_message_count())
+        _apns.alert(u"你的点评收到了一条新评论")
+        _apns.message(message = {
+            'note_id' : _note.note_id, 
+            'comment_id' : _obj.id, 
+            'type' : 'note_poke' 
+        })
 
         if reply_to_user_id != None:
             _message = NoteCommentReplyMessage(
@@ -420,6 +456,15 @@ class Note(object):
                 created_time = datetime.datetime.now()
             )
             _message.save()
+        
+            _replied_user = User(reply_to_user_id)
+            _apns = APNSWrapper(user_id = _replied_user.user_id) 
+            _apns.badge(badge = _replied_user.get_unread_message_count())
+            _apns.alert(u"你的评论收到了一条回应")
+            _apns.message(message = {
+                'comment_id' : reply_to_comment_id, 
+                'type' : 'note_poke' 
+            })
         
         return _obj.id
     

@@ -5,6 +5,8 @@ from utils.apns_notification import APNSWrapper
 
 import datetime
 import time
+import logging
+logger = logging.getLogger('django.request')
 
 MAX_RETRIES = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRIES', 5)
 RETRY_DELAY = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRY_DELAY', 60)
