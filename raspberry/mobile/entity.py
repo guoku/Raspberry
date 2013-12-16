@@ -142,12 +142,22 @@ def add_note_for_entity(request, entity_id):
         
         _request_user_id = Session_Key.objects.get_user_id(_session)
         _entity = MobileEntity(entity_id)
-        _note = _entity.add_note(
-            creator_id = _request_user_id,
-            note_text = _note_text,
-            score = _score,
-            image_data = _image_data,
-        )
+        try:
+            _note = _entity.add_note(
+                creator_id = _request_user_id,
+                note_text = _note_text,
+                score = _score,
+                image_data = _image_data,
+            )
+        except MobileNote.UserAddNoteForEntityAlready, e:
+            return ErrorJsonResponse(
+                data = {
+                    'type' : 'user_add_note_for_entity_already',
+                    'message' : str(e)
+                },
+                status = 400
+            )
+            
         _context = _note.read(request_user_id = _request_user_id) 
         return SuccessJsonResponse(_context)
 

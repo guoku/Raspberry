@@ -486,46 +486,45 @@ class Entity(object):
         return map(lambda x : x.entity_id, _hdl[offset : offset + count])
         
     def add_note(self, creator_id, note_text, score = 0, image_data = None):
-        if not Note.user_add_note_already(self.entity_id, creator_id): 
-            _note = Note.create(
-                entity_id = self.entity_id,
-                creator_id = creator_id,
-                note_text = note_text,
-                score = score,
-                image_data = image_data
-            )
-    
-            _note_info = self.__load_note_info_from_cache()
-            if _note_info != None:
-                _note_info['note_count'] += 1
-                _note_info['note_id_list'].append(_note.note_id) 
-                self.__reset_note_info_to_cache(_note_info)
-    
-            _creator = User(creator_id)
-            _creator.update_user_entity_note_count(delta = 1)
-                    
-            _basic_info = self.__read_basic_info()
-            if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None and _basic_info['creator_id'] != int(creator_id):
-                _message = EntityNoteMessage(
-                    user_id = _basic_info['creator_id'],
-                    entity_id = self.entity_id,
-                    note_id = _note.note_id, 
-                    created_time = datetime.datetime.now()
-                )
-                _message.save()
+        _note = Note.create(
+            entity_id = self.entity_id,
+            creator_id = creator_id,
+            note_text = note_text,
+            score = score,
+            image_data = image_data
+        )
+
+        _note_info = self.__load_note_info_from_cache()
+        if _note_info != None:
+            _note_info['note_count'] += 1
+            _note_info['note_id_list'].append(_note.note_id) 
+            self.__reset_note_info_to_cache(_note_info)
+
+        _creator = User(creator_id)
+        _creator.update_user_entity_note_count(delta = 1)
                 
-                _entity_creator = User(_basic_info['creator_id'])
-                _apns = APNSWrapper(user_id = _entity_creator.user_id)
-                _apns.badge(badge = _entity_creator.get_unread_message_count())
-                _apns.alert(u"你添加的商品收到了一条新点评")
-                _apns.message(message = {
-                    'entity_id' : self.entity_id, 
-                    'note_id' : _note.note_id, 
-                    'type' : 'new_note' 
-                })
-                _apns.push()
+        _basic_info = self.__read_basic_info()
+        if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None and _basic_info['creator_id'] != int(creator_id):
+            _message = EntityNoteMessage(
+                user_id = _basic_info['creator_id'],
+                entity_id = self.entity_id,
+                note_id = _note.note_id, 
+                created_time = datetime.datetime.now()
+            )
+            _message.save()
             
-            return _note
+            _entity_creator = User(_basic_info['creator_id'])
+            _apns = APNSWrapper(user_id = _entity_creator.user_id)
+            _apns.badge(badge = _entity_creator.get_unread_message_count())
+            _apns.alert(u"你添加的商品收到了一条新点评")
+            _apns.message(message = {
+                'entity_id' : self.entity_id, 
+                'note_id' : _note.note_id, 
+                'type' : 'new_note' 
+            })
+            _apns.push()
+        
+        return _note
     
     def del_note(self, note_id):
         _note_id = int(note_id)

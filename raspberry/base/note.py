@@ -16,6 +16,12 @@ from utils.apns_notification import APNSWrapper
 
 class Note(object):
     
+    class UserAddNoteForEntityAlready(Exception):
+        def __init__(self, user_id, entity_id):
+            self.__message = "user %s add note for entity %s already"%(user_id, entity_id)
+        def __str__(self):
+            return repr(self.__message)
+    
     class CommentDoesNotExist(Exception):
         def __init__(self, comment_id):
             self.__message = "comment %s does not exist"%comment_id
@@ -108,6 +114,9 @@ class Note(object):
     
     @classmethod
     def create(cls, entity_id, creator_id, note_text, score = 0, image_data = None):
+        if Note.user_add_note_already(entity_id, creator_id):
+            raise Note.UserAddNoteForEntityAlready(entity_id, creator_id)
+
         _note_text = note_text.replace(u"＃", "#")
         if image_data != None:
             _image_obj = Image.create(
