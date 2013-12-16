@@ -426,8 +426,6 @@ class User(object):
         _basic_info['email'] = self.user_obj.email
         _basic_info['username'] = self.user_obj.username 
         
-        print self.user_id
-        print UserCensorModel.objects.filter(user = self.user_id)
         if UserCensorModel.objects.filter(user = self.user_id).count() > 0:
             _basic_info['is_censor'] = True 
             _basic_info['nickname'] = u'我是一只小白兔'
