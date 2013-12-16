@@ -19,7 +19,7 @@ def category_stat(request, category_id):
             _request_user_id = None
 
         _rslt = {
-            'entity_count' : MobileEntity.count(category_id = category_id),
+            'entity_count' : MobileEntity.count(category_id = category_id, status = 1),
             'entity_note_count' : MobileNote.count(category_id = category_id),
         }
         if _request_user_id != None:
