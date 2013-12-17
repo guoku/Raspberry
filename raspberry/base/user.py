@@ -841,17 +841,21 @@ class User(object):
 
         return _footprint
             
-    def get_unread_message_count(self):
+    def get_last_read_message_time(self):
         _cache_key = 'user_%s_footprint'%self.user_id
         _footprint = cache.get(_cache_key)
         if _footprint == None:
             _footprint = self.mark_footprint()
         
         if _footprint.has_key('message') and _footprint['message'] != None:
-            return NeoMessage.objects.filter(user_id = self.user_id, created_time__gt = _footprint['message']).count()
-        else:
-            pass
+            return _footprint['message']
 
+        return None
+    
+    def get_unread_message_count(self):
+        _last_read_message_time = self.get_last_read_message_time() 
+        if _last_read_message_time != None:
+            return NeoMessage.objects.filter(user_id = self.user_id, created_time__gt = _last_read_message_time).count()
         return 0
         
 
