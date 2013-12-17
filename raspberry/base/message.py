@@ -1,6 +1,7 @@
 # coding=utf-8
 from mongoengine import *
 import datetime
+from utils.apns_notification import APNSWrapper
 
 class NeoMessage(Document):
     user_id = IntField(required = True) 
@@ -77,6 +78,26 @@ class EntityNoteMessage(NeoMessage):
             "note_id", 
         ]
     }
+    
+    @classmethod
+    def create(cls, user_id, user_unread_message_count, entity_id, note_id):
+        _doc = cls(
+            user_id = user_id, 
+            entity_id = entity_id,
+            note_id = note_id, 
+            created_time = datetime.datetime.now()
+        )
+        _doc.save()
+            
+        _apns = APNSWrapper(user_id = user_id)
+        _apns.badge(badge = user_unread_message_count) 
+        _apns.alert(u"你添加的商品收到了一条新点评")
+        _apns.message(message = {
+            'entity_id' : entity_id, 
+            'note_id' : note_id, 
+            'type' : 'new_note' 
+        })
+        _apns.push()
 
 class NoteSelectionMessage(NeoMessage):
     entity_id = IntField(required = True)

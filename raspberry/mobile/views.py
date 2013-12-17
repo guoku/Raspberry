@@ -12,6 +12,7 @@ from entity import *
 from note import *
 from report import *
 from user import *
+from tasks import MarkFootprint
 import time
 
 
@@ -22,7 +23,7 @@ def homepage(request):
     else:
         _request_user_id = None
     _rslt = {}
-    _rslt['discover'] = Category.find(offset = 0, count = 8, order_by = '-status') 
+    _rslt['discover'] = popularity.read_popular_category()['data'][0:8]
     
     _rslt['banner'] = []
     for _banner_context in Banner.find():
@@ -78,7 +79,7 @@ def feed(request):
                 _entity = MobileEntity(_note_context['entity_id'])
                 _rslt.append({
                     'type' : 'entity',
-                    'object' : {
+                    'content' : {
                         'entity' : _entity.read(_request_user_id),
                         'note' : _note_context
                     }
@@ -177,7 +178,10 @@ def message(request):
             except:
                 # TODO : logger
                 pass
-               
+            
+        if _request_user_id != None:
+            MarkFootprint.delay(user_id = _request_user_id, message = True)
+        
         return SuccessJsonResponse(_rslt)
 
 def selection(request):
@@ -213,7 +217,8 @@ def selection(request):
                 }
                 _rslt.append(_context)
         
-        #MobileUser(_request_user_id).mark_footprint(selection = True)
+        if _request_user_id != None:
+            MarkFootprint.delay(user_id = _request_user_id, selection = True)
         
         return SuccessJsonResponse(_rslt)
 
@@ -251,11 +256,12 @@ def popular(request):
                 status = 400
             )
 
-def unread_message_count(request):
+def unread_count(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
         _request_user_id = Session_Key.objects.get_user_id(_session)
         return SuccessJsonResponse({
-            'count' : MobileUser(_request_user_id).get_unread_message_count()
+            'unread_message_count' : MobileUser(_request_user_id).get_unread_message_count(),
+            'unread_selection_count' : MobileUser(_request_user_id).get_unread_selection_count()
         })
         

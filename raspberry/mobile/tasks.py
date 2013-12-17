@@ -107,3 +107,17 @@ class RetrievePasswordTask(Task):
     def run(self, user_id):
         _user = MobileUser(user_id)
         _user.retrieve_password() 
+
+class MarkFootprint(Task):
+    ignore_result = True
+    time_limit = 5 
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, user_id, message = False, selection = False, social_feed = False, friend_feed = False):
+        MobileUser(user_id).mark_footprint(
+            message = message,
+            selection = selection,
+            social_feed = social_feed,
+            friend_feed = friend_feed
+        )

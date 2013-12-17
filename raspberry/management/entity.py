@@ -42,7 +42,7 @@ def _load_taobao_item_info(taobao_id):
 
 
 def _get_special_names(request_user_id):
-    if request_user_id in [22045, 19, 10, 79761, 66400]:
+    if request_user_id in [22045, 19, 10, 79761, 66400, 195580]:
         if request_user_id == 22045:
             _id_list = [ 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902]
         elif request_user_id in [10, 19]:
