@@ -29,11 +29,14 @@ def sync_entity_without_title(request):
     _offset = int(request.GET.get('offset', '0'))
     _count = int(request.GET.get('count', '100'))
     
+    _category_title_dict = Category.get_category_title_dict()
     _rslt = []
     for _entity_obj in EntityModel.objects.filter(Q(title__isnull = True) | Q(title = '')).filter(id__gt = 210000)[_offset : _offset + _count]:
         try:
+            _title = _category_title_dict[_entity_obj.neo_category_id]
             _context = { 
                 'entity_id' : _entity_obj.id,
+                'category_title' : _title,
                 'item_titles' : []
             }
             for _item_id in Item.find(entity_id = _entity_obj.id):
