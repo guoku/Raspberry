@@ -505,24 +505,12 @@ class Entity(object):
                 
         _basic_info = self.__read_basic_info()
         if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None and _basic_info['creator_id'] != int(creator_id):
-            _message = EntityNoteMessage(
+            _message = EntityNoteMessage.create(
                 user_id = _basic_info['creator_id'],
+                user_unread_message_count = User(_basic_info['creator_id']).get_unread_message_count(),
                 entity_id = self.entity_id,
                 note_id = _note.note_id, 
-                created_time = datetime.datetime.now()
             )
-            _message.save()
-            
-            _entity_creator = User(_basic_info['creator_id'])
-            _apns = APNSWrapper(user_id = _entity_creator.user_id)
-            _apns.badge(badge = _entity_creator.get_unread_message_count())
-            _apns.alert(u"你添加的商品收到了一条新点评")
-            _apns.message(message = {
-                'entity_id' : self.entity_id, 
-                'note_id' : _note.note_id, 
-                'type' : 'new_note' 
-            })
-            _apns.push()
         
         return _note
     
