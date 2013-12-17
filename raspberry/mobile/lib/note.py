@@ -21,7 +21,7 @@ class MobileNote(Note):
         
         _context['creator'] = MobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
-        if _context['creator']['is_censor']:
+        if _context['creator'].has_key('is_censor') and  _context['creator']['is_censor'] == True:
             _context['content'] = u'大家好，我是一只小白兔。'
              
         
@@ -62,7 +62,7 @@ class MobileNote(Note):
         _context['creator'] = MobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
         
-        if _context['creator']['is_censor']:
+        if _context.has_key['creator'] and _context['creator']['is_censor'] == True:
             _context['content'] = u'大家好，我是一只小白兔。'
         
         if _context.has_key('reply_to_user_id') and _context['reply_to_user_id'] != None:
