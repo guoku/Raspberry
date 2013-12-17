@@ -22,7 +22,7 @@ def homepage(request):
     else:
         _request_user_id = None
     _rslt = {}
-    _rslt['discover'] = Category.find(offset = 0, count = 8, order_by = '-status') 
+    _rslt['discover'] = popularity.read_popular_category()['data'][0:8]
     
     _rslt['banner'] = []
     for _banner_context in Banner.find():
