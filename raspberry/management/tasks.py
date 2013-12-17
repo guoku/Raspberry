@@ -23,7 +23,7 @@ class PushMessageToUserTask(Task):
         _apns.alert(message)
         _apns.message(message = {
             'testor' : testor_id, 
-            'type' : 'test' 
+            'type' : 'broadcast' 
         })
         _apns.push()
 

@@ -813,6 +813,7 @@ class User(object):
     
          
     def mark_footprint(self, selection = False, message = False, social_feed = False, friend_feed = False):
+        _cache_key = 'user_%s_footprint'%self.user_id
         try:
             _record = UserFootprintModel.objects.get(user_id = self.user_id)
         except UserFootprintModel.DoesNotExist:
@@ -832,14 +833,39 @@ class User(object):
         if friend_feed:
             _record.last_read_friend_feed_time = datetime.datetime.now()
         _record.save()
+        
+        _footprint = {} 
+        _footprint['selection'] = _record.last_read_selection_time
+        _footprint['message'] = _record.last_read_message_time
+        cache.set(_cache_key, _footprint, 86400)
+
+        return _footprint
             
     def get_unread_message_count(self):
-        try:
-            _record = UserFootprintModel.objects.get(user_id = self.user_id)
-            if _record.last_read_message_time != None:
-                _unread_message_count = NeoMessage.objects.filter(user_id = self.user_id, created_time__gt = _record.last_read_message_time).count()
-                return _unread_message_count
-        except UserFootprintModel.DoesNotExist:
+        _cache_key = 'user_%s_footprint'%self.user_id
+        _footprint = cache.get(_cache_key)
+        if _footprint == None:
+            _footprint = self.mark_footprint()
+        
+        if _footprint.has_key('message') and _footprint['message'] != None:
+            return NeoMessage.objects.filter(user_id = self.user_id, created_time__gt = _footprint['message']).count()
+        else:
             pass
-        return 0 
+
+        return 0
+        
+
+    
+    def get_unread_selection_count(self):
+        _cache_key = 'user_%s_footprint'%self.user_id
+        _footprint = cache.get(_cache_key)
+        if _footprint == None:
+            _footprint = self.mark_footprint()
+        
+        if _footprint.has_key('selection') and _footprint['selection'] != None:
+            return Selection.objects.filter(post_time__gt = _footprint['selection'], post_time__lt = datetime.datetime(2099, 1, 1)).count() 
+        else:
+            pass
+        
+        return 0
     
