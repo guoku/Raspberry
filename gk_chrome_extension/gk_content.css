@@ -1,0 +1,36 @@
+
+#gk-help-box {
+    position: fixed;
+    bottom: 200px;
+    right: 15px;
+    width: 200px;
+    min-height: 100px;
+    padding: 5px;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 6px;
+    box-shadow: 0 3px 9px rgba(0,0,0,0.5);
+    background-color: #fff;
+    z-index: 100000;
+}
+
+.gk-header {
+
+}
+
+.gk-content {
+    border: 1px solid #ccc;
+    margin: 5px 0;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.gk-button {
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #f40;
+    cursor: pointer;
+}

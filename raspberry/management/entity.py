@@ -1,6 +1,7 @@
 #coding=utf-8
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -88,9 +89,9 @@ def _add_note_and_select_delay(entity, user_id, note):
 def new_entity(request):
     if request.method == 'GET':
         return render_to_response(
-            'entity/new.html', 
+            'entity/new.html',
             {
-                'active_division': 'entity'
+                'active_division': 'entity',
             },
             context_instance=RequestContext(request)
         )
@@ -563,3 +564,25 @@ def get_all_categories(request):
         new_category[g_a_c['title']] = categories
 
     return HttpResponse(json.dumps(result))
+
+@login_required
+def read_taobao_item_state(request):
+    _taobao_url = request.GET.get("url", None)
+    _item = None
+    if _taobao_url is not None:
+        _taobao_id = _parse_taobao_id_from_url(_taobao_url)
+        _item = Item.get_item_by_taobao_id(_taobao_id)
+
+    _result = {}
+
+    if _item is None:
+        _result['status'] = 0
+    elif _item.get_entity_id() == -1:
+        _result['status'] = -1
+    else:
+        _result['status'] = 1
+        _entity_id = _item.get_entity_id()
+        _entity = Entity(_entity_id).read()
+        _result['entity'] = _entity
+
+    return HttpResponse(json.dumps(_result, cls=DjangoJSONEncoder))
