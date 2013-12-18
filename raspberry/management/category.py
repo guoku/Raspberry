@@ -60,11 +60,20 @@ def category_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id != None:
         _group_id = int(_group_id)
-    _status = request.GET.get("status", "0")
+    _status = request.GET.get("status", None)
     if _status != None:
         _status = int(_status)
+
+    _all_count = len(Category.find(group_id=_group_id))
+    _normal_count = len(Category.find(group_id=_group_id, status=1))
+    _freeze_count = _all_count - _normal_count
+
     _category_groups = Category.allgroups()
     _categories = Category.find(group_id = _group_id, status = _status, order_by = '-status')
+
+    for _category in _categories:
+        _category["group_title"] = Category_Group(_category["group_id"]).read()["title"]
+
     return render_to_response( 
         'category/list.html', 
         {
@@ -72,7 +81,10 @@ def category_list(request):
             'category_groups' : _category_groups,
             'categories' : _categories,
             'selected_group_id' : _group_id,
-            'status' : _status
+            'status' : _status,
+            'all_count' : _all_count,
+            'normal_count' : _normal_count,
+            'freeze_count' : _freeze_count
         },
         context_instance = RequestContext(request)
     )
