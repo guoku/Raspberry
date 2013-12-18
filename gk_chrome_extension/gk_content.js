@@ -1,5 +1,5 @@
-//var gk_host = "http://10.0.1.148:8000/";
-var gk_host = "http://www.guoku.com/";
+var gk_host = "http://10.0.1.148:8000/";
+//var gk_host = "http://www.guoku.com/";
 
 var gk_add_url = gk_host + "management/entity/new/";
 var gk_read_state_url = gk_host + "management/entity/item/taobao/state";
@@ -115,8 +115,6 @@ function http_request(options, callback) {
       } else {
         callback({ status: xhr.status, statusText: xhr.statusText });
       }
-    } else {
-      callback({ error: "Request not completed" });
     }
   };
   xhr.open(method, url, async);
