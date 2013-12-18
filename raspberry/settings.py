@@ -11,9 +11,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku',
+        'NAME': 'guoku_12_12',
         'USER': 'root',                      
-        'PASSWORD': 'cw12345',
+        'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
         'PORT': '',                      
         'OPTIONS': {
@@ -31,15 +31,16 @@ connect('guoku')
 #register_connection('guoku', 'guoku')
 
 CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': 'localhost:6379',
-        'TIMEOUT:': 864000,
-        'OPTIONS': {
-            'DB': 1,
-            'PARSER_CLASS': 'redis.connection.HiredisParser'
-        },
-    },
+    "default": {
+        "BACKEND": "redis_cache.cache.RedisCache",
+        "LOCATION": [
+            "localhost:6379:1",
+        ],
+        "OPTIONS": {
+            "PARSER_CLASS": "redis.connection.HiredisParser",
+            "CLIENT_CLASS": "redis_cache.client.ShardClient",
+        }
+    }
 }
 
 MOGILEFS_DOMAIN = 'staging'
@@ -72,9 +73,8 @@ BROKER_PASSWORD = "guest"
 BROKER_VHOST = "/"
 BROKER_POOL_LIMIT = 10
 
-#GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
-GUOKU_APNS_KEY = '/home/stxiong/guoku/Raspberry/raspberry/apns_key/' 
-APNS_SERVER = {'HOST':'http://114.113.154.46:7077/'}
+GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
+APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -144,7 +144,6 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
-    'web'
 )
 
 LOGGING = {
@@ -183,46 +182,3 @@ TAOBAO_APP_INFO = {
     "web_app_secret" : "df91464ae934bacca326450f8ade67f7" 
 }
 
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
-    },
-    'handlers': {
-        'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
-        },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
-            'formatter': 'simple'
-        },
-        'file':{
-          'level':'INFO',
-          'class':'logging.FileHandler',
-          'formatter':'verbose',
-          'filename': '/tmp/djanog.log',
-          'mode':'a',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers':['console'],
-            'propagate': True,
-            'level':'INFO',
-        },
-        'django.request': {
-            'handlers': ['file', 'console'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-    }
-}
