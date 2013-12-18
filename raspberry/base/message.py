@@ -207,7 +207,7 @@ class NoteSelectionMessage(NeoMessage):
             
         _apns = APNSWrapper(user_id = user_id)
         _apns.badge(badge = user_unread_message_count + 1) 
-        _apns.alert(u"你的点评被收录了精选")
+        _apns.alert(u"你添加的商品被收录精选")
         _apns.message(message = {
             'entity_id' : entity_id, 
             'note_id' : note_id, 
