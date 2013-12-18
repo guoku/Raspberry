@@ -13,13 +13,12 @@ import time
 from category import Category 
 from image import Image
 from item import Item
-#from message import NoteSelectionMessage
 from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
 from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
 from models import Note as NoteModel
 from models import NoteSelection
-from tasks import CreateEntityNoteMessageTask
+from tasks import CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
 from note import Note
 from user import User 
 from hashlib import md5
@@ -552,7 +551,7 @@ class Entity(object):
         cache.delete("entity_key_note_id_%s"%self.entity_id)
         cache.delete("entity_note_context_list_%s"%self.entity_id)
         cache.delete("note_context_%s"%note_id)
-
+        
         if _selector_id == None:
             for _doc in NoteSelection.objects.filter(note_id = _note_id):
                 _doc.delete()
@@ -576,26 +575,14 @@ class Entity(object):
                 if self.entity_obj.weight < 0:
                     self.update(weight = 0)
                
-
                 _note_context = _note.read()
-                _message = NoteSelectionMessage(
+                CreateNoteSelectionMessageTask.delay(
                     user_id = _note_context['creator_id'], 
+                    user_unread_message_count = User(_note_context['creator_id']).get_unread_message_count(),
                     entity_id = self.entity_id,
                     note_id = _note_id, 
-                    created_time = datetime.datetime.now()
                 )
-                _message.save()
             
-                _creator = User(_note_context['creator_id'])
-                _apns = APNSWrapper(user_id = _creator.user_id)
-                _apns.badge(badge = _creator.get_unread_message_count())
-                _apns.alert(u"你的点评被收录了精选")
-                _apns.message(message = {
-                    'entity_id' : self.entity_id, 
-                    'note_id' : _note.note_id, 
-                    'type' : 'note_selected' 
-                })
-                _apns.push()
             
             else:
                 _doc.selector_id = _selector_id 

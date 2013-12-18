@@ -1,12 +1,10 @@
 # coding=utf-8
 from celery.task import Task
 from celery.task import PeriodicTask 
-from celery.task.schedules import crontab
 from django.conf import settings
 
-from message import EntityNoteMessage
-#import popularity
-#import selection 
+from message import EntityNoteMessage, NoteSelectionMessage, UserFollowMessage, NotePokeMessage, NoteCommentMessage, NoteCommentReplyMessage
+import popularity
 import datetime
 import time
 
@@ -14,33 +12,16 @@ POPULAR_ENTITY_RUN_INTERVAL_SECS = getattr(settings, 'POPULAR_ENTITY_RUN_INTERVA
 MAX_RETRIES = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRIES', 5)
 RETRY_DELAY = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRY_DELAY', 60)
 
-#class CalPopularEntity(PeriodicTask):
-#    ignore_result = True
-#    time_limit = 600
-#    run_every = datetime.timedelta(seconds = POPULAR_ENTITY_RUN_INTERVAL_SECS) 
-#    
-#    def run(self):
-#        t_start = datetime.datetime.now()
-#        popularity.generate_popular_entity()
-#        print "popular entity updated...%s secs cost" % str(datetime.datetime.now() - t_start)
-#
-#class ArrangeSelection(PeriodicTask):
-#    ignore_result = True
-#    time_limit = 1800
-#    run_every = crontab(minute = 0, hour = 12) #run at 2:30 am every day
-#    
-#    def run(self):
-#        _t_start = datetime.datetime.now() + datetime.timedelta(days = 1) 
-#        _year = _t_start.year
-#        _month = _t_start.month
-#        _date = _t_start.day
-#        selection.arrange( 
-#            select_count = 91,
-#            start_time = datetime.datetime(_year, _month, _date, 8, 0, 0),
-#            interval_secs = 600 
-#        )
-#        print "selection arranged...%s secs cost" % str(datetime.datetime.now() - _t_start)
+class CalPopularEntity(PeriodicTask):
+    ignore_result = True
+    time_limit = 600
+    run_every = datetime.timedelta(seconds = POPULAR_ENTITY_RUN_INTERVAL_SECS) 
     
+    def run(self):
+        t_start = datetime.datetime.now()
+        popularity.generate_popular_entity()
+        print "popular entity updated...%s secs cost" % str(datetime.datetime.now() - t_start)
+
 class CreateEntityNoteMessageTask(Task):
     ignore_result = True
     time_limit = 60
@@ -48,10 +29,86 @@ class CreateEntityNoteMessageTask(Task):
     default_retry_delay = RETRY_DELAY
     
     def run(self, user_id, user_unread_message_count, entity_id, note_id): 
-        _message = EntityNoteMessage.create(
+        EntityNoteMessage.create(
             user_id = user_id, 
             user_unread_message_count = user_unread_message_count, 
             entity_id = entity_id,
             note_id = note_id
+        )
+
+class CreateNoteSelectionMessageTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, user_id, user_unread_message_count, entity_id, note_id):
+        NoteSelectionMessage.create(
+            user_id = user_id, 
+            user_unread_message_count = user_unread_message_count, 
+            entity_id = entity_id,
+            note_id = note_id
+        )
+
+class CreateUserFollowMessageTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, user_id, user_unread_message_count, follower_id, follower_nickname):
+        UserFollowMessage.create(
+            user_id = user_id, 
+            user_unread_message_count = user_unread_message_count,
+            follower_id = follower_id,
+            follower_nickname = follower_nickname
+        )
+
+class CreateNotePokeMessageTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, user_id, user_unread_message_count, note_id, poker_id, poker_nickname):
+        NotePokeMessage.create(
+            user_id = user_id, 
+            user_unread_message_count = user_unread_message_count,
+            note_id = note_id,
+            poker_id = poker_id,
+            poker_nickname = poker_nickname
+        )
+
+class CreateNoteCommentMessageTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, user_id, user_unread_message_count, note_id, comment_id, comment_creator_id, comment_creator_nickname):
+        NoteCommentMessage.create(
+            user_id = user_id, 
+            user_unread_message_count = user_unread_message_count,
+            note_id = note_id,
+            comment_id = comment_id,
+            comment_creator_id = comment_creator_id,
+            comment_creator_nickname = comment_creator_nickname
+        )
+
+class CreateNoteCommentReplyMessageTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, user_id, user_unread_message_count, note_id, comment_id, replying_comment_id, replying_user_id, replying_user_nickname): 
+        NoteCommentReplyMessage.create(
+            user_id = user_id, 
+            user_unread_message_count = user_unread_message_count,
+            note_id = note_id,
+            comment_id = comment_id,
+            replying_comment_id = replying_comment_id,
+            replying_user_id = replying_user_id,
+            replying_user_nickname = replying_user_nickname
         )
 

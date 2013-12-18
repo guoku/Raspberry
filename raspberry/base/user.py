@@ -19,7 +19,8 @@ from models import User_Profile as UserProfileModel
 from models import User_Follow as UserFollowModel
 from models import User_Footprint as UserFootprintModel
 from utils.apns_notification import APNSWrapper
-from message import NeoMessage, UserFollowMessage 
+from tasks import CreateUserFollowMessageTask
+from message import NeoMessage 
 from models import Selection 
 from utils.mail import Mail
 from hashlib import md5
@@ -589,24 +590,12 @@ class User(object):
             cache.delete("user_fan_id_list_%s"%followee_id)
             cache.delete("user_following_id_list_%s"%self.user_id)
             
-            _message = UserFollowMessage(
+            CreateUserFollowMessageTask.delay(
                 user_id = _followee_id,
+                user_unread_message_count = User(_followee_id).get_unread_message_count(), 
                 follower_id = self.user_id,
-                created_time = datetime.datetime.now()
+                follower_nickname = self.get_nickname(),
             )
-            _message.save()
-           
-            _apns = APNSWrapper(user_id = followee_id)
-            _apns.badge(badge = _followee.get_unread_message_count())
-            _apns.alert(u"%s开始关注你"%_followee.get_nickname())
-            _apns.message(message = {
-                'followee_id' : _followee_id,
-                'follower_id' : self.user_id,
-                'type' : 'user_follow' 
-            })
-            _apns.push()
-
-
             
             return True
         except:
