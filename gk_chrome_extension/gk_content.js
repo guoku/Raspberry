@@ -1,17 +1,23 @@
-var body = document.body;
-var gk_host = "http://10.0.1.148:8000/";
+//var gk_host = "http://10.0.1.148:8000/";
+var gk_host = "http://www.guoku.com/";
+
 var gk_add_url = gk_host + "management/entity/new/";
 var gk_read_state_url = gk_host + "management/entity/item/taobao/state";
 
 var location_href = location.href;
 
-if (/(id)|(item_id)/ig.test(location_href)) {
+if (/id|item_id/ig.test(location_href)) {
   var options = {
     url: gk_read_state_url + "?url=" + encodeURIComponent(location_href)
   };
 
-  http_request(options, function (data) {
-    init_ui(body, JSON.parse(data));
+  http_request(options, function (err, data) {
+    if (!err) {
+      var body = document.body;
+      init_ui(body, JSON.parse(data));
+    } else {
+      console.log("Error: " + JSON.stringify(err));
+    }
   });
 }
 
@@ -104,7 +110,13 @@ function http_request(options, callback) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
-      callback(xhr.responseText);
+      if (xhr.status >= 200 && xhr.status < 300 || xhr.status == 304) {
+        callback(null, xhr.responseText);
+      } else {
+        callback({ status: xhr.status, statusText: xhr.statusText });
+      }
+    } else {
+      callback({ error: "Request not completed" });
     }
   };
   xhr.open(method, url, async);

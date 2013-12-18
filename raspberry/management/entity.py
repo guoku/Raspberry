@@ -91,7 +91,7 @@ def new_entity(request):
         return render_to_response(
             'entity/new.html',
             {
-                'active_division': 'entity',
+                'active_division': 'entity'
             },
             context_instance=RequestContext(request)
         )

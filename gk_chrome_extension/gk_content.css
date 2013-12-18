@@ -1,9 +1,9 @@
 
 #gk-help-box {
     position: fixed;
-    bottom: 200px;
-    right: 15px;
-    width: 200px;
+    top: 200px;
+    right: 20px;
+    width: 160px;
     min-height: 100px;
     padding: 5px;
     border: 1px solid rgba(0,0,0,0.2);
@@ -21,7 +21,8 @@
     border: 1px solid #ccc;
     margin: 5px 0;
     padding: 10px;
-    font-size: 16px;
+    font-size: 18px;
+    color: #666;
 }
 
 .gk-button {
@@ -29,7 +30,7 @@
     padding: 3px 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 16px;
     color: #fff;
     background-color: #f40;
     cursor: pointer;

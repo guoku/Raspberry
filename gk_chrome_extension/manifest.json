@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "GuoKu chrome helper",
   "version": "0.0.1",
-  "description": "For guoku user add taobao item",
+  "description": "For guoku'er add taobao item",
   "author": "evantre",
   "browser_action": {
     "default_icon": {
@@ -23,5 +23,5 @@
       "js": ["gk_content.js"]
     }
   ],
-  "permissions": ["tabs", "http://wwww.guoku.com/", "http://10.0.1.148:8000/"]
+  "permissions": ["tabs", "http://*.guoku.com/", "http://10.0.1.148:8000/"]
 }
