@@ -46,17 +46,17 @@
             <ul class="nav nav-pills">
                 <li{%if status == 0%} class="active"{%endif%}>
                     <a href="{% url 'management.views.category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}{%endif%}">
-                        全部
+                        全部 <small>({{ all_count }})</small>
                     </a>
                 </li>
                 <li{%if status == 1%} class="active"{%endif%}>
                     <a href="{% url 'management.views.category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}&{%endif%}status=1">
-                        展示 
+                        展示 <small>({{ normal_count }})</small>
                     </a>
                 </li>
                 <li{%if status == -1%} class="active"{%endif%}>
                     <a href="{% url 'management.views.category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}&{%endif%}status=-1">
-                        冻结 
+                        冻结 <small>({{ freeze_count }})</small>
                     </a>
                 </li>
             </ul>

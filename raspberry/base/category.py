@@ -160,11 +160,9 @@ class Category(object):
             pass
         elif status > 0:
             _hdl = _hdl.filter(status__gt = 0)
-        elif status == 0:
-            _hdl = _hdl.filter(status__gte = 0)
-        elif status < 0:
-            _hdl = _hdl.filter(status__lt = 0)
-            
+        else:
+            _hdl = _hdl.filter(status__lte = 0)
+
         if order_by == '-status':
             _hdl = _hdl.order_by('-status')
         if offset != None and count != None:
