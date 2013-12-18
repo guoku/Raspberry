@@ -58,8 +58,8 @@ def read_popular_entity_from_cache(scale = 'daily', json = False):
 def generate_popular_category_to_cache():
     
     _cache_key = 'category_popularity_24hours'
-    _start_time = datetime.datetime(2013, 12, 9, 16, 0, 0) 
-#    _start_time = datetime.datetime.now()
+#    _start_time = datetime.datetime(2013, 12, 9, 16, 0, 0) 
+    _start_time = datetime.datetime.now()
     _t_delta = datetime.timedelta(hours = 1) 
     _results = Entity_Like.objects.filter( 
         created_time__gt = _start_time  - _t_delta, 
