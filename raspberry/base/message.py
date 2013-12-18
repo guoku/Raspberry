@@ -34,7 +34,7 @@ class UserFollowMessage(NeoMessage):
         
         _apns = APNSWrapper(user_id = user_id)
         _apns.badge(badge = user_unread_message_count + 1) 
-        _apns.alert(u"%s开始关注你"%follower_nickname)
+        _apns.alert(u"%s 开始关注你"%follower_nickname)
         _apns.message(message = {
             'followee_id' : user_id,
             'follower_id' : follower_id,
@@ -104,6 +104,7 @@ class NoteCommentMessage(NeoMessage):
             'comment_id' : comment_id, 
             'type' : 'note_comment' 
         })
+        _apns.push()
 
 class NoteCommentReplyMessage(NeoMessage):
     note_id = IntField(required = True)
@@ -141,6 +142,7 @@ class NoteCommentReplyMessage(NeoMessage):
             'replying_user_id' : replying_user_id, 
             'type' : 'note_comment_reply' 
         })
+        _apns.push()
 
 
 class EntityLikeMessage(NeoMessage):
