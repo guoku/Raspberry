@@ -63,14 +63,15 @@ def generate_popular_category_to_cache():
     _t_delta = datetime.timedelta(hours = 1) 
     _results = Entity_Like.objects.filter( 
         created_time__gt = _start_time  - _t_delta, 
-        created_time__lt = _start_time 
-    ).values('entity__category').annotate(like_count = Count("entity__category")).order_by("-like_count")
+        created_time__lt = _start_time,
+        entity__neo_category__status__gte = 1
+    ).values('entity__neo_category').annotate(like_count = Count("entity__neo_category")).order_by("-like_count")
 
     _context = {}
     _context["updated_time"] = datetime.datetime.now()
     _context["data"] = [] 
     for _row in _results[0:20]:
-        _category_id = _row['entity__category']
+        _category_id = _row['entity__neo_category']
         _context['data'].append(Category(_category_id).read())
     
     cache.set(_cache_key, _context, 600)
