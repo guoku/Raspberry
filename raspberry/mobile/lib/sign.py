@@ -44,7 +44,6 @@ def _check_sign_md5(param):
     for key in sort_key:
         sum += '%s=%s' % (key, param[key])
     _sign_raw = sum + app_object.api_secret
-    print _sign_raw
     _server_sign =  md5(_sign_raw.encode('utf-8')).hexdigest()
     if _client_sign == _server_sign:
         return True
@@ -53,7 +52,6 @@ def _check_sign_md5(param):
 
 def check_sign(func):
     def check_sign_wrapped(request, *args, **kwargs):
-        print '...'
         _param = request.REQUEST.copy()
         _req_uri = request.get_full_path()
         try :
