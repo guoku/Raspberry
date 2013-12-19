@@ -33,8 +33,8 @@
                     </div>
                 </div>
 
-                <div class="more-note" style="display: none">
-                    {% for note in note_list %}
+                <div class="more-note">
+                    {% for note in selection.note_list %}
                         <div class="selection-note">
                             <a href=""><img class="avatar" src="{{ note.creator.avatar_small }}" width="50"
                                             height="50"></a>
