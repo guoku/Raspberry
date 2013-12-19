@@ -1,10 +1,12 @@
 # coding=utf8
+from lib.apns import Apns 
+from lib.http import SuccessJsonResponse, ErrorJsonResponse
+from lib.sign import check_sign
 from lib.user import MobileUser
-from tasks import RetrievePasswordTask 
-from mobile.lib.apns import Apns 
-from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.models import Session_Key 
+from tasks import RetrievePasswordTask 
 
+@check_sign
 def login(request):
     if request.method == "POST":
         _email = request.POST.get('email', None)
@@ -46,6 +48,7 @@ def login(request):
             )
             
 
+@check_sign
 def login_by_sina(request):
     if request.method == "POST":
         _sina_id = request.POST.get('sina_id', None)
@@ -79,6 +82,7 @@ def login_by_sina(request):
             )
 
 
+@check_sign
 def login_by_taobao(request):
     if request.method == "POST":
         _taobao_id = request.POST.get('taobao_id', None)
@@ -112,6 +116,7 @@ def login_by_taobao(request):
             )
 
 
+@check_sign
 def register(request):
     if request.method == "POST":
         _email = request.POST.get('email', None)
@@ -180,6 +185,7 @@ def register(request):
         return SuccessJsonResponse(_data)
 
 
+@check_sign
 def register_by_sina(request):
     if request.method == "POST":
         _email = request.POST.get('email', None)
@@ -261,6 +267,7 @@ def register_by_sina(request):
         }
         return SuccessJsonResponse(_data)
 
+@check_sign
 def register_by_taobao(request):
     if request.method == "POST":
         _email = request.POST.get('email', None)
@@ -343,6 +350,7 @@ def register_by_taobao(request):
         }
         return SuccessJsonResponse(_data)
 
+@check_sign
 def logout(request):
     _req_uri = request.get_full_path()
     if request.method == "POST":
@@ -353,6 +361,7 @@ def logout(request):
         return SuccessJsonResponse("1")
 
 
+@check_sign
 def forget_password(request):
     if request.method == "POST":
         _email = request.POST.get('email', None)
@@ -369,6 +378,7 @@ def forget_password(request):
 
         return SuccessJsonResponse("1")
 
+@check_sign
 def apns_token(request):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -387,18 +397,19 @@ def apns_token(request):
         _push_alert = request.POST.get('push_alert', False)
         _push_sound = request.POST.get('push_sound', False)
         _development = request.POST.get('development', False)
-        
-        _apns = Apns(_dev_token)
-        _apns.create( 
-            user_id = _request_user_id,
-            dev_name = _dev_name,
-            dev_models = _dev_model,
-            sys_ver = _sys_ver,
-            app_ver = _app_ver,
-            push_badge = _push_badge,
-            push_alert = _push_alert,
-            push_sound = _push_sound,
-            development = _development
-        )
+       
+        if _dev_token != None:
+            _apns = Apns(_dev_token)
+            _apns.create( 
+                user_id = _request_user_id,
+                dev_name = _dev_name,
+                dev_models = _dev_model,
+                sys_ver = _sys_ver,
+                app_ver = _app_ver,
+                push_badge = _push_badge,
+                push_alert = _push_alert,
+                push_sound = _push_sound,
+                development = _development
+            )
 
         return SuccessJsonResponse({ 'success' : '1' }) 

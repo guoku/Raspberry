@@ -66,14 +66,22 @@ def generate_popular_category_to_cache():
         created_time__lt = _start_time,
         entity__neo_category__status__gte = 1
     ).values('entity__neo_category').annotate(like_count = Count("entity__neo_category")).order_by("-like_count")
-
+    
+    _dict_tmp = {}
     _context = {}
     _context["updated_time"] = datetime.datetime.now()
     _context["data"] = [] 
     for _row in _results[0:20]:
         _category_id = _row['entity__neo_category']
         _context['data'].append(Category(_category_id).read())
-    
+        _dict_tmp[_category_id] = 0 
+     
+    if len(_context['data']) < 20:
+        for _cat_context in Category.find(status = 1, offset = 0, count = 30, order_by = '-status'):
+            if not _dict_tmp.has_key(_cat_context['category_id']):
+                _context['data'].append(_cat_context)
+                _dict_tmp[_cat_context['category_id']] = 0
+
     cache.set(_cache_key, _context, 600)
     return _context 
 

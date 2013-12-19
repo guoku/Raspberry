@@ -2,10 +2,12 @@
 from lib.entity import MobileEntity
 from lib.note import MobileNote
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
+from lib.sign import check_sign
 from mobile.models import Session_Key
 from tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask 
 import datetime
 
+@check_sign
 def category_entity_note(request, category_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -35,6 +37,7 @@ def category_entity_note(request, category_id):
             
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def search_entity_note(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -62,6 +65,7 @@ def search_entity_note(request):
         
         return SuccessJsonResponse(_rslt)
         
+@check_sign
 def update_entity_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -89,6 +93,7 @@ def update_entity_note(request, note_id):
         _rslt = _note.read(_request_user_id)
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def entity_note_detail(request, note_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -103,6 +108,7 @@ def entity_note_detail(request, note_id):
             _rslt['entity'] = MobileEntity(_rslt['note']['entity_id']).read(_request_user_id)
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def poke_entity_note(request, note_id, target_status):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -119,6 +125,7 @@ def poke_entity_note(request, note_id, target_status):
             _rslt['poke_already'] = 0
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def comment_entity_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -138,6 +145,7 @@ def comment_entity_note(request, note_id):
         _context = _note.read_comment(_comment_id, _request_user_id)
         return SuccessJsonResponse(_context)
 
+@check_sign
 def delete_entity_note_comment(request, note_id, comment_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)

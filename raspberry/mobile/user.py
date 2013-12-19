@@ -4,11 +4,13 @@ from lib.entity import MobileEntity
 from lib.note import MobileNote
 from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
+from lib.sign import check_sign
 from mobile.models import Session_Key
 from tasks import FollowUserTask, UnfollowUserTask
 import datetime
     
 
+@check_sign
 def category_user_like(request, category_id, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -43,6 +45,7 @@ def category_user_like(request, category_id, user_id):
 
 
 
+@check_sign
 def follow_user(request, user_id, target_status):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -67,6 +70,7 @@ def follow_user(request, user_id, target_status):
         return SuccessJsonResponse(_rslt)
 
 
+@check_sign
 def user_following(request, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -84,6 +88,7 @@ def user_following(request, user_id):
     
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def user_fan(request, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -101,6 +106,7 @@ def user_fan(request, user_id):
     
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def user_info(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -112,6 +118,7 @@ def user_info(request):
         return SuccessJsonResponse(_rslt)
 
 
+@check_sign
 def user_detail(request, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -131,6 +138,7 @@ def user_detail(request, user_id):
             
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def update_user(request):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -165,6 +173,7 @@ def update_user(request):
         
         return SuccessJsonResponse(_user.read())
 
+@check_sign
 def user_entity_note(request, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -190,6 +199,7 @@ def user_entity_note(request, user_id):
 
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def check_sina_user(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -206,6 +216,7 @@ def check_sina_user(request):
         
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def user_tag_list(request, user_id):
     if request.method == "GET":
         _user_context = MobileUser(user_id).read()
@@ -217,6 +228,7 @@ def user_tag_list(request, user_id):
     return SuccessJsonResponse(_rslt)
 
 
+@check_sign
 def user_tag_entity(request, user_id, tag):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -232,6 +244,7 @@ def user_tag_entity(request, user_id, tag):
     return SuccessJsonResponse(_rslt)
 
 
+@check_sign
 def search_user(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)

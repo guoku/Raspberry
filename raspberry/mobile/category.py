@@ -4,12 +4,15 @@ from lib.note import MobileNote
 from lib.user import MobileUser
 from base.category import Category
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
+from mobile.lib.sign import check_sign
 from mobile.models import Session_Key
 
+@check_sign
 def all_category(request):
     _all_categories = Category.all_group_with_full_category()
     return SuccessJsonResponse(_all_categories)
 
+@check_sign
 def category_stat(request, category_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)

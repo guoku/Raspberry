@@ -6,6 +6,7 @@ import base.popularity as popularity
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
+from mobile.lib.sign import check_sign
 from account import *
 from category import *
 from entity import *
@@ -16,6 +17,7 @@ from tasks import MarkFootprint
 import time
 
 
+@check_sign
 def homepage(request):
     _session = request.GET.get('session', None)
     if _session != None:
@@ -40,7 +42,7 @@ def homepage(request):
     
     return SuccessJsonResponse(_rslt)
 
-from base.models import Seed_User
+@check_sign
 def feed(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -61,7 +63,7 @@ def feed(request):
             _following_user_id_list = MobileUser(_request_user_id).read_following_user_id_list()
             #MobileUser(_request_user_id).mark_footprint(friend_feed = True)
         else:
-            _following_user_id_list = map(lambda x: x.user_id, Seed_User.objects.all())
+            _following_user_id_list = MobileUser.read_seed_users()
             #MobileUser(_request_user_id).mark_footprint(social_feed = True)
         
         _note_id_list = MobileNote.find(
@@ -87,6 +89,7 @@ def feed(request):
         
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def message(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -184,6 +187,7 @@ def message(request):
         
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def selection(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -222,6 +226,7 @@ def selection(request):
         
         return SuccessJsonResponse(_rslt)
 
+@check_sign
 def popular(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -256,6 +261,7 @@ def popular(request):
                 status = 400
             )
 
+@check_sign
 def unread_count(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
