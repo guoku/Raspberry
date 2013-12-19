@@ -1,4 +1,5 @@
 # coding=utf8
+from django.conf import settings
 from models import Item as ItemDocument
 from models import TaobaoItem as TaobaoItemDocument
 import datetime
@@ -99,7 +100,8 @@ class Item(object):
     
     @staticmethod
     def generate_taobao_item_url(taobao_id):
-        return 'http://item.taobao.com/item.htm?id=' + taobao_id
+        _url = settings.APP_HOST + "/visit_item?item_id=%s" % taobao_id + "&type=mobile"
+        return _url
 
     @staticmethod
     def get_item_id_list_by_entity_id(entity_id):

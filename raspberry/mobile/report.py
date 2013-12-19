@@ -1,10 +1,12 @@
 # coding=utf8
 from base.report import EntityReport, EntityNoteReport 
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
+from lib.sign import check_sign
 from mobile.models import Session_Key
 import datetime
 
 
+@check_sign
 def report_entity(request, entity_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -25,6 +27,7 @@ def report_entity(request, entity_id):
         return SuccessJsonResponse({ "status" : 1 })
 
             
+@check_sign
 def report_entity_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
