@@ -73,8 +73,9 @@
                     <fieldset>
                         <div class="control-group">
                             <label class="control-label" for="post_time">精选发布时间:</label>
-                            <div class="controls vDateClass">
+                            <div class="controls vDateClass" id="pub-time">
                                 <input type="text" id="post_time" name="post_time" value="{{ note_context.post_time|date_format }}" />
+                                <button class="btn btn-primary" type="button">现在</button>
                             </div>
                         </div>
                     </fieldset>
@@ -85,5 +86,24 @@
             {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block extra %}
+    <script>
+        (function ($) {
+            $("#pub-time button").click(function () {
+                var date = new Date();
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var day = date.getDate();
+                var hour = date.getHours();
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+
+                var date_str = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                $("#pub-time input").val(date_str);
+            });
+        })(jQuery)
+    </script>
 {% endblock %}
 

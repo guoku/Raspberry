@@ -4,7 +4,7 @@ from models import NoteSelection
 from entity import Entity
 import datetime
 
-def _available_for_selection(selected, cand):
+def _available_for_note_selection(selected, cand):
     i = len(selected) - 1
     while (i > len(selected) - 3) and (i >= 0):
         if cand['root_category_id'] == selected[i]['root_category_id']:
@@ -12,7 +12,7 @@ def _available_for_selection(selected, cand):
         i -= 1
     return True
 
-def arrange(select_count, start_time, interval_secs):
+def arrange_entity_note_selection(select_count, start_time, interval_secs):
     _freezing_time = datetime.datetime(2099, 1, 1) 
     
     _selection_cands = []
@@ -31,7 +31,7 @@ def arrange(select_count, start_time, interval_secs):
         i = 0
         f = False
         while i < len(_selection_cands): 
-            if _available_for_selection(_selected, _selection_cands[i]):
+            if _available_for_note_selection(_selected, _selection_cands[i]):
                 _selection = _selection_cands.pop(i)
                 _selected.append(_selection)
                 

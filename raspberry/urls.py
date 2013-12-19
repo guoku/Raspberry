@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     (r'^management/', include('management.urls')),
     (r'^mobile/v3/', include('mobile.urls')),
     (r'^admin/', include(admin.site.urls)),
+    (r'', include('web.urls'))
 )
 
 if settings.DEBUG:

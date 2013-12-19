@@ -1,26 +1,28 @@
 # coding=utf8
-from models import Entity as EntityModel
-from models import Entity_Like as EntityLikeModel
-from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
-from models import Note as NoteModel
-from message import EntityLikeMessage, EntityNoteMessage, NoteSelectionMessage
-from models import NoteSelection
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Count, Sum
 from mongoengine import *
-
-from category import Category 
-from note import Note
-from item import Item
-from image import Image
-from user import User 
 from utils.apns_notification import APNSWrapper
-from hashlib import md5
 import datetime
 import urllib
 import random 
 import time
+
+
+from category import Category 
+from image import Image
+from item import Item
+from models import Entity as EntityModel
+from models import Entity_Like as EntityLikeModel
+from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
+from models import Note as NoteModel
+from models import NoteSelection
+from tasks import CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
+from note import Note
+from user import User 
+from hashlib import md5
+
 
 
 
@@ -505,7 +507,7 @@ class Entity(object):
                 
         _basic_info = self.__read_basic_info()
         if _basic_info.has_key('creator_id') and _basic_info['creator_id'] != None and _basic_info['creator_id'] != int(creator_id):
-            _message = EntityNoteMessage.create(
+            CreateEntityNoteMessageTask.delay(
                 user_id = _basic_info['creator_id'],
                 user_unread_message_count = User(_basic_info['creator_id']).get_unread_message_count(),
                 entity_id = self.entity_id,
@@ -549,7 +551,7 @@ class Entity(object):
         cache.delete("entity_key_note_id_%s"%self.entity_id)
         cache.delete("entity_note_context_list_%s"%self.entity_id)
         cache.delete("note_context_%s"%note_id)
-
+        
         if _selector_id == None:
             for _doc in NoteSelection.objects.filter(note_id = _note_id):
                 _doc.delete()
@@ -573,26 +575,14 @@ class Entity(object):
                 if self.entity_obj.weight < 0:
                     self.update(weight = 0)
                
-
                 _note_context = _note.read()
-                _message = NoteSelectionMessage(
+                CreateNoteSelectionMessageTask.delay(
                     user_id = _note_context['creator_id'], 
+                    user_unread_message_count = User(_note_context['creator_id']).get_unread_message_count(),
                     entity_id = self.entity_id,
                     note_id = _note_id, 
-                    created_time = datetime.datetime.now()
                 )
-                _message.save()
             
-                _creator = User(_note_context['creator_id'])
-                _apns = APNSWrapper(user_id = _creator.user_id)
-                _apns.badge(badge = _creator.get_unread_message_count())
-                _apns.alert(u"你的点评被收录了精选")
-                _apns.message(message = {
-                    'entity_id' : self.entity_id, 
-                    'note_id' : _note.note_id, 
-                    'type' : 'note_selected' 
-                })
-                _apns.push()
             
             else:
                 _doc.selector_id = _selector_id 
@@ -644,3 +634,58 @@ class Entity(object):
             trackers = settings.MOGILEFS_TRACKERS 
         )
         return _datastore.get_file_data(store_key)
+
+
+    @staticmethod
+    def _available_for_selection(selected, cand):
+        i = len(selected) - 1
+        while (i > len(selected) - 3) and (i >= 0):
+            if cand['root_category_id'] == selected[i]['root_category_id']:
+                return False
+            i -= 1
+        return True
+    
+    @staticmethod
+    def arrange_entity_note_selection(select_count, start_time, interval_secs):
+        _freezing_time = datetime.datetime(2099, 1, 1) 
+        
+        _selection_cands = []
+        for _doc in NoteSelection.objects.filter(post_time__gt = _freezing_time).order_by("selected_time"):
+            _selection_cands.append({
+                'entity_id' : _doc.entity_id,
+                'note_id' : _doc.note_id,
+                'selector_id' : _doc.selector_id,
+                'selected_time' : _doc.selected_time,
+                'root_category_id' : _doc.root_category_id
+            })
+        
+        _selected = []
+        f = True
+        while f:
+            i = 0
+            f = False
+            while i < len(_selection_cands): 
+                if Entity._available_for_selection(_selected, _selection_cands[i]):
+                    _selection = _selection_cands.pop(i)
+                    _selected.append(_selection)
+                    
+                    f = True
+                    if len(_selected) >= select_count:
+                        f = False
+                        break
+                else:
+                    i += 1
+       
+        _post_time = start_time
+        for _selection in _selected:
+            Entity(_selection['entity_id']).update_note_selection_info(
+                note_id = _selection['note_id'],
+                selector_id = _selection['selector_id'],
+                selected_time = _selection['selected_time'],
+                post_time = _post_time
+            )
+            print "[%s:%s] [%d] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _selection['root_category_id'], _post_time)
+            _post_time += datetime.timedelta(seconds = interval_secs)
+        print "%d selection arranged in total"%len(_selected)
+    
+    
