@@ -3,10 +3,12 @@ from lib.entity import MobileEntity
 from lib.note import MobileNote
 from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
+from lib.sign import check_sign
 from mobile.models import Session_Key
 from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 import datetime
 
+@check_sign
 def entity_list(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -39,6 +41,7 @@ def entity_list(request):
         return SuccessJsonResponse(_rslt)
     
 
+@check_sign
 def search_entity(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -63,6 +66,7 @@ def search_entity(request):
         return SuccessJsonResponse(_rslt)
 
 
+@check_sign
 def category_entity(request, category_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -97,6 +101,7 @@ def category_entity(request, category_id):
         return SuccessJsonResponse(_rslt)
 
 
+@check_sign
 def entity_detail(request, entity_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -110,6 +115,7 @@ def entity_detail(request, entity_id):
         
 
 
+@check_sign
 def like_entity(request, entity_id, target_status):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -125,6 +131,7 @@ def like_entity(request, entity_id, target_status):
         return SuccessJsonResponse(_rslt)
             
 
+@check_sign
 def add_note_for_entity(request, entity_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -161,6 +168,7 @@ def add_note_for_entity(request, entity_id):
         _context = _note.read(request_user_id = _request_user_id) 
         return SuccessJsonResponse(_context)
 
+@check_sign
 def delete_entity_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
@@ -171,6 +179,7 @@ def delete_entity_note(request, note_id):
 
 
 
+@check_sign
 def user_like(request, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -191,6 +200,7 @@ def user_like(request, user_id):
         return SuccessJsonResponse(_rslt)
     
     
+@check_sign
 def search(request):
     if request.method == "GET":
         _query = request.GET.get('q', None)
@@ -206,6 +216,7 @@ def search(request):
         return SuccessJsonResponse(_rslt)
 
 
+@check_sign
 def guess_entity(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)

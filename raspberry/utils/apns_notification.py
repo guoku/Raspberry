@@ -46,14 +46,14 @@ class APNSWrapper(object):
 #                    APNS_KEY = self.guoku_apns_dir + 'guokuCK.sandbox.pem'
 #                    provision('com.guoku.iphone', open(APNS_KEY).read(), 'sandbox')
 #            else:
-            
-            if 'iPad' in apns.device.dev_name:
-                APNS_KEY = self.guoku_apns_dir + 'iPadCAPCK.pem'
-                provision('com.guoku', open(APNS_KEY).read(), 'sandbox')
-            else:
-                APNS_KEY = self.guoku_apns_dir + 'guokuCK.pem'
-                provision('com.guoku.iphone', open(APNS_KEY).read(), 'production')
-            if 'iPad' in apns.device.dev_name:
-                notify('com.guoku', apns.device.dev_token, self.notifications)
-            else:
-                notify('com.guoku.iphone', apns.device.dev_token, self.notifications)
+            if apns.device.app_version == '3000':
+                if 'iPad' in apns.device.dev_name:
+                    APNS_KEY = self.guoku_apns_dir + 'iPadCAPCK.pem'
+                    provision('com.guoku', open(APNS_KEY).read(), 'sandbox')
+                else:
+                    APNS_KEY = self.guoku_apns_dir + 'guokuCK.pem'
+                    provision('com.guoku.iphone', open(APNS_KEY).read(), 'production')
+                if 'iPad' in apns.device.dev_name:
+                    notify('com.guoku', apns.device.dev_token, self.notifications)
+                else:
+                    notify('com.guoku.iphone', apns.device.dev_token, self.notifications)

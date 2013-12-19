@@ -53,6 +53,7 @@ JUMP_TO_TAOBAO = True
 
 IMAGE_LOCAL = True 
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
+APP_HOST = "http://10.0.1.109:8001"
 #IMAGE_LOCAL = False 
 #IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 
