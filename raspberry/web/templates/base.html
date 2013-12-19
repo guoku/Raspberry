@@ -9,13 +9,17 @@
 </head>
 <body>
 <div id="header">
-    <a href="/selected"><img src="{{ STATIC_URL }}web/images/guoku_icon_32.png"></a>
     <div class="header-container">
+        <a href="/selected"><img src="{{ STATIC_URL }}web/images/guoku_icon_32.png"></a>
         <ul class="nav">
             <li>精选</li>
             <li>热门</li>
             <li>发现</li>
         </ul>
+        <form action="/search" method="GET">
+            <input type="text" placeholder="搜索" name="" class="search">
+            <input type="submit" value="" class="submit">
+        </form>
     </div>
 </div>
 <div id="main">{% block content %}{% endblock %}</div>

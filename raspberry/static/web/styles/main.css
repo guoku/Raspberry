@@ -19,8 +19,52 @@ ul {
 #header .header-container {
     width: 960px;
     margin: 0 auto;
+    height: 49px;
+    line-height: 50px;
+}
+
+#header img {
+    margin-top: 8px;
+}
+
+#header ul {
+    display: inline-block;
+    margin: 0 0 0 60px;
+    padding-left: 0;
+    vertical-align: top;
 }
 
 #header li {
     display: inline;
+    margin-right: 36px;
+}
+
+#header form {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#header form .search {
+    width: 170px;
+    padding: 7px 40px 7px 4px;
+    border: 1px solid #dcdcdc;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    transition: border linear .2s, box-shadow linear .2s;
+    color: #bbb;
+}
+
+#header form .search:focus {
+    border-color: rgba(153, 153, 153, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(51, 51, 51, .1);
+    outline: 0;
+}
+
+#header form .submit {
+    padding: 5px 18px 9px;
+    background: url(/static/web/images/header_icon.png) no-repeat -6px -10px #fff;
+    border: none;
+    border-left: 1px solid #dcdcdc;
+    border-radius: 2px;
+    margin-left: -42px;
 }

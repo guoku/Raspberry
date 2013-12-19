@@ -3,13 +3,18 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+from utils.paginator import Paginator
+
 
 def selected(request):
-    _test = "Hello World"
+    _page = int(request.GET.get('p', 1))
+    _category = request.GET.get('c', None)
+
+
 
     return render_to_response('selected/selected.html',
         {
-            'test': _test
+
         },
         context_instance=RequestContext(request)
     )
