@@ -2,7 +2,7 @@
 from models import Note as NoteModel
 from models import Note_Comment as NoteCommentModel
 from models import Note_Poke as NotePokeModel
-from message import NotePokeMessage, NoteCommentReplyMessage, NoteCommentMessage
+from tasks import CreateNotePokeMessageTask, CreateNoteCommentReplyMessageTask, CreateNoteCommentMessageTask
 from django.conf import settings
 from django.core.cache import cache
 import datetime
@@ -316,7 +316,7 @@ class Note(object):
             _user_id = int(user_id)
             NotePokeModel.objects.create(
                 note_id = self.note_id,
-                user_id = user_id
+                user_id = _user_id
             )
             
             _context = self.__load_note_context_from_cache()
@@ -328,24 +328,15 @@ class Note(object):
             User(user_id).update_user_entity_note_poke_count(delta = 1)
            
             self.__ensure_note_obj()
-            if self.note_obj.creator_id != user_id:
-                _message = NotePokeMessage(
+            if self.note_obj.creator_id != _user_id:
+                CreateNotePokeMessageTask.delay(
                     user_id = self.note_obj.creator_id,
-                    note_id = self.note_id, 
-                    poker_id = user_id, 
-                    created_time = datetime.datetime.now()
+                    user_unread_message_count = User(self.note_obj.creator_id).get_unread_message_count(),
+                    note_id = self.note_id,
+                    poker_id = _user_id,
+                    poker_nickname = User(_user_id).get_nickname()
                 )
-                _message.save()
-                
-                _note_creator = User(self.note_obj.creator_id)
-                _apns = APNSWrapper(user_id = _note_creator.user_id)
-                _apns.badge(badge = _note_creator.get_unread_message_count())
-                _apns.alert(u"你的点评收到了一个赞")
-                _apns.message(message = {
-                    'note_id' : self.note_id, 
-                    'type' : 'note_poke' 
-                })
-                _apns.push()
+
             return True
         except Exception, e:
             print e
@@ -403,11 +394,12 @@ class Note(object):
         return _context
     
     def add_comment(self, comment_text, creator_id, reply_to_comment_id = None, reply_to_user_id = None):
+        _creator_id = int(creator_id)
         _comment_text = comment_text.replace(u"＃", "#")
         _obj = NoteCommentModel.objects.create(
             note_id = self.note_id,
             comment = _comment_text, 
-            creator_id = creator_id,
+            creator_id = _creator_id,
             replied_comment_id = reply_to_comment_id,
             replied_user_id = reply_to_user_id
         )
@@ -424,53 +416,34 @@ class Note(object):
         for _tag in _tags:
             Tag.add_entity_tag(
                 entity_id = self.note_obj.entity_id,
-                user_id = creator_id,
+                user_id = _creator_id,
                 tag = _tag
             )
-            
-        _creator_id = int(creator_id)
+        
+        _creator = User(_creator_id)
         if _creator_id != self.note_obj.creator_id:
-            _message = NoteCommentMessage(
+            CreateNoteCommentMessageTask.delay(
                 user_id = self.note_obj.creator_id,
+                user_unread_message_count = User(self.note_obj.creator_id).get_unread_message_count(), 
                 note_id = self.note_id, 
                 comment_id =  _obj.id, 
-                comment_creator_id = creator_id, 
-                created_time = datetime.datetime.now()
+                comment_creator_id = _creator_id, 
+                comment_creator_nickname = _creator.get_nickname(), 
             )
-            _message.save()
                    
-            _note_creator = User(self.note_obj.creator_id)
-            _apns = APNSWrapper(user_id = _note_creator.user_id)
-            _apns.badge(badge = _note_creator.get_unread_message_count())
-            _apns.alert(u"你的点评收到了一条新评论")
-            _apns.message(message = {
-                'note_id' : self.note_id, 
-                'comment_id' : _obj.id, 
-                'type' : 'note_poke' 
-            })
-            _apns.push()
         
-        if reply_to_user_id != None and int(reply_to_user_id) != _creator_id: 
-            _message = NoteCommentReplyMessage(
-                user_id = reply_to_user_id,
+        if reply_to_user_id != None and int(reply_to_user_id) != _creator_id:
+            _reply_to_user_id = int(reply_to_user_id)
+            _reply_to_comment_id = int(reply_to_comment_id)
+            CreateNoteCommentReplyMessageTask.delay(
+                user_id = _reply_to_user_id,
+                user_unread_message_count = User(_reply_to_user_id).get_unread_message_count(),
                 note_id = self.note_id, 
-                comment_id = reply_to_comment_id,
+                comment_id = _reply_to_comment_id,
                 replying_comment_id = _obj.id, 
-                replying_user_id = creator_id, 
-                created_time = datetime.datetime.now()
+                replying_user_id = _creator_id, 
+                replying_user_nickname = _creator.get_nickname(), 
             )
-            _message.save()
-        
-            _replied_user = User(reply_to_user_id)
-            _apns = APNSWrapper(user_id = _replied_user.user_id) 
-            _apns.badge(badge = _replied_user.get_unread_message_count())
-            _apns.alert(u"你的评论收到了一条回应")
-            _apns.message(message = {
-                'comment_id' : reply_to_comment_id, 
-                'type' : 'note_poke' 
-            })
-            _apns.push()
-        
         return _obj.id
     
     def del_comment(self, comment_id):
