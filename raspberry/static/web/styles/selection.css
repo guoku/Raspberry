@@ -17,6 +17,7 @@
     font-size: 14px;
     font-weight: normal;
     margin: 0;
+    color: #999;
 }
 
 .selection-item .img-container {
@@ -28,7 +29,7 @@
     max-width: 210px;
 }
 
-.selection-item .like-count {
+.selection-item .like {
     display: inline-block;
     padding: 7px 10px;
     border: 1px solid #efefef;

@@ -13,6 +13,19 @@ a {
     color: inherit;
 }
 
+.text-input {
+    border: 1px solid #dcdcdc;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    transition: border linear .2s, box-shadow linear .2s;
+}
+
+.text-input:focus {
+    border-color: rgba(153, 153, 153, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(51, 51, 51, .1);
+    outline: 0;
+}
+
 #header {
     position: fixed;
     top: 0;
@@ -55,19 +68,9 @@ a {
 
 #header form .search {
     width: 170px;
-    padding: 7px 40px 7px 4px;
-    border: 1px solid #dcdcdc;
-    border-radius: 3px;
     vertical-align: middle;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    transition: border linear .2s, box-shadow linear .2s;
+    padding: 7px 40px 7px 4px;
     color: #bbb;
-}
-
-#header form .search:focus {
-    border-color: rgba(153, 153, 153, .6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(51, 51, 51, .1);
-    outline: 0;
 }
 
 #header form .submit {
@@ -82,12 +85,14 @@ a {
     background: url(/static/web/images/header_icon.png) no-repeat -6px -10px #fff;
 }
 
+/*-----------------------------------------*/
 #main {
     min-height: 900px;
     width: 960px;
-    margin: 100px auto 30px;
+    margin: 90px auto 30px;
 }
 
+/*--------------------------------------------*/
 #footer {
     padding: 15px 0;
     border-top: 1px solid #dedede;
@@ -107,11 +112,11 @@ a {
     margin-left: 10px;
 }
 
-
 /**note--------------------------------------------*/
 .note-item {
     padding: 15px;
     border-top: 1px solid #f3f3f3;
+    color: #666;
 }
 
 .note-item .avatar {
@@ -125,4 +130,41 @@ a {
 
 .note-item .note-detail p {
     margin: 10px 0 15px;
+}
+
+.note-item .note-detail .create-time {
+    float: right;
+    font-size: 12px;
+    color: #bbb;
+}
+
+.note-item .note-detail .poke {
+    color: #bbb;
+    margin-right: 9px;
+}
+
+.note-item .note-detail .add-comment {
+    color: #bbb;
+    padding-left: 10px;
+    border-left: 1px dotted #ccc;
+}
+
+.note-item .note-comment {
+    padding: 9px;
+    border: 1px solid #dedede;
+    border-radius: 2px;
+    background-color: #f8f8f8;
+}
+
+.note-item .note-comment-item {
+    border-bottom: 1px solid #dedede;
+}
+
+/*-----------------------------------------------------*/
+.guoku-block {
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
 }

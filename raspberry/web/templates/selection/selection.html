@@ -9,14 +9,17 @@
         <div class="selection-item">
             <div class="entity">
                 <h3>
-                    <a href="">{% if selection.entity_context.brand|length != 0 %}{{ selection.entity_context.brand }}
-                        - {% endif %}{{ selection.entity_context.title }}</a>
+                    <a href="{% url 'web.views.detail' selection.entity_context.entity_id %}">
+                        {% if selection.entity_context.brand|length != 0 %}{{ selection.entity_context.brand }}
+                            - {% endif %}{{ selection.entity_context.title }}</a>
                 </h3>
 
                 <div class="img-container">
-                    <a href=""><img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt=""></a>
+                    <a href="{% url 'web.views.detail' selection.entity_context.entity_id %}">
+                        <img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt="">
+                    </a>
                 </div>
-                <span class="like-count">喜爱 <small>{{ selection.entity_context.like_count }}</small></span>
+                <span class="like">喜爱 <small>{{ selection.entity_context.like_count }}</small></span>
             </div>
 
             <div class="note">

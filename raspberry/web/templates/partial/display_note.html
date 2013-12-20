@@ -9,9 +9,9 @@
         <small class="bio">{{ creator.bio }}</small>
         <p>{{ note.content }}</p>
 
-        <span class="like"></span>
-        <span class="add-comment"></span>
-        <span class="post-time">{{ note.created_time|format_time }}</span>
+        <a href="javascript:;" class="poke">{{ note.poke_count }}</a>
+        <a href="javascript:;" class="add-comment">{{ comment_list|length }}</a>
+        <span class="create-time">{{ note.created_time|format_time }}</span>
 
         <div class="note-comment">
             {% for comment in comment_list %}
@@ -23,14 +23,13 @@
                         <p>{{ comment.content }}</p>
                         <a href="javascript:;">回复</a>
                     </div>
-
-                    <form>
-                        <input type="text" name="">
-                        <a href="javascript:;">取消</a>
-                        <input type="submit" value="评论">
-                    </form>
                 </div>
             {% endfor %}
+            <form>
+                <input type="text" name="" class="text-input">
+                <a href="javascript:;">取消</a>
+                <input type="submit" value="评论">
+            </form>
         </div>
     </div>
 </div>

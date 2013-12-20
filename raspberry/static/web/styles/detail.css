@@ -1,0 +1,33 @@
+.detail h2 {
+    margin: 0 0 5px;
+    font-size: 16px;
+    color: #999;
+}
+
+.detail .entity-and-note {
+    width: 630px;
+    padding-top: 30px;
+}
+
+.detail .entity {
+    margin: 0 0 15px 74px;
+}
+
+.detail img {
+    max-width: 100%;
+}
+
+.detail .img-container {
+    width: 480px;
+    margin-bottom: 5px;
+}
+
+.detail .like-count {
+    display: inline-block;
+    padding: 7px 10px;
+    border: 1px solid #efefef;
+    border-radius: 2px;
+    font-size: 12px;
+    background: #fbfbfb;
+}
+

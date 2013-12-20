@@ -10,7 +10,7 @@ from base.entity import Entity
 from base.user import User
 
 
-def selection(request):
+def selection(request, template='selection/selection.html'):
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
 
@@ -43,7 +43,6 @@ def selection(request):
             if _note_id_ != _note_id:
                 _note_context_ = Note(_note_id_).read()
                 _note_list.append({
-                    'entity_context': Entity(_note_context_['entity_id']).read(),
                     'note_context': _note_context_,
                     'creator_context': User(_note_context_['creator_id']).read()
                 })
@@ -55,7 +54,7 @@ def selection(request):
             'note_list': _note_list
         })
 
-    return render_to_response('selection/selection.html',
+    return render_to_response(template,
         {
             "selections": _selections
         },

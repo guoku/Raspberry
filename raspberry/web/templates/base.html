@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>{% block title %}果库{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/normalize.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/main.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/base.css">
     {% block css %}{% endblock %}
 </head>
 <body>
@@ -12,12 +12,12 @@
     <div class="header-container">
         <a href="/selected"><img src="{{ STATIC_URL }}web/images/guoku_icon_32.png"></a>
         <ul class="nav">
-            <li>精选</li>
+            <li><a href="/selection">精选</a></li>
             <li>热门</li>
             <li>发现</li>
         </ul>
         <form action="/search" method="GET">
-            <input type="text" placeholder="搜索" name="" class="search">
+            <input type="text" placeholder="搜索" name="" class="search text-input">
             <input type="submit" value="" class="submit">
         </form>
     </div>
