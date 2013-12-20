@@ -34,10 +34,11 @@ def homepage(request):
             'img' : _banner_context['image'] 
         })
     
+    _rslt['config'] = {}
     if settings.JUMP_TO_TAOBAO: 
-        _rslt['jump_to_taobao'] = 1
+        _rslt['config']['jump_to_taobao'] = 1
     else:
-        _rslt['jump_to_taobao'] = 0
+        _rslt['config']['jump_to_taobao'] = 0
         
     
     return SuccessJsonResponse(_rslt)
