@@ -48,7 +48,7 @@ def login(request):
             )
             
 
-#@check_sign
+@check_sign
 def login_by_sina(request):
     if request.method == "POST":
         _sina_id = request.POST.get('sina_id', None)
