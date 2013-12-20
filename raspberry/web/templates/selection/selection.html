@@ -6,16 +6,16 @@
 
 {% block content %}
     {% for selection in selections %}
-        <div class="selection-item">
+        <div class="selection-item guoku-block">
             <div class="entity">
                 <h3>
-                    <a href="{% url 'web.views.detail' selection.entity_context.entity_id %}">
+                    <a href="{% url 'web.views.detail' selection.entity_context.entity_hash %}">
                         {% if selection.entity_context.brand|length != 0 %}{{ selection.entity_context.brand }}
                             - {% endif %}{{ selection.entity_context.title }}</a>
                 </h3>
 
                 <div class="img-container">
-                    <a href="{% url 'web.views.detail' selection.entity_context.entity_id %}">
+                    <a href="{% url 'web.views.detail' selection.entity_context.entity_hash %}">
                         <img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt="">
                     </a>
                 </div>
@@ -25,7 +25,7 @@
             <div class="note">
                 {% display_note selection.note_context selection.creator_context %}
 
-                <div class="more-note">
+                <div class="more-note" style="display: none">
                     {% for note in selection.note_list %}
                         {% display_note note.note_context note.creator_context %}
                     {% endfor %}

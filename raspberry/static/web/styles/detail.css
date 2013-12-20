@@ -1,3 +1,7 @@
+#main {
+    overflow: hidden;
+}
+
 .detail h2 {
     margin: 0 0 5px;
     font-size: 16px;
@@ -5,6 +9,7 @@
 }
 
 .detail .entity-and-note {
+    float: left;
     width: 630px;
     padding-top: 30px;
 }
@@ -31,3 +36,23 @@
     background: #fbfbfb;
 }
 
+
+.detail .more-info {
+    float: right;
+    width: 257px;
+    padding: 14px;
+}
+
+.detail .more-info .price {
+    margin: 15px 0;
+}
+
+.detail .more-info .like {
+    margin: 15px 0;
+    padding-top: 15px;
+    border-top: 1px solid #dedede;
+}
+
+.detail .more-info .people {
+    margin-bottom: 15px;
+}

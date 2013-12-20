@@ -13,7 +13,7 @@
         <a href="javascript:;" class="add-comment">{{ comment_list|length }}</a>
         <span class="create-time">{{ note.created_time|format_time }}</span>
 
-        <div class="note-comment">
+        <div class="note-comment" style="display: none">
             {% for comment in comment_list %}
                 <div class="note-comment-item">
                     <a href=""><img src="" class="avatar" height="32" width="32"></a>
@@ -21,14 +21,16 @@
                     <div class="note-comment-detail">
                         <span>{{ comment.creator.nickname }}</span>
                         <p>{{ comment.content }}</p>
-                        <a href="javascript:;">回复</a>
+                        <a href="javascript:;" class="reply">回复</a>
                     </div>
                 </div>
             {% endfor %}
             <form>
                 <input type="text" name="" class="text-input">
-                <a href="javascript:;">取消</a>
-                <input type="submit" value="评论">
+                <div class="operate-comment">
+                    <a href="javascript:;">取消</a>
+                    <input type="submit" value="评论" class="button">
+                </div>
             </form>
         </div>
     </div>

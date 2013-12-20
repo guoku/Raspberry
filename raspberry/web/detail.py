@@ -8,8 +8,8 @@ from base.entity import Entity
 from base.user import User
 
 
-def detail(request, entity_id, template='detail/detail.html'):
-    _entity_id = entity_id
+def detail(request, entity_hash, template='detail/detail.html'):
+    _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
 
     _all_note_id = Note.find(entity_id=_entity_id)

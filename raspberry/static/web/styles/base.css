@@ -13,6 +13,19 @@ a {
     color: inherit;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
+/*-----------------------------------------------------*/
+.guoku-block {
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+
 .text-input {
     border: 1px solid #dcdcdc;
     border-radius: 3px;
@@ -26,6 +39,21 @@ a {
     outline: 0;
 }
 
+.guoku-button {
+    display: inline-block;
+    padding: 5px 14px;
+    border: 1px #4db07a solid;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+    background: #4db07a;
+}
+
+.guoku-button:hover {
+    text-decoration: none;
+}
+
+/*--------------------------------------------*/
 #header {
     position: fixed;
     top: 0;
@@ -89,11 +117,12 @@ a {
 #main {
     min-height: 900px;
     width: 960px;
-    margin: 90px auto 30px;
+    margin: 90px auto 50px;
 }
 
 /*--------------------------------------------*/
 #footer {
+    clear: both;
     padding: 15px 0;
     border-top: 1px solid #dedede;
     font-size: 12px;
@@ -150,6 +179,8 @@ a {
 }
 
 .note-item .note-comment {
+    overflow: hidden;
+    margin-top: 10px;
     padding: 9px;
     border: 1px solid #dedede;
     border-radius: 2px;
@@ -157,14 +188,48 @@ a {
 }
 
 .note-item .note-comment-item {
+    margin-bottom: 9px;
+    padding-bottom: 9px;
     border-bottom: 1px solid #dedede;
 }
 
-/*-----------------------------------------------------*/
-.guoku-block {
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
+.note-item .note-comment-item .avatar {
+    float: left;
+}
+
+.note-item .note-comment-detail {
+    overflow: hidden;
+}
+
+.note-item .note-comment-detail p {
+    margin: 5px;
+}
+
+.note-item .note-comment-detail .reply {
+    float: right;
+}
+
+.note-item .note-comment .text-input {
+    display: block;
+    width: 506px;
+    padding: 6px;
+    margin-top: 12px;
+}
+
+.note-item .operate-comment {
+    float: right;
+    margin: 12px 0 9px;
+}
+
+.note-item .operate-comment .button {
+    margin-left: 15px;
+    padding: 5px 14px;
+    border: 1px #4db07a solid;
+    border-radius: 4px;
+    color: #fff;
+    background: #4db07a;
+}
+
+.note-item .operate-comment .button:hover {
+    border: 1px solid #ccc;
 }
