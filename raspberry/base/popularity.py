@@ -60,7 +60,7 @@ def generate_popular_category_to_cache():
     _cache_key = 'category_popularity_24hours'
 #    _start_time = datetime.datetime(2013, 12, 9, 16, 0, 0) 
     _start_time = datetime.datetime.now()
-    _t_delta = datetime.timedelta(hours = 1) 
+    _t_delta = datetime.timedelta(hours = 12) 
     _results = Entity_Like.objects.filter( 
         created_time__gt = _start_time  - _t_delta, 
         created_time__lt = _start_time,
