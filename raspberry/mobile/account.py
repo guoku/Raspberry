@@ -48,17 +48,19 @@ def login(request):
             )
             
 
-@check_sign
+#@check_sign
 def login_by_sina(request):
     if request.method == "POST":
         _sina_id = request.POST.get('sina_id', None)
         _sina_token = request.POST.get('sina_token', None)
+        _screen_name = request.POST.get('screen_name', None)
         _api_key = request.POST.get('api_key', None)
         
         try:
             _user = MobileUser.login_by_sina(
                 sina_id = _sina_id,
-                sina_token = _sina_token
+                sina_token = _sina_token,
+                screen_name = _screen_name
             )
             _session = Session_Key.objects.generate_session(
                 user_id = _user.user_id,
