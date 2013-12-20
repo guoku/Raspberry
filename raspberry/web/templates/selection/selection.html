@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load web %}
 
 {% block title %}精选{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/selection.css">{% endblock %}
@@ -8,46 +9,22 @@
         <div class="selection-item">
             <div class="entity">
                 <h3>
-                    <a href="">{% if selection.entity.brand|length != 0 %}{{ selection.entity.brand }}
-                        - {% endif %}{{ selection.entity.title }}</a>
+                    <a href="">{% if selection.entity_context.brand|length != 0 %}{{ selection.entity_context.brand }}
+                        - {% endif %}{{ selection.entity_context.title }}</a>
                 </h3>
 
                 <div class="img-container">
-                    <a href=""><img class="entity-img" src="{{ selection.entity.chief_image.url }}" alt=""></a>
+                    <a href=""><img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt=""></a>
                 </div>
-                <span class="like-count">喜爱 <small>{{ selection.entity.like_count }}</small></span>
+                <span class="like-count">喜爱 <small>{{ selection.entity_context.like_count }}</small></span>
             </div>
 
             <div class="note">
-                <div class="selection-note">
-                    <a href=""><img class="avatar" src="{{ selection.creator.avatar_small }}" width="50"
-                                    height="50"></a>
-
-                    <div class="note-detail">
-                        <span class="creator-name">{{ selection.creator.nickname }}</span>
-                        <small class="bio">{{ selection.creator.bio }}</small>
-                        <p>{{ selection.note.content }}</p>
-                        <span class="like"></span>
-                        <span class="add-comment"></span>
-                        <span class="post-time"></span>
-                    </div>
-                </div>
+                {% display_note selection.note_context selection.creator_context %}
 
                 <div class="more-note">
                     {% for note in selection.note_list %}
-                        <div class="selection-note">
-                            <a href=""><img class="avatar" src="{{ note.creator.avatar_small }}" width="50"
-                                            height="50"></a>
-
-                            <div class="note-detail">
-                                <span class="creator-name">{{ note.creator.nickname }}</span>
-                                <small class="bio">{{ note.creator.bio }}</small>
-                                <p>{{ note.note.content }}</p>
-                                <span class="like"></span>
-                                <span class="add-comment"></span>
-                                <span class="post-time"></span>
-                            </div>
-                        </div>
+                        {% display_note note.note_context note.creator_context %}
                     {% endfor %}
                 </div>
 

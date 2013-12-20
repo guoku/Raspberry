@@ -37,24 +37,6 @@
     background: #fbfbfb;
 }
 
-.selection-item .selection-note {
-    padding: 15px;
-    border-top: 1px solid #f3f3f3;
-}
-
-.selection-item .avatar {
-    float: left;
-    margin-right: 10px;
-}
-
-.selection-item .note-detail {
-    overflow: hidden;
-}
-
-.selection-item .note-detail p {
-    margin: 10px 0 15px;
-}
-
 .selection-item .operate-note {
     padding: 5px 0;
     border-top: 1px solid #f3f3f3;

@@ -32,33 +32,32 @@ def selection(request):
         _entity_id = note_selection['entity_id']
         _note_id = note_selection['note_id']
 
-        _entity = Entity(_entity_id).read()
-        _note = Note(_note_id).read()
-        _creator = User(_note['creator_id']).read()
+        _entity_context = Entity(_entity_id).read()
+        _note_context = Note(_note_id).read()
+        _creator_context = User(_note_context['creator_id']).read()
 
         _all_note_id = Note.find(entity_id=_entity_id)
         _note_list = []
 
         for _note_id_ in _all_note_id:
             if _note_id_ != _note_id:
-                _note_ = Note(_note_id_).read()
+                _note_context_ = Note(_note_id_).read()
                 _note_list.append({
-                    'entity': Entity(_note_['entity_id']).read(),
-                    'note': _note_,
-                    'creator': User(_note_['creator_id']).read()
+                    'entity_context': Entity(_note_context_['entity_id']).read(),
+                    'note_context': _note_context_,
+                    'creator_context': User(_note_context_['creator_id']).read()
                 })
 
         _selections.append({
-            'entity': _entity,
-            'note': _note,
-            'creator': _creator,
+            'entity_context': _entity_context,
+            'note_context': _note_context,
+            'creator_context': _creator_context,
             'note_list': _note_list
         })
 
     return render_to_response('selection/selection.html',
         {
-            "selections": _selections,
-            'note_list': _note_list
+            "selections": _selections
         },
         context_instance=RequestContext(request)
     )

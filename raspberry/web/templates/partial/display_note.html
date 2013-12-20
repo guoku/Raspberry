@@ -1,0 +1,36 @@
+{% load common %}
+
+<div class="note-item">
+    <a href=""><img class="avatar" src="{{ creator.avatar_small }}" width="50"
+                    height="50"></a>
+
+    <div class="note-detail">
+        <span class="creator-name">{{ creator.nickname }}</span>
+        <small class="bio">{{ creator.bio }}</small>
+        <p>{{ note.content }}</p>
+
+        <span class="like"></span>
+        <span class="add-comment"></span>
+        <span class="post-time">{{ note.created_time|format_time }}</span>
+
+        <div class="note-comment">
+            {% for comment in comment_list %}
+                <div class="note-comment-item">
+                    <a href=""><img src="" class="avatar" height="32" width="32"></a>
+
+                    <div class="note-comment-detail">
+                        <span>{{ comment.creator.nickname }}</span>
+                        <p>{{ comment.content }}</p>
+                        <a href="javascript:;">回复</a>
+                    </div>
+
+                    <form>
+                        <input type="text" name="">
+                        <a href="javascript:;">取消</a>
+                        <input type="submit" value="评论">
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

@@ -106,3 +106,23 @@ a {
 #footer .site-info a, #footer .site-info span {
     margin-left: 10px;
 }
+
+
+/**note--------------------------------------------*/
+.note-item {
+    padding: 15px;
+    border-top: 1px solid #f3f3f3;
+}
+
+.note-item .avatar {
+    float: left;
+    margin-right: 10px;
+}
+
+.note-item .note-detail {
+    overflow: hidden;
+}
+
+.note-item .note-detail p {
+    margin: 10px 0 15px;
+}
