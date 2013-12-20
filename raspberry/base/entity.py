@@ -35,7 +35,6 @@ class Entity(object):
         if not hasattr(self, 'entity_obj'):
             self.entity_obj = EntityModel.objects.get(pk = self.entity_id)
 
-    
     @classmethod
     def cal_entity_hash(cls, entity_hash_string):
         while True:
@@ -171,6 +170,18 @@ class Entity(object):
             self.entity_obj.save()
         return _item_id 
 
+    @classmethod
+    def get_entity_id_by_hash(cls, entity_hash):
+        _cache_key = 'entity_%s_hash_to_id'%entity_hash
+        _entity_id = cache.get(_cache_key)
+        if _entity_id == None:
+            try:
+                _entity_id = EntityModel.objects.get(entity_hash = entity_hash).id
+                cache.set(_cache_key, _entity_id, 8640000)
+            except EntityModel.DoesNotExist, e:
+                pass
+        return _entity_id 
+    
 
     def __load_basic_info_from_cache(self):
         _cache_key = 'entity_%s_basic_info'%self.entity_id
