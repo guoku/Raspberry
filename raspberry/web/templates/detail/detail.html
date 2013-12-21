@@ -20,6 +20,9 @@
                 <span class="like-count">喜爱 <small>{{ entity_context.like_count }}</small></span>
             </div>
 
+            {% display_note selected_note.note_context selected_note.creator_context %}
+
+            <div class="tip-info">还有 {{ note_list|length }} 条点评</div>
             <div class="note">
                 {% for note in note_list %}
                     {% display_note note.note_context note.creator_context %}
@@ -28,7 +31,7 @@
         </div>
 
         <div class="more-info guoku-block">
-            <a href="" class="price guoku-button">详情</a>
+            <a href="" class="price guoku-button">详情 ￥{{ entity_context.price }}</a>
             <div class="shop">来自于<a href=""></a></div>
             <div class="like">人喜爱</div>
             <div class="people">

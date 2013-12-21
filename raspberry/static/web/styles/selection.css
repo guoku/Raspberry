@@ -1,3 +1,12 @@
+#selections {
+    float: left;
+}
+
+#selections h2 {
+    font-size: 16px;
+    margin: 0 0 5px 0;
+}
+
 .selection-item {
     width: 630px;
     margin-bottom: 30px;
@@ -42,4 +51,45 @@
 
 .selection-item .show-note {
     margin-left: 75px;
+}
+
+
+.categories, .register-intro, .download_info {
+    float: right;
+    width: 257px;
+    padding: 14px;
+    color: #666;
+}
+
+.categories {
+    margin: 30px 0;
+}
+
+.categories ul {
+    margin: 0;
+    padding: 0;
+    line-height: 2;
+}
+
+.categories li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.register-intro {
+    padding-bottom: 30px;
+}
+
+.register-intro h3 {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.register-intro .register-address {
+    margin-left: 10px;
+    font-size: 12px;
+}
+
+.register-intro .register-address a {
+    color: #4db07a;
 }

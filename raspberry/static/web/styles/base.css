@@ -18,11 +18,15 @@ a:hover {
 }
 
 /*-----------------------------------------------------*/
+.clearfix:before, .clearfix:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+
 .guoku-block {
     background-color: #fff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
     border-radius: 2px;
 }
 
@@ -46,11 +50,12 @@ a:hover {
     border-radius: 4px;
     text-decoration: none;
     color: #fff;
-    background: #4db07a;
+    background-color: #4db07a;
 }
 
 .guoku-button:hover {
     text-decoration: none;
+    background-color: #5ebf7f;
 }
 
 /*--------------------------------------------*/
@@ -67,9 +72,10 @@ a:hover {
 }
 
 #header .header-container {
+    position: relative;
     width: 960px;
+    height: 49px;
     margin: 0 auto;
-    line-height: 49px;
 }
 
 #header img {
@@ -78,23 +84,24 @@ a:hover {
 
 #header ul {
     display: inline-block;
-    margin: 0 0 0 60px;
+    margin: 0 0 0 50px;
     padding-left: 0;
-    vertical-align: top;
 }
 
 #header li {
-    display: inline;
-    margin-right: 36px;
+    float: left;
+    margin-right: 30px;
+    padding: 7px;
 }
 
 #header form {
-    display: inline-block;
-    vertical-align: top;
+    position: absolute;
+    top: 9px;
+    left: 370px;
     width: 230px;
 }
 
-#header form .search {
+#header form .text-input {
     width: 170px;
     vertical-align: middle;
     padding: 7px 40px 7px 4px;
@@ -113,11 +120,23 @@ a:hover {
     background: url(/static/web/images/header_icon.png) no-repeat -6px -10px #fff;
 }
 
+#header .user {
+    float: right;
+    line-height: 49px;
+}
+
+#header .user a {
+    padding: 0 10px;
+}
+
+#header .user a.login-link {
+    padding-right: 1px;
+}
+
 /*-----------------------------------------*/
 #main {
-    min-height: 900px;
     width: 960px;
-    margin: 90px auto 50px;
+    margin: 85px auto 50px;
 }
 
 /*--------------------------------------------*/
@@ -221,15 +240,19 @@ a:hover {
     margin: 12px 0 9px;
 }
 
-.note-item .operate-comment .button {
+.note-item .operate-comment .guoku-button {
     margin-left: 15px;
-    padding: 5px 14px;
-    border: 1px #4db07a solid;
-    border-radius: 4px;
-    color: #fff;
-    background: #4db07a;
 }
 
-.note-item .operate-comment .button:hover {
-    border: 1px solid #ccc;
+/*------------------------------*/
+.download-link h3 {
+    font-size: 14px;
+}
+
+.download-link div {
+    margin-bottom: 14px;
+}
+
+.download-link a {
+    color: #999;
 }

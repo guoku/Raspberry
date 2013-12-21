@@ -5,37 +5,61 @@
 {% block css %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/selection.css">{% endblock %}
 
 {% block content %}
-    {% for selection in selections %}
-        <div class="selection-item guoku-block">
-            <div class="entity">
-                <h3>
-                    <a href="{% url 'web.views.detail' selection.entity_context.entity_hash %}">
-                        {% if selection.entity_context.brand|length != 0 %}{{ selection.entity_context.brand }}
-                            - {% endif %}{{ selection.entity_context.title }}</a>
-                </h3>
+    <div id="selections">
+        <h2>{{ curr_cat_title|default:'所有' }}</h2>
 
-                <div class="img-container">
-                    <a href="{% url 'web.views.detail' selection.entity_context.entity_hash %}">
-                        <img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt="">
-                    </a>
+        {% for selection in selections %}
+            <div class="selection-item guoku-block">
+                <div class="entity">
+                    <h3>
+                        <a href="{% url 'web.views.detail' selection.entity_context.entity_hash %}">
+                            {% if selection.entity_context.brand|length != 0 %}{{ selection.entity_context.brand }}
+                                - {% endif %}{{ selection.entity_context.title }}</a>
+                    </h3>
+
+                    <div class="img-container">
+                        <a href="{% url 'web.views.detail' selection.entity_context.entity_hash %}">
+                            <img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt="">
+                        </a>
+                    </div>
+                    <span class="like">喜爱 <small>{{ selection.entity_context.like_count }}</small></span>
                 </div>
-                <span class="like">喜爱 <small>{{ selection.entity_context.like_count }}</small></span>
+
+                <div class="note">
+                    {% display_note selection.note_context selection.creator_context %}
+
+                    <div class="more-note" style="display: none">
+                        {% for note in selection.note_list %}
+                            {% display_note note.note_context note.creator_context %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="operate-note">
+                        <a href="javascript:;" class="show-note">还有 {{ selection.note_list|length }} 条点评</a>
+                        &sdot;
+                        <a href="javascript:;" class="add-note">写点评</a>
+                    </div>
+                </div>
             </div>
+        {% endfor %}
+    </div>
 
-            <div class="note">
-                {% display_note selection.note_context selection.creator_context %}
+    <div class="register-intro guoku-block">
+        <h3>果库，尽收世上好物！</h3>
+        <div><a href="" class="guoku-button">注册帐号</a> <span class="register-address">已有帐号，<a href="">从这里登录</a></span></div>
+    </div>
 
-                <div class="more-note" style="display: none">
-                    {% for note in selection.note_list %}
-                        {% display_note note.note_context note.creator_context %}
-                    {% endfor %}
-                </div>
+    <div class="categories guoku-block">
+        <ul>
+            {% for category in categories %}
+                <li>
+                    <a href="{% url 'web.views.selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-                <div class="operate-note">
-                    <span class="show-note">还有 {{ selection.note_list|length }} 条点评</span>
-                    <span class="add-note">写点评</span>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
+    <div class="download_info guoku-block">
+         {% include 'partial/app_download.html' %}
+    </div>
 {% endblock %}

@@ -7,3 +7,4 @@ from django.template import RequestContext
 
 from selection import *
 from detail import *
+from user import *
