@@ -35,7 +35,7 @@ class MobileNote(Note):
             _entity_context = _entity.read()
             _context['brand'] = _entity_context['brand']
             _context['title'] = _entity_context['title']
-            _context['chief_image'] = _entity_context['chief_image']
+            _context['chief_image'] = _entity_context['chief_image']['url']
             _context['category_id'] = _entity_context['category_id']
             
         return _context 
