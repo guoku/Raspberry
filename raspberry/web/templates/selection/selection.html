@@ -5,9 +5,9 @@
 {% block css %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/selection.css">{% endblock %}
 
 {% block content %}
-    <div id="selections">
-        <h2>{{ curr_cat_title|default:'所有' }}</h2>
+    <h2>{{ curr_cat_title|default:'所有' }}</h2>
 
+    <div id="selections">
         {% for selection in selections %}
             <div class="selection-item guoku-block">
                 <div class="entity">

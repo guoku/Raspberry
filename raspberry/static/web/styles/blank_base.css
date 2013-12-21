@@ -1,0 +1,51 @@
+body {
+    background: url("/static/web/images/iconwall.png") repeat;
+}
+
+.main {
+    height: 300px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    margin-top: -170px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    background-color: #fff;
+}
+
+.container {
+    margin: 30px auto 0;
+    width: 500px;
+}
+
+.container img {
+    float: left;
+    margin-top: 40px;
+}
+
+h2 {
+    display: inline
+}
+
+form {
+    width: 282px;
+    float: right;
+}
+
+form a {
+    color: #4db07a;
+}
+
+.text-input {
+    width: 270px;
+    padding: 5px;
+    margin-top: 15px;
+    line-height: 1.3;
+}
+
+#password {
+    margin-bottom: 15px;
+}
+
+.guoku-button {
+    float: right;
+}

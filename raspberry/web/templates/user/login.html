@@ -1,11 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>欢迎加入果库</title>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/normalize.min.css">
-</head>
-<body>
+{% extends "blank_base.html" %}
 
-</body>
-</html>
+{% block body %}
+    <div class="main">
+        <div class="container">
+            <img src="{{ STATIC_URL }}web/images/guoku_icon_56.png">
+
+            <form action="" method="">
+                <h2>登录</h2> | 没有帐号？<a href="">请注册</a>
+
+                <input type="text" name="email" class="text-input" placeholder="邮箱" id="email"><br/>
+                <input type="text" name="password" class="text-input" placeholder="密码" id="password"><br/>
+                <label><input type="checkbox" name="remember_me" checked>记住我</label>
+                <small><a href="">忘了密码?</a></small>
+
+                <input type="submit" value="登录" class="guoku-button">
+
+                <div><a></a></div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

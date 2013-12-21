@@ -1,10 +1,10 @@
-#selections {
-    float: left;
-}
-
-#selections h2 {
+h2 {
     font-size: 16px;
     margin: 0 0 5px 0;
+}
+
+#selections {
+    float: left;
 }
 
 .selection-item {
