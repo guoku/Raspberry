@@ -236,7 +236,7 @@ class User(object):
         return _inst
 
     @classmethod
-    def login_by_sina(cls, sina_id, sina_token = None):
+    def login_by_sina(cls, sina_id, sina_token = None, screen_name = None):
         try:
             _sina_token_obj = SinaTokenModel.objects.get(sina_id = sina_id)
         except SinaTokenModel.DoesNotExist, e:
@@ -244,7 +244,9 @@ class User(object):
     
         if sina_token != None:
             _sina_token_obj.access_token = sina_token
-            _sina_token_obj.save()
+        if screen_name != None:
+            _sina_token_obj.screen_name = screen_name
+        _sina_token_obj.save()
         _inst = cls(_sina_token_obj.user_id)
         
         return _inst
@@ -451,6 +453,12 @@ class User(object):
             self.__ensure_avatar_obj()
             _basic_info['avatar_large'] = self.avatar_obj.get_large_link() 
             _basic_info['avatar_small'] = self.avatar_obj.get_small_link()
+
+        try:
+            _sina_token_obj = SinaTokenModel.objects.get(user_id = self.user_id)
+            _basic_info['sina_screen_name'] = _sina_token_obj.screen_name
+        except SinaTokenModel.DoesNotExist:
+            pass
         
         cache.set(_cache_key, _basic_info, 864000)
             

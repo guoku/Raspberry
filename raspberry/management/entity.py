@@ -373,9 +373,11 @@ def entity_list(request):
                     _item_context = Item(_entity_context['item_id_list'][0]).read()
                     _entity_context['buy_link'] = _item_context['buy_link'] 
                     _entity_context['taobao_title'] = _item_context['title'] 
+                    _entity_context['taobao_id'] = _item_context['taobao_id'] 
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
+                    _entity_context['taobao_id'] = '' 
                 _entity_context_list.append(_entity_context)
             except Exception, e:
                 pass
