@@ -2,21 +2,26 @@
 
 {% block body %}
     <div class="main">
-        <div class="container">
+        <div class="login clearfix">
             <img src="{{ STATIC_URL }}web/images/guoku_icon_56.png">
 
-            <form action="" method="">
-                <h2>登录</h2> | 没有帐号？<a href="">请注册</a>
+            <form action="/login/" method="POST">
+                <h2>登录</h2> | 没有帐号？<a href="/register/">请注册</a>
 
                 <input type="text" name="email" class="text-input" placeholder="邮箱" id="email"><br/>
                 <input type="text" name="password" class="text-input" placeholder="密码" id="password"><br/>
-                <label><input type="checkbox" name="remember_me" checked>记住我</label>
+                <label><input type="checkbox" name="remember_me" checked id="remember-me">记住我</label>
                 <small><a href="">忘了密码?</a></small>
-
                 <input type="submit" value="登录" class="guoku-button">
-
-                <div><a></a></div>
             </form>
+        </div>
+
+        <div class="third-party">
+            <div>
+                <h2>第三方帐号登录</h2>
+                <a href="/login/sina">新浪微博</a>
+                <a href="/login/taobao">淘宝</a>
+            </div>
         </div>
     </div>
 {% endblock %}

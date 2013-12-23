@@ -3,7 +3,7 @@ body {
 }
 
 .main {
-    height: 300px;
+    height: 270px;
     width: 100%;
     position: absolute;
     top: 50%;
@@ -12,17 +12,17 @@ body {
     background-color: #fff;
 }
 
-.container {
-    margin: 30px auto 0;
+.login, .register {
+    margin: 30px auto;
     width: 500px;
 }
 
-.container img {
+.login img, .register img {
     float: left;
     margin-top: 40px;
 }
 
-h2 {
+.login h2, .register h2 {
     display: inline
 }
 
@@ -35,17 +35,36 @@ form a {
     color: #4db07a;
 }
 
-.text-input {
+form .text-input {
     width: 270px;
     padding: 5px;
     margin-top: 15px;
     line-height: 1.3;
 }
 
-#password {
+form #password {
     margin-bottom: 15px;
 }
 
-.guoku-button {
+form .guoku-button {
     float: right;
+}
+
+.third-party {
+    clear: right;
+    border-top: 1px solid #dedede;
+}
+
+.third-party div {
+    width: 500px;
+    line-height: 52px;
+    margin: 0 auto;
+}
+
+.third-party h2 {
+    display: inline;
+    margin-left: 218px;
+    color: #666;
+    font-size: 14px;
+    font-weight: normal;
 }
