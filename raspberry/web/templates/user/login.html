@@ -3,10 +3,12 @@
 {% block body %}
     <div class="main">
         <div class="login clearfix">
-            <img src="{{ STATIC_URL }}web/images/guoku_icon_56.png">
+            <a href="{% url 'web.views.selection' %}"><img src="{{ STATIC_URL }}web/images/guoku_icon_56.png"></a>
 
-            <form action="/login/" method="POST">
-                <h2>登录</h2> | 没有帐号？<a href="/register/">请注册</a>
+            <form action="{% url 'web.views.login' %}" method="POST">
+                {% csrf_token %}
+
+                <h2>登录</h2> | 没有帐号？<a href="{% url 'web.views.register' %}">请注册</a>
 
                 <input type="text" name="email" class="text-input" placeholder="邮箱" id="email"><br/>
                 <input type="text" name="password" class="text-input" placeholder="密码" id="password"><br/>
@@ -19,8 +21,8 @@
         <div class="third-party">
             <div>
                 <h2>第三方帐号登录</h2>
-                <a href="/login/sina">新浪微博</a>
-                <a href="/login/taobao">淘宝</a>
+                <a href="{% url 'web.views.login_by_sina' %}">新浪微博</a>
+                <a href="{% url 'web.views.login_by_taobao' %}">淘宝</a>
             </div>
         </div>
     </div>

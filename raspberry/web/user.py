@@ -2,9 +2,73 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+
+import json
+
+from base.user import User
 
 
-def login(request, template='user/login.html'):
+MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14  # two weeks
+
+
+def _validate_email(email):
+    try:
+        validate_email(email)
+        return True
+    except ValidationError:
+        return False
+
+
+def _check_nickname_valid(nickname):
+    _result = None
+    if nickname is None or len(nickname) == 0:
+        _result = '昵称不能为空'
+    elif User.nickname_exist(nickname):
+        _result = '昵称已经被占用'
+    return _result
+
+
+def _check_email_valid(email):
+    _result = None
+    if email is None or len(email) == 0:
+        _result = '邮箱号不能为空'
+    elif _validate_email(email):
+        _result = '邮箱号不正确'
+    elif User.email_exist(email):
+        _result = '邮箱已经被注册'
+    return _result
+
+
+def _check_password_valid(password):
+    _result = None
+    if password is None or len(password) == 0:
+        _result = '密码不能为空'
+    elif len(password) < 6:
+        _result = '密码必须大于6位'
+    return _result
+
+
+def is_nickname_used(nickname):
+    _success = not User.nickname_exist(nickname)
+    return HttpResponse(json.dumps(_success))
+
+
+def is_email_used(email):
+    _success = not User.email_exist(email)
+    return HttpResponse(json.dumps(_success))
+
+
+def register(request, template='user/register.html'):
+    if request.user.is_authenticated():
+        # TODO
+        # return HttpResponseRedirect('/profile/')
+        pass
+
     if request.method == 'GET':
         return render_to_response(template,
                                   {
@@ -13,15 +77,88 @@ def login(request, template='user/login.html'):
                                   context_instance=RequestContext(request))
 
     else:
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        _nickname = request.POST.get('nickname', None)
+        _email = request.POST.get('email', None)
+        _password = request.POST.get('password', None)
+
+        _nickname_error = _check_nickname_valid(_nickname)
+        _email_error = _check_email_valid(_email)
+        _password_error = _check_password_valid(_password)
+
+        if not(_nickname_error or _email_error or _password_error):
+            _new_user = User.create(_email, _password)
+            _new_user.set_profile(_nickname)
+            # TODO
+            # return HttpResponseRedirect('/login/')
+
+        else:
+            return render_to_response(template,
+                                      {
+                                          'nickname_error': _nickname_error,
+                                          'email_error': _email_error,
+                                          'password_error': _password_error
+                                      },
+                                      context_instance=RequestContext(request))
 
 
-def register(request, template='user/register.html'):
+def login(request, template='user/login.html'):
+    if request.user.is_authenticated():
+        # TODO
+        # return HttpResponseRedirect('/profile/')
+        pass
+
     if request.method == 'GET':
         return render_to_response(template,
                                   {
                                       'title': '欢迎加入果库'
-                                  }, context_instance=RequestContext(request))
+                                  },
+                                  context_instance=RequestContext(request))
 
     else:
-        return HttpResponseRedirect('/login/')
+        _email = request.POST.get('email', None)
+        _password = request.POST.get('password', None)
+        _remember_me = request.POST.get("remember_me", None)
+
+        _email_error = _check_email_valid(_email)
+        _password_error = _check_password_valid(_password)
+
+        if not(_email_error or _password_error):
+            _user_id = User.get_user_id_by_email(_email)
+            _username = User(_user_id).get_username()
+
+            if _username is not None:
+                _user = authenticate(username=_username, password=_password)
+                if _user is not None:
+                    if _user.is_active:
+                        auth_login(request, _user)
+                        if _remember_me is not None:
+                            request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
+
+                        return HttpResponseRedirect('/selection/')
+
+                    else:
+                        _email_error = '帐号已冻结'
+                else:
+                    _password_error = '密码不正确'
+            else:
+                _email_error = '邮箱未注册'
+
+        return render_to_response(template,
+                                  {
+                                      'email_error': _email_error,
+                                      'password_error': _password_error
+                                  },
+                                  context_instance=RequestContext(request))
+
+
+def login_by_sina(request):
+    pass
+
+
+def login_by_taobao(request):
+    pass
+
+
+def logout(request):
+    auth_logout(request)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
