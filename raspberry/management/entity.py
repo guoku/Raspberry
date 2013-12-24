@@ -16,6 +16,7 @@ from base.category import Category, Old_Category
 from base.entity import Entity
 from base.item import Item
 from base.note import Note
+from base.taobao_shop import TaobaoShop 
 from base.user import User
 from utils.paginator import Paginator
 from base import fetcher 
@@ -193,7 +194,15 @@ def edit_entity(request, entity_id):
             _item_context = Item(_item_id).read()
             if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
                 _entity_context['recommend_title'] = _item_context['title']
+            _item_context['commission_type'] = 'unknown' 
+            _item_context['commission_rate'] = -1 
+            if _item_context.has_key('shop_nick'):
+                _shop_context = TaobaoShop(_item_context['shop_nick']).read()
+                if _shop_context != None:
+                    _item_context['commission_rate'] = _shop_context['commission_rate']
+                    _item_context['commission_type'] = _shop_context['commission_type']
             _item_context_list.append(_item_context)
+
 
         _note_count = Note.count(entity_id=entity_id)
 
@@ -374,6 +383,15 @@ def entity_list(request):
                     _entity_context['buy_link'] = _item_context['buy_link'] 
                     _entity_context['taobao_title'] = _item_context['title'] 
                     _entity_context['taobao_id'] = _item_context['taobao_id'] 
+                    _entity_context['taobao_shop_nick'] = _item_context['shop_nick'] 
+                    
+                    _entity_context['commission_rate'] = -1 
+                    _entity_context['commission_type'] = 'unknown' 
+                    if _item_context.has_key('shop_nick'):
+                        _shop_context = TaobaoShop(_item_context['shop_nick']).read()
+                        if _shop_context != None:
+                            _entity_context['commission_rate'] = _shop_context['commission_rate']
+                            _entity_context['commission_type'] = _shop_context['commission_type']
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
