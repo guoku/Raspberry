@@ -23,7 +23,10 @@ body {
 }
 
 .login h2, .register h2 {
-    display: inline
+    display: inline;
+    font-size: 18px;
+    font-weight: normal;
+    color: #666;
 }
 
 form {
@@ -49,6 +52,12 @@ form .guoku-button {
     margin-left: 106px;
 }
 
+form #agreement, form #remember-me {
+    position: relative;
+    bottom: 1px;
+    margin-right: 3px;
+}
+
 form .error-info {
     margin-left: 10px;
     border: 1px solid #dedede;
@@ -64,14 +73,14 @@ form .error-info {
 }
 
 .third-party div {
-    width: 500px;
+    width: 620px;
     line-height: 52px;
     margin: 0 auto;
 }
 
 .third-party h2 {
     display: inline;
-    margin-left: 218px;
+    margin-left: 200px;
     color: #666;
     font-size: 14px;
     font-weight: normal;

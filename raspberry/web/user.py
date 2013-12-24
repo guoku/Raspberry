@@ -62,11 +62,6 @@ def is_email_used(email):
 
 
 def register(request, template='user/register.html'):
-    if request.user.is_authenticated():
-        # TODO
-        # return HttpResponseRedirect('/profile/')
-        pass
-
     if request.method == 'GET':
         return render_to_response(template,
                                   {
@@ -90,7 +85,7 @@ def register(request, template='user/register.html'):
             _new_user = User.create(_email, _password)
             _new_user.set_profile(_nickname)
             # TODO
-            # return HttpResponseRedirect('/login/')
+            return HttpResponseRedirect('/login/')
 
         else:
             return render_to_response(template,
@@ -105,9 +100,7 @@ def register(request, template='user/register.html'):
 
 def login(request, template='user/login.html'):
     if request.user.is_authenticated():
-        # TODO
-        # return HttpResponseRedirect('/selection/')
-        pass
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
     if request.method == 'GET':
         return render_to_response(template,
@@ -144,7 +137,6 @@ def login(request, template='user/login.html'):
                         _email_error = '帐号已冻结'
                 else:
                     _password_error = '密码不正确'
-
             else:
                 _email_error = '邮箱未注册'
 
