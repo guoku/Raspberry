@@ -11,7 +11,9 @@
     <td width="100"><a href="{% url 'management.views.entity_list' %}?cid={{entity_context.category_id}}" target="_blank"><p class="text-info">{{ entity_context.category_title }}</p></a></td>
     <td width="100"><p class="text-info">{{ entity_context.brand }}</p></td>
     <td><p class="text-info">{{ entity_context.title }}</p></td>
-    <td><p class="text-info">{{ entity_context.taobao_title }}</p></td>
+    <td><p class="text-info">{{ entity_context.taobao_shop_nick }}</p></td>
+    <td><p class="text-info">{%if entity_context.commission_type == 'unknown'%}无{%else%}{%if entity_context.commission_type == 'general' %}通用{%else%}定向{%endif%}{%endif%}</p></td>
+    <td><p class="text-info">{{ entity_context.commission_rate }}</p></td>
     <td width="100"><p class="text-info">{{ entity_context.created_time|date_format }}</p></td>
     <td width="50"><p class="text-info">{{ entity_context.note_id_list|count }}</p></td>
     <td width="80"><p class="text-info">{{ entity_context.item_id_list|count }}</p></td>

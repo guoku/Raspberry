@@ -35,10 +35,11 @@ def homepage(request):
         })
     
     _rslt['config'] = {}
-    if settings.JUMP_TO_TAOBAO: 
-        _rslt['config']['jump_to_taobao'] = 1
-    else:
-        _rslt['config']['jump_to_taobao'] = 0
+    _rslt['config']['taobao_ban_count'] = 2
+#    if settings.JUMP_TO_TAOBAO: 
+#        _rslt['config']['jump_to_taobao'] = 1
+#    else:
+#        _rslt['config']['jump_to_taobao'] = 0
         
     
     return SuccessJsonResponse(_rslt)
