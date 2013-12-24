@@ -6,11 +6,15 @@ import datetime
 import urllib
 import pymongo
 
+
+HOST = getattr(settings, 'MANGO_HOST', 'localhost')
+PORT = getattr(settings, 'MANGO_PORT', 27017)
+
 class TaobaoShop(object):
     
     def __init__(self, nick):
         self.nick = nick 
-        self.client = pymongo.Connection(settings.MANGO_HOST, 27017)
+        self.client = pymongo.Connection(HOST, PORT)
         self.db = self.client['mango']
         self.shop_coll = self.db['taobao_shops_depot']
     
