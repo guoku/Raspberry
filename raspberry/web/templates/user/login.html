@@ -5,16 +5,24 @@
         <div class="login clearfix">
             <a href="{% url 'web.views.selection' %}"><img src="{{ STATIC_URL }}web/images/guoku_icon_56.png"></a>
 
-            <form action="{% url 'web.views.login' %}" method="POST">
+            <form action="{% url 'web.views.login' %}" method="POST"  id="login">
                 {% csrf_token %}
 
                 <h2>登录</h2> | 没有帐号？<a href="{% url 'web.views.register' %}">请注册</a>
 
-                <input type="text" name="email" class="text-input" placeholder="邮箱" id="email"><br/>
-                <input type="text" name="password" class="text-input" placeholder="密码" id="password"><br/>
-                <label><input type="checkbox" name="remember_me" checked id="remember-me">记住我</label>
-                <small><a href="">忘了密码?</a></small>
-                <input type="submit" value="登录" class="guoku-button">
+                <div>
+                    <input type="text" name="email" class="text-input" placeholder="邮箱" id="email">
+                    {% if email_error != None  %}<span class="error-info">{{ email_error }}</span>{% endif %}
+                </div>
+                <div>
+                    <input type="password" name="password" class="text-input" placeholder="密码" id="password">
+                    {% if password_error != None %}<span class="error-info">{{ password_error }}</span>{% endif %}
+                </div>
+                <div>
+                    <label><input type="checkbox" name="remember_me" checked id="remember-me">记住我</label>
+                    <small><a href="">忘了密码?</a></small>
+                    <input type="submit" value="登录" class="guoku-button">
+                </div>
             </form>
         </div>
 
@@ -26,4 +34,7 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block script %}
+    <script src="{{ STATIC_URL }}web/scripts/user.js"></script>
 {% endblock %}

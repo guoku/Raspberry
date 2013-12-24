@@ -37,10 +37,8 @@ def _check_email_valid(email):
     _result = None
     if email is None or len(email) == 0:
         _result = '邮箱号不能为空'
-    elif _validate_email(email):
+    elif not _validate_email(email):
         _result = '邮箱号不正确'
-    elif User.email_exist(email):
-        _result = '邮箱已经被注册'
     return _result
 
 
@@ -85,6 +83,9 @@ def register(request, template='user/register.html'):
         _email_error = _check_email_valid(_email)
         _password_error = _check_password_valid(_password)
 
+        if User.email_exist(_email):
+            _email_error = '邮箱已经被注册'
+
         if not(_nickname_error or _email_error or _password_error):
             _new_user = User.create(_email, _password)
             _new_user.set_profile(_nickname)
@@ -94,6 +95,7 @@ def register(request, template='user/register.html'):
         else:
             return render_to_response(template,
                                       {
+                                          'title': '欢迎加入果库',
                                           'nickname_error': _nickname_error,
                                           'email_error': _email_error,
                                           'password_error': _password_error
@@ -104,7 +106,7 @@ def register(request, template='user/register.html'):
 def login(request, template='user/login.html'):
     if request.user.is_authenticated():
         # TODO
-        # return HttpResponseRedirect('/profile/')
+        # return HttpResponseRedirect('/selection/')
         pass
 
     if request.method == 'GET':
@@ -124,13 +126,15 @@ def login(request, template='user/login.html'):
 
         if not(_email_error or _password_error):
             _user_id = User.get_user_id_by_email(_email)
-            _username = User(_user_id).get_username()
 
-            if _username is not None:
+            if _user_id is not None:
+                _username = User(_user_id).get_username()
                 _user = authenticate(username=_username, password=_password)
+
                 if _user is not None:
                     if _user.is_active:
                         auth_login(request, _user)
+
                         if _remember_me is not None:
                             request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
 
@@ -140,11 +144,13 @@ def login(request, template='user/login.html'):
                         _email_error = '帐号已冻结'
                 else:
                     _password_error = '密码不正确'
+
             else:
                 _email_error = '邮箱未注册'
 
         return render_to_response(template,
                                   {
+                                      'title': '欢迎加入果库',
                                       'email_error': _email_error,
                                       'password_error': _password_error
                                   },
@@ -161,4 +167,5 @@ def login_by_taobao(request):
 
 def logout(request):
     auth_logout(request)
+    request.session.set_expiry(0)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])

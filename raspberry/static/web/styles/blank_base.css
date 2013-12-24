@@ -14,12 +14,12 @@ body {
 
 .login, .register {
     margin: 30px auto;
-    width: 500px;
+    width: 620px;
 }
 
 .login img, .register img {
     float: left;
-    margin-top: 40px;
+    margin: 40px 60px 0 0;
 }
 
 .login h2, .register h2 {
@@ -27,8 +27,7 @@ body {
 }
 
 form {
-    width: 282px;
-    float: right;
+    display: inline-block;
 }
 
 form a {
@@ -47,7 +46,16 @@ form #password {
 }
 
 form .guoku-button {
-    float: right;
+    margin-left: 106px;
+}
+
+form .error-info {
+    margin-left: 10px;
+    border: 1px solid #dedede;
+    padding: 5px 6px;
+    font-size: 14px;
+    color: #999;
+    background: #ffc;
 }
 
 .third-party {
