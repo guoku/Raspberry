@@ -5,13 +5,14 @@
     <style>
         #batch {
             position: fixed;
-            top: 150px;
-            right: 20px;
+            bottom: 150px;
+            left: 20px;
             display: none;
+            margin: 0;
             border: 1px solid #ddd;
-            background-color: #fff;
             padding: 20px 30px;
         }
+
         #batch #selected_list {
             margin: 20px 0 30px;
         }
@@ -19,65 +20,78 @@
 {% endblock %}
 
 {% block content %}
-    <div class="span12">
-        <div class="span10">
-            {% if not select_entity_id %}
-                <div class="sub-nav">
-                    <ul class="nav nav-pills">
-                        <li{% if nav_filter == "all" %} class="active"{% endif %}>
-                            <a href="{% url 'management.views.note_list' %}">全部</a>
-                        </li>
-                        <li{% if nav_filter == "selection_only" %} class="active"{% endif %}>
-                            <a href="{% url 'management.views.note_list' %}?selection=only">精选</a>
-                        </li>
-                        <li{% if nav_filter == "selection_none" %} class="active"{% endif %}>
-                            <a href="{% url 'management.views.note_list' %}?selection=none">未入精选</a>
-                        </li>
-                        <li{% if nav_filter == "freezed" %} class="active"{% endif %}>
-                            <a href="{% url 'management.views.note_list' %}?freeze=1">冻结</a>
-                        </li>
-                    </ul>
-                </div>
-            {% endif %}
-        
-            <div>
-                <table class="table table-bordered table-condensed">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>id</th>
-                            <th>商品图片</th>
-                            <th>用户晒图</th>
-                            <th>用户</th>
-                            <th>点评</th>
-                            <th>精选</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for context in context_list %}
-                        {% display_note_row context %}
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        
-            {% if paginator %}
-                {% display_paginator paginator %}
-            {% endif %}
-        </div>
-    
-        <div class="span2 well" id="batch" style="">
-            <div class="text-info">选择了 <span id="selected_count" class="badge"></span> 项：</div>
-            <div id="selected_list" class="text-info"></div>
-    
-            <div class="btn-group">
-                <a class="btn" href="javascript:;">藏</a>
-                <a class="btn" href="javascript:;">当</a>
-                <a class="btn" href="javascript:;">迟</a>
-            </div>
+<div class="span12">
+<div class="span2">
+    <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+            <li class="nav-header">操作</li>
+            <li>
+                <a href="{% url 'management.views.arrange_selection' %}">
+                    精选排时间 
+                </a>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="span2 well" id="batch" style="">
+        <div class="text-info">选择了 <span id="selected_count" class="badge"></span> 项：</div>
+        <div id="selected_list" class="text-info"></div>
+
+        <div class="btn-group">
+            <a class="btn" href="javascript:;">藏</a>
+            <a class="btn" href="javascript:;">当</a>
+            <a class="btn" href="javascript:;">迟</a>
         </div>
     </div>
+</div>
+<div class="span10">
+    {% if not select_entity_id %}
+        <div class="sub-nav">
+            <ul class="nav nav-pills">
+                <li{% if nav_filter == "all" %} class="active"{% endif %}>
+                    <a href="{% url 'management.views.note_list' %}">全部</a>
+                </li>
+                <li{% if nav_filter == "selection_only" %} class="active"{% endif %}>
+                    <a href="{% url 'management.views.note_list' %}?selection=only">精选</a>
+                </li>
+                <li{% if nav_filter == "selection_none" %} class="active"{% endif %}>
+                    <a href="{% url 'management.views.note_list' %}?selection=none">未入精选</a>
+                </li>
+                <li{% if nav_filter == "freezed" %} class="active"{% endif %}>
+                    <a href="{% url 'management.views.note_list' %}?freeze=1">冻结</a>
+                </li>
+            </ul>
+        </div>
+    {% endif %}
+
+    <div>
+        <table class="table table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th></th>
+                <th>id</th>
+                <th>商品图片</th>
+                <th>用户晒图</th>
+                <th>用户</th>
+                <th>点评</th>
+                <th>精选</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for context in context_list %}
+                {% display_note_row context %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if paginator %}
+        {% display_paginator paginator %}
+    {% endif %}
+</div>
+</div>
 {% endblock %}
 
 {% block extra %}
