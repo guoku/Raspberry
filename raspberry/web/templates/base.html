@@ -23,7 +23,12 @@
         </form>
 
         <div class="user">
-            <a href="/register">注册</a> | <a href="/login" class="login-link">登录</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'web.views.logout' %}">退出</a>
+            {% else %}
+                <a href="{% url 'web.views.register' %}">注册</a> |
+                <a href="{% url 'web.views.login' %}" class="login-link">登录</a>
+            {% endif %}
         </div>
     </div>
 </div>

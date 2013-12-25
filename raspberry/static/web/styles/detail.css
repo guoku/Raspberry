@@ -1,29 +1,34 @@
-.detail h2 {
+#detail h2 {
     margin: 0 0 5px;
     font-size: 16px;
     color: #999;
 }
 
-.detail .entity-and-note {
+#detail .entity-and-note {
     float: left;
+}
+
+#detail .entity {
+    position: relative;
+    z-index: 10;
     width: 630px;
     padding-top: 30px;
 }
 
-.detail .entity {
+#detail .entity-detail {
     margin: 0 0 15px 74px;
 }
 
-.detail img {
+#detail img {
     max-width: 100%;
 }
 
-.detail .img-container {
+#detail .img-container {
     width: 480px;
     margin-bottom: 5px;
 }
 
-.detail .like-count {
+#detail .like-count {
     display: inline-block;
     padding: 7px 10px;
     border: 1px solid #efefef;
@@ -32,27 +37,56 @@
     background: #fbfbfb;
 }
 
-.detail .tip-info {
+#detail .tip-info {
     padding: 5px 5px 5px 75px;
     border-top: 1px solid #f3f3f3;;
 }
 
-.detail .more-info {
+#detail .add-note {
+    margin-top: -1px;
+    padding: 15px;
+    background-color: rgb(253, 252, 250);
+}
+
+#detail .add-note a {
+    float: left;
+    margin-right: 10px;
+}
+
+#detail .add-note div {
+    overflow: hidden;
+}
+
+#detail .add-note textarea {
+    resize: none;
+    width: 530px;
+    height: 100px;
+}
+
+#detail .recommend {
+    margin-top: 30px;
+}
+
+#detail .recommend div {
+    padding: 15px;
+}
+
+#detail .more-info {
     float: right;
     width: 257px;
     padding: 14px;
 }
 
-.detail .more-info .price {
+#detail .more-info .price {
     margin: 15px 0;
 }
 
-.detail .more-info .like {
+#detail .more-info .like {
     margin: 15px 0;
     padding-top: 15px;
     border-top: 1px solid #dedede;
 }
 
-.detail .more-info .people {
+#detail .more-info .people {
     margin-bottom: 15px;
 }

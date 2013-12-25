@@ -8,25 +8,57 @@
 {% block css %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/detail.css">{% endblock %}
 
 {% block content %}
-    <div class="detail">
+    <div id="detail">
         <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }}
                     - {% endif %}{{ entity_context.title }}</h2>
 
-        <div class="guoku-block entity-and-note">
-            <div class="entity">
-                <div class="img-container">
-                    <a href=""><img class="entity-img" src="{{ entity_context.chief_image.url }}" alt=""></a>
+        <div class="entity-and-note">
+            <div class="entity guoku-block">
+                <div class="entity-detail">
+                    <div class="img-container">
+                        <a href=""><img class="entity-img" src="{{ entity_context.chief_image.url }}" alt=""></a>
+                    </div>
+                    <span class="like-count">喜爱 <small>{{ entity_context.like_count }}</small></span>
                 </div>
-                <span class="like-count">喜爱 <small>{{ entity_context.like_count }}</small></span>
+
+                {% display_note selected_note.note_context selected_note.creator_context %}
+
+                <div class="tip-info">还有 {{ note_list|length }} 条点评</div>
+                <div class="note">
+                    {% for note in note_list %}
+                        {% display_note note.note_context note.creator_context %}
+                    {% endfor %}
+                </div>
             </div>
 
-            {% display_note selected_note.note_context selected_note.creator_context %}
+            <div class="add-note guoku-block">
+                {% if user.is_authenticated %}
+                    <a href=""><img src="" width="50" height="50"></a>
+                    <div>
+                        <span>{{ user_context.nickname }}</span>
 
-            <div class="tip-info">还有 {{ note_list|length }} 条点评</div>
-            <div class="note">
-                {% for note in note_list %}
-                    {% display_note note.note_context note.creator_context %}
-                {% endfor %}
+                        <form action="">
+                            <textarea name="" class="text-input"></textarea>
+
+                            <div>说说你的评价？欢迎真实、有用、有趣的商品点评。</div>
+                            <input type="submit" value="点评" class="guoku-button">
+                        </form>
+                    </div>
+                {% else %}
+                    <div>
+                        <span>收藏、点评、分享心爱好物</span>
+                        <a class="guoku-button" href="">现在注册</a>
+                        <span>已有帐号</span>
+                        <a href="">从这里登录</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="recommend">
+                <h3>相似推荐</h3>
+                <div guoku-block>
+                    <a href=""><img src=""></a>
+                </div>
             </div>
         </div>
 

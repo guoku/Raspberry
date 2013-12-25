@@ -12,6 +12,7 @@ from base.category import Old_Category
 
 
 def selection(request, template='selection/selection.html'):
+    _user = request.user
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
 
@@ -64,6 +65,7 @@ def selection(request, template='selection/selection.html'):
 
     return render_to_response(template,
         {
+            'user': _user,
             'selections': _selections,
             'categories': _old_category_list,
             'curr_cat_title': _curr_cat_title

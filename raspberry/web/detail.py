@@ -9,6 +9,13 @@ from base.user import User
 
 
 def detail(request, entity_hash, template='detail/detail.html'):
+    _user = request.user
+    _user_id = _user.id
+    _user_context = None
+
+    if _user_id is not None:
+        _user_context = User(_user_id).read()
+
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
     _all_note_id = Note.find(entity_id=_entity_id)
@@ -31,6 +38,8 @@ def detail(request, entity_hash, template='detail/detail.html'):
 
     return render_to_response(template,
         {
+            'user': _user,
+            'user_context': _user_context,
             'entity_context': _entity_context,
             'note_list': _note_list,
             'selected_note': _selected_note

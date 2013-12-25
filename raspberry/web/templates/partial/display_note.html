@@ -1,7 +1,7 @@
 {% load common %}
 
 <div class="note-item">
-    <a href=""><img class="avatar" src="{{ creator.avatar_small }}" width="50"
+    <a href="" class="avatar"><img src="{{ creator.avatar_small }}" width="50"
                     height="50"></a>
 
     <div class="note-detail">
@@ -16,7 +16,7 @@
         <div class="note-comment" style="display: none">
             {% for comment in comment_list %}
                 <div class="note-comment-item">
-                    <a href=""><img src="" class="avatar" height="32" width="32"></a>
+                    <a href="" class="avatar"><img src="" height="32" width="32"></a>
 
                     <div class="note-comment-detail">
                         <span>{{ comment.creator.nickname }}</span>
