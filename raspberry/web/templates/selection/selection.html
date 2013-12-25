@@ -12,13 +12,13 @@
             <div class="selection-item guoku-block">
                 <div class="entity">
                     <h3>
-                        <a href="{% url 'web.views.detail' selection.entity_context.entity_hash %}">
+                        <a href="{% url 'web.views.main.detail' selection.entity_context.entity_hash %}">
                             {% if selection.entity_context.brand|length != 0 %}{{ selection.entity_context.brand }}
                                 - {% endif %}{{ selection.entity_context.title }}</a>
                     </h3>
 
                     <div class="img-container">
-                        <a href="{% url 'web.views.detail' selection.entity_context.entity_hash %}">
+                        <a href="{% url 'web.views.main.detail' selection.entity_context.entity_hash %}">
                             <img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt="">
                         </a>
                     </div>
@@ -53,7 +53,7 @@
         <ul>
             {% for category in categories %}
                 <li>
-                    <a href="{% url 'web.views.selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a>
+                    <a href="{% url 'web.views.main.selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a>
                 </li>
             {% endfor %}
         </ul>

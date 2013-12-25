@@ -3,12 +3,12 @@
 {% block body %}
     <div class="main" style="height: 315px">
         <div class="register clearfix">
-            <a href="{% url 'web.views.selection' %}"><img src="{{ STATIC_URL }}web/images/guoku_icon_56.png"></a>
+            <a href="{% url 'web.views.main.selection' %}"><img src="{{ STATIC_URL }}web/images/guoku_icon_56.png"></a>
 
-            <form action="{% url 'web.views.register' %}" method="POST">
+            <form action="{% url 'web.views.account.register' %}" method="POST">
                 {% csrf_token %}
 
-                <h2>注册帐号</h2> | 已有帐号？<a href="{% url 'web.views.login' %}">请登录</a>
+                <h2>注册帐号</h2> | 已有帐号？<a href="{% url 'web.views.account.login' %}">请登录</a>
 
                 <div>
                     <input type="text" name="nickname" class="text-input" placeholder="昵称" id="nickname">
@@ -33,8 +33,8 @@
         <div class="third-party">
             <div>
                 <h2>第三方帐号登录</h2>
-                <a href="{% url 'web.views.login_by_sina' %}">新浪微博</a>
-                <a href="{% url 'web.views.login_by_taobao' %}">淘宝</a>
+                <a href="{% url 'web.views.account.login_by_sina' %}">新浪微博</a>
+                <a href="{% url 'web.views.account.login_by_taobao' %}">淘宝</a>
             </div>
         </div>
     </div>

@@ -117,10 +117,10 @@ def detail(request, entity_hash, template='detail/detail.html'):
 def popular(request, template='popular/popular.html'):
     _group = request.GET.get('group', 'daily')
 
-    generate_popular_entity()
-    _entity_list = read_popular_entity_from_cache(_group)['data']
-
-    print(_entity_list)
+    # generate_popular_entity()
+    # _entity_list = read_popular_entity_from_cache(_group)['data']
+    #
+    # print(_entity_list)
 
     return render_to_response(template,
         {

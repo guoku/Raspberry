@@ -9,7 +9,7 @@ urlpatterns = patterns(
 
     ('^account/', include('web.urls.account')),
 
-    ('^note/', include('web.urls.note')),
-    ('^entity/', include('web.urls.entity')),
-    ('^user/', include('web.urls.user'))
+    # ('^note/', include('web.urls.note')),
+    # ('^entity/', include('web.urls.entity')),
+    # ('^user/', include('web.urls.user'))
 )

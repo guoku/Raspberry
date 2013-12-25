@@ -61,7 +61,7 @@ def is_email_used(email):
     return HttpResponse(json.dumps(_success))
 
 
-def register(request, template='user/register.html'):
+def register(request, template='account/register.html'):
     if request.method == 'GET':
         return render_to_response(template,
                                   {
@@ -85,7 +85,7 @@ def register(request, template='user/register.html'):
             _new_user = User.create(_email, _password)
             _new_user.set_profile(_nickname)
             # TODO
-            return HttpResponseRedirect('/login/')
+            return HttpResponseRedirect('account/login/')
 
         else:
             return render_to_response(template,
@@ -98,7 +98,7 @@ def register(request, template='user/register.html'):
                                       context_instance=RequestContext(request))
 
 
-def login(request, template='user/login.html'):
+def login(request, template='account/login.html'):
     if request.user.is_authenticated():
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
