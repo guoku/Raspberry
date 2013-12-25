@@ -5,13 +5,14 @@
     <style>
         #batch {
             position: fixed;
-            top: 150px;
-            right: 20px;
+            bottom: 150px;
+            left: 20px;
             display: none;
+            margin: 0;
             border: 1px solid #ddd;
-            background-color: #fff;
             padding: 20px 30px;
         }
+
         #batch #selected_list {
             margin: 20px 0 30px;
         }
@@ -20,6 +21,22 @@
 
 {% block content %}
 <div class="span12">
+<div class="span2">
+    <div class="well sidebar-nav">
+
+    </div>
+
+    <div class="span2 well" id="batch" style="">
+        <div class="text-info">选择了 <span id="selected_count" class="badge"></span> 项：</div>
+        <div id="selected_list" class="text-info"></div>
+
+        <div class="btn-group">
+            <a class="btn" href="javascript:;">藏</a>
+            <a class="btn" href="javascript:;">当</a>
+            <a class="btn" href="javascript:;">迟</a>
+        </div>
+    </div>
+</div>
 <div class="span10">
     {% if not select_entity_id %}
         <div class="sub-nav">
@@ -66,17 +83,6 @@
         {% display_paginator paginator %}
     {% endif %}
 </div>
-
-    <div class="span2 well" id="batch" style="">
-        <div class="text-info">选择了 <span id="selected_count" class="badge"></span> 项：</div>
-        <div id="selected_list" class="text-info"></div>
-
-        <div class="btn-group">
-            <a class="btn" href="javascript:;">藏</a>
-            <a class="btn" href="javascript:;">当</a>
-            <a class="btn" href="javascript:;">迟</a>
-        </div>
-    </div>
 </div>
 {% endblock %}
 
