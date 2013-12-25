@@ -19,157 +19,157 @@
 {% endblock %}
 
 {% block content %}
-<div class="span12">
-<div class="span10">
-    {% if not select_entity_id %}
-        <div class="sub-nav">
-            <ul class="nav nav-pills">
-                <li{% if nav_filter == "all" %} class="active"{% endif %}>
-                    <a href="{% url 'management.views.note_list' %}">全部</a>
-                </li>
-                <li{% if nav_filter == "selection_only" %} class="active"{% endif %}>
-                    <a href="{% url 'management.views.note_list' %}?selection=only">精选</a>
-                </li>
-                <li{% if nav_filter == "selection_none" %} class="active"{% endif %}>
-                    <a href="{% url 'management.views.note_list' %}?selection=none">未入精选</a>
-                </li>
-                <li{% if nav_filter == "freezed" %} class="active"{% endif %}>
-                    <a href="{% url 'management.views.note_list' %}?freeze=1">冻结</a>
-                </li>
-            </ul>
+    <div class="span12">
+        <div class="span10">
+            {% if not select_entity_id %}
+                <div class="sub-nav">
+                    <ul class="nav nav-pills">
+                        <li{% if nav_filter == "all" %} class="active"{% endif %}>
+                            <a href="{% url 'management.views.note_list' %}">全部</a>
+                        </li>
+                        <li{% if nav_filter == "selection_only" %} class="active"{% endif %}>
+                            <a href="{% url 'management.views.note_list' %}?selection=only">精选</a>
+                        </li>
+                        <li{% if nav_filter == "selection_none" %} class="active"{% endif %}>
+                            <a href="{% url 'management.views.note_list' %}?selection=none">未入精选</a>
+                        </li>
+                        <li{% if nav_filter == "freezed" %} class="active"{% endif %}>
+                            <a href="{% url 'management.views.note_list' %}?freeze=1">冻结</a>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
+        
+            <div>
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>id</th>
+                            <th>商品图片</th>
+                            <th>用户晒图</th>
+                            <th>用户</th>
+                            <th>点评</th>
+                            <th>精选</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for context in context_list %}
+                        {% display_note_row context %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        
+            {% if paginator %}
+                {% display_paginator paginator %}
+            {% endif %}
         </div>
-    {% endif %}
-
-    <div>
-        <table class="table table-bordered table-condensed">
-            <thead>
-            <tr>
-                <th></th>
-                <th>id</th>
-                <th>商品图片</th>
-                <th>用户晒图</th>
-                <th>用户</th>
-                <th>点评</th>
-                <th>精选</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for context in context_list %}
-                {% display_note_row context %}
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    {% if paginator %}
-        {% display_paginator paginator %}
-    {% endif %}
-</div>
-
-    <div class="span2 well" id="batch" style="">
-        <div class="text-info">选择了 <span id="selected_count" class="badge"></span> 项：</div>
-        <div id="selected_list" class="text-info"></div>
-
-        <div class="btn-group">
-            <a class="btn" href="javascript:;">藏</a>
-            <a class="btn" href="javascript:;">当</a>
-            <a class="btn" href="javascript:;">迟</a>
+    
+        <div class="span2 well" id="batch" style="">
+            <div class="text-info">选择了 <span id="selected_count" class="badge"></span> 项：</div>
+            <div id="selected_list" class="text-info"></div>
+    
+            <div class="btn-group">
+                <a class="btn" href="javascript:;">藏</a>
+                <a class="btn" href="javascript:;">当</a>
+                <a class="btn" href="javascript:;">迟</a>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block extra %}
-<script>
-    (function ($) {
-        var urls = {};
-        urls["len"] = 0;
-        var batch = $("#batch");
-        var checkbox = $(".note-checkbox");
-        var selected_count = $("#selected_count");
-        var selected_list = $("#selected_list");
-
-        function show_select(urls, count) {
-            selected_count.text(count);
-            $("span", selected_list).remove();
-
-            for (var i in urls) {
-                if (i != "len") {
-                    $("<span> " + i + " </span>").appendTo(selected_list);
-                }
-            }
-        }
-
-        checkbox.click(function () {
-            var $this = $(this);
-            var checked = $this.attr("checked");
-            var select_time = $this.attr("data-selecttime");
-            var note_id = $this.attr("data-noteid");
-            var entity_id = $this.attr("data-entityid");
-            var instant_url = "/management/entity/" + entity_id + "/note/" + note_id + "/post/selection/instant/";
-            var delay_url = "/management/entity/" + entity_id + "/note/" + note_id + "/post/selection/delay/";
-            var freeze_url = "/management/note/" + note_id + "/freeze/";
-
-            if (select_time != "None") {
-                delay_url = undefined;
-                instant_url = undefined;
-            }
-
-            if (checked == "checked") {
-                urls.len++;
-                urls[note_id] = {
-                    instant_url: instant_url,
-                    delay_url: delay_url,
-                    freeze_url: freeze_url
-                };
-                show_select(urls, urls.len);
-                batch.show();
-            } else {
-                urls.len--;
-                delete urls[note_id];
-                show_select(urls, urls.len);
-                if (!urls.len) {
-                    batch.hide();
-                }
-            }
-        });
-
-        var exec_button = $("a", batch);
-        var exec_freeze = exec_button.eq(0);
-        var exec_instant = exec_button.eq(1);
-        var exec_delay = exec_button.eq(2);
-
-        exec_freeze.click(function () {
-            exec_request(urls, "freeze_url");
-        });
-
-        exec_instant.click(function () {
-            exec_request(urls, "instant_url");
-        });
-
-        exec_delay.click(function () {
-            exec_request(urls, "delay_url");
-        });
-
-        function exec_request(urls, urlType) {
-            var count = 0;
-            for (var id in urls) {
-                if (id !== "len") {
-                    var r_url = urls[id][urlType];
-                    if (r_url) {
-                        $.get(r_url, function () {
-                            count++;
-                            if (count === urls.len) {
-                                location.reload();
-                            }
-                        });
-                    } else {
-                        count++;
+    <script>
+        (function ($) {
+            var urls = {};
+            urls["len"] = 0;
+            var batch = $("#batch");
+            var checkbox = $(".note-checkbox");
+            var selected_count = $("#selected_count");
+            var selected_list = $("#selected_list");
+    
+            function show_select(urls, count) {
+                selected_count.text(count);
+                $("span", selected_list).remove();
+    
+                for (var i in urls) {
+                    if (i != "len") {
+                        $("<span> " + i + " </span>").appendTo(selected_list);
                     }
                 }
             }
-        }
-    })(jQuery);
-</script>
+    
+            checkbox.click(function () {
+                var $this = $(this);
+                var checked = $this.attr("checked");
+                var select_time = $this.attr("data-selecttime");
+                var note_id = $this.attr("data-noteid");
+                var entity_id = $this.attr("data-entityid");
+                var instant_url = "/management/entity/" + entity_id + "/note/" + note_id + "/post/selection/instant/";
+                var delay_url = "/management/entity/" + entity_id + "/note/" + note_id + "/post/selection/delay/";
+                var freeze_url = "/management/note/" + note_id + "/freeze/";
+    
+                if (select_time != "None") {
+                    delay_url = undefined;
+                    instant_url = undefined;
+                }
+    
+                if (checked == "checked") {
+                    urls.len++;
+                    urls[note_id] = {
+                        instant_url: instant_url,
+                        delay_url: delay_url,
+                        freeze_url: freeze_url
+                    };
+                    show_select(urls, urls.len);
+                    batch.show();
+                } else {
+                    urls.len--;
+                    delete urls[note_id];
+                    show_select(urls, urls.len);
+                    if (!urls.len) {
+                        batch.hide();
+                    }
+                }
+            });
+    
+            var exec_button = $("a", batch);
+            var exec_freeze = exec_button.eq(0);
+            var exec_instant = exec_button.eq(1);
+            var exec_delay = exec_button.eq(2);
+    
+            exec_freeze.click(function () {
+                exec_request(urls, "freeze_url");
+            });
+    
+            exec_instant.click(function () {
+                exec_request(urls, "instant_url");
+            });
+    
+            exec_delay.click(function () {
+                exec_request(urls, "delay_url");
+            });
+    
+            function exec_request(urls, urlType) {
+                var count = 0;
+                for (var id in urls) {
+                    if (id !== "len") {
+                        var r_url = urls[id][urlType];
+                        if (r_url) {
+                            $.get(r_url, function () {
+                                count++;
+                                if (count === urls.len) {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            count++;
+                        }
+                    }
+                }
+            }
+        })(jQuery);
+    </script>
 {% endblock %}
