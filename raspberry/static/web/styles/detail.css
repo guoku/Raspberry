@@ -1,0 +1,58 @@
+.detail h2 {
+    margin: 0 0 5px;
+    font-size: 16px;
+    color: #999;
+}
+
+.detail .entity-and-note {
+    float: left;
+    width: 630px;
+    padding-top: 30px;
+}
+
+.detail .entity {
+    margin: 0 0 15px 74px;
+}
+
+.detail img {
+    max-width: 100%;
+}
+
+.detail .img-container {
+    width: 480px;
+    margin-bottom: 5px;
+}
+
+.detail .like-count {
+    display: inline-block;
+    padding: 7px 10px;
+    border: 1px solid #efefef;
+    border-radius: 2px;
+    font-size: 12px;
+    background: #fbfbfb;
+}
+
+.detail .tip-info {
+    padding: 5px 5px 5px 75px;
+    border-top: 1px solid #f3f3f3;;
+}
+
+.detail .more-info {
+    float: right;
+    width: 257px;
+    padding: 14px;
+}
+
+.detail .more-info .price {
+    margin: 15px 0;
+}
+
+.detail .more-info .like {
+    margin: 15px 0;
+    padding-top: 15px;
+    border-top: 1px solid #dedede;
+}
+
+.detail .more-info .people {
+    margin-bottom: 15px;
+}

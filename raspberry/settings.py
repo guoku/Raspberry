@@ -11,9 +11,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_12_12',
+        'NAME': 'guoku',
         'USER': 'root',                      
-        'PASSWORD': '123456',                  
+        'PASSWORD': 'cw12345',
         'HOST': 'localhost',                      
         'PORT': '',                      
         'OPTIONS': {
@@ -31,16 +31,15 @@ connect('guoku')
 #register_connection('guoku', 'guoku')
 
 CACHES = {
-    "default": {
-        "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION": [
-            "localhost:6379:1",
-        ],
-        "OPTIONS": {
-            "PARSER_CLASS": "redis.connection.HiredisParser",
-            "CLIENT_CLASS": "redis_cache.client.ShardClient",
-        }
-    }
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'TIMEOUT:': 864000,
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        },
+    },
 }
 
 MOGILEFS_DOMAIN = 'staging'
@@ -85,7 +84,7 @@ APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'static')
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -151,6 +150,7 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
+    'web'
 )
 
 LOGGING = {

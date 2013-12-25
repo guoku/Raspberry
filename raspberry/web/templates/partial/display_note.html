@@ -1,0 +1,37 @@
+{% load common %}
+
+<div class="note-item">
+    <a href=""><img class="avatar" src="{{ creator.avatar_small }}" width="50"
+                    height="50"></a>
+
+    <div class="note-detail">
+        <span class="creator-name">{{ creator.nickname }}</span>
+        <small class="bio">{{ creator.bio }}</small>
+        <p>{{ note.content }}</p>
+
+        <a href="javascript:;" class="poke">{{ note.poke_count }}</a>
+        <a href="javascript:;" class="add-comment">{{ comment_list|length }}</a>
+        <span class="create-time">{{ note.created_time|format_time }}</span>
+
+        <div class="note-comment" style="display: none">
+            {% for comment in comment_list %}
+                <div class="note-comment-item">
+                    <a href=""><img src="" class="avatar" height="32" width="32"></a>
+
+                    <div class="note-comment-detail">
+                        <span>{{ comment.creator.nickname }}</span>
+                        <p>{{ comment.content }}</p>
+                        <a href="javascript:;" class="reply">回复</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <form>
+                <input type="text" name="" class="text-input">
+                <div class="operate-comment">
+                    <a href="javascript:;">取消</a>
+                    <input type="submit" value="评论" class="guoku-button">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

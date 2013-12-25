@@ -4,12 +4,10 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 
-def selected(request):
-    _test = "Hello World"
-
-    return render_to_response('selected/selected.html',
+def discover(request, template='discover/discover.html'):
+    return render_to_response(template,
         {
-            'test': _test
+
         },
         context_instance=RequestContext(request)
     )

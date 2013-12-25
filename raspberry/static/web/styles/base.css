@@ -1,0 +1,258 @@
+body {
+    color: #999;
+    background-color: #faf9f6;
+    font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/*-----------------------------------------------------*/
+.clearfix:before, .clearfix:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+
+.guoku-block {
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    border-radius: 2px;
+}
+
+.text-input {
+    border: 1px solid #dcdcdc;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    transition: border linear .2s, box-shadow linear .2s;
+}
+
+.text-input:focus {
+    border-color: rgba(153, 153, 153, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(51, 51, 51, .1);
+    outline: 0;
+}
+
+.guoku-button {
+    display: inline-block;
+    padding: 5px 14px;
+    border: 1px #4db07a solid;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #4db07a;
+}
+
+.guoku-button:hover {
+    text-decoration: none;
+    background-color: #5ebf7f;
+}
+
+/*--------------------------------------------*/
+#header {
+    position: fixed;
+    top: 0;
+    height: 49px;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+    background-color: #fff;
+}
+
+#header .header-container {
+    position: relative;
+    width: 960px;
+    height: 49px;
+    margin: 0 auto;
+}
+
+#header img {
+    padding-top: 8px;
+}
+
+#header ul {
+    display: inline-block;
+    margin: 0 0 0 50px;
+    padding-left: 0;
+}
+
+#header li {
+    float: left;
+    margin-right: 30px;
+    padding: 7px;
+}
+
+#header form {
+    position: absolute;
+    top: 9px;
+    left: 370px;
+    width: 230px;
+}
+
+#header form .text-input {
+    width: 170px;
+    vertical-align: middle;
+    padding: 7px 40px 7px 4px;
+    color: #bbb;
+}
+
+#header form .submit {
+    padding: 6px 0;
+    width: 36px;
+    border: none;
+    border-left: 1px solid #dcdcdc;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin-left: -41px;
+    vertical-align: middle;
+    background: url(/static/web/images/header_icon.png) no-repeat -6px -10px #fff;
+}
+
+#header .user {
+    float: right;
+    line-height: 49px;
+}
+
+#header .user a {
+    padding: 0 10px;
+}
+
+#header .user a.login-link {
+    padding-right: 1px;
+}
+
+/*-----------------------------------------*/
+#main {
+    width: 960px;
+    margin: 85px auto 50px;
+}
+
+/*--------------------------------------------*/
+#footer {
+    clear: both;
+    padding: 15px 0;
+    border-top: 1px solid #dedede;
+    font-size: 12px;
+}
+
+#footer .container {
+    width: 960px;
+    margin: 0 auto;
+}
+
+#footer .site-info {
+    float: right;
+}
+
+#footer .site-info a, #footer .site-info span {
+    margin-left: 10px;
+}
+
+/**note--------------------------------------------*/
+.note-item {
+    padding: 15px;
+    border-top: 1px solid #f3f3f3;
+    color: #666;
+}
+
+.note-item .avatar {
+    float: left;
+    margin-right: 10px;
+}
+
+.note-item .note-detail {
+    overflow: hidden;
+}
+
+.note-item .note-detail p {
+    margin: 10px 0 15px;
+}
+
+.note-item .note-detail .create-time {
+    float: right;
+    font-size: 12px;
+    color: #bbb;
+}
+
+.note-item .note-detail .poke {
+    color: #bbb;
+    margin-right: 9px;
+}
+
+.note-item .note-detail .add-comment {
+    color: #bbb;
+    padding-left: 10px;
+    border-left: 1px dotted #ccc;
+}
+
+.note-item .note-comment {
+    overflow: hidden;
+    margin-top: 10px;
+    padding: 9px;
+    border: 1px solid #dedede;
+    border-radius: 2px;
+    background-color: #f8f8f8;
+}
+
+.note-item .note-comment-item {
+    margin-bottom: 9px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid #dedede;
+}
+
+.note-item .note-comment-item .avatar {
+    float: left;
+}
+
+.note-item .note-comment-detail {
+    overflow: hidden;
+}
+
+.note-item .note-comment-detail p {
+    margin: 5px;
+}
+
+.note-item .note-comment-detail .reply {
+    float: right;
+}
+
+.note-item .note-comment .text-input {
+    display: block;
+    width: 506px;
+    padding: 6px;
+    margin-top: 12px;
+}
+
+.note-item .operate-comment {
+    float: right;
+    margin: 12px 0 9px;
+}
+
+.note-item .operate-comment .guoku-button {
+    margin-left: 15px;
+}
+
+/*------------------------------*/
+.download-link h3 {
+    font-size: 14px;
+}
+
+.download-link div {
+    margin-bottom: 14px;
+}
+
+.download-link a {
+    color: #999;
+}

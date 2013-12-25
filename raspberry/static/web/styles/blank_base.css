@@ -1,0 +1,87 @@
+body {
+    background: url("/static/web/images/iconwall.png") repeat;
+}
+
+.main {
+    height: 270px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    margin-top: -170px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    background-color: #fff;
+}
+
+.login, .register {
+    margin: 30px auto;
+    width: 620px;
+}
+
+.login img, .register img {
+    float: left;
+    margin: 40px 60px 0 0;
+}
+
+.login h2, .register h2 {
+    display: inline;
+    font-size: 18px;
+    font-weight: normal;
+    color: #666;
+}
+
+form {
+    display: inline-block;
+}
+
+form a {
+    color: #4db07a;
+}
+
+form .text-input {
+    width: 270px;
+    padding: 5px;
+    margin-top: 15px;
+    line-height: 1.3;
+}
+
+form #password {
+    margin-bottom: 15px;
+}
+
+form .guoku-button {
+    margin-left: 106px;
+}
+
+form #agreement, form #remember-me {
+    position: relative;
+    bottom: 1px;
+    margin-right: 3px;
+}
+
+form .error-info {
+    margin-left: 10px;
+    border: 1px solid #dedede;
+    padding: 5px 6px;
+    font-size: 14px;
+    color: #999;
+    background: #ffc;
+}
+
+.third-party {
+    clear: right;
+    border-top: 1px solid #dedede;
+}
+
+.third-party div {
+    width: 620px;
+    line-height: 52px;
+    margin: 0 auto;
+}
+
+.third-party h2 {
+    display: inline;
+    margin-left: 200px;
+    color: #666;
+    font-size: 14px;
+    font-weight: normal;
+}
