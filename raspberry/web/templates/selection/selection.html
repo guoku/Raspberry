@@ -44,10 +44,9 @@
         {% endfor %}
     </div>
 
-    <div class="register-intro guoku-block">
-        <h3>果库，尽收世上好物！</h3>
-        <div><a href="" class="guoku-button">注册帐号</a> <span class="register-address">已有帐号，<a href="">从这里登录</a></span></div>
-    </div>
+    {% if not user.is_authenticated %}
+        {% include 'partial/display_login_block.html' %}
+    {% endif %}
 
     <div class="categories guoku-block">
         <ul>
@@ -59,7 +58,5 @@
         </ul>
     </div>
 
-    <div class="download_info guoku-block">
-         {% include 'partial/app_download.html' %}
-    </div>
+    {% include 'partial/app_download.html' %}
 {% endblock %}

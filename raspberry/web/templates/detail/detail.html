@@ -33,23 +33,21 @@
 
             <div class="add-note guoku-block">
                 {% if user.is_authenticated %}
-                    <a href=""><img src="" width="50" height="50"></a>
+                    <a href="" class="avatar"><img src="" width="50" height="50"></a>
                     <div>
-                        <span>{{ user_context.nickname }}</span>
+                        <span class="nickname">{{ user_context.nickname }}</span>
 
                         <form action="">
                             <textarea name="" class="text-input"></textarea>
-
                             <div>说说你的评价？欢迎真实、有用、有趣的商品点评。</div>
                             <input type="submit" value="点评" class="guoku-button">
                         </form>
                     </div>
                 {% else %}
-                    <div>
-                        <span>收藏、点评、分享心爱好物</span>
-                        <a class="guoku-button" href="">现在注册</a>
-                        <span>已有帐号</span>
-                        <a href="">从这里登录</a>
+                    <div class="login-link">
+                        <span class="intro">收藏、点评、分享心爱好物</span>
+                        <a class="guoku-button register-link" href="{% url 'web.views.account.register' %}">现在注册</a>
+                        <small>已有帐号， <a href="{% url 'web.views.account.login' %}">从这里登录</a></small>
                     </div>
                 {% endif %}
             </div>
@@ -61,6 +59,10 @@
                 </div>
             </div>
         </div>
+
+        {% if not user.is_authenticated %}
+            {% include 'partial/display_login_block.html' %}
+        {% endif %}
 
         <div class="more-info guoku-block">
             <a href="" class="price guoku-button">详情 ￥{{ entity_context.price }}</a>
@@ -74,5 +76,7 @@
                 <span></span>
             </div>
         </div>
+
+        {% include 'partial/app_download.html' %}
     </div>
 {% endblock %}

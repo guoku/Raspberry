@@ -54,15 +54,11 @@ h2 {
 }
 
 
-.categories, .register-intro, .download_info {
+.categories {
     float: right;
     width: 257px;
     padding: 14px;
     color: #666;
-}
-
-.categories {
-    margin: 30px 0;
 }
 
 .categories ul {
@@ -74,22 +70,4 @@ h2 {
 .categories li {
     display: inline;
     margin-right: 20px;
-}
-
-.register-intro {
-    padding-bottom: 30px;
-}
-
-.register-intro h3 {
-    font-size: 14px;
-    font-weight: normal;
-}
-
-.register-intro .register-address {
-    margin-left: 10px;
-    font-size: 12px;
-}
-
-.register-intro .register-address a {
-    color: #4db07a;
 }

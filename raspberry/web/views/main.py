@@ -64,14 +64,13 @@ def selection(request, template='selection/selection.html'):
         })
 
     return render_to_response(template,
-        {
-            'user': _user,
-            'selections': _selections,
-            'categories': _old_category_list,
-            'curr_cat_title': _curr_cat_title
-        },
-        context_instance=RequestContext(request)
-    )
+                              {
+                                  'user': _user,
+                                  'selections': _selections,
+                                  'categories': _old_category_list,
+                                  'curr_cat_title': _curr_cat_title
+                              },
+                              context_instance=RequestContext(request))
 
 
 def detail(request, entity_hash, template='detail/detail.html'):
@@ -103,15 +102,14 @@ def detail(request, entity_hash, template='detail/detail.html'):
             _selected_note['creator_context'] = _creator_context
 
     return render_to_response(template,
-        {
-            'user': _user,
-            'user_context': _user_context,
-            'entity_context': _entity_context,
-            'note_list': _note_list,
-            'selected_note': _selected_note
-        },
-        context_instance=RequestContext(request)
-    )
+                              {
+                                  'user': _user,
+                                  'user_context': _user_context,
+                                  'entity_context': _entity_context,
+                                  'note_list': _note_list,
+                                  'selected_note': _selected_note
+                              },
+                              context_instance=RequestContext(request))
 
 
 def popular(request, template='popular/popular.html'):
@@ -123,17 +121,15 @@ def popular(request, template='popular/popular.html'):
     # print(_entity_list)
 
     return render_to_response(template,
-        {
+                              {
 
-        },
-        context_instance=RequestContext(request)
-    )
+                              },
+                              context_instance=RequestContext(request))
 
 
 def discover(request, template='discover/discover.html'):
     return render_to_response(template,
-        {
+                              {
 
-        },
-        context_instance=RequestContext(request)
-    )
+                              },
+                              context_instance=RequestContext(request))

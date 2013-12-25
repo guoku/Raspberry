@@ -186,6 +186,10 @@ a:hover {
     color: #bbb;
 }
 
+.note-item .note-detail .nickname {
+    color: #333;
+}
+
 .note-item .note-detail .poke {
     color: #bbb;
     margin-right: 9px;
@@ -241,6 +245,40 @@ a:hover {
 }
 
 /*------------------------------*/
+.login-block, .download_info {
+    float: right;
+    width: 257px;
+    padding: 14px;
+    color: #666;
+}
+
+.login-block {
+    margin-bottom: 30px;
+}
+
+.download_info {
+    margin-top: 30px;
+}
+
+.login-block {
+    padding-bottom: 30px;
+}
+
+.login-block h3 {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.login-block .register-address {
+    margin-left: 10px;
+    font-size: 12px;
+}
+
+.login-block .register-address a {
+    color: #4db07a;
+}
+
+
 .download-link h3 {
     font-size: 14px;
 }

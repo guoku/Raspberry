@@ -6,12 +6,12 @@
 
 #detail .entity-and-note {
     float: left;
+    width: 630px;
 }
 
 #detail .entity {
     position: relative;
     z-index: 10;
-    width: 630px;
     padding-top: 30px;
 }
 
@@ -42,13 +42,18 @@
     border-top: 1px solid #f3f3f3;;
 }
 
+
 #detail .add-note {
     margin-top: -1px;
     padding: 15px;
-    background-color: rgb(253, 252, 250);
+    background-color: #fdfcfa;
 }
 
-#detail .add-note a {
+#detail .add-note .nickname {
+    color: #333;
+}
+
+#detail .add-note .avatar {
     float: left;
     margin-right: 10px;
 }
@@ -57,11 +62,55 @@
     overflow: hidden;
 }
 
-#detail .add-note textarea {
-    resize: none;
-    width: 530px;
-    height: 100px;
+#detail .add-note form {
+    position: relative;
 }
+
+#detail .add-note form div {
+    position: absolute;
+    left: 1px;
+    bottom: 11px;
+    width: 526px;
+    padding: 5px;
+    border-top: 1px solid #dedede;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    font-size: 12px;
+    color: #999;
+    background-color: #fff;
+}
+
+#detail .add-note textarea {
+    width: 532px;
+    height: 100px;
+    margin: 15px 0 10px;
+    resize: none;
+    color: #666;
+}
+
+#detail .add-note input {
+    float: right;
+    margin-right: 3px;
+}
+
+#detail .add-note .login-link {
+    margin: 15px 0;
+}
+
+#detail .add-note .intro {
+    margin-left: 60px;
+    margin-right: 15px;
+}
+
+#detail .add-note small {
+    float: right;
+    line-height: 28px;
+}
+
+#detail .add-note small a {
+    color: #5eb685;
+}
+
 
 #detail .recommend {
     margin-top: 30px;
