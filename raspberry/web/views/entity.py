@@ -11,8 +11,6 @@ from base.entity import Entity
 
 @login_required
 def like_entity(request, entity_id):
-    _result = 0
-
     if request.method == 'POST':
         _user_id = request.user.id
         _entity = Entity(entity_id)
@@ -21,9 +19,8 @@ def like_entity(request, entity_id):
             _entity.unlike(_user_id)
         else:
             _entity.like(_user_id)
-        _result = 1
 
-    return HttpResponse(_result)
+        return HttpResponse(1)
 
 
 @login_required
@@ -33,8 +30,9 @@ def add_note(request, entity_id):
         _note_text = request.GET.get('note_text', None)
         _entity = Entity(entity_id)
 
-        _note = _entity.add_note(_creator_id, _note_text)
+        _entity.add_note(_creator_id, _note_text)
 
+        return HttpResponse(1)
 
 @login_required
 def del_note(request, entity_id):
