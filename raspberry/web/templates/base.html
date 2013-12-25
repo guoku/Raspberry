@@ -12,9 +12,9 @@
     <div class="header-container">
         <a href="/selection"><img src="{{ STATIC_URL }}web/images/guoku_icon_32.png"></a>
         <ul class="nav">
-            <li><a href="{% url 'web.views.selection' %}">精选</a></li>
-            <li><a href="{% url 'web.views.popular' %}">热门</a></li>
-            <li><a href="{% url 'web.views.discover' %}">发现</a></li>
+            <li><a href="{% url 'web.views.main.selection' %}">精选</a></li>
+            <li><a href="{% url 'web.views.main.popular' %}">热门</a></li>
+            <li><a href="{% url 'web.views.main.discover' %}">发现</a></li>
         </ul>
 
         <form action="/search" method="GET">
@@ -24,10 +24,10 @@
 
         <div class="user">
             {% if user.is_authenticated %}
-                <a href="{% url 'web.views.logout' %}">退出</a>
+                <a href="{% url 'web.views.account.logout' %}">退出</a>
             {% else %}
-                <a href="{% url 'web.views.register' %}">注册</a> |
-                <a href="{% url 'web.views.login' %}" class="login-link">登录</a>
+                <a href="{% url 'web.views.account.register' %}">注册</a> |
+                <a href="{% url 'web.views.account.login' %}" class="login-link">登录</a>
             {% endif %}
         </div>
     </div>

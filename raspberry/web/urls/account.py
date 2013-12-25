@@ -1,13 +1,8 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import url, patterns
+
 
 urlpatterns = patterns(
-    'web.views',
-
-    #(r'^selection/$', 'selection'),
-    (r'^popular/$', 'popular'),
-    (r'^discover/$', 'discover'),
-    (r'^detail/(?P<entity_hash>\w+)/$', 'detail'),
-
+    'web.views.account',
     (r'^login/$', 'login'),
     (r'^login/sina/$', 'login_by_sina'),
     (r'^login/taobao/$', 'login_by_taobao'),
@@ -16,5 +11,3 @@ urlpatterns = patterns(
     (r'^register/validate_nickname/$', 'is_nickname_used'),
     (r'^register/validate_email/$', 'is_email_used')
 )
-
-
