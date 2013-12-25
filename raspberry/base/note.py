@@ -37,7 +37,7 @@ class Note(object):
             self.note_obj = NoteModel.objects.get(pk = self.note_id)
     
     @classmethod
-    def count(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, selection = 0, status = 0):
+    def count(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, selection = 0, status = 0, pending_selection = False):
         _hdl = NoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
@@ -55,6 +55,9 @@ class Note(object):
             _hdl = _hdl.filter(weight__lt = 0)
         elif status > 0:
             _hdl = _hdl.filter(weight__gte = 0)
+        if pending_selection == True:
+            _freezing_time = datetime.datetime(2099, 1, 1) 
+            _hdl = _hdl.filter(post_time__gt = _freezing_time)
         return _hdl.count() 
     
     @classmethod

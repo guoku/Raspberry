@@ -1,7 +1,7 @@
 {% load management %}
 {% load common %}
 
-<tr {% if entity_context.weight < 0 %}class="info"{% else %}class="success"{% endif %}>
+<tr {%if entity_context.creator_id == None%}class="warning"{%else%}{%if entity_context.weight < 0%}class="info"{%else%}class="success"{%endif%}{%endif%}>
     <td width="90">
         <a href="http://item.taobao.com/item.htm?id={{ entity_context.taobao_id }}" target="_blank">
             <img class="img-polaroid" src="{{ entity_context.chief_image.url }}" style="max-height:80px;max-width:80px;">
@@ -12,8 +12,8 @@
     <td width="100"><p class="text-info">{{ entity_context.brand }}</p></td>
     <td><p class="text-info">{{ entity_context.title }}</p></td>
     <td><p class="text-info">{{ entity_context.taobao_shop_nick }}</p></td>
-    <td><p class="text-info">{%if entity_context.commission_type == 'unknown'%}无{%else%}{%if entity_context.commission_type == 'general' %}通用{%else%}定向{%endif%}{%endif%}</p></td>
-    <td><p class="text-info">{{ entity_context.commission_rate }}</p></td>
+    <td><p class="text-info">{%if entity_context.commission_type == 'unknown'%}{%else%}{%if entity_context.commission_type == 'general' %}通用{%else%}定向{%endif%}{%endif%}</p></td>
+    <td><p class="text-info">{%if entity_context.commission_rate > 0 %}{{ entity_context.commission_rate }}{%endif%}</p></td>
     <td width="100"><p class="text-info">{{ entity_context.created_time|date_format }}</p></td>
     <td width="50"><p class="text-info">{{ entity_context.note_id_list|count }}</p></td>
     <td width="80"><p class="text-info">{{ entity_context.item_id_list|count }}</p></td>

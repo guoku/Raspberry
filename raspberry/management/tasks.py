@@ -30,20 +30,18 @@ class PushMessageToUserTask(Task):
         })
         _apns.push()
 
-class ArrangeSelection(PeriodicTask):
+class ArrangeSelectionTask(Task):
     ignore_result = True
     time_limit = 1800
-    run_every = crontab(minute = 30, hour = 14) #run at 2:30 am every day
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
     
-    def run(self):
-        _t_start = datetime.datetime.now() + datetime.timedelta(days = 1) 
-        _year = _t_start.year
-        _month = _t_start.month
-        _date = _t_start.day
+    def run(self, select_count, start_time, interval_secs = 600):
+        _t_start = datetime.datetime.now()
         base_selection.arrange_entity_note_selection( 
-            select_count = 91,
-            start_time = datetime.datetime(_year, _month, _date, 8, 0, 0),
-            interval_secs = 600 
+            select_count = select_count,
+            start_time = start_time, 
+            interval_secs = interval_secs 
         )
         print "selection arranged...%s secs cost" % str(datetime.datetime.now() - _t_start)
     
