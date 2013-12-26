@@ -1,0 +1,51 @@
+/**
+ * Created by cuiwei on 13-12-26.
+ */
+(function ($, document, window) {
+  // selection 展开点评
+  $('.show-note').on('click', function () {
+    var $note = $(this).parent().parent();
+    $note.find('.more-note').slideToggle('slow');
+  });
+
+
+  // detail 修改点评
+  $('a.update-note').on('click', function () {
+    var $noteDetail = $(this).parent();
+    var $p = $noteDetail.find('p').hide();
+    var $form = $noteDetail.find('form').slideDown('fast');
+    var $textarea = $form.find('textarea');
+    var originNote = $textarea.val();
+
+    $noteDetail.find('.cancel-update').one('click', function () {
+      $textarea.val(originNote);
+      $form.slideUp('fast');
+      $p.show();
+    });
+
+    $form.on('submit', function (e) {
+      var noteText = $textarea.val();
+
+      if (noteText != originNote && noteText.length > 0) {
+        var url = $form[0].action;
+
+        $.post(url, $form.serialize(), function (data) {
+          if (parseInt(data) === 1) {
+            $form.slideUp('fast');
+            $p.text(noteText);
+            $p.show();
+          }
+        });
+      }
+
+      e.preventDefault();
+    });
+  });
+
+
+
+
+
+
+
+})(jQuery, document, window);

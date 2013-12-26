@@ -180,25 +180,64 @@ a:hover {
     margin: 10px 0 15px;
 }
 
-.note-item .note-detail .create-time {
-    float: right;
-    font-size: 12px;
-    color: #bbb;
-}
-
 .note-item .note-detail .nickname {
     color: #333;
 }
 
-.note-item .note-detail .poke {
+.note-item .note-detail form {
+   margin: 10px 0;
+}
+
+.note-item .note-detail textarea {
+    width: 532px;
+    height: 100px;
+    margin-bottom: 10px;
+    resize: none;
+    color: #666;
+}
+
+.note-item .note-detail form div {
+    float: right;
+    margin-right: 3px;
+}
+
+.note-item .note-detail form input {
+    margin-left: 5px;
+}
+
+.note-item .note-detail .poke,
+.note-item .note-detail .add-comment,
+.note-item .note-detail .update-note,
+.note-item .note-detail .my-note,
+.note-item .note-detail .create-time {
+    font-size: 12px;
     color: #bbb;
+}
+
+.note-item .note-detail .poke {
     margin-right: 9px;
 }
 
 .note-item .note-detail .add-comment {
-    color: #bbb;
-    padding-left: 10px;
+    padding: 0 9px;
     border-left: 1px dotted #ccc;
+}
+
+.note-item .note-detail .update-note {
+    padding-left: 9px;
+    border-left: 1px dotted #ccc;
+}
+
+.note-item .note-detail .my-note {
+    margin-left: 330px;
+    padding: 3px;
+    color: #666;
+    background-color: #fffdca;
+}
+
+.note-item .note-detail .create-time {
+    float: right;
+    padding-top: 2px;
 }
 
 .note-item .note-comment {
@@ -277,7 +316,6 @@ a:hover {
 .login-block .register-address a {
     color: #4db07a;
 }
-
 
 .download-link h3 {
     font-size: 14px;

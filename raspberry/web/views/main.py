@@ -92,10 +92,14 @@ def detail(request, entity_hash, template='main/detail.html'):
 
     _note_list = []
     _selected_note = {}
+    _user_already_note = False
 
     for _note_id in _all_note_id:
         _note_context = Note(_note_id).read()
         _creator_context = User(_note_context['creator_id']).read()
+
+        if _creator_context['user_id'] == _user.id:
+            _user_already_note = True
 
         # 判断是否是精选
         if _note_context['selector_id'] is None:
@@ -113,7 +117,8 @@ def detail(request, entity_hash, template='main/detail.html'):
                                   'user_context': _user_context,
                                   'entity_context': _entity_context,
                                   'note_list': _note_list,
-                                  'selected_note': _selected_note
+                                  'selected_note': _selected_note,
+                                  'user_already_note': _user_already_note
                               },
                               context_instance=RequestContext(request))
 

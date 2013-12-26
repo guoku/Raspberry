@@ -25,7 +25,8 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     'web.views.entity',
     (r'^entity/(?P<entity_id>\w+)/add_note$', 'add_note'),
-    (r'^entity/(?P<entity_id>\w+)/update_note$', 'update_note')
+    (r'^entity/(?P<note_id>\w+)/update_note$', 'update_note'),
+    (r'^entity/(?P<note_id>\w+)/delete_note$', 'delete_note')
 )
 
 

@@ -1,28 +1,46 @@
 {% load common %}
 
 <div class="note-item">
-    <a href="" class="avatar"><img src="{{ creator.avatar_small }}" width="50"
+    <a href="" class="avatar"><img src="{{ creator_context.avatar_small }}" width="50"
                     height="50"></a>
 
     <div class="note-detail">
-        <span class="nickname">{{ creator.nickname }}</span>
-        <small class="bio">{{ creator.bio }}</small>
-        <p>{{ note.content }}</p>
+        <span class="nickname">{{ creator_context.nickname }}</span>
+        <small class="bio">{{ creator_context.bio }}</small>
+        <p>{{ note_context.content }}</p>
 
-        <a href="javascript:;" class="poke">{{ note.poke_count }}</a>
+        {% if user_context.user_id == creator_context.user_id %}
+            <form class="clearfix" action="{% url 'web.views.entity.update_note' note_context.note_id %}"
+                  method="POST" style="display: none">
+                <textarea name="note_text" class="text-input">{{ note_context.content }}</textarea>
+
+                <div>
+                    <a href="javascript:;" class="cancel-update">取消</a>
+                    <input type="submit" value="修改" class="guoku-button">
+                </div>
+            </form>
+        {% endif %}
+
+        <a href="javascript:;" class="poke">{{ note_context.poke_count }}</a>
         <a href="javascript:;" class="add-comment">{{ comment_list|length }}</a>
-        <span class="create-time">{{ note.created_time|format_time }}</span>
+
+        {% if user_context.user_id == creator_context.user_id %}
+            <a href="javascript:;" class="update-note">修改</a>
+            <span class="my-note">你的点评</span>
+        {% endif %}
+
+        <span class="create-time">{{ note_context.created_time|format_time }}</span>
 
         {% if comment_list != None and comment_list|length > 0 %}
-            <div class="note-comment">
-                {% for comment in comment_list %}
+            <div class="note-comment" style="display: none">
+                {% for comment_context in comment_list %}
                     <div class="note-comment-item">
-                        <a href="" class="avatar"><img src="{{ comment.creator.avatar_small }}" height="32" width="32"></a>
+                        <a href="" class="avatar"><img src="{{ comment_context.creator_context.avatar_small }}" height="32" width="32"></a>
 
                         <div class="note-comment-detail">
-                            <span class="nickname">{{ comment.creator.nickname }}</span>
+                            <span class="nickname">{{ comment_context.creator_context.nickname }}</span>
 
-                            <p>{{ comment.content }}</p>
+                            <p>{{ comment_context.content }}</p>
                             <a href="javascript:;" class="reply">回复</a>
                         </div>
                     </div>

@@ -38,12 +38,20 @@ def add_note(request, entity_id):
             return HttpResponse('1')
 
 @login_required
-def update_note(request, entity_id):
+def update_note(request, note_id):
     if request.method == 'POST':
         _note_text = request.POST.get('note_text', None)
 
         if _note_text is not None and len(_note_text) > 0:
-            _entity = Entity(entity_id)
-            _entity.update_note(request.user.id, _note_text)
+            _entity = Entity(note_id)
+            _entity.update_note(note_id, note_text=_note_text)
 
             return HttpResponse('1')
+
+
+@login_required
+def delete_note(request, note_id):
+    if request.method == 'POST':
+        # TODO
+        # return HttpResponse('1')
+        pass
