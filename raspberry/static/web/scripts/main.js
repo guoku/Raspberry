@@ -1,17 +1,17 @@
 /**
  * Created by cuiwei on 13-12-26.
  */
-
 (function ($, document, window) {
+
   // selection 展开点评
-  $('.show-note').on('click', function () {
+  $('.note-item a.show-note').on('click', function () {
     var $note = $(this).parent().parent();
     $note.find('.more-note').slideToggle('slow');
   });
 
 
   // 修改点评
-  $('a.update-note').on('click', function () {
+  $('.note-item a.update-note').on('click', function () {
     var $noteDetail = $(this).parent();
     var $p = $noteDetail.find('p').hide();
     var $form = $noteDetail.find('form').slideDown('fast');
@@ -44,7 +44,7 @@
   });
 
   // 展开评论
-  $('a.add-comment').on('click', function () {
+  $('.note-comment a.add-comment').on('click', function () {
     var $noteDetail = $(this).parent();
     var $noteComment = $noteDetail.find('.note-comment');
     $noteComment.slideToggle('fast');

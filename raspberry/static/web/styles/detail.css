@@ -28,7 +28,7 @@
     margin-bottom: 5px;
 }
 
-#detail .like-count {
+#detail .like-entity {
     display: inline-block;
     padding: 7px 10px;
     border: 1px solid #efefef;
@@ -37,7 +37,7 @@
     background: #fbfbfb;
 }
 
-#detail .tip-info {
+#detail .remain-note-count {
     padding: 5px 5px 5px 75px;
     border-top: 1px solid #f3f3f3;;
 }

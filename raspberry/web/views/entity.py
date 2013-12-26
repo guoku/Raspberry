@@ -37,6 +37,7 @@ def add_note(request, entity_id):
 
             return HttpResponse('1')
 
+
 @login_required
 def update_note(request, note_id):
     if request.method == 'POST':

@@ -18,12 +18,12 @@
                     <div class="img-container">
                         <a href=""><img class="entity-img" src="{{ entity_context.chief_image.url }}" alt=""></a>
                     </div>
-                    <span class="like-count">喜爱 <small>{{ entity_context.like_count }}</small></span>
+                    <span class="like-entity">喜爱 <small>{{ entity_context.like_count }}</small></span>
                 </div>
 
                 {% display_note selected_note.note_context selected_note.creator_context user_context %}
 
-                <div class="tip-info">还有 {{ note_list|length }} 条点评</div>
+                <div class="remain-note-count">还有 {{ note_list|length }} 条点评</div>
                 <div class="note">
                     {% for note in note_list %}
                         {% display_note note.note_context note.creator_context user_context %}
