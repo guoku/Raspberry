@@ -8,7 +8,7 @@
     <h2>{{ curr_cat_title|default:'所有' }}</h2>
 
     <div id="selections">
-        {% for selection in selections %}
+        {% for selection in selection_list %}
             <div class="selection-item guoku-block">
                 <div class="entity">
                     <h3>
@@ -50,7 +50,7 @@
 
     <div class="categories guoku-block">
         <ul>
-            {% for category in categories %}
+            {% for category in category_list %}
                 <li>
                     <a href="{% url 'web.views.main.selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a>
                 </li>

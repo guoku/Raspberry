@@ -40,7 +40,7 @@ def selection(request, template='main/selection.html'):
     _offset = _paginator.offset
     _note_selections = _hdl[_offset: _offset + _count_in_one_page]
 
-    _selections = []
+    _selection_list = []
 
     for note_selection in _note_selections:
         _entity_id = note_selection['entity_id']
@@ -61,7 +61,7 @@ def selection(request, template='main/selection.html'):
                     'creator_context': User(_note_context_['creator_id']).read()
                 })
 
-        _selections.append({
+        _selection_list.append({
             'entity_context': _entity_context,
             'note_context': _note_context,
             'creator_context': _creator_context,
@@ -72,8 +72,8 @@ def selection(request, template='main/selection.html'):
                               {
                                   'user': _user,
                                   'user_context': _user_context,
-                                  'selections': _selections,
-                                  'categories': _old_category_list,
+                                  'selection_list': _selection_list,
+                                  'category_list': _old_category_list,
                                   'curr_cat_title': _curr_cat_title
                               },
                               context_instance=RequestContext(request))
@@ -97,6 +97,7 @@ def detail(request, entity_hash, template='main/detail.html'):
         _note_context = Note(_note_id).read()
         _creator_context = User(_note_context['creator_id']).read()
 
+        # 判断是否是精选
         if _note_context['selector_id'] is None:
             _note_list.append({
                 'note_context': _note_context,
