@@ -4,11 +4,10 @@
 (function ($, document, window) {
 
   // selection 展开点评
-  $('.note-item a.show-note').on('click', function () {
+  $('.selection-item a.show-note').on('click', function () {
     var $note = $(this).parent().parent();
     $note.find('.more-note').slideToggle('slow');
   });
-
 
   // 修改点评
   $('.note-item a.update-note').on('click', function () {
@@ -20,8 +19,8 @@
 
     $noteDetail.find('.cancel-update').one('click', function () {
       $textarea.val(originNote);
-      $form.slideUp('fast');
       $p.show();
+      $form.slideUp('fast');
     });
 
     $form.on('submit', function (e) {
@@ -32,9 +31,9 @@
 
         $.post(url, $form.serialize(), function (data) {
           if (parseInt(data) === 1) {
-            $form.slideUp('fast');
             $p.text(noteText);
             $p.show();
+            $form.slideUp('fast');
           }
         });
       }
@@ -44,7 +43,7 @@
   });
 
   // 展开评论
-  $('.note-comment a.add-comment').on('click', function () {
+  $('.note-item a.add-comment').on('click', function () {
     var $noteDetail = $(this).parent();
     var $noteComment = $noteDetail.find('.note-comment');
     $noteComment.slideToggle('fast');
