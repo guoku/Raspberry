@@ -21,24 +21,24 @@
                     <span class="like-count">喜爱 <small>{{ entity_context.like_count }}</small></span>
                 </div>
 
-                {% display_note selected_note.note_context selected_note.creator_context %}
+                {% display_note selected_note.note_context selected_note.creator_context True %}
 
                 <div class="tip-info">还有 {{ note_list|length }} 条点评</div>
                 <div class="note">
                     {% for note in note_list %}
-                        {% display_note note.note_context note.creator_context %}
+                        {% display_note note.note_context note.creator_context True %}
                     {% endfor %}
                 </div>
             </div>
 
             <div class="add-note guoku-block">
                 {% if user.is_authenticated %}
-                    <a href="" class="avatar"><img src="" width="50" height="50"></a>
+                    <a href="" class="avatar"><img src="{{ user_context.avatar_small }}" width="50" height="50"></a>
                     <div>
                         <span class="nickname">{{ user_context.nickname }}</span>
 
-                        <form action="">
-                            <textarea name="" class="text-input"></textarea>
+                        <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">
+                            <textarea class="text-input" name="note_text"></textarea>
                             <div>说说你的评价？欢迎真实、有用、有趣的商品点评。</div>
                             <input type="submit" value="点评" class="guoku-button">
                         </form>
@@ -61,7 +61,7 @@
         </div>
 
         {% if not user.is_authenticated %}
-            {% include 'partial/display_login_block.html' %}
+            {% include 'main/partial/display_login_block.html' %}
         {% endif %}
 
         <div class="more-info guoku-block">
@@ -77,6 +77,6 @@
             </div>
         </div>
 
-        {% include 'partial/app_download.html' %}
+        {% include 'main/partial/app_download.html' %}
     </div>
 {% endblock %}

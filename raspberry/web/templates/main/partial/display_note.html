@@ -13,11 +13,11 @@
         <a href="javascript:;" class="add-comment">{{ comment_list|length }}</a>
         <span class="create-time">{{ note.created_time|format_time }}</span>
 
-        {% if comment_list|length > 0 %}
-            <div class="note-comment" style="display: none">
+        {% if comment_list != None and comment_list|length > 0 %}
+            <div class="note-comment">
                 {% for comment in comment_list %}
                     <div class="note-comment-item">
-                        <a href="" class="avatar"><img src="" height="32" width="32"></a>
+                        <a href="" class="avatar"><img src="{{ comment.creator.avatar_small }}" height="32" width="32"></a>
 
                         <div class="note-comment-detail">
                             <span class="nickname">{{ comment.creator.nickname }}</span>

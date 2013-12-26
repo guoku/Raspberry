@@ -20,20 +20,30 @@ def like_entity(request, entity_id):
         else:
             _entity.like(_user_id)
 
-        return HttpResponse(1)
+        return HttpResponse('1')
 
 
 @login_required
 def add_note(request, entity_id):
     if request.method == 'POST':
-        _creator_id = request.user.id
-        _note_text = request.GET.get('note_text', None)
-        _entity = Entity(entity_id)
+        _note_text = request.POST.get('note_text', None)
 
-        _entity.add_note(_creator_id, _note_text)
+        if _note_text is not None and len(_note_text) > 0:
+            try:
+                _entity = Entity(entity_id)
+                _entity.add_note(request.user.id, _note_text)
+            except:
+                pass
 
-        return HttpResponse(1)
+            return HttpResponse('1')
 
 @login_required
-def del_note(request, entity_id):
-    pass
+def update_note(request, entity_id):
+    if request.method == 'POST':
+        _note_text = request.POST.get('note_text', None)
+
+        if _note_text is not None and len(_note_text) > 0:
+            _entity = Entity(entity_id)
+            _entity.update_note(request.user.id, _note_text)
+
+            return HttpResponse('1')

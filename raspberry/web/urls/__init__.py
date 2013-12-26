@@ -22,12 +22,13 @@ urlpatterns += patterns(
 )
 
 
-# urlpatterns += patterns(
-#     'web.views.entity',
-#     (r'', '')
-# )
-#
-#
+urlpatterns += patterns(
+    'web.views.entity',
+    (r'^entity/(?P<entity_id>\w+)/add_note$', 'add_note'),
+    (r'^entity/(?P<entity_id>\w+)/update_note$', 'update_note')
+)
+
+
 # urlpatterns += patterns(
 #     'web.views.note',
 #     (r'', '')

@@ -11,8 +11,13 @@ from base.user import User
 from base.category import Old_Category
 
 
-def selection(request, template='selection/selection.html'):
+def selection(request, template='main/selection.html'):
     _user = request.user
+    _user_context = None
+
+    if _user.id is not None:
+        _user_context = User(_user.id).read()
+
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
 
@@ -66,6 +71,7 @@ def selection(request, template='selection/selection.html'):
     return render_to_response(template,
                               {
                                   'user': _user,
+                                  'user_context': _user_context,
                                   'selections': _selections,
                                   'categories': _old_category_list,
                                   'curr_cat_title': _curr_cat_title
@@ -73,13 +79,12 @@ def selection(request, template='selection/selection.html'):
                               context_instance=RequestContext(request))
 
 
-def detail(request, entity_hash, template='detail/detail.html'):
+def detail(request, entity_hash, template='main/detail.html'):
     _user = request.user
-    _user_id = _user.id
     _user_context = None
 
-    if _user_id is not None:
-        _user_context = User(_user_id).read()
+    if _user.id is not None:
+        _user_context = User(_user.id).read()
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
@@ -112,7 +117,7 @@ def detail(request, entity_hash, template='detail/detail.html'):
                               context_instance=RequestContext(request))
 
 
-def popular(request, template='popular/popular.html'):
+def popular(request, template='main/popular.html'):
     _group = request.GET.get('group', 'daily')
 
     # generate_popular_entity()
@@ -127,7 +132,7 @@ def popular(request, template='popular/popular.html'):
                               context_instance=RequestContext(request))
 
 
-def discover(request, template='discover/discover.html'):
+def discover(request, template='main/discover.html'):
     return render_to_response(template,
                               {
 

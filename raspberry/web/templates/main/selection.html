@@ -45,7 +45,7 @@
     </div>
 
     {% if not user.is_authenticated %}
-        {% include 'partial/display_login_block.html' %}
+        {% include 'main/partial/display_login_block.html' %}
     {% endif %}
 
     <div class="categories guoku-block">
@@ -58,5 +58,5 @@
         </ul>
     </div>
 
-    {% include 'partial/app_download.html' %}
+    {% include 'main/partial/app_download.html' %}
 {% endblock %}
