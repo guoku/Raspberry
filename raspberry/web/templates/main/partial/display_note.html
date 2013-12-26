@@ -31,30 +31,30 @@
 
         <span class="create-time">{{ note_context.created_time|format_time }}</span>
 
-        {% if comment_list != None and comment_list|length > 0 %}
-            <div class="note-comment" style="display: none">
-                {% for comment_context in comment_list %}
-                    <div class="note-comment-item">
-                        <a href="" class="avatar"><img src="{{ comment_context.creator_context.avatar_small }}" height="32" width="32"></a>
+        <div class="note-comment" style="display: none">
+            {% for comment_context in comment_list %}
+                <div class="note-comment-item">
+                    <a href="" class="avatar"><img src="{{ comment_context.creator_context.avatar_small }}"
+                                                   height="32" width="32"></a>
 
-                        <div class="note-comment-detail">
-                            <span class="nickname">{{ comment_context.creator_context.nickname }}</span>
+                    <div class="note-comment-detail">
+                        <span class="nickname">{{ comment_context.creator_context.nickname }}</span>
 
-                            <p>{{ comment_context.content }}</p>
-                            <a href="javascript:;" class="reply">回复</a>
-                        </div>
+                        <p>{{ comment_context.content }}</p>
+                        <a href="javascript:;" class="reply">回复</a>
                     </div>
-                {% endfor %}
+                </div>
+            {% endfor %}
 
-                <form>
-                    <input type="text" name="" class="text-input">
+            <form method="POST" action="">
+                <input type="text" name="" class="text-input">
 
-                    <div class="operate-comment">
-                        <a href="javascript:;">取消</a>
-                        <input type="submit" value="评论" class="guoku-button">
-                    </div>
-                </form>
-            </div>
-        {% endif %}
+                <div class="operate-comment">
+                    <a href="javascript:;" class="cancel-comment">取消</a>
+                    <input type="submit" value="评论" class="guoku-button">
+                </div>
+            </form>
+        </div>
+
     </div>
 </div>

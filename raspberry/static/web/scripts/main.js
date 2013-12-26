@@ -1,6 +1,7 @@
 /**
  * Created by cuiwei on 13-12-26.
  */
+
 (function ($, document, window) {
   // selection 展开点评
   $('.show-note').on('click', function () {
@@ -9,7 +10,7 @@
   });
 
 
-  // detail 修改点评
+  // 修改点评
   $('a.update-note').on('click', function () {
     var $noteDetail = $(this).parent();
     var $p = $noteDetail.find('p').hide();
@@ -39,6 +40,17 @@
       }
 
       e.preventDefault();
+    });
+  });
+
+  // 展开评论
+  $('a.add-comment').on('click', function () {
+    var $noteDetail = $(this).parent();
+    var $noteComment = $noteDetail.find('.note-comment');
+    $noteComment.slideToggle('fast');
+
+    $noteDetail.find('.cancel-comment').one('click', function () {
+      $noteComment.slideUp('fast');
     });
   });
 
