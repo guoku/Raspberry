@@ -61,13 +61,15 @@ def is_email_used(email):
     return HttpResponse(json.dumps(_success))
 
 
-def register(request, template='account/register.html'):
+def register(request, template='accounts/register.html'):
     if request.method == 'GET':
-        return render_to_response(template,
-                                  {
-                                      'title': '欢迎加入果库'
-                                  },
-                                  context_instance=RequestContext(request))
+        return render_to_response(
+            template,
+            {
+                'title' : '欢迎加入果库'
+            },
+            context_instance=RequestContext(request)
+        )
 
     else:
         _nickname = request.POST.get('nickname', None)
@@ -88,26 +90,29 @@ def register(request, template='account/register.html'):
             return HttpResponseRedirect('account/login/')
 
         else:
-            return render_to_response(template,
-                                      {
-                                          'title': '欢迎加入果库',
-                                          'nickname_error': _nickname_error,
-                                          'email_error': _email_error,
-                                          'password_error': _password_error
-                                      },
-                                      context_instance=RequestContext(request))
+            return render_to_response(
+                template,
+                {
+                    'nickname_error' : _nickname_error,
+                    'email_error' : _email_error,
+                    'password_error' : _password_error
+                },
+                context_instance=RequestContext(request)
+            )
 
 
-def login(request, template='account/login.html'):
+def login(request, template='accounts/login.html'):
     if request.user.is_authenticated():
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
     if request.method == 'GET':
-        return render_to_response(template,
-                                  {
-                                      'title': '欢迎加入果库'
-                                  },
-                                  context_instance=RequestContext(request))
+        return render_to_response(
+            template,
+            {
+
+            },
+            context_instance=RequestContext(request)
+        )
 
     else:
         _email = request.POST.get('email', None)
@@ -140,13 +145,15 @@ def login(request, template='account/login.html'):
             else:
                 _email_error = '邮箱未注册'
 
-        return render_to_response(template,
-                                  {
-                                      'title': '欢迎加入果库',
-                                      'email_error': _email_error,
-                                      'password_error': _password_error
-                                  },
-                                  context_instance=RequestContext(request))
+        return render_to_response(
+            template,
+            {
+                'title' : '欢迎加入果库',
+                'email_error' : _email_error,
+                'password_error' : _password_error
+            },
+            context_instance=RequestContext(request)
+        )
 
 
 def login_by_sina(request):

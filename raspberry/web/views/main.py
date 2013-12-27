@@ -28,6 +28,7 @@ def selection(request, template='main/selection.html'):
         _hdl = NoteSelection.objects.all()
     else:
         _hdl = NoteSelection.objects.filter(category_id=_category_id)
+
         for _old_cat in _old_category_list:
             if _old_cat['category_id'] == int(_category_id):
                 _curr_cat_title = _old_cat['category_title']
@@ -42,41 +43,54 @@ def selection(request, template='main/selection.html'):
 
     _selection_list = []
 
-    for note_selection in _note_selections:
-        _entity_id = note_selection['entity_id']
-        _note_id = note_selection['note_id']
+    for _note_selection in _note_selections:
+        _entity_id = _note_selection['entity_id']
+        _entity = Entity(_entity_id)
+        _note_id = _note_selection['note_id']
 
-        _entity_context = Entity(_entity_id).read()
+        _already_like = False
+
+        if _user.id is not None:
+            _already_like = _entity.like_already(_user.id)
+
+        _entity_context = _entity.read()
         _note_context = Note(_note_id).read()
         _creator_context = User(_note_context['creator_id']).read()
 
         _all_note_id = Note.find(entity_id=_entity_id)
         _note_list = []
 
-        for _note_id_ in _all_note_id:
-            if _note_id_ != _note_id:
-                _note_context_ = Note(_note_id_).read()
-                _note_list.append({
-                    'note_context': _note_context_,
-                    'creator_context': User(_note_context_['creator_id']).read()
-                })
+        for _note_id_other in _all_note_id:
+            if _note_id_other != _note_id:
+                _note_context_other = Note(_note_id_other).read()
+                _note_list.append(
+                    {
+                        'note_context' : _note_context_other,
+                        'creator_context' : User(_note_context_other['creator_id']).read()
+                    }
+                )
 
-        _selection_list.append({
-            'entity_context': _entity_context,
-            'note_context': _note_context,
-            'creator_context': _creator_context,
-            'note_list': _note_list
-        })
+        _selection_list.append(
+            {
+                'already_like' : _already_like,
+                'entity_context' : _entity_context,
+                'note_context' : _note_context,
+                'creator_context' : _creator_context,
+                'note_list' : _note_list
+            }
+        )
 
-    return render_to_response(template,
-                              {
-                                  'user': _user,
-                                  'user_context': _user_context,
-                                  'selection_list': _selection_list,
-                                  'category_list': _old_category_list,
-                                  'curr_cat_title': _curr_cat_title
-                              },
-                              context_instance=RequestContext(request))
+    return render_to_response(
+        template,
+        {
+            'user' : _user,
+            'user_context' : _user_context,
+            'selection_list' : _selection_list,
+            'category_list' : _old_category_list,
+            'curr_cat_title' : _curr_cat_title
+        },
+        context_instance=RequestContext(request)
+    )
 
 
 def detail(request, entity_hash, template='main/detail.html'):
@@ -103,24 +117,28 @@ def detail(request, entity_hash, template='main/detail.html'):
 
         # 判断是否是精选
         if _note_context['selector_id'] is None:
-            _note_list.append({
-                'note_context': _note_context,
-                'creator_context': _creator_context
-            })
+            _note_list.append(
+                {
+                    'note_context' : _note_context,
+                    'creator_context' : _creator_context
+                }
+            )
         else:
             _selected_note['note_context'] = _note_context
             _selected_note['creator_context'] = _creator_context
 
-    return render_to_response(template,
-                              {
-                                  'user': _user,
-                                  'user_context': _user_context,
-                                  'entity_context': _entity_context,
-                                  'note_list': _note_list,
-                                  'selected_note': _selected_note,
-                                  'user_already_note': _user_already_note
-                              },
-                              context_instance=RequestContext(request))
+    return render_to_response(
+        template,
+        {
+            'user' : _user,
+            'user_context' : _user_context,
+            'entity_context' : _entity_context,
+            'note_list' : _note_list,
+            'selected_note' : _selected_note,
+            'user_already_note' : _user_already_note
+        },
+        context_instance=RequestContext(request)
+    )
 
 
 def popular(request, template='main/popular.html'):
@@ -131,16 +149,20 @@ def popular(request, template='main/popular.html'):
     #
     # print(_entity_list)
 
-    return render_to_response(template,
-                              {
+    return render_to_response(
+        template,
+        {
 
-                              },
-                              context_instance=RequestContext(request))
+        },
+        context_instance=RequestContext(request)
+    )
 
 
 def discover(request, template='main/discover.html'):
-    return render_to_response(template,
-                              {
+    return render_to_response(
+        template,
+        {
 
-                              },
-                              context_instance=RequestContext(request))
+        },
+        context_instance=RequestContext(request)
+    )

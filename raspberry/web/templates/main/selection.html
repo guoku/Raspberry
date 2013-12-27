@@ -22,7 +22,10 @@
                             <img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt="entity image">
                         </a>
                     </div>
-                    <span class="like-entity">喜爱 <small>{{ selection.entity_context.like_count }}</small></span>
+                    <a href="javascript:;" class="like-entity{% if selection.already_like == True %} already-like{% endif %}"
+                       data-entity="{{ selection.entity_context.entity_id }}">
+                        喜爱 <small>{{ selection.entity_context.like_count }}</small>
+                    </a>
                 </div>
 
                 <div class="note">

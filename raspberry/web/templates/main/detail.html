@@ -18,7 +18,9 @@
                     <div class="img-container">
                         <a href=""><img class="entity-img" src="{{ entity_context.chief_image.url }}" alt=""></a>
                     </div>
-                    <span class="like-entity">喜爱 <small>{{ entity_context.like_count }}</small></span>
+                    <a href="javascript:;" class="like-entity" data-entity="{{ entity_context.entity_id }}">
+                        喜爱 <small>{{ entity_context.like_count }}</small>
+                    </a>
                 </div>
 
                 <div class="selection-note">
@@ -49,8 +51,8 @@
                     {% else %}
                         <div class="login-link">
                             <span class="intro">收藏、点评、分享心爱好物</span>
-                            <a class="guoku-button register-link" href="{% url 'web.views.account.register' %}">现在注册</a>
-                            <small>已有帐号， <a href="{% url 'web.views.account.login' %}">从这里登录</a></small>
+                            <a class="guoku-button register-link" href="{% url 'web.views.accounts.register' %}">现在注册</a>
+                            <small>已有帐号， <a href="{% url 'web.views.accounts.login' %}">从这里登录</a></small>
                         </div>
                     {% endif %}
                 </div>

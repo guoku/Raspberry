@@ -42,6 +42,19 @@ h2 {
     background: #fbfbfb;
 }
 
+.selection-item .already-like {
+   color: #f00;
+}
+
+.selection-item .like-entity:hover {
+    text-decoration: none;
+    color: #666;
+}
+
+.selection-item .already-like:hover {
+   color: #f00;
+}
+
 .selection-item .operate {
     padding: 5px 0;
     border-top: 1px solid #f3f3f3;

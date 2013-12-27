@@ -13,14 +13,14 @@ from base.entity import Entity
 def like_entity(request, entity_id):
     if request.method == 'POST':
         _user_id = request.user.id
-        _entity = Entity(entity_id)
+        _entity = Entity(int(entity_id))
 
         if _entity.like_already(_user_id):
             _entity.unlike(_user_id)
+            return HttpResponse('0')
         else:
             _entity.like(_user_id)
-
-        return HttpResponse('1')
+            return HttpResponse('1')
 
 
 @login_required
@@ -30,7 +30,7 @@ def add_note(request, entity_id):
 
         if _note_text is not None and len(_note_text) > 0:
             try:
-                _entity = Entity(entity_id)
+                _entity = Entity(int(entity_id))
                 _entity.add_note(request.user.id, _note_text)
             except:
                 pass
@@ -44,7 +44,7 @@ def update_note(request, note_id):
         _note_text = request.POST.get('note_text', None)
 
         if _note_text is not None and len(_note_text) > 0:
-            _entity = Entity(note_id)
+            _entity = Entity(int(note_id))
             _entity.update_note(note_id, note_text=_note_text)
 
             return HttpResponse('1')

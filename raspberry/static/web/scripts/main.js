@@ -2,14 +2,22 @@
  * Created by cuiwei on 13-12-26.
  */
 (function ($, document, window) {
+  var $selectionItem = $('.selection-item');
 
-  // selection 展开点评
-  $('.selection-item .show-note').on('click', function () {
-    var $note = $(this).parent().parent();
-    $note.find('.common-note').slideToggle('slow');
+  $selectionItem.each(function () {
+    var $this = $(this);
+
+    $this.find('.show-note').on('click', function () {
+      // selection 展开点评
+      $this.find('.common-note').slideToggle('slow');
+    });
   });
 
-  $('.note-item').each(function () {
+
+  var $noteItem = $('.note-item');
+
+  // 修改点评
+  $noteItem.each(function () {
     var $this = $(this);
     var $p = $this.find('p.note-content');
     var $form = $this.find('.update-note-form');
@@ -48,7 +56,7 @@
   });
 
   // 展开评论
-  $('.note-comment .add-comment').on('click', function () {
+  $noteItem.find('.add-comment').on('click', function () {
     var $noteDetail = $(this).parent();
     var $noteComment = $noteDetail.find('.note-comment');
     $noteComment.slideToggle('fast');
@@ -57,6 +65,31 @@
       $noteComment.slideUp('fast');
     });
   });
+
+
+  // 喜爱 like
+  $('.like-entity').on('click', function () {
+    var $this = $(this);
+    var counter = $this.find('small');
+    var entity_id = $this.attr('data-entity');
+    var url = '/entity/' + entity_id + '/like/';
+
+    $.post(url, function (data) {
+      var count = parseInt(counter.text());
+      var result = parseInt(data);
+
+      if (result === 1) {
+        counter.text(count + 1);
+        $this.addClass('already-like');
+      } else if (result === 0) {
+        counter.text(count - 1);
+        $this.removeClass('already-like');
+      } else {
+        // 需登录
+      }
+    });
+  });
+
 
 
 

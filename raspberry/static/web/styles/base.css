@@ -242,7 +242,7 @@ a:hover {
 
 .note-item .note-comment {
     overflow: hidden;
-    margin-top: 10px;
+    margin: 10px 60px 0 0;
     padding: 9px;
     border: 1px solid #dedede;
     border-radius: 2px;
@@ -261,6 +261,7 @@ a:hover {
 
 .note-item .note-comment-detail p {
     margin: 5px;
+    font-size: 13px;
 }
 
 .note-item .note-comment-detail .reply {
@@ -269,7 +270,7 @@ a:hover {
 
 .note-item .note-comment .text-input {
     display: block;
-    width: 499px;
+    width: 438px;
     padding: 6px;
     margin-top: 12px;
 }

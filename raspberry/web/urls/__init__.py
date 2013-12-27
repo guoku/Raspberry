@@ -11,22 +11,23 @@ urlpatterns = patterns(
 
 
 urlpatterns += patterns(
-    'web.views.account',
-    (r'^account/login/$', 'login'),
-    (r'^account/login/sina/$', 'login_by_sina'),
-    (r'^account/login/taobao/$', 'login_by_taobao'),
-    (r'^account/logout/$', 'logout'),
-    (r'^account/register/$', 'register'),
-    (r'^account/register/validate_nickname/$', 'is_nickname_used'),
-    (r'^account/register/validate_email/$', 'is_email_used')
+    'web.views.accounts',
+    (r'^accounts/login/$', 'login'),
+    (r'^accounts/login/sina/$', 'login_by_sina'),
+    (r'^accounts/login/taobao/$', 'login_by_taobao'),
+    (r'^accounts/logout/$', 'logout'),
+    (r'^accounts/register/$', 'register'),
+    (r'^accounts/register/validate_nickname/$', 'is_nickname_used'),
+    (r'^accounts/register/validate_email/$', 'is_email_used')
 )
 
 
 urlpatterns += patterns(
     'web.views.entity',
-    (r'^entity/(?P<entity_id>\w+)/add_note$', 'add_note'),
-    (r'^entity/(?P<note_id>\w+)/update_note$', 'update_note'),
-    (r'^entity/(?P<note_id>\w+)/delete_note$', 'delete_note')
+    (r'^entity/(?P<entity_id>\w+)/like/$', 'like_entity'),
+    (r'^entity/(?P<entity_id>\w+)/add_note/$', 'add_note'),
+    (r'^entity/(?P<note_id>\w+)/update_note/$', 'update_note'),
+    (r'^entity/(?P<note_id>\w+)/delete_note/$', 'delete_note')
 )
 
 

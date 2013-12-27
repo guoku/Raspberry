@@ -37,6 +37,11 @@
     background: #fbfbfb;
 }
 
+#detail .like-entity:hover {
+    text-decoration: none;
+    color: #666;
+}
+
 #detail .common-note-count {
     padding: 5px 5px 5px 75px;
     border-top: 1px solid #f3f3f3;;
