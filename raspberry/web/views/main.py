@@ -39,44 +39,63 @@ def selection(request, template='main/selection.html'):
 
     _hdl.order_by('-post_time')
     _offset = _paginator.offset
-    _note_selections = _hdl[_offset: _offset + _count_in_one_page]
+    _note_selection_list = _hdl[_offset: _offset + _count_in_one_page]
 
     _selection_list = []
 
-    for _note_selection in _note_selections:
+    for _note_selection in _note_selection_list:
+        _selection_note_id = _note_selection['note_id']
         _entity_id = _note_selection['entity_id']
         _entity = Entity(_entity_id)
-        _note_id = _note_selection['note_id']
+        _entity_context = _entity.read()
 
         _already_like = False
 
         if _user.id is not None:
             _already_like = _entity.like_already(_user.id)
 
-        _entity_context = _entity.read()
-        _note_context = Note(_note_id).read()
-        _creator_context = User(_note_context['creator_id']).read()
+        _note_id_list = Note.find(entity_id=_entity_id)
+        _common_note_list = []
 
-        _all_note_id = Note.find(entity_id=_entity_id)
-        _note_list = []
+        for _note_id in _note_id_list:
+            _note = Note(_note_id)
+            _note_context = _note.read()
+            _creator_context = User(_note_context['creator_id']).read()
 
-        for _note_id_other in _all_note_id:
-            if _note_id_other != _note_id:
-                _note_context_other = Note(_note_id_other).read()
-                _note_list.append(
+            _comment_id_list = _note_context['comment_id_list']
+            _comment_list = []
+
+            for _comment_id in _comment_id_list:
+                _comment_context = _note.read_comment(_comment_id)
+
+                _comment_list.append(
                     {
-                        'note_context' : _note_context_other,
-                        'creator_context' : User(_note_context_other['creator_id']).read()
+                        'comment_context' : _comment_context,
+                        'creator_context' : User(_comment_context['creator_id']).read()
                     }
                 )
+
+            if _note_id != _selection_note_id:
+                _common_note_list.append(
+                    {
+                        'note_context' : _note_context,
+                        'creator_context' : _creator_context,
+                        'comment_list' : _comment_list
+                    }
+                )
+            else:
+                _selection_note = {
+                    'note_context' : _note_context,
+                    'creator_context' : _creator_context,
+                    'comment_list' : _comment_list
+                }
 
         _selection_list.append(
             {
                 'already_like' : _already_like,
                 'entity_context' : _entity_context,
-                'note_context' : _note_context,
-                'creator_context' : _creator_context,
-                'note_list' : _note_list
+                'selection_note' : _selection_note,
+                'common_note_list' : _common_note_list,
             }
         )
 
@@ -102,40 +121,58 @@ def detail(request, entity_hash, template='main/detail.html'):
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
-    _all_note_id = Note.find(entity_id=_entity_id)
+    _note_id_list = Note.find(entity_id=_entity_id)
 
-    _note_list = []
-    _selected_note = {}
+    _common_note_list = []
+    _selection_note = None
     _user_already_note = False
 
-    for _note_id in _all_note_id:
-        _note_context = Note(_note_id).read()
+    for _note_id in _note_id_list:
+        _note = Note(_note_id)
+        _note_context = _note.read()
         _creator_context = User(_note_context['creator_id']).read()
 
         if _creator_context['user_id'] == _user.id:
             _user_already_note = True
 
+        _comment_id_list = _note_context['comment_id_list']
+        _comment_list = []
+
+        for _comment_id in _comment_id_list:
+            _comment_context = _note.read_comment(_comment_id)
+
+            _comment_list.append(
+                {
+                    'comment_context' : _comment_context,
+                    'creator_context' : User(_comment_context['creator_id']).read()
+                }
+            )
+
         # 判断是否是精选
         if _note_context['selector_id'] is None:
-            _note_list.append(
+            _common_note_list.append(
                 {
                     'note_context' : _note_context,
-                    'creator_context' : _creator_context
+                    'creator_context' : _creator_context,
+                    'comment_list' : _comment_list
                 }
             )
         else:
-            _selected_note['note_context'] = _note_context
-            _selected_note['creator_context'] = _creator_context
+            _selection_note = {
+                'note_context' : _note_context,
+                'creator_context' : _creator_context,
+                'comment_list' : _comment_list
+            }
 
     return render_to_response(
         template,
         {
             'user' : _user,
             'user_context' : _user_context,
+            'user_already_note' : _user_already_note,
             'entity_context' : _entity_context,
-            'note_list' : _note_list,
-            'selected_note' : _selected_note,
-            'user_already_note' : _user_already_note
+            'selection_note' : _selection_note,
+            'common_note_list' : _common_note_list,
         },
         context_instance=RequestContext(request)
     )

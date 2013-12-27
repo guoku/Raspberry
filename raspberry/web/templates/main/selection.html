@@ -30,17 +30,17 @@
 
                 <div class="note">
                     <div class="selection-note">
-                        {% display_note selection.note_context selection.creator_context user_context %}
+                        {% display_note selection.selection_note user_context %}
                     </div>
 
                     <div class="common-note" style="display: none">
-                        {% for note in selection.note_list %}
-                            {% display_note note.note_context note.creator_context user_context %}
+                        {% for note in selection.common_note_list %}
+                            {% display_note note user_context %}
                         {% endfor %}
                     </div>
 
                     <div class="operate">
-                        <a href="javascript:;" class="show-note">还有 {{ selection.note_list|length }} 条点评</a>
+                        <a href="javascript:;" class="show-note">还有 {{ selection.common_note_list|length }} 条点评</a>
                         &sdot;
                         <a href="{% url 'web.views.main.detail' selection.entity_context.entity_hash %}#addnote"
                            class="add-note">写点评</a>
