@@ -55,6 +55,7 @@ def selection(request, template='main/selection.html'):
             _already_like = _entity.like_already(_user.id)
 
         _note_id_list = Note.find(entity_id=_entity_id)
+        _selection_note = {}
         _common_note_list = []
 
         for _note_id in _note_id_list:
@@ -123,8 +124,8 @@ def detail(request, entity_hash, template='main/detail.html'):
     _entity_context = Entity(_entity_id).read()
     _note_id_list = Note.find(entity_id=_entity_id)
 
+    _selection_note = {}
     _common_note_list = []
-    _selection_note = None
     _user_already_note = False
 
     for _note_id in _note_id_list:
