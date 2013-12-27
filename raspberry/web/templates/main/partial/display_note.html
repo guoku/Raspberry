@@ -7,10 +7,11 @@
     <div class="note-detail">
         <span class="nickname">{{ creator_context.nickname }}</span>
         <small class="bio">{{ creator_context.bio }}</small>
-        <p>{{ note_context.content }}</p>
+        <p class="note-content">{{ note_context.content }}</p>
 
         {% if user_context.user_id == creator_context.user_id %}
-            <form class="clearfix" action="{% url 'web.views.entity.update_note' note_context.note_id %}"
+            <form class="clearfix update-note-form"
+                  action="{% url 'web.views.entity.update_note' note_context.note_id %}"
                   method="POST" style="display: none">
                 <textarea name="note_text" class="text-input">{{ note_context.content }}</textarea>
 
@@ -40,14 +41,14 @@
                     <div class="note-comment-detail">
                         <span class="nickname">{{ comment_context.creator_context.nickname }}</span>
 
-                        <p>{{ comment_context.content }}</p>
+                        <p class="comment-content">{{ comment_context.content }}</p>
                         <a href="javascript:;" class="reply">回复</a>
                     </div>
                 </div>
             {% endfor %}
 
             <form method="POST" action="">
-                <input type="text" name="" class="text-input">
+                <input type="text" name="comment_text" class="text-input">
 
                 <div class="operate-comment">
                     <a href="javascript:;" class="cancel-comment">取消</a>

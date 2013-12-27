@@ -4,36 +4,41 @@
 (function ($, document, window) {
 
   // selection 展开点评
-  $('.selection-item a.show-note').on('click', function () {
+  $('.selection-item .show-note').on('click', function () {
     var $note = $(this).parent().parent();
-    $note.find('.more-note').slideToggle('slow');
+    $note.find('.common-note').slideToggle('slow');
   });
 
-  // 修改点评
-  $('.note-item a.update-note').on('click', function () {
-    var $noteDetail = $(this).parent();
-    var $p = $noteDetail.find('p').hide();
-    var $form = $noteDetail.find('form').slideDown('fast');
+  $('.note-item').each(function () {
+    var $this = $(this);
+    var $p = $this.find('p.note-content');
+    var $form = $this.find('.update-note-form');
     var $textarea = $form.find('textarea');
-    var originNote = $textarea.val();
+    var originNoteText;
 
-    $noteDetail.find('.cancel-update').one('click', function () {
-      $textarea.val(originNote);
-      $p.show();
-      $form.slideUp('fast');
+    $this.find('.update-note').on('click', function () {
+      originNoteText = $textarea.val();
+      $p.hide();
+      $form.show();
+
+      $form.find('.cancel-update').one('click', function () {
+        $textarea.val(originNoteText);
+        $form.hide();
+        $p.show();
+      });
     });
 
-    $form.on('submit', function (e) {
+    $this.find('.update-note-form').on('submit', function (e) {
       var noteText = $textarea.val();
 
-      if (noteText != originNote && noteText.length > 0) {
+      if (noteText !== originNoteText && noteText.length > 0) {
         var url = $form[0].action;
 
         $.post(url, $form.serialize(), function (data) {
           if (parseInt(data) === 1) {
             $p.text(noteText);
+            $form.hide();
             $p.show();
-            $form.slideUp('fast');
           }
         });
       }
@@ -43,7 +48,7 @@
   });
 
   // 展开评论
-  $('.note-item a.add-comment').on('click', function () {
+  $('.note-comment .add-comment').on('click', function () {
     var $noteDetail = $(this).parent();
     var $noteComment = $noteDetail.find('.note-comment');
     $noteComment.slideToggle('fast');

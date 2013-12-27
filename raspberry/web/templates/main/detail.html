@@ -12,19 +12,20 @@
         <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }}
                     - {% endif %}{{ entity_context.title }}</h2>
 
-        <div class="entity-and-note">
-            <div class="entity guoku-block">
-                <div class="entity-detail">
+        <div class="container">
+            <div class="entity-and-note guoku-block">
+                <div class="entity">
                     <div class="img-container">
                         <a href=""><img class="entity-img" src="{{ entity_context.chief_image.url }}" alt=""></a>
                     </div>
                     <span class="like-entity">喜爱 <small>{{ entity_context.like_count }}</small></span>
                 </div>
 
-                {% display_note selected_note.note_context selected_note.creator_context user_context %}
-
-                <div class="remain-note-count">还有 {{ note_list|length }} 条点评</div>
-                <div class="note">
+                <div class="selection-note">
+                    {% display_note selected_note.note_context selected_note.creator_context user_context %}
+                </div>
+                <div class="common-note-count">还有 {{ note_list|length }} 条点评</div>
+                <div class="common-note">
                     {% for note in note_list %}
                         {% display_note note.note_context note.creator_context user_context %}
                     {% endfor %}
@@ -67,10 +68,10 @@
             {% include 'main/partial/display_login_block.html' %}
         {% endif %}
 
-        <div class="more-info guoku-block">
+        <div class="other-info guoku-block">
             <a href="" class="price guoku-button">详情 ￥{{ entity_context.price }}</a>
             <div class="shop">来自于<a href=""></a></div>
-            <div class="like">人喜爱</div>
+            <div class="like-count">人喜爱</div>
             <div class="people">
                 <img src="" height="25" width="25">
             </div>

@@ -4,18 +4,18 @@
     color: #999;
 }
 
-#detail .entity-and-note {
+#detail .container {
     float: left;
     width: 630px;
 }
 
-#detail .entity {
+#detail .entity-and-note {
     position: relative;
     z-index: 10;
     padding-top: 30px;
 }
 
-#detail .entity-detail {
+#detail .entity {
     margin: 0 0 15px 74px;
 }
 
@@ -37,7 +37,7 @@
     background: #fbfbfb;
 }
 
-#detail .remain-note-count {
+#detail .common-note-count {
     padding: 5px 5px 5px 75px;
     border-top: 1px solid #f3f3f3;;
 }
@@ -120,22 +120,22 @@
     padding: 15px;
 }
 
-#detail .more-info {
+#detail .other-info {
     float: right;
     width: 257px;
     padding: 14px;
 }
 
-#detail .more-info .price {
+#detail .other-info .price {
     margin: 15px 0;
 }
 
-#detail .more-info .like {
+#detail .other-info .like-count {
     margin: 15px 0;
     padding-top: 15px;
     border-top: 1px solid #dedede;
 }
 
-#detail .more-info .people {
+#detail .other-info .people {
     margin-bottom: 15px;
 }

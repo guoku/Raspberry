@@ -17,24 +17,26 @@
                                 - {% endif %}{{ selection.entity_context.title }}</a>
                     </h3>
 
-                    <div class="img-container">
+                    <div class="entity-img-container">
                         <a href="{% url 'web.views.main.detail' selection.entity_context.entity_hash %}">
-                            <img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt="">
+                            <img class="entity-img" src="{{ selection.entity_context.chief_image.url }}" alt="entity image">
                         </a>
                     </div>
-                    <span class="like">喜爱 <small>{{ selection.entity_context.like_count }}</small></span>
+                    <span class="like-entity">喜爱 <small>{{ selection.entity_context.like_count }}</small></span>
                 </div>
 
                 <div class="note">
-                    {% display_note selection.note_context selection.creator_context user_context %}
+                    <div class="selection-note">
+                        {% display_note selection.note_context selection.creator_context user_context %}
+                    </div>
 
-                    <div class="more-note" style="display: none">
+                    <div class="common-note" style="display: none">
                         {% for note in selection.note_list %}
                             {% display_note note.note_context note.creator_context user_context %}
                         {% endfor %}
                     </div>
 
-                    <div class="operate-note">
+                    <div class="operate">
                         <a href="javascript:;" class="show-note">还有 {{ selection.note_list|length }} 条点评</a>
                         &sdot;
                         <a href="{% url 'web.views.main.detail' selection.entity_context.entity_hash %}#addnote"
