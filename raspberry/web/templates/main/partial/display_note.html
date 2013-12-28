@@ -1,4 +1,5 @@
 {% load common %}
+{% load web %}
 
 <div class="note-item">
     <a href="" class="avatar"><img src="{{ creator_context.avatar_small }}" width="50"
@@ -35,22 +36,7 @@
 
         <div class="note-comment" style="display: none">
             {% for comment in comment_list %}
-                <div class="note-comment-item">
-                    <a href="" class="avatar"><img src="{{ comment.creator_context.avatar_small }}"
-                                                   height="32" width="32"></a>
-
-                    <div class="note-comment-detail">
-                        <span class="nickname">{{ comment.creator_context.nickname }}</span>
-
-                        <p class="comment-content" data-creator="{{ comment.creator_context.user_id }}"
-                           data-comment="{{ comment.comment_context.comment_id }}">
-                            {% if comment.comment_context.reply_to_user_id != None %}回复
-                                {{ comment.comment_context.reply_to_user_nickname }}:
-                            {% endif %}{{ comment.comment_context.content }}</p>
-
-                        <a href="javascript:;" class="reply">回复</a>
-                    </div>
-                </div>
+                {% display_note_comment comment %}
             {% endfor %}
 
             <form method="POST" action="{% url 'web.views.note.add_comment' note_context.note_id %}">

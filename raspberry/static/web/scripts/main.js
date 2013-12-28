@@ -92,9 +92,7 @@
         var url = $form[0].action;
 
         $.post(url, $form.serialize(), function (data) {
-          if (parseInt(data) === 1) {
-            
-          }
+          $(data).insertBefore($form);
         });
       }
 
