@@ -6,7 +6,7 @@ cur_gk = conn_gk.cursor()
 cur_gk.execute("SET names utf8")
 
 
-print "DATE\tUSR\tENTY\tSLC\tLKE\tTAG\tNTE\tCMNT\tPOKE"
+print "DATE\tUSR\tENTY\tCRWL\tSLC\tLKE\tTAG\tNTE\tCMNT\tPOKE"
 for i in range(0, 30):
     start_time = datetime.datetime.now() - datetime.timedelta(hours = 24 * (30 - i))
     end_time = datetime.datetime.now() - datetime.timedelta(hours = 24 * (29 - i))
@@ -15,9 +15,13 @@ for i in range(0, 30):
     cur_gk.execute(sql_query)
     user_count_delta = cur_gk.fetchone()[0]
     
-    sql_query = "SELECT count(*) FROM base_entity WHERE created_time > '%s' AND created_time < '%s'"%(start_time, end_time)
+    sql_query = "SELECT count(*) FROM base_entity WHERE creator_id is not NULL AND created_time > '%s' AND created_time < '%s'"%(start_time, end_time)
     cur_gk.execute(sql_query)
     entity_count_delta = cur_gk.fetchone()[0]
+    
+    sql_query = "SELECT count(*) FROM base_entity WHERE creator_id is NULL AND created_time > '%s' AND created_time < '%s'"%(start_time, end_time)
+    cur_gk.execute(sql_query)
+    entity_crawler_count_delta = cur_gk.fetchone()[0]
     
     sql_query = "SELECT count(*) FROM base_note WHERE post_time > '%s' AND post_time < '%s'"%(start_time, end_time)
     cur_gk.execute(sql_query)
@@ -43,15 +47,19 @@ for i in range(0, 30):
     cur_gk.execute(sql_query)
     poke_count_delta = cur_gk.fetchone()[0]
 
-    print "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d"%(i - 30, user_count_delta, entity_count_delta, selection_count_delta, like_count_delta, tag_count_delta, note_count_delta, comment_count_delta, poke_count_delta)
+    print "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d"%(i - 30, user_count_delta, entity_count_delta, entity_crawler_count_delta, selection_count_delta, like_count_delta, tag_count_delta, note_count_delta, comment_count_delta, poke_count_delta)
 
 sql_query = "SELECT count(*) FROM auth_user"
 cur_gk.execute(sql_query)
 user_count = cur_gk.fetchone()[0]
 
-sql_query = "SELECT count(*) FROM base_entity"
+sql_query = "SELECT count(*) FROM base_entity WHERE creator_id is not NULL"
 cur_gk.execute(sql_query)
 entity_count = cur_gk.fetchone()[0]
+
+sql_query = "SELECT count(*) FROM base_entity WHERE creator_id is NULL"
+cur_gk.execute(sql_query)
+entity_crawler_count = cur_gk.fetchone()[0]
 
 sql_query = "SELECT count(*) FROM base_note"
 cur_gk.execute(sql_query)
@@ -77,7 +85,7 @@ sql_query = "SELECT count(*) FROM base_note_poke"
 cur_gk.execute(sql_query)
 poke_count = cur_gk.fetchone()[0]
 
-print "TOT\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d"%(user_count, entity_count, selection_count, like_count, tag_count, note_count, comment_count, poke_count)
+print "TOT\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d"%(user_count, entity_count, entity_crawler_count, selection_count, like_count, tag_count, note_count, comment_count, poke_count)
 
 cur_gk.execute("SELECT gender, COUNT(*) FROM base_user_profile GROUP BY gender;")
 print "\nGENDER\tCOUNT"
@@ -103,10 +111,49 @@ for row in cur_gk.fetchall():
         'user_id' : user_id,
         'like_count' : like_count
     })
-    if len(user_like_list) > 20:
+    if len(user_like_list) > 30:
         break
 
 for user in user_like_list:
     cur_gk.execute("SELECT nickname from base_user_profile where user_id=%d;"%user['user_id'])
     nickname = cur_gk.fetchone()[0]
     print "%d\t%s\t%d"%(user['user_id'], nickname, user['like_count'])
+
+
+print "\nTop note user:"
+sql_query = "select creator_id, count(*) as tot from base_note where created_time > '%s' group by creator_id order by tot desc;"%(start_time)
+cur_gk.execute(sql_query)
+user_note_list = [] 
+for row in cur_gk.fetchall():
+    user_id = row[0]
+    note_count = row[1]
+    user_note_list.append({
+        'user_id' : user_id,
+        'note_count' : note_count
+    })
+    if len(user_note_list) > 30:
+        break
+
+for user in user_note_list:
+    cur_gk.execute("SELECT nickname from base_user_profile where user_id=%d;"%user['user_id'])
+    nickname = cur_gk.fetchone()[0]
+    print "%d\t%s\t%d"%(user['user_id'], nickname, user['note_count'])
+
+print "\nTop poke user:"
+sql_query = "select user_id, count(*) as tot from base_note_poke where created_time > '%s' group by user_id order by tot desc;"%(start_time)
+cur_gk.execute(sql_query)
+user_poke_list = [] 
+for row in cur_gk.fetchall():
+    user_id = row[0]
+    poke_count = row[1]
+    user_poke_list.append({
+        'user_id' : user_id,
+        'poke_count' : poke_count
+    })
+    if len(user_poke_list) > 30:
+        break
+
+for user in user_poke_list:
+    cur_gk.execute("SELECT nickname from base_user_profile where user_id=%d;"%user['user_id'])
+    nickname = cur_gk.fetchone()[0]
+    print "%d\t%s\t%d"%(user['user_id'], nickname, user['poke_count'])
