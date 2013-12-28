@@ -11,19 +11,16 @@ from base.note import Note
 
 @login_required
 def poke_note(request, note_id):
-    _result = 0
-
     if request.method == 'POST':
         _user_id = request.user.id
         _note = Note(note_id)
 
         if _note.poke_already(_user_id):
             _note.depoke(note_id)
+            return HttpResponse('0')
         else:
             _note.poke(note_id)
-        _result = 1
-
-    return HttpResponse(json.dumps(_result))
+            return HttpResponse('1')
 
 
 @login_required
@@ -32,5 +29,5 @@ def add_comment(request, note_id):
 
 
 @login_required
-def del_comment(request, note_id):
+def delete_comment(request, comment_id):
     pass

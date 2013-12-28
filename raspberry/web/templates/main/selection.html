@@ -30,12 +30,12 @@
 
                 <div class="note">
                     <div class="selection-note">
-                        {% display_note selection.selection_note user_context %}
+                        {% display_note selection.selection_note selection.entity_context user_context %}
                     </div>
 
                     <div class="common-note" style="display: none">
                         {% for note in selection.common_note_list %}
-                            {% display_note note user_context %}
+                            {% display_note note selection.entity_context user_context %}
                         {% endfor %}
                     </div>
 

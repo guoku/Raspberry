@@ -39,13 +39,14 @@ def add_note(request, entity_id):
 
 
 @login_required
-def update_note(request, note_id):
+def update_note(request, entity_id):
     if request.method == 'POST':
         _note_text = request.POST.get('note_text', None)
+        _note_id = request.POST.get('note_id', None)
 
-        if _note_text is not None and len(_note_text) > 0:
-            _entity = Entity(int(note_id))
-            _entity.update_note(note_id, note_text=_note_text)
+        if _note_id is not None and _note_text is not None and len(_note_text) > 0:
+            _entity = Entity(int(entity_id))
+            _entity.update_note(_note_id, note_text=_note_text)
 
             return HttpResponse('1')
 

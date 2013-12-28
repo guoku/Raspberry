@@ -11,8 +11,9 @@
 
         {% if user_context.user_id == creator_context.user_id %}
             <form class="clearfix update-note-form"
-                  action="{% url 'web.views.entity.update_note' note_context.note_id %}"
+                  action="{% url 'web.views.entity.update_note' entity_context.entity_id %}"
                   method="POST" style="display: none">
+                <input type="hidden" name="note_id" value="{{ note_context.note_id }}">
                 <textarea name="note_text" class="text-input">{{ note_context.content }}</textarea>
 
                 <div>
@@ -33,21 +34,21 @@
         <span class="create-time">{{ note_context.created_time|format_time }}</span>
 
         <div class="note-comment" style="display: none">
-            {% for comment_context in comment_list %}
+            {% for comment in comment_list %}
                 <div class="note-comment-item">
-                    <a href="" class="avatar"><img src="{{ comment_context.creator_context.avatar_small }}"
+                    <a href="" class="avatar"><img src="{{ comment.creator_context.avatar_small }}"
                                                    height="32" width="32"></a>
 
                     <div class="note-comment-detail">
-                        <span class="nickname">{{ comment_context.creator_context.nickname }}</span>
+                        <span class="nickname">{{ comment.creator_context.nickname }}</span>
 
-                        <p class="comment-content">{{ comment_context.content }}</p>
+                        <p class="comment-content">{{ comment.comment_context.content }}</p>
                         <a href="javascript:;" class="reply">回复</a>
                     </div>
                 </div>
             {% endfor %}
 
-            <form method="POST" action="">
+            <form method="POST" action="{% url 'web.views.note.add_comment' note_context.note_id %}">
                 <input type="text" name="comment_text" class="text-input">
 
                 <div class="operate-comment">

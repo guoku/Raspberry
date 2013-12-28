@@ -24,12 +24,12 @@
                 </div>
 
                 <div class="selection-note">
-                    {% display_note selection_note user_context %}
+                    {% display_note selection_note entity_context user_context %}
                 </div>
                 <div class="common-note-count">还有 {{ note_list|length }} 条点评</div>
                 <div class="common-note">
                     {% for note in common_note_list %}
-                        {% display_note note user_context %}
+                        {% display_note note entity_context user_context %}
                     {% endfor %}
                 </div>
             </div>
