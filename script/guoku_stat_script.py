@@ -93,7 +93,7 @@ like_20_user_count = cur_gk.fetchone()[0]
 print "\nIn [%s - %s]\nthere are %d user with more than 20 like count"%(start_time, datetime.datetime.now(), like_20_user_count) 
 
 print "\nTop like user:"
-sql_query = "select user_id, count(*) as tot from guoku_entity_like where created_time > '2013-11-28' group by user_id order by tot desc;"
+sql_query = "select user_id, count(*) as tot from guoku_entity_like where created_time > '%s' group by user_id order by tot desc;"%(start_time)
 cur_gk.execute(sql_query)
 user_like_list = [] 
 for row in cur_gk.fetchall():
