@@ -1,8 +1,9 @@
 /**
  * Created by cuiwei on 13-12-26.
  */
-(function ($, document, window) {
+;(function ($, document, window) {
   var $selectionItem = $('.selection-item');
+  var $noteItem = $('.note-item');
 
   $selectionItem.each(function () {
     var $this = $(this);
@@ -12,9 +13,6 @@
       $this.find('.common-note').slideToggle('slow');
     });
   });
-
-
-  var $noteItem = $('.note-item');
 
   // 修改点评
   $noteItem.each(function () {
@@ -55,17 +53,54 @@
     });
   });
 
-  // 展开评论
-  $noteItem.find('.add-comment').on('click', function () {
-    var $noteDetail = $(this).parent();
-    var $noteComment = $noteDetail.find('.note-comment');
-    $noteComment.slideToggle('fast');
+  // 评论
+  $noteItem.each(function () {
+    var $this = $(this);
+    var $noteComment = $this.find('.note-comment');
+    var $form = $noteComment.find('form');
 
-    $noteDetail.find('.cancel-comment').one('click', function () {
-      $noteComment.slideUp('fast');
+    var $replyToUser = $form.find('input[name="reply_to_user_id"]');
+    var $replyToComment = $form.find('input[name="reply_to_comment_id"]');
+    var $commentText = $form.find('input[name="comment_text"]');
+
+    $this.find('.add-comment').on('click', function () {
+      $noteComment.slideToggle('fast');
+
+      $form.find('.cancel-comment').one('click', function () {
+        $noteComment.slideUp('fast');
+
+        $replyToUser.val('');
+        $replyToComment.val('');
+        $commentText.val('');
+      });
+    });
+
+    $noteComment.find('.reply').on('click', function () {
+      var $parent = $(this).parent();
+      var $p = $parent.find('.comment-content');
+      var $nickname = $parent.find('.nickname');
+
+      $commentText.val('回复 ' + $nickname.text() + ': ');
+      $replyToUser.val($p.attr('data-creator'));
+      $replyToComment.val($p.attr('data-comment'));
+    });
+
+    $form.find('.operate-comment input').on('click', function (e) {
+      var commentText = $commentText.val();
+
+      if (commentText.length > 0) {
+        var url = $form[0].action;
+
+        $.post(url, $form.serialize(), function (data) {
+          if (parseInt(data) === 1) {
+            
+          }
+        });
+      }
+
+      e.preventDefault();
     });
   });
-
 
   // 喜爱 like
   $('.like-entity').on('click', function () {

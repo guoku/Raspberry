@@ -34,7 +34,7 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     'web.views.note',
     (r'^note/(?P<note_id>\w+)/add_comment$', 'add_comment'),
-    (r'^note/(?P<comment_id>\w+)/delete_comment$', 'delete_comment')
+    (r'^note/(?P<note_id>\w+)/delete_comment$', 'delete_comment')
 )
 
 

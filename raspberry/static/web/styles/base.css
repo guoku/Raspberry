@@ -260,7 +260,7 @@ a:hover {
 }
 
 .note-item .note-comment-detail p {
-    margin: 5px;
+    margin: 5px 0;
     font-size: 13px;
 }
 
@@ -282,6 +282,7 @@ a:hover {
 
 .note-item .operate-comment .guoku-button {
     margin-left: 15px;
+    margin-right: 1px;
 }
 
 /*------------------------------*/
