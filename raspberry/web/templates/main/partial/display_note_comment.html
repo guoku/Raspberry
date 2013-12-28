@@ -5,6 +5,10 @@
     <div class="note-comment-detail">
         <span class="nickname">{{ creator_context.nickname }}</span>
 
+        {% if user_context.user_id == creator_context.user_id %}
+            <a href="javascript:;" class="close" data-comment="{{ comment_context.comment_id }}">&times;</a>
+        {% endif %}
+
         <p class="comment-content" data-creator="{{ creator_context.user_id }}"
            data-comment="{{ comment_context.comment_id }}">
             {% if comment_context.reply_to_user_id != None %}回复

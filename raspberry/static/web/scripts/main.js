@@ -58,10 +58,10 @@
     var $this = $(this);
     var $noteComment = $this.find('.note-comment');
     var $form = $noteComment.find('form');
-
-    var $replyToUser = $form.find('input[name="reply_to_user_id"]');
-    var $replyToComment = $form.find('input[name="reply_to_comment_id"]');
     var $commentText = $form.find('input[name="comment_text"]');
+
+    var replyToUser = '';
+    var replyToComment = '';
 
     $this.find('.add-comment').on('click', function () {
       $noteComment.slideToggle('fast');
@@ -69,8 +69,8 @@
       $form.find('.cancel-comment').one('click', function () {
         $noteComment.slideUp('fast');
 
-        $replyToUser.val('');
-        $replyToComment.val('');
+        replyToUser = '';
+        replyToComment = '';
         $commentText.val('');
       });
     });
@@ -81,18 +81,45 @@
       var $nickname = $parent.find('.nickname');
 
       $commentText.val('回复 ' + $nickname.text() + ': ');
-      $replyToUser.val($p.attr('data-creator'));
-      $replyToComment.val($p.attr('data-comment'));
+      replyToUser = $p.attr('data-creator');
+      replyToComment = $p.attr('data-comment');
+    });
+
+    $noteComment.find('.close').on('click', function () {
+      var comment_id = $(this).attr('data-comment');
+      var url = '/note/comment/' + comment_id + '/delete';
+
+      $.post(url, {}, function (data) {
+        if (parseInt(data) === 1) {
+          // delete
+        }
+      });
     });
 
     $form.find('.operate-comment input').on('click', function (e) {
-      var commentText = $commentText.val();
+      var commentText = $.trim($commentText.val());
+
+      commentText = commentText.replace(/^回复.*: /, function (str, index) {
+        if (index === 0) {
+          return '';
+        }
+        return str;
+      });
 
       if (commentText.length > 0) {
         var url = $form[0].action;
+        var data = {
+          comment_text: commentText,
+          reply_to_user_id: replyToUser,
+          reply_to_comment_id: replyToComment
+        };
 
-        $.post(url, $form.serialize(), function (data) {
-          $(data).insertBefore($form);
+        $.post(url, data, function (htmlData) {
+          $commentText.val('');
+          $(htmlData).insertBefore($form);
+
+          replyToUser = '';
+          replyToComment = '';
         });
       }
 

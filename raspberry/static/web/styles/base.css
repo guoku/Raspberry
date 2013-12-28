@@ -259,6 +259,16 @@ a:hover {
     overflow: hidden;
 }
 
+.note-item .note-comment-detail .close {
+    float: right;
+    font-size: 16px;
+    color: #999;
+}
+
+.note-item .note-comment-detail .close:hover {
+    text-decoration: none;
+}
+
 .note-item .note-comment-detail p {
     margin: 5px 0;
     font-size: 13px;

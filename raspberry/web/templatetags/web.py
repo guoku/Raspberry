@@ -20,10 +20,11 @@ def display_note(note, entity_context, user_context):
 register.inclusion_tag("main/partial/display_note.html")(display_note)
 
 
-def display_note_comment(comment):
+def display_note_comment(comment, user_context):
     return {
         'comment_context' : comment['comment_context'],
-        'creator_context' : comment['creator_context']
+        'creator_context' : comment['creator_context'],
+        'user_context' : user_context
     }
 
 register.inclusion_tag("main/partial/display_note_comment.html")(display_note_comment)
