@@ -96,6 +96,11 @@
                         冻结({{ freeze_entity_count }}) 
                     </a>
                 </li>
+                <li{%if status_filter == "recycle"%} class="active"{%endif%}>
+                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=recycle">
+                        剔除({{ recycle_entity_count }}) 
+                    </a>
+                </li>
             </ul>
         </div>
 

@@ -38,7 +38,7 @@ class Entity(object):
     @classmethod
     def cal_entity_hash(cls, entity_hash_string):
         while True:
-            _hash = md5(entity_hash_string + unicode(datetime.datetime.now())).hexdigest()[0:8]
+            _hash = md5((entity_hash_string + unicode(datetime.datetime.now())).encode('utf-8')).hexdigest()[0:8]
             try:
                 Entity.objects.get(entity_hash = _hash)
             except:
@@ -77,7 +77,7 @@ class Entity(object):
             _detail_image_ids.append(_image_id)
             
         
-        _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'])
+        _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'] + taobao_item_info['title'] + taobao_item_info['shop_nick'])
         
         try:
             _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = taobao_item_info["cid"])
@@ -328,8 +328,10 @@ class Entity(object):
         if like_word != None: 
             _q = Q(title__icontains = like_word)
             _hdl = _hdl.filter(_q)
-        if status < 0:
-            _hdl = _hdl.filter(weight__lt = 0)
+        if status == -1:
+            _hdl = _hdl.filter(weight = -1)
+        elif status == -2:
+            _hdl = _hdl.filter(weight = -2)
         elif status >= 0:
             _hdl = _hdl.filter(weight__gte = 0)
         if timestamp != None:
@@ -350,11 +352,14 @@ class Entity(object):
                 _hdl = _hdl.annotate(note_count = Count('note')).order_by('note_count')
             else:
                 _hdl = _hdl.annotate(note_count = Count('note')).order_by('-note_count')
-        else:
+        elif sort_by == 'time':
             if reverse:
                 _hdl = _hdl.order_by('created_time')
             else:
                 _hdl = _hdl.order_by('-created_time')
+        else:
+            _hdl = _hdl.order_by('-weight', '-like_count')
+             
         
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
@@ -412,8 +417,10 @@ class Entity(object):
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
         if status != None:
-            if status < 0:
-                _hdl = _hdl.filter(weight__lt = 0)
+            if status == -1:
+                _hdl = _hdl.filter(weight = -1)
+            elif status == -2:
+                _hdl = _hdl.filter(weight = -2)
             elif status >= 0:
                 _hdl = _hdl.filter(weight__gte = 0)
         return _hdl.count()
@@ -498,7 +505,12 @@ class Entity(object):
         _hdl = EntityLikeModel.objects.filter(user_id = _user_id)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
-        return map(lambda x : x.entity_id, _hdl[offset : offset + count])
+        
+        _list = []
+        for _obj in _hdl[offset : offset + count]:
+            _list.append([_obj.entity_id, _obj.created_time])
+
+        return _list
         
     def add_note(self, creator_id, note_text, score = 0, image_data = None):
         _note = Note.create(
