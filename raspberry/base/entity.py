@@ -352,11 +352,14 @@ class Entity(object):
                 _hdl = _hdl.annotate(note_count = Count('note')).order_by('note_count')
             else:
                 _hdl = _hdl.annotate(note_count = Count('note')).order_by('-note_count')
-        else:
+        elif sort_by == 'time':
             if reverse:
                 _hdl = _hdl.order_by('created_time')
             else:
                 _hdl = _hdl.order_by('-created_time')
+        else:
+            _hdl = _hdl.order_by('-weight', '-like_count')
+             
         
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
