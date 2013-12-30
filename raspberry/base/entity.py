@@ -38,7 +38,7 @@ class Entity(object):
     @classmethod
     def cal_entity_hash(cls, entity_hash_string):
         while True:
-            _hash = md5(entity_hash_string + unicode(datetime.datetime.now())).hexdigest()[0:8]
+            _hash = md5((entity_hash_string + unicode(datetime.datetime.now())).encode('utf-8')).hexdigest()[0:8]
             try:
                 Entity.objects.get(entity_hash = _hash)
             except:
@@ -77,7 +77,7 @@ class Entity(object):
             _detail_image_ids.append(_image_id)
             
         
-        _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'])
+        _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'] + taobao_item_info['title'] + taobao_item_info['shop_nick'])
         
         try:
             _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = taobao_item_info["cid"])
