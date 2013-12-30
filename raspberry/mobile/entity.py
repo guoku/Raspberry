@@ -7,6 +7,7 @@ from lib.sign import check_sign
 from mobile.models import Session_Key
 from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 import datetime
+import time
 
 @check_sign
 def entity_list(request):
@@ -178,8 +179,7 @@ def delete_entity_note(request, note_id):
         return SuccessJsonResponse({ 'delete_already' : 1 })
 
 
-
-@check_sign
+#@check_sign
 def user_like(request, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -193,9 +193,16 @@ def user_like(request, user_id):
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
         
-        _rslt = []
-        for _entity_id in MobileEntity.like_list_of_user(user_id = user_id, timestamp = _timestamp, offset = _offset, count = _count):
-            _rslt.append(MobileEntity(_entity_id).read(_request_user_id))
+        _list = []
+        _last_like_time = None
+        for _item in MobileEntity.like_list_of_user(user_id = user_id, timestamp = _timestamp, offset = _offset, count = _count):
+            _list.append(MobileEntity(_item[0]).read(_request_user_id))
+            _last_like_time = _item[1]
+
+        _rslt = {
+            'timestamp' : time.mktime(_last_like_time.timetuple()),
+            'entity_list' : _list
+        }
 
         return SuccessJsonResponse(_rslt)
     

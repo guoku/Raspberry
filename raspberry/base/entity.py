@@ -498,7 +498,12 @@ class Entity(object):
         _hdl = EntityLikeModel.objects.filter(user_id = _user_id)
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
-        return map(lambda x : x.entity_id, _hdl[offset : offset + count])
+        
+        _list = []
+        for _obj in _hdl[offset : offset + count]:
+            _list.append([_obj.entity_id, _obj.created_time])
+
+        return _list
         
     def add_note(self, creator_id, note_text, score = 0, image_data = None):
         _note = Note.create(
