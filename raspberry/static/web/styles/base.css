@@ -78,7 +78,8 @@ a:hover {
     margin: 0 auto;
 }
 
-#header img {
+#header .logo {
+    display: inline-block;
     padding-top: 8px;
 }
 
@@ -122,15 +123,88 @@ a:hover {
 
 #header .user {
     float: right;
-    line-height: 49px;
+    position: relative;
 }
 
-#header .user a {
-    padding: 0 10px;
+#header .user a:hover {
+    text-decoration: none;
 }
 
-#header .user a.login-link {
-    padding-right: 1px;
+#header .user .tool {
+    display: inline-block;
+    margin-top: 14px;
+}
+
+#header .user .tool a {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 22px;
+}
+
+#header .user .tool .add {
+    background: url(/static/web/images/header_icon.png) no-repeat -58px -13px;
+}
+
+#header .user .tool .friend {
+    background: url(/static/web//images/header_icon.png) no-repeat -110px -13px;
+}
+
+#header .user .tool .message {
+    background: url(/static/web//images/header_icon.png) no-repeat -156px -13px;
+}
+
+#header .user .container {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    height: 32px;
+    margin-top: 10px;
+    padding: 6px 10px 0;
+}
+
+#header .user .container-hover {
+    border-bottom: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    border-radius: 2px;
+}
+
+#header .user .container img {
+    position: absolute;
+    left: 10px;
+    top: 2px;
+}
+
+#header .user .container span {
+    margin-left: 35px;
+}
+
+#header .user .container small {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border: solid 4px;
+    border-color: #000 #fff #fff #fff;
+    margin-left: 5px;
+}
+
+#header .user .pop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 35px;
+    z-index: 10;
+    padding-right: 20px;
+    line-height: 1.2;
+    text-align: right;
+
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    border-radius: 2px;
+}
+
+#header .user .pop a {
+    display: block;
 }
 
 /*-----------------------------------------*/
@@ -185,7 +259,7 @@ a:hover {
 }
 
 .note-item .note-detail form {
-   margin: 10px 0;
+    margin: 10px 0;
 }
 
 .note-item .note-detail textarea {
