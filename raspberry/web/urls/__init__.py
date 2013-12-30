@@ -25,16 +25,16 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     'web.views.entity',
     (r'^entity/(?P<entity_id>\w+)/like/$', 'like_entity'),
-    (r'^entity/(?P<entity_id>\w+)/add_note/$', 'add_note'),
-    (r'^entity/(?P<entity_id>\w+)/update_note/$', 'update_note'),
-    (r'^entity/(?P<note_id>\w+)/delete_note/$', 'delete_note')
+    (r'^entity/(?P<entity_id>\w+)/note/create/$', 'add_note'),
+    (r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/update/$', 'update_note'),
+    (r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/delete/$', 'delete_note')
 )
 
 
 urlpatterns += patterns(
     'web.views.note',
-    (r'^note/(?P<note_id>\w+)/add_comment$', 'add_comment'),
-    (r'^note/(?P<note_id>\w+)/delete_comment$', 'delete_comment')
+    (r'^note/(?P<note_id>\w+)/comment/create/$', 'add_comment'),
+    (r'^note/(?P<note_id>\w+)/comment/(?P<comment_id>\w+)/delete/$', 'delete_comment')
 )
 
 

@@ -39,7 +39,7 @@ def selection(request, template='main/selection.html'):
     _user = request.user
     _user_context = None
 
-    if _user.id is not None:
+    if _user.is_authenticated():
         _user_context = User(_user.id).read()
 
     _page_num = int(request.GET.get('p', 1))
@@ -129,7 +129,7 @@ def detail(request, entity_hash, template='main/detail.html'):
     _user = request.user
     _user_context = None
 
-    if _user.id is not None:
+    if _user.is_authenticated():
         _user_context = User(_user.id).read()
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)

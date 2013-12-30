@@ -54,22 +54,22 @@ def add_comment(request, note_id, template='main/partial/display_note_comment.ht
             return render_to_response(
                 template,
                 {
-                    'comment_context' : _comment_context,
-                    'creator_context' : _creator_context
+                    'comment_context': _comment_context,
+                    'creator_context': _creator_context
                 },
                 context_instance=RequestContext(request)
             )
 
 
 @login_required
-def delete_comment(request, comment_id):
+def delete_comment(request, note_id, comment_id):
     if request.method == 'POST':
-        _comment_id = int(comment_id)
+        _note = Note(note_id)
+        _note_context = _note.read()
+        _comment_context = _note.read_comment(comment_id)
+        _user_id = request.user.id
 
-        _note = Note()
-
-        if _comment_id is not None:
-            _note = Note(note_id)
-            _note.del_comment(int(_comment_id))
+        if _comment_context['creator_id'] == _user_id or _note_context['creator_id'] == _user_id:
+            _note.del_comment(comment_id)
 
             return HttpResponse('1')

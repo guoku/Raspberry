@@ -85,15 +85,16 @@
       replyToComment = $p.attr('data-comment');
     });
 
-    $noteComment.find('.close').on('click', function () {
-      var comment_id = $(this).attr('data-comment');
-      var url = '/note/comment/' + comment_id + '/delete';
+    $noteComment.find('.close').on('click', function (e) {
+      var $noteCommentItem = $(this).parent().parent();
 
-      $.post(url, {}, function (data) {
+      $.post(this.href, function (data) {
         if (parseInt(data) === 1) {
-          // delete
+          $noteCommentItem.remove();
         }
       });
+
+      e.preventDefault();
     });
 
     $form.find('.operate-comment input').on('click', function (e) {

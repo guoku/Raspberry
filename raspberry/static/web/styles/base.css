@@ -229,7 +229,8 @@ a:hover {
 }
 
 .note-item .note-detail .my-note {
-    margin-left: 330px;
+    float: right;
+    margin-right: 10px;
     padding: 3px;
     color: #666;
     background-color: #fffdca;

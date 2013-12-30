@@ -12,9 +12,8 @@
 
         {% if user_context.user_id == creator_context.user_id %}
             <form class="clearfix update-note-form"
-                  action="{% url 'web.views.entity.update_note' entity_context.entity_id %}"
+                  action="{% url 'web.views.entity.update_note' entity_context.entity_id note_context.note_id %}"
                   method="POST" style="display: none">
-                <input type="hidden" name="note_id" value="{{ note_context.note_id }}">
                 <textarea name="note_text" class="text-input">{{ note_context.content }}</textarea>
 
                 <div>
@@ -27,16 +26,16 @@
         <a href="javascript:;" class="poke">{{ note_context.poke_count }}</a>
         <a href="javascript:;" class="add-comment">{{ comment_list|length }}</a>
 
+        <span class="create-time">{{ note_context.created_time|format_time }}</span>
+
         {% if user_context.user_id == creator_context.user_id %}
             <a href="javascript:;" class="update-note">修改</a>
             <span class="my-note">你的点评</span>
         {% endif %}
 
-        <span class="create-time">{{ note_context.created_time|format_time }}</span>
-
         <div class="note-comment" style="display: none">
             {% for comment in comment_list %}
-                {% display_note_comment comment user_context %}
+                {% display_note_comment comment user_context note_context %}
             {% endfor %}
 
             <form method="POST" action="{% url 'web.views.note.add_comment' note_context.note_id %}">
