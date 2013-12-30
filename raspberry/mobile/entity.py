@@ -179,7 +179,7 @@ def delete_entity_note(request, note_id):
         return SuccessJsonResponse({ 'delete_already' : 1 })
 
 
-#@check_sign
+@check_sign
 def user_like(request, user_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
