@@ -317,6 +317,8 @@ def entity_list(request):
         _status = request.GET.get("status", "all")
         if _status == "freeze":
             _status_code = -1 
+        elif _status == "recycle":
+            _status_code = -2 
         elif _status == "normal":
             _status_code = 1
         else:
@@ -345,6 +347,7 @@ def entity_list(request):
         _category_groups = Category.allgroups()
         _normal_entity_count = Entity.count(category_id = _category_id, status = 0) 
         _freeze_entity_count = Entity.count(category_id = _category_id, status = -1)
+        _recycle_entity_count = Entity.count(category_id = _category_id, status = -2)
         
         _entity_count = Entity.count(
             category_id = _category_id,
@@ -411,6 +414,7 @@ def entity_list(request):
                 'category_group_id': _category_group_id,
                 'normal_entity_count': _normal_entity_count,
                 'freeze_entity_count': _freeze_entity_count,
+                'recycle_entity_count': _recycle_entity_count,
                 'entity_context_list': _entity_context_list,
                 'paginator': _paginator,
                 'sort_by': _sort_by,
@@ -606,3 +610,12 @@ def read_taobao_item_state(request):
         _result['entity'] = _entity
 
     return HttpResponse(json.dumps(_result, cls=DjangoJSONEncoder))
+
+@login_required
+def recycle_entity(request, entity_id):
+    if request.method == 'GET':
+        _entity = Entity(entity_id)
+        _entity.update(
+            weight = -2
+        )
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])

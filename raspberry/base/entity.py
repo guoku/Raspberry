@@ -328,8 +328,10 @@ class Entity(object):
         if like_word != None: 
             _q = Q(title__icontains = like_word)
             _hdl = _hdl.filter(_q)
-        if status < 0:
-            _hdl = _hdl.filter(weight__lt = 0)
+        if status == -1:
+            _hdl = _hdl.filter(weight = -1)
+        elif status == -2:
+            _hdl = _hdl.filter(weight = -2)
         elif status >= 0:
             _hdl = _hdl.filter(weight__gte = 0)
         if timestamp != None:
@@ -412,8 +414,10 @@ class Entity(object):
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
         if status != None:
-            if status < 0:
-                _hdl = _hdl.filter(weight__lt = 0)
+            if status == -1:
+                _hdl = _hdl.filter(weight = -1)
+            elif status == -2:
+                _hdl = _hdl.filter(weight = -2)
             elif status >= 0:
                 _hdl = _hdl.filter(weight__gte = 0)
         return _hdl.count()
