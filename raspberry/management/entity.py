@@ -354,7 +354,7 @@ def entity_list(request):
             status = _status_code
         )
 
-        _sort_by = request.GET.get("sort_by", None)
+        _sort_by = request.GET.get("sort_by", "time")
         _reverse = request.GET.get("reverse", None)
         if _sort_by:
             _para["sort_by"] = _sort_by
@@ -398,7 +398,14 @@ def entity_list(request):
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
-                    _entity_context['taobao_id'] = '' 
+                    _entity_context['taobao_id'] = ''
+                _entity_context['is_selected'] = False
+                if _entity_context.has_key('note_id_list') and len(_entity_context['note_id_list']):
+                    for _note_id in _entity_context['note_id_list']:
+                        _note_context = Note(_note_id).read()
+                        if _note_context['is_selected']:
+                            _entity_context['is_selected'] = True
+                            break
                 _entity_context_list.append(_entity_context)
             except Exception, e:
                 pass
