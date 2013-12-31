@@ -126,6 +126,16 @@ a:hover {
     position: relative;
 }
 
+#header .user .login {
+    display: inline-block;
+    height: 49px;
+    line-height: 49px;
+}
+
+#header .user .login .sep {
+    margin: 0 10px;
+}
+
 #header .user a:hover {
     text-decoration: none;
 }
@@ -158,25 +168,31 @@ a:hover {
     position: relative;
     display: inline-block;
     vertical-align: top;
-    height: 32px;
-    margin-top: 10px;
-    padding: 6px 10px 0;
+    height: 34px;
+    margin-top: 8px;
+    padding: 6px;
 }
 
 #header .user .container-hover {
-    border-bottom: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    height: 115px;
     border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    background-color: #fff;
+}
+
+#header .user .container .nickname {
+    display: inline-block;
+    padding-top: 3px;
 }
 
 #header .user .container img {
     position: absolute;
     left: 10px;
-    top: 2px;
+    top: 4px;
 }
 
 #header .user .container span {
-    margin-left: 35px;
+    margin-left: 38px;
 }
 
 #header .user .container small {
@@ -184,8 +200,11 @@ a:hover {
     width: 0;
     height: 0;
     border: solid 4px;
-    border-color: #000 #fff #fff #fff;
-    margin-left: 5px;
+    border-color: #999 #fff #fff #fff;
+}
+
+#header .user .container small.hover {
+    border-color: #333 #fff #fff #fff;
 }
 
 #header .user .pop {
@@ -194,17 +213,20 @@ a:hover {
     right: 0;
     top: 35px;
     z-index: 10;
-    padding-right: 20px;
+    padding-right: 14px;
+    padding-left: 10px;
     line-height: 1.2;
     text-align: right;
-
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
-    border-radius: 2px;
 }
 
 #header .user .pop a {
     display: block;
+    margin-bottom: 8px;
+    padding: 2px 5px 2px 0;
+}
+
+#header .user .pop a:hover {
+    background-color: #eee;
 }
 
 /*-----------------------------------------*/

@@ -1,7 +1,8 @@
 /**
  * Created by cuiwei on 13-12-26.
  */
-;(function ($, document, window) {
+;
+(function ($, document, window) {
   var $selectionItem = $('.selection-item');
   var $noteItem = $('.note-item');
 
@@ -100,12 +101,14 @@
     $form.find('.operate-comment input').on('click', function (e) {
       var commentText = $.trim($commentText.val());
 
-      commentText = commentText.replace(/^回复.*: /, function (str, index) {
+      commentText = commentText.replace(/^回复.*[:：]/, function (str, index) {
         if (index === 0) {
           return '';
         }
         return str;
       });
+
+      commentText = $.trim(commentText);
 
       if (commentText.length > 0) {
         var url = $form[0].action;
@@ -151,11 +154,24 @@
     });
   });
 
+  // header user hover
+  $('#header .user .container').hover(function () {
+    var $this = $(this);
+    var $pop = $this.find('.pop');
+    var $small = $this.find('small');
 
+    $this.addClass('container-hover');
+    $small.addClass('hover');
+    $pop.show();
+  }, function () {
+    var $this = $(this);
+    var $pop = $this.find('.pop');
+    var $small = $this.find('small');
 
-
-
-
+    $this.removeClass('container-hover');
+    $pop.hide();
+    $small.removeClass('hover');
+  });
 
 
 })(jQuery, document, window);

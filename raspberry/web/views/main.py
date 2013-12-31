@@ -9,6 +9,7 @@ from base.note import Note
 from base.entity import Entity
 from base.user import User
 from base.category import Old_Category
+from util import get_user_context
 
 
 def _get_comment_list(note):
@@ -36,11 +37,7 @@ def _get_comment_list(note):
 
 
 def selection(request, template='main/selection.html'):
-    _user = request.user
-    _user_context = None
-
-    if _user.is_authenticated():
-        _user_context = User(_user.id).read()
+    _user_context = get_user_context(request.user)
 
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
@@ -75,8 +72,8 @@ def selection(request, template='main/selection.html'):
 
         _already_like = False
 
-        if _user.id is not None:
-            _already_like = _entity.like_already(_user.id)
+        if request.user.id is not None:
+            _already_like = _entity.like_already(request.user.id)
 
         _note_id_list = Note.find(entity_id=_entity_id)
         _selection_note = {}
@@ -115,7 +112,6 @@ def selection(request, template='main/selection.html'):
     return render_to_response(
         template,
         {
-            'user' : _user,
             'user_context' : _user_context,
             'selection_list' : _selection_list,
             'category_list' : _old_category_list,
@@ -126,11 +122,7 @@ def selection(request, template='main/selection.html'):
 
 
 def detail(request, entity_hash, template='main/detail.html'):
-    _user = request.user
-    _user_context = None
-
-    if _user.is_authenticated():
-        _user_context = User(_user.id).read()
+    _user_context = get_user_context(request.user)
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
@@ -146,7 +138,7 @@ def detail(request, entity_hash, template='main/detail.html'):
         _comment_list = _get_comment_list(_note)
         _creator_context = User(_note_context['creator_id']).read()
 
-        if _creator_context['user_id'] == _user.id:
+        if _creator_context['user_id'] == request.user.id:
             _user_already_note = True
 
         # 判断是否是精选
@@ -168,7 +160,6 @@ def detail(request, entity_hash, template='main/detail.html'):
     return render_to_response(
         template,
         {
-            'user' : _user,
             'user_context' : _user_context,
             'user_already_note' : _user_already_note,
             'entity_context' : _entity_context,
@@ -180,6 +171,8 @@ def detail(request, entity_hash, template='main/detail.html'):
 
 
 def popular(request, template='main/popular.html'):
+    _user_context = get_user_context(request.user)
+
     _group = request.GET.get('group', 'daily')
 
     # generate_popular_entity()
@@ -190,17 +183,19 @@ def popular(request, template='main/popular.html'):
     return render_to_response(
         template,
         {
-
+            'user_context' : _user_context
         },
         context_instance=RequestContext(request)
     )
 
 
 def discover(request, template='main/discover.html'):
+    _user_context = get_user_context(request.user)
+
     return render_to_response(
         template,
         {
-
+            'user_context' : _user_context
         },
         context_instance=RequestContext(request)
     )

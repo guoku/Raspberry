@@ -8,6 +8,7 @@ from base.user import User
 register = template.Library()
 
 
+# note ---
 def display_note(note, entity_context, user_context):
     return {
         'note_context' : note['note_context'],

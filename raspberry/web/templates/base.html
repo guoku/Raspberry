@@ -30,22 +30,25 @@
                     <a href="" class="message"></a>
                 </div>
 
-                <div class="container container-hover">
-                    <a href="">
+                <div class="container">
+                    <a href="{% url 'web.views.user.likes' user.id %}" class="nickname">
                         <img src="{{ user_context.avatar_small }}" height="25" width="25">
-                        <span>{{ user_context.nickname }}</span>
+                        <span>{{ user_context.nickname|truncatechars:12 }}</span>
                         <small></small>
                     </a>
 
-                    <div style="" class="pop">
-                        <a href="">我的果库</a>
-                        <a href="">设置</a>
+                    <div style="display: none" class="pop">
+                        <a href="{% url 'web.views.user.likes' user.id %}">我的果库</a>
+                        <a href="{% url 'web.views.accounts.setting' %}">设置</a>
                         <a href="{% url 'web.views.accounts.logout' %}">退出</a>
                     </div>
                 </div>
             {% else %}
-                <a href="{% url 'web.views.accounts.register' %}">注册</a> |
-                <a href="{% url 'web.views.accounts.login' %}">登录</a>
+                <span class="login">
+                    <a href="{% url 'web.views.accounts.register' %}">注册</a>
+                    <span class="sep">|</span>
+                    <a href="{% url 'web.views.accounts.login' %}">登录</a>
+                </span>
             {% endif %}
         </div>
     </div>

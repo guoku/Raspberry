@@ -18,7 +18,8 @@ urlpatterns += patterns(
     (r'^accounts/logout/$', 'logout'),
     (r'^accounts/register/$', 'register'),
     (r'^accounts/register/validate_nickname/$', 'is_nickname_used'),
-    (r'^accounts/register/validate_email/$', 'is_email_used')
+    (r'^accounts/register/validate_email/$', 'is_email_used'),
+    (r'^accounts/setting/$', 'setting')
 )
 
 
@@ -38,7 +39,13 @@ urlpatterns += patterns(
 )
 
 
-# urlpatterns += patterns(
-#     'web.views.user',
-#     (r'', '')
-# )
+urlpatterns += patterns(
+    'web.views.user',
+    (r'^u/(?P<user_id>\w+)/$', 'likes'),
+    (r'^u/(?P<user_id>\w+)/likes/$', 'likes'),
+    (r'^u/(?P<user_id>\w+)/posts/$', 'posts'),
+    (r'^u/(?P<user_id>\w+)/notes/$', 'notes'),
+    (r'^u/(?P<user_id>\w+)/tags/$', 'tags'),
+    (r'^u/(?P<user_id>\w+)/followings/$', 'followings'),
+    (r'^u/(?P<user_id>\w+)/fans/$', 'fans')
+)
