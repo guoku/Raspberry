@@ -110,6 +110,7 @@ class Entity(models.Model):
     intro = models.TextField(null = False, default = '')
     price = models.DecimalField(max_digits = 20, decimal_places = 2, default = 0, db_index = True)
     like_count = models.IntegerField(default = 0, db_index = True)
+    mark = models.IntegerField(default = 0, db_index = True)
     chief_image = models.CharField(max_length = 64, null = False)
     detail_images = models.CharField(max_length = 1024, null = True)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
