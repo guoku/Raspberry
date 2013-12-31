@@ -50,6 +50,12 @@ SPHINX_API_VERSION = 0x116
 SPHINX_SERVER = 'localhost' 
 SPHINX_port = 3312 
 
+
+#mongo db
+MANGO_HOST = 'localhost' 
+MANGO_PORT = 27017
+
+
 JUMP_TO_TAOBAO = True 
 
 IMAGE_LOCAL = True 

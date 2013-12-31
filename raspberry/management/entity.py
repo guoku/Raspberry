@@ -16,6 +16,7 @@ from base.category import Category, Old_Category
 from base.entity import Entity
 from base.item import Item
 from base.note import Note
+from base.taobao_shop import TaobaoShop 
 from base.user import User
 from utils.paginator import Paginator
 from base import fetcher 
@@ -193,7 +194,15 @@ def edit_entity(request, entity_id):
             _item_context = Item(_item_id).read()
             if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
                 _entity_context['recommend_title'] = _item_context['title']
+            _item_context['commission_type'] = 'unknown' 
+            _item_context['commission_rate'] = -1 
+            if _item_context.has_key('shop_nick'):
+                _shop_context = TaobaoShop(_item_context['shop_nick']).read()
+                if _shop_context != None:
+                    _item_context['commission_rate'] = _shop_context['commission_rate']
+                    _item_context['commission_type'] = _shop_context['commission_type']
             _item_context_list.append(_item_context)
+
 
         _note_count = Note.count(entity_id=entity_id)
 
@@ -308,6 +317,8 @@ def entity_list(request):
         _status = request.GET.get("status", "all")
         if _status == "freeze":
             _status_code = -1 
+        elif _status == "recycle":
+            _status_code = -2 
         elif _status == "normal":
             _status_code = 1
         else:
@@ -336,6 +347,7 @@ def entity_list(request):
         _category_groups = Category.allgroups()
         _normal_entity_count = Entity.count(category_id = _category_id, status = 0) 
         _freeze_entity_count = Entity.count(category_id = _category_id, status = -1)
+        _recycle_entity_count = Entity.count(category_id = _category_id, status = -2)
         
         _entity_count = Entity.count(
             category_id = _category_id,
@@ -369,11 +381,20 @@ def entity_list(request):
                 _entity = Entity(_entity_id)
                 _entity_context = _entity.read()
                 _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
+                _entity_context['commission_rate'] = -1 
+                _entity_context['commission_type'] = 'unknown' 
                 if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
                     _item_context = Item(_entity_context['item_id_list'][0]).read()
                     _entity_context['buy_link'] = _item_context['buy_link'] 
                     _entity_context['taobao_title'] = _item_context['title'] 
                     _entity_context['taobao_id'] = _item_context['taobao_id'] 
+                    _entity_context['taobao_shop_nick'] = _item_context['shop_nick'] 
+                    
+                    if _item_context.has_key('shop_nick'):
+                        _shop_context = TaobaoShop(_item_context['shop_nick']).read()
+                        if _shop_context != None:
+                            _entity_context['commission_rate'] = _shop_context['commission_rate']
+                            _entity_context['commission_type'] = _shop_context['commission_type']
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
@@ -393,6 +414,7 @@ def entity_list(request):
                 'category_group_id': _category_group_id,
                 'normal_entity_count': _normal_entity_count,
                 'freeze_entity_count': _freeze_entity_count,
+                'recycle_entity_count': _recycle_entity_count,
                 'entity_context_list': _entity_context_list,
                 'paginator': _paginator,
                 'sort_by': _sort_by,
@@ -588,3 +610,12 @@ def read_taobao_item_state(request):
         _result['entity'] = _entity
 
     return HttpResponse(json.dumps(_result, cls=DjangoJSONEncoder))
+
+@login_required
+def recycle_entity(request, entity_id):
+    if request.method == 'GET':
+        _entity = Entity(entity_id)
+        _entity.update(
+            weight = -2
+        )
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])

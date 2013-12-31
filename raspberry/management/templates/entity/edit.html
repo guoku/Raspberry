@@ -194,6 +194,20 @@
                                 <input class="input-xxlarge" type="text" id="shop_nick" name="shop_nick" value="{{ item_context.shop_nick }}" disabled/>
                             </div>
                         </div>
+                        {% if item_context.commission_type != 'unknown' %}
+                            <div class="control-group">
+                                <label class="control-label" for="commission_type">计划</label>
+                                <div class="controls">
+                                    <input class="input-xxlarge" type="text" id="commission_type" name="commission_type" value="{%if item_context.commission_type == 'general'%}通用{%else%}定向{%endif%}" disabled/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="commission_rate">分成</label>
+                                <div class="controls">
+                                    <input class="input-xxlarge" type="text" id="commission_rate" name="commission_rate" value="{{ item_context.commission_rate }}" disabled/>
+                                </div>
+                            </div>
+                        {% endif %}
                         <div class="control-group">
                             <label class="control-label" for="price">价格</label>
                             <div class="controls">

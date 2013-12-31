@@ -13,5 +13,8 @@ class MobileUser(User):
         _context = super(MobileUser, self).read()
         if request_user_id:
             _context['relation'] = MobileUser.get_relation(request_user_id, self.user_id)
+        else:
+            _context['relation'] = 0 
+            
         return _context
     

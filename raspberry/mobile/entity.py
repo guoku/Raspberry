@@ -7,6 +7,7 @@ from lib.sign import check_sign
 from mobile.models import Session_Key
 from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 import datetime
+import time
 
 @check_sign
 def entity_list(request):
@@ -19,6 +20,13 @@ def entity_list(request):
         _timestamp = request.GET.get('timestamp', None)
         if _timestamp != None:
             _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
+        
+        _sort_by = request.GET.get('sort', 'time')
+        _reverse = request.GET.get('reverse', '0')
+        if _reverse == '0':
+            _reverse = False
+        else:
+            _reverse = True
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
         _root_old_cat_id = request.GET.get('rcat', None)
@@ -30,6 +38,8 @@ def entity_list(request):
             timestamp = _timestamp,
             offset = _offset,
             count = _count,
+            sort_by = _sort_by,
+            reverse = _reverse,
             status = 1
         )
         _rslt = []
@@ -74,7 +84,7 @@ def category_entity(request, category_id):
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
             _request_user_id = None
-        _sort_by = request.GET.get('sort', 'new')
+        _sort_by = request.GET.get('sort', None)
         _reverse = request.GET.get('reverse', '0')
         if _reverse == '0':
             _reverse = False
@@ -178,7 +188,6 @@ def delete_entity_note(request, note_id):
         return SuccessJsonResponse({ 'delete_already' : 1 })
 
 
-
 @check_sign
 def user_like(request, user_id):
     if request.method == "GET":
@@ -193,9 +202,16 @@ def user_like(request, user_id):
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
         
-        _rslt = []
-        for _entity_id in MobileEntity.like_list_of_user(user_id = user_id, timestamp = _timestamp, offset = _offset, count = _count):
-            _rslt.append(MobileEntity(_entity_id).read(_request_user_id))
+        _list = []
+        _last_like_time = None
+        for _item in MobileEntity.like_list_of_user(user_id = user_id, timestamp = _timestamp, offset = _offset, count = _count):
+            _list.append(MobileEntity(_item[0]).read(_request_user_id))
+            _last_like_time = _item[1]
+
+        _rslt = {
+            'timestamp' : time.mktime(_last_like_time.timetuple()),
+            'entity_list' : _list
+        }
 
         return SuccessJsonResponse(_rslt)
     

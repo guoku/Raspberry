@@ -14,7 +14,41 @@ import json
 from base.entity import Entity 
 from base.note import Note
 from base.user import User
+from tasks import ArrangeSelectionTask
 from utils.paginator import Paginator
+
+
+@login_required
+def arrange_selection(request):
+    if request.method == 'GET':
+        _t_start = datetime.datetime.now() + datetime.timedelta(days = 1) 
+        _year = _t_start.year
+        _month = _t_start.month
+        _date = _t_start.day
+        _start_time = "%d-%d-%d 8:00:00"%(_year, _month, _date) 
+        
+        _pending_note_count = Note.count(pending_selection = True)
+        return render_to_response( 
+            'note/arrange.html', 
+            {
+                'active_division' : 'note',
+                'pending_note_count' : _pending_note_count,
+                'start_time' : _start_time
+            },
+            context_instance = RequestContext(request)
+        )
+    else:
+        _count = int(request.POST.get("count", None))
+        _start_time = request.POST.get("start_time")
+        _start_time = datetime.datetime.strptime(_start_time, "%Y-%m-%d %H:%M:%S")
+        _interval = int(request.POST.get("interval", None))
+        ArrangeSelectionTask.delay(
+            select_count = _count,
+            start_time = _start_time,
+            interval_secs = _interval
+        )
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        
 
 
 @login_required

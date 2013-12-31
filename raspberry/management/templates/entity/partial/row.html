@@ -1,7 +1,13 @@
 {% load management %}
 {% load common %}
 
-<tr {% if entity_context.weight < 0 %}class="info"{% else %}class="success"{% endif %}>
+<tr {% if entity_context.weight == -2 %} class=""
+    {% elif entity_context.weight >= 0 %} class="success"
+    {% elif entity_context.creator_id == None %} class="warning"
+    {% else %} class="info"
+    {% endif %}
+>
+
     <td width="90">
         <a href="http://item.taobao.com/item.htm?id={{ entity_context.taobao_id }}" target="_blank">
             <img class="img-polaroid" src="{{ entity_context.chief_image.url }}" style="max-height:80px;max-width:80px;">
@@ -11,13 +17,18 @@
     <td width="100"><a href="{% url 'management.views.entity_list' %}?cid={{entity_context.category_id}}" target="_blank"><p class="text-info">{{ entity_context.category_title }}</p></a></td>
     <td width="100"><p class="text-info">{{ entity_context.brand }}</p></td>
     <td><p class="text-info">{{ entity_context.title }}</p></td>
-    <td><p class="text-info">{{ entity_context.taobao_title }}</p></td>
+    <td><p class="text-info">{{ entity_context.taobao_shop_nick }}</p></td>
+    <td><p class="text-info">{%if entity_context.commission_type == 'unknown'%}{%else%}{%if entity_context.commission_type == 'general' %}通用{%else%}定向{%endif%}{%endif%}</p></td>
+    <td><p class="text-info">{%if entity_context.commission_rate > 0 %}{{ entity_context.commission_rate }}{%endif%}</p></td>
     <td width="100"><p class="text-info">{{ entity_context.created_time|date_format }}</p></td>
     <td width="50"><p class="text-info">{{ entity_context.note_id_list|count }}</p></td>
     <td width="80"><p class="text-info">{{ entity_context.item_id_list|count }}</p></td>
     <td width="80">
         <div class="btn-group">
             <a class="btn" href="{% url 'management.views.edit_entity' entity_context.entity_id %}">编</a>
+            {% if entity_context.weight == -1 %}
+                <a class="btn" href="{% url 'management.views.recycle_entity' entity_context.entity_id %}">剔</a>
+            {% endif %}
         </div>
     </td>
 </tr>

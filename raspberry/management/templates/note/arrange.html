@@ -1,0 +1,60 @@
+{% extends "management_base.html" %}
+{% load common %}
+
+{% block content %}
+    <div class="container">
+        <div>
+            <form class="well form-horizontal" action="{% url 'management.views.arrange_selection' %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="pending_selection_count" style="padding-top: 0">待发布精选:</label>
+                        <div class="controls">{{ pending_note_count }}</div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="count">数量:</label>
+                        <div class="controls">
+                            <input type="text" id="count" name="count" value="91" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="start_time">起始时间:</label>
+                        <div class="controls vDateClass" id="pub-time">
+                            <input type="text" id="start_time" name="start_time" value="{{ start_time }}" />
+                            <button class="btn" type="button">现在</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="interval">间隔（秒）:</label>
+                        <div class="controls">
+                            <input type="text" id="interval" name="interval" value="600" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">执行</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block extra %}
+    <script>
+        (function ($) {
+            $("#pub-time button").click(function () {
+                var date = new Date();
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var day = date.getDate();
+                var hour = date.getHours();
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+
+                var date_str = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                $("#pub-time input").val(date_str);
+            });
+        })(jQuery)
+    </script>
+{% endblock %}
+
