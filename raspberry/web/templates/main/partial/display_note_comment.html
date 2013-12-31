@@ -1,9 +1,11 @@
 <div class="note-comment-item">
-    <a href="" class="avatar"><img src="{{ creator_context.avatar_small }}"
-                                   height="32" width="32"></a>
+    <a class="avatar" href="{% url 'web.views.user.index' creator_context.user_id %}">
+        <img src="{{ creator_context.avatar_small }}" height="32" width="32">
+    </a>
 
     <div class="note-comment-detail">
-        <span class="nickname">{{ creator_context.nickname }}</span>
+        <a class="nickname"
+           href="{% url 'web.views.user.index' creator_context.user_id %}">{{ creator_context.nickname }}</a>
 
         {% if user_context.user_id == creator_context.user_id or user_context.user_id == note_context.creator_id %}
             <a href="{% url 'web.views.note.delete_comment' comment_context.note_id comment_context.comment_id %}"

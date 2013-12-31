@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load web %}
+
+{% block title %}{{ title|default:'我' }}的果库{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/user.css">{% endblock %}
+
+{% block content %}
+    <div id="user-center">
+        <div class="user">
+            <div class="base guoku-block">
+                <img src="{{ query_user_context.avatar_small }}">
+
+                <h2>nickname</h2>
+                <small>bio</small>
+                <address>北京</address>
+                <a href="javascript:;">关注</a>
+            </div>
+
+            <div class="stat guoku-block">
+                <a href="">喜爱 <small>122</small></a>
+                <a href="">添加 <small>122</small></a>
+                <a href="">点评 <small>122</small></a>
+                <a href="">标签 <small>122</small></a>
+
+                <a href="">关注了<strong>100</strong>人</a>
+                <a href="">关注者<strong>100</strong>人</a>
+            </div>
+        </div>
+
+        {% if content_tab == 1 %}
+            <ul>
+                <li><a></a></li>
+            </ul>
+            {% display_user_entities entity_list %}
+
+        {% elif content_tab == 2 %}
+            <div class="date"></div>
+            {% display_user_entities entity_list %}
+
+        {% elif content_tab == 3 %}
+            <h3>全部点评</h3>
+            {% display_user_notes note_list %}
+
+        {% elif content_tab == 4 %}
+            {% display_user_tags tag_list %}
+
+        {% elif content_tab == 5 %}
+            <h3>关注了</h3>
+            {% display_user_users user_list %}
+
+        {% else %}
+            <h3>关注者</h3>
+            {% display_user_users user_list %}
+
+        {% endif %}
+
+        <div class="pagination">
+
+        </div>
+    </div>
+{% endblock %}

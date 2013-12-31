@@ -11,7 +11,7 @@ from django.contrib.auth import logout as auth_logout
 import json
 
 from base.user import User
-from util import get_user_context
+from util import get_request_user_context
 
 
 MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14  # two weeks
@@ -172,7 +172,7 @@ def logout(request):
 
 
 def setting(request, template='accounts/setting.html'):
-    _user_context = get_user_context(request.user)
+    _user_context = get_request_user_context(request.user)
 
     return render_to_response(
         template,

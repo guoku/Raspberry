@@ -30,3 +30,37 @@ def display_note_comment(comment, user_context, note_context):
     }
 
 register.inclusion_tag("main/partial/display_note_comment.html")(display_note_comment)
+
+
+# user ---
+def display_user_entities(entity_list):
+    return {
+
+    }
+
+register.inclusion_tag("user/partial/display_entity.html")(display_user_entities)
+
+
+def display_user_notes(note_list):
+    return {
+
+    }
+
+register.inclusion_tag("user/partial/display_note.html")(display_user_notes)
+
+
+def display_user_tags(tag_list):
+    return {
+
+    }
+
+register.inclusion_tag("user/partial/display_tag.html")(display_user_tags)
+
+
+def display_user_users(user_list):
+    return {
+
+    }
+
+register.inclusion_tag("user/partial/display_user.html")(display_user_users)
+

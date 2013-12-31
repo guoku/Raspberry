@@ -41,7 +41,7 @@ urlpatterns += patterns(
 
 urlpatterns += patterns(
     'web.views.user',
-    (r'^u/(?P<user_id>\w+)/$', 'likes'),
+    (r'^u/(?P<user_id>\w+)/$', 'index'),
     (r'^u/(?P<user_id>\w+)/likes/$', 'likes'),
     (r'^u/(?P<user_id>\w+)/posts/$', 'posts'),
     (r'^u/(?P<user_id>\w+)/notes/$', 'notes'),

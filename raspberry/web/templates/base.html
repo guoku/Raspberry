@@ -31,14 +31,14 @@
                 </div>
 
                 <div class="container">
-                    <a href="{% url 'web.views.user.likes' user.id %}" class="nickname">
+                    <a href="{% url 'web.views.user.index' user.id %}" class="nickname">
                         <img src="{{ user_context.avatar_small }}" height="25" width="25">
                         <span>{{ user_context.nickname|truncatechars:12 }}</span>
                         <small></small>
                     </a>
 
                     <div style="display: none" class="pop">
-                        <a href="{% url 'web.views.user.likes' user.id %}">我的果库</a>
+                        <a href="{% url 'web.views.user.index' user.id %}">我的果库</a>
                         <a href="{% url 'web.views.accounts.setting' %}">设置</a>
                         <a href="{% url 'web.views.accounts.logout' %}">退出</a>
                     </div>

@@ -2,7 +2,7 @@
 from base.user import User
 
 
-def get_user_context(request_user):
+def get_request_user_context(request_user):
     _user_context = None
 
     if request_user.is_authenticated():
