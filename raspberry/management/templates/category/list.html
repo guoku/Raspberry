@@ -1,0 +1,83 @@
+{% extends "management_base.html" %}
+{% load management %}
+
+{% block content %}
+    <div class="span2">
+        {% if selected_group_id != None %}
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li class="nav-header">操作</li>
+                    <li>
+                        <a href="{% url 'management.views.edit_category_group' selected_group_id %}" target=_blank>
+                            编辑本分类组  
+                        </a>
+                        <a href="{% url 'management.views.create_category' %}?gid={{ selected_group_id }}" target=_blank>
+                            添加分类到本分类组
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">分类组</li>
+                <li{%if selected_group_id == None %} class="active"{%endif%}>
+                    <a href="{% url 'management.views.category_list' %}">
+                        全部
+                    </a>
+                </li>
+                {% for group in category_groups %}
+                    <li{%if group.group_id == selected_group_id%} class="active"{%endif%}>
+                        <a href="{% url 'management.views.category_list' %}?gid={{group.group_id}}">
+                            {{ group.title }}({{ group.category_count }})
+                        </a>
+                    </li>
+                {% endfor %}
+                <li>
+                    <a href="{% url 'management.views.create_category_group' %}">
+                        +
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="span10">
+        <div class="sub-nav">
+            <ul class="nav nav-pills">
+                <li{%if status == 0%} class="active"{%endif%}>
+                    <a href="{% url 'management.views.category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}{%endif%}">
+                        全部 <small>({{ all_count }})</small>
+                    </a>
+                </li>
+                <li{%if status == 1%} class="active"{%endif%}>
+                    <a href="{% url 'management.views.category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}&{%endif%}status=1">
+                        展示 <small>({{ normal_count }})</small>
+                    </a>
+                </li>
+                <li{%if status == -1%} class="active"{%endif%}>
+                    <a href="{% url 'management.views.category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}&{%endif%}status=-1">
+                        冻结 <small>({{ freeze_count }})</small>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <table class="table table-striped table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th>图片</th>
+                        <th>组</th>
+                        <th>名称</th>
+                        <th>status</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category_context in categories%}
+                        {% display_category_row category_context %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

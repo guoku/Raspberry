@@ -1,0 +1,106 @@
+{% extends "management_base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row-fluid" id="chlid-images">
+            <ul class="thumbnails">
+                <li>
+                    <div class="thumbnail">
+                        <a href="" >
+                            <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 220px;max-height: 220px">
+                        </a>
+                        <div style="text-align:center">
+                            当前主图
+                        </div>
+                    </div>
+                </li>
+                {% for detail_image in entity_context.detail_images %}
+                    <li>
+                        <div class="thumbnail">
+                            <a href="" >
+                                <img id="main-image" class="img-polaroid" src="{{ detail_image.url }}" alt="" style="max-width: 200px;max-height: 200px">
+                            </a>
+                            <div style="text-align:center">
+                                细节图{{ forloop.counter }}
+                                <a href="{% url 'management.views.del_image_from_entity' entity_context.entity_id detail_image.id %}">
+                                    删除 
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <form class="well form-horizontal" action="{% url 'management.views.edit_entity' entity_context.entity_id %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="entity_hash">Hash:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="entity_hash" name="entity_hash" value="{{ entity_context.entity_hash }}" disabled/>
+                            <a href="{% url 'management.views.edit_entity' entity_context.entity_id %}" target="_blank">
+                                管理商品详情 > 
+                            </a>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="chief_image">主图:</label>
+                        <div class="controls">
+                            <select id="catagory" name="chief_image">
+                                <option selected="selected" value="{{ entity_context.chief_image.id }}">当前</option>
+                                {% for detail_image in entity_context.detail_images %}
+                                    <option value="{{ detail_image.id }}">细节图{{ forloop.counter }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">更新</button>
+                </div>
+            </form>
+            <form class="well form-horizontal" action="{% url 'management.views.add_image_for_entity' entity_context.entity_id %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="image">添加新图片(从链接):</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="image_url" name="image_url" value="" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+            <form class="well form-horizontal" action="{% url 'management.views.add_image_for_entity' entity_context.entity_id %}" method="POST" enctype="multipart/form-data">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="image">上传新图片:</label>
+                        <div class="controls">
+                            <input type="file" id="image" name="image" value="" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+            <form class="well form-horizontal"> 
+                <fieldset>
+                    {% for detail_image in entity_context.detail_images %}
+                        <label class="control-label" for="image">细节图{{ forloop.counter }}:</label>
+                        <div class="control-group">
+                            <div class="controls">
+                                <input class="input-xlarge" type="text" id="image_id" name="image_id" value="{{ detail_image.id }}" disabled/>
+                                <a href="{% url 'management.views.del_image_from_entity' entity_context.entity_id detail_image.id %}">
+                                    删除 
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </fieldset>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

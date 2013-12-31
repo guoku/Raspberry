@@ -1,4 +1,5 @@
 import os.path
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -11,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'raspberry',
+        'NAME': 'guoku_12_12',
         'USER': 'root',                      
         'PASSWORD': '123456',                  
         'HOST': 'localhost',                      
@@ -22,37 +23,68 @@ DATABASES = {
         }
     },
 }
+#DATABASE_ROUTERS = ['router.AuthRouter'] 
 
-from mongoengine import register_connection 
-register_connection('mango', 'mango')
+from mongoengine import connect 
+connect('guoku')
+
+CACHES = {
+    "default": {
+        "BACKEND": "redis_cache.cache.RedisCache",
+        "LOCATION": [
+            "localhost:6379:1",
+        ],
+        "OPTIONS": {
+            "PARSER_CLASS": "redis.connection.HiredisParser",
+            "CLIENT_CLASS": "redis_cache.client.ShardClient",
+        }
+    }
+}
+
+MOGILEFS_DOMAIN = 'staging'
+MOGILEFS_TRACKERS = ['10.0.1.23:7001']
+
+SPHINX_API_VERSION = 0x116
+SPHINX_SERVER = 'localhost' 
+SPHINX_port = 3312 
+
+
+#mongo db
+MANGO_HOST = 'localhost' 
+MANGO_PORT = 27017
+
+
+JUMP_TO_TAOBAO = True 
+
+IMAGE_LOCAL = True 
+IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
+APP_HOST = "http://10.0.1.109:8001"
+#IMAGE_LOCAL = False 
+#IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1
 USE_I18N = False
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/home/media/media.lawrence.com/media/"
+#CELERY_RESULT_BACKEND = "redis"
+#CELERY_REDIS_HOST = "localhost"
+#CELERY_REDIS_PORT = 6379
+
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/"
+BROKER_POOL_LIMIT = 10
+
+GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
+APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
+
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'static')
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = ''
-
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = ''
-
-# URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
-
-# URL prefix for admin static files -- CSS, JavaScript and images.
-# Make sure to use a trailing slash.
-# Examples: "http://foo.com/static/admin/", "/static/admin/".
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
@@ -62,8 +94,6 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-# List of finder classes that know how to find static files in
-# various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -80,6 +110,16 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+  'django.contrib.auth.context_processors.auth',
+  #'django.core.context_processors.static',
+  'django.core.context_processors.i18n',
+  'django.core.context_processors.request',
+  'django.core.context_processors.media',
+  'django.core.context_processors.static',
+  'zinnia.context_processors.version',
+) # Optional
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -95,9 +135,10 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'common',
+    'django.contrib.staticfiles',
+    'djcelery',
+    'base',
     'management',
-    'mango',
     'mobile',
 )
 
@@ -118,6 +159,11 @@ LOGGING = {
         },
     }
 }
+
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+)
 
 # taobao api key and sercet
 TAOBAO_APP_KEY = '12313170'

@@ -1,30 +1,21 @@
 {% extends "management_base.html" %}
 
 {% block content %}
-<div class="container">
-    <div>
-        <form class="well form-horizontal" action="{% url 'management.views.new_entity' %}" method="POST">
-            <fieldset>
-                <div class="control-group">
-                    <label class="control-label" for="image_url">链接:</label>
-                    <div class="controls">
-                        <input class="input-xxlarge" type="text" id="url" name="url" value="" />
+    <div class="container">
+        <div>
+            <form class="well form-horizontal" action="{% url 'management.views.new_entity' %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="image_url">链接:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="url" name="url" value=""/>
+                        </div>
                     </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">提交</button>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="catagory_id">分类:</label>
-                    <div class="controls">
-                        <select id="catagory" name="category_id">
-                            {% for category in category_list %}
-                                <option {%if selected_category_id == category.id%}selected="selected" {%endif%}value="{{ category.id }}">{{ category.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </fieldset>
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">提交</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 {% endblock %}

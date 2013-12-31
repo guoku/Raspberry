@@ -9,50 +9,154 @@
         {% endif %}
         <div class="row-fluid" id="chlid-images">
             <ul class="thumbnails">
-                <li class="span4">
+                <li>
                     <div class="thumbnail">
-                        <a href="{{ entity_context.meta.chief_image.url }}" >
-                            <img id="main-image" class="img-polaroid" src="{{ entity_context.meta.chief_image.url }}" alt="" style="max-width: 280px;max-height: 280px">
+                        <a href="" >
+                            <img id="main-image" class="img-polaroid" src="{{ entity_context.chief_image.url }}" alt="" style="max-width: 300px;">
                         </a>
+                        <div style="text-align:center">
+                            当前主图
+                        </div>
                     </div>
                 </li>
+                {% for detail_image in entity_context.detail_images %}
+                    <li>
+                        <div class="thumbnail">
+                            <a href="" >
+                                <img id="main-image" class="img-polaroid" src="{{ detail_image.url }}" alt="" style="max-width: 200px;max-height: 200px">
+                            </a>
+                            <div style="text-align:center">
+                                细节图{{ forloop.counter }}
+                                <a href="{% url 'management.views.del_image_from_entity' entity_context.entity_id detail_image.id %}">
+                                    - 删除
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
         <div>
-            <form class="well form-horizontal" action="" method="POST">
+            <form class="well form-horizontal" action="{% url 'management.views.edit_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
-                        <label class="control-label" for="entity_hash">Hash</label>
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">entity_id:</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="entity_hash" name="entity_hash" value="{{ entity_context.entity_hash }}" disabled/>
+                            <a href="http://www.guoku.com/detail/{{ entity_context.entity_hash }}/" target="_blank">{{ entity_context.entity_id }}</a>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="brand">品牌</label>
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">Hash:</label>
+                        <div class="controls">{{ entity_context.entity_hash }}</div>
+                    </div>
+
+
+                    <div class="control-group">
+                        <label class="control-label" for="brand">品牌:</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="brand" name="brand" value="{{ entity_context.meta.brand }}" onChange="loadSimilarEntity(null);"/>
+                            <input class="input-xxlarge" type="text" id="brand" name="brand" value="{{ entity_context.brand }}" onChange="loadSimilarEntity(null);"/>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="title">名称</label>
+                        <label class="control-label" for="title">名称:</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="title" name="title" value="{{ entity_context.meta.title }}" />
+                            <input class="input-xxlarge" type="text" id="title" name="title" value="{{ entity_context.title }}" />
                         </div>
                     </div>
+                    {% if entity_context.recommend_title %}
+                        <div class="control-group">
+                            <label class="control-label" for="title">推荐名称:</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="title" name="title" value="{{ entity_context.recommend_title }}" disabled/>
+                            </div>
+                        </div>
+                    {% endif %}
                     <div class="control-group">
-                        <label class="control-label" for="intro">简介</label>
+                        <label class="control-label" for="intro">简介:</label>
                         <div class="controls">
-                            <textarea class="input-xxlarge" style="height:120px" type="text" id="intro" name="intro" >{{ entity_context.meta.intro }}</textarea>
+                            <textarea class="input-xxlarge" rows="1" type="text" id="intro" name="intro" >{{ entity_context.intro }}</textarea>
                         </div>
                     </div>
+
                     <div class="control-group">
-                        <label class="control-label" for="catagory_id">分类:</label>
+                        <label class="control-label" for="entity_hash" style="padding-top: 0">点评: </label>
                         <div class="controls">
-                            <select id="catagory" name="category_id">
-                                {% for category in category_list %}
-                                    <option {%if category.id == entity_context.category_id%}selected="selected" {%endif%}value="{{ category.id }}">{{ category.title }}</option>
+                            <a href="{% url 'management.views.note_list' %}?entity_id={{ entity_context.entity_id }}">{{ note_count }} 条</a>
+                        </div>
+                    </div>
+
+
+                    <div class="control-group">
+                        <label class="control-label" for="user">点评者</label>
+
+                        <div class="controls">
+                            <select name="user_id" id="user">
+                                {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.name }}</option>
                                 {% endfor %}
                             </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="note">追加点评</label>
+
+                        <div class="controls">
+                            <textarea class="input-xxlarge" rows="5" type="text" id="note" name="note"></textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="control-group">
+                        <label class="control-label" for="price">价格:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="price" name="price" value="{{ entity_context.price }}" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="category_group">分类组:</label>
+                        <div class="controls">
+                            <select id="category_group" name="category_group"></select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="category">分类:</label>
+                        <div class="controls">
+                            <select id="category" name="category_id" data-init="{{ entity_context.category_id }}"></select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="old_category_group">老分类组:</label>
+                        <div class="controls">
+                            <select id="old_category_group" name="old_category_group"></select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="old_category">老分类:</label>
+                        <div class="controls">
+                            <select id="old_category" name="old_category_id" data-oldinit="{{ entity_context.old_category_id }}"></select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="chief_image">主图:</label>
+                        <div class="controls">
+                            <select id="catagory" name="chief_image">
+                                <option selected="selected" value="{{ entity_context.chief_image.id }}">当前</option>
+                                {% for detail_image in entity_context.detail_images %}
+                                    <option value="{{ detail_image.id }}">细节图{{ forloop.counter }}</option>
+                                {% endfor %}
+                            </select>
+                            <a href="{% url 'management.views.edit_entity_image' entity_context.entity_id %}" target="_blank">
+                                管理图片 >
+                            </a>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="weight">状态:</label>
+                        <div class="controls">
+                            <input class="input-xlarge" type="text" id="weight" name="weight" value="{{ entity_context.weight }}" />
+                            <span class="help-inline">小于0表示冻结</span>
                         </div>
                     </div>
                 </fieldset>
@@ -67,6 +171,15 @@
                             <label class="control-label" for="item_id_display">item id:</label>
                             <div class="controls">
                                 <input class="input-xxlarge" type="text" id="item_id_display" name="item_id_display" value="{{ item_context.item_id }}" disabled/>
+                                <a href="http://item.taobao.com/item.htm?id={{ item_context.taobao_id }}" target="_blank">
+                                    去看看 >
+                                </a>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="taobao_id_display">淘宝标题:</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="taobao_id_display" name="taobao_id_display" value="{{ item_context.title }}" disabled/>
                             </div>
                         </div>
                         <div class="control-group">
@@ -81,6 +194,20 @@
                                 <input class="input-xxlarge" type="text" id="shop_nick" name="shop_nick" value="{{ item_context.shop_nick }}" disabled/>
                             </div>
                         </div>
+                        {% if item_context.commission_type != 'unknown' %}
+                            <div class="control-group">
+                                <label class="control-label" for="commission_type">计划</label>
+                                <div class="controls">
+                                    <input class="input-xxlarge" type="text" id="commission_type" name="commission_type" value="{%if item_context.commission_type == 'general'%}通用{%else%}定向{%endif%}" disabled/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="commission_rate">分成</label>
+                                <div class="controls">
+                                    <input class="input-xxlarge" type="text" id="commission_rate" name="commission_rate" value="{{ item_context.commission_rate }}" disabled/>
+                                </div>
+                            </div>
+                        {% endif %}
                         <div class="control-group">
                             <label class="control-label" for="price">价格</label>
                             <div class="controls">
@@ -95,12 +222,11 @@
                         </div>
                     </fieldset>
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">更新</button>
-                        <a class="btn" href="{% url 'management.views.unbind_entity_item' entity_context.meta.entity_id item_context.item_id %}">删除</a>
+                        <a class="btn" href="{% url 'management.views.unbind_taobao_item_from_entity' entity_context.entity_id item_context.item_id %}">删除</a>
                     </div>
                 </form>
             {% endfor %}
-            <form class="well form-horizontal" action="{% url 'management.views.load_taobao_item_for_entity' entity_context.meta.entity_id %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management.views.load_taobao_item_for_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="image_url">添加新 item :</label>
@@ -113,7 +239,23 @@
                     <button type="submit" class="btn btn-primary">添加</button>
                 </div>
             </form>
+            <form class="well form-horizontal" action="{% url 'management.views.merge_entity' entity_context.entity_id %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="target_entity_id">合并商品:</label>
+                        <div class="controls">
+                            <input class="input-xxlarge" type="text" id="target_entity_id" name="target_entity_id" value="" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}
 
+{% block extra %}
+    <script type="text/javascript" src="{{ STATIC_URL }}management/js/category.js"></script>
+{% endblock %}
