@@ -111,13 +111,20 @@ for row in cur_gk.fetchall():
         'user_id' : user_id,
         'like_count' : like_count
     })
-    if len(user_like_list) > 30:
+    if len(user_like_list) > 100:
         break
 
 for user in user_like_list:
     cur_gk.execute("SELECT nickname from base_user_profile where user_id=%d;"%user['user_id'])
     nickname = cur_gk.fetchone()[0]
-    print "%d\t%s\t%d"%(user['user_id'], nickname, user['like_count'])
+    cur_gk.execute("SELECT screen_name from base_sina_token where user_id=%d;"%user['user_id'])
+    try:
+        sina_screen_name = cur_gk.fetchone()[0]
+    except:
+        sina_screen_name = '-'
+    cur_gk.execute("SELECT date_joined from auth_user where id=%d;"%user['user_id'])
+    date_joined = cur_gk.fetchone()[0]
+    print "%d\t%s\t%d\t%s\t%s"%(user['user_id'], nickname, user['like_count'], sina_screen_name, date_joined)
 
 
 print "\nTop note user:"
@@ -131,13 +138,20 @@ for row in cur_gk.fetchall():
         'user_id' : user_id,
         'note_count' : note_count
     })
-    if len(user_note_list) > 30:
+    if len(user_note_list) > 100:
         break
 
 for user in user_note_list:
     cur_gk.execute("SELECT nickname from base_user_profile where user_id=%d;"%user['user_id'])
     nickname = cur_gk.fetchone()[0]
-    print "%d\t%s\t%d"%(user['user_id'], nickname, user['note_count'])
+    cur_gk.execute("SELECT screen_name from base_sina_token where user_id=%d;"%user['user_id'])
+    try:
+        sina_screen_name = cur_gk.fetchone()[0]
+    except:
+        sina_screen_name = '-'
+    cur_gk.execute("SELECT date_joined from auth_user where id=%d;"%user['user_id'])
+    date_joined = cur_gk.fetchone()[0]
+    print "%d\t%s\t%d\t%s\t%s"%(user['user_id'], nickname, user['note_count'], sina_screen_name, date_joined)
 
 print "\nTop poke user:"
 sql_query = "select user_id, count(*) as tot from base_note_poke where created_time > '%s' group by user_id order by tot desc;"%(start_time)
@@ -150,10 +164,17 @@ for row in cur_gk.fetchall():
         'user_id' : user_id,
         'poke_count' : poke_count
     })
-    if len(user_poke_list) > 30:
+    if len(user_poke_list) > 100:
         break
 
 for user in user_poke_list:
     cur_gk.execute("SELECT nickname from base_user_profile where user_id=%d;"%user['user_id'])
     nickname = cur_gk.fetchone()[0]
-    print "%d\t%s\t%d"%(user['user_id'], nickname, user['poke_count'])
+    cur_gk.execute("SELECT screen_name from base_sina_token where user_id=%d;"%user['user_id'])
+    try:
+        sina_screen_name = cur_gk.fetchone()[0]
+    except:
+        sina_screen_name = '-'
+    cur_gk.execute("SELECT date_joined from auth_user where id=%d;"%user['user_id'])
+    date_joined = cur_gk.fetchone()[0]
+    print "%d\t%s\t%d\t%s\t%s"%(user['user_id'], nickname, user['poke_count'], sina_screen_name, date_joined)

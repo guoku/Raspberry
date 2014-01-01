@@ -81,12 +81,12 @@ class Note(object):
             _hdl = _hdl.filter(weight__gte = 0)
             
         
-        if sort_by == 'poke':
-            _hdl = _hdl.order_by('-poke_count')
+        if sort_by == 'time':
+            _hdl = _hdl.order_by('-created_time')
         elif sort_by == 'selection_post_time':
             _hdl = _hdl.order_by('-post_time')
         else:
-            _hdl = _hdl.order_by('-created_time')
+            _hdl = _hdl.order_by('-poke_count')
             
 
 
