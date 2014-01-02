@@ -5,6 +5,7 @@ from base.category import Category
 from base.entity import Entity
 from base.item import Item
 from base.models import Entity as EntityModel
+from base.models import NoteSelection 
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 import datetime
 import json
@@ -12,6 +13,24 @@ import json
 def sync_category(request):
     _all_categories = Category.all_group_with_full_category()
     return SuccessJsonResponse(_all_categories)
+
+def sync_selection(request):
+    _offset = int(request.GET.get('offset', '0'))
+    _count = int(request.GET.get('count', '100'))
+    _rslt = []
+    for _doc in NoteSelection.objects.all().order_by('-post_time')[_offset : _offset + _count]:
+        _entity_id = _doc.entity_id
+        _entity_context = Entity(_entity_id).read()
+        _taobao_id_list = []
+        for _item_id in _entity_context['item_id_list']:
+            _taobao_id_list.append(Item(_item_id).read()['taobao_id'])
+        _rslt.append({
+            'entity_id' : _entity_id,
+            'note_id' : _doc.note_id,
+            'taobao_id_list' : _taobao_id_list
+        })
+    
+    return SuccessJsonResponse(_rslt)
 
 def sync_taobao_item(request):
     _offset = int(request.GET.get('offset', '0'))
