@@ -106,10 +106,10 @@
 
         <div class="sub-nav">
             <ul class="nav nav-pills" id="sort-entity">
-                <li {% if sort_by == None or sort_by == "date" and reverse == False %}class="active"{% endif %}>
+                <li {% if sort_by == None or sort_by == "time" and reverse == False %}class="active"{% endif %}>
                     <a href="javascript:;" id="date-order">创建时间降序</a>
                 </li>
-                <li {% if sort_by == "date" and reverse %}class="active"{% endif %}>
+                <li {% if sort_by == "time" and reverse %}class="active"{% endif %}>
                     <a href="javascript:;" id="date-order">创建时间升序</a>
                 </li>
                 <li {% if sort_by == "note" and reverse == False %}class="active"{% endif %}>
@@ -159,10 +159,10 @@
             var sortButtons = $("#sort-entity a");
 
             sortButtons.eq(0).click(function () {
-                sort("date", 0);
+                sort("time", 0);
             });
             sortButtons.eq(1).click(function () {
-                sort("date", 1);
+                sort("time", 1);
             });
             sortButtons.eq(2).click(function () {
                 sort("note", 0);
