@@ -56,10 +56,9 @@
 
     <div class="categories guoku-block">
         <ul>
+            <li><a href="{% url 'web.views.main.selection' %}">所有</a></li>
             {% for category in category_list %}
-                <li>
-                    <a href="{% url 'web.views.main.selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a>
-                </li>
+                <li><a href="{% url 'web.views.main.selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a></li>
             {% endfor %}
         </ul>
     </div>

@@ -1,11 +1,113 @@
-#user-center {
+#user-center .img-container {
+    display: inline-block;
+    margin: -30px 0 15px 15px;
+    padding: 5px 5px 12px;
+}
 
+#user-center .user {
+    margin-top: 25px;
 }
 
 #user-center .base {
-    margin-bottom: 1px;
+    position: relative;
+    z-index: -1;
+    border-bottom: 1px solid #dedede;
+}
+
+#user-center h2 {
+    position: absolute;
+    left: 140px;
+    top: 0;
+    margin: 15px 0 0;
+    font-size: 22px;
+    font-weight: normal;
+    color: #666;
+}
+
+#user-center .base small {
+    position: absolute;
+    left: 140px;
+    top: 43px;
+}
+
+#user-center .base address {
+    position: absolute;
+    left: 140px;
+    top: 75px;
+    font-style: normal;
+    font-size: 12px;
+    color: #666;
+}
+
+#user-center .base a {
+    position: absolute;
+    right: 15px;
+    top: 75px;
+
+    padding: 4px;
+    color: #999;
+    border: 1px solid #e1e1e1;
+    border-radius: 2px;
+    background: #fafafa;
+}
+
+#user-center .base a:hover {
+    text-decoration: none;
 }
 
 #user-center .stat {
     padding: 15px;
+    color: #666;
+}
+
+#user-center .stat a {
+    margin-right: 25px;
+}
+
+#user-center .stat .social {
+    float: right;
+    color: #999;
+}
+
+#user-center .stat .social a {
+    margin: 0 0 0 25px;
+}
+
+#user-center .entity-nav {
+    margin-top: 45px;
+}
+
+#user-center .categories {
+    display: inline-block;
+    margin: 0;
+    list-style: none;
+    padding: 15px;
+}
+
+#user-center .categories li {
+    display: inline;
+    margin-right: 15px;
+}
+
+#user-center .filter {
+    float: right;
+    width: 100px;
+    margin: 8px 15px 0 0;
+    padding: 5px 0;
+    line-height: 1.5;
+}
+
+#user-center .filter a {
+    display: block;
+    padding-left: 5px;
+}
+
+#user-center .filter a.price {
+    display: none;
+}
+
+#user-center .filter a:hover {
+    text-decoration: none;
+    color: #fff;
+    background-color: #4db07a;
 }

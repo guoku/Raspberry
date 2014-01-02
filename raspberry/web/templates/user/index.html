@@ -8,29 +8,57 @@
     <div id="user-center">
         <div class="user">
             <div class="base guoku-block">
-                <img src="{{ query_user_context.avatar_small }}">
-
-                <h2>nickname</h2>
-                <small>bio</small>
+                <div class="img-container  guoku-block">
+                    <img src="{{ query_user_context.avatar_small }}" width="100" height="100" class="avatar">
+                </div>
+                <h2>{{ query_user_context.nickname }}</h2>
+                <small>{{ query_user_context.bio }}</small>
                 <address>北京</address>
                 <a href="javascript:;">关注</a>
             </div>
 
             <div class="stat guoku-block">
-                <a href="">喜爱 <small>122</small></a>
-                <a href="">添加 <small>122</small></a>
-                <a href="">点评 <small>122</small></a>
-                <a href="">标签 <small>122</small></a>
+                <a href="{% url 'web.views.user.likes' query_user_context.user_id %}">喜爱<strong>({{ query_user_context.like_count }})</strong></a>
+                <a href="{% url 'web.views.user.posts' query_user_context.user_id %}">添加<strong></strong></a>
+                <a href="{% url 'web.views.user.notes' query_user_context.user_id %}">点评<strong>({{ query_user_context.entity_note_count }})</strong></a>
+                <a href="{% url 'web.views.user.tags' query_user_context.user_id %}">标签<strong>({{ query_user_context.tag_count }})</strong></a>
 
-                <a href="">关注了<strong>100</strong>人</a>
-                <a href="">关注者<strong>100</strong>人</a>
+                <div class="social">
+                    <a href="{% url 'web.views.user.followings' query_user_context.user_id %}">关注了 <strong>{{ query_user_context.following_count }}</strong> 人</a>
+                    <a href="{% url 'web.views.user.fans' query_user_context.user_id %}">关注者 <strong>{{ query_user_context.fan_count }}</strong> 人</a>
+                </div>
             </div>
         </div>
 
         {% if content_tab == 1 %}
-            <ul>
-                <li><a></a></li>
-            </ul>
+            <div class="entity-nav guoku-block">
+                <ul class="categories">
+                    <li><a href="{% url 'web.views.user.likes' query_user_context.user_id %}">所有</a></li>
+                    {% for category in category_list %}
+                        <li>
+                            <a href="{% url 'web.views.user.likes' query_user_context.user_id %}?c={{ category.category_id }}">{{ category.category_title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <ul class="filter guoku-block">
+                    <li>
+                        <a href="{% url 'web.views.user.likes' query_user_context.user_id %}?c={{ curr_cat_id }}">按价格</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'web.views.user.likes' query_user_context.user_id %}?c={{ curr_cat_id }}&p=1"
+                           class="price">0-99</a></li>
+                    <li>
+                        <a href="{% url 'web.views.user.likes' query_user_context.user_id %}?c={{ curr_cat_id }}&p=2"
+                           class="price">100-499</a></li>
+                    <li>
+                        <a href="{% url 'web.views.user.likes' query_user_context.user_id %}?c={{ curr_cat_id }}&p=3"
+                           class="price">500-999</a></li>
+                    <li>
+                        <a href="{% url 'web.views.user.likes' query_user_context.user_id %}?c={{ curr_cat_id }}&p=4"
+                           class="price">1000+</a></li>
+                </ul>
+            </div>
+
             {% display_user_entities entity_list %}
 
         {% elif content_tab == 2 %}

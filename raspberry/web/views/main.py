@@ -50,6 +50,8 @@ def selection(request, template='main/selection.html'):
     else:
         _hdl = NoteSelection.objects.filter(category_id=_category_id)
 
+        # 取得当前分类名 需要改进？
+        # TODO
         for _old_cat in _old_category_list:
             if _old_cat['category_id'] == int(_category_id):
                 _curr_cat_title = _old_cat['category_title']
