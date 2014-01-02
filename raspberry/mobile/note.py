@@ -16,6 +16,8 @@ def category_entity_note(request, category_id):
         else:
             _request_user_id = None
         _sort_by = request.GET.get('sort', 'poke')
+        if _sort_by == '':
+            _sort_by = 'poke'
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
         
