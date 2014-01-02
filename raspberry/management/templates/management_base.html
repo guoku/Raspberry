@@ -4,8 +4,8 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <link media="all" rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-responsive.min.css' %}" />
-    <link media="all" rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/.min.css' %}" />
+    <link media="all" rel="stylesheet" type="text/css" href="{% static 'management/css/bootstrap-responsive.min.css' %}" />
+    <link media="all" rel="stylesheet" type="text/css" href="{% static 'management/css/bootstrap.min.css' %}" />
     {% block cssstyle %}{% endblock %}
     <title>果库后台</title>
 </head>
@@ -21,23 +21,27 @@
                         </p>
                         <ul class="nav">
                             <li class="divider-vertical"></li>
-                            <li{% if active_division == "entity" %} class="active"{%endif%}><a href="{% url 'management.views.entity_list' %}">Entity</a></li>
+                            {% url 'entity_list' as entity_list_url %}
+                            <li{% if entity_list_url in request.path %} class="active"{%endif%}><a href="{{ entity_list_url }}">Entity</a></li>
                             <li class="divider-vertical"></li>
-                            <li{% if active_division == "category" %} class="active"{%endif%}><a href="{% url 'management.views.category_list' %}">Category</a></li>
+                            {% url 'category_list' as category_list_url %}
+                            <li{% if category_list_url in request.path %} class="active"{%endif%}><a href="{{ category_list_url }}">Category</a></li>
                             <li class="divider-vertical"></li>
-                            <li{% if active_division == "note" %} class="active"{%endif%}><a href="{% url 'management.views.note_list' %}">Note</a></li>
+                            {% url 'note_list' as note_list_url %}
+                            <li{% if note_list_url in request.path %} class="active"{%endif%}><a href="{{ note_list_url }}">Note</a></li>
                             <li class="divider-vertical"></li>
-                            <li{% if active_division == "banner" %} class="active"{%endif%}><a href="{% url 'management.views.banner_list' %}">Banner</a></li>
+{#                            <li{% if active_division == "banner" %} class="active"{%endif%}><a href="{% url 'management.views.banner_list' %}">Banner</a></li>#}
+{#                            <li class="divider-vertical"></li>#}
+                            {% url 'user_list' as user_list_url %}
+                            <li{% if user_list_url in request.path %} class="active"{%endif%}><a href="{{ user_list_url }}">User</a></li>
                             <li class="divider-vertical"></li>
-                            <li{% if active_division == "user" %} class="active"{%endif%}><a href="{% url 'management.views.user_list' %}">User</a></li>
-                            <li class="divider-vertical"></li>
-                            <li{% if active_division == "report" %} class="active"{%endif%}><a href="{% url 'management.views.report_list' %}">Report</a></li>
+{#                            <li{% if active_division == "report" %} class="active"{%endif%}><a href="{% url 'management.views.report_list' %}">Report</a></li>#}
                             <li class="divider-vertical"></li>
                         </ul>
-                        <form class="navbar-form" action="{% url 'management.views.search_entity' %}" method="POST">
-                            <input class="span2" type="text" placeholder="搜索分类/商品" id="query" name="query" class="form-control" />
-                            <button type="submit" class="btn btn-success">Search</button>
-                        </form>
+{#                        <form class="navbar-form" action="{% url 'management.views.search_entity' %}" method="POST">#}
+{#                            <input class="span2" type="text" placeholder="搜索分类/商品" id="query" name="query" class="form-control" />#}
+{#                            <button type="submit" class="btn btn-success">Search</button>#}
+{#                        </form>#}
                     </div>
                 </div>
             </div>
@@ -54,7 +58,7 @@
     
     {% block js %}
         <script type="text/javascript" src="{% static 'management/js/jquery.js' %}"></script>
-        <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'management/js/bootstrap.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'management/js/misc.js' %}"></script>
         <script type="text/javascript" src="{% static 'management/js/date.format.js' %}"></script>
     {% endblock %}
