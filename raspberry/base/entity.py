@@ -243,8 +243,8 @@ class Entity(object):
             _basic_info["created_time"] = self.entity_obj.created_time
             _basic_info["updated_time"] = self.entity_obj.updated_time
             _basic_info["weight"] = self.entity_obj.weight
-            _basic_info["mark"] = self.entity_obj.mark
-            _basic_info["mark_title"] = Entity.Mark.get_title(self.entity_obj.mark)
+            _basic_info["mark_value"] = self.entity_obj.mark
+            _basic_info["mark"] = Entity.Mark.get_title(self.entity_obj.mark)
             
             _basic_info['chief_image'] = {
                 'id' : self.entity_obj.chief_image,

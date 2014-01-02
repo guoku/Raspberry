@@ -143,7 +143,7 @@
                         <div class="controls">
                             <select name="mark" id="mark">
                                 {% for mark in mark_list %}
-                                    <option {%if mark.value == entity_context.mark%} selected="selected"{%endif%} value="{{ mark.value }}">{{ mark.title }}</option>
+                                    <option {%if mark.value == entity_context.mark_value%} selected="selected"{%endif%} value="{{ mark.value }}">{{ mark.title }}</option>
                                 {% endfor %}
                             </select>
                         </div>

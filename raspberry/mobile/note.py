@@ -7,7 +7,7 @@ from mobile.models import Session_Key
 from tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask 
 import datetime
 
-#@check_sign
+@check_sign
 def category_entity_note(request, category_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
