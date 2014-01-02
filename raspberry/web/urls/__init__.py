@@ -3,7 +3,7 @@ from django.conf.urls.defaults import url, patterns, include
 
 urlpatterns = patterns(
     'web.views.main',
-    ('^selection/$', 'selection'),
+    ('^selected/$', 'selection'),
     (r'^popular/$', 'popular'),
     (r'^discover/$', 'discover'),
     (r'^detail/(?P<entity_hash>\w+)/$', 'detail')

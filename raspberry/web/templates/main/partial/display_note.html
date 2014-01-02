@@ -26,7 +26,7 @@
         {% endif %}
 
         <a href="javascript:;" class="poke">{{ note_context.poke_count }}</a>
-        <a href="javascript:;" class="add-comment">{{ comment_list|length }}</a>
+        <a href="javascript:;" class="add-comment">{{ note_context.comment_count }}</a>
 
         <span class="create-time">{{ note_context.created_time|format_time }}</span>
 

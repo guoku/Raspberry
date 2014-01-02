@@ -130,7 +130,7 @@ def detail(request, entity_hash, template='main/detail.html'):
     _entity_context = Entity(_entity_id).read()
     _note_id_list = Note.find(entity_id=_entity_id)
 
-    _selection_note = {}
+    _selection_note = None
     _common_note_list = []
     _user_already_note = False
 

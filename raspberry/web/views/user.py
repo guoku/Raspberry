@@ -7,6 +7,7 @@ from util import get_request_user_context
 from base.user import User
 from base.category import Old_Category
 from base.entity import Entity
+from base.note import Note
 
 
 def _get_user_basic_info(user_id):
@@ -34,7 +35,7 @@ def likes(request, user_id, template='user/index.html'):
 
     _old_category_list = Old_Category.find()[0:12]
 
-    _entity_id_list = Entity.find(root_old_category_id=_c)
+    _entity_id_list = _query_user.find_like_entity(None, offset=0, count=30)
     _entity_list = []
 
     for _entity_id in _entity_id_list:
@@ -76,12 +77,29 @@ def notes(request, user_id, template='user/index.html'):
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
 
+    _note_id_list = Note.find(creator_set=[user_id], offset=0, count=30)
+    _note_list = []
+
+    for _note in _note_id_list:
+        _note_context = Note(_note).read()
+        _creator_context = User(user_id).read()
+        _entity_context = Entity(_note_context['entity_id']).read()
+
+        _note_list.append(
+            {
+                'entity_context' : _entity_context,
+                'note_context' : _note_context,
+                'creator_context' : _creator_context
+            }
+        )
+
     return render_to_response(
         template,
         {
             'user_context' : _user_context,
             'content_tab' : 3,
-            'query_user_context' : _query_user_context
+            'query_user_context' : _query_user_context,
+            'note_list' : _note_list
         },
         context_instance=RequestContext(request)
     )
