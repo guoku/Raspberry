@@ -8,6 +8,9 @@ urlpatterns = patterns(
     url(r'^create/taobao/$', 'create_entity_by_taobao_item', name='create_entity_from_taobao'),
     #url(r'^create/offline/$', 'create_entity_from_offline', name='create_entity_from_offline'),
 
+    url(r'^(?P<entity_id>\w+)/edit/$', 'edit_entity', name='entity_edited'),
+
+    url(r'^(?P<entity_id>\w+)/recycle/$', 'recycle_entity', name='entity_recycled')
 )
 
 

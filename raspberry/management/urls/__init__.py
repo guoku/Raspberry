@@ -8,7 +8,9 @@ urlpatterns = patterns(
     url(r'^category/', include('management.urls.category')),
     url(r'^entity/', include('management.urls.entity')),
     url(r'^note/', include('management.urls.note')),
+    url(r'^banner/', include('management.urls.banner')),
     url(r'^user/', include('management.urls.user')),
+    url(r'report/', include('management.urls.report')),
 
 )
 
