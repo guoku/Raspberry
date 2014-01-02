@@ -23,11 +23,15 @@ def sync_selection(request):
         _entity_context = Entity(_entity_id).read()
         _taobao_id_list = []
         for _item_id in _entity_context['item_id_list']:
-            _taobao_id_list.append(Item(_item_id).read()['taobao_id'])
+            _item_context = Item(_item_id).read()
+            _taobao_id_list.append({
+                'taobao_id' : _item_context['taobao_id'],
+                'shop_nick' : _item_context['shop_nick'],
+            })
         _rslt.append({
             'entity_id' : _entity_id,
             'note_id' : _doc.note_id,
-            'taobao_id_list' : _taobao_id_list
+            'taobao_item_list' : _taobao_id_list
         })
     
     return SuccessJsonResponse(_rslt)
