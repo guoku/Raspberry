@@ -7,7 +7,7 @@ from mobile.models import Session_Key
 from tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask 
 import datetime
 
-@check_sign
+#@check_sign
 def category_entity_note(request, category_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -15,7 +15,7 @@ def category_entity_note(request, category_id):
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
             _request_user_id = None
-        _sort_by = request.GET.get('sort', 'new')
+        _sort_by = request.GET.get('sort', 'poke')
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
         

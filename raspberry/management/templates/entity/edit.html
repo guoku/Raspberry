@@ -137,6 +137,17 @@
                             <select id="old_category" name="old_category_id" data-oldinit="{{ entity_context.old_category_id }}"></select>
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label class="control-label" for="mark">标识</label>
+
+                        <div class="controls">
+                            <select name="mark" id="mark">
+                                {% for mark in mark_list %}
+                                    <option {%if mark.value == entity_context.mark%} selected="selected"{%endif%} value="{{ mark.value }}">{{ mark.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="control-group">
                         <label class="control-label" for="chief_image">主图:</label>

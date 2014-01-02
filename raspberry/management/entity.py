@@ -207,6 +207,7 @@ def edit_entity(request, entity_id):
         _note_count = Note.count(entity_id=entity_id)
 
         _users = _get_special_names(request.user.id)
+        _mark_list = Entity.Mark.all()
 
         return render_to_response( 
             'entity/edit.html', 
@@ -216,6 +217,7 @@ def edit_entity(request, entity_id):
                 'category_list' : Category.find(), 
                 'old_category_list' : Old_Category.find(), 
                 'item_context_list' : _item_context_list,
+                'mark_list' : _mark_list,
                 'message' : _message,
                 'note_count': _note_count,
                 'users' : _users
@@ -228,6 +230,7 @@ def edit_entity(request, entity_id):
         _intro = request.POST.get("intro", None)
         _price = request.POST.get("price", None)
         _weight = int(request.POST.get("weight", '0'))
+        _mark = int(request.POST.get("mark", '0'))
         _chief_image_id = request.POST.get("chief_image", None)
         if _price:
             _price = float(_price)
@@ -246,7 +249,8 @@ def edit_entity(request, entity_id):
             intro = _intro,
             price = _price,
             chief_image_id = _chief_image_id,
-            weight = _weight
+            weight = _weight,
+            mark = _mark
         )
 
         _note = request.POST.get("note", None)
@@ -354,7 +358,7 @@ def entity_list(request):
             status = _status_code
         )
 
-        _sort_by = request.GET.get("sort_by", None)
+        _sort_by = request.GET.get("sort_by", "time")
         _reverse = request.GET.get("reverse", None)
         if _sort_by:
             _para["sort_by"] = _sort_by
@@ -398,7 +402,14 @@ def entity_list(request):
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
-                    _entity_context['taobao_id'] = '' 
+                    _entity_context['taobao_id'] = ''
+                _entity_context['is_selected'] = False
+                if _entity_context.has_key('note_id_list') and len(_entity_context['note_id_list']):
+                    for _note_id in _entity_context['note_id_list']:
+                        _note_context = Note(_note_id).read()
+                        if _note_context['is_selected']:
+                            _entity_context['is_selected'] = True
+                            break
                 _entity_context_list.append(_entity_context)
             except Exception, e:
                 pass
