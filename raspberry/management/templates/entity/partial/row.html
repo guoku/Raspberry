@@ -2,7 +2,7 @@
 {% load common %}
 
 <tr {% if entity_context.weight == -2 %} class=""
-    {% elif entity_context.weight >= 0 %} class="success"
+    {% elif entity_context.is_selected == True %} class="success"
     {% elif entity_context.creator_id == None %} class="warning"
     {% else %} class="info"
     {% endif %}
