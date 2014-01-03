@@ -21,22 +21,22 @@
                         </p>
                         <ul class="nav">
                             <li class="divider-vertical"></li>
-                            {% url 'entity_list' as entity_list_url %}
+                            {% url 'management_entity_list' as entity_list_url %}
                             <li{% if entity_list_url in request.path %} class="active"{%endif%}><a href="{{ entity_list_url }}">Entity</a></li>
                             <li class="divider-vertical"></li>
-                            {% url 'category_list' as category_list_url %}
+                            {% url 'management_category_list' as category_list_url %}
                             <li{% if category_list_url in request.path %} class="active"{%endif%}><a href="{{ category_list_url }}">Category</a></li>
                             <li class="divider-vertical"></li>
-                            {% url 'note_list' as note_list_url %}
+                            {% url 'management_note_list' as note_list_url %}
                             <li{% if note_list_url in request.path %} class="active"{%endif%}><a href="{{ note_list_url }}">Note</a></li>
                             <li class="divider-vertical"></li>
-                            {% url 'banner_list' as banner_list_url %}
-                            <li{% if banner_list_url in request.url %} class="active"{%endif%}><a href="{{ banner_list_url }}">Banner</a></li>
+                            {% url 'management_banner_list' as banner_list_url %}
+                            <li{% if banner_list_url in request.path %} class="active"{%endif%}><a href="{{ banner_list_url }}">Banner</a></li>
                             <li class="divider-vertical"></li>
-                            {% url 'user_list' as user_list_url %}
+                            {% url 'management_user_list' as user_list_url %}
                             <li{% if user_list_url in request.path %} class="active"{%endif%}><a href="{{ user_list_url }}">User</a></li>
                             <li class="divider-vertical"></li>
-                            {% url 'report_list' as report_list_url %}
+                            {% url 'management_report_list' as report_list_url %}
                             <li{% if report_list_url in request.path %} class="active"{%endif%}><a href="{{ report_list_url }}">Report</a></li>
                             <li class="divider-vertical"></li>
                         </ul>

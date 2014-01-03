@@ -132,7 +132,7 @@ def new_entity(request):
                 #TODO: bind an exist item to entity
                 pass
             else:
-                return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _item.get_entity_id() }) + '?code=1')
+                return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _item.get_entity_id() }) + '?code=1')
                 
                 
 @login_required
@@ -177,7 +177,7 @@ def create_entity_by_taobao_item(request):
         if _note != None and len(_note) > 0:
             _add_note_and_select_delay(_entity, _user_id, _note)
 
-        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
+        return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
 def edit_entity(request, entity_id):
@@ -453,20 +453,20 @@ def entity_list(request):
                 context_instance = RequestContext(request)
             )
         else:
-            return HttpResponseRedirect(reverse('management.views.entity_list') + '?cid=' + str(_categories[0]['category_id'])) 
+            return HttpResponseRedirect(reverse('management_entity_list') + '?cid=' + str(_categories[0]['category_id'])) 
 
 @login_required
 def unbind_taobao_item_from_entity(request, entity_id, item_id):
     _entity = Entity(entity_id)
     _entity.unbind_item(item_id)
 
-    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
+    return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
 def bind_taobao_item_to_entity(request, entity_id, item_id):
     _entity = Entity(entity_id)
     _entity.bind_item(item_id)
-    return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
+    return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 
 @login_required
@@ -514,7 +514,7 @@ def load_taobao_item_for_entity(request, entity_id):
                 context_instance = RequestContext(request)
             )
         else:
-            return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
+            return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
     
 @login_required
 def add_image_for_entity(request, entity_id):
@@ -570,7 +570,7 @@ def add_taobao_item_for_entity(request, entity_id):
             },
             image_urls = _image_urls
         ) 
-        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
+        return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
 def merge_entity(request, entity_id):
@@ -578,7 +578,7 @@ def merge_entity(request, entity_id):
         _target_entity_id = request.POST.get("target_entity_id", None)
         _entity = Entity(entity_id)
         _entity.merge(_target_entity_id)
-        return HttpResponseRedirect(reverse('management.views.edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
+        return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
 def get_all_categories(request):
