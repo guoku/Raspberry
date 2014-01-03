@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load web %}
 
 {% block title %}精选{% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/selection.css">{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/selection.css' %}">{% endblock %}
 
 {% block content %}
     <h2>{{ curr_cat_title|default:'所有' }}</h2>

@@ -15,17 +15,10 @@ connect('guoku')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-<<<<<<< HEAD
         'NAME': 'guoku',
         'USER': 'root',                      
         'PASSWORD': 'cw12345',
-        'HOST': 'localhost',                      
-=======
-        'NAME': 'guoku_12_12',
-        'USER': 'root',
-        'PASSWORD': '123456',
         'HOST': 'localhost',
->>>>>>> c4b2ad145aa5759c46e2f2b05aec54b312af15f4
         'PORT': '',                      
         'OPTIONS': {
             'use_unicode':'utf-8',
@@ -105,7 +98,6 @@ BROKER_POOL_LIMIT = 10
 GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
 APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 
-<<<<<<< HEAD
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
@@ -113,9 +105,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-=======
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'static')
->>>>>>> c4b2ad145aa5759c46e2f2b05aec54b312af15f4
 MEDIA_URL = ''
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
@@ -191,11 +180,7 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
-<<<<<<< HEAD
     'web'
-=======
-    # 'redis_admin',
->>>>>>> c4b2ad145aa5759c46e2f2b05aec54b312af15f4
 )
 
 LOGGING = {

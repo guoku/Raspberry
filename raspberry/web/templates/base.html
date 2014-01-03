@@ -1,16 +1,18 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>{% block title %}果库{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/normalize.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/base.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
     {% block css %}{% endblock %}
 </head>
 <body>
 <div id="header">
     <div class="header-container">
-        <a href="{% url 'web.views.main.selection' %}" class="logo"><img src="{{ STATIC_URL }}web/images/guoku_icon_32.png"></a>
+        <a href="{% url 'web.views.main.selection' %}" class="logo"><img src="{% static 'images/guoku_icon_32.png' %}"></a>
         <ul class="nav">
             <li><a href="{% url 'web.views.main.selection' %}">精选</a></li>
             <li><a href="{% url 'web.views.main.popular' %}">热门</a></li>
@@ -73,8 +75,8 @@
     </div>
 </div>
 
-<script src="{{ STATIC_URL }}web/scripts/jquery.min.js"></script>
-<script src="{{ STATIC_URL }}web/scripts/main.js"></script>
+<script src="{% static 'scripts/jquery.min.js' %}"></script>
+<script src="{% static 'scripts/main.js' %}"></script>
 {% block script %}
 {% endblock %}
 </body>

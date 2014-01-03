@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}设置 - 果库{% endblock %}
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/account.css">{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
+{% endblock %}
 
 {% block content %}
     <h2 class="setting">帐号设置</h2>

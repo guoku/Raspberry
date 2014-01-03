@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load web %}
 
 {% block title %}
     {% if entity_context.brand|length != 0 %}{{ entity_context.brand }}
         - {% endif %}{{ entity_context.title }}
 {% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/detail.css">{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/detail.css' %}">{% endblock %}
 
 {% block content %}
     <div id="detail">

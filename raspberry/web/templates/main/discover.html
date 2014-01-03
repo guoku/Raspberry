@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block title %}发现{% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/discover.css">{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/discover.css' %}">{% endblock %}
 
 {% block content %}
 
