@@ -55,6 +55,7 @@ def create_banner(request):
         _weight = int(request.POST.get("weight", "0"))
         
         _image_file = request.FILES.get('image', None)
+        _image_data = None
         if _image_file != None:
             if hasattr(_image_file, 'chunks'):
                 _image_data = ''.join(chunk for chunk in _image_file.chunks())

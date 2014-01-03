@@ -9,6 +9,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+from mongoengine import connect
+connect('guoku', host='10.0.2.200')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
@@ -23,10 +26,7 @@ DATABASES = {
         }
     },
 }
-#DATABASE_ROUTERS = ['router.AuthRouter'] 
-
-from mongoengine import connect 
-connect('guoku', host='10.0.2.200')
+#DATABASE_ROUTERS = ['router.AuthRouter']
 
 CACHES = {
     'default': {
@@ -163,6 +163,7 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
+    # 'redis_admin',
 )
 
 LOGGING = {

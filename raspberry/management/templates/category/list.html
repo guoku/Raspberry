@@ -28,13 +28,13 @@
                 </li>
                 {% for group in category_groups %}
                     <li{%if group.group_id == selected_group_id%} class="active"{%endif%}>
-                        <a href="{% url 'management.views.category_list' %}?gid={{group.group_id}}">
+                        <a href="{% url 'category_list' %}?gid={{group.group_id}}">
                             {{ group.title }}({{ group.category_count }})
                         </a>
                     </li>
                 {% endfor %}
                 <li>
-                    <a href="{% url 'management.views.create_category_group' %}">
+                    <a href="{% url 'category_group_created' %}">
                         +
                     </a>
                 </li>
@@ -45,17 +45,17 @@
         <div class="sub-nav">
             <ul class="nav nav-pills">
                 <li{%if status == 0%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}{%endif%}">
+                    <a href="{% url 'category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}{%endif%}">
                         全部 <small>({{ all_count }})</small>
                     </a>
                 </li>
                 <li{%if status == 1%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}&{%endif%}status=1">
+                    <a href="{% url 'category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}&{%endif%}status=1">
                         展示 <small>({{ normal_count }})</small>
                     </a>
                 </li>
                 <li{%if status == -1%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}&{%endif%}status=-1">
+                    <a href="{% url 'category_list' %}?{%if selected_group_id != None %}gid={{selected_group_id}}&{%endif%}status=-1">
                         冻结 <small>({{ freeze_count }})</small>
                     </a>
                 </li>
