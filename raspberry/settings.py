@@ -10,15 +10,15 @@ ADMINS = (
 MANAGERS = ADMINS
 
 from mongoengine import connect
-connect('guoku')
+connect('guoku', host='10.0.2.200')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_12_12',
-        'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
+        'NAME': 'guoku',
+        'USER': 'qinzhoukan',
+        'PASSWORD': 'qinzhoukan1@#',
+        'HOST': '10.0.2.90',
         'PORT': '',                      
         'OPTIONS': {
             'use_unicode':'utf-8',
@@ -28,33 +28,33 @@ DATABASES = {
 }
 #DATABASE_ROUTERS = ['router.AuthRouter']
 
+# CACHES = {
+#     "default": {
+#         "BACKEND": "redis_cache.cache.RedisCache",
+#         "LOCATION": [
+#             "localhost:6379:1",
+#         ],
+#         "OPTIONS": {
+#             "PARSER_CLASS": "redis.connection.HiredisParser",
+#             "CLIENT_CLASS": "redis_cache.client.ShardClient",
+#         }
+#     }
+# }
 CACHES = {
-    "default": {
-        "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION": [
-            "localhost:6379:1",
-        ],
-        "OPTIONS": {
-            "PARSER_CLASS": "redis.connection.HiredisParser",
-            "CLIENT_CLASS": "redis_cache.client.ShardClient",
-        }
-    }
+   'default': {
+       'BACKEND': 'redis_cache.RedisCache',
+       'LOCATION': '10.0.2.49:6379',
+       'TIMEOUT:': 864000,
+       'OPTIONS': {
+           'DB': 1,
+           'PARSER_CLASS': 'redis.connection.HiredisParser'
+       },
+   },
 }
-#CACHES = {
-#    'default': {
-#        'BACKEND': 'redis_cache.RedisCache',
-#        'LOCATION': 'localhost:6379',
-#        'TIMEOUT:': 864000,
-#        'OPTIONS': {
-#            'DB': 1,
-#            'PARSER_CLASS': 'redis.connection.HiredisParser'
-#        },
-#    },
-#}
 
 # session
 SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_HOST = 'localhost'
+SESSION_REDIS_HOST = '10.0.2.49'
 SESSION_REDIS_PORT = 6379
 SESSION_REDIS_DB = 2
 SESSION_COOKIE_AGE = 1209600
@@ -175,7 +175,6 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
-    # 'redis_admin',
 )
 
 LOGGING = {
