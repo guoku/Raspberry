@@ -26,7 +26,7 @@
         <ul class="nav nav-list">
             <li class="nav-header">操作</li>
             <li>
-                <a href="{% url 'management.views.arrange_selection' %}">
+                <a href="{% url 'management_arrange_selection' %}">
                     精选排时间 
                 </a>
             </li>
@@ -50,16 +50,16 @@
         <div class="sub-nav">
             <ul class="nav nav-pills">
                 <li{% if nav_filter == "all" %} class="active"{% endif %}>
-                    <a href="{% url 'management.views.note_list' %}">全部</a>
+                    <a href="{% url 'management_note_list' %}">全部</a>
                 </li>
                 <li{% if nav_filter == "selection_only" %} class="active"{% endif %}>
-                    <a href="{% url 'management.views.note_list' %}?selection=only">精选</a>
+                    <a href="{% url 'management_note_list' %}?selection=only">精选</a>
                 </li>
                 <li{% if nav_filter == "selection_none" %} class="active"{% endif %}>
-                    <a href="{% url 'management.views.note_list' %}?selection=none">未入精选</a>
+                    <a href="{% url 'management_note_list' %}?selection=none">未入精选</a>
                 </li>
                 <li{% if nav_filter == "freezed" %} class="active"{% endif %}>
-                    <a href="{% url 'management.views.note_list' %}?freeze=1">冻结</a>
+                    <a href="{% url 'management_note_list' %}?freeze=1">冻结</a>
                 </li>
             </ul>
         </div>

@@ -14,7 +14,7 @@ import json
 from base.entity import Entity 
 from base.note import Note
 from base.user import User
-from tasks import ArrangeSelectionTask
+from management.tasks import ArrangeSelectionTask
 from utils.paginator import Paginator
 
 
