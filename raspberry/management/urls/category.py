@@ -5,7 +5,7 @@ urlpatterns = patterns(
     url(r'^$', 'category_list', name='category_list'),
     url(r'^create/$', 'create_category', name='category_created'),
     # url(r'^sync/$', 'sync_category', name='category_sync'),
-    url(r'(?P<category_id>\d+)/edit/$', 'edit_category', name='category_edit'),
+    url(r'(?P<category_id>\d+)/edit/$', 'edit_category', name='category_edited'),
     url(r'^group/create/$', 'create_category_group', name='category_group_created'),
     url(r'^group/(?P<category_group_id>\d+)/edit/$', 'edit_category_group', name='category_group_edit'),
 )

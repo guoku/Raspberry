@@ -2,7 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from urlparse import urlparse
@@ -11,7 +11,6 @@ import re
 import datetime
 import time
 import json
-
 from base.category import Category, Old_Category
 from base.entity import Entity
 from base.item import Item
@@ -207,6 +206,7 @@ def edit_entity(request, entity_id):
         _note_count = Note.count(entity_id=entity_id)
 
         _users = _get_special_names(request.user.id)
+        _mark_list = Entity.Mark.all()
 
         return render_to_response( 
             'entity/edit.html', 
@@ -216,6 +216,7 @@ def edit_entity(request, entity_id):
                 'category_list' : Category.find(), 
                 'old_category_list' : Old_Category.find(), 
                 'item_context_list' : _item_context_list,
+                'mark_list' : _mark_list,
                 'message' : _message,
                 'note_count': _note_count,
                 'users' : _users
@@ -228,6 +229,7 @@ def edit_entity(request, entity_id):
         _intro = request.POST.get("intro", None)
         _price = request.POST.get("price", None)
         _weight = int(request.POST.get("weight", '0'))
+        _mark = int(request.POST.get("mark", '0'))
         _chief_image_id = request.POST.get("chief_image", None)
         if _price:
             _price = float(_price)
@@ -246,7 +248,8 @@ def edit_entity(request, entity_id):
             intro = _intro,
             price = _price,
             chief_image_id = _chief_image_id,
-            weight = _weight
+            weight = _weight,
+            mark = _mark
         )
 
         _note = request.POST.get("note", None)
@@ -354,7 +357,7 @@ def entity_list(request):
             status = _status_code
         )
 
-        _sort_by = request.GET.get("sort_by", None)
+        _sort_by = request.GET.get("sort_by", "time")
         _reverse = request.GET.get("reverse", None)
         if _sort_by:
             _para["sort_by"] = _sort_by
@@ -398,7 +401,14 @@ def entity_list(request):
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
-                    _entity_context['taobao_id'] = '' 
+                    _entity_context['taobao_id'] = ''
+                _entity_context['is_selected'] = False
+                if _entity_context.has_key('note_id_list') and len(_entity_context['note_id_list']):
+                    for _note_id in _entity_context['note_id_list']:
+                        _note_context = Note(_note_id).read()
+                        if _note_context['is_selected']:
+                            _entity_context['is_selected'] = True
+                            break
                 _entity_context_list.append(_entity_context)
             except Exception, e:
                 pass
@@ -572,22 +582,24 @@ def merge_entity(request, entity_id):
 
 @login_required
 def get_all_categories(request):
-    result = {}
-    new_category = {}
-    result['new_category'] = new_category
-    result['old_category'] = Old_Category.find()
-    groups_and_categories = Category.all_group_with_full_category()
+    if request.method == "GET":
+        result = {}
+        new_category = {}
+        result['new_category'] = new_category
+        result['old_category'] = Old_Category.find()
+        groups_and_categories = Category.all_group_with_full_category()
 
-    for g_a_c in groups_and_categories:
-        categories = []
-        for cat in g_a_c['content']:
-            category = {}
-            category['category_title'] = cat['category_title']
-            category['category_id'] = cat['category_id']
-            categories.append(category)
-        new_category[g_a_c['title']] = categories
-
-    return HttpResponse(json.dumps(result))
+        for g_a_c in groups_and_categories:
+            categories = []
+            for cat in g_a_c['content']:
+                category = {}
+                category['category_title'] = cat['category_title']
+                category['category_id'] = cat['category_id']
+                categories.append(category)
+            new_category[g_a_c['title']] = categories
+        return HttpResponse(json.dumps(result))
+    else:
+        return Http404
 
 @login_required
 def read_taobao_item_state(request):

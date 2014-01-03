@@ -15,18 +15,18 @@ $(document).ready(function() {
     initAddCatalog();
     initDeleteCatalog();
 //    initDeleteCategory();
-    initImageSelect();
+//    initImageSelect();
     initPubCandidate();
     vDateClass();
     vTimeClass();
 
     actionAddNewVer();
     actionSaveNewVersion();
-    $(function(){
-        $('#dp1').datepicker({
-            format: 'yyyy-mm-dd'
-        });
-    });
+//    $(function(){
+//        $('#dp1').datepicker({
+//            format: 'yyyy-mm-dd'
+//        });
+//    });
 });
 
 function initNavForm(){

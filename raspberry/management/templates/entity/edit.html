@@ -27,7 +27,7 @@
                             </a>
                             <div style="text-align:center">
                                 细节图{{ forloop.counter }}
-                                <a href="{% url 'management.views.del_image_from_entity' entity_context.entity_id detail_image.id %}">
+                                <a href="{% url 'del_image_from_entity' entity_context.entity_id detail_image.id %}">
                                     - 删除
                                 </a>
                             </div>

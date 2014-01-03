@@ -26,3 +26,9 @@ if settings.IMAGE_LOCAL:
         (r'^image/local/img/(?P<key1>\w+).(?P<key2>\w+).(?P<key3>\w+)$', 'base.views.local_entity_image_extend'),
         (r'^image/local/category/(?P<key1>\w+)/(?P<key2>\w+)$', 'base.views.local_category_image'),
     )
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
