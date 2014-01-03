@@ -1,12 +1,14 @@
 __author__ = 'stxiong'
 from django.conf import settings
-from django.conf.urls.defaults import *
+from django.conf.urls import url, include, patterns
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', 'management.views.index'),
-    (r'^management/', include('management.urls')),
+    url(r'^$', 'management.views.index'),
+    #url(r'^management/', include('management.urls_bak')),
+    url(r'^management/', include('management.urls')),
+
     (r'^mobile/v3/', include('mobile.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'', include('web.urls'))
@@ -23,4 +25,10 @@ if settings.IMAGE_LOCAL:
         (r'^image/local/img/(?P<key>\w+).(?P<image_format>\w+)$', 'base.views.local_entity_image'),
         (r'^image/local/img/(?P<key1>\w+).(?P<key2>\w+).(?P<key3>\w+)$', 'base.views.local_entity_image_extend'),
         (r'^image/local/category/(?P<key1>\w+)/(?P<key2>\w+)$', 'base.views.local_category_image'),
+    )
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
     )

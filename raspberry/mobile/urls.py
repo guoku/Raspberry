@@ -1,5 +1,5 @@
 __author__ = 'stxiong'
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 
 urlpatterns = patterns('mobile.views',
     (r'^login/$', 'login'),
