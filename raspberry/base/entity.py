@@ -27,6 +27,43 @@ from hashlib import md5
 
 
 class Entity(object):
+    
+    class Mark(object):
+        promoted = 1
+        first = 2
+        event = 3
+        media = 4
+        celebrity = 5
+        award = 6
+
+        @staticmethod
+        def all():
+            return [
+                { 'value' : 0, 'title' : 'none' },
+                { 'value' : 1, 'title' : 'promoted' },
+                { 'value' : 2, 'title' : 'first' },
+                { 'value' : 3, 'title' : 'event' },
+                { 'value' : 4, 'title' : 'media' },
+                { 'value' : 5, 'title' : 'celebrity' },
+                { 'value' : 6, 'title' : 'award' }
+            ]
+        
+        @staticmethod
+        def get_title(value):
+            if value == 1:
+                return 'promoted'
+            elif value == 2:
+                return 'first'
+            elif value == 3:
+                return 'event'
+            elif value == 4:
+                return 'media'
+            elif value == 5:
+                return 'celebrity'
+            elif value == 6:
+                return 'award'
+            return 'none' 
+
 
     def __init__(self, entity_id):
         self.entity_id = int(entity_id)
@@ -206,6 +243,8 @@ class Entity(object):
             _basic_info["created_time"] = self.entity_obj.created_time
             _basic_info["updated_time"] = self.entity_obj.updated_time
             _basic_info["weight"] = self.entity_obj.weight
+            _basic_info["mark_value"] = self.entity_obj.mark
+            _basic_info["mark"] = Entity.Mark.get_title(self.entity_obj.mark)
             
             _basic_info['chief_image'] = {
                 'id' : self.entity_obj.chief_image,
@@ -286,7 +325,7 @@ class Entity(object):
 
         # TODO: removing entity_id in item
     
-    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None):
+    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None, mark = None):
         
         self.__ensure_entity_obj()
         if brand != None:
@@ -303,6 +342,8 @@ class Entity(object):
             self.entity_obj.category_id = int(old_category_id) 
         if weight != None:
             self.entity_obj.weight = int(weight)
+        if mark != None:
+            self.entity_obj.mark = int(mark)
         
         if chief_image_id != None and chief_image_id != self.entity_obj.chief_image:
             _detail_image_ids = self.entity_obj.detail_images.split('#')

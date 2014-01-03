@@ -864,7 +864,7 @@ class User(object):
             _footprint = self.mark_footprint()
         
         if _footprint.has_key('selection') and _footprint['selection'] != None:
-            return Selection.objects.filter(post_time__gt = _footprint['selection'], post_time__lt = datetime.datetime(2099, 1, 1)).count() 
+            return Selection.objects.filter(post_time__gt = _footprint['selection'], post_time__lt = datetime.datetime.now()).count() 
         else:
             pass
         

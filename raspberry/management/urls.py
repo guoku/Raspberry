@@ -41,6 +41,7 @@ urlpatterns = patterns('management.views',
     (r'^user/(?P<user_id>\w+)/edit/$', 'edit_user'),
     (r'^user/(?P<user_id>\w+)/pust/message/$', 'push_message_to_user'),
     (r'^taobao/item/sync/$', 'sync_taobao_item'),
+    (r'^selection/sync/$', 'sync_selection'),
     (r'^entity/without/title/sync/$', 'sync_entity_without_title'),
     (r'^update/entity/(?P<entity_id>\w+)/title/sync/$', 'sync_update_entity_title'),
 )
