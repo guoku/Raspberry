@@ -23,30 +23,35 @@
                 {% csrf_token %}
                 <div>
                     <label for="nickname">昵称</label>
-                    <input type="text" name="nickname" id="nickname" class="text-input">
+                    <input type="text" name="nickname" value="{{ user_context.nickname }}" id="nickname" class="text-input">
                 </div>
+
                 <div>
                     <label for="email">登录邮箱</label>
-                    <input type="text" name="email" id="email" class="text-input">
+                    <input type="text" name="email" value="{{ user_context.email }}" id="email" class="text-input">
                 </div>
+
                 <div>
                     <label for="bio">个人介绍</label>
-                    <textarea name="bio" id="bio" class="text-input" rows="4"></textarea>
+                    <textarea name="bio" value="{{ user_context.bio }}" id="bio" class="text-input" rows="4"></textarea>
                 </div>
-                <div>
+
+                <div class="address">
                     <span class="label">所在地</span>
-                    <select name=""><option>{{ province|default:'北京' }}</option></select>
-                    <select name=""><option>{{ city|default:'朝阳' }}</option></select>
+                    <select name="province" class="province" data-p="{{ user_context.location }}"></select>
+                    <select name="city" class="city" data-c=""></select>
                 </div>
+
                 <div class="gender">
                     <span class="label">性别</span>
-                    <label>男 <input type="radio" name="gender" value="M"></label>
-                    <label>女 <input type="radio" name="gender" value="F"></label>
-                    <label>其他 <input type="radio" name="gender" value="O"></label>
+                    <label>男 <input type="radio" name="gender" value="M" {% if user_context.gender == 'M' %}checked{% endif %}></label>
+                    <label>女 <input type="radio" name="gender" value="F" {% if user_context.gender == 'F' %}checked{% endif %}></label>
+                    <label>其他 <input type="radio" name="gender" value="O" {% if user_context.gender == 'O' %}checked{% endif %}></label>
                 </div>
+
                 <div>
                     <label for="website">网址</label>
-                    <input type="text" name="website" id="website" class="text-input">
+                    <input type="text" name="website" value="{{ user_context.website }}" id="website" class="text-input">
                 </div>
 
                 <input type="submit" value="更改资料" class="guoku-button">
@@ -62,10 +67,12 @@
                     <label for="old_psw">当前秘密</label>
                     <input type="text" name="old_password" id="old_psw" class="text-input">
                 </div>
+
                 <div>
                     <label for="psw1">新的密码</label>
                     <input type="text" name="password" id="psw1" class="text-input">
                 </div>
+
                 <div>
                     <label for="psw2">确认密码</label>
                     <input type="text" name="password2" id="psw2" class="text-input">
