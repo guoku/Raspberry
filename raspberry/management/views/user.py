@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from tasks import PushMessageToUserTask
+from management.tasks import PushMessageToUserTask
 from urlparse import urlparse
 import HTMLParser
 import re 

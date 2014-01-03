@@ -237,10 +237,14 @@ def user_tag_entity(request, user_id, tag):
         else:
             _request_user_id = None
         
+        _user_context = MobileUser(user_id).read(_request_user_id)
         _entity_id_list = Tag.find_user_tag_entity(user_id, tag)
-        _rslt = [] 
+        _rslt = {
+            'user' : _user_context,
+            'entity_list' : []
+        }
         for _entity_id in _entity_id_list: 
-            _rslt.append(MobileEntity(_entity_id).read(_request_user_id))
+            _rslt['entity_list'].append(MobileEntity(_entity_id).read(_request_user_id))
     return SuccessJsonResponse(_rslt)
 
 

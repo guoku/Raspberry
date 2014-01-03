@@ -377,7 +377,7 @@ class User(object):
            
     
     
-    def set_profile(self, nickname, location = 'beijing', gender = 'O', bio = '', website = ''):
+    def set_profile(self, nickname, location = u'北京', city = u'朝阳', gender = 'O', bio = '', website = ''):
         self.__ensure_user_profile_obj()
         
         if nickname != None:
@@ -391,6 +391,7 @@ class User(object):
                 user_id = self.user_id,
                 nickname = nickname.strip(),
                 location = location,
+                city = city,
                 gender = gender,
                 bio = bio,
                 website = website
@@ -401,6 +402,8 @@ class User(object):
                 self.user_profile_obj.nickname = nickname.strip()
             if location != None:
                 self.user_profile_obj.location = location.strip()
+            if city != None:
+                self.user_profile_obj.city = city.strip()
             if bio != None:
                 self.user_profile_obj.bio = bio.strip()
             if website != None:
@@ -447,6 +450,8 @@ class User(object):
             _basic_info['verified_type'] = 'guoku' 
             _basic_info['verified_reason'] = 'guoku' 
             _basic_info['gender'] = _profile.gender 
+            _basic_info['location'] = _profile.location
+            _basic_info['city'] = _profile.city
             _basic_info['bio'] = _profile.bio
             _basic_info['is_censor'] = False
             
@@ -864,7 +869,7 @@ class User(object):
             _footprint = self.mark_footprint()
         
         if _footprint.has_key('selection') and _footprint['selection'] != None:
-            return Selection.objects.filter(post_time__gt = _footprint['selection'], post_time__lt = datetime.datetime(2099, 1, 1)).count() 
+            return Selection.objects.filter(post_time__gt = _footprint['selection'], post_time__lt = datetime.datetime.now()).count() 
         else:
             pass
         
