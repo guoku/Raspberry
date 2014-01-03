@@ -68,9 +68,9 @@ def create_banner(request):
             image_data = _image_data,
             weight = _weight
         )
-    return HttpResponseRedirect(reverse('management.views.banner_list'))
+    return HttpResponseRedirect(reverse('management_banner_list'))
 
 @login_required
 def delete_banner(request, banner_id):
     Banner(banner_id).delete()
-    return HttpResponseRedirect(reverse('management.views.banner_list'))
+    return HttpResponseRedirect(reverse('management_banner_list'))

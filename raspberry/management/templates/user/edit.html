@@ -29,7 +29,7 @@
             <div class="stat-info"><span>赞: </span><span>{{ user_context.entity_note_poke_count }}</span></div>
         </div>
 
-        <form class="well form-horizontal" action="{% url 'user_edited' user_context.user_id %}"
+        <form class="well form-horizontal" action="{% url 'management_edit_user' user_context.user_id %}"
               method="POST">
             <fieldset>
                 <div class="control-group">
@@ -97,7 +97,7 @@
                 <button type="submit" class="btn btn-primary">更新</button>
             </div>
         </form>
-        <form class="well form-horizontal" action="{% url 'push_message_to_user' user_context.user_id %}" method="POST">
+        <form class="well form-horizontal" action="{% url 'management_push_message_to_user' user_context.user_id %}" method="POST">
             <fieldset>
                 <div class="control-group">
                     <label class="control-label" for="badge">数字:</label>

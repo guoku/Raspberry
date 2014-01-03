@@ -6,6 +6,6 @@ from django.http import HttpResponseRedirect
 
 def index(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('entity_list', kwargs = {}))
+        return HttpResponseRedirect(reverse('management_entity_list', kwargs = {}))
     else:
         return HttpResponseRedirect('admin')
