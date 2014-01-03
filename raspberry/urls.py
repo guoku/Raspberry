@@ -1,12 +1,14 @@
 __author__ = 'stxiong'
 from django.conf import settings
-from django.conf.urls.defaults import *
+from django.conf.urls import url, include, patterns
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', 'management.views.index'),
-    (r'^management/', include('management.urls')),
+    url(r'^$', 'management.views.index'),
+    #url(r'^management/', include('management.urls_bak')),
+    url(r'^management/', include('management.urls')),
+
     (r'^mobile/v3/', include('mobile.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'', include('web.urls'))

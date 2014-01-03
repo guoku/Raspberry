@@ -32,7 +32,7 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">操作</li>
                     <li>
-                        <a href="{% url 'management.views.new_entity' %}">
+                        <a href="{% url 'entity_new' %}">
                             添加商品
                         </a>
                     </li>
@@ -43,19 +43,19 @@
             <ul class="nav nav-list">
                 <li class="nav-header">分类组</li>
                 <li{%if  categories == None %} class="active"{%endif%}>
-                    <a href="{% url 'management.views.entity_list' %}">
+                    <a href="{% url 'entity_list' %}">
                         全部
                     </a>
                 </li>
                 {% for group in category_groups %}
                     <li{%if group.group_id == category_group_id%} class="active"{%endif%}>
-                        <a href="{% url 'management.views.entity_list' %}?gid={{group.group_id}}">
+                        <a href="{% url 'entity_list' %}?gid={{group.group_id}}">
                             {{ group.title }}({{ group.category_count }})
                         </a>
                     </li>
                 {% endfor %}
                 <li>
-                    <a href="{% url 'management.views.create_category_group' %}">
+                    <a href="{% url 'category_group_created' %}">
                         +
                     </a>
                 </li>
@@ -68,13 +68,13 @@
             <ul class="nav nav-pills">
                 {% for category in categories%}
                     <li{%if category.category_id == category_context.category_id%} class="active"{%endif%}>
-                        <a href="{% url 'management.views.entity_list' %}?cid={{category.category_id}}">
+                        <a href="{% url 'entity_list' %}?cid={{category.category_id}}">
                             {{ category.category_title }}({{ category.entity_count }})
                         </a>
                     </li>
                 {% endfor %}
                 <li>
-                    <a href="{% url 'management.views.create_category' %}?gid={{category_group_id}}">+</a> 
+                    <a href="{% url 'category_created' %}?gid={{category_group_id}}">+</a>
                 </li>
             </ul>
         </div>
@@ -82,22 +82,22 @@
         <div class="sub-nav">
             <ul class="nav nav-pills">
                 <li{%if status_filter == "all"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=all">
+                    <a href="{% url 'entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=all">
                         全部({{ normal_entity_count|add:freeze_entity_count }})
                     </a>
                 </li>
                 <li{%if status_filter == "normal"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=normal">
+                    <a href="{% url 'entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=normal">
                         正常({{ normal_entity_count }}) 
                     </a>
                 </li>
                 <li{%if status_filter == "freeze"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=freeze">
+                    <a href="{% url 'entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=freeze">
                         冻结({{ freeze_entity_count }}) 
                     </a>
                 </li>
                 <li{%if status_filter == "recycle"%} class="active"{%endif%}>
-                    <a href="{% url 'management.views.entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=recycle">
+                    <a href="{% url 'entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=recycle">
                         剔除({{ recycle_entity_count }}) 
                     </a>
                 </li>
