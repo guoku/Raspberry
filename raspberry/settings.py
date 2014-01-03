@@ -10,15 +10,15 @@ ADMINS = (
 MANAGERS = ADMINS
 
 from mongoengine import connect
-connect('guoku', host='10.0.2.200')
+connect('guoku')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku',
-        'USER': 'qinzhoukan',
-        'PASSWORD': 'qinzhoukan1@#',
-        'HOST': '10.0.2.90',
+        'NAME': 'guoku_12_12',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
         'PORT': '',                      
         'OPTIONS': {
             'use_unicode':'utf-8',
@@ -29,20 +29,32 @@ DATABASES = {
 #DATABASE_ROUTERS = ['router.AuthRouter']
 
 CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '10.0.2.49:6379',
-        'TIMEOUT:': 864000,
-        'OPTIONS': {
-            'DB': 1,
-            'PARSER_CLASS': 'redis.connection.HiredisParser'
-        },
-    },
+    "default": {
+        "BACKEND": "redis_cache.cache.RedisCache",
+        "LOCATION": [
+            "localhost:6379:1",
+        ],
+        "OPTIONS": {
+            "PARSER_CLASS": "redis.connection.HiredisParser",
+            "CLIENT_CLASS": "redis_cache.client.ShardClient",
+        }
+    }
 }
+#CACHES = {
+#    'default': {
+#        'BACKEND': 'redis_cache.RedisCache',
+#        'LOCATION': 'localhost:6379',
+#        'TIMEOUT:': 864000,
+#        'OPTIONS': {
+#            'DB': 1,
+#            'PARSER_CLASS': 'redis.connection.HiredisParser'
+#        },
+#    },
+#}
 
 # session
 SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_HOST = '10.0.2.49'
+SESSION_REDIS_HOST = 'localhost'
 SESSION_REDIS_PORT = 6379
 SESSION_REDIS_DB = 2
 SESSION_COOKIE_AGE = 1209600
@@ -123,7 +135,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.request',
   'django.core.context_processors.media',
   'django.core.context_processors.static',
-  'zinnia.context_processors.version',
+  #'zinnia.context_processors.version',
 ) # Optional
 
 DEBUG_TOOLBAR_PANELS = [
@@ -180,8 +192,7 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
-        },
-    }
+        }, }
 }
 
 PASSWORD_HASHERS = (
