@@ -1,5 +1,5 @@
 __author__ = 'stxiong'
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 
 urlpatterns = patterns('management.views',
     (r'^category/$', 'category_list'),
