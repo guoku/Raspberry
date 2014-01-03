@@ -1,0 +1,12 @@
+<ul class="users guoku-block">
+    {% for user_context in user_list %}
+        <li>
+            <a href="{% url 'web.views.user.user_index' user_context.user_id %}" class="avatar"><img src="{{ user_context.avatar_small }}" width="100" height="100"></a>
+            <div>
+                <span>{{ user_context.nickname }}</span>
+                <p>{{ user_context.bio|truncatechars:12 }}</p>
+                <a href="javascript:;" class="follow">关注</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

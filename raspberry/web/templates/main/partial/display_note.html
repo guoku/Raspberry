@@ -2,13 +2,13 @@
 {% load web %}
 
 <div class="note-item">
-    <a href="{% url 'web.views.user.index' creator_context.user_id %}" class="avatar">
+    <a href="{% url 'web.views.user.user_index' creator_context.user_id %}" class="avatar">
         <img src="{{ creator_context.avatar_small }}" width="50" height="50">
     </a>
 
     <div class="note-detail">
         <a class="nickname"
-           href="{% url 'web.views.user.index' creator_context.user_id %}">{{ creator_context.nickname }}</a>
+           href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}</a>
         <small class="bio">{{ creator_context.bio }}</small>
         <p class="note-content">{{ note_context.content }}</p>
 

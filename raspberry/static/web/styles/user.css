@@ -47,17 +47,14 @@
 #user-center .base a {
     position: absolute;
     right: 15px;
-    top: 75px;
+    top: 65px;
+    text-decoration: none;
 
     padding: 4px;
     color: #999;
     border: 1px solid #e1e1e1;
     border-radius: 2px;
     background: #fafafa;
-}
-
-#user-center .base a:hover {
-    text-decoration: none;
 }
 
 #user-center .stat {
@@ -166,20 +163,23 @@
 #user-center .notes li {
     display: inline-block;
     width: 319px;
+    height: 478px;
     padding: 30px 0;
+    vertical-align: top;
     font-size: 14px;
     border-right: 1px solid #f3f3f3;
-    border-top: 1px solid #f3f3f3;
+    border-bottom: 1px solid #f3f3f3;
 }
 
-#user-center h3.notes {
-    margin: 45px 0 5px;
+#user-center h3 {
+    margin: 25px 0 5px;
+    font-size: 14px;
 }
 
 #user-center .notes .entity-img {
     display: block;
     width: 290px;
-    height: 290px;
+    max-height: 290px;
     margin: 0 auto;
     text-align: center;
 }
@@ -187,4 +187,65 @@
 #user-center .notes .entity-img img {
     max-width: 100%;
     max-height: 100%;
+}
+
+#user-center .notes li div {
+    width: 290px;
+    margin: 10px auto;
+}
+
+#user-center .notes .avatar {
+    float: left;
+    margin-right: 5px;
+}
+
+#user-center .notes .nickname {
+    color: #333;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+#user-center .notes .date {
+    font-size: 12px;
+}
+
+#user-center .notes p {
+    clear: left;
+    color: #666;
+    line-height: 1.5;
+}
+
+#user-center .users {
+    padding: 0 15px;
+    font-size: 0;
+}
+
+#user-center .users li {
+    display: inline-block;
+    width: 310px;
+    height: 110px;
+    margin: 30px 0;
+    vertical-align: top;
+    font-size: 14px;
+}
+
+#user-center .users .avatar {
+    float: left;
+    margin-right: 10px;
+}
+
+#user-center .users .follow {
+    display: inline-block;
+    text-decoration: none;
+
+    padding: 4px;
+    color: #999;
+    border: 1px solid #e1e1e1;
+    border-radius: 2px;
+    background: #fafafa;
+}
+
+#user-center .users li p {
+    margin: 5px 0 15px;
+    font-size: 12px;
 }

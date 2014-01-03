@@ -10,16 +10,14 @@ from base.entity import Entity
 from base.note import Note
 
 
-def _get_user_basic_info(user_id):
-    _info = {}
-    return _info
+def user_index(request, user_id):
+    return user_likes(request, user_id)
 
 
-def index(request, user_id):
-    return likes(request, user_id)
+TEMPLATE = 'user/index.html'
 
 
-def likes(request, user_id, template='user/index.html'):
+def user_likes(request, user_id, template=TEMPLATE):
     _c = request.GET.get('c', None)
     _p = request.GET.get('p', None)
     _curr_cat_id = 0
@@ -35,6 +33,7 @@ def likes(request, user_id, template='user/index.html'):
 
     _old_category_list = Old_Category.find()[0:12]
 
+    # TODO
     _entity_id_list = _query_user.find_like_entity(None, offset=0, count=30)
     _entity_list = []
 
@@ -56,7 +55,7 @@ def likes(request, user_id, template='user/index.html'):
     )
 
 
-def posts(request, user_id, template='user/index.html'):
+def user_posts(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
@@ -72,11 +71,12 @@ def posts(request, user_id, template='user/index.html'):
     )
 
 
-def notes(request, user_id, template='user/index.html'):
+def user_notes(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
 
+    # TODO
     _note_id_list = Note.find(creator_set=[user_id], offset=0, count=30)
     _note_list = []
 
@@ -105,7 +105,7 @@ def notes(request, user_id, template='user/index.html'):
     )
 
 
-def tags(request, user_id, template='user/index.html'):
+def user_tags(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
@@ -121,33 +121,52 @@ def tags(request, user_id, template='user/index.html'):
     )
 
 
-def followings(request, user_id, template='user/index.html'):
+def user_followings(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
+
+    # TODO paginate
+    _following_id_list = _query_user.read_following_user_id_list()[0:30]
+    _following_list = []
+
+    for _f_id in _following_id_list:
+        _f_context = User(_f_id).read()
+        _following_list.append(_f_context)
 
     return render_to_response(
         template,
         {
             'user_context' : _user_context,
             'content_tab' : 5,
-            'query_user_context' : _query_user_context
+            'query_user_context' : _query_user_context,
+            'user_list' : _following_list
         },
         context_instance=RequestContext(request)
     )
 
 
-def fans(request, user_id, template='user/index.html'):
+def user_fans(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
+
+    # TODO
+    _fans_id_list = _query_user.read_fan_user_id_list()[0:30]
+    _fans_list = []
+
+    for _f_id in _fans_id_list:
+        _f_context = User(_f_id).read()
+        _fans_list.append(_f_context)
+
 
     return render_to_response(
         template,
         {
             'user_context' : _user_context,
             'content_tab' : 6,
-            'query_user_context' : _query_user_context
+            'query_user_context' : _query_user_context,
+            'user_list' : _fans_list
         },
         context_instance=RequestContext(request)
     )

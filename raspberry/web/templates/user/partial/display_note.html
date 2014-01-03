@@ -5,14 +5,18 @@
             <a href="{% url 'web.views.main.detail' note.entity_context.entity_hash %}" class="entity-img"><img
                     src="{{ note.entity_context.chief_image.url }}"></a>
 
-            <a href="{% url 'web.views.user.index' note.note_context.creator_id %}" class="avatar"><img
-                    src="{{ note.creator_context.avatar_small }}" width="35" height="35"></a>
+            <div>
+                <a href="{% url 'web.views.user.user_index' note.note_context.creator_id %}" class="avatar"><img
+                        src="{{ note.creator_context.avatar_small }}" width="35" height="35"></a>
+                <a href="{% url 'web.views.user.user_index' note.note_context.creator_id %}" class="nickname">{{ note.creator_context.nickname }}</a><br />
+                <span class="date">{{ note.note_context.created_time|format_time }}</span>
 
-            <a>{{ note.creator_context.nickname }}</a>
-            <span>{{ note.note_context.created_time|format_time }}</span>
-            <p>{{ note.note_context.content }}</p>
+                <p>{{ note.note_context.content }}</p>
 
-            <a href="javascript:;"><small>{{ note.note_context.poke_count }}</small></a>
+                <a href="javascript:;">
+                    <span>喜爱 </span><small>{{ note.note_context.poke_count }}</small>
+                </a>
+            </div>
         </li>
     {% endfor %}
 </ul>

@@ -41,11 +41,11 @@ urlpatterns += patterns(
 
 urlpatterns += patterns(
     'web.views.user',
-    (r'^u/(?P<user_id>\w+)/$', 'index'),
-    (r'^u/(?P<user_id>\w+)/likes/$', 'likes'),
-    (r'^u/(?P<user_id>\w+)/posts/$', 'posts'),
-    (r'^u/(?P<user_id>\w+)/notes/$', 'notes'),
-    (r'^u/(?P<user_id>\w+)/tags/$', 'tags'),
-    (r'^u/(?P<user_id>\w+)/followings/$', 'followings'),
-    (r'^u/(?P<user_id>\w+)/fans/$', 'fans')
+    (r'^u/(?P<user_id>\w+)/$', 'user_index'),
+    (r'^u/(?P<user_id>\w+)/likes/$', 'user_likes'),
+    (r'^u/(?P<user_id>\w+)/posts/$', 'user_posts'),
+    (r'^u/(?P<user_id>\w+)/notes/$', 'user_notes'),
+    (r'^u/(?P<user_id>\w+)/tags/$', 'user_tags'),
+    (r'^u/(?P<user_id>\w+)/followings/$', 'user_followings'),
+    (r'^u/(?P<user_id>\w+)/fans/$', 'user_fans')
 )

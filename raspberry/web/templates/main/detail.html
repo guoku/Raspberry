@@ -29,7 +29,7 @@
                     </div>
                 {% endif %}
 
-                {% if common_note_list|length > 0 %}
+                {% if selection_note != None and common_note_list|length > 0 %}
                     <div class="common-note-count">还有 {{ common_note_list|length }} 条点评</div>
                 {% endif %}
 
