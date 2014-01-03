@@ -10,7 +10,7 @@
 <body>
 <div id="header">
     <div class="header-container">
-        <a href="/selection" class="logo"><img src="{{ STATIC_URL }}web/images/guoku_icon_32.png"></a>
+        <a href="{% url 'web.views.main.selection' %}" class="logo"><img src="{{ STATIC_URL }}web/images/guoku_icon_32.png"></a>
         <ul class="nav">
             <li><a href="{% url 'web.views.main.selection' %}">精选</a></li>
             <li><a href="{% url 'web.views.main.popular' %}">热门</a></li>

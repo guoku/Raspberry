@@ -1,13 +1,78 @@
 {% extends "base.html" %}
 
 {% block title %}设置 - 果库{% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/user.css">{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}web/styles/account.css">{% endblock %}
 
 {% block content %}
-    <h2>帐号设置</h2>
-    <div id="setting" class="guoku-block">
-        <div class="container">
+    <h2 class="setting">帐号设置</h2>
+    <div class="guoku-block">
+        <div id="setting">
+            <form class="update-avatar clearfix" enctype="multipart/form-data" action="{% url 'web.views.accounts.update_avatar' %}" method="POST">
+                {% csrf_token %}
+                <div class="avatar guoku-block"><img src="{{ user_context.avatar_small }}" height="100" width="100"></div>
 
+                <a href="javascript:;">点击选择图片</a><span></span>
+                <input type="file" name="avatar_img" class="file">
+                <p>支持 JPG、GIF、PNG 格式，不超过 2MB。</p>
+                <input type="submit" value="更新头像" class="guoku-button">
+            </form>
+
+            <form method="POST" action="{% url 'web.views.accounts.setting' %}" class="base-info">
+                <h3>个人资料</h3>
+                {% csrf_token %}
+                <div>
+                    <label for="nickname">昵称</label>
+                    <input type="text" name="nickname" id="nickname" class="text-input">
+                </div>
+                <div>
+                    <label for="email">登录邮箱</label>
+                    <input type="text" name="email" id="email" class="text-input">
+                </div>
+                <div>
+                    <label for="bio">个人介绍</label>
+                    <textarea name="bio" id="bio" class="text-input" rows="4"></textarea>
+                </div>
+                <div>
+                    <span class="label">所在地</span>
+                    <select name=""><option>{{ province|default:'北京' }}</option></select>
+                    <select name=""><option>{{ city|default:'朝阳' }}</option></select>
+                </div>
+                <div class="gender">
+                    <span class="label">性别</span>
+                    <label>男 <input type="radio" name="gender" value="M"></label>
+                    <label>女 <input type="radio" name="gender" value="F"></label>
+                    <label>其他 <input type="radio" name="gender" value="O"></label>
+                </div>
+                <div>
+                    <label for="website">网址</label>
+                    <input type="text" name="website" id="website" class="text-input">
+                </div>
+
+                <input type="submit" value="更改资料" class="guoku-button">
+            </form>
+
+            <div class="bind"><span class="label">新浪微博</span><a href="">绑定新浪微博</a></div>
+            <div class="bind"><span class="label">淘宝网</span><a href="">绑定淘宝网</a></div>
+
+            <form method="POST" action="{% url 'web.views.accounts.setting' %}" class="psw">
+                <h3>更改密码</h3>
+                {% csrf_token %}
+                <div>
+                    <label for="old_psw">当前秘密</label>
+                    <input type="text" name="old_password" id="old_psw" class="text-input">
+                </div>
+                <div>
+                    <label for="psw1">新的密码</label>
+                    <input type="text" name="password" id="psw1" class="text-input">
+                </div>
+                <div>
+                    <label for="psw2">确认密码</label>
+                    <input type="text" name="password2" id="psw2" class="text-input">
+                </div>
+
+                <input type="submit" value="修改密码" class="guoku-button">
+            </form>
         </div>
     </div>
 {% endblock %}

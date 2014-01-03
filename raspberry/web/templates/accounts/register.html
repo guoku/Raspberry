@@ -1,6 +1,5 @@
 {% extends "accounts/account_base.html" %}
 
-{% block title %}{% endblock %}
 {% block form %}
     <form action="{% url 'web.views.accounts.register' %}" method="POST">
         {% csrf_token %}

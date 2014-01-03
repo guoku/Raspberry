@@ -1,12 +1,14 @@
 {% extends "accounts/account_base.html" %}
 
-{% block title %}{% endblock %}
 {% block form %}
     <form action="{% url 'web.views.accounts.login' %}" method="POST" id="login">
         {% csrf_token %}
 
         <h2>登录</h2> | 没有帐号？<a href="{% url 'web.views.accounts.register' %}">请注册</a>
 
+        {% if next != None %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
         <div>
             <input type="text" name="email" class="text-input" placeholder="邮箱" id="email">
             {% if email_error != None %}<span class="error-info">{{ email_error }}</span>{% endif %}

@@ -19,7 +19,9 @@ urlpatterns += patterns(
     (r'^accounts/register/$', 'register'),
     (r'^accounts/register/validate_nickname/$', 'is_nickname_used'),
     (r'^accounts/register/validate_email/$', 'is_email_used'),
-    (r'^accounts/setting/$', 'setting')
+    (r'^accounts/setting/$', 'setting'),
+    (r'^accounts/setting/upload_avatar/$', 'upload_avatar'),
+    (r'^accounts/setting/update_avatar$', 'update_avatar'),
 )
 
 

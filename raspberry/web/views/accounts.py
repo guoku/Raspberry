@@ -1,5 +1,6 @@
 # coding=utf-8
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.validators import validate_email
@@ -67,7 +68,7 @@ def register(request, template='accounts/register.html'):
         return render_to_response(
             template,
             {
-                'title' : '欢迎加入果库'
+
             },
             context_instance=RequestContext(request)
         )
@@ -107,15 +108,18 @@ def login(request, template='accounts/login.html'):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
     if request.method == 'GET':
+        _next = request.GET.get('next', None)
+
         return render_to_response(
             template,
             {
-
+                'next' : _next
             },
             context_instance=RequestContext(request)
         )
 
     else:
+        _next = request.POST.get('next', None)
         _email = request.POST.get('email', None)
         _password = request.POST.get('password', None)
         _remember_me = request.POST.get("remember_me", None)
@@ -137,7 +141,10 @@ def login(request, template='accounts/login.html'):
                         if _remember_me is not None:
                             request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
 
-                        return HttpResponseRedirect('/selection/')
+                        if _next is not None:
+                            return HttpResponseRedirect(_next)
+
+                        return HttpResponseRedirect('/selected/')
 
                     else:
                         _email_error = '帐号已冻结'
@@ -149,7 +156,6 @@ def login(request, template='accounts/login.html'):
         return render_to_response(
             template,
             {
-                'title' : '欢迎加入果库',
                 'email_error' : _email_error,
                 'password_error' : _password_error
             },
@@ -165,19 +171,35 @@ def login_by_taobao(request):
     pass
 
 
+@login_required
 def logout(request):
     auth_logout(request)
     request.session.set_expiry(0)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
+@login_required
 def setting(request, template='accounts/setting.html'):
     _user_context = get_request_user_context(request.user)
 
-    return render_to_response(
-        template,
-        {
-            'user_context' : _user_context,
-        },
-        context_instance=RequestContext(request)
-    )
+    if request.method == 'GET':
+        return render_to_response(
+            template,
+            {
+                'user_context': _user_context,
+            },
+            context_instance=RequestContext(request)
+        )
+
+    else:
+        pass
+
+
+@login_required
+def upload_avatar(request):
+    pass
+
+
+@login_required
+def update_avatar(request):
+    pass
