@@ -3,7 +3,6 @@ body {
 }
 
 .main {
-    height: 270px;
     width: 100%;
     position: absolute;
     top: 50%;
@@ -12,17 +11,17 @@ body {
     background-color: #fff;
 }
 
-.login, .register {
+.container {
     margin: 30px auto;
     width: 620px;
 }
 
-.login img, .register img {
+.container img {
     float: left;
     margin: 40px 60px 0 0;
 }
 
-.login h2, .register h2 {
+.container h2 {
     display: inline;
     font-size: 18px;
     font-weight: normal;
@@ -31,6 +30,7 @@ body {
 
 form {
     display: inline-block;
+    position: relative;
 }
 
 form a {
@@ -49,7 +49,9 @@ form #password {
 }
 
 form .guoku-button {
-    margin-left: 106px;
+    position: absolute;
+    right: 1px;
+    
 }
 
 form #agreement, form #remember-me {
