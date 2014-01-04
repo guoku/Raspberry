@@ -11,13 +11,13 @@
         {% endif %}
         <div>
             <input type="text" name="email" class="text-input" placeholder="邮箱" id="email">
-            {% if email_error != None %}<span class="error-info">{{ email_error }}</span>{% endif %}
+            {% if error.email != None %}<span class="error-info">{{ error.email }}</span>{% endif %}
         </div>
         <div>
             <input type="password" name="password" class="text-input" placeholder="密码" id="password">
-            {% if password_error != None %}<span class="error-info">{{ password_error }}</span>{% endif %}
+            {% if error.psw != None %}<span class="error-info">{{ error.psw }}</span>{% endif %}
         </div>
-        <div>
+        <div class="submit-row">
             <label><input type="checkbox" name="remember_me" id="remember-me">记住我</label>
             <small><a href="">忘了密码?</a></small>
             <input type="submit" value="登录" class="guoku-button">

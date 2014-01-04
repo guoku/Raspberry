@@ -66,18 +66,18 @@
                 <h3>更改密码</h3>
                 {% csrf_token %}
                 <div>
-                    <label for="old_psw">当前秘密</label>
-                    <input type="text" name="old_password" id="old_psw" class="text-input">
+                    <label for="curr_psw">当前秘密</label>
+                    <input type="text" name="current_psw" id="curr_psw" class="text-input">
                 </div>
 
                 <div>
-                    <label for="psw1">新的密码</label>
-                    <input type="text" name="password" id="psw1" class="text-input">
+                    <label for="n_psw">新的密码</label>
+                    <input type="text" name="new_psw" id="n_psw" class="text-input">
                 </div>
 
                 <div>
-                    <label for="psw2">确认密码</label>
-                    <input type="text" name="password2" id="psw2" class="text-input">
+                    <label for="c_psw">确认密码</label>
+                    <input type="text" name="confirm_psw" id="c_psw" class="text-input">
                 </div>
 
                 <input type="submit" value="修改密码" class="guoku-button">

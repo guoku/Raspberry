@@ -78,29 +78,28 @@ def register(request, template='accounts/register.html'):
         _email = request.POST.get('email', None)
         _password = request.POST.get('password', None)
 
-        _nickname_error = _check_nickname_valid(_nickname)
-        _email_error = _check_email_valid(_email)
-        _password_error = _check_password_valid(_password)
+        _error = {
+            'nickname' : _check_nickname_valid(_nickname),
+            'email' : _check_email_valid(_email),
+            'psw' : _check_password_valid(_password)
+        }
 
-        if User.email_exist(_email):
-            _email_error = '邮箱已经被注册'
+        if _error['email'] is None and User.email_exist(_email):
+            _error['email'] = '邮箱已经被注册'
 
-        if not(_nickname_error or _email_error or _password_error):
+        if _error['nickname'] is None and _error['email'] is None and _error['psw'] is None:
             _new_user = User.create(_email, _password)
             _new_user.set_profile(_nickname)
             # TODO
             return HttpResponseRedirect('account/login/')
 
-        else:
-            return render_to_response(
-                template,
-                {
-                    'nickname_error' : _nickname_error,
-                    'email_error' : _email_error,
-                    'password_error' : _password_error
-                },
-                context_instance=RequestContext(request)
-            )
+        return render_to_response(
+            template,
+            {
+                'error': _error
+            },
+            context_instance=RequestContext(request)
+        )
 
 
 def login(request, template='accounts/login.html'):
@@ -124,40 +123,42 @@ def login(request, template='accounts/login.html'):
         _password = request.POST.get('password', None)
         _remember_me = request.POST.get("remember_me", None)
 
-        _email_error = _check_email_valid(_email)
-        _password_error = _check_password_valid(_password)
+        _error = {
+            'email' : _check_email_valid(_email),
+            'psw' : _check_password_valid(_password)
+        }
 
-        if not(_email_error or _password_error):
+        if _error['email'] is None and _error['psw'] is None:
             _user_id = User.get_user_id_by_email(_email)
 
-            if _user_id is not None:
+            if _user_id is None:
+                _error['email'] = '邮箱未注册'
+
+            else:
                 _username = User(_user_id).get_username()
                 _user = authenticate(username=_username, password=_password)
 
-                if _user is not None:
-                    if _user.is_active:
-                        auth_login(request, _user)
+                if _user is None:
+                    _error['psw'] = '密码不正确'
 
-                        if _remember_me is not None:
-                            request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
+                elif not _user.is_active:
+                    _error['email'] = '帐号已冻结'
 
-                        if _next is not None:
-                            return HttpResponseRedirect(_next)
-
-                        return HttpResponseRedirect('/selected/')
-
-                    else:
-                        _email_error = '帐号已冻结'
                 else:
-                    _password_error = '密码不正确'
-            else:
-                _email_error = '邮箱未注册'
+                    auth_login(request, _user)
+
+                    if _remember_me is not None:
+                        request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
+
+                    if _next is not None:
+                        return HttpResponseRedirect(_next)
+
+                    return HttpResponseRedirect('/selected/')
 
         return render_to_response(
             template,
             {
-                'email_error' : _email_error,
-                'password_error' : _password_error
+                'error' : _error
             },
             context_instance=RequestContext(request)
         )
@@ -179,13 +180,21 @@ def logout(request):
 
 
 @login_required
+def check_curr_psw(request):
+    if request.method == 'POST':
+        _user = User(request.user.id)
+        _psw = request.POST.get('psw', None)
+
+        if _psw is not None:
+            return _user.check_auth(_psw)
+
+
+@login_required
 def setting(request, template='accounts/setting.html'):
-    _user_context = get_request_user_context(request.user)
+    _user = User(request.user.id)
+    _user_context = _user.read()
 
     if request.method == 'GET':
-        print(_user_context)
-        # print(_user_context['city'])
-
         return render_to_response(
             template,
             {
@@ -195,7 +204,54 @@ def setting(request, template='accounts/setting.html'):
         )
 
     else:
-        pass
+        _curr_psw = request.POST.get('current_psw', None)
+        _error = {}
+
+        if _curr_psw is not None:
+            # set password
+            _new_psw = request.POST.get('new_psw', None)
+            _confirm_psw = request.POST.get('confirm_psw', None)
+
+            if len(_curr_psw) < 6 or not _user.check_auth(_curr_psw):
+                _error['psw'] = '当前密码不正确'
+
+            elif len(_new_psw) < 6 or len(_confirm_psw) < 6:
+                _error['psw'] = '秘密不能少于6位'
+
+            elif _new_psw != _confirm_psw:
+                _error['psw'] = '两次密码不一致'
+
+            else:
+                _user.reset_account(password=_new_psw)
+
+        else:
+            # set basic info
+            _nickname = request.POST.get('nickname', None)
+            _email = request.POST.get('email', None)
+            _bio = request.POST.get('bio', None)
+            _location = request.POST.get('location', None)
+            _city = request.POST.get('city', None)
+            _gender = request.POST.get('gender', None)
+            _website = request.POST.get('website', None)
+
+            _len = len(_nickname)
+            if _len == 0 or _len > 15:
+                _nickname = None
+
+            _len = len(_bio)
+            if _len == 0:
+                _bio = None
+
+            _len = len(_website)
+            if _len == 0:
+                _website = None
+
+            _user.set_profile(_nickname, location=_location, city=_city, gender=_gender, bio=_bio, website=_website)
+
+            if _validate_email(_email):
+                _user.reset_account(email=_email)
+
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 @login_required

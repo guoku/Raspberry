@@ -1,8 +1,7 @@
 /**
  * Created by cuiwei on 13-12-26.
  */
-;
-(function ($, document, window) {
+;(function ($, document, window) {
   var $selectionItem = $('.selection-item');
   var $noteItem = $('.note-item');
 
@@ -254,7 +253,7 @@
         .appendTo($city);
 
       if (currC === cities[i]) {
-        $option[0].checked = true;
+        $option[0].selected = true;
       }
     }
 
