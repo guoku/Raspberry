@@ -183,8 +183,8 @@ def setting(request, template='accounts/setting.html'):
     _user_context = get_request_user_context(request.user)
 
     if request.method == 'GET':
-        # print(_user_context['location'])
         print(_user_context)
+        # print(_user_context['city'])
 
         return render_to_response(
             template,

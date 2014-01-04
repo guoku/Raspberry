@@ -182,7 +182,7 @@
 
 
   var Location = {
-    province: ['安徽', '澳门', '北京', '福建', '甘肃', '广东', '广西', '贵州', '海南', '河北', '河南', '黑龙江', '湖北', '湖南',
+    location: ['安徽', '澳门', '北京', '福建', '甘肃', '广东', '广西', '贵州', '海南', '河北', '河南', '黑龙江', '湖北', '湖南',
       '吉林', '江苏', '江西', '辽宁', '内蒙古', '宁夏', '青海', '山东', '山西', '陕西', '上海', '四川', '台湾', '天津', '西藏',
       '香港', '新疆', '云南', '浙江', '重庆', '海外'],
     city: [
@@ -226,23 +226,23 @@
 
   (function setAddress() {
     var $setting = $('#setting');
-    var $province = $setting.find('.province');
+    var $location = $setting.find('.location');
     var $city = $setting.find('.city');
-    var p = Location.province;
+    var l = Location.location;
     var c = Location.city;
 
-    var currP = $province.attr('data-p');
+    var currP = $location.attr('data-p');
     var currC = $city.attr('data-c');
+    var selectedP = 2;
 
-    var selectedP = 0;
+    for (var i = 0; i < l.length; i++) {
+      var $option = $('<option>').val(l[i])
+        .text(l[i])
+        .appendTo($location);
 
-    for (var i = 0; i < p.length; i++) {
-      var $option = $('<option>').val(p[i])
-        .text(p[i])
-        .appendTo($province);
-
-      if (currP === p[i]) {
-        $option.attr('checked', 'checked');
+      if (currP === l[i]) {
+        $option[0].selected = true;
+        selectedP = i;
       }
     }
 
@@ -254,13 +254,13 @@
         .appendTo($city);
 
       if (currC === cities[i]) {
-        $option.attr('checked', 'checked');
+        $option[0].checked = true;
       }
     }
 
-    $province.change(function () {
+    $location.change(function () {
       var currP = $(this).val();
-      var selectedP = p.indexOf(currP);
+      var selectedP = l.indexOf(currP);
       var cities = c[selectedP];
       $city.html('');
 
