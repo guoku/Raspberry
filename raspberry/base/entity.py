@@ -179,9 +179,9 @@ class Entity(object):
         if image_id in self.entity_obj.detail_images:
             self.entity_obj.detail_images = self.entity_obj.detail_images.replace(image_id, '')
             self.entity_obj.detail_images = self.entity_obj.detail_images.replace('##', '#')
-            if self.entity_obj.detail_images[0] == '#':
+            if len(self.entity_obj.detail_images) > 1 and self.entity_obj.detail_images[0] == '#':
                 self.entity_obj.detail_images = self.entity_obj.detail_images[1:]
-            if self.entity_obj.detail_images[-1] == '#':
+            if len(self.entity_obj.detail_images) > 1 and self.entity_obj.detail_images[-1] == '#':
                 self.entity_obj.detail_images = self.entity_obj.detail_images[:-1]
         self.entity_obj.save()
     
