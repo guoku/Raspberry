@@ -582,7 +582,7 @@ def merge_entity(request, entity_id):
 
 @login_required
 def get_all_categories(request):
-    if request.method == "GET":
+    if request.method == 'GET':
         result = {}
         new_category = {}
         result['new_category'] = new_category
@@ -591,15 +591,17 @@ def get_all_categories(request):
 
         for g_a_c in groups_and_categories:
             categories = []
+
             for cat in g_a_c['content']:
-                category = {}
-                category['category_title'] = cat['category_title']
-                category['category_id'] = cat['category_id']
+                category = {
+                    'category_title' : cat['category_title'],
+                    'category_id' : cat['category_id']
+                }
                 categories.append(category)
+
             new_category[g_a_c['title']] = categories
+
         return HttpResponse(json.dumps(result))
-    else:
-        return Http404
 
 @login_required
 def read_taobao_item_state(request):

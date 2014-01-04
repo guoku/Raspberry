@@ -16,6 +16,7 @@ class User_Profile(models.Model):
     user = models.OneToOneField(User)
     nickname = models.CharField(max_length = 64, db_index = True, unique = True)
     location = models.CharField(max_length = 32, null = True, default = u'北京')
+    city = models.CharField(max_length = 32, null = True, default = u'朝阳')
     gender = models.CharField(max_length = 2, choices = GENDER_CHOICES, default = Other)
     bio = models.CharField(max_length = 1024, null = True, blank = True)
     website = models.CharField(max_length = 1024, null = True, blank = True)

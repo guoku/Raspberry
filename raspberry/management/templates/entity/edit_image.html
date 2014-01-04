@@ -22,7 +22,7 @@
                             </a>
                             <div style="text-align:center">
                                 细节图{{ forloop.counter }}
-                                <a href="{% url 'management.views.del_image_from_entity' entity_context.entity_id detail_image.id %}">
+                                <a href="{% url 'management_del_image_from_entity' entity_context.entity_id detail_image.id %}">
                                     删除 
                                 </a>
                             </div>
@@ -32,13 +32,13 @@
             </ul>
         </div>
         <div>
-            <form class="well form-horizontal" action="{% url 'management.views.edit_entity' entity_context.entity_id %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management_edit_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="entity_hash">Hash:</label>
                         <div class="controls">
                             <input class="input-xxlarge" type="text" id="entity_hash" name="entity_hash" value="{{ entity_context.entity_hash }}" disabled/>
-                            <a href="{% url 'management.views.edit_entity' entity_context.entity_id %}" target="_blank">
+                            <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target="_blank">
                                 管理商品详情 > 
                             </a>
                         </div>
@@ -59,7 +59,7 @@
                     <button type="submit" class="btn btn-primary">更新</button>
                 </div>
             </form>
-            <form class="well form-horizontal" action="{% url 'management.views.add_image_for_entity' entity_context.entity_id %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management_add_image_for_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="image">添加新图片(从链接):</label>
@@ -72,7 +72,7 @@
                     <button type="submit" class="btn btn-primary">添加</button>
                 </div>
             </form>
-            <form class="well form-horizontal" action="{% url 'management.views.add_image_for_entity' entity_context.entity_id %}" method="POST" enctype="multipart/form-data">
+            <form class="well form-horizontal" action="{% url 'management_add_image_for_entity' entity_context.entity_id %}" method="POST" enctype="multipart/form-data">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="image">上传新图片:</label>
@@ -92,7 +92,7 @@
                         <div class="control-group">
                             <div class="controls">
                                 <input class="input-xlarge" type="text" id="image_id" name="image_id" value="{{ detail_image.id }}" disabled/>
-                                <a href="{% url 'management.views.del_image_from_entity' entity_context.entity_id detail_image.id %}">
+                                <a href="{% url 'management_del_image_from_entity' entity_context.entity_id detail_image.id %}">
                                     删除 
                                 </a>
                             </div>
