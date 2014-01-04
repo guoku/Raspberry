@@ -26,6 +26,9 @@ DATABASES = {
         }
     },
 }
+
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 #DATABASE_ROUTERS = ['router.AuthRouter']
 
 # CACHES = {
@@ -69,7 +72,7 @@ SPHINX_port = 3312
 
 
 #mongo db
-MANGO_HOST = 'localhost'
+MANGO_HOST = '10.0.2.200'
 MANGO_PORT = 27017
 
 
