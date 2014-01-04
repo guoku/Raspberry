@@ -582,21 +582,26 @@ def merge_entity(request, entity_id):
 
 @login_required
 def get_all_categories(request):
-    result = {}
-    new_category = {}
-    result['new_category'] = new_category
-    result['old_category'] = Old_Category.find()
-    groups_and_categories = Category.all_group_with_full_category()
+    if request.method == 'GET':
+        result = {}
+        new_category = {}
+        result['new_category'] = new_category
+        result['old_category'] = Old_Category.find()
+        groups_and_categories = Category.all_group_with_full_category()
 
-    for g_a_c in groups_and_categories:
-        categories = []
-        for cat in g_a_c['content']:
-            category = {}
-            category['category_title'] = cat['category_title']
-            category['category_id'] = cat['category_id']
-            categories.append(category)
-        new_category[g_a_c['title']] = categories
-    return HttpResponse(json.dumps(result))
+        for g_a_c in groups_and_categories:
+            categories = []
+
+            for cat in g_a_c['content']:
+                category = {
+                    'category_title' : cat['category_title'],
+                    'category_id' : cat['category_id']
+                }
+                categories.append(category)
+
+            new_category[g_a_c['title']] = categories
+
+        return HttpResponse(json.dumps(result))
 
 @login_required
 def read_taobao_item_state(request):
