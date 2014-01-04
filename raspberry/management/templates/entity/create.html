@@ -1,4 +1,5 @@
 {% extends "management_base.html" %}
+{% load staticfiles %}
 
 {% block content %}
     <div class="container">
@@ -129,5 +130,5 @@
 {% endblock %}
 
 {% block extra %}
-    <script type="text/javascript" src="{{ STATIC_URL }}management/js/category.js"></script>
+    <script type="text/javascript" src="{% static 'management/js/category.js' %}"></script>
 {% endblock %}
