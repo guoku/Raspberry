@@ -1,7 +1,7 @@
 __author__ = 'edison'
 from hashlib import md5
 from http import ErrorJsonResponse
-from mobile.models import Apps
+from mobile_app.models import Apps
 
 
 class MissParamError(Exception):
