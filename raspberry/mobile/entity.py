@@ -4,7 +4,7 @@ from lib.note import MobileNote
 from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
-from mobile_app.models import Session_Key
+from mobile.models import Session_Key
 from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 import datetime
 import time

@@ -7,7 +7,7 @@ from base.entity import Entity
 from base.item import Item
 from base.models import Entity as EntityModel
 from base.models import NoteSelection 
-from mobile_app.lib.http import SuccessJsonResponse, ErrorJsonResponse
+from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 #import datetime
 #import json
 

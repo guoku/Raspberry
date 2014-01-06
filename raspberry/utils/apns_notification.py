@@ -4,7 +4,7 @@ __author__ = 'edison'
 from django.conf import settings
 from pyapns import configure, provision, notify
 
-from mobile_app.models import User_Apns
+from mobile.models import User_Apns
 import logging
 logger = logging.getLogger('django.request')
 

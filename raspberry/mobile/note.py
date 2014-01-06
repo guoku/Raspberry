@@ -3,7 +3,7 @@ from lib.entity import MobileEntity
 from lib.note import MobileNote
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
-from mobile_app.models import Session_Key
+from mobile.models import Session_Key
 from tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask 
 import datetime
 

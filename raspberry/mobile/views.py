@@ -5,8 +5,8 @@ from base.models import Selection, NoteSelection
 import base.popularity as popularity 
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from mobile_app.lib.http import SuccessJsonResponse, ErrorJsonResponse
-from mobile_app.lib.sign import check_sign
+from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
+from mobile.lib.sign import check_sign
 from account import *
 from category import *
 from entity import *

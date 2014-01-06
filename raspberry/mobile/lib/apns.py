@@ -1,5 +1,5 @@
 # coding=utf8
-from mobile_app.models import Device, User_Apns
+from mobile.models import Device, User_Apns
 
 
 class Apns(object):

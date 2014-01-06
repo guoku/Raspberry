@@ -2,7 +2,7 @@
 from base.report import EntityReport, EntityNoteReport 
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
-from mobile_app.models import Session_Key
+from mobile.models import Session_Key
 import datetime
 
 

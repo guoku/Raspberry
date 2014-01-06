@@ -3,9 +3,9 @@ from lib.entity import MobileEntity
 from lib.note import MobileNote
 from lib.user import MobileUser
 from base.category import Category
-from mobile_app.lib.http import SuccessJsonResponse, ErrorJsonResponse
-from mobile_app.lib.sign import check_sign
-from mobile_app.models import Session_Key
+from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
+from mobile.lib.sign import check_sign
+from mobile.models import Session_Key
 
 @check_sign
 def all_category(request):
