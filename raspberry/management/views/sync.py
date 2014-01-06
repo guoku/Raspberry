@@ -104,7 +104,7 @@ def create_entity_from_offline(request):
         _brand = request.POST.get("brand", "")
         _title = request.POST.get("title", "")
         _intro = request.POST.get("intro", "")
-        _category_id = int(request.POST.get("category_id", None))
+        _category_id = Category.get_category_by_taobao_cid(_cid)
         _detail_image_urls = request.POST.getlist("image_url")
         
         if _chief_image_url in _detail_image_urls:
@@ -137,10 +137,17 @@ def create_entity_from_offline(request):
             }
             return SuccessJsonResponse(_rslt)
         else:
+            _item.update(
+                cid = _cid, 
+                title = _taobao_title, 
+                shop_nick = _taobao_shop_nick, 
+                price = _taobao_price, 
+                soldout = _taobao_soldout 
+            )
             _rslt = {
                 'message' : 'item_exist',
                 'item_id' : _item.item_id,
-                'status' : 'failed'
+                'status' : 'updated'
             }
             return SuccessJsonResponse(_rslt)
 
