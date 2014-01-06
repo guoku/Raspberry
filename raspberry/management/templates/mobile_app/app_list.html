@@ -1,0 +1,22 @@
+{% extends 'management_base.html' %}
+
+{% block content %}
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>文件名</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody class="table-hover ">
+            {% for app in apps %}
+                <tr>
+                    <td>{{ app }}</td>
+                    <td>发布</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

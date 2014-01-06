@@ -10,15 +10,15 @@ ADMINS = (
 MANAGERS = ADMINS
 
 from mongoengine import connect
-connect('guoku')
+connect('guoku', host='10.0.2.200')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_12_12',
-        'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
+        'NAME': 'guoku',
+        'USER': 'qinzhoukan',
+        'PASSWORD': 'qinzhoukan1@#',
+        'HOST': '10.0.2.90',
         'PORT': '',                      
         'OPTIONS': {
             'use_unicode':'utf-8',
@@ -26,38 +26,42 @@ DATABASES = {
         }
     },
 }
+
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 #DATABASE_ROUTERS = ['router.AuthRouter']
 
+# CACHES = {
+#     "default": {
+#         "BACKEND": "redis_cache.cache.RedisCache",
+#         "LOCATION": [
+#             "localhost:6379:1",
+#         ],
+#         "OPTIONS": {
+#             "PARSER_CLASS": "redis.connection.HiredisParser",
+#             "CLIENT_CLASS": "redis_cache.client.ShardClient",
+#         }
+#     }
+# }
 CACHES = {
-    "default": {
-        "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION": [
-            "localhost:6379:1",
-        ],
-        "OPTIONS": {
-            "PARSER_CLASS": "redis.connection.HiredisParser",
-            "CLIENT_CLASS": "redis_cache.client.ShardClient",
-        }
-    }
+   'default': {
+       'BACKEND': 'redis_cache.RedisCache',
+       'LOCATION': '10.0.2.49:6379',
+       'TIMEOUT:': 864000,
+       'OPTIONS': {
+           'DB': 1,
+           'PARSER_CLASS': 'redis.connection.HiredisParser'
+       },
+   },
 }
-#CACHES = {
-#    'default': {
-#        'BACKEND': 'redis_cache.RedisCache',
-#        'LOCATION': 'localhost:6379',
-#        'TIMEOUT:': 864000,
-#        'OPTIONS': {
-#            'DB': 1,
-#            'PARSER_CLASS': 'redis.connection.HiredisParser'
-#        },
-#    },
-#}
 
 # session
-#SESSION_ENGINE = 'redis_sessions.session'
-#SESSION_REDIS_HOST = 'localhost'
-#SESSION_REDIS_PORT = 6379
-#SESSION_REDIS_DB = 2
-#SESSION_COOKIE_AGE = 1209600
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_HOST = '10.0.2.49'
+SESSION_REDIS_PORT = 6379
+SESSION_REDIS_DB = 2
+SESSION_COOKIE_AGE = 1209600
+
 
 MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
@@ -68,7 +72,7 @@ SPHINX_port = 3312
 
 
 #mongo db
-MANGO_HOST = 'localhost'
+MANGO_HOST = '10.0.2.200'
 MANGO_PORT = 27017
 
 
@@ -175,7 +179,6 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
-    # 'redis_admin',
 )
 
 LOGGING = {

@@ -19,6 +19,8 @@ urlpatterns = patterns(
     url(r'^banner/', include('management.urls.banner')),
     url(r'^user/', include('management.urls.user')),
     url(r'report/', include('management.urls.report')),
+
+    url(r'^mobile/', include('management.urls.mobile_app')),
 )
 
 __author__ = 'edison7500'

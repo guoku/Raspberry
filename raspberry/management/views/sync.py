@@ -1,14 +1,15 @@
 #coding=utf-8
+
 from django.db.models import Q
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+#from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from base.category import Category
 from base.entity import Entity
 from base.item import Item
 from base.models import Entity as EntityModel
 from base.models import NoteSelection 
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
-import datetime
-import json
+#import datetime
+#import json
 
 def sync_category(request):
     _all_categories = Category.all_group_with_full_category()
