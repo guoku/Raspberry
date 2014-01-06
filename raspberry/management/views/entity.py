@@ -29,7 +29,7 @@ def _parse_taobao_id_from_url(url):
     return None
 
 def _load_taobao_item_info(taobao_id):
-    taobao_item_info = fetcher.fetch(taobao_id)
+    taobao_item_info = fetcher.fetch_item(taobao_id)
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:
@@ -37,7 +37,8 @@ def _load_taobao_item_info(taobao_id):
     taobao_item_info["thumb_images"] = thumb_images
     taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
     
-    taobao_item_info["shop_nick"] = taobao_item_info["nick"] 
+    taobao_item_info["shop_nick"] = taobao_item_info["nick"]
+    print fetcher.fetch_shop(taobao_item_info["shoplink"])
     return taobao_item_info
 
 
