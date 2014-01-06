@@ -15,14 +15,20 @@ from validation import *
 MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14  # two weeks
 
 
-def check_nickname_available(nickname):
-    _ret = not User.nickname_exist(nickname)
-    return HttpResponse(_ret)
+def check_nickname_available(request):
+    if request.method == 'GET':
+        _nickname = request.GET.get('nickname', None)
+        _ret = not User.nickname_exist(_nickname)
+
+        return HttpResponse(int(_ret))
 
 
-def check_email_available(email):
-    _ret = not User.email_exist(email)
-    return HttpResponse(_ret)
+def check_email_available(request):
+    if request.method == 'GET':
+        _email = request.GET.get('email', None)
+        _ret = not User.email_exist(_email)
+
+        return HttpResponse(int(_ret))
 
 
 def register(request, template='accounts/register.html'):
@@ -36,26 +42,34 @@ def register(request, template='accounts/register.html'):
     else:
         _nickname = request.POST.get('nickname', None)
         _email = request.POST.get('email', None)
-        _psw = request.POST.get('password', None)
+        _psw = request.POST.get('psw', None)
         _error = {}
 
-        _error['email'] = v_check_email(_email)
+        _error['nickname'] = v_check_nickname(_nickname)
 
-        if _error['email'] is None:
-            if User.email_exist(_email):
-                _error['email'] = '邮箱已经被注册'
+        if _error['nickname'] is None:
+            if User.nickname_exist(_nickname):
+                _error['nickname'] = '昵称已经被占用'
 
             else:
-                _error['nickname'] = v_check_nickname(_nickname)
+                _error['email'] = v_check_email(_email)
 
-                if _error['nickname'] is None:
-                    _error['psw'] = v_check_psw(_psw)
+                if _error['email'] is None:
+                    if User.email_exist(_email):
+                        _error['email'] = '邮箱已经被注册'
 
-                    if _error['psw'] is None:
-                        _new_user = User.create(_email, _psw)
-                        _new_user.set_profile(_nickname)
+                    else:
+                        _error['psw'] = v_check_psw(_psw)
 
-                        return HttpResponseRedirect('account/setting/')
+                        if _error['psw'] is None:
+                            _new_user = User.create(_email, _psw)
+                            _new_user.set_profile(_nickname)
+
+                            _username = _new_user.get_username()
+                            _new_user = authenticate(username=_username, password=_psw)
+                            auth_login(request, _new_user)
+
+                            return HttpResponseRedirect('/accounts/setting/')
 
         return render_to_response(
             template,

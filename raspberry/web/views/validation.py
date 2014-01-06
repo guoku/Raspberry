@@ -25,8 +25,6 @@ def v_check_nickname(nickname):
         _ret = '昵称不能为空'
     elif len(nickname) > 15:
         _ret = '昵称不能超过15个字'
-    elif User.nickname_exist(nickname):
-        _ret = '昵称已经被占用'
 
     return _ret
 

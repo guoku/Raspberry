@@ -118,7 +118,7 @@ a:hover {
     border-bottom-right-radius: 3px;
     margin-left: -41px;
     vertical-align: middle;
-    background: url(/static/web/images/header_icon.png) no-repeat -6px -10px #fff;
+    background: url(/static/images/header_icon.png) no-repeat -6px -10px #fff;
 }
 
 #header .user {
@@ -153,15 +153,15 @@ a:hover {
 }
 
 #header .user .tool .add {
-    background: url(/static/web/images/header_icon.png) no-repeat -58px -13px;
+    background: url(/static/images/header_icon.png) no-repeat -58px -13px;
 }
 
 #header .user .tool .friend {
-    background: url(/static/web//images/header_icon.png) no-repeat -110px -13px;
+    background: url(/static/images/header_icon.png) no-repeat -110px -13px;
 }
 
 #header .user .tool .message {
-    background: url(/static/web//images/header_icon.png) no-repeat -156px -13px;
+    background: url(/static/images/header_icon.png) no-repeat -156px -13px;
 }
 
 #header .user .container {
@@ -192,7 +192,9 @@ a:hover {
 }
 
 #header .user .container span {
+    display: inline-block;
     margin-left: 38px;
+    min-width: 40px;
 }
 
 #header .user .container small {
