@@ -31,7 +31,7 @@
     var result;
 
     if (email.length === 0) {
-      result = '邮箱帐号不能为空';
+      result = '请填写邮箱';
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       result = '请输入正确的邮箱地址';
     } else if (remote) {
@@ -78,35 +78,60 @@
   }
 
   // 注册
-  var rForm = $('form#register');
-  var rNickName = $('#nickname');
-  var rEmail = $('#email');
-  var rPsw = $('#psw');
+  var $rForm = $('form#register');
+  var $rNickName = $rForm.find('#nickname');
+  var $rEmail = $rForm.find('#email');
+  var $rPsw = $rForm.find('#psw');
   var rValid = {};
 
-  rNickName.on('change', function () {
+  $rNickName.on('change', function () {
     V.checkNickname($(this), rValid, true);
   });
 
-  rEmail.on('change', function () {
+  $rEmail.on('change', function () {
     V.checkEmail($(this), rValid, true);
   });
 
-  rPsw.on('change', function () {
+  $rPsw.on('change', function () {
     V.checkPsw($(this), rValid);
   });
 
-  rForm.on('submit', function (e) {
+  $rForm.on('submit', function (e) {
     if (rValid.nickname && rValid.email && rValid.psw) {
       return;
     }
 
-    V.checkNickname(rNickName, rValid, true);
-    V.checkEmail(rEmail, rValid, true);
-    V.checkPsw(rPsw, rValid);
+    V.checkNickname($rNickName, rValid, true);
+    V.checkEmail($rEmail, rValid, true);
+    V.checkPsw($rPsw, rValid);
 
     e.preventDefault()
-  })
+  });
+
+  // 登录
+  var $lForm = $('form#login');
+  var $lEmail = $lForm.find('#email');
+  var $lPsw = $lForm.find('#psw');
+  var lValid = {};
+
+  $lEmail.on('change', function () {
+    V.checkEmail($(this), lValid);
+  });
+
+  $lPsw.on('change', function () {
+    V.checkPsw($(this), lValid);
+  });
+
+  $lForm.on('submit', function (e) {
+    if (lValid.email && lValid.psw) {
+      return;
+    }
+
+    V.checkEmail($lEmail, lValid);
+    V.checkPsw($lPsw, lValid);
+
+    e.preventDefault()
+  });
 
 
 })(jQuery);

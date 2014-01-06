@@ -98,7 +98,7 @@ def login(request, template='accounts/login.html'):
     else:
         _next = request.POST.get('next', None)
         _email = request.POST.get('email', None)
-        _psw = request.POST.get('password', None)
+        _psw = request.POST.get('psw', None)
         _remember_me = request.POST.get("remember_me", None)
         _error = {}
 

@@ -9,14 +9,17 @@
         {% if next != None %}
             <input type="hidden" name="next" value="{{ next }}">
         {% endif %}
+
         <div>
             <input type="text" name="email" class="text-input" placeholder="邮箱" id="email">
             {% if error.email != None %}<span class="error-info">{{ error.email }}</span>{% endif %}
         </div>
+
         <div>
-            <input type="password" name="password" class="text-input" placeholder="密码" id="password">
+            <input type="password" name="psw" class="text-input" placeholder="密码" id="psw">
             {% if error.psw != None %}<span class="error-info">{{ error.psw }}</span>{% endif %}
         </div>
+
         <div class="submit-row">
             <label><input type="checkbox" name="remember_me" id="remember-me">记住我</label>
             <small><a href="">忘了密码?</a></small>
