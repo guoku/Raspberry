@@ -11,7 +11,7 @@
     var old_category = $("#old_category");
     var old_init_category = old_category.attr("data-oldinit");
 
-    $.post(url, function (data) {
+    $.get(url, function (data) {
         var return_data = $.parseJSON(data);
         new_data = return_data["new_category"];
         old_data = return_data["old_category"];
