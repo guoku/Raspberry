@@ -3,7 +3,7 @@ from lib.apns import Apns
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
 from lib.user import MobileUser
-from mobile.models import Session_Key 
+from mobile.models import Session_Key
 from tasks import RetrievePasswordTask 
 
 @check_sign
