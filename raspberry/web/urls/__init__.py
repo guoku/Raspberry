@@ -17,9 +17,11 @@ urlpatterns += patterns(
     (r'^accounts/login/taobao/$', 'login_by_taobao'),
     (r'^accounts/logout/$', 'logout'),
     (r'^accounts/register/$', 'register'),
-    (r'^accounts/register/validate_nickname/$', 'is_nickname_used'),
-    (r'^accounts/register/validate_email/$', 'is_email_used'),
+    (r'^accounts/register/check_nickname_available/$', 'check_nickname_available'),
+    (r'^accounts/register/check_email_available/$', 'check_email_available'),
     (r'^accounts/setting/$', 'setting'),
+    (r'^accounts/setting/base/$', 'set_base'),
+    (r'^accounts/setting/psw/$', 'set_psw'),
     (r'^accounts/setting/upload_avatar/$', 'upload_avatar'),
     (r'^accounts/setting/update_avatar$', 'update_avatar'),
 )

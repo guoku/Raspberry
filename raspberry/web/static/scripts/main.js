@@ -81,6 +81,7 @@
       var $nickname = $parent.find('.nickname');
 
       $commentText.val('回复 ' + $nickname.text() + ': ');
+      $commentText.focus();
       replyToUser = $p.attr('data-creator');
       replyToComment = $p.attr('data-comment');
     });
