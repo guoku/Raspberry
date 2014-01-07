@@ -1,12 +1,11 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
-from django.conf import settings
 
-APP_UPLOAD_DIR = getattr(settings, 'APP_UPLOAD_DIR', 'uploads/app/')
 
 class App_Pubilsh(models.Model):
-    name = models.CharField(max_length = 64, db_index = True)
-    file = models.FileField(upload_to = APP_UPLOAD_DIR)
+    name = models.CharField(max_length = 150, blank = True)
+    file = models.CharField(max_length = 255, blank = True)
     is_published = models.BooleanField(default = False)
     uploaded_time = models.DateTimeField(auto_now_add = True, editable = False)
 
@@ -15,5 +14,9 @@ class App_Pubilsh(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+    def get_url(self):
+        return "/%s" % self.file
 
 __author__ = 'edison'
