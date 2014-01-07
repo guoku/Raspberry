@@ -1,29 +1,39 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load common %}
 
 {% block title %}热门{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">{% endblock %}
 
 {% block content %}
-    <div class="guoku-block">
-        <a href="">24 小时</a> | <a href="">7 天 </a> | <a href="">30 天</a>
-        <span>最近更新：10 分钟前</span>
-    </div>
+    <div id="popular">
+        <div class="guoku-block nav">
+            <a href="">24 小时</a> | <a href="">7 天 </a> | <a href="">30 天</a>
+            <span>最近更新：10 分钟前</span>
+        </div>
 
-    <ul class="guoku-block">
-        <li>
-            <a href=""><img src=""></a>
-            <div>
-                <a href=""><img src=""></a>
-                <span></span>
-                <span></span>
-            </div>
-            <div>
-                <span></span><span></span>
-            </div>
-            <div>
-                <a><img src=""></a>
-            </div>
-        </li>
-    </ul>
+        <ul class="guoku-block">
+            {% for popular in popular_list %}
+                <li>
+                    <a href="{% url 'web.views.main.detail' popular.entity_context.entity_hash %}" class="entity-img"><img
+                            src="{{ popular.entity_context.chief_image.url }}"></a>
+
+                    <div>
+                        <a href="{% url 'web.views.user.user_index' popular.s_note_context.creator_id %}" class="avatar"><img
+                                src="{{ popular.s_creator_context.avatar_small }}" width="35" height="35"></a>
+                        <a href="{% url 'web.views.user.user_index' popular.s_note_context.creator_id %}"
+                           class="nickname">{{ popular.s_creator_context.nickname }}</a><br/>
+                        <span class="date">{{ popular.s_note_context.created_time|format_time }}</span>
+
+                        <p>{{ popular.s_note_context.content }}</p>
+
+                        <a href="javascript:;">
+                            <span>喜爱 </span>
+                            <small>{{ popular.s_note_context.poke_count }}</small>
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

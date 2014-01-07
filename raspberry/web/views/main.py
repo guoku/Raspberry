@@ -144,7 +144,13 @@ def detail(request, entity_hash, template='main/detail.html'):
             _user_already_note = True
 
         # 判断是否是精选
-        if _note_context['selector_id'] is None:
+        if _note_context['is_selected']:
+            _selection_note = {
+                'note_context' : _note_context,
+                'creator_context' : _creator_context,
+                'comment_list' : _comment_list
+            }
+        else:
             _common_note_list.append(
                 {
                     'note_context' : _note_context,
@@ -152,12 +158,6 @@ def detail(request, entity_hash, template='main/detail.html'):
                     'comment_list' : _comment_list
                 }
             )
-        else:
-            _selection_note = {
-                'note_context' : _note_context,
-                'creator_context' : _creator_context,
-                'comment_list' : _comment_list
-            }
 
     return render_to_response(
         template,
@@ -174,18 +174,40 @@ def detail(request, entity_hash, template='main/detail.html'):
 
 def popular(request, template='main/popular.html'):
     _user_context = get_request_user_context(request.user)
-
     _group = request.GET.get('group', 'daily')
 
-    # generate_popular_entity()
-    # _entity_list = read_popular_entity_from_cache(_group)['data']
-    #
-    # print(_entity_list)
+    # 先用精选数据来模拟热门 TODO
+    _entity_list = NoteSelection.objects.all()[0:30]
+    _entity_id_list = [entity['entity_id'] for entity in _entity_list]
+    _popular_list = []
+
+    for _id in _entity_id_list:
+        _entity_context = Entity(_id).read()
+        _s_note_context = None
+        _s_creator_context = None
+        _note_id_list = Note.find(entity_id=_id)
+
+        # 找到精选点评 需优化? TODO
+        for _note_id in _note_id_list:
+            _note_context = Note(_note_id).read()
+            if _note_context['is_selected']:
+                _s_note_context = _note_context
+                break
+
+        if _s_note_context is not None:
+            _s_creator_context = User(_s_note_context['creator_id']).read()
+
+        _popular_list.append({
+            'entity_context' : _entity_context,
+            's_note_context' : _s_note_context,
+            's_creator_context' : _s_creator_context
+        })
 
     return render_to_response(
         template,
         {
-            'user_context' : _user_context
+            'user_context' : _user_context,
+            'popular_list' : _popular_list
         },
         context_instance=RequestContext(request)
     )

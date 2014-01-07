@@ -1,0 +1,71 @@
+#popular .nav {
+    margin-top: 25px;
+    padding: 15px;
+}
+
+#popular .nav span {
+    float: right;
+    font-size: 12px;
+}
+
+#popular ul {
+    margin: 2px 0 0 0;
+    padding: 0;
+    font-size: 0;
+}
+
+#popular li {
+    display: inline-block;
+    width: 319px;
+    height: 500px;
+    padding: 30px 0;
+    vertical-align: top;
+    font-size: 14px;
+    border-right: 1px solid #f3f3f3;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+#popular h3 {
+    margin: 25px 0 5px;
+    font-size: 14px;
+}
+
+
+#popular .entity-img {
+    display: block;
+    width: 290px;
+    max-height: 290px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#popular .entity-img img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#popular li div {
+    width: 290px;
+    margin: 10px auto;
+}
+
+#popular .avatar {
+    float: left;
+    margin-right: 5px;
+}
+
+#popular .nickname {
+    color: #333;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+#popular .date {
+    font-size: 12px;
+}
+
+#popular p {
+    clear: left;
+    color: #666;
+    line-height: 1.5;
+}
