@@ -76,7 +76,7 @@ def search_entity(request):
         return SuccessJsonResponse(_rslt)
 
 
-@check_sign
+#@check_sign
 def category_entity(request, category_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -125,7 +125,7 @@ def entity_detail(request, entity_id):
         
 
 
-#@check_sign
+@check_sign
 def like_entity(request, entity_id, target_status):
     if request.method == "POST":
         _session = request.POST.get('session', None)

@@ -37,11 +37,25 @@ class Item(object):
             created_time = datetime.datetime.now(),
             updated_time = datetime.datetime.now() 
         )
-        _item_obj.save()
-
+        _item_obj.save() 
         _inst = cls(_item_obj.id)
         _inst.item_obj = _item_obj
         return _inst
+    
+    def update(self, cid = None, title = None, shop_nick = None, price = None, soldout = None):
+        self.__ensure_item_obj()
+        if cid != None:
+            self.item_obj.cid = int(cid)
+        if title != None:
+            self.item_obj.title = title
+        if shop_nick != None:
+            self.item_obj.shop_nick = shop_nick
+        if price != None:
+            self.item_obj.price = float(price)
+        if soldout != None:
+            self.item_obj.soldout = soldout
+        self.item_obj.updated_time = datetime.datetime.now()
+        self.item_obj.save()
 
     
     def __load_taobao_item(self):

@@ -1,0 +1,61 @@
+import datetime
+import MySQLdb
+import pymongo
+
+conn = pymongo.Connection('localhost', 27017)
+db = conn.guoku
+
+item_dict = {}
+user_dict = {}
+count = 0
+start_time = None
+end_time = None
+for doc in db.logging_backup.find():
+    try:
+        if doc.has_key('item_id'):
+            if not item_dict.has_key(doc['item_id']):
+                item_dict[doc['item_id']] = {
+                    'entity_id' : doc['entity_id'],
+                    'count' : 0
+                }
+            item_dict[doc['item_id']]['count'] += 1
+
+        if doc.has_key('user_id') and doc['user_id'] != -1:
+            if not user_dict.has_key(doc['user_id']):
+                user_dict[doc['user_id']] = {
+                    'count' : 0
+                }
+            user_dict[doc['user_id']]['count'] += 1
+        elif doc.has_key('outer_code') and len(doc['outer_code']) > 3:
+            user_id = int(doc['outer_code'][3:])
+            if not user_dict.has_key(user_id):
+                user_dict[user_id] = {
+                    'count' : 0
+                }
+            user_dict[user_id]['count'] += 1
+
+            
+        
+        count += 1
+        if start_time == None or doc['logged_time'] < start_time:
+            start_time = doc['logged_time']
+        if end_time == None or doc['logged_time'] > start_time:
+            end_time = doc['logged_time']
+        if count % 1000 == 0:
+            print '%d processed..'%count
+    except Exception, e:
+        print e
+
+
+items_sorted = sorted(item_dict.items(), key = lambda x : x[1]['count'], reverse = True)
+fo = open('entities.txt', 'w')
+for item in items_sorted:
+    fo.write("%d\t%d\t%d\n"%(item[1]['entity_id'], item[0], item[1]['count']))
+fo.close()
+
+users_sorted = sorted(user_dict.items(), key = lambda x : x[1]['count'], reverse = True)
+fo = open('users.txt', 'w')
+for item in users_sorted:
+    fo.write("%d\t%d\n"%(item[0], item[1]['count']))
+fo.close()
+print "from [%s]\n to [%s]"%(start_time, end_time)

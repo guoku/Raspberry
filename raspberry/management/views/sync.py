@@ -1,17 +1,41 @@
 #coding=utf-8
+
 from django.db.models import Q
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+#from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from base.category import Category
 from base.entity import Entity
 from base.item import Item
 from base.models import Entity as EntityModel
+from base.models import NoteSelection 
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
-import datetime
-import json
+#import datetime
+#import json
 
 def sync_category(request):
     _all_categories = Category.all_group_with_full_category()
     return SuccessJsonResponse(_all_categories)
+
+def sync_selection(request):
+    _offset = int(request.GET.get('offset', '0'))
+    _count = int(request.GET.get('count', '100'))
+    _rslt = []
+    for _doc in NoteSelection.objects.all().order_by('-post_time')[_offset : _offset + _count]:
+        _entity_id = _doc.entity_id
+        _entity_context = Entity(_entity_id).read()
+        _taobao_id_list = []
+        for _item_id in _entity_context['item_id_list']:
+            _item_context = Item(_item_id).read()
+            _taobao_id_list.append({
+                'taobao_id' : _item_context['taobao_id'],
+                'shop_nick' : _item_context['shop_nick'],
+            })
+        _rslt.append({
+            'entity_id' : _entity_id,
+            'note_id' : _doc.note_id,
+            'taobao_item_list' : _taobao_id_list
+        })
+    
+    return SuccessJsonResponse(_rslt)
 
 def sync_taobao_item(request):
     _offset = int(request.GET.get('offset', '0'))
@@ -80,7 +104,7 @@ def create_entity_from_offline(request):
         _brand = request.POST.get("brand", "")
         _title = request.POST.get("title", "")
         _intro = request.POST.get("intro", "")
-        _category_id = int(request.POST.get("category_id", None))
+        _category_id = Category.get_category_by_taobao_cid(_cid)
         _detail_image_urls = request.POST.getlist("image_url")
         
         if _chief_image_url in _detail_image_urls:
@@ -113,10 +137,17 @@ def create_entity_from_offline(request):
             }
             return SuccessJsonResponse(_rslt)
         else:
+            _item.update(
+                cid = _cid, 
+                title = _taobao_title, 
+                shop_nick = _taobao_shop_nick, 
+                price = _taobao_price, 
+                soldout = _taobao_soldout 
+            )
             _rslt = {
                 'message' : 'item_exist',
                 'item_id' : _item.item_id,
-                'status' : 'failed'
+                'status' : 'updated'
             }
             return SuccessJsonResponse(_rslt)
 

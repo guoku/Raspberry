@@ -1,4 +1,5 @@
 import os.path
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -8,13 +9,16 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+from mongoengine import connect
+connect('guoku')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'guoku_12_12',
-        'USER': 'root',                      
-        'PASSWORD': '123456',                  
-        'HOST': 'localhost',                      
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
         'PORT': '',                      
         'OPTIONS': {
             'use_unicode':'utf-8',
@@ -22,13 +26,7 @@ DATABASES = {
         }
     },
 }
-#DATABASE_ROUTERS = ['router.AuthRouter'] 
-
-from mongoengine import connect 
-connect('guoku')
-
-#from mongoengine import register_connection 
-#register_connection('guoku', 'guoku')
+#DATABASE_ROUTERS = ['router.AuthRouter']
 
 CACHES = {
     "default": {
@@ -42,6 +40,24 @@ CACHES = {
         }
     }
 }
+#CACHES = {
+#    'default': {
+#        'BACKEND': 'redis_cache.RedisCache',
+#        'LOCATION': 'localhost:6379',
+#        'TIMEOUT:': 864000,
+#        'OPTIONS': {
+#            'DB': 1,
+#            'PARSER_CLASS': 'redis.connection.HiredisParser'
+#        },
+#    },
+#}
+
+# session
+#SESSION_ENGINE = 'redis_sessions.session'
+#SESSION_REDIS_HOST = 'localhost'
+#SESSION_REDIS_PORT = 6379
+#SESSION_REDIS_DB = 2
+#SESSION_COOKIE_AGE = 1209600
 
 MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
@@ -52,7 +68,7 @@ SPHINX_port = 3312
 
 
 #mongo db
-MANGO_HOST = 'localhost' 
+MANGO_HOST = 'localhost'
 MANGO_PORT = 27017
 
 
@@ -83,28 +99,10 @@ BROKER_POOL_LIMIT = 10
 GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
 APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'static')
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = ''
-
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = ''
-
-# URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
-
-# URL prefix for admin static files -- CSS, JavaScript and images.
-# Make sure to use a trailing slash.
-# Examples: "http://foo.com/static/admin/", "/static/admin/".
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
@@ -114,8 +112,6 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-# List of finder classes that know how to find static files in
-# various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -132,12 +128,38 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+  'django.contrib.auth.context_processors.auth',
+  #'django.core.context_processors.static',
+  'django.core.context_processors.i18n',
+  'django.core.context_processors.request',
+  'django.core.context_processors.media',
+  'django.core.context_processors.static',
+  #'zinnia.context_processors.version',
+) # Optional
+
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+]
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 #    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'raspberry.urls'
@@ -147,10 +169,13 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.staticfiles',
+    'debug_toolbar',
     'djcelery',
     'base',
     'management',
     'mobile',
+    # 'redis_admin',
 )
 
 LOGGING = {
@@ -167,8 +192,7 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
-        },
-    }
+        }, }
 }
 
 PASSWORD_HASHERS = (
@@ -189,3 +213,4 @@ TAOBAO_APP_INFO = {
     "web_app_secret" : "df91464ae934bacca326450f8ade67f7" 
 }
 
+INTERNAL_IPS = ('127.0.0.1',)

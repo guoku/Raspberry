@@ -1,0 +1,23 @@
+{% extends 'management_base.html' %}
+
+{% block content %}
+    <div class="container">
+        <form class="well form-horizontal" role="form" action="{% url 'management_upload_app' %}" method="post"
+                {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+            <fieldset>
+                {% for field in form %}
+                    <div class="control-group">
+                        <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <div class="controls">
+                            {{ field }}
+                        </div>
+                    </div>
+                {% endfor %}
+{#                {{ form.as_p }}#}
+            </fieldset>
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">提交</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

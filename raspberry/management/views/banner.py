@@ -55,6 +55,7 @@ def create_banner(request):
         _weight = int(request.POST.get("weight", "0"))
         
         _image_file = request.FILES.get('image', None)
+        _image_data = None
         if _image_file != None:
             if hasattr(_image_file, 'chunks'):
                 _image_data = ''.join(chunk for chunk in _image_file.chunks())
@@ -67,9 +68,9 @@ def create_banner(request):
             image_data = _image_data,
             weight = _weight
         )
-    return HttpResponseRedirect(reverse('management.views.banner_list'))
+    return HttpResponseRedirect(reverse('management_banner_list'))
 
 @login_required
 def delete_banner(request, banner_id):
     Banner(banner_id).delete()
-    return HttpResponseRedirect(reverse('management.views.banner_list'))
+    return HttpResponseRedirect(reverse('management_banner_list'))

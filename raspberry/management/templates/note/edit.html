@@ -7,7 +7,7 @@
             <img id="main-image" class="img-polaroid" src="{{ note_context.figure }}" alt="" style="max-width: 220px;max-height: 220px">
         {% endif %}
         <div>
-            <form class="well form-horizontal" action="{% url 'management.views.edit_note' note_context.note_id %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management_edit_note' note_context.note_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <div class="controls">
@@ -20,7 +20,7 @@
                         <label class="control-label" for="entity_id" style="padding-top: 0">entity_id:</label>
                         <div class="controls">
                             <input class="input-xxlarge" type="text" id="entity_id" name="entity_id" value="{{ entity_context.entity_id }}" disabled/>
-                            <a href="{% url 'management.views.edit_entity' entity_context.entity_id %}" target="_blank">
+                            <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target="_blank">
                                 去看看 > 
                             </a>
                         </div>
@@ -30,10 +30,11 @@
                         <label class="control-label" for="entity_id" style="padding-top: 0">creator: </label>
 
                         <div class="controls">
-                            <a href="{% url 'management.views.edit_user' creator.user_id %}">
+                            <a href="{% url 'management_edit_user' creator.user_id %}">
                                 <span style="margin-right: 10px">{{ creator.nickname }}</span></a>
-                            <a href="{% url 'management.views.edit_user' creator.user_id %}"><img class="img-polaroid" src="{{ creator.avatar_large }}" alt=""
-                                                style="max-width: 100px;max-height: 100px;vertical-align: top"></a>
+                            <a href="{% url 'management_edit_user' creator.user_id %}">
+                                <img class="img-polaroid" src="{{ creator.avatar_large }}" alt="" style="max-width: 100px;max-height: 100px;vertical-align: top">
+                            </a>
 
                         </div>
                     </div>
@@ -62,14 +63,14 @@
                         {% if note_context.weight < 0 %}
                             该点评处于冻结状态不能发精选 
                         {% else %}
-                            <a class="btn btn-success btn-small" href="{% url 'management.views.post_selection_instant' entity_context.entity_id note_context.note_id %}">精选-即时发布</a>
-                            <a class="btn btn-success btn-small" href="{% url 'management.views.post_selection_delay' entity_context.entity_id note_context.note_id %}">精选-延迟发布</a>
+                            <a class="btn btn-success btn-small" href="{% url 'management_post_selection_instant' entity_context.entity_id note_context.note_id %}">精选-即时发布</a>
+                            <a class="btn btn-success btn-small" href="{% url 'management_post_selection_delay' entity_context.entity_id note_context.note_id %}">精选-延迟发布</a>
                         {% endif %}
                     {% endif %}
                 </div>
             </form>
             {% if note_context.selector_id != None %}
-                <form class="well form-horizontal" action="{% url 'management.views.update_note_selection_info' entity_context.entity_id note_context.note_id %}" method="POST">
+                <form class="well form-horizontal" action="{% url 'management_update_note_selection_info' entity_context.entity_id note_context.note_id %}" method="POST">
                     <fieldset>
                         <div class="control-group">
                             <label class="control-label" for="post_time">精选发布时间:</label>

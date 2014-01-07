@@ -1,4 +1,5 @@
 {% extends "management_base.html" %}
+{% load staticfiles %}
 
 {% block content %}
     <div class="container">
@@ -27,7 +28,7 @@
                             </a>
                             <div style="text-align:center">
                                 细节图{{ forloop.counter }}
-                                <a href="{% url 'management.views.del_image_from_entity' entity_context.entity_id detail_image.id %}">
+                                <a href="{% url 'management_del_image_from_entity' entity_context.entity_id detail_image.id %}">
                                     - 删除
                                 </a>
                             </div>
@@ -37,7 +38,7 @@
             </ul>
         </div>
         <div>
-            <form class="well form-horizontal" action="{% url 'management.views.edit_entity' entity_context.entity_id %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management_edit_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="entity_hash" style="padding-top: 0">entity_id:</label>
@@ -81,7 +82,7 @@
                     <div class="control-group">
                         <label class="control-label" for="entity_hash" style="padding-top: 0">点评: </label>
                         <div class="controls">
-                            <a href="{% url 'management.views.note_list' %}?entity_id={{ entity_context.entity_id }}">{{ note_count }} 条</a>
+                            <a href="{% url 'management_note_list' %}?entity_id={{ entity_context.entity_id }}">{{ note_count }} 条</a>
                         </div>
                     </div>
 
@@ -137,6 +138,17 @@
                             <select id="old_category" name="old_category_id" data-oldinit="{{ entity_context.old_category_id }}"></select>
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label class="control-label" for="mark">标识</label>
+
+                        <div class="controls">
+                            <select name="mark" id="mark">
+                                {% for mark in mark_list %}
+                                    <option {%if mark.value == entity_context.mark_value%} selected="selected"{%endif%} value="{{ mark.value }}">{{ mark.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="control-group">
                         <label class="control-label" for="chief_image">主图:</label>
@@ -147,7 +159,7 @@
                                     <option value="{{ detail_image.id }}">细节图{{ forloop.counter }}</option>
                                 {% endfor %}
                             </select>
-                            <a href="{% url 'management.views.edit_entity_image' entity_context.entity_id %}" target="_blank">
+                            <a href="{% url 'management_edit_entity_image' entity_context.entity_id %}" target="_blank">
                                 管理图片 >
                             </a>
                         </div>
@@ -222,11 +234,11 @@
                         </div>
                     </fieldset>
                     <div class="form-actions">
-                        <a class="btn" href="{% url 'management.views.unbind_taobao_item_from_entity' entity_context.entity_id item_context.item_id %}">删除</a>
+                        <a class="btn" href="{% url 'management_unbind_taobao_item_from_entity' entity_context.entity_id item_context.item_id %}">删除</a>
                     </div>
                 </form>
             {% endfor %}
-            <form class="well form-horizontal" action="{% url 'management.views.load_taobao_item_for_entity' entity_context.entity_id %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management_load_taobao_item_for_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="image_url">添加新 item :</label>
@@ -239,7 +251,7 @@
                     <button type="submit" class="btn btn-primary">添加</button>
                 </div>
             </form>
-            <form class="well form-horizontal" action="{% url 'management.views.merge_entity' entity_context.entity_id %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management_merge_entity' entity_context.entity_id %}" method="POST">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="target_entity_id">合并商品:</label>
@@ -257,5 +269,5 @@
 {% endblock %}
 
 {% block extra %}
-    <script type="text/javascript" src="{{ STATIC_URL }}management/js/category.js"></script>
+    <script type="text/javascript" src="{% static 'management/js/category.js' %}"></script>
 {% endblock %}
