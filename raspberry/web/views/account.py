@@ -31,7 +31,7 @@ def check_email_available(request):
         return HttpResponse(int(_ret))
 
 
-def register(request, template='accounts/register.html'):
+def register(request, template='account/register.html'):
     if request.method == 'GET':
         return render_to_response(
             template,
@@ -80,7 +80,7 @@ def register(request, template='accounts/register.html'):
         )
 
 
-def login(request, template='accounts/login.html'):
+def login(request, template='account/login.html'):
     if request.user.is_authenticated():
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -169,7 +169,7 @@ def check_curr_psw(request):
 
 
 @login_required
-def setting(request, template='accounts/setting.html'):
+def setting(request, template='account/setting.html'):
     if request.method == 'GET':
         _user_context = User(request.user.id).read()
 
@@ -183,7 +183,7 @@ def setting(request, template='accounts/setting.html'):
 
 
 @login_required
-def set_base(request, template='accounts/setting.html'):
+def set_base(request, template='account/setting.html'):
     if request.method == 'POST':
         _user = User(request.user.id)
         _user_context = _user.read()
@@ -231,7 +231,7 @@ def set_base(request, template='accounts/setting.html'):
 
 
 @login_required
-def set_psw(request, template='accounts/setting.html'):
+def set_psw(request, template='account/setting.html'):
     if request.method == 'POST':
         _user = User(request.user.id)
         _user_context = _user.read()

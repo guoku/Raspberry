@@ -38,15 +38,23 @@ def _get_comment_list(note):
 
 def selection(request, template='main/selection.html'):
     _user_context = get_request_user_context(request.user)
+
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
 
+    _curr_cat_title = None
     _old_category_list = Old_Category.find()[0:12]
 
     if _category_id is None:
         _hdl = NoteSelection.objects.all()
     else:
         _hdl = NoteSelection.objects.filter(category_id=_category_id)
+
+        # 取得当前分类名 需要改进？
+        # TODO
+        for _old_cat in _old_category_list:
+            if _old_cat['category_id'] == int(_category_id):
+                _curr_cat_title = _old_cat['category_title']
 
     _total_count = _hdl.count()
     _count_in_one_page = 25
@@ -111,6 +119,7 @@ def selection(request, template='main/selection.html'):
             'user_context' : _user_context,
             'selection_list' : _selection_list,
             'category_list' : _old_category_list,
+            'curr_cat_title' : _curr_cat_title,
             'category_id' : _category_id,
             'page_num' : _page_num
         },

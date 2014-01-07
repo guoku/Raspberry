@@ -46,8 +46,10 @@
                         </div>
 
                         <div class="operate">
-                            <a href="javascript:;" class="show-note">还有 {{ selection.common_note_list|length }} 条点评</a>
-                            &sdot;
+                            {% if selection.common_note_list|length > 0 %}
+                                <a href="javascript:;" class="show-note">还有 {{ selection.common_note_list|length }} 条点评</a>
+                                &sdot;
+                            {% endif %}
                             <a href="{% url 'web.views.main.detail' selection.entity_context.entity_hash %}#addnote"
                                class="add-note">写点评</a>
                         </div>
