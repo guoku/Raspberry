@@ -6,7 +6,9 @@ urlpatterns = patterns(
     ('^selected/$', 'selection'),
     (r'^popular/$', 'popular'),
     (r'^discover/$', 'discover'),
-    (r'^detail/(?P<entity_hash>\w+)/$', 'detail')
+    (r'^discover/product/$', 'discover'),
+    (r'^detail/(?P<entity_hash>\w+)/$', 'detail'),
+    (r'^shop/(?P<shop_id>\w+)/$', 'shop')
 )
 
 

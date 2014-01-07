@@ -2,13 +2,27 @@
 
 from django import template
 import datetime
-from base.note import Note
-from base.user import User
-
 register = template.Library()
 
 
-# note ---
+def format_time(value):
+    time_interval = (datetime.datetime.now() - value).total_seconds()
+    if time_interval < 60:
+        return "%d 秒前" % (time_interval)
+    elif time_interval < 60 * 60:
+        return "%d 分钟前" % ((time_interval / 60) + 1)
+    elif time_interval < 60 * 60 * 24:
+        return "%d 小时前" % (time_interval / (60 * 60) + 1)
+    elif time_interval < 60 * 60 * 48:
+        return "昨天"
+    elif time_interval < 60 * 60 * 72:
+        return "前天"
+    return "%d 年 %d 月 %d 日" % (value.year, value.month, value.day)
+
+register.filter(format_time)
+
+
+# for note ---
 def display_note(note, entity_context, user_context):
     return {
         'note_context' : note['note_context'],
@@ -32,7 +46,7 @@ def display_note_comment(comment, user_context, note_context):
 register.inclusion_tag("main/partial/display_note_comment.html")(display_note_comment)
 
 
-# user ---
+# for user ---
 def display_user_entities(entity_list):
     return {
         'entity_list' : entity_list
@@ -63,4 +77,3 @@ def display_user_users(user_list):
     }
 
 register.inclusion_tag("user/partial/display_user.html")(display_user_users)
-

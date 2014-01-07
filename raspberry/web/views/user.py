@@ -8,6 +8,7 @@ from base.user import User
 from base.category import Old_Category
 from base.entity import Entity
 from base.note import Note
+from base.models import NoteSelection
 
 
 def user_index(request, user_id):
@@ -35,6 +36,10 @@ def user_likes(request, user_id, template=TEMPLATE):
 
     # TODO
     _entity_id_list = _query_user.find_like_entity(None, offset=0, count=30)
+
+    # 没数据 用精选模拟 TODO
+    _entity_id_list = [entity['entity_id'] for entity in NoteSelection.objects.all()[0:30]]
+
     _entity_list = []
 
     for _entity_id in _entity_id_list:
