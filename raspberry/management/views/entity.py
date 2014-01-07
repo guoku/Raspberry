@@ -628,9 +628,9 @@ def read_taobao_item_state(request):
 
 @login_required
 def recycle_entity(request, entity_id):
-    if request.method == 'GET':
+    if request.method == 'POST':
         _entity = Entity(entity_id)
         _entity.update(
             weight = -2
         )
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        return HttpResponse(1)
