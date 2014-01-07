@@ -191,6 +191,19 @@
 
                 location.href = urlPath + "?" + $.param(paras);
             }
+
+            $('a.recycle').on('click', function (e) {
+                e.preventDefault();
+
+                var url = this.href;
+                var $tr = $(this).parents('tr');
+
+                $.post(url, function (data) {
+                    if (parseInt(data) === 1) {
+                        $tr.remove();
+                    }
+                });
+            });
         })(jQuery)
     </script>
 {% endblock %}

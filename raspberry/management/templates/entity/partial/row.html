@@ -27,7 +27,7 @@
         <div class="btn-group">
             <a class="btn" href="{% url 'management_edit_entity' entity_context.entity_id %}">编</a>
             {% if entity_context.weight == -1 %}
-                <a class="btn" href="{% url 'management_recycle_entity' entity_context.entity_id %}">剔</a>
+                <a class="btn recycle" href="{% url 'management_recycle_entity' entity_context.entity_id %}">剔</a>
             {% endif %}
         </div>
     </td>
