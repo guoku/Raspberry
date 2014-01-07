@@ -182,6 +182,12 @@ class User(object):
         def __str__(self):
             return repr(self.__message)
     
+    class UserBindTaobaoAlready(Exception):
+        def __init__(self):
+            self.__message = "bind taobao already" 
+        def __str__(self):
+            return repr(self.__message)
+    
     def __init__(self, user_id):
         self.user_id = int(user_id) 
     
@@ -323,7 +329,32 @@ class User(object):
         )
 
         return _user_inst
-            
+    
+    
+    def bind_taobao(self, taobao_id, screen_name, taobao_token):
+        if TaobaoTokenModel.objects.filter(taobao_id = taobao_id).count() > 0:
+            raise User.TaobaoIdExistAlready(taobao_id)
+        
+        if TaobaoTokenModel.objects.filter(user_id = self.user_id).count() > 0:
+            raise User.UserBindTaobaoAlready()
+        
+        TaobaoTokenModel.objects.create(
+            user_id = self.user_id,
+            taobao_id = taobao_id,
+            screen_name = screen_name,
+            access_token = taobao_token
+        )
+        self.__reset_basic_info_to_cache()
+    
+    def unbind_taobao(self):
+        try:
+            _taobao_token_obj = TaobaoTokenModel.objects.get(user_id = self.user_id)
+            _taobao_token_obj.delete()
+            self.__reset_basic_info_to_cache()
+        except TaobaoTokenModel.DoesNotExist:
+            pass
+        
+
     
     def delete(self):
         self.__ensure_user_obj()
@@ -465,7 +496,14 @@ class User(object):
         except SinaTokenModel.DoesNotExist:
             pass
         
+        try:
+            _taobao_token_obj = TaobaoTokenModel.objects.get(user_id = self.user_id)
+            _basic_info['taobao_screen_name'] = _taobao_token_obj.screen_name
+        except TaobaoTokenModel.DoesNotExist:
+            pass
+        
         cache.set(_cache_key, _basic_info, 864000)
+        cache.delete("user_context_%s"%self.user_id)
             
         return _basic_info
     

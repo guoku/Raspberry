@@ -38,7 +38,7 @@ def _load_taobao_item_info(taobao_id):
     taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
     
     taobao_item_info["shop_nick"] = taobao_item_info["nick"]
-    print fetcher.fetch_shop(taobao_item_info["shoplink"])
+    
     return taobao_item_info
 
 
