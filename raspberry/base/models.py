@@ -232,6 +232,7 @@ class Sina_Token(models.Model):
 
 class Taobao_Token(models.Model):
     user = models.OneToOneField(User)
+    taobao_user_nick = models.CharField(max_length = 64, null = True, db_index = True)
     taobao_id = models.CharField(max_length = 64, null = True, db_index = True)
     screen_name = models.CharField(max_length = 64, null = True, db_index = True)
     access_token = models.CharField(max_length = 255, null = True, db_index = True)
@@ -332,3 +333,8 @@ class NoteSelection(Selection):
             "category_id" 
         ]
     }
+
+class Seller_Info(models.Model):
+    user = models.OneToOneField(User, related_name = "seller_info")
+    shop_nick = models.CharField(max_length = 64, db_index = True)
+    verified = models.BooleanField(default = False)
