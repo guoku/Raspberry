@@ -1,4 +1,4 @@
-h2 {
+#selection h2 {
     font-size: 16px;
     margin: 0 0 5px 0;
 }
@@ -67,20 +67,47 @@ h2 {
 }
 
 
-.categories {
+#selection .categories {
     float: right;
     width: 257px;
     padding: 14px;
     color: #666;
 }
 
-.categories ul {
+#selection .categories ul {
     margin: 0;
     padding: 0;
     line-height: 2;
 }
 
-.categories li {
+#selection .categories li {
     display: inline;
     margin-right: 20px;
+}
+
+#selection .pagination {
+    clear: left;
+    float: left;
+    width: 630px;
+}
+
+#selection .pagination div {
+    float: right;
+}
+
+#selection .pagination div a {
+    padding: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    background: #fff;
+    color: #333;
+    text-decoration: none;
+}
+
+#selection .pagination div a:hover {
+    background-color: #f3f3f3;
+}
+
+#selection .pagination div a.inactive {
+    color: #999;
+    background-color: #fff;
 }

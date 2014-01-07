@@ -14,9 +14,9 @@
     <div class="header-container">
         <a href="{% url 'web.views.main.selection' %}" class="logo"><img src="{% static 'images/guoku_icon_32.png' %}"></a>
         <ul class="nav">
-            <li><a href="{% url 'web.views.main.selection' %}">精选</a></li>
-            <li><a href="{% url 'web.views.main.popular' %}">热门</a></li>
-            <li><a href="{% url 'web.views.main.discover' %}">发现</a></li>
+            <li {% if main_nav_deliver == 'selection' %}class="active"{% endif %}><a href="{% url 'web.views.main.selection' %}">精选</a></li>
+            <li {% if main_nav_deliver == 'popular' %}class="active"{% endif %}><a href="{% url 'web.views.main.popular' %}">热门</a></li>
+            <li {% if main_nav_deliver == 'discover' %}class="active"{% endif %}><a href="{% url 'web.views.main.discover' %}">发现</a></li>
         </ul>
 
         <form action="/search" method="GET">

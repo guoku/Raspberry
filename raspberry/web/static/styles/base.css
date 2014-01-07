@@ -80,19 +80,29 @@ a:hover {
 
 #header .logo {
     display: inline-block;
+    vertical-align: top;
+    height: 41px;
     padding-top: 8px;
 }
 
 #header ul {
     display: inline-block;
-    margin: 0 0 0 50px;
+    height: 49px;
+    line-height: 49px;
+    margin: 0 0 0 45px;
     padding-left: 0;
 }
 
 #header li {
     float: left;
-    margin-right: 30px;
-    padding: 7px;
+    margin-right: 25px;
+    padding: 0 11px;
+}
+
+#header li.active {
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    background: url(/static/images/menu_bar_button_gb_02.png) repeat-x;;
 }
 
 #header form {
