@@ -311,7 +311,7 @@ class User(object):
         return _user_inst
     
     @classmethod
-    def create_by_taobao(cls, taobao_id, screen_name, taobao_token, email, password, username = None):
+    def create_by_taobao(cls, taobao_id, screen_name, taobao_token, email, password, expires_in = 0, username = None):
         if TaobaoTokenModel.objects.filter(taobao_id = taobao_id).count() > 0:
             raise User.TaobaoIdExistAlready(taobao_id)
 
@@ -325,13 +325,14 @@ class User(object):
             user_id = _user_inst.user_id,
             taobao_id = taobao_id,
             screen_name = screen_name,
-            access_token = taobao_token
+            access_token = taobao_token,
+            expires_in = expires_in
         )
 
         return _user_inst
     
     
-    def bind_taobao(self, taobao_id, screen_name, taobao_token):
+    def bind_taobao(self, taobao_id, screen_name, taobao_token, expires_in = 0):
         if TaobaoTokenModel.objects.filter(taobao_id = taobao_id).count() > 0:
             raise User.TaobaoIdExistAlready(taobao_id)
         
@@ -342,7 +343,8 @@ class User(object):
             user_id = self.user_id,
             taobao_id = taobao_id,
             screen_name = screen_name,
-            access_token = taobao_token
+            access_token = taobao_token,
+            expires_in = expires_in
         )
         self.__reset_basic_info_to_cache()
     
