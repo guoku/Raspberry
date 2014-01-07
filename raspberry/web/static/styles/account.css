@@ -86,12 +86,12 @@
     font-weight: normal;
 }
 
-#setting {
-    margin: 0 0 0 250px;
-    padding: 35px 0 50px;
+/*----------------*/
+#setting .guoku-block {
+    padding: 35px 0 50px 250px;
 }
 
-h2.setting  {
+#setting h2 {
     margin: 0 0 5px;
     font-size: 16px;
 }
@@ -108,7 +108,7 @@ h2.setting  {
 
 #setting .text-input {
     width: 190px;
-    padding: 5px 4px;
+    padding: 7px 4px;
 }
 
 #setting label, #setting .label {

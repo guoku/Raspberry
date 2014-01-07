@@ -105,4 +105,5 @@
 #selection .pagination div a.inactive {
     color: #999;
     background-color: #fff;
+    cursor: default;
 }

@@ -17,10 +17,14 @@ urlpatterns += patterns(
     url('^account/login/$', 'login', name='web_login'),
     url('^account/login/sina/$', 'login_by_sina', name='web_login_by_sina'),
     url('^account/login/taobao/$', 'login_by_taobao', name='web_login_by_taobao'),
+
     url('^account/logout/$', 'logout', name='web_logout'),
+
     url('^account/register/$', 'register', name='web_register'),
+    url('^account/register/bio/$', 'register_bio', name='web_register_bio'),
     url('^account/register/check_nickname_available/$', 'check_nickname_available', name='web_check_nickname_available'),
     url('^account/register/check_email_available/$', 'check_email_available', name='web_check_email_available'),
+
     url('^account/setting/$', 'setting', name='web_setting'),
     url('^account/setting/base/$', 'set_base', name='web_set_base'),
     url('^account/setting/psw/$', 'set_psw', name='web_set_psw'),
