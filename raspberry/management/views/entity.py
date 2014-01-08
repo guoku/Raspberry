@@ -11,14 +11,15 @@ import re
 import datetime
 import time
 import json
+from base import fetcher 
 from base.category import Category, Old_Category
 from base.entity import Entity
 from base.item import Item
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
+from utils.authority import staff_only 
 from utils.paginator import Paginator
-from base import fetcher 
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -87,6 +88,7 @@ def _add_note_and_select_delay(entity, user_id, note):
 
 
 @login_required
+@staff_only
 def new_entity(request):
     if request.method == 'GET':
         return render_to_response(
@@ -137,6 +139,7 @@ def new_entity(request):
                 
                 
 @login_required
+@staff_only
 def create_entity_by_taobao_item(request):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
@@ -181,6 +184,7 @@ def create_entity_by_taobao_item(request):
         return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
+@staff_only
 def edit_entity(request, entity_id):
     if request.method == 'GET':
         _code = request.GET.get("code", None)
@@ -261,6 +265,7 @@ def edit_entity(request, entity_id):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
+@staff_only
 def edit_entity_image(request, entity_id):
     if request.method == 'GET':
         _entity_context = Entity(entity_id).read()
@@ -274,6 +279,7 @@ def edit_entity_image(request, entity_id):
         )
         
 @login_required
+@staff_only
 def search_entity(request):
     if request.method == 'POST':
         _query = request.POST.get("query", None)
@@ -315,6 +321,7 @@ def search_entity(request):
 
 
 @login_required
+@staff_only
 def entity_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id == None:
@@ -450,6 +457,7 @@ def entity_list(request):
             return HttpResponseRedirect(reverse('management_entity_list') + '?cid=' + str(_categories[0]['category_id'])) 
 
 @login_required
+@staff_only
 def unbind_taobao_item_from_entity(request, entity_id, item_id):
     _entity = Entity(entity_id)
     _entity.unbind_item(item_id)
@@ -457,6 +465,7 @@ def unbind_taobao_item_from_entity(request, entity_id, item_id):
     return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
+@staff_only
 def bind_taobao_item_to_entity(request, entity_id, item_id):
     _entity = Entity(entity_id)
     _entity.bind_item(item_id)
@@ -464,6 +473,7 @@ def bind_taobao_item_to_entity(request, entity_id, item_id):
 
 
 @login_required
+@staff_only
 def load_taobao_item_for_entity(request, entity_id):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
@@ -511,6 +521,7 @@ def load_taobao_item_for_entity(request, entity_id):
             return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
     
 @login_required
+@staff_only
 def add_image_for_entity(request, entity_id):
     if request.method == "POST":
         _image_file = request.FILES.get('image', None)
@@ -531,6 +542,7 @@ def add_image_for_entity(request, entity_id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
+@staff_only
 def del_image_from_entity(request, entity_id, image_id):
     if request.method == "GET":
         _entity = Entity(entity_id)
@@ -541,6 +553,7 @@ def del_image_from_entity(request, entity_id, image_id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
+@staff_only
 def add_taobao_item_for_entity(request, entity_id):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
@@ -567,6 +580,7 @@ def add_taobao_item_for_entity(request, entity_id):
         return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
+@staff_only
 def merge_entity(request, entity_id):
     if request.method == 'POST':
         _target_entity_id = request.POST.get("target_entity_id", None)
@@ -575,6 +589,7 @@ def merge_entity(request, entity_id):
         return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
+@staff_only
 def get_all_categories(request):
     if request.method == 'GET':
         result = {}
@@ -598,6 +613,7 @@ def get_all_categories(request):
         return HttpResponse(json.dumps(result))
 
 @login_required
+@staff_only
 def read_taobao_item_state(request):
     _taobao_url = request.GET.get("url", None)
     _item = None
@@ -620,6 +636,7 @@ def read_taobao_item_state(request):
     return HttpResponse(json.dumps(_result, cls=DjangoJSONEncoder))
 
 @login_required
+@staff_only
 def recycle_entity(request, entity_id):
     if request.method == 'POST':
         _entity = Entity(entity_id)
