@@ -360,21 +360,35 @@ class Entity(object):
             _basic_info = self.__reset_basic_info_to_cache()
             
     @classmethod
-    def find(cls, root_old_category_id = None, category_id = None, like_word = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
+    def find(cls, root_old_category_id = None, category_id = None, 
+                  like_word = None, timestamp = None, status = None, 
+                  offset = None, count = None, 
+                  sort_by = None, reverse = False):
+        
         _hdl = EntityModel.objects.all()
+        
         if root_old_category_id != None and root_old_category_id >= 1 and root_old_category_id <= 11:
             _hdl = _hdl.filter(category__pid = root_old_category_id)
+        
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
+        
         if like_word != None: 
             _q = Q(title__icontains = like_word)
             _hdl = _hdl.filter(_q)
-        if status == -1:
-            _hdl = _hdl.filter(weight = -1)
-        elif status == -2:
+        
+        if status == 'recycle':
             _hdl = _hdl.filter(weight = -2)
-        elif status >= 0:
+        elif status == 'freeze':
+            _hdl = _hdl.filter(weight = -1)
+        elif status == 'novus':
+            _hdl = _hdl.filter(weight = 0)
+        elif status == 'select':
+            _hdl = _hdl.filter(weight__gt = 0)
+        elif status == 'normal':
             _hdl = _hdl.filter(weight__gte = 0)
+
+        
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         
@@ -455,15 +469,21 @@ class Entity(object):
     @classmethod
     def count(cls, category_id = None, status = None):
         _hdl = EntityModel.objects.all()
+        
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
-        if status != None:
-            if status == -1:
-                _hdl = _hdl.filter(weight = -1)
-            elif status == -2:
-                _hdl = _hdl.filter(weight = -2)
-            elif status >= 0:
-                _hdl = _hdl.filter(weight__gte = 0)
+        
+        if status == 'recycle':
+            _hdl = _hdl.filter(weight = -2)
+        elif status == 'freeze':
+            _hdl = _hdl.filter(weight = -1)
+        elif status == 'novus':
+            _hdl = _hdl.filter(weight = 0)
+        elif status == 'select':
+            _hdl = _hdl.filter(weight__gt = 0)
+        elif status == 'normal':
+            _hdl = _hdl.filter(weight__gte = 0)
+        
         return _hdl.count()
     
     def bind_item(self, item_id):

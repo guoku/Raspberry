@@ -318,16 +318,7 @@ def search_entity(request):
 def entity_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id == None:
-        _status = request.GET.get("status", "all")
-        if _status == "freeze":
-            _status_code = -1 
-        elif _status == "recycle":
-            _status_code = -2 
-        elif _status == "normal":
-            _status_code = 1
-        else:
-            _status_code = 0
-    
+        _status = request.GET.get("status", "select")
         _para = { 
             "status" : _status
         }
@@ -349,13 +340,14 @@ def entity_list(request):
         
         
         _category_groups = Category.allgroups()
-        _normal_entity_count = Entity.count(category_id = _category_id, status = 0) 
-        _freeze_entity_count = Entity.count(category_id = _category_id, status = -1)
-        _recycle_entity_count = Entity.count(category_id = _category_id, status = -2)
+        _select_entity_count = Entity.count(category_id = _category_id, status = 'select') 
+        _novus_entity_count = Entity.count(category_id = _category_id, status = 'novus') 
+        _freeze_entity_count = Entity.count(category_id = _category_id, status = 'freeze')
+        _recycle_entity_count = Entity.count(category_id = _category_id, status = 'recycle')
         
         _entity_count = Entity.count(
             category_id = _category_id,
-            status = _status_code
+            status = _status
         )
 
         _sort_by = request.GET.get("sort_by", "time")
@@ -371,12 +363,12 @@ def entity_list(request):
         _paginator = Paginator(_page_num, 30, _entity_count, _para)
 
         _entity_id_list = Entity.find(
-            category_id=_category_id,
-            status=_status_code,
-            offset=_paginator.offset,
-            count=_paginator.count_in_one_page,
-            sort_by=_sort_by,
-            reverse=_reverse
+            category_id = _category_id,
+            status = _status,
+            offset = _paginator.offset,
+            count = _paginator.count_in_one_page,
+            sort_by = _sort_by,
+            reverse = _reverse
         )
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
@@ -423,7 +415,8 @@ def entity_list(request):
                 'category_groups': _category_groups,
                 'categories': _categories,
                 'category_group_id': _category_group_id,
-                'normal_entity_count': _normal_entity_count,
+                'select_entity_count': _select_entity_count,
+                'novus_entity_count': _novus_entity_count,
                 'freeze_entity_count': _freeze_entity_count,
                 'recycle_entity_count': _recycle_entity_count,
                 'entity_context_list': _entity_context_list,

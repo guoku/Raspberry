@@ -40,7 +40,7 @@ def entity_list(request):
             count = _count,
             sort_by = _sort_by,
             reverse = _reverse,
-            status = 1
+            status = 'normal' 
         )
         _rslt = []
         for _entity_id in _entity_id_list:
@@ -95,7 +95,7 @@ def category_entity(request, category_id):
         
         _entity_id_list = MobileEntity.find(
             category_id = category_id,
-            status = 1,
+            status = 'normal',
             sort_by = _sort_by,
             offset = _offset,
             count = _count,
