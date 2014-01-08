@@ -69,7 +69,7 @@ def register(request, template='account/register.html'):
                             _new_user = authenticate(username=_username, password=_psw)
                             auth_login(request, _new_user)
 
-                            return HttpResponseRedirect('/account/register/bio/')
+                            return HttpResponseRedirect('/register/bio/')
 
         return render_to_response(
             template,
@@ -81,23 +81,28 @@ def register(request, template='account/register.html'):
 
 
 def register_bio(request, template='account/register_bio.html'):
+    _user_context = User(request.user.id).read()
+
     if request.method == 'GET':
         return render_to_response(
             template,
             {
-
+                'user_context' : _user_context
             },
             context_instance=RequestContext(request)
         )
 
     else:
-        return render_to_response(
-            template,
-            {
+        if False:
+            return render_to_response(
+                template,
+                {
+                    'user_context': _user_context
+                },
+                context_instance=RequestContext(request)
+            )
 
-            },
-            context_instance=RequestContext(request)
-        )
+        return HttpResponseRedirect('/selected/')
 
 
 def login(request, template='account/login.html'):

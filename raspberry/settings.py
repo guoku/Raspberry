@@ -104,6 +104,10 @@ STATIC_ROOT = os.path.join(os.path.dirname(__file__),'static')
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
+#
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".

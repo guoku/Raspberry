@@ -14,22 +14,22 @@ urlpatterns = patterns(
 
 urlpatterns += patterns(
     'web.views.account',
-    url('^account/login/$', 'login', name='web_login'),
-    url('^account/login/sina/$', 'login_by_sina', name='web_login_by_sina'),
-    url('^account/login/taobao/$', 'login_by_taobao', name='web_login_by_taobao'),
+    url('^login/$', 'login', name='web_login'),
+    url('^login/sina/$', 'login_by_sina', name='web_login_by_sina'),
+    url('^login/taobao/$', 'login_by_taobao', name='web_login_by_taobao'),
 
-    url('^account/logout/$', 'logout', name='web_logout'),
+    url('^logout/$', 'logout', name='web_logout'),
 
-    url('^account/register/$', 'register', name='web_register'),
-    url('^account/register/bio/$', 'register_bio', name='web_register_bio'),
-    url('^account/register/check_nickname_available/$', 'check_nickname_available', name='web_check_nickname_available'),
-    url('^account/register/check_email_available/$', 'check_email_available', name='web_check_email_available'),
+    url('^register/$', 'register', name='web_register'),
+    url('^register/bio/$', 'register_bio', name='web_register_bio'),
+    url('^register/check_nickname_available/$', 'check_nickname_available', name='web_check_nickname_available'),
+    url('^register/check_email_available/$', 'check_email_available', name='web_check_email_available'),
 
-    url('^account/setting/$', 'setting', name='web_setting'),
-    url('^account/setting/base/$', 'set_base', name='web_set_base'),
-    url('^account/setting/psw/$', 'set_psw', name='web_set_psw'),
-    url('^account/setting/upload_avatar/$', 'upload_avatar', name='web_upload_avatar'),
-    url('^account/setting/update_avatar$', 'update_avatar', name='web_update_avatar')
+    url('^setting/$', 'setting', name='web_setting'),
+    url('^setting/base/$', 'set_base', name='web_set_base'),
+    url('^setting/psw/$', 'set_psw', name='web_set_psw'),
+    url('^setting/upload_avatar/$', 'upload_avatar', name='web_upload_avatar'),
+    url('^setting/update_avatar$', 'update_avatar', name='web_update_avatar')
 )
 
 
