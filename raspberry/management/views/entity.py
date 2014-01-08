@@ -38,7 +38,7 @@ def _load_taobao_item_info(taobao_id):
     taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
     
     taobao_item_info["shop_nick"] = taobao_item_info["nick"]
-    print fetcher.fetch_shop(taobao_item_info["shoplink"])
+    
     return taobao_item_info
 
 
@@ -628,9 +628,9 @@ def read_taobao_item_state(request):
 
 @login_required
 def recycle_entity(request, entity_id):
-    if request.method == 'GET':
+    if request.method == 'POST':
         _entity = Entity(entity_id)
         _entity.update(
             weight = -2
         )
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        return HttpResponse(1)
