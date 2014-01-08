@@ -702,8 +702,8 @@ class Entity(object):
                 )
                 _doc.save()
                 
-                if self.entity_obj.weight < 0:
-                    self.update(weight = 0)
+                if self.entity_obj.weight <= 0:
+                    self.update(weight = 1)
                
                 _note_context = _note.read()
                 CreateNoteSelectionMessageTask.delay(
