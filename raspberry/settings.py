@@ -101,7 +101,8 @@ APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'uploads')
 MEDIA_URL = '/uploads/'
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
+#STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
+STATIC_ROOT = '/tmp/static/'
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
