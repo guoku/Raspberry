@@ -8,8 +8,10 @@ from management.forms.mobile_app import UploadFileForm
 from management.lib.handle_uploaded_file import handle_uploaded_file
 from management.models import App_Pubilsh
 from management.tasks import PublishApkTask
+from utils.authority import staff_only 
 
 @login_required
+@staff_only
 def upload_file(request):
 
     if request.method == 'POST':
@@ -30,6 +32,7 @@ def upload_file(request):
 
 
 @login_required
+@staff_only
 def app_list(request):
     # app_list = get_app_location()
     app_list = App_Pubilsh.objects.all()
@@ -44,6 +47,7 @@ def app_list(request):
 
 
 @login_required
+@staff_only
 def publish_app(request, pk):
     app = App_Pubilsh.objects.get(pk = pk)
 

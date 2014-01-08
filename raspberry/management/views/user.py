@@ -13,11 +13,13 @@ import time
 import json
 
 from base.user import User
+from utils.authority import staff_only 
 from utils.paginator import Paginator
 import logging
 logger = logging.getLogger('django.request')
 
 @login_required
+@staff_only
 def user_list(request):
     _page_num = int(request.GET.get("p", "1"))
     _user_count = User.count()
@@ -48,6 +50,7 @@ def user_list(request):
 
 
 @login_required
+@staff_only
 def edit_user(request, user_id):
     if request.method == 'GET':
         _user_context = User(user_id).read()
@@ -75,6 +78,7 @@ def edit_user(request, user_id):
 
 
 @login_required
+@staff_only
 def push_message_to_user(request, user_id):
     if request.method == 'POST':
         _user_id = int(user_id)
