@@ -11,7 +11,7 @@
         {% endif %}
 
         <div>
-            <input type="text" name="email" class="text-input" placeholder="邮箱" id="email">
+            <input type="text" name="email" class="text-input" placeholder="邮箱" id="email" {% if email %}value="{{ email }}" {% endif %}>
             {% if error.email != None %}<span class="error-info">{{ error.email }}</span>{% endif %}
         </div>
 

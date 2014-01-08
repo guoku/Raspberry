@@ -1,12 +1,14 @@
 # coding=utf-8
-# validation for account
-
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from base.user import User
 
+# validation for account
+
 
 def v_validate_email(email):
+    """ 如合法返回 True """
+
     try:
         validate_email(email)
         return True
@@ -15,61 +17,79 @@ def v_validate_email(email):
 
 
 def v_validate_gender(g):
+    """ 如合法返回 True """
+
     return g == 'F' or g == 'M' or g == 'O'
 
 
-def v_check_nickname(nickname):
+def v_check_nickname(nickname, must_not_exist = False):
+    """ 返回错误信息，若没问题返回 None """
+
     _ret = None
 
     if nickname is None or len(nickname) == 0:
-        _ret = '昵称不能为空'
+        _ret = u'请填写昵称'
     elif len(nickname) > 15:
-        _ret = '昵称不能超过15个字'
+        _ret = u'昵称不能超过15个字'
+    elif must_not_exist and User.nickname_exist(nickname):
+        _ret = u'昵称已经被占用'
 
     return _ret
 
 
-def v_check_email(email):
+def v_check_email(email, must_not_exist = False):
+    """ 返回错误信息，若没问题返回 None """
+
     _ret = None
 
     if email is None or len(email) == 0:
-        _ret = '邮箱号不能为空'
+        _ret = u'请填写邮箱'
     elif not v_validate_email(email):
-        _ret = '邮箱号不正确'
+        _ret = u'请输入正确的邮箱'
+    elif must_not_exist and User.email_exist(email):
+        _ret = u'邮箱已经被占用'
 
     return _ret
 
 
 def v_check_psw(psw):
+    """ 返回错误信息，若没问题返回 None """
+
     _ret = None
 
     if psw is None or len(psw) == 0:
-        _ret = '密码不能为空'
+        _ret = u'请填写密码'
     elif len(psw) < 6:
-        _ret = '密码必须大于6位'
+        _ret = u'密码必须大于6位'
 
     return _ret
 
 
 def v_check_bio(b):
+    """ 返回错误信息，若没问题返回 None """
+
     _ret = None
 
     if b is not None and len(b) > 300:
-        _ret = '简介需在300字以内'
+        _ret = u'简介需在300字以内'
 
     return _ret
 
 
 def v_check_website(w):
+    """ 返回错误信息，若没问题返回 None """
+
     _ret = None
 
     if w is not None and len(w) > 255:
-        _ret = 'url太长'
+        _ret = u'url太长'
 
     return _ret
 
 
 def v_validate_location(l, c):
+    """ 如合法返回 True """
+
     _l = ['安徽', '澳门', '北京', '福建', '甘肃', '广东', '广西', '贵州', '海南', '河北', '河南', '黑龙江', '湖北', '湖南', '吉林', '江苏', '江西', '辽宁',
           '内蒙古', '宁夏', '青海', '山东', '山西', '陕西', '上海', '四川', '台湾', '天津', '西藏', '香港', '新疆', '云南', '浙江', '重庆', '海外']
     _c = [

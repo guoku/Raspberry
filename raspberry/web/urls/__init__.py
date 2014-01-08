@@ -26,8 +26,6 @@ urlpatterns += patterns(
     url('^register/check_email_available/$', 'check_email_available', name='web_check_email_available'),
 
     url('^setting/$', 'setting', name='web_setting'),
-    url('^setting/base/$', 'set_base', name='web_set_base'),
-    url('^setting/psw/$', 'set_psw', name='web_set_psw'),
     url('^setting/upload_avatar/$', 'upload_avatar', name='web_upload_avatar'),
     url('^setting/update_avatar$', 'update_avatar', name='web_update_avatar')
 )
