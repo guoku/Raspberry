@@ -338,4 +338,4 @@ class NoteSelection(Selection):
 class Seller_Info(models.Model):
     user = models.OneToOneField(User, related_name = "seller_info")
     shop_nick = models.CharField(max_length = 64, db_index = True)
-    verified = models.BooleanField(default = False)
+    verified = models.BooleanField(default = False, verified = True)
