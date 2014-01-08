@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load web %}
 
 {% block title %}设置 - 果库{% endblock %}
 {% block css %}
@@ -11,22 +12,17 @@
         <h2>帐号设置</h2>
 
         <div class="guoku-block">
-            <form class="update-avatar clearfix" enctype="multipart/form-data"
-                  action="{% url 'web.views.account.update_avatar' %}" method="POST">
-                {% csrf_token %}
-                <div class="avatar guoku-block"><img src="{{ user_context.avatar_small }}" height="100" width="100">
-                </div>
-
-                <a href="javascript:;">点击选择图片</a><span></span>
-                <input type="file" name="avatar_img" class="file">
-
-                <p>支持 JPG、GIF、PNG 格式，不超过 2MB。</p>
-                <input type="submit" value="更新头像" class="guoku-button">
-            </form>
+            {% display_avatar_update user_context %}
 
             <form method="POST" action="{% url 'web.views.account.setting' %}" class="base-info">
                 {% csrf_token %}
                 <h3>个人资料</h3>
+
+                {% if base_error != None %}
+                    <p class="error">{{ base_error }}</p>
+                {% elif base_success != None %}
+                    <p class="success">{{ base_success }}</p>
+                {% endif %}
 
                 <div>
                     <label for="nickname">昵称</label>
@@ -77,19 +73,25 @@
                 {% csrf_token %}
                 <h3>更改密码</h3>
 
+                {% if psw_error != None %}
+                    <p class="error">{{ psw_error }}</p>
+                {% elif psw_success != None %}
+                    <p class="success">{{ psw_success }}</p>
+                {% endif %}
+
                 <div>
                     <label for="curr_psw">当前秘密</label>
-                    <input type="text" name="current_psw" id="curr_psw" class="text-input">
+                    <input type="password" name="current_psw" id="current_psw" class="text-input">
                 </div>
 
                 <div>
                     <label for="n_psw">新的密码</label>
-                    <input type="text" name="new_psw" id="n_psw" class="text-input">
+                    <input type="password" name="new_psw" id="new_psw" class="text-input">
                 </div>
 
                 <div>
                     <label for="c_psw">确认密码</label>
-                    <input type="text" name="confirm_psw" id="c_psw" class="text-input">
+                    <input type="password" name="confirm_psw" id="confirm_psw" class="text-input">
                 </div>
 
                 <input type="hidden" name="type" value="psw">

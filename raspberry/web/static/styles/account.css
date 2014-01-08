@@ -179,3 +179,19 @@
 #setting form.psw div {
     margin-bottom: 15px;
 }
+
+#setting form.base-info p,
+#setting form.psw p {
+    width: 333px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px solid #dedede;
+    background: #ffc;
+    color: #999;
+}
+
+#setting form.base-info p.success,
+#setting form.psw p.success {
+    background-color: #dff0d8;
+}

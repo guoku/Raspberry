@@ -77,3 +77,12 @@ def display_user_users(user_list):
     }
 
 register.inclusion_tag("user/partial/display_user.html")(display_user_users)
+
+
+# for account
+def display_avatar_update(user_context):
+    return {
+        'user_context' : user_context
+    }
+
+register.inclusion_tag("account/partial/display_avatar_update.html")(display_avatar_update)

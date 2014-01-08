@@ -16,6 +16,8 @@ MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14  # two weeks
 
 
 def check_nickname_available(request):
+    """注册时 Ajax 方式验证 nickname 是否可用"""
+
     if request.method == 'GET':
         _nickname = request.GET.get('nickname', None)
         _ret = not User.nickname_exist(_nickname)
@@ -24,6 +26,8 @@ def check_nickname_available(request):
 
 
 def check_email_available(request):
+    """注册时 Ajax 方式验证 email 是否可用"""
+
     if request.method == 'GET':
         _email = request.GET.get('email', None)
         _ret = not User.email_exist(_email)
@@ -73,6 +77,8 @@ def register(request, template = 'account/register.html'):
 
 
 def register_bio(request, template = 'account/register_bio.html'):
+    """ 注册成功后完善用户信息 """
+
     _user_context = User(request.user.id).read()
 
     if request.method == 'GET':
@@ -177,19 +183,40 @@ def logout(request):
 
 
 @login_required
-def check_curr_psw(request):
-    if request.method == 'POST':
-        _user = User(request.user.id)
-        _psw = request.POST.get('psw', None)
+def s_check_nickname_available(request):
+    """用户设置时 Ajax 方式验证 nickname 是否可用"""
 
-        if _psw is not None:
-            return _user.check_auth(_psw)
+    if request.method == 'GET':
+        _nickname = request.GET.get('nickname', None)
+        _user_context = User(request.user.id).read()
+        _ret = 1
+
+        if User.nickname_exist(_nickname) and _user_context['nickname'] != _nickname:
+            _ret = 0
+
+        return HttpResponse(_ret)
+
+
+@login_required
+def s_check_email_available(request):
+    """用户设置时 Ajax 方式验证 email 是否可用"""
+
+    if request.method == 'GET':
+        _email = request.GET.get('email', None)
+        _user_context = User(request.user.id).read()
+        _ret = 1
+
+        if User.email_exist(_email) and _user_context['email'] != _email:
+            _ret = 0
+
+        return HttpResponse(_ret)
 
 
 def _set_base(request, template):
     _user = User(request.user.id)
     _user_context = _user.read()
-    _error = {}
+    _error = None
+    _success = None
 
     _nickname = request.POST.get('nickname', None)
     _email = request.POST.get('email', None)
@@ -199,18 +226,18 @@ def _set_base(request, template):
     _gender = request.POST.get('gender', None)
     _website = request.POST.get('website', None)
 
-    _error['nickname'] = v_check_nickname(_nickname)
+    _error = v_check_nickname(_nickname)
 
-    if _error['nickname'] is None:
-        _error['email'] = v_check_email(_email)
+    if _error is None:
+        _error = v_check_email(_email)
 
-        if _error['email'] is None:
-            _error['bio'] = v_check_bio(_bio)
+        if _error is None:
+            _error = v_check_bio(_bio)
 
-            if _error['bio'] is None:
-                _error['website'] = v_check_website(_website)
+            if _error is None:
+                _error = v_check_website(_website)
 
-                if _error['website'] is None:
+                if _error is None:
                     # 验证性别和地理位置是否合法 不合法则用原值
                     if not v_validate_gender(_gender):
                         _gender = _user_context['gender']
@@ -219,16 +246,20 @@ def _set_base(request, template):
                         _location = _user_context['location']
                         _city = _user_context['city']
 
+                    _success = '设置成功'
+
                     try:
                         _user.set_profile(_nickname, location = _location, city = _city, gender = _gender,
                                           bio = _bio, website = _website)
                     except User.NicknameExistAlready:
-                        _error['nickname'] = u'昵称已经被占用'
+                        _error = u'昵称已经被占用'
+                        _success = None
 
                     try:
                         _user.reset_account(email = _email)
                     except User.EmailExistAlready:
-                        _error['email'] = u'邮箱已经被占用'
+                        _error = u'邮箱已经被占用'
+                        _success = None
 
                     # 读取最新信息
                     _user_context = User(request.user.id).read()
@@ -237,7 +268,8 @@ def _set_base(request, template):
         template,
         {
             'user_context' : _user_context,
-            'error' : _error
+            'base_error' : _error,
+            'base_success' : _success
         },
         context_instance = RequestContext(request)
     )
@@ -246,29 +278,32 @@ def _set_base(request, template):
 def _set_psw(request, template):
     _user = User(request.user.id)
     _user_context = _user.read()
-    _error = {}
+    _error = None
+    _success = None
 
     _curr_psw = request.POST.get('current_psw', None)
     _new_psw = request.POST.get('new_psw', None)
     _confirm_psw = request.POST.get('confirm_psw', None)
 
-    if _curr_psw is not None or len(_curr_psw) < 6 or not _user.check_auth(_curr_psw):
-        _error['psw'] = u'当前密码不正确'
+    if _curr_psw is None or len(_curr_psw) < 6 or not _user.check_auth(_curr_psw):
+        _error = u'当前密码不正确'
 
     elif len(_new_psw) < 6 or len(_confirm_psw) < 6:
-        _error['psw'] = u'秘密不能少于6位'
+        _error = u'秘密不能少于6位'
 
     elif _new_psw != _confirm_psw:
-        _error['psw'] = u'两次密码不一致'
+        _error = u'两次密码不一致'
 
     else:
         _user.reset_account(password = _new_psw)
+        _success = u'密码设置成功'
 
     return render_to_response(
         template,
         {
             'user_context' : _user_context,
-            'error' : _error
+            'psw_error' : _error,
+            'psw_success' : _success
         },
         context_instance = RequestContext(request)
     )
@@ -292,8 +327,10 @@ def setting(request, template = 'account/setting.html'):
 
         if _type is not None:
             _type = _type.strip()
+
             if _type == 'base':
                 return _set_base(request, template)
+
             elif _type == 'psw':
                 return _set_psw(request, template)
 

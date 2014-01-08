@@ -25,7 +25,7 @@
                            class="nickname">{{ popular.s_creator_context.nickname }}</a><br/>
                         <span class="date">{{ popular.s_note_context.created_time|format_time }}</span>
 
-                        <p>{{ popular.s_note_context.content }}</p>
+                        <p>{{ popular.s_note_context.content|truncatechars:100 }}</p>
 
                         <a href="javascript:;">
                             <span>喜爱 </span>
