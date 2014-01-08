@@ -2,9 +2,10 @@
 {% load common %}
 
 <tr {% if entity_context.weight == -2 %} class=""
-    {% elif entity_context.is_selected == True %} class="success"
-    {% elif entity_context.creator_id == None %} class="warning"
-    {% else %} class="info"
+    {% elif entity_context.weight == -1 %} 
+        {% if entity_context.creator_id == None %}class="info"{%else%}class="error"{%endif%}
+    {% elif entity_context.weight == 0 %} class="warning"
+    {% else %} class="success"
     {% endif %}
 >
 

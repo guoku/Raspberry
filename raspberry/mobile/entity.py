@@ -40,8 +40,9 @@ def entity_list(request):
             count = _count,
             sort_by = _sort_by,
             reverse = _reverse,
-            status = 1
+            status = 'novus' 
         )
+        
         _rslt = []
         for _entity_id in _entity_id_list:
             _entity = MobileEntity(_entity_id)
@@ -76,7 +77,7 @@ def search_entity(request):
         return SuccessJsonResponse(_rslt)
 
 
-#@check_sign
+@check_sign
 def category_entity(request, category_id):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -95,7 +96,7 @@ def category_entity(request, category_id):
         
         _entity_id_list = MobileEntity.find(
             category_id = category_id,
-            status = 1,
+            status = 'normal',
             sort_by = _sort_by,
             offset = _offset,
             count = _count,
