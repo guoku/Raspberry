@@ -106,6 +106,9 @@
 
         <div class="sub-nav">
             <ul class="nav nav-pills" id="sort-entity">
+                <li {% if sort_by == None or sort_by == "random" and reverse == False %}class="active"{% endif %}>
+                    <a href="javascript:;" id="random-order">随机</a>
+                </li>
                 <li {% if sort_by == None or sort_by == "time" and reverse == False %}class="active"{% endif %}>
                     <a href="javascript:;" id="date-order">创建时间降序</a>
                 </li>
@@ -159,15 +162,18 @@
             var sortButtons = $("#sort-entity a");
 
             sortButtons.eq(0).click(function () {
-                sort("time", 0);
+                sort("random", 0);
             });
             sortButtons.eq(1).click(function () {
-                sort("time", 1);
+                sort("time", 0);
             });
             sortButtons.eq(2).click(function () {
-                sort("note", 0);
+                sort("time", 1);
             });
             sortButtons.eq(3).click(function () {
+                sort("note", 0);
+            });
+            sortButtons.eq(4).click(function () {
                 sort("note", 1);
             });
 

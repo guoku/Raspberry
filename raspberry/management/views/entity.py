@@ -352,11 +352,6 @@ def entity_list(request):
         _freeze_entity_count = Entity.count(category_id = _category_id, status = 'freeze')
         _recycle_entity_count = Entity.count(category_id = _category_id, status = 'recycle')
         
-        _entity_count = Entity.count(
-            category_id = _category_id,
-            status = _status
-        )
-
         _sort_by = request.GET.get("sort_by", "time")
         _reverse = request.GET.get("reverse", None)
         if _sort_by:
@@ -366,17 +361,31 @@ def entity_list(request):
                 _reverse = True
             else:
                 _reverse = False
-
-        _paginator = Paginator(_page_num, 30, _entity_count, _para)
-
-        _entity_id_list = Entity.find(
+        
+        _entity_count = Entity.count(
             category_id = _category_id,
-            status = _status,
-            offset = _paginator.offset,
-            count = _paginator.count_in_one_page,
-            sort_by = _sort_by,
-            reverse = _reverse
+            status = _status
         )
+    
+        if _sort_by == 'random':
+            _paginator = None
+            _entity_id_list = Entity.random(
+                tot = _entity_count,
+                status = _status,
+                count = 30
+            )
+        else:
+            _paginator = Paginator(_page_num, 30, _entity_count, _para)
+
+            _entity_id_list = Entity.find(
+                category_id = _category_id,
+                status = _status,
+                offset = _paginator.offset,
+                count = _paginator.count_in_one_page,
+                sort_by = _sort_by,
+                reverse = _reverse
+            )
+        
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
         for _entity_id in _entity_id_list:
