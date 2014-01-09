@@ -6,7 +6,6 @@ from mongoengine import *
 from utils.apns_notification import APNSWrapper
 import datetime
 import urllib
-import random 
 import time
 
 
@@ -22,23 +21,8 @@ from tasks import CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
 from note import Note
 from user import User 
 from hashlib import md5
+from utils.lib import roll
 
-
-
-def random_pick(tot, num):
-    if tot > num * 10:
-        _rslt = []
-        for i in range(0, num - 1):
-            while True:
-                k = random.randint(0, tot - 1)
-                if not k in _rslt:
-                    _rslt.append(k)
-                    break
-    else:
-        _rslt = []
-        for i in range(0, num - 1):
-            _rslt.append(i)
-    return _rslt
 
 class Entity(object):
     
@@ -394,7 +378,7 @@ class Entity(object):
             _sql_query += ' AND neo_category_id=%d'%int(category_id)
         
         _entity_id_list = []
-        _random_offset_list = random_pick(tot, count)
+        _random_offset_list = roll(tot, count)
         
         for k in _random_offset_list:
             for _obj in EntityModel.objects.raw((_sql_query + ' LIMIT %d, 1')%(k)):

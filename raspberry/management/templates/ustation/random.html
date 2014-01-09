@@ -1,0 +1,23 @@
+{% extends "management_base.html" %}
+{% load common %}
+
+{% block content %}
+    <div class="container">
+        <div>
+            <form class="well form-horizontal" action="{% url 'management_ustation_random_generate' %}" method="POST">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="count">数量:</label>
+                        <div class="controls">
+                            <input type="text" id="count" name="count" value="50" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Go</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

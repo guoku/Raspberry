@@ -2,7 +2,9 @@
 from django.conf import settings
 from models import Item as ItemDocument
 from models import TaobaoItem as TaobaoItemDocument
+from utils.lib import roll
 import datetime
+import pymongo
 import urllib
 
 class Item(object):
@@ -79,6 +81,24 @@ class Item(object):
             _context = self.__load_taobao_item()
         return _context
     
+    @classmethod
+    def random(cls, count = 30, full_info = False):
+        _client = pymongo.Connection('localhost', 27017)
+        _db = _client['guoku']
+        _coll = _db['item']
+        #_hdl = TaobaoItemDocument.objects.filter(ustation = None)
+        _hdl = _coll.find({'ustation' : None })
+        _random_offset_list = roll(_hdl.count(), count)
+       
+        _start = datetime.datetime.now()
+        for k in _random_offset_list:
+            for _obj in _hdl[k]:
+                print _obj
+       
+        print datetime.datetime.now() - _start
+   
+
+
     @classmethod
     def find(cls, entity_id = None, offset = 0, count = 30, full_info = False):
         _hdl = ItemDocument.objects.all()

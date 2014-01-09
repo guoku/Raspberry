@@ -425,22 +425,22 @@ def entity_list(request):
         return render_to_response( 
             'entity/list.html', 
             {
-                'active_division': 'entity',
-                'status_filter': _status,
-                'category_context': _category_context,
-                'category_groups': _category_groups,
-                'categories': _categories,
-                'category_group_id': _category_group_id,
-                'select_entity_count': _select_entity_count,
-                'novus_entity_count': _novus_entity_count,
-                'freeze_entity_count': _freeze_entity_count,
-                'recycle_entity_count': _recycle_entity_count,
-                'entity_context_list': _entity_context_list,
-                'paginator': _paginator,
-                'sort_by': _sort_by,
-                'reverse': _reverse
+                'active_division' : 'entity',
+                'status_filter' : _status,
+                'category_context' : _category_context,
+                'category_groups' : _category_groups,
+                'categories' : _categories,
+                'category_group_id' : _category_group_id,
+                'select_entity_count' : _select_entity_count,
+                'novus_entity_count' : _novus_entity_count,
+                'freeze_entity_count' : _freeze_entity_count,
+                'recycle_entity_count' : _recycle_entity_count,
+                'entity_context_list' : _entity_context_list,
+                'paginator' : _paginator,
+                'sort_by' : _sort_by,
+                'reverse' : _reverse
             },
-            context_instance=RequestContext(request)
+            context_instance = RequestContext(request)
         )
     else:
         _categories = Category.find(group_id = int(_group_id))
