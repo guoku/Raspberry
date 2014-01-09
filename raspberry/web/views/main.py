@@ -181,7 +181,7 @@ def popular(request, template='main/popular.html'):
     _group = request.GET.get('group', 'daily')
 
     # 先用精选数据来模拟热门 TODO
-    _entity_id_list = [entity['entity_id'] for entity in NoteSelection.objects.all()[0:30]]
+    _entity_id_list = map(lambda x: x['entity_id'], NoteSelection.objects.all()[0:30])
     _popular_list = []
 
     for _id in _entity_id_list:
@@ -221,8 +221,7 @@ def discover(request, template='main/discover.html'):
     _user_context = get_request_user_context(request.user)
 
     # 先用精选数据来模拟 TODO
-    _entity_id_list = [entity['entity_id'] for entity in NoteSelection.objects.all()[0:10]]
-    _product_list = [Entity(_id).read() for _id in _entity_id_list]
+    _product_list = map(lambda x: Entity(x['entity_id']).read(), NoteSelection.objects.all()[0:10])
 
     return render_to_response(
         template,

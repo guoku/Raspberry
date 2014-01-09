@@ -9,6 +9,7 @@ from base.category import Old_Category
 from base.entity import Entity
 from base.note import Note
 from base.models import NoteSelection
+from base.tag import Tag
 
 
 def user_index(request, user_id):
@@ -38,20 +39,13 @@ def user_likes(request, user_id, template=TEMPLATE):
     _entity_id_list = _query_user.find_like_entity(None, offset=0, count=30)
 
     # 没数据 用精选模拟 TODO
-    _entity_id_list = [ns['entity_id'] for ns in NoteSelection.objects.all()[0:30]]
-    _entity_id_list = map(lambda x: x['entity_id'], NoteSelection.objects.all()[0:30])
-
-    _entity_list = []
-
-    for _entity_id in _entity_id_list:
-        _entity_context = Entity(_entity_id).read()
-        _entity_list.append(_entity_context)
+    _entity_list = map(lambda x: Entity(x['entity_id']).read(), NoteSelection.objects.all()[0:30])
 
     return render_to_response(
         template,
         {
             'user_context' : _user_context,
-            'content_tab' : 1,
+            'content_tab' : 'like',
             'query_user_context' : _query_user_context,
             'category_list' : _old_category_list,
             'curr_cat_id' : _curr_cat_id,
@@ -70,7 +64,7 @@ def user_posts(request, user_id, template=TEMPLATE):
         template,
         {
             'user_context' : _user_context,
-            'content_tab' : 2,
+            'content_tab' : 'post',
             'query_user_context' : _query_user_context
         },
         context_instance=RequestContext(request)
@@ -103,7 +97,7 @@ def user_notes(request, user_id, template=TEMPLATE):
         template,
         {
             'user_context' : _user_context,
-            'content_tab' : 3,
+            'content_tab' : 'note',
             'query_user_context' : _query_user_context,
             'note_list' : _note_list
         },
@@ -116,14 +110,27 @@ def user_tags(request, user_id, template=TEMPLATE):
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
 
-    _entity_id_list = User(user_id)
+    _tag_stat_list = Tag.user_tag_stat(user_id)
+    _tag_list = []
+
+    for _tag_stat in _tag_stat_list:
+        _tag_id = _tag_stat['tag_id']
+        _tag = _tag_stat['tag']
+        _entity_list = map(lambda x: Entity(x).read(), Tag.find_user_tag_entity(user_id, _tag))
+
+        _tag_list.append({
+            'tag' : _tag,
+            'tag_id' : _tag_id,
+            'entity_list' : _entity_list
+        })
 
     return render_to_response(
         template,
         {
             'user_context' : _user_context,
-            'content_tab' : 4,
-            'query_user_context' : _query_user_context
+            'content_tab' : 'tag',
+            'query_user_context' : _query_user_context,
+            'tag_list' : _tag_list
         },
         context_instance=RequestContext(request)
     )
@@ -146,7 +153,7 @@ def user_followings(request, user_id, template=TEMPLATE):
         template,
         {
             'user_context' : _user_context,
-            'content_tab' : 5,
+            'content_tab' : 'following',
             'query_user_context' : _query_user_context,
             'user_list' : _following_list
         },
@@ -172,7 +179,7 @@ def user_fans(request, user_id, template=TEMPLATE):
         template,
         {
             'user_context' : _user_context,
-            'content_tab' : 6,
+            'content_tab' : 'fan',
             'query_user_context' : _query_user_context,
             'user_list' : _fans_list
         },

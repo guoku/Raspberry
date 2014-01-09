@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        {% if content_tab == 1 %}
+        {% if content_tab == 'like' %}
             <div class="entity-nav guoku-block">
                 <ul class="categories">
                     <li><a href="{% url 'web.views.user.user_likes' query_user_context.user_id %}">所有</a></li>
@@ -61,27 +61,29 @@
             </div>
 
             {% if entity_list|length > 0 %}
-                {% display_user_entities entity_list %}
+                <ul class="guoku-block likes">
+                    {% display_user_entities entity_list %}
+                </ul>
             {% endif %}
 
-        {% elif content_tab == 2 %}
+        {% elif content_tab == 'post' %}
             <div class="date"></div>
             {% if entity_list|length > 0 %}
                 {% display_user_entities entity_list %}
             {% endif %}
 
-        {% elif content_tab == 3 %}
+        {% elif content_tab == 'note' %}
             <h3 class="notes">全部点评</h3>
             {% if note_list|length > 0 %}
                 {% display_user_notes note_list %}
             {% endif %}
 
-        {% elif content_tab == 4 %}
+        {% elif content_tab == 'tag' %}
             {% if tag_list|length > 0 %}
                 {% display_user_tags tag_list %}
             {% endif %}
 
-        {% elif content_tab == 5 %}
+        {% elif content_tab == 'following' %}
             <h3>关注了</h3>
             {% if user_list|length > 0 %}
                 {% display_user_users user_list %}

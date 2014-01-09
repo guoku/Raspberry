@@ -11,7 +11,7 @@
                 <a href="{% url 'web.views.user.user_index' note.note_context.creator_id %}" class="nickname">{{ note.creator_context.nickname }}</a><br />
                 <span class="date">{{ note.note_context.created_time|format_time }}</span>
 
-                <p>{{ note.note_context.content }}</p>
+                <p>{{ note.note_context.content|truncatechars:100 }}</p>
 
                 <a href="javascript:;">
                     <span>喜爱 </span><small>{{ note.note_context.poke_count }}</small>
