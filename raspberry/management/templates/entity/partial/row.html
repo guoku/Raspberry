@@ -2,9 +2,10 @@
 {% load common %}
 
 <tr {% if entity_context.weight == -2 %} class=""
-    {% elif entity_context.is_selected == True %} class="success"
-    {% elif entity_context.creator_id == None %} class="warning"
-    {% else %} class="info"
+    {% elif entity_context.weight == -1 %} 
+        {% if entity_context.creator_id == None %}class="info"{%else%}class="error"{%endif%}
+    {% elif entity_context.weight == 0 %} class="warning"
+    {% else %} class="success"
     {% endif %}
 >
 
@@ -25,9 +26,9 @@
     <td width="80"><p class="text-info">{{ entity_context.item_id_list|count }}</p></td>
     <td width="80">
         <div class="btn-group">
-            <a class="btn" href="{% url 'management_edit_entity' entity_context.entity_id %}">编</a>
+            <a class="btn" href="{% url 'management_edit_entity' entity_context.entity_id %}" target="_blank">编</a>
             {% if entity_context.weight == -1 %}
-                <a class="btn" href="{% url 'management_recycle_entity' entity_context.entity_id %}">剔</a>
+                <a class="btn recycle" href="{% url 'management_recycle_entity' entity_context.entity_id %}">剔</a>
             {% endif %}
         </div>
     </td>

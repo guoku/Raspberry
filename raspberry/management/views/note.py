@@ -15,10 +15,12 @@ from base.entity import Entity
 from base.note import Note
 from base.user import User
 from management.tasks import ArrangeSelectionTask
+from utils.authority import staff_only 
 from utils.paginator import Paginator
 
 
 @login_required
+@staff_only
 def arrange_selection(request):
     if request.method == 'GET':
         _t_start = datetime.datetime.now() + datetime.timedelta(days = 1) 
@@ -52,6 +54,7 @@ def arrange_selection(request):
 
 
 @login_required
+@staff_only
 def note_list(request):
     _selection = request.GET.get("selection", None)
     _select_entity_id = request.GET.get("entity_id", None)
@@ -130,6 +133,7 @@ def note_list(request):
 
 
 @login_required
+@staff_only
 def freeze_note(request, note_id):
     if request.method == 'GET':
         _note = Note(note_id)
@@ -144,6 +148,7 @@ def freeze_note(request, note_id):
 
 
 @login_required
+@staff_only
 def edit_note(request, note_id):
     if request.method == 'GET':
         _note_context = Note(note_id).read()
@@ -172,6 +177,7 @@ def edit_note(request, note_id):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
+@staff_only
 def update_note_selection_info(request, entity_id, note_id):
     _post_time = request.POST.get("post_time")
     _post_time = datetime.datetime.strptime(_post_time, "%Y-%m-%d %H:%M:%S")
@@ -191,6 +197,7 @@ def update_note_selection_info(request, entity_id, note_id):
 
 
 @login_required
+@staff_only
 def post_selection_instant(request, entity_id, note_id):
     _request_user_id = request.user.id
     _selected_time = datetime.datetime.now()
@@ -205,6 +212,7 @@ def post_selection_instant(request, entity_id, note_id):
 
 
 @login_required
+@staff_only
 def post_selection_delay(request, entity_id, note_id):
     _request_user_id = request.user.id
     _selected_time = datetime.datetime.now()
