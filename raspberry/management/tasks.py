@@ -21,7 +21,7 @@ RETRY_DELAY = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRY_DELAY', 60)
 
 scp_host = getattr(settings, 'SCP_HOST', '10.0.2.46')
 scp_user = getattr(settings, 'SCP_USER', 'jiaxin')
-scp_key = getattr(settings, 'SCP_KEY', '')
+scp_key = getattr(settings, 'SCP_KEY', None)
 remote_file = getattr(settings, 'SCP_REMOTE_FILE', '/data/www/core/download/android/guoku-release.apk')
 
 class PushMessageToUserTask(Task):
@@ -65,11 +65,11 @@ class PublishApkTask(Task):
         # client = scp.SCPClient(host=scp_host, user=scp_user, keyfile=scp_key)
         # pass
         # path_file =  filename
-
+        key_filename = scp_key + 'id_rsa'
         ssh = SSHClient()
         # ssh.load_host_keys(filename=scp_key)
         ssh.load_system_host_keys()
         ssh.set_missing_host_key_policy(AutoAddPolicy())
-        ssh.connect(hostname=scp_host, username=scp_user, key_filename=scp_key)
+        ssh.connect(hostname=scp_host, username=scp_user, key_filename=key_filename)
         scp = SCPClient(ssh.get_transport())
         scp.put(filename, remote_file)

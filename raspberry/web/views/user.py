@@ -38,7 +38,8 @@ def user_likes(request, user_id, template=TEMPLATE):
     _entity_id_list = _query_user.find_like_entity(None, offset=0, count=30)
 
     # 没数据 用精选模拟 TODO
-    _entity_id_list = [entity['entity_id'] for entity in NoteSelection.objects.all()[0:30]]
+    _entity_id_list = [ns['entity_id'] for ns in NoteSelection.objects.all()[0:30]]
+    _entity_id_list = map(lambda x: x['entity_id'], NoteSelection.objects.all()[0:30])
 
     _entity_list = []
 
@@ -114,6 +115,8 @@ def user_tags(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
+
+    _entity_id_list = User(user_id)
 
     return render_to_response(
         template,
