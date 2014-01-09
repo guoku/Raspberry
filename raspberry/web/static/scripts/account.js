@@ -1,67 +1,54 @@
 ;(function ($) {
-    // 注册
-    var $rForm = $('form#register');
-    var $rNickName = $rForm.find('#nickname');
-    var $rEmail = $rForm.find('#email');
-    var $rPsw = $rForm.find('#psw');
-    var rV = new V();
-
-    $rNickName.on('change', function () {
-        rV.checkNickname($(this), true);
-    });
-
-    $rEmail.on('change', function () {
-        rV.checkEmail($(this), true);
-    });
-
-    $rPsw.on('change', function () {
-        rV.checkPsw($(this));
-    });
-
-    $rForm.on('submit', function (e) {
-        if (rV.isValid()) {
-            return;
+    /**
+     * form validation
+     * @param $form jQuery form object
+     * @returns Object validation
+     * @constructor
+     */
+    function V($form) {
+        if (!(this instanceof arguments.callee)) {
+            return new arguments.callee($form);
         }
-
-        rV.checkNickname($rNickName, true);
-        rV.checkEmail($rEmail, true);
-        rV.checkPsw($rPsw);
-
-        e.preventDefault()
-    });
-
-    // 登录
-    var $lForm = $('form#login');
-    var $lEmail = $lForm.find('#email');
-    var $lPsw = $lForm.find('#psw');
-    var lV = new V();
-
-    $lEmail.on('change', function () {
-        lV.checkEmail($(this));
-    });
-
-    $lPsw.on('change', function () {
-        lV.checkPsw($(this));
-    });
-
-    $lForm.on('submit', function (e) {
-        if (lV.isValid()) {
-            return;
-        }
-
-        lV.checkEmail($lEmail);
-        lV.checkPsw($lPsw);
-
-        e.preventDefault()
-    });
-
-
-    // for validation
-    function V() {
+        this.$form = $form;
         this.valid = {};
     }
 
-    V.prototype._showErrMsg = function ($formEle, msg) {
+    V.fn = V.prototype;
+    
+    V.fn.validate = function (options) {
+        var self = this;
+        var $form = self.$form;
+
+        for (var i = 0; i < options.length; i++) {
+            (function (option) {
+                var selector = option.selector;
+                var validator = option.validator;
+                var url = option.url;
+
+                $form.find(selector).on('change', function () {
+                    self[validator]($(this), url);
+                });
+            })(options[i]);
+        }
+        
+        $form.on('submit', function (e) {
+            if (self.isValid()) {
+                return;
+            }
+            
+            for (var i = 0; i < options.length; i++) {
+                var selector = options[i].selector;
+                var validator = options[i].validator;
+                var url = options[i].url;
+                
+                self[validator]($form.find(selector), url);
+            }
+            
+            e.preventDefault();
+        });
+    };
+
+    V.fn._show = function ($formEle, msg) {
         var $errorEle = $formEle.next('.error-info');
 
         if (!msg) {
@@ -73,63 +60,61 @@
         }
     };
 
-    V.prototype.checkNickname = function ($nickname, remote) {
+    V.fn.nickname = function ($nickname, url) {
         var nickname = $.trim($nickname.val());
         var result;
         var valid = this.valid;
-        var showErrMsg = this._showErrMsg;
+        var show = this._show;
 
         if (nickname.length === 0) {
             result = '昵称不能为空';
         } else if (nickname.length > 15) {
             result = '昵称不能超过15个字';
-        } else if (remote) {
-            var url = '/register/check_nickname_available/';
+        } else if (url) {
             $.get(url, { nickname: nickname }, function (data) {
                 var result = parseInt(data);
                 valid['nickname'] = !!result;
 
                 if (result === 0) {
-                    showErrMsg($nickname, '昵称已经被占用');
+                    show($nickname, '昵称已经被占用');
                 }
             });
         }
 
         valid['nickname'] = !result;
-        showErrMsg($nickname, result);
+        show($nickname, result);
     };
 
-    V.prototype.checkEmail = function ($email, remote) {
+    V.fn.email = function ($email, url) {
         var email = $.trim($email.val());
         var result;
         var valid = this.valid;
-        var showErrMsg = this._showErrMsg;
+        var show = this._show;
 
         if (email.length === 0) {
             result = '请填写邮箱';
         } else if (!/\S+@\S+\.\S+/.test(email)) {
             result = '请输入正确的邮箱地址';
-        } else if (remote) {
-            var url = '/register/check_email_available/';
+        } else if (url) {
             $.get(url, { email: email }, function (data) {
                 var result = parseInt(data);
                 valid['email'] = !!result;
 
                 if (result === 0) {
-                    showErrMsg($email, '邮箱已经被注册');
+                    show($email, '邮箱已经被注册');
                 }
             });
         }
 
         valid['email'] = !result;
-        showErrMsg($email, result);
+        show($email, result);
     };
 
-    V.prototype.checkPsw = function ($psw) {
+    V.fn.psw = function ($psw) {
         var psw = $.trim($psw.val());
         var result;
         var valid = this.valid;
-        var showErrMsg = this._showErrMsg;
+        var show = this._show;
 
         if (psw.length < 6) {
             result = '密码至少6位';
@@ -138,10 +123,10 @@
         }
 
         valid['psw'] = !result;
-        showErrMsg($psw, result);
+        show($psw, result);
     };
 
-    V.prototype.isValid = function () {
+    V.fn.isValid = function () {
         var valid = this.valid;
         var ret = true;
         var flag = false;
@@ -154,6 +139,53 @@
         }
         return ret && flag;
     };
+
+
+    // 注册
+    V($('form#register')).validate([
+        {
+            selector: '#nickname',
+            validator: 'nickname',
+            url: '/register/check_nickname_available/'
+        },
+        {
+            selector: '#email',
+            validator: 'email',
+            url: '/register/check_email_available/'
+        },
+        {
+            selector: '#psw',
+            validator: 'psw'
+        }
+    ]);
+
+    // 登录
+    V($('form#login')).validate([
+        {
+            selector: '#email',
+            validator: 'email'
+        },
+        {
+            selector: '#psw',
+            validator: 'psw'
+        }
+    ]);
+
+    // 用户设置
+    V($('form#set-base-info')).validate([
+        {
+            selector: '#nickname',
+            validator: 'nickname',
+            url: '/setting/check_nickname_available/'
+        },
+        {
+            selector: '#email',
+            validator: 'email',
+            url: '/setting/check_email_available/'
+        }
+    ]);
+
+
 
 
     var Location = {

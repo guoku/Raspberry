@@ -76,10 +76,12 @@ def register(request, template = 'account/register.html'):
         )
 
 
+@login_required
 def register_bio(request, template = 'account/register_bio.html'):
     """ 注册成功后完善用户信息 """
 
-    _user_context = User(request.user.id).read()
+    _user = User(request.user.id)
+    _user_context = _user.read()
 
     if request.method == 'GET':
         return render_to_response(
@@ -91,16 +93,43 @@ def register_bio(request, template = 'account/register_bio.html'):
         )
 
     else:
-        if False:
-            return render_to_response(
-                template,
-                {
-                    'user_context': _user_context
-                },
-                context_instance = RequestContext(request)
-            )
+        _bio = request.POST.get('bio', None)
+        _location = request.POST.get('location', None)
+        _city = request.POST.get('city', None)
+        _gender = request.POST.get('gender', None)
+        _website = request.POST.get('website', None)
 
-        return HttpResponseRedirect('/selected/')
+        _error = v_check_bio(_bio)
+
+        if _error is None:
+            _error = v_check_website(_website)
+
+            if _error is None:
+                # 验证性别和地理位置是否合法 不合法则用原值
+                if not v_validate_gender(_gender):
+                    _gender = _user_context['gender']
+
+                if not v_validate_location(_location, _city):
+                    _location = _user_context['location']
+                    _city = _user_context['city']
+
+                try:
+                    _nickname = _user_context['nickname']
+                    _user.set_profile(_nickname, location = _location, city = _city, gender = _gender,
+                                  bio = _bio, website = _website)
+                    return HttpResponseRedirect('/selected/')
+
+                except User.NicknameExistAlready:
+                    _error = u'昵称已经被占用'
+
+        return render_to_response(
+            template,
+            {
+                'user_context': _user_context,
+                'error': _error
+            },
+            context_instance = RequestContext(request)
+        )
 
 
 def login(request, template = 'account/login.html'):

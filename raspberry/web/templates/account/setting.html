@@ -14,7 +14,7 @@
         <div class="guoku-block">
             {% display_avatar_update user_context %}
 
-            <form method="POST" action="{% url 'web.views.account.setting' %}" class="base-info">
+            <form method="POST" action="{% url 'web.views.account.setting' %}" class="base-info" id="set-base-info">
                 {% csrf_token %}
                 <h3>个人资料</h3>
 
@@ -80,7 +80,7 @@
                 {% endif %}
 
                 <div>
-                    <label for="curr_psw">当前秘密</label>
+                    <label for="curr_psw">当前密码</label>
                     <input type="password" name="current_psw" id="current_psw" class="text-input">
                 </div>
 

@@ -18,6 +18,10 @@
                 {% csrf_token %}
                 <h3>个人资料</h3>
 
+                {% if error != None %}
+                    <p class="error">{{ error }}</p>
+                {% endif %}
+
                 <div>
                     <label for="bio">个人介绍</label>
                     <textarea name="bio" value="{{ user_context.bio }}" id="bio" class="text-input" rows="4"></textarea>

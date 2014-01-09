@@ -58,6 +58,7 @@
     margin-right: 3px;
 }
 
+#setting form .error-info,
 #account form .error-info {
     margin-left: 10px;
     border: 1px solid #dedede;
