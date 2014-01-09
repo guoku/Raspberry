@@ -11,9 +11,11 @@ import time
 import json
 
 from base.report import Report, EntityReport, EntityNoteReport
+from utils.authority import staff_only 
 from utils.paginator import Paginator
 
 @login_required
+@staff_only
 def report_list(request):
     _page_num = int(request.GET.get("p", "1"))
     _paginator = Paginator(_page_num, 30, Report.objects.count())

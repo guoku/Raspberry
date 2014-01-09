@@ -2,10 +2,18 @@
 
 {% block content %}
     <div class="container">
+
+        <div class="well">
+            <a class="btn btn-primary" href="{% url 'management_upload_app' %}">上传</a>
+        </div>
+
+        <div class="well">
         <table class="table">
             <thead>
                 <tr>
                     <th>文件名</th>
+                    <th>已发布</th>
+                    <th>上传时间</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -13,10 +21,17 @@
             {% for app in apps %}
                 <tr>
                     <td>{{ app }}</td>
-                    <td>发布</td>
+                    <td>{{ app.is_published }}</td>
+                    <td>{{ app.uploaded_time|date:'Y-m-d' }}</td>
+                    <td>
+                        <a class="btn" href="{{ app.get_url }}">下载</a>
+                        <a class="btn btn-primary" href="{% url 'management_publish_app' app.pk %}">{% if app.is_published %}重新发布{% else %}发布{% endif %}</a>
+{#                        {% endif %}#}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        </div>
     </div>
 {% endblock %}

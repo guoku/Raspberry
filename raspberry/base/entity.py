@@ -25,6 +25,20 @@ from hashlib import md5
 
 
 
+def random_pick(tot, num):
+    if tot > num * 10:
+        _rslt = []
+        for i in range(0, num - 1):
+            while True:
+                k = random.randint(0, tot - 1)
+                if not k in _rslt:
+                    _rslt.append(k)
+                    break
+    else:
+        _rslt = []
+        for i in range(0, num - 1):
+            _rslt.append(i)
+    return _rslt
 
 class Entity(object):
     
@@ -358,26 +372,69 @@ class Entity(object):
         _basic_info = self.__load_basic_info_from_cache()
         if _basic_info != None:
             _basic_info = self.__reset_basic_info_to_cache()
+    
             
+        
     @classmethod
-    def find(cls, root_old_category_id = None, category_id = None, like_word = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
+    def random(cls, tot, status = 'normal', category_id = None, count = 30):
+        _sql_query = 'SELECT id FROM base_entity WHERE weight'
+
+        if status == 'select':
+            _sql_query += '>0'
+        elif status == 'novus':
+            _sql_query += '=0'
+        elif status == 'freeze':
+            _sql_query += '=-1'
+        elif status == 'recycle':
+            _sql_query += '=-2'
+        else:
+            _sql_query += '>=0'
+        
+        if category_id != None:
+            _sql_query += ' AND neo_category_id=%d'%int(category_id)
+        
+        _entity_id_list = []
+        _random_offset_list = random_pick(tot, count)
+        
+        for k in _random_offset_list:
+            for _obj in EntityModel.objects.raw((_sql_query + ' LIMIT %d, 1')%(k)):
+                _entity_id_list.append(_obj.id) 
+        return _entity_id_list 
+
+
+    @classmethod
+    def find(cls, root_old_category_id = None, category_id = None, 
+                  like_word = None, timestamp = None, status = None, 
+                  offset = None, count = 30, 
+                  sort_by = None, reverse = False):
+        
         _hdl = EntityModel.objects.all()
+        
         if root_old_category_id != None and root_old_category_id >= 1 and root_old_category_id <= 11:
             _hdl = _hdl.filter(category__pid = root_old_category_id)
+        
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
+        
         if like_word != None: 
             _q = Q(title__icontains = like_word)
             _hdl = _hdl.filter(_q)
-        if status == -1:
-            _hdl = _hdl.filter(weight = -1)
-        elif status == -2:
+        
+        if status == 'recycle':
             _hdl = _hdl.filter(weight = -2)
-        elif status >= 0:
+        elif status == 'freeze':
+            _hdl = _hdl.filter(weight = -1)
+        elif status == 'novus':
+            _hdl = _hdl.filter(weight = 0)
+        elif status == 'select':
+            _hdl = _hdl.filter(weight__gt = 0)
+        elif status == 'normal':
             _hdl = _hdl.filter(weight__gte = 0)
+
+        
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
-        
+       
         if sort_by == 'price':
             if reverse:
                 _hdl = _hdl.order_by('-price')
@@ -406,6 +463,7 @@ class Entity(object):
             _hdl = _hdl[offset : offset + count]
         
         _entity_id_list = map(lambda x: x.id, _hdl)
+        
         return _entity_id_list
     
     @classmethod
@@ -455,15 +513,21 @@ class Entity(object):
     @classmethod
     def count(cls, category_id = None, status = None):
         _hdl = EntityModel.objects.all()
+        
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
-        if status != None:
-            if status == -1:
-                _hdl = _hdl.filter(weight = -1)
-            elif status == -2:
-                _hdl = _hdl.filter(weight = -2)
-            elif status >= 0:
-                _hdl = _hdl.filter(weight__gte = 0)
+        
+        if status == 'recycle':
+            _hdl = _hdl.filter(weight = -2)
+        elif status == 'freeze':
+            _hdl = _hdl.filter(weight = -1)
+        elif status == 'novus':
+            _hdl = _hdl.filter(weight = 0)
+        elif status == 'select':
+            _hdl = _hdl.filter(weight__gt = 0)
+        elif status == 'normal':
+            _hdl = _hdl.filter(weight__gte = 0)
+        
         return _hdl.count()
     
     def bind_item(self, item_id):
@@ -638,8 +702,8 @@ class Entity(object):
                 )
                 _doc.save()
                 
-                if self.entity_obj.weight < 0:
-                    self.update(weight = 0)
+                if self.entity_obj.weight <= 0:
+                    self.update(weight = 1)
                
                 _note_context = _note.read()
                 CreateNoteSelectionMessageTask.delay(

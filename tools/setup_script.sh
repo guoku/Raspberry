@@ -34,4 +34,5 @@ sudo pip install redis_session_backend
 sudo pip install gunicorn
 sudo pip install django-storages
 sudo pip install pyapns
+sudo pip install scp 
 sudo easy_install django-sphinx
