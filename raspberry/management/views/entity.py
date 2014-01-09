@@ -352,7 +352,7 @@ def entity_list(request):
         _freeze_entity_count = Entity.count(category_id = _category_id, status = 'freeze')
         _recycle_entity_count = Entity.count(category_id = _category_id, status = 'recycle')
         
-        _sort_by = request.GET.get("sort_by", "time")
+        _sort_by = request.GET.get("sort_by", "updated")
         _reverse = request.GET.get("reverse", None)
         if _sort_by:
             _para["sort_by"] = _sort_by

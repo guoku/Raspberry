@@ -455,6 +455,11 @@ class Entity(object):
                 _hdl = _hdl.order_by('created_time')
             else:
                 _hdl = _hdl.order_by('-created_time')
+        elif sort_by == 'updated':
+            if reverse:
+                _hdl = _hdl.order_by('updated_time')
+            else:
+                _hdl = _hdl.order_by('-updated_time')
         else:
             _hdl = _hdl.order_by('-weight', '-like_count')
              
