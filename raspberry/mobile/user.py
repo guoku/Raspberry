@@ -261,7 +261,9 @@ def search_user(request):
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
         _user_id_list = MobileUser.search(
-            query_string = _query_string
+            query_string = _query_string,
+            offset = _offset,
+            count = _count
         )
         _rslt = [] 
         for _user_id in _user_id_list: 
