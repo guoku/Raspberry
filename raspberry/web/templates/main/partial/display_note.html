@@ -24,8 +24,8 @@
             </form>
         {% endif %}
 
-        <a href="javascript:;" class="poke">{{ note_context.poke_count }}</a>
-        <a href="javascript:;" class="add-comment">{{ note_context.comment_count }}</a>
+        <a href="javascript:;" class="poke" data-note="{{ note_context.note_id }}"><span></span> <small>{{ note_context.poke_count }}</small></a>
+        <a href="javascript:;" class="add-comment"><span></span> <small>{{ note_context.comment_count }}</small></a>
 
         <span class="create-time">{{ note_context.created_time|format_time }}</span>
 

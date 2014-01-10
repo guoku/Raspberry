@@ -348,12 +348,35 @@ a:hover {
 }
 
 .note-item .note-detail .poke {
+    display: inline-block;
     margin-right: 9px;
+
+}
+
+.note-item .note-detail .poke span {
+    display: inline-block;
+    width: 16px;
+    height: 13px;
+    vertical-align: top;
+    background: url(/static/images/guoku_icon.png) no-repeat scroll -32px -4px;
+}
+
+.note-item .note-detail .already-poke span {
+    background: url(/static/images/guoku_icon.png) no-repeat scroll -32px -18px;
 }
 
 .note-item .note-detail .add-comment {
+    display: inline-block;
     padding: 0 9px;
     border-left: 1px dotted #ccc;
+}
+
+.note-item .note-detail .add-comment span {
+    display: inline-block;
+    width: 16px;
+    height: 13px;
+    vertical-align: top;
+    background: url(/static/images/guoku_icon.png) no-repeat scroll -80px -3px;
 }
 
 .note-item .note-detail .update-note {

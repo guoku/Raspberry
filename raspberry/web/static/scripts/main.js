@@ -134,22 +134,41 @@
     // 喜爱 like
     $('.like-entity').on('click', function () {
         var $this = $(this);
-        var counter = $this.find('small');
+        var $counter = $this.find('small');
         var entity_id = $this.attr('data-entity');
         var url = '/entity/' + entity_id + '/like/';
 
         $.post(url, function (data) {
-            var count = parseInt(counter.text());
+            var count = parseInt($counter.text());
             var result = parseInt(data);
 
             if (result === 1) {
-                counter.text(count + 1);
+                $counter.text(count + 1);
                 $this.addClass('already-like-entity');
             } else if (result === 0) {
-                counter.text(count - 1);
+                $counter.text(count - 1);
                 $this.removeClass('already-like-entity');
-            } else {
-                // 需登录
+            }
+        });
+    });
+
+    // 点评 赞
+    $('.poke').on('click', function () {
+        var $this = $(this);
+        var $counter = $this.find('small');
+        var note_id = $this.attr('data-note');
+        var url = '/note/' + note_id + '/poke/';
+
+        $.post(url, function (data) {
+            var count = parseInt($counter.text());
+            var result = parseInt(data);
+
+            if (result === 1) {
+                $counter.text(count + 1);
+                $this.addClass('already-poke');
+            } else if (result === 0) {
+                $counter.text(count - 1);
+                $this.removeClass('already-poke');
             }
         });
     });
