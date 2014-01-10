@@ -66,7 +66,9 @@ def search_entity(request):
         _count = int(request.GET.get('count', '30'))
         
         _entity_id_list = MobileEntity.search(
-            query_string = _query_string
+            query_string = _query_string,
+            offset = _offset,
+            count = _count,
         )
         _rslt = []
         for _entity_id in _entity_id_list:
