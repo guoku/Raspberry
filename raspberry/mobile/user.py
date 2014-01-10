@@ -199,7 +199,7 @@ def user_entity_note(request, user_id):
 
         return SuccessJsonResponse(_rslt)
 
-@check_sign
+#@check_sign
 def check_sina_user(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
