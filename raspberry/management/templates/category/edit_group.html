@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <div>
-        <form enctype="multipart/form-data" class="well form-horizontal" action="{% url 'management.views.edit_category_group' category_group_context.category_group_id  %}" method="POST">
+        <form enctype="multipart/form-data" class="well form-horizontal" action="{% url 'management_edit_category_group' category_group_context.category_group_id  %}" method="POST">
             <fieldset>
                 <div class="control-group">
                     <label class="control-label" for="title">名称:</label>

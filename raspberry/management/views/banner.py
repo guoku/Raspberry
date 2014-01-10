@@ -12,9 +12,11 @@ import json
 
 from base.banner import Banner 
 from base.models import Banner as BannerModel 
+from utils.authority import staff_only 
 from utils.paginator import Paginator
 
 @login_required
+@staff_only
 def banner_list(request):
     _page_num = int(request.GET.get("p", "1"))
     _paginator = Paginator(_page_num, 30, BannerModel.objects.count())
@@ -35,6 +37,7 @@ def banner_list(request):
     )
 
 @login_required
+@staff_only
 def new_banner(request):
     if request.method == 'GET':
         _content_type_list = ['entity', 'category', 'user', 'user_tag', 'outlink']
@@ -48,6 +51,7 @@ def new_banner(request):
         )
 
 @login_required
+@staff_only
 def create_banner(request):
     if request.method == 'POST':
         _content_type = request.POST.get("content_type", None)
@@ -68,9 +72,10 @@ def create_banner(request):
             image_data = _image_data,
             weight = _weight
         )
-    return HttpResponseRedirect(reverse('management.views.banner_list'))
+    return HttpResponseRedirect(reverse('management_banner_list'))
 
 @login_required
+@staff_only
 def delete_banner(request, banner_id):
     Banner(banner_id).delete()
-    return HttpResponseRedirect(reverse('management.views.banner_list'))
+    return HttpResponseRedirect(reverse('management_banner_list'))
