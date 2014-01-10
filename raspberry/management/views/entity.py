@@ -370,7 +370,6 @@ def entity_list(request):
         if _sort_by == 'random':
             _paginator = None
             _entity_id_list = Entity.random(
-                tot = _entity_count,
                 status = _status,
                 count = 30
             )

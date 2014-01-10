@@ -44,7 +44,7 @@ class Item(object):
         _inst.item_obj = _item_obj
         return _inst
     
-    def update(self, cid = None, title = None, shop_nick = None, price = None, soldout = None):
+    def update(self, cid = None, title = None, shop_nick = None, price = None, soldout = None, ustation = None):
         self.__ensure_item_obj()
         if cid != None:
             self.item_obj.cid = int(cid)
@@ -56,6 +56,8 @@ class Item(object):
             self.item_obj.price = float(price)
         if soldout != None:
             self.item_obj.soldout = soldout
+        if ustation != None:
+            self.item_obj.ustation = ustation
         self.item_obj.updated_time = datetime.datetime.now()
         self.item_obj.save()
 
@@ -71,6 +73,7 @@ class Item(object):
         _context["shop_nick"] = self.item_obj.shop_nick
         _context["price"] = float(self.item_obj.price)
         _context["soldout"] = self.item_obj.soldout
+        _context["ustation"] = self.item_obj.ustation
         _context['buy_link'] = Item.generate_taobao_item_url(_context['taobao_id'])
         _context["volume"] = 0 
         return _context
@@ -81,7 +84,18 @@ class Item(object):
             _context = self.__load_taobao_item()
         return _context
     
+    @classmethod
+    def find_ustation(cls):
+        _list = []
+        for _doc in TaobaoItemDocument.objects.filter(ustation = 0):
+            _list.append({
+                'item_id' : str(_doc.id),
+                'taobao_id' : _doc.taobao_id,
+                'entity_id' : _doc.entity_id,
+            })
+        return _list
 
+    
     @classmethod
     def find(cls, entity_id = None, offset = 0, count = 30, full_info = False):
         _hdl = ItemDocument.objects.all()

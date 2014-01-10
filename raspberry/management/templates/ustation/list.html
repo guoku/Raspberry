@@ -1,4 +1,5 @@
 {% extends "management_base.html" %}
+{% load common %}
 {% load management %}
 
 {% block cssstyle %}
@@ -23,6 +24,9 @@
         </div>
     </div>
     <div class="span10">
+        <div class="sub-nav">
+            <h3>There {{ entity_context_list|count }} items.</h3>
+        </div>
         <div>
             <table class="table table-striped table-bordered table-condensed">
                 <thead>
