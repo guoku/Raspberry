@@ -449,3 +449,49 @@ a:hover {
 .download-link a {
     color: #999;
 }
+
+/*------------------------------*/
+.pagination {
+    text-align: center;
+}
+
+.pagination .container {
+    display: inline-block;
+    margin-top: 30px;
+}
+
+.pagination a {
+    float: left;
+    height: 35px;
+    line-height: 35px;
+    width: 40px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    font-weight: bold;
+    color: #999;
+    background: #fff;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    background-color: #f6f6f6;
+}
+
+.pagination .active {
+    background-color: #f6f6f6;
+}
+
+.pagination a .previous,
+.pagination a .next {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+}
+
+.pagination a .previous {
+    background: url(/static/images/guoku_icon.png) no-repeat scroll -157px -3px;
+}
+
+.pagination a .next {
+    background: url(/static/images/guoku_icon.png) no-repeat scroll -170px -3px;
+}

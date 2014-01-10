@@ -80,17 +80,17 @@
     margin-right: 20px;
 }
 
-#selection .pagination {
+#selection .s-pagination {
     clear: left;
     float: left;
     width: 630px;
 }
 
-#selection .pagination div {
+#selection .s-pagination div {
     float: right;
 }
 
-#selection .pagination div a {
+#selection .s-pagination div a {
     padding: 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
     background: #fff;
@@ -98,11 +98,11 @@
     text-decoration: none;
 }
 
-#selection .pagination div a:hover {
+#selection .s-pagination div a:hover {
     background-color: #f3f3f3;
 }
 
-#selection .pagination div a.inactive {
+#selection .s-pagination div a.inactive {
     color: #999;
     background-color: #fff;
     cursor: default;

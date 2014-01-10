@@ -3,6 +3,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+from utils.paginator import Paginator
 from util import get_request_user_context
 from base.user import User
 from base.category import Old_Category
@@ -32,7 +33,6 @@ def user_likes(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
-
     _old_category_list = Old_Category.find()[0:12]
 
     # TODO
@@ -76,8 +76,19 @@ def user_notes(request, user_id, template=TEMPLATE):
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
 
-    # TODO
-    _note_id_list = Note.find(creator_set=[user_id], offset=0, count=30)
+    _p = int(request.GET.get('p', 1))
+
+    _total_count = Note.count(creator_set=[user_id])
+    _count_in_one_page = 30
+    _paginator = None
+
+    if _total_count > _count_in_one_page:
+        _paginator = Paginator(_p, _count_in_one_page, _total_count)
+        _offset = _paginator.offset
+        _note_id_list = Note.find(creator_set=[user_id], offset=_offset, count=_count_in_one_page)
+    else:
+        _note_id_list = Note.find(creator_set=[user_id], offset=0, count=_total_count)
+
     _note_list = []
 
     for _note in _note_id_list:
@@ -99,7 +110,8 @@ def user_notes(request, user_id, template=TEMPLATE):
             'user_context' : _user_context,
             'content_tab' : 'note',
             'query_user_context' : _query_user_context,
-            'note_list' : _note_list
+            'note_list' : _note_list,
+            'paginator' : _paginator
         },
         context_instance=RequestContext(request)
     )
@@ -109,8 +121,18 @@ def user_tags(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
+    _p = int(request.GET.get('p', 1))
 
     _tag_stat_list = Tag.user_tag_stat(user_id)
+    _count_in_one_page = 5
+    _total_count = len(_tag_stat_list)
+    _paginator = None
+
+    if _total_count > _count_in_one_page:
+        _paginator = Paginator(_p, _count_in_one_page, _total_count)
+        _offset = _paginator.offset
+        _tag_stat_list = _tag_stat_list[_offset: _offset + _count_in_one_page]
+
     _tag_list = []
 
     for _tag_stat in _tag_stat_list:
@@ -130,7 +152,8 @@ def user_tags(request, user_id, template=TEMPLATE):
             'user_context' : _user_context,
             'content_tab' : 'tag',
             'query_user_context' : _query_user_context,
-            'tag_list' : _tag_list
+            'tag_list' : _tag_list,
+            'paginator' : _paginator
         },
         context_instance=RequestContext(request)
     )
@@ -140,14 +163,19 @@ def user_followings(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
+    _p = request.GET.get('p', 1)
 
-    # TODO paginate
-    _following_id_list = _query_user.read_following_user_id_list()[0:30]
-    _following_list = []
+    _following_id_list = _query_user.read_following_user_id_list()
+    _total_count = len(_following_id_list)
+    _count_in_one_page = 30
+    _paginator = None
 
-    for _f_id in _following_id_list:
-        _f_context = User(_f_id).read()
-        _following_list.append(_f_context)
+    if _total_count > _count_in_one_page:
+        _paginator = Paginator(_p, _count_in_one_page, _total_count)
+        _offset = _paginator.offset
+        _following_id_list = _following_id_list[_offset: _offset + _count_in_one_page]
+
+    _following_list = map(lambda x: User(x).read(), _following_id_list)
 
     return render_to_response(
         template,
@@ -155,7 +183,8 @@ def user_followings(request, user_id, template=TEMPLATE):
             'user_context' : _user_context,
             'content_tab' : 'following',
             'query_user_context' : _query_user_context,
-            'user_list' : _following_list
+            'user_list' : _following_list,
+            'paginator' : _paginator
         },
         context_instance=RequestContext(request)
     )
@@ -165,15 +194,19 @@ def user_fans(request, user_id, template=TEMPLATE):
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
     _query_user_context = _query_user.read()
+    _p = request.GET.get('p', 1)
 
-    # TODO
-    _fans_id_list = _query_user.read_fan_user_id_list()[0:30]
-    _fans_list = []
+    _fans_id_list = _query_user.read_fan_user_id_list()
+    _total_count = len(_fans_id_list)
+    _count_in_one_page = 30
+    _paginator = None
 
-    for _f_id in _fans_id_list:
-        _f_context = User(_f_id).read()
-        _fans_list.append(_f_context)
+    if _total_count > _count_in_one_page:
+        _paginator = Paginator(_p, _count_in_one_page, _total_count)
+        _offset = _paginator.offset
+        _fans_id_list = _fans_id_list[_offset: _offset + _count_in_one_page]
 
+    _fans_list = map(lambda x: User(x).read(), _fans_id_list)
 
     return render_to_response(
         template,
@@ -181,7 +214,8 @@ def user_fans(request, user_id, template=TEMPLATE):
             'user_context' : _user_context,
             'content_tab' : 'fan',
             'query_user_context' : _query_user_context,
-            'user_list' : _fans_list
+            'user_list' : _fans_list,
+            'paginator' : _paginator
         },
         context_instance=RequestContext(request)
     )

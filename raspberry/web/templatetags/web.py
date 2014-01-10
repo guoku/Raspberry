@@ -22,6 +22,14 @@ def format_time(value):
 register.filter(format_time)
 
 
+def display_web_paginator(paginator):
+    return {
+        "paginator" : paginator
+    }
+
+register.inclusion_tag("common/web_paginator.html")(display_web_paginator)
+
+
 # for note ---
 def display_note(note, entity_context, user_context):
     return {
@@ -47,12 +55,12 @@ register.inclusion_tag("main/partial/display_note_comment.html")(display_note_co
 
 
 # for user ---
-def display_user_entities(entity_list):
+def display_user_entity(entity_list):
     return {
         'entity_list' : entity_list
     }
 
-register.inclusion_tag("user/partial/display_entity.html")(display_user_entities)
+register.inclusion_tag("user/partial/display_entity.html")(display_user_entity)
 
 
 def display_user_notes(note_list):

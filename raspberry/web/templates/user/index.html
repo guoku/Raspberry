@@ -62,14 +62,14 @@
 
             {% if entity_list|length > 0 %}
                 <ul class="guoku-block likes">
-                    {% display_user_entities entity_list %}
+                    {% display_user_entity entity_list %}
                 </ul>
             {% endif %}
 
         {% elif content_tab == 'post' %}
             <div class="date"></div>
             {% if entity_list|length > 0 %}
-                {% display_user_entities entity_list %}
+                {% display_user_entity entity_list %}
             {% endif %}
 
         {% elif content_tab == 'note' %}
@@ -97,8 +97,8 @@
 
         {% endif %}
 
-        <div class="pagination">
-
-        </div>
+        {% if paginator %}
+            {% display_web_paginator paginator %}
+        {% endif %}
     </div>
 {% endblock %}
