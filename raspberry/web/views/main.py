@@ -9,7 +9,7 @@ from base.note import Note
 from base.entity import Entity
 from base.user import User
 from base.category import Old_Category
-from util import get_request_user_context
+from util import *
 
 
 def _get_comment_list(note):
@@ -69,13 +69,9 @@ def selection(request, template='main/selection.html'):
     for _note_selection in _note_selection_list:
         _selection_note_id = _note_selection['note_id']
         _entity_id = _note_selection['entity_id']
-        _entity = Entity(_entity_id)
-        _entity_context = _entity.read()
+        _entity_context = Entity(_entity_id).read()
 
-        _already_like = False
-
-        if request.user.id is not None:
-            _already_like = _entity.like_already(request.user.id)
+        _already_like = user_already_like_entity(request.user.id, _entity_id)
 
         _note_id_list = Note.find(entity_id=_entity_id)
         _selection_note = {}
@@ -137,6 +133,7 @@ def detail(request, entity_hash, template='main/detail.html'):
     _selection_note = None
     _common_note_list = []
     _user_already_note = False
+    _already_like = user_already_like_entity(request.user.id, _entity_id)
 
     for _note_id in _note_id_list:
         _note = Note(_note_id)
@@ -171,6 +168,7 @@ def detail(request, entity_hash, template='main/detail.html'):
             'entity_context' : _entity_context,
             'selection_note' : _selection_note,
             'common_note_list' : _common_note_list,
+            'already_like' : _already_like
         },
         context_instance=RequestContext(request)
     )
@@ -185,10 +183,13 @@ def popular(request, template='main/popular.html'):
     _popular_list = []
 
     for _id in _entity_id_list:
-        _entity_context = Entity(_id).read()
+        _entity = Entity(_id)
+        _entity_context = _entity.read()
         _s_note_context = None
         _s_creator_context = None
         _note_id_list = Note.find(entity_id=_id)
+
+        _already_like = user_already_like_entity(request.user.id, _id)
 
         # 找到精选点评 需优化? TODO
         for _note_id in _note_id_list:
@@ -201,6 +202,7 @@ def popular(request, template='main/popular.html'):
             _s_creator_context = User(_s_note_context['creator_id']).read()
 
         _popular_list.append({
+            'already_like' : _already_like,
             'entity_context' : _entity_context,
             's_note_context' : _s_note_context,
             's_creator_context' : _s_creator_context

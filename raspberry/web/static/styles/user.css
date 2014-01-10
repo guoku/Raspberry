@@ -133,7 +133,7 @@
     margin: 0 auto;
 }
 
-#user-center li.entity div span {
+#user-center li.entity div .price {
     float: right;
 }
 

@@ -27,7 +27,7 @@
 
                         <p>{{ popular.s_note_context.content|truncatechars:100 }}</p>
 
-                        {% display_like_entity popular.entity_context None %}
+                        {% display_like_entity popular.entity_context popular.already_like %}
                     </div>
                 </li>
             {% endfor %}

@@ -1,13 +1,12 @@
+{% load web %}
 {% for entity_context in entity_list %}
     <li class="entity">
         <a href="{% url 'web.views.main.detail' entity_context.entity_hash %}" class="entity-img"><img
                 src="{{ entity_context.chief_image.url }}"></a>
 
         <div>
-            <a href="javascript:;">喜爱
-                <small>{{ entity_context.like_count }}</small>
-            </a>
-            <span>￥{{ entity_context.price }}</span>
+            {% display_like_entity entity_context entity_context.already_like %}
+            <span class="price">￥{{ entity_context.price }}</span>
         </div>
     </li>
 {% endfor %}

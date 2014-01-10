@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from utils.paginator import Paginator
-from util import get_request_user_context
+from util import *
 from base.user import User
 from base.category import Old_Category
 from base.entity import Entity
@@ -26,9 +26,10 @@ def user_likes(request, user_id, template=TEMPLATE):
     _curr_cat_id = 0
 
     if _c is not None:
-        if _c == int(0):
+        _c = int(_c)
+        if int(_c) == 0:
             _c = None
-        _curr_cat_id = int(_c)
+        _curr_cat_id = _c
 
     _user_context = get_request_user_context(request.user)
     _query_user = User(user_id)
@@ -39,7 +40,13 @@ def user_likes(request, user_id, template=TEMPLATE):
     _entity_id_list = _query_user.find_like_entity(None, offset=0, count=30)
 
     # 没数据 用精选模拟 TODO
-    _entity_list = map(lambda x: Entity(x['entity_id']).read(), NoteSelection.objects.all()[0:30])
+    _entity_list = []
+
+    for _ns in NoteSelection.objects.all()[0:30]:
+        _entity_id = _ns['entity_id']
+        _entity_context = Entity(_entity_id).read()
+        _entity_context['already_like'] = user_already_like_entity(request.user.id, _entity_id)
+        _entity_list.append(_entity_context)
 
     return render_to_response(
         template,
@@ -96,11 +103,14 @@ def user_notes(request, user_id, template=TEMPLATE):
         _creator_context = User(user_id).read()
         _entity_context = Entity(_note_context['entity_id']).read()
 
+        _already_like = user_already_like_entity(request.user.id, _entity_context['entity_id'])
+
         _note_list.append(
             {
                 'entity_context' : _entity_context,
                 'note_context' : _note_context,
-                'creator_context' : _creator_context
+                'creator_context' : _creator_context,
+                'already_like' : _already_like
             }
         )
 
@@ -138,7 +148,12 @@ def user_tags(request, user_id, template=TEMPLATE):
     for _tag_stat in _tag_stat_list:
         _tag_id = _tag_stat['tag_id']
         _tag = _tag_stat['tag']
-        _entity_list = map(lambda x: Entity(x).read(), Tag.find_user_tag_entity(user_id, _tag))
+        _entity_list = []
+
+        for _id in Tag.find_user_tag_entity(user_id, _tag):
+            _entity_context = Entity(_id).read()
+            _entity_context['already_like'] = user_already_like_entity(request.user.id, _id)
+            _entity_list.append(_entity_context)
 
         _tag_list.append({
             'tag' : _tag,
