@@ -27,10 +27,7 @@
 
                         <p>{{ popular.s_note_context.content|truncatechars:100 }}</p>
 
-                        <a href="javascript:;">
-                            <span>喜爱 </span>
-                            <small>{{ popular.s_note_context.poke_count }}</small>
-                        </a>
+                        {% display_like_entity popular.entity_context None %}
                     </div>
                 </li>
             {% endfor %}

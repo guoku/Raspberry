@@ -144,10 +144,10 @@
 
             if (result === 1) {
                 counter.text(count + 1);
-                $this.addClass('already-like');
+                $this.addClass('already-like-entity');
             } else if (result === 0) {
                 counter.text(count - 1);
-                $this.removeClass('already-like');
+                $this.removeClass('already-like-entity');
             } else {
                 // 需登录
             }

@@ -30,6 +30,16 @@ def display_web_paginator(paginator):
 register.inclusion_tag("common/web_paginator.html")(display_web_paginator)
 
 
+def display_like_entity(entity_context, already_like):
+    return {
+        'entity_id' : entity_context['entity_id'],
+        'like_count' : entity_context['like_count'],
+        'already_like' : already_like
+    }
+
+register.inclusion_tag("common/like_entity.html")(display_like_entity)
+
+
 # for note ---
 def display_note(note, entity_context, user_context):
     return {

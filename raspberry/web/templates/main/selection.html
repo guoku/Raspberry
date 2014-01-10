@@ -26,12 +26,8 @@
                                      alt="entity image">
                             </a>
                         </div>
-                        <a href="javascript:;"
-                           class="like-entity{% if selection.already_like == True %} already-like{% endif %}"
-                           data-entity="{{ selection.entity_context.entity_id }}">
-                            喜爱
-                            <small>{{ selection.entity_context.like_count }}</small>
-                        </a>
+
+                        {% display_like_entity selection.entity_context selection.already_list %}
                     </div>
 
                     <div class="note">

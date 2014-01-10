@@ -19,9 +19,8 @@
                     <div class="img-container">
                         <a href=""><img class="entity-img" src="{{ entity_context.chief_image.url }}" alt=""></a>
                     </div>
-                    <a href="javascript:;" class="like-entity" data-entity="{{ entity_context.entity_id }}">
-                        喜爱 <small>{{ entity_context.like_count }}</small>
-                    </a>
+
+                    {% display_like_entity entity_context None %}
                 </div>
 
                 {% if selection_note != None %}

@@ -34,25 +34,9 @@
 }
 
 .selection-item .like-entity {
-    display: inline-block;
     padding: 7px 10px;
     border: 1px solid #efefef;
     border-radius: 2px;
-    font-size: 12px;
-    background: #fbfbfb;
-}
-
-.selection-item .already-like {
-   color: #f00;
-}
-
-.selection-item .like-entity:hover {
-    text-decoration: none;
-    color: #666;
-}
-
-.selection-item .already-like:hover {
-   color: #f00;
 }
 
 .selection-item .operate {

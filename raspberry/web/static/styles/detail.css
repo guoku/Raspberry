@@ -29,17 +29,9 @@
 }
 
 #detail .like-entity {
-    display: inline-block;
     padding: 7px 10px;
     border: 1px solid #efefef;
     border-radius: 2px;
-    font-size: 12px;
-    background: #fbfbfb;
-}
-
-#detail .like-entity:hover {
-    text-decoration: none;
-    color: #666;
 }
 
 #detail .common-note-count {

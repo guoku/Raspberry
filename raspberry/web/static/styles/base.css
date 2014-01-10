@@ -268,6 +268,31 @@ a:hover {
     margin-left: 10px;
 }
 
+/**entity like-------------------------------------*/
+.like-entity {
+    display: inline-block;
+    font-size: 12px;
+    background: #fbfbfb;
+    text-decoration: none;
+}
+
+.like-entity:hover {
+    color: #666;
+    text-decoration: none;
+}
+
+.like-entity span {
+    display: inline-block;
+    vertical-align: top;
+    width: 16px;
+    height: 13px;
+    background: url(/static/images/guoku_icon.png) no-repeat scroll 0 -3px;
+}
+
+.already-like-entity span {
+    background: url(/static/images/guoku_icon.png) no-repeat scroll -16px -3px;
+}
+
 /**note--------------------------------------------*/
 .note-item {
     padding: 15px;
