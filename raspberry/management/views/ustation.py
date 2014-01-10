@@ -75,5 +75,5 @@ def ustation_random_generate(request):
         )
     else:
         _count = int(request.POST.get("count", None))
-        Item.random()
+        _entity_id_list = Entity.random()
          
