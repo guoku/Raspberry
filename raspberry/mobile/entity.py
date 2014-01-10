@@ -21,7 +21,7 @@ def entity_list(request):
         if _timestamp != None:
             _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
         
-        _sort_by = request.GET.get('sort', 'udpated')
+        _sort_by = request.GET.get('sort', 'updated')
         _reverse = request.GET.get('reverse', '0')
         if _reverse == '0':
             _reverse = False
