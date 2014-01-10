@@ -6,7 +6,6 @@ from mongoengine import *
 from utils.apns_notification import APNSWrapper
 import datetime
 import urllib
-import random 
 import time
 
 
@@ -22,23 +21,8 @@ from tasks import CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
 from note import Note
 from user import User 
 from hashlib import md5
+from utils.lib import roll
 
-
-
-def random_pick(tot, num):
-    if tot > num * 10:
-        _rslt = []
-        for i in range(0, num - 1):
-            while True:
-                k = random.randint(0, tot - 1)
-                if not k in _rslt:
-                    _rslt.append(k)
-                    break
-    else:
-        _rslt = []
-        for i in range(0, num - 1):
-            _rslt.append(i)
-    return _rslt
 
 class Entity(object):
     
@@ -376,26 +360,33 @@ class Entity(object):
             
         
     @classmethod
-    def random(cls, tot, status = 'normal', category_id = None, count = 30):
+    def random(cls, status = 'normal', category_id = None, count = 30):
+        _hdl = EntityModel.objects.all()
         _sql_query = 'SELECT id FROM base_entity WHERE weight'
 
         if status == 'select':
             _sql_query += '>0'
+            _hdl = _hdl.filter(weight__gt = 0)
         elif status == 'novus':
             _sql_query += '=0'
+            _hdl = _hdl.filter(weight = 0)
         elif status == 'freeze':
             _sql_query += '=-1'
+            _hdl = _hdl.filter(weight = -1)
         elif status == 'recycle':
             _sql_query += '=-2'
+            _hdl = _hdl.filter(weight = -2)
         else:
             _sql_query += '>=0'
+            _hdl = _hdl.filter(weight__gte = 0)
         
         if category_id != None:
             _sql_query += ' AND neo_category_id=%d'%int(category_id)
+            _hdl = _hdl.filter(neo_category_id = category_id)
+        
+        _random_offset_list = roll(_hdl.count(), count)
         
         _entity_id_list = []
-        _random_offset_list = random_pick(tot, count)
-        
         for k in _random_offset_list:
             for _obj in EntityModel.objects.raw((_sql_query + ' LIMIT %d, 1')%(k)):
                 _entity_id_list.append(_obj.id) 
