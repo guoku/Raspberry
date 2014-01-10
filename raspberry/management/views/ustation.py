@@ -62,7 +62,7 @@ def _available_ustation_list():
             
     for _selection in NoteSelection.objects.filter(post_time__lt =  _t_top, post_time__gt = _t_bottom).order_by('-post_time'):
         if not _selection.entity_id in _entity_id_set:
-            _entity_context = _get_ustation_entity(_selection.entity_id)
+            _entity_context = _get_ustation_entity(_selection.entity_id, True)
             if _entity_context != None:
                 _entity_context_list.append(_entity_context)
                 _entity_id_set.add(_selection.entity_id)
@@ -97,6 +97,15 @@ def sync_ustation(request):
         })
 
     return SuccessJsonResponse(_rslt)
+
+@login_required
+@staff_only
+def clean_ustation(request):
+    for _item_info in Item.find_ustation():
+        _item = Item(_item_info['item_id'])
+        _item.update(ustation = 1)
+    
+    return HttpResponseRedirect(reverse('management_ustation_list'))
     
 
 @login_required
