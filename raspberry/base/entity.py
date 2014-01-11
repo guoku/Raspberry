@@ -236,6 +236,7 @@ class Entity(object):
             _basic_info['creator_id'] = self.entity_obj.creator_id
             _basic_info["entity_hash"] = self.entity_obj.entity_hash
             _basic_info["old_category_id"] = self.entity_obj.category_id
+            _basic_info['old_root_category_id'] = self.entity_obj.category.pid
             _basic_info["category_id"] = self.entity_obj.neo_category_id
             _basic_info['like_count'] = self.entity_obj.like_count 
             _basic_info["created_time"] = self.entity_obj.created_time

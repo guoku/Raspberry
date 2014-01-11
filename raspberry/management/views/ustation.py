@@ -93,6 +93,7 @@ def sync_ustation(request):
         _note_context = Note(_note_id).read()
         _rslt.append({
             'item_id' : _entity_context['taobao_id'],
+            'cid' : _entity_context['old_root_category_id'],
             'note' : _note_context['content']
         })
 
