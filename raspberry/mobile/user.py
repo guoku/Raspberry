@@ -199,7 +199,7 @@ def user_entity_note(request, user_id):
 
         return SuccessJsonResponse(_rslt)
 
-@check_sign
+#@check_sign
 def check_sina_user(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -261,7 +261,9 @@ def search_user(request):
         _offset = int(request.GET.get('offset', '0'))
         _count = int(request.GET.get('count', '30'))
         _user_id_list = MobileUser.search(
-            query_string = _query_string
+            query_string = _query_string,
+            offset = _offset,
+            count = _count
         )
         _rslt = [] 
         for _user_id in _user_id_list: 

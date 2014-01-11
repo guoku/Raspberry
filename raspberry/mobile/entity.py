@@ -21,7 +21,7 @@ def entity_list(request):
         if _timestamp != None:
             _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
         
-        _sort_by = request.GET.get('sort', 'udpated')
+        _sort_by = request.GET.get('sort', 'updated')
         _reverse = request.GET.get('reverse', '0')
         if _reverse == '0':
             _reverse = False
@@ -66,7 +66,9 @@ def search_entity(request):
         _count = int(request.GET.get('count', '30'))
         
         _entity_id_list = MobileEntity.search(
-            query_string = _query_string
+            query_string = _query_string,
+            offset = _offset,
+            count = _count,
         )
         _rslt = []
         for _entity_id in _entity_id_list:

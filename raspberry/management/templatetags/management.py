@@ -10,6 +10,12 @@ def display_entity_row(entity_context):
     } 
 register.inclusion_tag("entity/partial/row.html")(display_entity_row)
 
+def display_ustation_entity_row(entity_context):
+    return {
+        "entity_context" : entity_context,
+    } 
+register.inclusion_tag("ustation/partial/row.html")(display_ustation_entity_row)
+
 def display_user_row(user_context):
     return {
         "user_context" : user_context,

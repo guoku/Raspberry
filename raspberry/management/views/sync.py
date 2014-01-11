@@ -8,7 +8,7 @@ from base.item import Item
 from base.models import Entity as EntityModel
 from base.models import NoteSelection 
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
-#import datetime
+import time
 #import json
 
 def sync_category(request):
@@ -32,6 +32,7 @@ def sync_selection(request):
         _rslt.append({
             'entity_id' : _entity_id,
             'note_id' : _doc.note_id,
+            'post_time' : time.mktime(_doc.post_time.timetuple()),
             'taobao_item_list' : _taobao_id_list
         })
     

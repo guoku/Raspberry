@@ -36,6 +36,9 @@ def homepage(request):
     
     _rslt['config'] = {}
     _rslt['config']['taobao_ban_count'] = 2
+    _rslt['config']['url_ban_list'] = ['http://m.taobao.com/go/act/mobile/cloud-jump.html']
+
+
 #    if settings.JUMP_TO_TAOBAO: 
 #        _rslt['config']['jump_to_taobao'] = 1
 #    else:
