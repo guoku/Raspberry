@@ -205,6 +205,7 @@ a:hover {
     display: inline-block;
     margin-left: 38px;
     min-width: 40px;
+    text-align: right;
 }
 
 #header .user .container small {
@@ -234,7 +235,7 @@ a:hover {
 #header .user .pop a {
     display: block;
     margin-bottom: 8px;
-    padding: 2px 5px 2px 0;
+    padding: 2px 3px 2px 0;
 }
 
 #header .user .pop a:hover {
