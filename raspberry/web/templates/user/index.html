@@ -15,7 +15,14 @@
                 <h2>{{ query_user_context.nickname }}</h2>
                 <small>{{ query_user_context.bio }}</small>
                 <address>北京</address>
-                <a href="javascript:;">关注</a>
+
+                {% if not is_user_self %}
+                    {% if is_user_followed %}
+                        <a href="javascript:;" data-user="{{ query_user_context.user_id }}" class="follow-user">取消关注</a>
+                    {% else %}
+                        <a href="javascript:;" data-user="{{ query_user_context.user_id }}" class="follow-user"><span></span> 关注</a>
+                    {% endif %}
+                {% endif %}
             </div>
 
             <div class="stat guoku-block">

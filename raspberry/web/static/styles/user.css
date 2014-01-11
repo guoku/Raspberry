@@ -15,7 +15,6 @@
 
 #user-center .base {
     position: relative;
-    z-index: -1;
     border-bottom: 1px solid #dedede;
 }
 
@@ -44,12 +43,14 @@
     color: #666;
 }
 
-#user-center .base a {
+#user-center .base .follow-user {
     position: absolute;
     right: 15px;
     top: 65px;
-    text-decoration: none;
+}
 
+#user-center .follow-user {
+    text-decoration: none;
     padding: 4px;
     color: #999;
     border: 1px solid #e1e1e1;
@@ -57,7 +58,16 @@
     background: #fafafa;
 }
 
+#user-center .follow-user span {
+    display: inline-block;
+    width: 16px;
+    height: 13px;
+    background: url(/static/images/guoku_icon.png) no-repeat scroll -81px -18px;
+}
+
 #user-center .stat {
+    position: relative;
+    z-index: 1;
     padding: 15px;
     color: #666;
 }
@@ -240,18 +250,7 @@
     margin-right: 10px;
 }
 
-#user-center .users .follow {
-    display: inline-block;
-    text-decoration: none;
-
-    padding: 4px;
-    color: #999;
-    border: 1px solid #e1e1e1;
-    border-radius: 2px;
-    background: #fafafa;
-}
-
 #user-center .users li p {
-    margin: 5px 0 15px;
+    margin: 5px 0 25px;
     font-size: 12px;
 }

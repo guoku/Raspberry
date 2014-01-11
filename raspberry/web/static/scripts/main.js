@@ -152,7 +152,7 @@
         });
     });
 
-    // 点评 赞
+    // 点评 点赞
     $('.poke').on('click', function () {
         var $this = $(this);
         var $counter = $this.find('small');
@@ -169,6 +169,23 @@
             } else if (result === 0) {
                 $counter.text(count - 1);
                 $this.removeClass('already-poke');
+            }
+        });
+    });
+
+    // 关注
+    $('.follow-user').on('click', function () {
+        var $this = $(this);
+        var user_id = $this.attr('data-user');
+        var url = '/u/' + user_id + '/follow/';
+
+        $.post(url, function (data) {
+            var result = parseInt(data);
+
+            if (result === 1) {
+                $this.text('取消关注');
+            } else if (result === 0) {
+                $this.html('<span></span> 关注');
             }
         });
     });

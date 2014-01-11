@@ -58,5 +58,7 @@ urlpatterns += patterns(
     url('^u/(?P<user_id>\w+)/notes/$', 'user_notes', name='web_user_notes'),
     url('^u/(?P<user_id>\w+)/tags/$', 'user_tags', name='web_user_tags'),
     url('^u/(?P<user_id>\w+)/followings/$', 'user_followings', name='web_user_followings'),
-    url('^u/(?P<user_id>\w+)/fans/$', 'user_fans', name='web_user_fans')
+    url('^u/(?P<user_id>\w+)/fans/$', 'user_fans', name='web_user_fans'),
+
+    url('^u/(?P<user_id>\w+)/follow/$', 'follow', name='web_follow'),
 )

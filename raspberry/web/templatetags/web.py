@@ -91,7 +91,7 @@ register.inclusion_tag("user/partial/display_tag.html")(display_user_tags)
 
 def display_user_users(user_list):
     return {
-        'user_list' : user_list
+        'user_list' : user_list,
     }
 
 register.inclusion_tag("user/partial/display_user.html")(display_user_users)
