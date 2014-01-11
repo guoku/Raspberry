@@ -83,8 +83,8 @@ def ustation_list(request):
         context_instance = RequestContext(request)
     )
 
-@login_required
-@staff_only
+#@login_required
+#@staff_only
 def sync_ustation(request):
     _entity_context_list = _available_ustation_list() 
     _rslt = []
