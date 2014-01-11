@@ -242,3 +242,31 @@ def discover_more(request):
 
 def shop(request, shop_id):
     pass
+
+
+def message(request, template='main/message.html'):
+    if request.method == 'GET':
+        _user = User(request.user.id)
+        _user_context = _user.read()
+
+        return render_to_response(
+            template,
+            {
+                'user_context': _user_context,
+            },
+            context_instance = RequestContext(request)
+        )
+
+
+def activity(request, template='main/activity.html'):
+    if request.method == "GET":
+        _user = User(request.user.id)
+        _user_context = _user.read()
+
+        return render_to_response(
+            template,
+            {
+                'user_context': _user_context,
+            },
+            context_instance = RequestContext(request)
+        )

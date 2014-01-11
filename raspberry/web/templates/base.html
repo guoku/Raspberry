@@ -27,9 +27,9 @@
         <div class="user">
             {% if user.is_authenticated %}
                 <div class="tool">
-                    <a href="" class="add"></a>
-                    <a href="" class="friend"></a>
-                    <a href="" class="message"></a>
+                    <a href="{% url 'web_new_entity' %}" class="add"></a>
+                    <a href="{% url 'web_activity' %}" class="friend"></a>
+                    <a href="{% url 'web_message' %}" class="message"></a>
                 </div>
 
                 <div class="container">

@@ -8,7 +8,10 @@ urlpatterns = patterns(
     url('^discover/$', 'discover', name='web_discover'),
     url('^discover/product/$', 'discover_more', name='web_discover_more'),
     url('^detail/(?P<entity_hash>\w+)/$', 'detail', name='web_detail'),
-    url('^shop/(?P<shop_id>\w+)/$', 'shop', name='web_shop')
+
+    url('^shop/(?P<shop_id>\w+)/$', 'shop', name='web_shop'),
+    url('^message/$', 'message', name='web_message'),
+    url('^activity/$', 'activity', name='web_activity')
 )
 
 
@@ -35,6 +38,7 @@ urlpatterns += patterns(
 
 urlpatterns += patterns(
     'web.views.entity',
+    url('^entity/new/$', 'new_entity', name='web_new_entity'),
     url('^entity/(?P<entity_id>\w+)/like/$', 'like_entity', name='web_like_entity'),
     url('^entity/(?P<entity_id>\w+)/note/create/$', 'add_note', name='web_add_note'),
     url('^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/update/$', 'update_note', name='web_update_note'),

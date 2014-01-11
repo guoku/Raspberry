@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load web %}
+
+{% block title %}添加商品 － 果库{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/entity.css' %}">{% endblock %}
+
+{% block content %}
+    <div id="add-entity">
+        <h2>添加商品入库</h2>
+
+        <div class="guoku-block">
+            <form action="{% url 'web_new_entity' %}" method="POST">
+                <p>选择货真价实，有用、有趣、有价值的好商品 </p>
+                <input type="text" class="text-input">
+                <input type="submit" value="载入" class="guoku-button">
+            </form>
+
+            <div class="detail">
+
+            </div>
+
+        </div>
+
+        <div class="add-note">
+
+        </div>
+    </div>
+{% endblock %}

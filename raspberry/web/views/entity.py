@@ -8,6 +8,32 @@ import json
 
 from base.entity import Entity
 from base.entity import Note
+from base.user import User
+
+
+@login_required
+def new_entity(request, template='entity/create_entity.html'):
+    _user = User(request.user.id)
+    _user_context = _user.read()
+
+    if request.method == 'GET':
+        return render_to_response(
+            template,
+            {
+                'method' : 0,
+                'user_context' : _user_context
+            },
+            context_instance = RequestContext(request)
+        )
+    else:
+        return render_to_response(
+            template,
+            {
+                'method' : 1,
+                'user_context' : _user_context
+            },
+            context_instance = RequestContext(request)
+        )
 
 
 @login_required
