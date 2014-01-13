@@ -38,7 +38,8 @@ urlpatterns += patterns(
 
 urlpatterns += patterns(
     'web.views.entity',
-    url('^entity/new/$', 'new_entity', name='web_new_entity'),
+    url('^entity/new/$', 'load_entity', name='web_load_entity'),
+    url('^entity/create/$', 'create_entity', name='web_create_entity'),
     url('^entity/(?P<entity_id>\w+)/like/$', 'like_entity', name='web_like_entity'),
     url('^entity/(?P<entity_id>\w+)/note/create/$', 'add_note', name='web_add_note'),
     url('^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/update/$', 'update_note', name='web_update_note'),

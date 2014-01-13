@@ -1,5 +1,6 @@
 # coding=utf-8
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -65,7 +66,7 @@ def register(request, template = 'account/register.html'):
                     _new_user = authenticate(username = _username, password = _psw)
                     auth_login(request, _new_user)
 
-                    return HttpResponseRedirect('/register/bio/')
+                    return HttpResponseRedirect(reverse('web_register_bio'))
 
         return render_to_response(
             template,
@@ -117,7 +118,7 @@ def register_bio(request, template = 'account/register_bio.html'):
                     _nickname = _user_context['nickname']
                     _user.set_profile(_nickname, location = _location, city = _city, gender = _gender,
                                   bio = _bio, website = _website)
-                    return HttpResponseRedirect('/selected/')
+                    return HttpResponseRedirect(reverse('web_selection'))
 
                 except User.NicknameExistAlready:
                     _error = u'昵称已经被占用'
@@ -184,7 +185,7 @@ def login(request, template = 'account/login.html'):
                         if _next is not None:
                             return HttpResponseRedirect(_next)
 
-                        return HttpResponseRedirect('/selected/')
+                        return HttpResponseRedirect(reverse('web_selection'))
 
         return render_to_response(
             template,
