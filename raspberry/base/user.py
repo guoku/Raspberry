@@ -373,7 +373,7 @@ class User(object):
     def create_seller_info(self, taobao_shop_nick):
         if SellerInfoModel.objects.filter(user_id = self.user_id).count() > 0:
             raise User.UserBindShopAlready() 
-        SellerInfoModel.objects.create(user_id = self.user_id, shop_nick = taoba_shop_nick)
+        SellerInfoModel.objects.create(user_id = self.user_id, shop_nick = taobao_shop_nick)
         self.__reset_basic_info_to_cache()
     
     def delete(self):
@@ -527,7 +527,8 @@ class User(object):
             _seller_info_obj = SellerInfoModel.objects.get(user_id = self.user_id)
             _basic_info['shop_nick'] = _seller_info_obj.shop_nick
             _basic_info['shop_verified'] = _seller_info_obj.verified
-        
+        except SellerInfoModel.DoesNotExist:
+            pass
         cache.set(_cache_key, _basic_info, 864000)
         cache.delete("user_context_%s"%self.user_id)
             

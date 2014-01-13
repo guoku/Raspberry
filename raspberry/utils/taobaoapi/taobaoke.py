@@ -1,4 +1,3 @@
-from django.utils.log import logger
 from top.api import TbkMobileItemsConvertRequest
 from top import appinfo
 import json
@@ -22,7 +21,6 @@ class TaobaokeMobileItem():
             return resp
         except Exception, e:
             print e
-            logger.error("[taobao_api_error][mobile_item_convert_request] %s", e)
             return None
 
 '''

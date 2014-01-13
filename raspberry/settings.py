@@ -1,5 +1,5 @@
 import os.path
-
+import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -10,12 +10,12 @@ ADMINS = (
 MANAGERS = ADMINS
 
 from mongoengine import connect
-connect('guoku')
+connect('guoku_01_03')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_12_12',
+        'NAME': 'guoku_01_03',
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': 'localhost',
@@ -27,7 +27,7 @@ DATABASES = {
     },
 }
 #DATABASE_ROUTERS = ['router.AuthRouter']
-
+'''
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.cache.RedisCache",
@@ -40,24 +40,28 @@ CACHES = {
         }
     }
 }
-#CACHES = {
-#    'default': {
-#        'BACKEND': 'redis_cache.RedisCache',
-#        'LOCATION': 'localhost:6379',
-#        'TIMEOUT:': 864000,
-#        'OPTIONS': {
-#            'DB': 1,
-#            'PARSER_CLASS': 'redis.connection.HiredisParser'
-#        },
-#    },
-#}
+'''
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'TIMEOUT:': 864000,
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        },
+    },
+}
 
-# session
-#SESSION_ENGINE = 'redis_sessions.session'
-#SESSION_REDIS_HOST = 'localhost'
-#SESSION_REDIS_PORT = 6379
-#SESSION_REDIS_DB = 2
+#session
+'''
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_HOST = 'localhost'
+SESSION_REDIS_PORT = 6379
+SESSION_REDIS_DB = 2
+'''
 #SESSION_COOKIE_AGE = 1209600
+#SESSION_COOKIE_DOMAIN = '.guoku.com'
 
 MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
@@ -66,6 +70,9 @@ SPHINX_API_VERSION = 0x116
 SPHINX_SERVER = 'localhost' 
 SPHINX_port = 3312 
 
+
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/login/"
 
 #mongo db
 MANGO_HOST = 'localhost'
@@ -76,7 +83,7 @@ JUMP_TO_TAOBAO = True
 
 IMAGE_LOCAL = True 
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
-APP_HOST = "http://10.0.1.109:8001"
+APP_HOST = "http://www.guoku.com"
 #IMAGE_LOCAL = False 
 #IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 
@@ -102,12 +109,15 @@ APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'uploads')
 MEDIA_URL = '/uploads/'
 #STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
+BASE_DIR = os.getcwd()
+print BASE_DIR, os.path.join(BASE_DIR, "static")
 STATIC_ROOT = '/tmp/static/'
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
-
+MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 7
 # Additional locations of static files
 STATICFILES_DIRS = (
+    ("common", os.path.join(BASE_DIR, "static")),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -136,6 +146,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.request',
   'django.core.context_processors.media',
   'django.core.context_processors.static',
+  'django.contrib.messages.context_processors.messages',
   #'zinnia.context_processors.version',
 ) # Optional
 
@@ -171,14 +182,17 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'django.contrib.messages',
     'debug_toolbar',
     'djcelery',
     'base',
     'management',
     'mobile',
+    'web',
     # 'redis_admin',
 )
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -205,6 +219,7 @@ PASSWORD_HASHERS = (
 TAOBAO_APP_KEY = '12313170'
 TAOBAO_APP_SECRET = '90797bd8d5859aac971f8cc9d4e51105'
 TAOBAO_OAUTH_URL = 'https://oauth.taobao.com/authorize'
+TAOBAO_BACK_URL = APP_HOST + '/taobao/auth'
 TAOBAO_OAUTH_LOGOFF = 'https://oauth.taobao.com/logoff'
 
 TAOBAO_APP_INFO = { 

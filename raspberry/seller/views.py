@@ -5,3 +5,6 @@ from django.template import RequestContext
 def index(request):
     pass
 
+def commodities(request):
+    pass
+

@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
-from django.utils.log import logger
+#coding: utf-8
 from top.api import UserBuyerGetRequest
 from top import appinfo
 import json
+import logging
+logger = logging.getLogger('django.request')
 class TaobaoUser():
 
     def __init__(self, app_key, app_secret):
