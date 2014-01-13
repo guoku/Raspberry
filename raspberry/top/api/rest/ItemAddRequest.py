@@ -1,5 +1,5 @@
 '''
-Created by auto_sdk on 2013-08-28 14:05:29
+Created by auto_sdk on 2013-11-15 12:58:10
 '''
 from top.api.base import RestApi
 class ItemAddRequest(RestApi):
@@ -32,6 +32,7 @@ class ItemAddRequest(RestApi):
 		self.food_security_stock_date_start = None
 		self.food_security_supplier = None
 		self.freight_payer = None
+		self.global_stock_country = None
 		self.global_stock_type = None
 		self.has_discount = None
 		self.has_invoice = None
