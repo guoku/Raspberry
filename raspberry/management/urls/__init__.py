@@ -13,14 +13,14 @@ urlpatterns = patterns(
     url(r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/post/selection/delay/$', 'note.post_selection_delay', name = 'management_post_selection_delay'),
     url(r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/update/selection/info/$', 'note.update_note_selection_info', name = 'management_update_note_selection_info'),
 
+    url(r'^banner/', include('management.urls.banner')),
     url(r'^category/', include('management.urls.category')),
     url(r'^entity/', include('management.urls.entity')),
     url(r'^note/', include('management.urls.note')),
-    url(r'^banner/', include('management.urls.banner')),
-    url(r'^user/', include('management.urls.user')),
-    url(r'report/', include('management.urls.report')),
-
     url(r'^mobile/', include('management.urls.mobile_app')),
+    url(r'^report/', include('management.urls.report')),
+    url(r'^user/', include('management.urls.user')),
+    url(r'^ustation/', include('management.urls.ustation')),
 )
 
 __author__ = 'edison7500'
