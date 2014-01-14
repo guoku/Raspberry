@@ -12,8 +12,9 @@ Config.read('config.ini')
 
 env.hosts = ['114.113.154.47' ]
 env.user = Config.get('global', 'user')
+env.key = Config.get('global', 'key')
 
-script_dir = Config.get('global', 'script_dir')
+script_dir = Config.get('server', 'script_dir')
 
 def reload_gunicorn():
 	with cd(script_dir):
