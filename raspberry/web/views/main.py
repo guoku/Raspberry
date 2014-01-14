@@ -37,7 +37,8 @@ def _get_comment_list(note):
 
 
 def selection(request, template='main/selection.html'):
-    _user_context = get_request_user_context(request.user)
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
 
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
@@ -124,7 +125,8 @@ def selection(request, template='main/selection.html'):
 
 
 def detail(request, entity_hash, template='main/detail.html'):
-    _user_context = get_request_user_context(request.user)
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
@@ -175,7 +177,8 @@ def detail(request, entity_hash, template='main/detail.html'):
 
 
 def popular(request, template='main/popular.html'):
-    _user_context = get_request_user_context(request.user)
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
     _group = request.GET.get('group', 'daily')
 
     # 先用精选数据来模拟热门 TODO
@@ -220,7 +223,8 @@ def popular(request, template='main/popular.html'):
 
 
 def discover(request, template='main/discover.html'):
-    _user_context = get_request_user_context(request.user)
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
 
     # 先用精选数据来模拟 TODO
     _product_list = map(lambda x: Entity(x['entity_id']).read(), NoteSelection.objects.all()[0:10])

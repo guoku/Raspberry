@@ -3,13 +3,16 @@ from base.user import User
 from base.entity import Entity
 
 
-def get_request_user_context(request_user):
-    _user_context = None
+def get_request_user(request_user_id):
+    if request_user_id is None:
+        return None
+    return User(request_user_id)
 
-    if request_user.is_authenticated():
-        _user_context = User(request_user.id).read()
 
-    return _user_context
+def get_request_user_context(user):
+    if user is None:
+        return None
+    return user.read()
 
 
 def user_already_like_entity(user_id, entity_id):

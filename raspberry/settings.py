@@ -67,7 +67,7 @@ SPHINX_port = 3312
 
 
 #mongo db
-MANGO_HOST = 'localhost'
+# MANGO_HOST = '10.0.2.200'
 MANGO_PORT = 27017
 
 

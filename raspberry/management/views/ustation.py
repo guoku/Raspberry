@@ -33,7 +33,7 @@ def _get_ustation_entity(entity_id, update_ustation = False):
         _entity_context['taobao_id'] = _item_context['taobao_id'] 
         _entity_context['taobao_shop_nick'] = _item_context['shop_nick'] 
         
-        if _item_context.has_key('shop_nick'):
+        if _item_context.has_key('shop_nick') and (not _item_context.has_key('ustation') or _item_context['ustation'] != 1):
             _shop_context = TaobaoShop(_item_context['shop_nick']).read()
             if _shop_context != None:
                 _entity_context['commission_rate'] = _shop_context['commission_rate']
@@ -83,8 +83,8 @@ def ustation_list(request):
         context_instance = RequestContext(request)
     )
 
-@login_required
-@staff_only
+#@login_required
+#@staff_only
 def sync_ustation(request):
     _entity_context_list = _available_ustation_list() 
     _rslt = []
@@ -93,6 +93,7 @@ def sync_ustation(request):
         _note_context = Note(_note_id).read()
         _rslt.append({
             'item_id' : _entity_context['taobao_id'],
+            'cid' : _entity_context['old_root_category_id'],
             'note' : _note_context['content']
         })
 

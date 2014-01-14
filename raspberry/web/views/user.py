@@ -25,15 +25,18 @@ def user_likes(request, user_id, template=TEMPLATE):
     _c = request.GET.get('c', None)
     _p = request.GET.get('p', None)
 
-    _user = User(request.user.id)
-    _user_context = _user.read()
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
 
     _query_user_id = int(user_id)
     _query_user = User(_query_user_id)
     _query_user_context = _query_user.read()
 
     _is_user_self = (request.user.id == _query_user_id)
-    _is_user_followed = _user.is_following(_query_user_id)
+    _is_user_followed = None
+
+    if _user is not None:
+        _is_user_followed = _user.is_following(_query_user_id)
 
     _curr_cat_id = 0
 
@@ -75,15 +78,18 @@ def user_likes(request, user_id, template=TEMPLATE):
 def user_posts(request, user_id, template=TEMPLATE):
     # TODO 是否需要?
 
-    _user = User(request.user.id)
-    _user_context = _user.read()
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
 
     _query_user_id = int(user_id)
     _query_user = User(_query_user_id)
     _query_user_context = _query_user.read()
 
     _is_user_self = (request.user.id == _query_user_id)
-    _is_user_followed = _user.is_following(_query_user_id)
+    _is_user_followed = None
+
+    if _user is not None:
+        _is_user_followed = _user.is_following(_query_user_id)
 
     return render_to_response(
         template,
@@ -99,15 +105,18 @@ def user_posts(request, user_id, template=TEMPLATE):
 
 
 def user_notes(request, user_id, template=TEMPLATE):
-    _user = User(request.user.id)
-    _user_context = _user.read()
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
 
     _query_user_id = int(user_id)
     _query_user = User(_query_user_id)
     _query_user_context = _query_user.read()
 
     _is_user_self = (request.user.id == _query_user_id)
-    _is_user_followed = _user.is_following(_query_user_id)
+    _is_user_followed = None
+
+    if _user is not None:
+        _is_user_followed = _user.is_following(_query_user_id)
 
     _p = int(request.GET.get('p', 1))
 
@@ -156,15 +165,18 @@ def user_notes(request, user_id, template=TEMPLATE):
 
 
 def user_tags(request, user_id, template=TEMPLATE):
-    _user = User(request.user.id)
-    _user_context = _user.read()
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
 
     _query_user_id = int(user_id)
     _query_user = User(_query_user_id)
     _query_user_context = _query_user.read()
 
     _is_user_self = (request.user.id == _query_user_id)
-    _is_user_followed = _user.is_following(_query_user_id)
+    _is_user_followed = None
+
+    if _user is not None:
+        _is_user_followed = _user.is_following(_query_user_id)
 
     _p = int(request.GET.get('p', 1))
 
@@ -212,15 +224,18 @@ def user_tags(request, user_id, template=TEMPLATE):
 
 
 def user_followings(request, user_id, template=TEMPLATE):
-    _user = User(request.user.id)
-    _user_context = _user.read()
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
 
     _query_user_id = int(user_id)
     _query_user = User(_query_user_id)
     _query_user_context = _query_user.read()
 
     _is_user_self = (request.user.id == _query_user_id)
-    _is_user_followed = _user.is_following(_query_user_id)
+    _is_user_followed = None
+
+    if _user is not None:
+        _is_user_followed = _user.is_following(_query_user_id)
 
     _p = request.GET.get('p', 1)
 
@@ -238,7 +253,11 @@ def user_followings(request, user_id, template=TEMPLATE):
 
     for _id in _following_id_list:
         _f_user_context = User(_id).read()
-        _f_user_context['is_user_followed'] = _user.is_following(_id)
+        _f_user_context['is_user_followed'] = False
+
+        if _user is not None:
+            _f_user_context['is_user_followed'] = _user.is_following(_id)
+
         _following_list.append(_f_user_context)
 
     return render_to_response(
@@ -257,15 +276,18 @@ def user_followings(request, user_id, template=TEMPLATE):
 
 
 def user_fans(request, user_id, template=TEMPLATE):
-    _user = User(request.user.id)
-    _user_context = _user.read()
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
 
     _query_user_id = int(user_id)
     _query_user = User(_query_user_id)
     _query_user_context = _query_user.read()
 
     _is_user_self = (request.user.id == _query_user_id)
-    _is_user_followed = _user.is_following(_query_user_id)
+    _is_user_followed = None
+
+    if _user is not None:
+        _is_user_followed = _user.is_following(_query_user_id)
 
     _p = request.GET.get('p', 1)
 
@@ -283,7 +305,11 @@ def user_fans(request, user_id, template=TEMPLATE):
 
     for _id in _fans_id_list:
         _f_user_context = User(_id).read()
-        _f_user_context['is_user_followed'] = _user.is_following(_id)
+        _f_user_context['is_user_followed'] = False
+
+        if _user is not None:
+            _f_user_context['is_user_followed'] = _user.is_following(_id)
+
         _fans_list.append(_f_user_context)
 
     return render_to_response(
