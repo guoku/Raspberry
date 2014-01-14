@@ -3,6 +3,6 @@
 #FAB='/Users/edison7500/PycharmProjects/django15/bin/fab'
 FAB=`which fab`
 
-${FAB} -f update_code.py update_code
+${FAB} -f update_code.py upload
 ${FAB} -f reload_server.py reload
 
