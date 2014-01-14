@@ -39,15 +39,22 @@
                             {% url 'management_report_list' as report_list_url %}
                             <li{% if report_list_url in request.path %} class="active"{%endif%}><a href="{{ report_list_url }}">Report</a></li>
                             <li class="divider-vertical"></li>
+                            {% url 'management_ustation_list' as ustation_list %}
+                            <li{% if ustation_list in request.path %} class="active" {% endif %}><a href="{{ ustation_list }}">UStation</a></li>
+                            <li class="divider-vertical"></li>
                             {% url 'management_app_list' as app_list_url %}
-                            <li{% if app_list_url in request.path %} class="active" {% endif %}><a href="{{ app_list_url }}">App_Publish</a></li>
+                            <li{% if app_list_url in request.path %} class="active" {% endif %}><a href="{{ app_list_url }}">Publish</a></li>
                             <li class="divider-vertical"></li>
                         </ul>
 {#                        <form class="navbar-form" action="{% url 'management.views.search_entity' %}" method="POST">#}
 {#                            <input class="span2" type="text" placeholder="搜索分类/商品" id="query" name="query" class="form-control" />#}
 {#                            <button type="submit" class="btn btn-success">Search</button>#}
 {#                        </form>#}
+
                     </div>
+{#                    <ul class="nav navbar-nav navbar-right">#}
+{#                        <li><a href="#">{{ request.user }}</a></li>#}
+{#                    </ul>#}
                 </div>
             </div>
         </div>
