@@ -426,7 +426,7 @@ class Entity(object):
 
         
         if timestamp != None:
-            _hdl = _hdl.filter(created_time__lt = timestamp)
+            _hdl = _hdl.filter(updated_time__lt = timestamp)
        
         if sort_by == 'price':
             if reverse:
