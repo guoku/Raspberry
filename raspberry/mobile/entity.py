@@ -69,14 +69,16 @@ def search_entity(request):
             query_string = _query_string,
         )
         _rslt = {
-            'all_count' : len(_entity_id_list),
-            'like_count' : 0,
+            'stat' : {
+                'all_count' : len(_entity_id_list),
+                'like_count' : 0,
+            },
             'entity_list' : []
         }
         
         if _request_user_id != None:
             _like_set = MobileEntity.like_set_of_user(_request_user_id)
-            _rslt['like_count'] = len(_like_set.intersection(_entity_id_list))
+            _rslt['stat']['like_count'] = len(_like_set.intersection(_entity_id_list))
 
         for _entity_id in _entity_id_list[_offset : _offset + _count]:
             _entity = MobileEntity(_entity_id)
