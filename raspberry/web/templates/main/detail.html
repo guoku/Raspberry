@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load web %}
+{% load entity %}
 
 {% block title %}
     {% if entity_context.brand|length != 0 %}{{ entity_context.brand }}
@@ -25,7 +26,7 @@
 
                 {% if selection_note != None %}
                     <div class="selection-note">
-                        {% display_note selection_note entity_context user_context %}
+                        {% display_note_item selection_note %}
                     </div>
                 {% endif %}
 
@@ -35,7 +36,7 @@
 
                 <div class="common-note">
                     {% for note in common_note_list %}
-                        {% display_note note entity_context user_context %}
+                        {% display_note_item note %}
                     {% endfor %}
                 </div>
             </div>

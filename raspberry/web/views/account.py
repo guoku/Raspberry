@@ -354,6 +354,7 @@ def setting(request, template = 'account/setting.html'):
 
     if request.method == 'POST':
         _type = request.POST.get('type', None)
+        # 根据表单字段 type 判断是设置基本信息还是密码 type 只能是 base 或 psw
 
         if _type is not None:
             _type = _type.strip()
@@ -372,4 +373,31 @@ def upload_avatar(request):
 
 @login_required
 def update_avatar(request):
-    pass
+    if request.method == 'POST':
+        _avatar_img = request.FILES.get('avatar_img', None)
+        _ret = {
+            'status': 1
+        }
+
+        if _avatar_img is None:
+            _ret = {
+                'status': 0,
+                'msg': '未上传图片'
+            }
+
+        elif len(_avatar_img) / (1024 ** 2) > 2:
+            _ret = {
+                'status': 0,
+                'msg': '图片太大'
+            }
+
+        else:
+            if hasattr(_avatar_img, 'chunks'):
+                _image_data = ''.join(chunk for chunk in _avatar_img.chunks())
+            else:
+                _image_data = _avatar_img.read()
+
+            # TODO
+
+        return HttpResponse(json.dumps(_ret))
+

@@ -165,6 +165,36 @@ def like_entity(request, entity_id):
             return HttpResponse('1')
 
 
+def get_notes(request, entity_id, template='entity/entity_note_list.html'):
+    if request.method == 'GET':
+        _user_context = User(request.user.id).read()
+        _note_id_list = Note.find(entity_id=entity_id)
+        _note_list = []
+
+        for _note_id in _note_id_list:
+            _note = Note(_note_id)
+            _note_context = _note.read()
+            _creator_id = _note_context['creator_id']
+            _creator_context = User(_creator_id).read()
+
+            if not _note_context['is_selected']:
+                _note_list.append(
+                    {
+                        'note_context' : _note_context,
+                        'creator_context' : _creator_context,
+                        'user_context' : _user_context
+                    }
+                )
+
+        return render_to_response(
+            template,
+            {
+                'note_list' : _note_list
+            },
+            context_instance = RequestContext(request)
+        )
+
+
 @login_required
 def add_note(request, entity_id):
     if request.method == 'POST':

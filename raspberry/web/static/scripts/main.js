@@ -2,21 +2,43 @@
  * Created by cuiwei on 13-12-26.
  */
 ;(function ($, document, window) {
-    var $selectionItem = $('.selection-item');
-    var $noteItem = $('.note-item');
-
-    $selectionItem.each(function () {
-        var $this = $(this);
-
-        $this.find('.show-note').on('click', function () {
-            // selection 展开点评
-            $this.find('.common-note').slideToggle('slow');
-        });
+    // 展开点评
+    $('.selection-item').each(function () {
+        toggleNote($(this));
     });
 
-    // 修改点评
-    $noteItem.each(function () {
+    // 点评事件处理
+    $('.note-item').each(function () {
         var $this = $(this);
+        dealUpdateNote($this);
+        addCommentEventHandle($this);
+    });
+
+    function toggleNote($selectionItem) {
+        $selectionItem.find('.show-note').on('click', function () {
+            var $commonNote = $selectionItem.find('.common-note');
+
+            // 确保只加载1次
+            if ($commonNote[0].hasChildNodes()) {
+                $commonNote.slideToggle('slow');
+            } else {
+                var url = '/entity/' + $(this).attr('data-entity') + '/note/';
+                $.get(url, function (data) {
+                    $commonNote.html(data);
+                    $commonNote.slideToggle('slow');
+
+                    $commonNote.find('.note-item').each(function () {
+                        var $this = $(this);
+                        dealUpdateNote($this);
+                        addCommentEventHandle($this);
+                    })
+                });
+            }
+        });
+    }
+
+    function dealUpdateNote($noteItem) {
+        var $this = $noteItem;
         var $p = $this.find('p.note-content');
         var $form = $this.find('.update-note-form');
         var $textarea = $form.find('textarea');
@@ -51,28 +73,42 @@
 
             e.preventDefault();
         });
-    });
+    }
 
     // 评论
-    $noteItem.each(function () {
-        var $this = $(this);
-        var $noteComment = $this.find('.note-comment');
+    function addCommentEventHandle($noteItem) {
+        var $this = $noteItem;
+        var $noteDetail = $this.find('.note-detail');
+
+        $this.find('.add-comment').on('click', function () {
+            var $noteComment = $this.find('.note-comment');
+
+            if ($noteComment[0]) {
+                $noteComment.slideToggle('fast');
+            } else {
+                var url = '/note/' + $(this).attr('data-note') + '/comment/';
+                $.get(url, function (data) {
+                    $noteComment = $(data);
+                    $noteComment.appendTo($noteDetail);
+                    addCommentEvent($noteComment);
+                    $noteComment.slideToggle('fast');
+                });
+            }
+        });
+    }
+
+    function addCommentEvent($noteComment) {
         var $form = $noteComment.find('form');
         var $commentText = $form.find('input[name="comment_text"]');
-
         var replyToUser = '';
         var replyToComment = '';
 
-        $this.find('.add-comment').on('click', function () {
-            $noteComment.slideToggle('fast');
+        $form.find('.cancel-comment').one('click', function () {
+            $noteComment.slideUp('fast');
 
-            $form.find('.cancel-comment').one('click', function () {
-                $noteComment.slideUp('fast');
-
-                replyToUser = '';
-                replyToComment = '';
-                $commentText.val('');
-            });
+            replyToUser = '';
+            replyToComment = '';
+            $commentText.val('');
         });
 
         $noteComment.find('.reply').on('click', function () {
@@ -129,6 +165,30 @@
 
             e.preventDefault();
         });
+    }
+
+    // 点评 点赞
+   function pokeEventHandle ($poke) {
+        var $counter = $poke.find('small');
+        var note_id = $poke.attr('data-note');
+        var url = '/note/' + note_id + '/poke/';
+
+        $.post(url, function (data) {
+            var count = parseInt($counter.text());
+            var result = parseInt(data);
+
+            if (result === 1) {
+                $counter.text(count + 1);
+                $poke.addClass('already-poke');
+            } else if (result === 0) {
+                $counter.text(count - 1);
+                $poke.removeClass('already-poke');
+            }
+        });
+    }
+
+    $('.poke').on('click', function () {
+        pokeEventHandle($(this));
     });
 
     // 喜爱 like
@@ -148,27 +208,6 @@
             } else if (result === 0) {
                 $counter.text(count - 1);
                 $this.removeClass('already-like-entity');
-            }
-        });
-    });
-
-    // 点评 点赞
-    $('.poke').on('click', function () {
-        var $this = $(this);
-        var $counter = $this.find('small');
-        var note_id = $this.attr('data-note');
-        var url = '/note/' + note_id + '/poke/';
-
-        $.post(url, function (data) {
-            var count = parseInt($counter.text());
-            var result = parseInt(data);
-
-            if (result === 1) {
-                $counter.text(count + 1);
-                $this.addClass('already-poke');
-            } else if (result === 0) {
-                $counter.text(count - 1);
-                $this.removeClass('already-poke');
             }
         });
     });

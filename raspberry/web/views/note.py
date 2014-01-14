@@ -10,6 +10,10 @@ from base.note import Note
 from base.user import User
 
 
+def get_comment(request, note_id):
+    pass
+
+
 @login_required
 def poke_note(request, note_id):
     if request.method == 'POST':
@@ -22,6 +26,43 @@ def poke_note(request, note_id):
         else:
             _note.poke(note_id)
             return HttpResponse('1')
+
+
+@login_required
+def get_comments(request, note_id, template='note/note_comment_list.html'):
+    _user_context = User(request.user.id)
+    _note = Note(note_id)
+    _note_context = _note.read()
+    _comment_id_list = _note_context['comment_id_list']
+    _comment_list = []
+
+    for _c_id in _comment_id_list:
+        _comment_context = _note.read_comment(_c_id)
+        _creator_id = _comment_context['creator_id']
+        _creator_context = User(_creator_id).read()
+        _reply_to_user_id = _comment_context['reply_to_user_id']
+
+        if _reply_to_user_id is not None:
+            _nickname = User(_reply_to_user_id).read()['nickname']
+            _comment_context['reply_to_user_nickname'] = _nickname
+
+        _comment_list.append(
+            {
+                'comment_context' : _comment_context,
+                'creator_context' : _creator_context,
+                'note_context' : _note_context,
+                'user_context' : _user_context
+            }
+        )
+
+    return render_to_response(
+        template,
+        {
+            'comment_list' : _comment_list,
+            'note_context' : _note_context,
+        },
+        context_instance = RequestContext(request)
+    )
 
 
 @login_required

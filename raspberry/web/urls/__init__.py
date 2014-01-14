@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.conf.urls.defaults import url, patterns, include
 
 
@@ -41,6 +42,7 @@ urlpatterns += patterns(
     url('^entity/new/$', 'load_entity', name='web_load_entity'),
     url('^entity/create/$', 'create_entity', name='web_create_entity'),
     url('^entity/(?P<entity_id>\w+)/like/$', 'like_entity', name='web_like_entity'),
+    url('^entity/(?P<entity_id>\w+)/note/$', 'get_notes', name='web_get_notes'),  # Ajax 方式获取点评
     url('^entity/(?P<entity_id>\w+)/note/create/$', 'add_note', name='web_add_note'),
     url('^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/update/$', 'update_note', name='web_update_note'),
     url('^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/delete/$', 'delete_note', name='web_delete_note')
@@ -50,6 +52,7 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     'web.views.note',
     url('^note/(?P<note_id>\w+)/poke/$', 'poke_note', name='web_poke_note'),
+    url('^note/(?P<note_id>\w+)/comment/$', 'get_comments', name='web_get_comments'),  # Ajax 方式获取评论
     url('^note/(?P<note_id>\w+)/comment/create/$', 'add_comment', name='web_add_comment'),
     url('^note/(?P<note_id>\w+)/comment/(?P<comment_id>\w+)/delete/$', 'delete_comment', name='web_delete_comment')
 )
