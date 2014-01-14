@@ -52,7 +52,7 @@ def entity_list(request):
         return SuccessJsonResponse(_rslt)
     
 
-#@check_sign
+@check_sign
 def search_entity(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -74,7 +74,6 @@ def search_entity(request):
             'entity_list' : []
         }
         
-        _request_user_id = 79761
         if _request_user_id != None:
             _like_set = MobileEntity.like_set_of_user(_request_user_id)
             _rslt['like_count'] = len(_like_set.intersection(_entity_id_list))
