@@ -50,6 +50,17 @@ CACHES = {
        },
    },
 }
+#CACHES = {
+#    'default': {
+#        'BACKEND': 'redis_cache.RedisCache',
+#        'LOCATION': 'localhost:6379',
+#        'TIMEOUT:': 864000,
+#        'OPTIONS': {
+#            'DB': 1,
+#            'PARSER_CLASS': 'redis.connection.HiredisParser'
+#        },
+#    },
+#}
 
 # session
 # SESSION_ENGINE = 'redis_sessions.session'
@@ -57,6 +68,11 @@ CACHES = {
 # SESSION_REDIS_PORT = 6379
 # SESSION_REDIS_DB = 2
 # SESSION_COOKIE_AGE = 1209600
+#SESSION_ENGINE = 'redis_sessions.session'
+#SESSION_REDIS_HOST = 'localhost'
+#SESSION_REDIS_PORT = 6379
+#SESSION_REDIS_DB = 2
+#SESSION_COOKIE_AGE = 1209600
 
 MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
@@ -68,6 +84,7 @@ SPHINX_port = 3312
 
 #mongo db
 # MANGO_HOST = '10.0.2.200'
+MANGO_HOST = 'localhost'
 MANGO_PORT = 27017
 
 

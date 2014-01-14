@@ -426,7 +426,7 @@ class Entity(object):
 
         
         if timestamp != None:
-            _hdl = _hdl.filter(created_time__lt = timestamp)
+            _hdl = _hdl.filter(updated_time__lt = timestamp)
        
         if sort_by == 'price':
             if reverse:
@@ -465,11 +465,9 @@ class Entity(object):
         return _entity_id_list
     
     @classmethod
-    def search(cls, query_string, offset = 0, count = 30):
+    def search(cls, query_string):
         _query_set = EntityModel.search.query(query_string).filter(like_count__gte = 0)
-        _entity_id_list = []
-        for _result in _query_set[offset : offset + count]:
-            _entity_id_list.append(int(_result._sphinx["id"]))
+        _entity_id_list = map(lambda x : int(x._sphinx['id']), _query_set[0 : _query_set.count()])
         return _entity_id_list 
 
     @classmethod
@@ -603,14 +601,27 @@ class Entity(object):
         return EntityLikeModel.objects.filter(user_id = user_id, entity_id = self.entity_id).count() > 0 
 
     @staticmethod
-    def like_list_of_user(user_id, timestamp = None, offset = 0, count = 30):
+    def like_set_of_user(user_id):
+        _user_id = int(user_id)
+        _set = set()
+        for _obj in EntityLikeModel.objects.filter(user_id = _user_id):
+            _set.add(_obj.entity_id)
+        return _set
+        
+    
+    @staticmethod
+    def like_list_of_user(user_id, timestamp = None, offset = None, count = None):
         _user_id = int(user_id)
         _hdl = EntityLikeModel.objects.filter(user_id = _user_id)
+        
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
         _list = []
-        for _obj in _hdl[offset : offset + count]:
+        for _obj in _hdl:
             _list.append([_obj.entity_id, _obj.created_time])
 
         return _list
