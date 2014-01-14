@@ -19,7 +19,7 @@ class MobileEntity(Entity):
     def __init__(self, entity_id):
         Entity.__init__(self, entity_id)
 
-    def read(self, request_user_id = None):
+    def _read(self, request_user_id = None):
         _context = super(MobileEntity, self).read(json = True)
 
         _context['chief_image'] = _context['chief_image']['url']
@@ -41,9 +41,14 @@ class MobileEntity(Entity):
         
         return _context
     
+    def read(self, request_user_id = None):
+        _context = self._read(request_user_id) 
+        del _context['note_id_list']
+        return _context
+    
     def read_full_context(self, request_user_id = None):
         _context = {}
-        _context['entity'] = self.read(request_user_id) 
+        _context['entity'] = self._read(request_user_id) 
         
         _context['entity']['item_list'] = []
         for _item_id in _context['entity']['item_id_list']:
