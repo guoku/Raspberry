@@ -107,7 +107,7 @@ def create_entity(request):
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
         _chief_image_url = request.POST.get("chief_image_url", None)
-        _note = request.POST.get("note", "")
+        _note = request.POST.get("note_text", "")
 
         _hostname = urlparse(_cand_url).hostname
 
