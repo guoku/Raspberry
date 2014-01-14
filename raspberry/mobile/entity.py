@@ -52,7 +52,7 @@ def entity_list(request):
         return SuccessJsonResponse(_rslt)
     
 
-#@check_sign
+@check_sign
 def search_entity(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
