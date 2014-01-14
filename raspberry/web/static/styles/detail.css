@@ -88,6 +88,7 @@
 #detail .add-note input {
     float: right;
     margin-right: 3px;
+    margin-bottom: 5px;
 }
 
 #detail .add-note .login-link {

@@ -196,18 +196,28 @@ def get_notes(request, entity_id, template='entity/entity_note_list.html'):
 
 
 @login_required
-def add_note(request, entity_id):
+def add_note(request, entity_id, template='entity/entity_note.html'):
     if request.method == 'POST':
         _note_text = request.POST.get('note_text', None)
 
         if _note_text is not None and len(_note_text) > 0:
             try:
                 _entity = Entity(int(entity_id))
-                _entity.add_note(request.user.id, _note_text)
+                _note = _entity.add_note(request.user.id, _note_text)
+                _note_context = _note.read()
+                _user_context = User(request.user.id).read()
+
+                return render_to_response(
+                    template,
+                    {
+                        'note_context' : _note_context,
+                        'creator_context' : _user_context,
+                        'user_context' : _user_context
+                    },
+                    context_instance = RequestContext(request)
+                )
             except:
                 pass
-
-            return HttpResponse('1')
 
 
 @login_required

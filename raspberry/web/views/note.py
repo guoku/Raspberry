@@ -66,8 +66,9 @@ def get_comments(request, note_id, template='note/note_comment_list.html'):
 
 
 @login_required
-def add_comment(request, note_id, template='main/partial/display_note_comment.html'):
+def add_comment(request, note_id, template='note/note_comment.html'):
     if request.method == 'POST':
+        _user_context = User(request.user.id).read()
         _creator_id = request.user.id
         _comment_text = request.POST.get('comment_text', None)
         _reply_to_user_id = request.POST.get('reply_to_user_id', None)
@@ -95,8 +96,9 @@ def add_comment(request, note_id, template='main/partial/display_note_comment.ht
             return render_to_response(
                 template,
                 {
-                    'comment_context': _comment_context,
-                    'creator_context': _creator_context
+                    'comment_context' : _comment_context,
+                    'creator_context' : _creator_context,
+                    'user_context' : _user_context
                 },
                 context_instance=RequestContext(request)
             )
