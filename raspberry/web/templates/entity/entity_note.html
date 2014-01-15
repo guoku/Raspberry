@@ -11,6 +11,7 @@
             <small class="bio">{{ creator_context.bio }}</small>
             <p class="note-content">{{ note_context.content }}</p>
 
+            {# 判断是否当前用户发的点评，如果是则允许修改 #}
             {% if user_context.user_id == creator_context.user_id %}
                 <form class="clearfix update-note-form"
                       action="{% url 'web.views.entity.update_note' note_context.entity_id note_context.note_id %}"

@@ -112,6 +112,7 @@ def delete_comment(request, note_id, comment_id):
         _comment_context = _note.read_comment(comment_id)
         _user_id = request.user.id
 
+        # 判断当前用户是否具有删除权限
         if _comment_context['creator_id'] == _user_id or _note_context['creator_id'] == _user_id:
             _note.del_comment(comment_id)
 

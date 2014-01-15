@@ -41,6 +41,7 @@
                 </div>
             </div>
 
+            {# 判断当前用户是否已经评论过 #}
             {% if not user_already_note %}
                 <div class="add-note guoku-block">
                     {% if user.is_authenticated %}
