@@ -189,13 +189,17 @@ def user_entity_note(request, user_id):
         
         _rslt = []
         for _note_id in MobileNote.find(creator_set = [user_id], timestamp = _timestamp, offset = _offset, count = _count):
-            _note_context = MobileNote(_note_id).read(_request_user_id)
-            if _note_context.has_key('entity_id'):
-                _entity = MobileEntity(_note_context['entity_id'])
-                _rslt.append({
-                    'entity' : _entity.read(_request_user_id),
-                    'note' : _note_context, 
-                })
+            try:
+                _note_context = MobileNote(_note_id).read(_request_user_id)
+                if _note_context.has_key('entity_id'):
+                    _entity = MobileEntity(_note_context['entity_id'])
+                    _rslt.append({
+                        'entity' : _entity.read(_request_user_id),
+                        'note' : _note_context, 
+                    })
+            except:
+                print _note_id
+                pass
 
         return SuccessJsonResponse(_rslt)
 
