@@ -15,26 +15,19 @@ from util import *
 def selection(request, template='main/selection.html'):
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
+    _old_category_list = Old_Category.find()[0:12]
 
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
 
-    _curr_cat_title = None
-    _old_category_list = Old_Category.find()[0:12]
-
     if _category_id is None:
         _hdl = NoteSelection.objects.all()
     else:
+        _category_id = int(_category_id)
         _hdl = NoteSelection.objects.filter(category_id=_category_id)
 
-        # 取得当前分类名 需要改进？
-        # TODO
-        for _old_cat in _old_category_list:
-            if _old_cat['category_id'] == int(_category_id):
-                _curr_cat_title = _old_cat['category_title']
-
     _total_count = _hdl.count()
-    _count_in_one_page = 25
+    _count_in_one_page = 24
     _paginator = Paginator(_page_num, _count_in_one_page, _total_count)
 
     _hdl.order_by('-post_time')
@@ -47,43 +40,45 @@ def selection(request, template='main/selection.html'):
         _selection_note_id = _note_selection['note_id']
         _entity_id = _note_selection['entity_id']
         _entity_context = Entity(_entity_id).read()
-        _common_note_count = len(Note.find(entity_id=_entity_id)) - 1
 
         _note = Note(_selection_note_id)
         _note_context = _note.read()
         _creator_context = User(_note_context['creator_id']).read()
-
-        _selection_note = {
-            'note_context' : _note_context,
-            'creator_context' : _creator_context,
-            'user_context' : _user_context
-        }
-
-        _already_like = user_already_like_entity(request.user.id, _entity_id)
+        _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
 
         _selection_list.append(
             {
-                'already_like' : _already_like,
-                'entity_context' : _entity_context,
-                'selection_note' : _selection_note,
-                'common_note_count' : _common_note_count
+                'is_user_already_like': _is_user_already_like,
+                'entity_context': _entity_context,
+                'note_context': _note_context,
+                'creator_context': _creator_context,
             }
         )
 
-    return render_to_response(
-        template,
-        {
-            'main_nav_deliver' : 'selection',
-            'paginator' : _paginator,
-            'user_context' : _user_context,
-            'selection_list' : _selection_list,
-            'category_list' : _old_category_list,
-            'curr_cat_title' : _curr_cat_title,
-            'category_id' : _category_id,
-            'page_num' : _page_num
-        },
-        context_instance=RequestContext(request)
-    )
+    # 判断是否第一次加载
+    if _page_num is None or _page_num == 1:
+        return render_to_response(
+            template,
+            {
+                'main_nav_deliver' : 'selection',
+                'page_num' : _page_num,
+                'curr_category_id' : _category_id,
+
+                'user_context' : _user_context,
+                'category_list' : _old_category_list,
+                'selection_list' : _selection_list,
+            },
+            context_instance = RequestContext(request)
+        )
+
+    else:
+        return render_to_response(
+            'main/partial/selection_item_list.html',
+            {
+                'selection_list' : _selection_list,
+            },
+            context_instance = RequestContext(request)
+        )
 
 
 def detail(request, entity_hash, template='main/detail.html'):

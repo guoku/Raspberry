@@ -1,93 +1,125 @@
-#selection h2 {
-    font-size: 16px;
-    margin: 0 0 5px 0;
+#selection {
+    margin-right: -15px;
+    padding: 15px;
 }
 
-#selections {
-    float: left;
+#selection ul {
+    margin: 35px 0;
+    padding: 0;
+}
+
+#selection ul li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+#selection ul li.active {
+    color: #000;
+}
+
+#selection ul .sep {
+    margin: 0 5px;
 }
 
 .selection-item {
-    width: 630px;
-    margin-bottom: 30px;
-    padding: 30px 0 0;
+    display: inline-block;
+    width: 298px;
+    height: 448px;
+    vertical-align: top;
+    margin: 0 15px 15px 0;
+    border: 1px solid #eee;
 }
 
-.selection-item .entity {
-    margin: 0 0 45px 74px;
+.selection-item .entity .title {
+    position: absolute;
+    width: 268px;
+    padding: 30px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #fbfbfb;
+    background-color: rgba(251, 251, 251, .95);
+    font-size: 16px;
 }
 
-.selection-item h3 {
+.selection-item .entity h2 {
+    display: inline-block;
+    width: 160px;
+    margin: 0 10px 0 0;
+    line-height: 1.3;
     font-size: 14px;
     font-weight: normal;
-    margin: 0;
-    color: #999;
+    color: #333;
 }
 
-.selection-item .entity-img-container {
-    max-width: 210px;
-    margin: 10px 0 5px;
+.selection-item .entity .title span {
+    float: right;
+    vertical-align: top;
+    font-family: Georgia;
+    color: #4271c0;
 }
 
 .selection-item .entity-img {
-    max-width: 210px;
+    display: table-cell;
+    width: 300px;
+    height: 270px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0;
 }
 
-.selection-item .like-entity {
-    padding: 7px 10px;
-    border: 1px solid #efefef;
-    border-radius: 2px;
+.selection-item .entity-img img {
+    max-width: 100%;
+    max-height: 100%;
 }
 
-.selection-item .operate {
-    padding: 5px 0 5px 75px;
-    border-top: 1px solid #f3f3f3;
-    font-size: 12px;
-    color: #bbb;
+.selection-item .note {
+    position: relative;
+    height: 147px;
+    padding: 15px;
+    border-top: 1px solid #eee;
 }
 
-#selection .categories {
-    float: right;
-    width: 257px;
-    padding: 14px;
-    color: #666;
-}
-
-#selection .categories ul {
+.selection-item .note p {
     margin: 0;
     padding: 0;
-    line-height: 2;
+    line-height: 1.5;
 }
 
-#selection .categories li {
-    display: inline;
-    margin-right: 20px;
-}
-
-#selection .s-pagination {
-    clear: left;
-    float: left;
-    width: 630px;
-}
-
-#selection .s-pagination div {
-    float: right;
-}
-
-#selection .s-pagination div a {
-    padding: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
-    background: #fff;
-    color: #333;
+.selection-item .like {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    line-height: 30px;
     text-decoration: none;
 }
 
-#selection .s-pagination div a:hover {
-    background-color: #f3f3f3;
+.selection-item .like .icon {
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    width: 20px;
+    height: 17px;
+    margin-right: 5px;
+    background: url(/static/images/icon_like.png) no-repeat;
 }
 
-#selection .s-pagination div a.inactive {
-    color: #999;
-    background-color: #fff;
-    cursor: default;
+.selection-item .like .icon.liked {
+    background: url(/static/images/icon_like_press.png) no-repeat;
+}
+
+.selection-item .like .count {
+    margin-right: 5px;
+}
+
+.selection-item .creator {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    color: #666;
+    font-size: 15px;
+}
+
+.selection-item .creator img {
+    border-radius: 15px;
+    vertical-align: middle;
+    margin-right: 5px;
 }

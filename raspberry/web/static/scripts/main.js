@@ -2,10 +2,46 @@
  * Created by cuiwei on 13-12-26.
  */
 ;(function ($, document, window) {
+    // 动态加载selection
+    (function () {
+        var $selection = $('#selection');
+        if ($selection[0]) {
+            var counter = 1;
+            var top = 2800 * counter;
+
+            $(window).scroll(function () {
+                var $this = $(this);
+
+                if ($this.scrollTop() > top) {
+                    counter++;
+                    top = 3000 * counter;
+                    var url = '/selected/?p=' + counter;
+
+                    $.get(url, function (html) {
+                        var $html = $(html);
+                        $html.each(function () {
+                            showEntityTitle($(this));
+                        });
+                        $html.appendTo($selection);
+                    });
+                }
+            });
+        }
+    })();
+
     // 展开点评
     $('.selection-item').each(function () {
-        toggleNote($(this));
+        showEntityTitle($(this));
     });
+
+    function showEntityTitle($selectionItem) {
+        var $entityTitle = $selectionItem.find('.entity .title');
+        $selectionItem.hover(function () {
+            $entityTitle.slideDown('fast');
+        }, function () {
+            $entityTitle.slideUp('fast');
+        });
+    }
 
     // 点评事件处理
     $('.note-item').each(function () {

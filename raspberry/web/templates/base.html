@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <title>{% block title %}果库{% endblock %}</title>
+    <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
     {% block css %}{% endblock %}
@@ -12,7 +13,11 @@
 <body>
 <div id="header">
     <div class="header-container">
-        <a href="{% url 'web.views.main.selection' %}" class="logo"><img src="{% static 'images/guoku_icon_32.png' %}"></a>
+        <div class="title">
+            <h1 style="display: none"><a href="{% url 'web.views.main.selection' %}">果库</a></h1>
+            <a href="{% url 'web.views.main.selection' %}" class="logo"><img src="{% static 'images/logo.png' %}"></a>
+        </div>
+
         <ul class="nav">
             <li {% if main_nav_deliver == 'selection' %}class="active"{% endif %}><a href="{% url 'web_selection' %}">精选</a></li>
             <li {% if main_nav_deliver == 'popular' %}class="active"{% endif %}><a href="{% url 'web_popular' %}">热门</a></li>
@@ -20,39 +25,39 @@
         </ul>
 
         <form action="/search" method="GET">
-            <input type="text" placeholder="搜索" name="" class="text-input">
-            <input type="submit" value="" class="submit">
+            <input type="text" placeholder="搜你想要的" name="keyword" class="search">
+            <button type="submit"><img src="{% static 'images/search_icon.png' %}"></button>
         </form>
 
-        <div class="user">
-            {% if user.is_authenticated %}
-                <div class="tool">
-                    <a href="{% url 'web_load_entity' %}" class="add"></a>
-                    <a href="{% url 'web_activity' %}" class="friend"></a>
-                    <a href="{% url 'web_message' %}" class="message"></a>
-                </div>
-
-                <div class="container">
-                    <a href="{% url 'web_user_index' user.id %}" class="nickname">
-                        <img src="{{ user_context.avatar_small }}" height="25" width="25">
-                        <span>{{ user_context.nickname|truncatechars:12 }}</span>
-                        <small></small>
-                    </a>
-
-                    <div style="display: none" class="pop">
-                        <a href="{% url 'web_user_index' user.id %}">我的果库</a>
-                        <a href="{% url 'web_setting' %}">设置</a>
-                        <a href="{% url 'web_logout' %}">退出</a>
-                    </div>
-                </div>
-            {% else %}
-                <span class="login">
-                    <a href="{% url 'web_register' %}">注册</a>
-                    <span class="sep">|</span>
-                    <a href="{% url 'web_login' %}">登录</a>
-                </span>
-            {% endif %}
-        </div>
+{#        <div class="user">#}
+{#            {% if user.is_authenticated %}#}
+{#                <div class="tool">#}
+{#                    <a href="{% url 'web_load_entity' %}" class="add"></a>#}
+{#                    <a href="{% url 'web_activity' %}" class="friend"></a>#}
+{#                    <a href="{% url 'web_message' %}" class="message"></a>#}
+{#                </div>#}
+{##}
+{#                <div class="container">#}
+{#                    <a href="{% url 'web_user_index' user.id %}" class="nickname">#}
+{#                        <img src="{{ user_context.avatar_small }}" height="25" width="25">#}
+{#                        <span>{{ user_context.nickname|truncatechars:12 }}</span>#}
+{#                        <small></small>#}
+{#                    </a>#}
+{##}
+{#                    <div style="display: none" class="pop">#}
+{#                        <a href="{% url 'web_user_index' user.id %}">我的果库</a>#}
+{#                        <a href="{% url 'web_setting' %}">设置</a>#}
+{#                        <a href="{% url 'web_logout' %}">退出</a>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% else %}#}
+{#                <span class="login">#}
+{#                    <a href="{% url 'web_register' %}">注册</a>#}
+{#                    <span class="sep">|</span>#}
+{#                    <a href="{% url 'web_login' %}">登录</a>#}
+{#                </span>#}
+{#            {% endif %}#}
+{#        </div>#}
     </div>
 </div>
 

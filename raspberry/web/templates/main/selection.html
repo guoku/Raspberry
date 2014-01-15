@@ -1,95 +1,26 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% load web %}
-{% load entity %}
+{% load selection %}
 
 {% block title %}精选{% endblock %}
-{% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/selection.css' %}">{% endblock %}
-
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/selection.css' %}">{% endblock %}
 {% block content %}
     <div id="selection">
-        <h2>{{ curr_cat_title|default:'所有' }}</h2>
-
-        <div id="selections">
-            {% for selection in selection_list %}
-                <div class="selection-item guoku-block">
-                    <div class="entity">
-                        <h3>
-                            <a href="{% url 'web.views.main.detail' selection.entity_context.entity_hash %}">
-                                {% if selection.entity_context.brand|length != 0 %}{{ selection.entity_context.brand }}
-                                    - {% endif %}{{ selection.entity_context.title }}</a>
-                        </h3>
-
-                        <div class="entity-img-container">
-                            <a href="{% url 'web.views.main.detail' selection.entity_context.entity_hash %}">
-                                <img class="entity-img" src="{{ selection.entity_context.chief_image.url }}"
-                                     alt="entity image">
-                            </a>
-                        </div>
-
-                        {% display_like_entity selection.entity_context selection.already_like %}
-                    </div>
-
-                    <div class="note">
-                        <div class="selection-note">
-                            {% display_note_item selection.selection_note %}
-                        </div>
-
-                        <div class="common-note" style="display: none"></div>
-
-                        <div class="operate">
-                            {% if selection.common_note_list|length > 0 %}
-                                <a href="javascript:;" class="show-note"
-                                   data-entity="{{ selection.entity_context.entity_id }}">还有 {{ selection.common_note_count }}
-                                    条点评</a>
-                                &sdot;
-                            {% endif %}
-                            <a href="{% url 'web.views.main.detail' selection.entity_context.entity_hash %}#addnote"
-                               class="add-note">写点评</a>
-                        </div>
-                    </div>
-                </div>
+        <ul class="nav">
+            <li {% if curr_category_id == None  %}class="active"{% endif %}>
+                <a href="{% url 'web.views.main.selection' %}">所有</a>
+            </li>
+            <span class="sep">|</span>
+            {% for category in category_list %}
+                <li {% if category.category_id == curr_category_id %}class="active"{% endif %}>
+                    <a href="{% url 'web.views.main.selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a>
+                </li>
+                {% if category_list|length > forloop.counter %}&sdot;{% endif %}
             {% endfor %}
-        </div>
+        </ul>
 
-        {% if not user.is_authenticated %}
-            {% include 'main/partial/display_login_block.html' %}
-        {% endif %}
-
-        <div class="categories guoku-block">
-            <ul>
-                <li><a href="{% url 'web.views.main.selection' %}">所有</a></li>
-                {% for category in category_list %}
-                    <li>
-                        <a href="{% url 'web.views.main.selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        {% include 'main/partial/app_download.html' %}
-
-        <div class="s-pagination">
-            <a href="{% url 'web.views.main.selection' %}">返回第一页</a>
-
-            <div>
-                {% if not paginator.has_previous %}
-                    <a href="javascript:;" class="inactive">上一页</a>
-                {% elif category_id == None %}
-                    <a href="{% url 'web.views.main.selection' %}?p={{ paginator.previous_page_number }}">上一页</a>
-                {% else %}
-                    <a href="{% url 'web.views.main.selection' %}?p={{ paginator.previous_page_number }}&c={{ category_id }}">上一页</a>
-                {% endif %}
-
-                {% if not paginator.has_next %}
-                    <a href="javascript:;" class="inactive">下一页</a>
-                {% elif category_id == None %}
-                    <a href="{% url 'web.views.main.selection' %}?p={{ paginator.next_page_number }}">下一页</a>
-                {% else %}
-                    <a href="{% url 'web.views.main.selection' %}?p={{ paginator.next_page_number }}&c={{ category_id }}">下一页</a>
-                {% endif %}
-            </div>
+        <div class="selections">
+            {% display_selections selection_list %}
         </div>
     </div>
 {% endblock %}
