@@ -22,6 +22,8 @@ class LikeEntityTask(Task):
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
     
+    queue = "default"
+    
     def run(self, entity_id, request_user_id = None):
         _entity_id = int(entity_id)
         _request_user_id = int(request_user_id)

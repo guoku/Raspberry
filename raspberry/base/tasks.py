@@ -112,3 +112,25 @@ class CreateNoteCommentReplyMessageTask(Task):
             replying_user_nickname = replying_user_nickname
         )
 
+class CleanNoteMessageTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    
+    def run(self, entity_id, note_id): 
+        for _doc in EntityNoteMessage.objects.filter(entity_id = entity_id, note_id = note_id):
+            _doc.delete()
+        
+        for _doc in NotePokeMessage.objects.filter(note_id = note_id):
+            _doc.delete()
+        
+        for _doc in NoteCommentMessage.objects.filter(note_id = note_id):
+            _doc.delete()
+        
+        for _doc in NoteCommentReplyMessage.objects.filter(note_id = note_id):
+            _doc.delete()
+        
+        for _doc in NoteSelectionMessage.objects.filter(note_id = note_id):
+            _doc.delete()
+
