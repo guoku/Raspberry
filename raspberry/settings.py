@@ -9,8 +9,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-from mongoengine import connect
-connect('guoku')
+from mongoengine import register_connection 
+register_connection('guoku-db', 'guoku')
+register_connection('log-db', 'guoku_log')
 
 DATABASES = {
     'default': {

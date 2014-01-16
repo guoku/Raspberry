@@ -28,9 +28,10 @@ remote_file = getattr(settings, 'SCP_REMOTE_FILE', '/data/www/core/download/andr
 
 class PushMessageToUserTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 30
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id, badge, message, testor_id): 
         _apns = APNSWrapper(user_id = user_id)
@@ -44,9 +45,10 @@ class PushMessageToUserTask(Task):
 
 class ArrangeSelectionTask(Task):
     ignore_result = True
-    time_limit = 1800
+    time_limit = 600
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, select_count, start_time, interval_secs = 600):
         _t_start = datetime.datetime.now()
@@ -59,9 +61,10 @@ class ArrangeSelectionTask(Task):
 
 class CreateTaobaoShopTask(Task):
     ignore_result = True
-    time_limit = 10
+    time_limit = 30
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, nick, shop_link):
         if not TaobaoShop.nick_exist(nick):
@@ -80,6 +83,7 @@ class PublishApkTask(Task):
     time_limit = 1800
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
 
     def run(self, filename):
         # client = scp.SCPClient(host=scp_host, user=scp_user, keyfile=scp_key)
@@ -90,6 +94,6 @@ class PublishApkTask(Task):
         # ssh.load_host_keys(filename=scp_key)
         ssh.load_system_host_keys()
         ssh.set_missing_host_key_policy(AutoAddPolicy())
-        ssh.connect(hostname=scp_host, username=scp_user, key_filename=key_filename)
+        ssh.connect(hostname = scp_host, username = scp_user, key_filename = key_filename)
         scp = SCPClient(ssh.get_transport())
         scp.put(filename, remote_file)

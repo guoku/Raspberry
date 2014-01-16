@@ -18,11 +18,10 @@ RETRY_DELAY = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRY_DELAY', 60)
 
 class LikeEntityTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
-    
-    queue = "default"
+    queue = "main"
     
     def run(self, entity_id, request_user_id = None):
         _entity_id = int(entity_id)
@@ -31,9 +30,10 @@ class LikeEntityTask(Task):
 
 class UnlikeEntityTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, entity_id, request_user_id = None):
         _entity_id = int(entity_id)
@@ -42,27 +42,30 @@ class UnlikeEntityTask(Task):
 
 class FollowUserTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, follower_id, followee_id):
         MobileUser(follower_id).follow(followee_id)
 
 class UnfollowUserTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, follower_id, followee_id):
         MobileUser(follower_id).unfollow(followee_id)
 
 class PokeEntityNoteTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, note_id, request_user_id = None):
         _note_id = int(note_id)
@@ -71,9 +74,10 @@ class PokeEntityNoteTask(Task):
 
 class DepokeEntityNoteTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, note_id, request_user_id = None):
         _note_id = int(note_id)
@@ -82,9 +86,10 @@ class DepokeEntityNoteTask(Task):
 
 class DeleteEntityNoteTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 20
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, entity_id, note_id):
         _entity = MobileEntity(entity_id)
@@ -92,9 +97,10 @@ class DeleteEntityNoteTask(Task):
 
 class DeleteEntityNoteCommentTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 20
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, note_id, comment_id):
         _note = MobileNote(note_id)
@@ -102,9 +108,10 @@ class DeleteEntityNoteCommentTask(Task):
 
 class RetrievePasswordTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 30
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id):
         _user = MobileUser(user_id)
@@ -112,9 +119,10 @@ class RetrievePasswordTask(Task):
 
 class MarkFootprint(Task):
     ignore_result = True
-    time_limit = 5 
+    time_limit = 10 
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id, message = False, selection = False, social_feed = False, friend_feed = False):
         MobileUser(user_id).mark_footprint(

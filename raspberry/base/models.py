@@ -265,6 +265,7 @@ class Image(Document):
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
+        'db_alias' : 'guoku-db',
         'indexes' : [ 
             'source',
             'origin_url',
@@ -280,6 +281,7 @@ class Item(Document):
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
+        'db_alias' : 'guoku-db',
         'indexes' : [ 
             'entity_id' 
         ],
@@ -311,11 +313,12 @@ class Selection(Document):
     selected_time = DateTimeField(required = True)
     post_time = DateTimeField(required = True)
     meta = {
-        "indexes" : [ 
-            "selector_id", 
-            "post_time" 
+        'db_alias' : 'guoku-db',
+        'indexes' : [ 
+            'selector_id', 
+            'post_time' 
         ],
-        "allow_inheritance" : True
+        'allow_inheritance' : True
     }
 
 class NoteSelection(Selection):
@@ -326,12 +329,12 @@ class NoteSelection(Selection):
     neo_category_id = IntField(required = True) 
     category_id = IntField(required = True) 
     meta = {
-        "indexes" : [ 
-            "entity_id", 
-            "note_id",
-            "root_category_id",
-            "neo_category_group_id",
-            "neo_category_id",
-            "category_id" 
+        'indexes' : [ 
+            'entity_id', 
+            'note_id',
+            'root_category_id',
+            'neo_category_group_id',
+            'neo_category_id',
+            'category_id' 
         ]
     }
