@@ -17,12 +17,19 @@
                     top = 3000 * counter;
                     var url = '/selected/?p=' + counter;
 
-                    $.get(url, function (html) {
-                        var $html = $(html);
-                        $html.each(function () {
-                            showEntityTitle($(this));
-                        });
-                        $html.appendTo($selection);
+                    $.get(url, function (result) {
+                        result = $.parseJSON(result);
+                        var status = parseInt(result.status);
+
+                        if (status === 1) {
+                            var $html = $(result.data);
+                            $html.each(function () {
+                                showEntityTitle($(this));
+                            });
+                            $html.appendTo($selection);
+                        } else if (status == 0) {
+                            // 没有数据可以加载了
+                        }
                     });
                 }
             });

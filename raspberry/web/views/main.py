@@ -2,6 +2,8 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.template import loader
+import json
 
 from utils.paginator import Paginator
 from base.models import NoteSelection
@@ -77,14 +79,24 @@ def selection(request, template='main/selection.html'):
         )
 
     else:
-        # 返回html片段
-        return render_to_response(
-            'main/partial/selection_item_list.html',
-            {
-                'selection_list' : _selection_list,
-            },
-            context_instance = RequestContext(request)
-        )
+        _ret = {
+            'status' : 0,
+            'msg' : '没有更多数据'
+        }
+
+        if _selection_list:
+            _t = loader.get_template('main/partial/selection_item_list.html')
+            _c = RequestContext(request, {
+                'selection_list': _selection_list,
+            })
+            _data = _t.render(_c)
+
+            _ret = {
+                'status' : '1',
+                'data' : _data
+            }
+
+        return HttpResponse(json.dumps(_ret))
 
 
 def detail(request, entity_hash, template='main/detail.html'):
