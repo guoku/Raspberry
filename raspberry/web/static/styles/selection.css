@@ -102,7 +102,7 @@
     background: url(/static/images/icon_like.png) no-repeat;
 }
 
-.selection-item .like .icon.liked {
+.selection-item .liked .icon {
     background: url(/static/images/icon_like_press.png) no-repeat;
 }
 

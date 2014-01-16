@@ -20,6 +20,11 @@ def selection(request, template='main/selection.html'):
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
 
+    # 判断是否ajax方式加载,如不是则强制返回首页
+    # 见https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.is_ajax
+    if not request.is_ajax():
+        _page_num = 1
+
     if _category_id is None:
         _hdl = NoteSelection.objects.all()
     else:
@@ -72,6 +77,7 @@ def selection(request, template='main/selection.html'):
         )
 
     else:
+        # 返回html片段
         return render_to_response(
             'main/partial/selection_item_list.html',
             {

@@ -21,12 +21,9 @@
 
             <div class="note">
                 <p>{{ selection.note_context.content|truncatechars:90 }}</p>
-                <a href="{% url 'web_like_entity' selection.entity_context.entity_id %}" class="like">
-                    {% if selection.is_user_already_like %}
-                        <span class="icon liked"></span>
-                    {% else %}
-                        <span class="icon"></span>
-                    {% endif %}
+                <a href="{% url 'web_like_entity' selection.entity_context.entity_id %}"
+                   class="like{% if selection.is_user_already_like %} liked{% endif %}">
+                    <span class="icon"></span>
                     <span class="count">{{ selection.entity_context.like_count }}</span>喜爱
                 </a>
                 <div class="creator">

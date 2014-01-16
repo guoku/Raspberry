@@ -228,11 +228,10 @@
     });
 
     // 喜爱 like
-    $('.like-entity').on('click', function () {
+    $('.like').on('click', function (e) {
         var $this = $(this);
-        var $counter = $this.find('small');
-        var entity_id = $this.attr('data-entity');
-        var url = '/entity/' + entity_id + '/like/';
+        var url = this.href;
+        var $counter = $this.find('.count');
 
         $.post(url, function (data) {
             var count = parseInt($counter.text());
@@ -240,12 +239,14 @@
 
             if (result === 1) {
                 $counter.text(count + 1);
-                $this.addClass('already-like-entity');
+                $this.addClass('liked');
             } else if (result === 0) {
                 $counter.text(count - 1);
-                $this.removeClass('already-like-entity');
+                $this.removeClass('liked');
             }
         });
+
+        e.preventDefault();
     });
 
     // 关注
