@@ -338,3 +338,19 @@ class NoteSelection(Selection):
             'category_id' 
         ]
     }
+
+class Log(Document):
+    entry = StringField(required = True)
+    user_id = IntField(required = True) 
+    ip = StringField(required = True)
+    log_time = DateTimeField(required = True)
+    meta = {
+        'db_alias' : 'log-db',
+        'indexes' : [ 
+            'entry',
+            'user_id',
+            'log_time' 
+        ],
+        'allow_inheritance' : True
+    }
+

@@ -5,7 +5,8 @@ from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
 from mobile.models import Session_Key
-from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
+from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask, MobileLogTask
+from utils.lib import get_client_ip
 import datetime
 import time
 
@@ -137,6 +138,9 @@ def entity_detail(request, entity_id):
             _request_user_id = None
 
         _rslt = MobileEntity(entity_id).read_full_context(_request_user_id)
+        
+        MobileLogTask.delay('ENTITY', request.REQUEST, get_client_ip(request), _request_user_id)
+        
         return SuccessJsonResponse(_rslt)
         
 
