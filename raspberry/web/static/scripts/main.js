@@ -7,14 +7,14 @@
         var $selection = $('#selection');
         if ($selection[0]) {
             var counter = 1;
-            var top = 2800 * counter;
+            var top = 3000;
 
             $(window).scroll(function () {
                 var $this = $(this);
 
                 if ($this.scrollTop() > top) {
                     counter++;
-                    top = 3000 * counter;
+                    top += 2200;
                     var url = '/selected/?p=' + counter;
 
                     $.get(url, function (result) {

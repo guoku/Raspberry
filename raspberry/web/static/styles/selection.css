@@ -53,7 +53,7 @@
 .selection-item .entity .title span {
     float: right;
     vertical-align: top;
-    font-family: Georgia;
+    font-family: Georgia, serif;
     color: #4271c0;
 }
 
@@ -76,12 +76,14 @@
     height: 147px;
     padding: 15px;
     border-top: 1px solid #eee;
+    font-family: Tahoma, Geneva, sans-serif;
 }
 
 .selection-item .note p {
     margin: 0;
     padding: 0;
     line-height: 1.5;
+    color: #888;
 }
 
 .selection-item .like {
@@ -114,7 +116,7 @@
     position: absolute;
     right: 15px;
     bottom: 15px;
-    color: #666;
+    color: #777;
     font-size: 15px;
 }
 

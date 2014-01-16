@@ -7,7 +7,7 @@
 {% block content %}
     <div id="selection">
         <ul class="nav">
-            <li {% if curr_category_id == None  %}class="active"{% endif %}>
+            <li {% if curr_category_id == None %}class="active"{% endif %}>
                 <a href="{% url 'web.views.main.selection' %}">所有</a>
             </li>
             <span class="sep">|</span>

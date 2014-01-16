@@ -186,6 +186,7 @@ def get_notes(request, entity_id, template='entity/entity_note_list.html'):
                     }
                 )
 
+        # TODO 需要改进 返回json 参照 main.selection
         return render_to_response(
             template,
             {

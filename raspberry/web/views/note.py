@@ -55,6 +55,7 @@ def get_comments(request, note_id, template='note/note_comment_list.html'):
             }
         )
 
+    # TODO 需要改进 返回json 参照 main.selection
     return render_to_response(
         template,
         {
@@ -93,6 +94,7 @@ def add_comment(request, note_id, template='note/note_comment.html'):
             _comment_context = _note.read_comment(_new_comment_id)
             _creator_context = User(_creator_id).read()
 
+            # TODO 需要改进 返回json 参照 main.selection
             return render_to_response(
                 template,
                 {

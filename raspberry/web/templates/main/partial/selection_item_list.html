@@ -31,7 +31,7 @@
                        class="avatar"><img src="{{ selection.creator_context.avatar_small }}" width="30"
                                            height="30"></a>
                     <a href="{% url 'web_user_index' selection.creator_context.user_id %}"
-                       class="nickname">{{ selection.creator_context.nickname|truncatechars:11 }}</a>
+                       class="nickname">{{ selection.creator_context.nickname|truncatechars:10 }}</a>
                 </div>
             </div>
         </div>

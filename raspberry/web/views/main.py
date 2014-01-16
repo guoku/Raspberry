@@ -35,6 +35,9 @@ def selection(request, template='main/selection.html'):
 
     _total_count = _hdl.count()
     _count_in_one_page = 24
+    if _page_num != 1:
+        # 每次ajax加载的数量
+        _count_in_one_page = 15
     _paginator = Paginator(_page_num, _count_in_one_page, _total_count)
 
     _hdl.order_by('-post_time')
@@ -63,7 +66,7 @@ def selection(request, template='main/selection.html'):
         )
 
     # 判断是否第一次加载
-    if _page_num is None or _page_num == 1:
+    if _page_num == 1:
         return render_to_response(
             template,
             {
