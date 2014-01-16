@@ -14,7 +14,7 @@
 
                 if ($this.scrollTop() > top) {
                     counter++;
-                    top += 2200;
+                    top += 2300;
                     var url = '/selected/?p=' + counter;
 
                     $.get(url, function (result) {

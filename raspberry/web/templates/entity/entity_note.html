@@ -6,8 +6,7 @@
         </a>
 
         <div class="note-detail">
-            <a class="nickname"
-               href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}</a>
+            <a class="nickname" href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}</a>
             <small class="bio">{{ creator_context.bio }}</small>
             <p class="note-content">{{ note_context.content }}</p>
 

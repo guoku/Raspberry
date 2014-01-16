@@ -143,122 +143,10 @@ a:hover {
 }
 
 
-/*#header .user {*/
-    /*position: absolute;*/
-    /*top: 0;*/
-    /*right: 0;*/
-/*}*/
-
-/*#header .user .login {*/
-    /*display: inline-block;*/
-    /*height: 49px;*/
-    /*line-height: 49px;*/
-/*}*/
-
-/*#header .user .login .sep {*/
-    /*margin: 0 10px;*/
-/*}*/
-
-/*#header .user a:hover {*/
-    /*text-decoration: none;*/
-/*}*/
-
-/*#header .user .tool {*/
-    /*display: inline-block;*/
-    /*margin-top: 14px;*/
-/*}*/
-
-/*#header .user .tool a {*/
-    /*display: inline-block;*/
-    /*width: 20px;*/
-    /*height: 20px;*/
-    /*margin-right: 22px;*/
-/*}*/
-
-/*#header .user .tool .add {*/
-    /*background: url(/static/images/header_icon.png) no-repeat -58px -13px;*/
-/*}*/
-
-/*#header .user .tool .friend {*/
-    /*background: url(/static/images/header_icon.png) no-repeat -110px -13px;*/
-/*}*/
-
-/*#header .user .tool .message {*/
-    /*background: url(/static/images/header_icon.png) no-repeat -156px -13px;*/
-/*}*/
-
-/*#header .user .container {*/
-    /*position: relative;*/
-    /*display: inline-block;*/
-    /*vertical-align: top;*/
-    /*height: 34px;*/
-    /*margin-top: 8px;*/
-    /*padding: 6px 6px 0;*/
-/*}*/
-
-/*#header .user .container-hover {*/
-    /*height: 115px;*/
-    /*border-radius: 2px;*/
-    /*box-shadow: 0 1px 3px rgba(0, 0, 0, .2);*/
-    /*background-color: #fff;*/
-/*}*/
-
-/*#header .user .container .nickname {*/
-    /*display: inline-block;*/
-    /*padding-top: 3px;*/
-/*}*/
-
-/*#header .user .container img {*/
-    /*position: absolute;*/
-    /*left: 10px;*/
-    /*top: 4px;*/
-/*}*/
-
-/*#header .user .container span {*/
-    /*display: inline-block;*/
-    /*margin-left: 38px;*/
-    /*min-width: 40px;*/
-    /*text-align: right;*/
-/*}*/
-
-/*#header .user .container small {*/
-    /*display: inline-block;*/
-    /*width: 0;*/
-    /*height: 0;*/
-    /*border: solid 4px;*/
-    /*border-color: #999 #fff #fff #fff;*/
-/*}*/
-
-/*#header .user .container small.hover {*/
-    /*border-color: #333 #fff #fff #fff;*/
-/*}*/
-
-/*#header .user .pop {*/
-    /*position: absolute;*/
-    /*left: 0;*/
-    /*right: 0;*/
-    /*top: 35px;*/
-    /*z-index: 10;*/
-    /*padding-right: 14px;*/
-    /*padding-left: 10px;*/
-    /*line-height: 1.2;*/
-    /*text-align: right;*/
-/*}*/
-
-/*#header .user .pop a {*/
-    /*display: block;*/
-    /*margin-bottom: 8px;*/
-    /*padding: 2px 3px 2px 0;*/
-/*}*/
-
-/*#header .user .pop a:hover {*/
-    /*background-color: #eee;*/
-/*}*/
-
 /*-----------------------------------------*/
 #main {
     width: 960px;
-    margin: 85px auto 50px;
+    margin: 75px auto 50px;
 }
 
 /*--------------------------------------------*/
@@ -283,234 +171,28 @@ a:hover {
 }
 
 /**entity like-------------------------------------*/
-.like-entity {
-    display: inline-block;
-    font-size: 12px;
-    background: #fbfbfb;
+.like {
     text-decoration: none;
 }
 
-.like-entity:hover {
-    color: #666;
-    text-decoration: none;
-}
-
-.like-entity span {
+.like .icon {
     display: inline-block;
-    vertical-align: top;
-    width: 16px;
-    height: 13px;
-    background: url(/static/images/guoku_icon.png) no-repeat scroll 0 -3px;
+    position: relative;
+    top: 3px;
+    width: 20px;
+    height: 17px;
+    margin-right: 5px;
+    background: url(/static/images/icon_like.png) no-repeat;
 }
 
-.already-like-entity span {
-    background: url(/static/images/guoku_icon.png) no-repeat scroll -16px -3px;
+.liked .icon {
+    background: url(/static/images/icon_like_press.png) no-repeat;
 }
 
-/**note--------------------------------------------*/
-.note-item {
-    padding: 15px;
-    border-top: 1px solid #f3f3f3;
-    color: #666;
+.like .count {
+    margin-right: 5px;
 }
 
-.note-item .avatar {
-    float: left;
-    margin-right: 10px;
-}
-
-.note-item .note-detail {
-    overflow: hidden;
-}
-
-.note-item .note-detail p {
-    margin: 10px 0 15px;
-}
-
-.note-item .note-detail .nickname {
-    color: #333;
-}
-
-.note-item .note-detail form {
-    margin: 10px 0;
-}
-
-.note-item .note-detail textarea {
-    width: 532px;
-    height: 100px;
-    margin-bottom: 10px;
-    resize: none;
-    color: #666;
-}
-
-.note-item .note-detail form div {
-    float: right;
-    margin-right: 3px;
-}
-
-.note-item .note-detail form input {
-    margin-left: 5px;
-}
-
-.note-item .note-detail .poke,
-.note-item .note-detail .add-comment,
-.note-item .note-detail .update-note,
-.note-item .note-detail .my-note,
-.note-item .note-detail .create-time {
-    font-size: 12px;
-    color: #bbb;
-}
-
-.note-item .note-detail .poke {
-    display: inline-block;
-    margin-right: 9px;
-
-}
-
-.note-item .note-detail .poke span {
-    display: inline-block;
-    width: 16px;
-    height: 13px;
-    vertical-align: top;
-    background: url(/static/images/guoku_icon.png) no-repeat scroll -32px -4px;
-}
-
-.note-item .note-detail .already-poke span {
-    background: url(/static/images/guoku_icon.png) no-repeat scroll -32px -18px;
-}
-
-.note-item .note-detail .add-comment {
-    display: inline-block;
-    padding: 0 9px;
-    border-left: 1px dotted #ccc;
-}
-
-.note-item .note-detail .add-comment span {
-    display: inline-block;
-    width: 16px;
-    height: 13px;
-    vertical-align: top;
-    background: url(/static/images/guoku_icon.png) no-repeat scroll -80px -3px;
-}
-
-.note-item .note-detail .update-note {
-    padding-left: 9px;
-    border-left: 1px dotted #ccc;
-}
-
-.note-item .note-detail .my-note {
-    float: right;
-    margin-right: 10px;
-    padding: 3px;
-    color: #666;
-    background-color: #fffdca;
-}
-
-.note-item .note-detail .create-time {
-    float: right;
-    padding-top: 2px;
-}
-
-.note-item .note-comment {
-    overflow: hidden;
-    margin: 10px 60px 0 0;
-    padding: 9px;
-    border: 1px solid #dedede;
-    border-radius: 2px;
-    background-color: #f8f8f8;
-}
-
-.note-item .note-comment-item {
-    margin-bottom: 9px;
-    padding-bottom: 9px;
-    border-bottom: 1px solid #dedede;
-}
-
-.note-item .note-comment-detail {
-    overflow: hidden;
-}
-
-.note-item .note-comment-detail .close {
-    float: right;
-    font-size: 16px;
-    color: #999;
-}
-
-.note-item .note-comment-detail .close:hover {
-    text-decoration: none;
-}
-
-.note-item .note-comment-detail p {
-    margin: 5px 0;
-    font-size: 13px;
-}
-
-.note-item .note-comment-detail .reply {
-    float: right;
-}
-
-.note-item .note-comment .text-input {
-    display: block;
-    width: 438px;
-    padding: 6px;
-    margin-top: 12px;
-}
-
-.note-item .operate-comment {
-    float: right;
-    margin: 12px 0 9px;
-}
-
-.note-item .operate-comment .guoku-button {
-    margin-left: 15px;
-    margin-right: 1px;
-}
-
-/*------------------------------*/
-.login-block, .download_info {
-    float: right;
-    width: 257px;
-    padding: 14px;
-    color: #666;
-}
-
-.login-block {
-    margin-bottom: 30px;
-}
-
-.download_info {
-    margin-top: 30px;
-}
-
-.login-block {
-    padding-bottom: 30px;
-}
-
-.login-block h3 {
-    font-size: 14px;
-    font-weight: normal;
-}
-
-.login-block .register-address {
-    margin-left: 10px;
-    font-size: 12px;
-}
-
-.login-block .register-address a {
-    color: #4db07a;
-}
-
-.download-link h3 {
-    font-size: 14px;
-}
-
-.download-link div {
-    margin-bottom: 14px;
-}
-
-.download-link a {
-    color: #999;
-}
 
 /*------------------------------*/
 .pagination {

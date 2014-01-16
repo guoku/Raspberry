@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load web %}
+{% load user %}
 
 {% block title %}{{ title|default:'我' }}的果库{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">{% endblock %}
