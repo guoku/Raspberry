@@ -34,6 +34,7 @@ class TaobaoItem(Item):
     shop_nick = StringField(required = True)
     price = DecimalField(required = True)
     soldout = BooleanField(required = True) 
+    ustation = IntField(required = False) 
 
     meta = {
         'indexes' : [ 
@@ -41,7 +42,8 @@ class TaobaoItem(Item):
             'cid',
             'shop_nick',
             'price',
-            'soldout'
+            'soldout',
+            'ustation',
         ],
     }
     
