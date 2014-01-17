@@ -344,6 +344,7 @@ class Log(Document):
     user_id = IntField(required = True) 
     ip = StringField(required = True)
     log_time = DateTimeField(required = True)
+    appendix = DictField(required = False)
     meta = {
         'db_alias' : 'log-db',
         'indexes' : [ 
