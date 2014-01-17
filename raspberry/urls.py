@@ -5,9 +5,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'management.views.index'),
-    #url(r'^management/', include('management.urls_bak')),
-    url(r'^management/', include('management.urls')),
+    (r'^management/', include('management.urls')),
+    (r'^seller/', include('seller.urls')),
 
     (r'^mobile/v3/', include('mobile.urls')),
     (r'^admin/', include(admin.site.urls)),

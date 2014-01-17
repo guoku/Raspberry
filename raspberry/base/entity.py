@@ -18,7 +18,7 @@ from models import Entity_Like as EntityLikeModel
 from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
 from models import Note as NoteModel
 from models import NoteSelection
-from tasks import CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
+from tasks import CleanNoteMessageTask, CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
 from note import Note
 from user import User 
 from hashlib import md5
@@ -669,8 +669,10 @@ class Entity(object):
             self.__reset_note_info_to_cache(_note_info)
         
         User(_note_context['creator_id']).update_user_entity_note_count(delta = -1)
-        for _doc in EntityNoteMessage.objects.filter(entity_id = self.entity_id, note_id = _note_id):
-            _doc.delete()
+        CleanNoteMessageTask.delay(
+            entity_id = self.entity_id, 
+            note_id = _note_id
+        )
     
     def update_note_selection_info(self, note_id, selector_id, selected_time, post_time):
         _note_id = int(note_id)

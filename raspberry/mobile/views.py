@@ -13,7 +13,8 @@ from entity import *
 from note import *
 from report import *
 from user import *
-from tasks import MarkFootprint
+from tasks import MarkFootprint, MobileLogTask
+from utils.lib import get_client_ip
 import time
 
 
@@ -45,6 +46,7 @@ def homepage(request):
 #        _rslt['config']['jump_to_taobao'] = 0
         
     
+    MobileLogTask.delay('HOMEPAGE', request.REQUEST, get_client_ip(request), _request_user_id)
     return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -66,9 +68,11 @@ def feed(request):
 
         if _scale == 'friend':
             _following_user_id_list = MobileUser(_request_user_id).read_following_user_id_list()
+            _log_appendix = { 'scale' : 'FRIEND' }
             #MobileUser(_request_user_id).mark_footprint(friend_feed = True)
         else:
             _following_user_id_list = MobileUser.read_seed_users()
+            _log_appendix = { 'scale' : 'SOCIAL' }
             #MobileUser(_request_user_id).mark_footprint(social_feed = True)
         
         _note_id_list = MobileNote.find(
@@ -92,6 +96,7 @@ def feed(request):
                     }
                 })
         
+        MobileLogTask.delay('FEED', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -190,6 +195,7 @@ def message(request):
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, message = True)
         
+        MobileLogTask.delay('MESSAGE', request.REQUEST, get_client_ip(request), _request_user_id)
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -229,6 +235,7 @@ def selection(request):
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, selection = True)
         
+        MobileLogTask.delay('SELECTION', request.REQUEST, get_client_ip(request), _request_user_id, { 'root_category_id' : _root_cat_id })
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -256,6 +263,13 @@ def popular(request):
                     'entity' : _entity_context,
                     'hotness' : _hotness
                 })
+            
+            if _scale == 'weekly':
+                _log_appendix = { 'scale' : 'WEEK' }
+            else:
+                _log_appendix = { 'scale' : 'DAY' }
+                
+            MobileLogTask.delay('POPULAR', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
             return SuccessJsonResponse(_rslt)
         else:
             return ErrorJsonResponse(

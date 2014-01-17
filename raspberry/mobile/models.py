@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 from hashlib import md5
+from base.models import Log
+from mongoengine import * 
 
 class SessionKeyManager(models.Manager):
     def generate_session(self, user_id, username, email, api_key):

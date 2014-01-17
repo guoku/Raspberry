@@ -9,8 +9,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-from mongoengine import connect
-connect('guoku')
+from mongoengine import register_connection 
+register_connection('guoku-db', 'guoku')
+register_connection('log-db', 'guoku_log')
 
 DATABASES = {
     'default': {
@@ -77,6 +78,7 @@ JUMP_TO_TAOBAO = True
 IMAGE_LOCAL = True 
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
 APP_HOST = "http://10.0.1.109:8001"
+ALLOWED_HOSTS = ['*']
 #IMAGE_LOCAL = False 
 #IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 
@@ -104,9 +106,13 @@ MEDIA_URL = ''
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
+BASE_DIR = os.getcwd()
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    ('common', os.path.join(BASE_DIR, 'static')),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -134,6 +140,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.i18n',
   'django.core.context_processors.request',
   'django.core.context_processors.media',
+  'django.contrib.messages.context_processors.messages',
   'django.core.context_processors.static',
   #'zinnia.context_processors.version',
 ) # Optional
@@ -168,6 +175,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.messages',
@@ -176,6 +184,8 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
+    'seller',
+    'web',
     # 'redis_admin',
 )
 

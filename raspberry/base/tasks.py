@@ -16,6 +16,7 @@ class CalPopularEntity(PeriodicTask):
     ignore_result = True
     time_limit = 600
     run_every = datetime.timedelta(seconds = POPULAR_ENTITY_RUN_INTERVAL_SECS) 
+    queue = "main"
     
     def run(self):
         t_start = datetime.datetime.now()
@@ -27,6 +28,7 @@ class CreateEntityNoteMessageTask(Task):
     time_limit = 60
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id, user_unread_message_count, entity_id, note_id): 
         EntityNoteMessage.create(
@@ -41,6 +43,7 @@ class CreateNoteSelectionMessageTask(Task):
     time_limit = 60
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id, user_unread_message_count, entity_id, note_id):
         NoteSelectionMessage.create(
@@ -55,6 +58,7 @@ class CreateUserFollowMessageTask(Task):
     time_limit = 60
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id, user_unread_message_count, follower_id, follower_nickname):
         UserFollowMessage.create(
@@ -69,6 +73,7 @@ class CreateNotePokeMessageTask(Task):
     time_limit = 60
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id, user_unread_message_count, note_id, poker_id, poker_nickname):
         NotePokeMessage.create(
@@ -84,6 +89,7 @@ class CreateNoteCommentMessageTask(Task):
     time_limit = 60
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id, user_unread_message_count, note_id, comment_id, comment_creator_id, comment_creator_nickname):
         NoteCommentMessage.create(
@@ -100,6 +106,7 @@ class CreateNoteCommentReplyMessageTask(Task):
     time_limit = 60
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id, user_unread_message_count, note_id, comment_id, replying_comment_id, replying_user_id, replying_user_nickname): 
         NoteCommentReplyMessage.create(
@@ -111,4 +118,27 @@ class CreateNoteCommentReplyMessageTask(Task):
             replying_user_id = replying_user_id,
             replying_user_nickname = replying_user_nickname
         )
+
+class CleanNoteMessageTask(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    queue = "main"
+    
+    def run(self, entity_id, note_id): 
+        for _doc in EntityNoteMessage.objects.filter(entity_id = entity_id, note_id = note_id):
+            _doc.delete()
+        
+        for _doc in NotePokeMessage.objects.filter(note_id = note_id):
+            _doc.delete()
+        
+        for _doc in NoteCommentMessage.objects.filter(note_id = note_id):
+            _doc.delete()
+        
+        for _doc in NoteCommentReplyMessage.objects.filter(note_id = note_id):
+            _doc.delete()
+        
+        for _doc in NoteSelectionMessage.objects.filter(note_id = note_id):
+            _doc.delete()
 
