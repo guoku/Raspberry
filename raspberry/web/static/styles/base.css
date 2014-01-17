@@ -43,19 +43,13 @@ a:hover {
     outline: 0;
 }
 
-.guoku-button {
+button {
     display: inline-block;
-    padding: 5px 14px;
-    border: 1px #4db07a solid;
-    border-radius: 4px;
-    text-decoration: none;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 5px;
     color: #fff;
-    background-color: #4db07a;
-}
-
-.guoku-button:hover {
-    text-decoration: none;
-    background-color: #5ebf7f;
+    outline: none;
 }
 
 /*--------------------------------------------*/

@@ -6,11 +6,11 @@
         {% endfor %}
 
         <form method="POST" action="{% url 'web.views.note.add_comment' note_context.note_id %}">
-            <input type="text" name="comment_text" class="text-input">
+            <input type="text" name="comment_text" class="text">
 
             <div class="operate-comment">
-                <a href="javascript:;" class="cancel-comment">取消</a>
-                <input type="submit" value="评论" class="guoku-button">
+                <button type="button" class="cancel-comment">取消</button>
+                <button type="submit" class="submit-comment">评论</button>
             </div>
         </form>
     </div>

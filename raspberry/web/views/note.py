@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.template import loader
 import json
 
 from base.note import Note
@@ -36,6 +37,11 @@ def get_comments(request, note_id, template='note/note_comment_list.html'):
     _comment_id_list = _note_context['comment_id_list']
     _comment_list = []
 
+    _ret = {
+        'status' : '0',
+        'msg' : ''
+    }
+
     for _c_id in _comment_id_list:
         _comment_context = _note.read_comment(_c_id)
         _creator_id = _comment_context['creator_id']
@@ -55,15 +61,19 @@ def get_comments(request, note_id, template='note/note_comment_list.html'):
             }
         )
 
-    # TODO 需要改进 返回json 参照 main.selection
-    return render_to_response(
-        template,
-        {
-            'comment_list' : _comment_list,
-            'note_context' : _note_context,
-        },
-        context_instance = RequestContext(request)
-    )
+    _t = loader.get_template(template)
+    _c = RequestContext(request, {
+        'comment_list': _comment_list,
+        'note_context': _note_context,
+    })
+    _data = _t.render(_c)
+
+    _ret = {
+        'status': '1',
+        'data': _data
+    }
+
+    return HttpResponse(json.dumps(_ret))
 
 
 @login_required
@@ -74,6 +84,11 @@ def add_comment(request, note_id, template='note/note_comment.html'):
         _comment_text = request.POST.get('comment_text', None)
         _reply_to_user_id = request.POST.get('reply_to_user_id', None)
         _reply_to_comment_id = request.POST.get('reply_to_comment_id', None)
+
+        _ret = {
+            'status' : '0',
+            'msg' : ''
+        }
 
         if _comment_text is not None and len(_comment_text) > 0:
             if _reply_to_comment_id is not None:
@@ -94,16 +109,21 @@ def add_comment(request, note_id, template='note/note_comment.html'):
             _comment_context = _note.read_comment(_new_comment_id)
             _creator_context = User(_creator_id).read()
 
-            # TODO 需要改进 返回json 参照 main.selection
-            return render_to_response(
-                template,
-                {
-                    'comment_context' : _comment_context,
-                    'creator_context' : _creator_context,
-                    'user_context' : _user_context
-                },
-                context_instance=RequestContext(request)
-            )
+            _t = loader.get_template(template)
+            _c = RequestContext(request, {
+                'comment_context': _comment_context,
+                'creator_context': _creator_context,
+                'user_context': _user_context
+            })
+            _data = _t.render(_c)
+
+            _ret = {
+                'status': '1',
+                'data': _data
+            }
+
+        return HttpResponse(json.dumps(_ret))
+
 
 
 @login_required

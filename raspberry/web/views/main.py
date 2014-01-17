@@ -112,8 +112,8 @@ def detail(request, entity_hash, template='main/detail.html'):
 
     _selection_note = None
     _common_note_list = []
-    _user_already_note = False
-    _already_like = user_already_like_entity(request.user.id, _entity_id)
+    _is_user_already_note = False
+    _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
 
     for _note_id in _note_id_list:
         _note = Note(_note_id)
@@ -121,7 +121,7 @@ def detail(request, entity_hash, template='main/detail.html'):
         _creator_context = User(_note_context['creator_id']).read()
 
         if _creator_context['user_id'] == request.user.id:
-            _user_already_note = True
+            _is_user_already_note = True
 
         # 判断是否是精选
         if _note_context['is_selected']:
@@ -143,11 +143,11 @@ def detail(request, entity_hash, template='main/detail.html'):
         template,
         {
             'user_context' : _user_context,
-            'user_already_note' : _user_already_note,
             'entity_context' : _entity_context,
+            'is_user_already_note' : _is_user_already_note,
+            'is_user_already_like' : _is_user_already_like,
             'selection_note' : _selection_note,
             'common_note_list' : _common_note_list,
-            'already_like' : _already_like
         },
         context_instance=RequestContext(request)
     )

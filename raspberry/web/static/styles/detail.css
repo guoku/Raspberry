@@ -1,10 +1,7 @@
-#detail {
-
-}
-
 #detail .main {
-    width: 630px;
     float: left;
+    width: 630px;
+    margin-bottom: 45px;
 }
 
 #detail .entity {
@@ -31,7 +28,6 @@
 
 #detail .like {
     display: inline-block;
-    margin-bottom: 30px;
     padding: 8px 15px;
     border: 1px solid #eee;
     border-radius: 5px;
@@ -39,8 +35,9 @@
 }
 
 #detail .selection-note {
-    border-top: 1px solid #eee;
+    margin-top: 30px;
     padding-top: 20px;
+    border-top: 1px solid #eee;
 }
 
 #detail .note-count {
@@ -48,14 +45,15 @@
     height: 35px;
     line-height: 35px;
     padding-left: 90px;
-    border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
+    border: 1px solid #eee;
+    border-top: none;
     background-color: #fbfbfb;
 }
 
 #detail .notes {
     padding: 25px;
     border: 1px solid #eee;
+    border-top: none;
 }
 
 #detail .notes .sep {
@@ -63,6 +61,65 @@
     border-bottom: 1px solid #eee;
     margin: 20px 0;
     font-size: 0;
+}
+
+#detail .add-note {
+    padding: 25px;
+    background-color: #fbfbfb;
+}
+
+#detail .add-note img {
+    margin-right: 10px;
+    border-radius: 50%;
+    vertical-align: top;
+}
+
+#detail .add-note form {
+    display: inline-block;
+    width: 484px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+#detail .add-note form textarea {
+    width: 484px;
+    height: 14px;
+    margin: 0;
+    padding: 0;
+    resize: none;
+    border: none;
+    outline: 0;
+}
+
+#detail .add-note form.active textarea {
+    height: 90px;
+}
+
+#detail .add-note form div {
+    display: none;
+}
+
+#detail .add-note form.active div {
+    display: block;
+    position: relative;
+    height: 28px;
+    margin-top: 10px;
+}
+
+#detail .add-note form .cancel {
+    position: absolute;
+    right: 60px;
+    bottom: 0;
+    background-color: #bbb;
+}
+
+#detail .add-note form .submit {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: #427ec0;
 }
 
 /*--note-item--*/
@@ -99,6 +156,43 @@
     line-height: 1.5;
 }
 
+.note-item .update-note-form {
+    margin: 10px 0;
+}
+
+.note-item .update-note-form textarea {
+    width: 507px;
+    height: 90px;
+    margin: 0 0 10px 0;
+    padding: 2px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    outline: none;
+    resize: none;
+}
+
+.note-item .update-note-form div {
+    height: 28px;
+}
+
+.note-item .update-note-form .cancel {
+    position: absolute;
+    right: 60px;
+    bottom: 0;
+    background-color: #bbb;
+}
+
+.note-item .update-note-form .update {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: #427ec0;
+}
+
+.note-item .note-operate {
+    position: relative;
+}
+
 .note-item .poke, .note-item .poke, .note-item .create-time,
 .note-item .my-note, .note-item .update-note,
 .note-item .add-comment {
@@ -133,12 +227,92 @@
     right: 0;
     bottom: 0;
 }
+
+.note-item .note-comment {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #eee;
+}
+
+.note-item .note-comment-item {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.note-item .note-comment-detail {
+    position: relative;
+    overflow: hidden;
+}
+
+.note-item .note-comment-item .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 16px;
+    color: #999;
+    text-decoration: none;
+}
+
+.note-item .note-comment-item .close:hover {
+    color: #666;
+}
+
+.note-item .note-comment-item .nickname {
+    color: #666;
+}
+
+.note-item .note-comment-item p {
+    margin: 5px 0;
+    color: #999;
+}
+
+.note-item .note-comment-item .reply {
+    float: right;
+}
+
+.note-item .note-comment .text {
+    width: 485px;
+    padding: 6px 2px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    outline: none;
+}
+
+.note-item .operate-comment {
+    position: relative;
+    height: 28px;
+}
+
+.note-item .operate-comment .cancel-comment{
+    position: absolute;
+    right: 60px;
+    bottom: 0;
+    background-color: #bbb;
+}
+
+.note-item .operate-comment .submit-comment {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: #427ec0;
+}
 /*--note-item-end--*/
 
-/*------------------*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 #detail .aside {
     float: right;
     width: 285px;
+}
+
+#detail .aside h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: normal;
+    color: #666;
 }
 
 #detail .aside .entity-info {
@@ -153,7 +327,7 @@
     border-radius: 5px;
     font-size: 16px;
     color: #fff;
-    background-color: #4271c0;
+    background-color: #427ec0;
     text-decoration: none;
 }
 
@@ -162,15 +336,21 @@
     font: 22px Georgia, serif;
 }
 
+#detail .shop a {
+    margin-left: 8px;
+}
+
 #detail .detail-img {
     margin-top: 20px;
+    margin-right: -15px;
+    font-size: 0;
 }
 
 #detail .detail-img a {
     display: inline-block;
     width: 50px;
     height: 50px;
-    margin-right: 10px;
+    margin-right: 14px; /*(285 - 1*2 - 20*2 - 50*4) / 3*/
 }
 
 #detail .detail-img a img {
@@ -178,150 +358,92 @@
     max-height: 100%;
 }
 
-/*------------------*/
-#detail .recommend {
-    clear: both;
+#detail .likes {
+    padding: 25px 20px;
+    border: 1px solid #eee;
+    border-top: none;
+}
+
+#detail .likes div {
+    margin-top: 10px;
+}
+
+#detail .likes img {
+    margin: 0 5px 5px 0;
+}
+
+#detail .category {
+    height: 50px;
+    margin: 0;
+    line-height: 50px;
+    padding: 0 20px;
+    border: 1px solid #eee;
+    border-top: none;
+    color: #427ec0;
+    background-color: #fbfbfb;
+}
+
+#detail .tag {
+    padding: 25px 20px;
+    border: 1px solid #eee;
+    border-top: none;
+}
+
+#detail .tag div {
+    margin-top: 15px;
+}
+
+#detail .tag a {
+    display: block;
+    margin-top: 10px;
+}
+
+#detail .share {
+    padding: 25px 20px;
+    border: 1px solid #eee;
+    border-top: none;
+    font-size: 14px;
+}
+
+#detail .share a {
+    text-decoration: none;
+}
+
+#detail .download {
+    padding: 25px 20px;
+    border: 1px solid #eee;
+    border-top: none;
+}
+
+#detail .download div {
+    margin-top: 10px;
 }
 
 
+/*---------------------------------------------------------------------------------------------------------------------*/
+#detail .recommend {
+    clear: both;
+    width: 630px;
+}
 
+#detail .recommend h2 {
+    margin: 0 0 10px;
+}
 
-/*#detail h2 {*/
-    /*margin: 0 0 5px;*/
-    /*font-size: 16px;*/
-    /*color: #999;*/
-/*}*/
+#detail .recommend div {
+    margin-right: -15px;
+    font-size: 0;
+}
 
-/*#detail .container {*/
-    /*float: left;*/
-    /*width: 630px;*/
-/*}*/
+#detail .recommend a {
+    display: inline-block;
+    width: 146px;
+    height: 146px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
 
-/*#detail .entity-and-note {*/
-    /*position: relative;*/
-    /*z-index: 10;*/
-    /*padding-top: 30px;*/
-/*}*/
-
-/*#detail .entity {*/
-    /*margin: 0 0 15px 74px;*/
-/*}*/
-
-/*#detail img {*/
-    /*max-width: 100%;*/
-/*}*/
-
-/*#detail .img-container {*/
-    /*width: 480px;*/
-    /*margin-bottom: 5px;*/
-/*}*/
-
-/*#detail .like-entity {*/
-    /*padding: 7px 10px;*/
-    /*border: 1px solid #efefef;*/
-    /*border-radius: 2px;*/
-/*}*/
-
-/*#detail .common-note-count {*/
-    /*padding: 5px 5px 5px 75px;*/
-    /*border-top: 1px solid #f3f3f3;;*/
-/*}*/
-
-
-/*#detail .add-note {*/
-    /*margin-top: -1px;*/
-    /*padding: 15px;*/
-    /*background-color: #fdfcfa;*/
-/*}*/
-
-/*#detail .add-note .nickname {*/
-    /*color: #333;*/
-/*}*/
-
-/*#detail .add-note .avatar {*/
-    /*float: left;*/
-    /*margin-right: 10px;*/
-/*}*/
-
-/*#detail .add-note div {*/
-    /*overflow: hidden;*/
-/*}*/
-
-/*#detail .add-note form {*/
-    /*position: relative;*/
-/*}*/
-
-/*#detail .add-note form div {*/
-    /*position: absolute;*/
-    /*left: 1px;*/
-    /*bottom: 11px;*/
-    /*width: 526px;*/
-    /*padding: 5px;*/
-    /*border-top: 1px solid #dedede;*/
-    /*border-bottom-left-radius: 3px;*/
-    /*border-bottom-right-radius: 3px;*/
-    /*font-size: 12px;*/
-    /*color: #999;*/
-    /*background-color: #fff;*/
-/*}*/
-
-/*#detail .add-note textarea {*/
-    /*width: 532px;*/
-    /*height: 100px;*/
-    /*margin: 15px 0 10px;*/
-    /*resize: none;*/
-    /*color: #666;*/
-/*}*/
-
-/*#detail .add-note input {*/
-    /*float: right;*/
-    /*margin-right: 3px;*/
-    /*margin-bottom: 5px;*/
-/*}*/
-
-/*#detail .add-note .login-link {*/
-    /*margin: 15px 0;*/
-/*}*/
-
-/*#detail .add-note .intro {*/
-    /*margin-left: 60px;*/
-    /*margin-right: 15px;*/
-/*}*/
-
-/*#detail .add-note small {*/
-    /*float: right;*/
-    /*line-height: 28px;*/
-/*}*/
-
-/*#detail .add-note small a {*/
-    /*color: #5eb685;*/
-/*}*/
-
-
-/*#detail .recommend {*/
-    /*margin-top: 30px;*/
-/*}*/
-
-/*#detail .recommend div {*/
-    /*padding: 15px;*/
-/*}*/
-
-/*#detail .other-info {*/
-    /*float: right;*/
-    /*width: 257px;*/
-    /*padding: 14px;*/
-/*}*/
-
-/*#detail .other-info .price {*/
-    /*margin: 15px 0;*/
-/*}*/
-
-/*#detail .other-info .like-count {*/
-    /*margin: 15px 0;*/
-    /*padding-top: 15px;*/
-    /*border-top: 1px solid #dedede;*/
-/*}*/
-
-/*#detail .other-info .people {*/
-    /*margin-bottom: 15px;*/
-/*}*/
+#detail .recommend img {
+    max-width: 100%;
+    max-height: 100%;
+}

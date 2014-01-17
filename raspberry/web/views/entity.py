@@ -5,6 +5,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from urlparse import urlparse
+from django.template import loader
 import json
 import re
 import HTMLParser
@@ -200,22 +201,33 @@ def get_notes(request, entity_id, template='entity/entity_note_list.html'):
 def add_note(request, entity_id, template='entity/entity_note.html'):
     if request.method == 'POST':
         _note_text = request.POST.get('note_text', None)
+        _ret = {
+            'status' : '0',
+            'msg' : ''
+        }
 
         if _note_text is not None and len(_note_text) > 0:
             _entity = Entity(int(entity_id))
-            _note = _entity.add_note(request.user.id, _note_text)
+            # TODO 连接有问题 正式需要替换以下两句
+            # _note = _entity.add_note(request.user.id, _note_text)
+            _note = Note(312868)
             _note_context = _note.read()
             _user_context = User(request.user.id).read()
 
-            return render_to_response(
-                template,
-                {
-                    'note_context': _note_context,
-                    'creator_context': _user_context,
-                    'user_context': _user_context
-                },
-                context_instance = RequestContext(request)
-            )
+            _t = loader.get_template(template)
+            _c = RequestContext(request, {
+                'note_context': _note_context,
+                'creator_context': _user_context,
+                'user_context': _user_context
+            })
+            _data = _t.render(_c)
+
+            _ret = {
+                'status' : '1',
+                'data' : _data
+            }
+
+        return HttpResponse(json.dumps(_ret))
 
 
 @login_required
@@ -237,4 +249,5 @@ def update_note(request, entity_id, note_id):
 @login_required
 def delete_note(request, entity_id, note_id):
     if request.method == 'POST':
+        # 暂时不需要该功能 以前版本没有
         pass

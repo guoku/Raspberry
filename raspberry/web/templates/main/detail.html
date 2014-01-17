@@ -26,7 +26,7 @@
                 {% endif %}
             </div>
 
-            {% if selection_note != None and common_note_list.length > 0 %}
+            {% if selection_note != None and common_note_list|length > 0 %}
                 <p class="note-count">还有 {{ common_note_list|length }} 条点评</p>
             {% endif %}
 
@@ -37,15 +37,25 @@
                 {% endfor %}
             </div>
 
-            <div class="add-note">
-
-            </div>
+            {# 判断有没有点评过 #}
+            {% if not is_user_already_note %}
+                <div class="add-note">
+                    <img src="{{ user_context.avatar_small }}" width="50" height="50">
+                    <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">
+                        <textarea name="note_text" placeholder="写点评 ＃贴标签"></textarea>
+                        <div>
+                            <button type="button" class="cancel">取消</button>
+                            <button type="submit" class="submit">点评</button>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
         </div>
 
         <div class="aside">
             <div class="entity-info">
                 <a href="" class="price">详情<span>&#65509;{{ entity_context.price }}</span></a>
-                <div href="" class="shop">来自于</div>
+                <div class="shop">来自于<a href="">url需替换</a></div>
 
                 {% if entity_context.detail_images|length > 0 %}
                     <div class="detail-img">
@@ -57,118 +67,43 @@
             </div>
 
             <div class="likes">
-                <p>100人喜爱</p>
+                <h3>100人喜爱</h3>
                 <div>
-                    <img src="">
+                    <a href=""><img src="" height="25" width="25"></a>
                 </div>
             </div>
 
-            <p class="category"></p>
+            <p class="category">[杂七杂八]</p>
 
             <div class="tag">
-
+                <h3>该商品的标签</h3>
+                <div>
+                    <a href="">＃test</a>
+                    <a href="">＃测试</a>
+                </div>
             </div>
 
-            <div>
-                分享到微博
+            <div class="share">
+                <a href="">分享到微博</a>
             </div>
 
-            <div>
+            <div class="download">
                 <h3>下载果库客户端</h3>
+
+                <div>
+                    <a href="">iPhone</a> / <a href="">iPhone</a> / <a href="">iPhone</a>
+                </div>
             </div>
         </div>
 
         <div class="recommend">
             <h2>相似推荐</h2>
             <div>
-                <img src="">
+                <a href=""><img src=""></a>
+                <a href=""><img src=""></a>
+                <a href=""><img src=""></a>
+                <a href=""><img src=""></a>
             </div>
         </div>
-
-
-
-
-
-{#        <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }}#}
-{#                    - {% endif %}{{ entity_context.title }}</h2>#}
-{##}
-{#        <div class="container">#}
-{#            <div class="entity-and-note guoku-block">#}
-{#                <div class="entity">#}
-{#                    <div class="img-container">#}
-{#                        <a href=""><img class="entity-img" src="{{ entity_context.chief_image.url }}" alt=""></a>#}
-{#                    </div>#}
-{##}
-{#                    {% display_like_entity entity_context already_like %}#}
-{#                </div>#}
-{##}
-{#                {% if selection_note != None %}#}
-{#                    <div class="selection-note">#}
-{#                        {% display_note_item selection_note %}#}
-{#                    </div>#}
-{#                {% endif %}#}
-{##}
-{#                {% if selection_note != None and common_note_list|length > 0 %}#}
-{#                    <div class="common-note-count">还有 {{ common_note_list|length }} 条点评</div>#}
-{#                {% endif %}#}
-{##}
-{#                <div class="common-note">#}
-{#                    {% for note in common_note_list %}#}
-{#                        {% display_note_item note %}#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#            </div>#}
-{##}
-            {# 判断当前用户是否已经评论过 #}
-{#            {% if not user_already_note %}#}
-{#                <div class="add-note guoku-block">#}
-{#                    {% if user.is_authenticated %}#}
-{#                        <a href="" class="avatar"><img src="{{ user_context.avatar_small }}" width="50" height="50"></a>#}
-{#                        <div>#}
-{#                            <span class="nickname">{{ user_context.nickname }}</span>#}
-{##}
-{#                            <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST" id="addnote">#}
-{#                                <textarea class="text-input" name="note_text"></textarea>#}
-{##}
-{#                                <div>说说你的评价？欢迎真实、有用、有趣的商品点评。</div>#}
-{#                                <input type="submit" value="点评" class="guoku-button">#}
-{#                            </form>#}
-{#                        </div>#}
-{#                    {% else %}#}
-{#                        <div class="login-link">#}
-{#                            <span class="intro">收藏、点评、分享心爱好物</span>#}
-{#                            <a class="guoku-button register-link" href="{% url 'web.views.account.register' %}">现在注册</a>#}
-{#                            <small>已有帐号， <a href="{% url 'web.views.account.login' %}">从这里登录</a></small>#}
-{#                        </div>#}
-{#                    {% endif %}#}
-{#                </div>#}
-{#            {% endif %}#}
-{##}
-{#            <div class="recommend">#}
-{#                <h3>相似推荐</h3>#}
-{#                <div guoku-block>#}
-{#                    <a href=""><img src=""></a>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{##}
-{#        {% if not user.is_authenticated %}#}
-{#            {% include 'main/partial/display_login_block.html' %}#}
-{#        {% endif %}#}
-{##}
-{#        <div class="other-info guoku-block">#}
-{#            <a href="" class="price guoku-button">详情 ￥{{ entity_context.price }}</a>#}
-{#            <div class="shop">来自于<a href=""></a></div>#}
-{#            <div class="like-count">人喜爱</div>#}
-{#            <div class="people">#}
-{#                <img src="" height="25" width="25">#}
-{#            </div>#}
-{#            <div>#}
-{#                <span>该商品的标签</span>#}
-{#                <span></span>#}
-{#            </div>#}
-{#        </div>#}
-{##}
-{#        {% include 'main/partial/app_download.html' %}#}
     </div>
 {% endblock %}
