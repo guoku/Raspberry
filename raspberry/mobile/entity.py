@@ -5,7 +5,8 @@ from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
 from mobile.models import Session_Key
-from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
+from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask, MobileLogTask
+from utils.lib import get_client_ip
 import datetime
 import time
 
@@ -49,6 +50,9 @@ def entity_list(request):
             _rslt.append(
                 _entity.read(_request_user_id)
             )
+        
+        MobileLogTask.delay('NOVUS', request.REQUEST, get_client_ip(request), _request_user_id)
+        
         return SuccessJsonResponse(_rslt)
     
 
@@ -89,6 +93,9 @@ def search_entity(request):
             _rslt['entity_list'].append(
                 _entity.read(_request_user_id)
             )
+        
+        MobileLogTask.delay('SEARCH_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'query' : _query_string })
+        
         return SuccessJsonResponse(_rslt)
 
 
@@ -124,6 +131,7 @@ def category_entity(request, category_id):
                 _entity.read(_request_user_id)
             )
             
+        MobileLogTask.delay('CATEGORY_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'category_id' : int(category_id) })
         return SuccessJsonResponse(_rslt)
 
 
@@ -137,6 +145,9 @@ def entity_detail(request, entity_id):
             _request_user_id = None
 
         _rslt = MobileEntity(entity_id).read_full_context(_request_user_id)
+        
+        MobileLogTask.delay('ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'entity_id' : int(entity_id) })
+        
         return SuccessJsonResponse(_rslt)
         
 
@@ -229,6 +240,7 @@ def user_like(request, user_id):
             'entity_list' : _list
         }
 
+        MobileLogTask.delay('USER_LIKE', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
         return SuccessJsonResponse(_rslt)
     
     

@@ -77,6 +77,22 @@ class NoteSelection(Selection):
         ]
     }
 
+class Log(Document):
+    entry = StringField(required = True)
+    user_id = IntField(required = True) 
+    ip = StringField(required = True)
+    log_time = DateTimeField(required = True)
+    appendix = DictField(required = False)
+    meta = {
+        'db_alias' : 'log-db',
+        'indexes' : [ 
+            'entry',
+            'user_id',
+            'log_time' 
+        ],
+        'allow_inheritance' : True
+    }
+
 class ShopScore(EmbeddedDocument):
     credit = StringField()
     praise_rate = FloatField()
