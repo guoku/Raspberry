@@ -176,6 +176,8 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
+    'seller',
+    'web',
     # 'redis_admin',
 )
 

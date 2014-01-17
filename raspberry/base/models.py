@@ -2,7 +2,7 @@
 from djangosphinx.models import SphinxSearch
 from django.contrib.auth.models import User
 from django.db import models
-
+from stream_models import *
 class User_Profile(models.Model):
     Man = u'M'
     Woman = u'F'
@@ -256,87 +256,8 @@ class User_Footprint(models.Model):
     last_read_social_feed_time = models.DateTimeField(null = True, db_index = True)
     last_read_friend_feed_time = models.DateTimeField(null = True, db_index = True)
 
-
-from mongoengine import * 
-class Image(Document):
-    source = StringField(required = True)
-    origin_url  = URLField(required = False)
-    store_hash = StringField(required = False)
-    created_time = DateTimeField(required = True)
-    updated_time = DateTimeField(required = True)
-    meta = {
-        'indexes' : [ 
-            'source',
-            'origin_url',
-            'store_hash',
-        ],
-        'allow_inheritance' : True
-    }
-
-class Item(Document):
-    entity_id = IntField(required = True) 
-    source = StringField(required = True)
-    images = ListField(required = False)
-    created_time = DateTimeField(required = True)
-    updated_time = DateTimeField(required = True)
-    meta = {
-        'indexes' : [ 
-            'entity_id' 
-        ],
-        'allow_inheritance' : True
-    }
-
-class TaobaoItem(Item):
-    taobao_id = StringField(required = True, unique = True)
-    cid = IntField(required = True) 
-    title = StringField(required = True)
-    shop_nick = StringField(required = True)
-    price = DecimalField(required = True)
-    soldout = BooleanField(required = True) 
-    ustation = IntField(required = False) 
-
-    meta = {
-        'indexes' : [ 
-            'taobao_id',
-            'cid',
-            'shop_nick',
-            'price',
-            'soldout',
-            'ustation',
-        ],
-    }
-    
-class Selection(Document):
-    selector_id = IntField(required = True) 
-    selected_time = DateTimeField(required = True)
-    post_time = DateTimeField(required = True)
-    meta = {
-        "indexes" : [ 
-            "selector_id", 
-            "post_time" 
-        ],
-        "allow_inheritance" : True
-    }
-
-class NoteSelection(Selection):
-    entity_id = IntField(required = True) 
-    note_id = IntField(required = True) 
-    root_category_id = IntField(required = True) 
-    neo_category_group_id = IntField(required = True) 
-    neo_category_id = IntField(required = True) 
-    category_id = IntField(required = True) 
-    meta = {
-        "indexes" : [ 
-            "entity_id", 
-            "note_id",
-            "root_category_id",
-            "neo_category_group_id",
-            "neo_category_id",
-            "category_id" 
-        ]
-    }
-
 class Seller_Info(models.Model):
     user = models.OneToOneField(User, related_name = "seller_info")
     shop_nick = models.CharField(max_length = 64, db_index = True)
     verified = models.BooleanField(default = False, db_index = True)
+
