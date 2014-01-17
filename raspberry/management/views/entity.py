@@ -47,11 +47,11 @@ def _load_taobao_item_info(taobao_id):
 def _get_special_names(request_user_id):
     if request_user_id in [22045, 19, 10, 79761, 66400, 195580]:
         if request_user_id == 22045:
-            _id_list = [ 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902]
+            _id_list = [ 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902, 79761, 66400]
         elif request_user_id in [10, 19]:
-            _id_list = [ 19, 10, 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902]
+            _id_list = [ 19, 10, 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902, 79761, 66400]
         elif request_user_id == 195580:
-            _id_list = [ 195580, 215653, 209071 ] 
+            _id_list = [ 195580, 215653, 209071, 79761, 66400 ] 
         elif request_user_id in [79761, 66400]:
             _id_list = [ 66400, 79761 ]
             
@@ -357,7 +357,7 @@ def entity_list(request):
         _freeze_entity_count = Entity.count(category_id = _category_id, status = 'freeze')
         _recycle_entity_count = Entity.count(category_id = _category_id, status = 'recycle')
         
-        _sort_by = request.GET.get("sort_by", "time")
+        _sort_by = request.GET.get("sort_by", "updated")
         _reverse = request.GET.get("reverse", None)
         if _sort_by:
             _para["sort_by"] = _sort_by
@@ -375,7 +375,6 @@ def entity_list(request):
         if _sort_by == 'random':
             _paginator = None
             _entity_id_list = Entity.random(
-                tot = _entity_count,
                 status = _status,
                 count = 30
             )
@@ -430,22 +429,22 @@ def entity_list(request):
         return render_to_response( 
             'entity/list.html', 
             {
-                'active_division': 'entity',
-                'status_filter': _status,
-                'category_context': _category_context,
-                'category_groups': _category_groups,
-                'categories': _categories,
-                'category_group_id': _category_group_id,
-                'select_entity_count': _select_entity_count,
-                'novus_entity_count': _novus_entity_count,
-                'freeze_entity_count': _freeze_entity_count,
-                'recycle_entity_count': _recycle_entity_count,
-                'entity_context_list': _entity_context_list,
-                'paginator': _paginator,
-                'sort_by': _sort_by,
-                'reverse': _reverse
+                'active_division' : 'entity',
+                'status_filter' : _status,
+                'category_context' : _category_context,
+                'category_groups' : _category_groups,
+                'categories' : _categories,
+                'category_group_id' : _category_group_id,
+                'select_entity_count' : _select_entity_count,
+                'novus_entity_count' : _novus_entity_count,
+                'freeze_entity_count' : _freeze_entity_count,
+                'recycle_entity_count' : _recycle_entity_count,
+                'entity_context_list' : _entity_context_list,
+                'paginator' : _paginator,
+                'sort_by' : _sort_by,
+                'reverse' : _reverse
             },
-            context_instance=RequestContext(request)
+            context_instance = RequestContext(request)
         )
     else:
         _categories = Category.find(group_id = int(_group_id))

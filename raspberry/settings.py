@@ -106,12 +106,11 @@ BROKER_POOL_LIMIT = 10
 GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
 APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'uploads')
-MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'static')
+MEDIA_URL = ''
 #STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 BASE_DIR = os.getcwd()
-print BASE_DIR, os.path.join(BASE_DIR, "static")
-STATIC_ROOT = '/tmp/static/'
+STATIC_ROOT = ''
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 7
@@ -231,9 +230,3 @@ TAOBAO_APP_INFO = {
 }
 
 INTERNAL_IPS = ('127.0.0.1',)
-
-
-SCP_HOST = '10.0.2.46'
-SCP_USER = 'jiaxin'
-SCP_KEY = os.path.join(os.path.dirname(__file__), 'scp_key')
-SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'

@@ -21,7 +21,7 @@ def entity_list(request):
         if _timestamp != None:
             _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
         
-        _sort_by = request.GET.get('sort', 'time')
+        _sort_by = request.GET.get('sort', 'updated')
         _reverse = request.GET.get('reverse', '0')
         if _reverse == '0':
             _reverse = False
@@ -56,6 +56,7 @@ def entity_list(request):
 def search_entity(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
+        _type = request.GET.get('type', None)
         if _session != None:
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
@@ -66,12 +67,26 @@ def search_entity(request):
         _count = int(request.GET.get('count', '30'))
         
         _entity_id_list = MobileEntity.search(
-            query_string = _query_string
+            query_string = _query_string,
         )
-        _rslt = []
-        for _entity_id in _entity_id_list:
+        _rslt = {
+            'stat' : {
+                'all_count' : len(_entity_id_list),
+                'like_count' : 0,
+            },
+            'entity_list' : []
+        }
+       
+        if _request_user_id != None:
+            _like_set = MobileEntity.like_set_of_user(_request_user_id)
+            _like_entity_id_list = _like_set.intersection(_entity_id_list)
+            _rslt['stat']['like_count'] = len(_like_entity_id_list)
+            if _type == 'like':
+                _entity_id_list = list(_like_entity_id_list)
+
+        for _entity_id in _entity_id_list[_offset : _offset + _count]:
             _entity = MobileEntity(_entity_id)
-            _rslt.append(
+            _rslt['entity_list'].append(
                 _entity.read(_request_user_id)
             )
         return SuccessJsonResponse(_rslt)

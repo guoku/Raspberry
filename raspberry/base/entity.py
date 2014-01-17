@@ -6,7 +6,7 @@ from mongoengine import *
 from utils.apns_notification import APNSWrapper
 import datetime
 import urllib
-import random 
+import random
 import time
 
 
@@ -22,23 +22,8 @@ from tasks import CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
 from note import Note
 from user import User 
 from hashlib import md5
+from utils.lib import roll
 
-
-
-def random_pick(tot, num):
-    if tot > num * 10:
-        _rslt = []
-        for i in range(0, num - 1):
-            while True:
-                k = random.randint(0, tot - 1)
-                if not k in _rslt:
-                    _rslt.append(k)
-                    break
-    else:
-        _rslt = []
-        for i in range(0, num - 1):
-            _rslt.append(i)
-    return _rslt
 
 class Entity(object):
     
@@ -252,6 +237,7 @@ class Entity(object):
             _basic_info['creator_id'] = self.entity_obj.creator_id
             _basic_info["entity_hash"] = self.entity_obj.entity_hash
             _basic_info["old_category_id"] = self.entity_obj.category_id
+            _basic_info['old_root_category_id'] = self.entity_obj.category.pid
             _basic_info["category_id"] = self.entity_obj.neo_category_id
             _basic_info['like_count'] = self.entity_obj.like_count 
             _basic_info["created_time"] = self.entity_obj.created_time
@@ -376,26 +362,33 @@ class Entity(object):
             
         
     @classmethod
-    def random(cls, tot, status = 'normal', category_id = None, count = 30):
+    def random(cls, status = 'normal', category_id = None, count = 30):
+        _hdl = EntityModel.objects.all()
         _sql_query = 'SELECT id FROM base_entity WHERE weight'
 
         if status == 'select':
             _sql_query += '>0'
+            _hdl = _hdl.filter(weight__gt = 0)
         elif status == 'novus':
             _sql_query += '=0'
+            _hdl = _hdl.filter(weight = 0)
         elif status == 'freeze':
             _sql_query += '=-1'
+            _hdl = _hdl.filter(weight = -1)
         elif status == 'recycle':
             _sql_query += '=-2'
+            _hdl = _hdl.filter(weight = -2)
         else:
             _sql_query += '>=0'
+            _hdl = _hdl.filter(weight__gte = 0)
         
         if category_id != None:
             _sql_query += ' AND neo_category_id=%d'%int(category_id)
+            _hdl = _hdl.filter(neo_category_id = category_id)
+        
+        _random_offset_list = roll(_hdl.count(), count)
         
         _entity_id_list = []
-        _random_offset_list = random_pick(tot, count)
-        
         for k in _random_offset_list:
             for _obj in EntityModel.objects.raw((_sql_query + ' LIMIT %d, 1')%(k)):
                 _entity_id_list.append(_obj.id) 
@@ -433,7 +426,7 @@ class Entity(object):
 
         
         if timestamp != None:
-            _hdl = _hdl.filter(created_time__lt = timestamp)
+            _hdl = _hdl.filter(updated_time__lt = timestamp)
        
         if sort_by == 'price':
             if reverse:
@@ -455,6 +448,11 @@ class Entity(object):
                 _hdl = _hdl.order_by('created_time')
             else:
                 _hdl = _hdl.order_by('-created_time')
+        elif sort_by == 'updated':
+            if reverse:
+                _hdl = _hdl.order_by('updated_time')
+            else:
+                _hdl = _hdl.order_by('-updated_time')
         else:
             _hdl = _hdl.order_by('-weight', '-like_count')
              
@@ -467,11 +465,9 @@ class Entity(object):
         return _entity_id_list
     
     @classmethod
-    def search(cls, query_string, offset = 0, count = 30):
+    def search(cls, query_string):
         _query_set = EntityModel.search.query(query_string).filter(like_count__gte = 0)
-        _entity_id_list = []
-        for _result in _query_set[offset : offset + count]:
-            _entity_id_list.append(int(_result._sphinx["id"]))
+        _entity_id_list = map(lambda x : int(x._sphinx['id']), _query_set[0 : _query_set.count()])
         return _entity_id_list 
 
     @classmethod
@@ -605,14 +601,27 @@ class Entity(object):
         return EntityLikeModel.objects.filter(user_id = user_id, entity_id = self.entity_id).count() > 0 
 
     @staticmethod
-    def like_list_of_user(user_id, timestamp = None, offset = 0, count = 30):
+    def like_set_of_user(user_id):
+        _user_id = int(user_id)
+        _set = set()
+        for _obj in EntityLikeModel.objects.filter(user_id = _user_id):
+            _set.add(_obj.entity_id)
+        return _set
+        
+    
+    @staticmethod
+    def like_list_of_user(user_id, timestamp = None, offset = None, count = None):
         _user_id = int(user_id)
         _hdl = EntityLikeModel.objects.filter(user_id = _user_id)
+        
         if timestamp != None:
             _hdl = _hdl.filter(created_time__lt = timestamp)
         
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
         _list = []
-        for _obj in _hdl[offset : offset + count]:
+        for _obj in _hdl:
             _list.append([_obj.entity_id, _obj.created_time])
 
         return _list
