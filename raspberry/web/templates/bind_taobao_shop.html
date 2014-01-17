@@ -20,7 +20,7 @@
     {% if request_user_context.shop_nick%}
         <div>
             你已经绑定了店铺
-            <a href="#">管理</a>
+            <a href="{% url 'seller_commodities'%}">管理</a>
         </div>
     {% else %}
         {% if not request_user_context.taobao_nick or request_user_context.taobao_token_expired %}

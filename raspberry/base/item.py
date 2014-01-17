@@ -97,6 +97,25 @@ class Item(object):
                 _item_list.append(str(_doc.id))
         return _item_list
 
+    @classmethod
+    def find_taobao_item(cls, entity_id = None, shop_nick = None, offset = 0, count = 30, full_info = False):
+        _hdl = TaobaoItemDocument.objects.all()
+        if entity_id != None:
+            _entity_id = int(entity_id)
+            _hdl = _hdl.filter(entity_id = _entity_id)
+        if shop_nick != None:
+            _hdl = _hdl.filter(shop_nick = shop_nick)
+        _item_list = []
+        for _doc in _hdl.order_by('-created_time')[offset : offset + count]:
+            if full_info:
+                _item_list.append({
+                    'item_id' : str(_doc.id),
+                    'taobao_id' : _doc.taobao_id,
+                    'entity_id' : _doc.entity_id,
+                })
+            else:
+                _item_list.append(str(_doc.id))
+        return _item_list
     
     def bind(self, entity_id):
         self.__ensure_item_obj()
