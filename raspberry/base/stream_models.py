@@ -6,6 +6,7 @@ class Image(Document):
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
+        'db_alias' : 'guoku-db',
         'indexes' : [ 
             'source',
             'origin_url',
@@ -21,6 +22,7 @@ class Item(Document):
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
+        'db_alias' : 'guoku-db',
         'indexes' : [ 
             'entity_id' 
         ],
@@ -37,6 +39,7 @@ class TaobaoItem(Item):
     ustation = IntField(required = False) 
 
     meta = {
+        'db_alias' : 'guoku-db',
         'indexes' : [ 
             'taobao_id',
             'cid',
@@ -52,6 +55,7 @@ class Selection(Document):
     selected_time = DateTimeField(required = True)
     post_time = DateTimeField(required = True)
     meta = {
+        'db_alias' : 'guoku-db',
         "indexes" : [ 
             "selector_id", 
             "post_time" 
@@ -67,6 +71,7 @@ class NoteSelection(Selection):
     neo_category_id = IntField(required = True) 
     category_id = IntField(required = True) 
     meta = {
+        'db_alias' : 'guoku-db',
         "indexes" : [ 
             "entity_id", 
             "note_id",
@@ -96,6 +101,9 @@ class Log(Document):
 class ShopScore(EmbeddedDocument):
     credit = StringField()
     praise_rate = FloatField()
+    meta = {
+        'db_alias' : 'guoku-db',
+    }
 
 class TaobaoShopInfo(EmbeddedDocument):
     cid = IntField()
@@ -112,6 +120,7 @@ class TaobaoShopInfo(EmbeddedDocument):
     location = StringField()
     updated_time = DateTimeField()
     meta = {
+        'db_alias' : 'guoku-db',
         'indexes' : ['cid', 'nick', 'sid', 'seller_id','shop_type']
     }
 
@@ -121,10 +130,16 @@ class TaobaoShopExtendedInfo(EmbeddedDocument):
     commission = BooleanField()
     single_tail = BooleanField()
     gifts = ListField(StringField())
+    meta = {
+        'db_alias' : 'guoku-db',
+    }
 
 class CrawlerInfo(EmbeddedDocument):
     priority = IntField(required = True)
     cycle = IntField(required = True)
+    meta = {
+        'db_alias' : 'guoku-db',
+    }
 
 class TaobaoShop(DynamicDocument):
     shop_info = EmbeddedDocumentField(TaobaoShopInfo)
@@ -134,5 +149,7 @@ class TaobaoShop(DynamicDocument):
     crawler_info = EmbeddedDocumentField(CrawlerInfo)
     extended_info = EmbeddedDocumentField(TaobaoShopExtendedInfo)
     meta = { 
+        'db_alias' : 'guoku-db',
         'collection' : 'taobao_shops_depot',
-        'indexes' : [ 'last_updated_time' ]}
+        'indexes' : [ 'last_updated_time' ]
+    }
