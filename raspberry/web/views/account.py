@@ -22,7 +22,7 @@ import time
 @login_required
 def bind_taobao(request):
     request.session['bind_taobao_next_url'] = request.GET.get('next', None)
-    request.session['back_to_url'] = reverse('web.views.bind_taobao_check')
+    request.session['back_to_url'] = reverse('check_taobao_binding')
     return HttpResponseRedirect(taobao_utils.get_login_url())
 
 def taobao_auth(request):
@@ -78,11 +78,11 @@ def bind_taobao_shop(request):
     elif request.method == "POST":
         if not request_user_context.get("taobao_nick"):
             messages.info(request, "尚未绑定淘宝帐号") 
-            return HttpResponseRedirect(reverse('web.views.bind_taobao_shop'))
+            return HttpResponseRedirect(reverse('bind_taobao_shop'))
         item_url = request.POST.get('item_url', None)
         if not item_url:
             message.info(request, "请输入商品地址")
-            return HttpResponseRedirect(reverse('web.views.bind_taobao_shop'))
+            return HttpResponseRedirect(reverse('bind_taobao_shop'))
       
         hostname = urlparse(item_url).hostname
         if re.search(r"\b(tmall|taobao)\.(com|hk)$", hostname) != None:
@@ -99,28 +99,12 @@ def bind_taobao_shop(request):
                                       shop_info['type'],
                                       shop_info['seller_id'],
                                       shop_info['pic']) 
-                return HttpResponseRedirect(reverse('web.views.bind_taobao_shop'))
+                return HttpResponseRedirect(reverse('bind_taobao_shop'))
             else:
                 message.info(request, "错误的商品地址，请输入淘宝商品地址")
-                return HttpResponseRedirect(reverse('web.views.bind_taobao_shop'))
+                return HttpResponseRedirect(reverse('bind_taobao_shop'))
         else:
-            return HttpResponseRedirect(reverse('web.views.bind_taobao_shop'))
-'''
-def _test_login(email, password):
-    try:
-        User.login(email, password)
-    if not user_id:
-        return error_code.LOGIN_ERROR_WRONG_EMAIL, None
-    user_inst = User(user_id)
-    user_context = user_inst.read()
-    user = authenticate(username = user_context['username'], 
-                        password = password)
-    if not user:
-        return error_code.LOGIN_ERROR_WRONG_PASSWORD, user
-    if not user.is_active:
-        return error_code.LOGIN_ERROR_NOT_ACTIVE, user
-    return error_code.LOGIN_SUCCEEDED, user
-'''
+            return HttpResponseRedirect(reverse('bind_taobao_shop'))
 
 def login(request, template="login.html"):
     redirect_url = web_utils.get_login_redirect_url(request)
