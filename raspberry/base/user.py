@@ -13,6 +13,7 @@ from models import Note_Poke as NotePokeModel
 from models import User_Censor as UserCensorModel 
 from models import Seed_User as SeedUserModel 
 from models import Sina_Token as SinaTokenModel 
+from models import Seller_Info as SellerInfoModel 
 from models import Taobao_Token as TaobaoTokenModel 
 from models import One_Time_Token as OneTimeTokenModel 
 from models import User_Profile as UserProfileModel 
@@ -185,6 +186,12 @@ class User(object):
     class UserBindTaobaoAlready(Exception):
         def __init__(self):
             self.__message = "bind taobao already" 
+        def __str__(self):
+            return repr(self.__message)
+    
+    class UserBindShopAlready(Exception):
+        def __init__(self):
+            self.__message = "bind shop already" 
         def __str__(self):
             return repr(self.__message)
     
@@ -363,7 +370,11 @@ class User(object):
         except TaobaoTokenModel.DoesNotExist:
             pass
         
-
+    def create_seller_info(self, taobao_shop_nick):
+        if SellerInfoModel.objects.filter(user_id = self.user_id).count() > 0:
+            raise User.UserBindShopAlready() 
+        SellerInfoModel.objects.create(user_id = self.user_id, shop_nick = taobao_shop_nick)
+        self.__reset_basic_info_to_cache()
     
     def delete(self):
         self.__ensure_user_obj()
@@ -507,10 +518,17 @@ class User(object):
         
         try:
             _taobao_token_obj = TaobaoTokenModel.objects.get(user_id = self.user_id)
-            _basic_info['taobao_screen_name'] = _taobao_token_obj.screen_name
+            _basic_info['taobao_nick'] = _taobao_token_obj.screen_name
+            _basic_info['taobao_token_expires_in'] = _taobao_token_obj.expires_in
         except TaobaoTokenModel.DoesNotExist:
             pass
-        
+
+        try:
+            _seller_info_obj = SellerInfoModel.objects.get(user_id = self.user_id)
+            _basic_info['shop_nick'] = _seller_info_obj.shop_nick
+            _basic_info['shop_verified'] = _seller_info_obj.verified
+        except SellerInfoModel.DoesNotExist:
+            pass
         cache.set(_cache_key, _basic_info, 864000)
         cache.delete("user_context_%s"%self.user_id)
             

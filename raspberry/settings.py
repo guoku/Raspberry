@@ -99,11 +99,12 @@ BROKER_POOL_LIMIT = 10
 GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
 APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'static')
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 MEDIA_URL = ''
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
+BASE_DIR = os.getcwd()
 
 # Additional locations of static files
 STATICFILES_DIRS = (

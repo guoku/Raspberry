@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title> 绑定淘宝店铺 </title>
+{% endblock %}
+
+
+{% block content %}
+    {% if messages %}
+        <div class="messages">
+            <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class=
+    <div class="with_border mt60">
+    {% if request_user_context.shop_nick%}
+        <div>
+            你已经绑定了店铺
+            <a href="#">管理</a>
+        </div>
+    {% else %}
+        {% if not request_user_context.taobao_nick or request_user_context.taobao_token_expired %}
+            {% if not request_user_context.taobao_nick %}
+                <div>
+                    请先绑定淘宝帐号 
+                </div>
+            {% else %}
+                <div>
+                    你的淘宝帐号授权已过期，请重新绑定
+                </div>
+            {% endif %}
+            <a href="{% url 'bind_taobao' %}">绑定</a>
+        {% else %}
+            <div>
+                请输入你店铺某一件商品的地址
+                <form action="{%url 'bind_taobao_shop' %}" method="post">
+                    <input type="text" name="item_url"/>
+                    <input type="submit" value="submit"/>
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
+    </div>
+{% endblock %}
