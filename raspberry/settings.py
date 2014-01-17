@@ -99,7 +99,7 @@ BROKER_POOL_LIMIT = 10
 GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
 APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'static')
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 MEDIA_URL = ''
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
@@ -170,6 +170,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'django.contrib.messages',
     'debug_toolbar',
     'djcelery',
     'base',
