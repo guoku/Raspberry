@@ -1,6 +1,7 @@
 # coding=utf8
 from django.conf import settings
 from base.stream_models import TaobaoShop as TaobaoShopModel
+from base.stream_models import TaobaoShopInfo
 import datetime
 import urllib
 import pymongo
