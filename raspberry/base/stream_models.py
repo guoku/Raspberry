@@ -141,7 +141,7 @@ class CrawlerInfo(EmbeddedDocument):
         'db_alias' : 'guoku-db',
     }
 
-class TaobaoShop(DynamicDocument):
+class TaobaoShop(Document):
     shop_info = EmbeddedDocumentField(TaobaoShopInfo)
     created_time = DateTimeField()
     last_updated_time = DateTimeField()
