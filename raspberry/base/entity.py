@@ -325,7 +325,7 @@ class Entity(object):
 
         # TODO: removing entity_id in item
     
-    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None, mark = None):
+    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None, mark = None, reset_created_time = False):
         
         self.__ensure_entity_obj()
         if brand != None:
@@ -353,7 +353,11 @@ class Entity(object):
                 _detail_image_ids.insert(0, self.entity_obj.chief_image)
             self.entity_obj.detail_images =  "#".join(_detail_image_ids)
             self.entity_obj.chief_image = chief_image_id
-            
+        
+        if reset_created_time == True:
+            self.entity_obj.created_time = datetime.datetime.now()
+
+
         self.entity_obj.save()
         _basic_info = self.__load_basic_info_from_cache()
         if _basic_info != None:
