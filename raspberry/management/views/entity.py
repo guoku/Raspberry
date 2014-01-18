@@ -32,6 +32,7 @@ def _parse_taobao_id_from_url(url):
 
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = fetcher.fetch_item(taobao_id)
+    print "===========", taobao_item_info['nick']
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:
@@ -121,7 +122,7 @@ def new_entity(request):
                         'taobao_id': _taobao_id,
                         'cid': _taobao_item_info['cid'],
                         'taobao_title': _taobao_item_info['title'],
-                        'shop_nick': _taobao_item_info['shop_nick'],
+                        'shop_nick': _taobao_item_info['nick'],
                         'shop_link': _taobao_item_info['shop_link'],
                         'price': _taobao_item_info['price'],
                         'thumb_images': _taobao_item_info["thumb_images"],

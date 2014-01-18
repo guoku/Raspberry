@@ -141,7 +141,7 @@ def fetch_item(itemid):
         "location" : location,
         "reviews" : reviews,
         "nick" : nick,
-        "shoplink" : shoplink
+        "shop_link" : shoplink
         #"sellerid":sellerid,
         #"shoptype":shoptype
     } 
