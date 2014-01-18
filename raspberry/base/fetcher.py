@@ -258,7 +258,7 @@ def fetch_taobao_web(itemid):
         "count" : 0,
         "reviews" : 0,
         "nick" : nick,
-        "shoplink" : shoplink,
+        "shop_link" : shoplink,
         "location" : ""
         }
     return result
@@ -318,7 +318,7 @@ def fetch_tmall_web(itemid):
         "count" : 0,
         "reviews" : 0,
         "nick" : nick,
-        "shoplink" : shoplink,
+        "shop_link" : shoplink,
         "location" : ""
             }
     return result
