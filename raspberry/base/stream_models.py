@@ -150,6 +150,6 @@ class TaobaoShop(DynamicDocument):
     extended_info = EmbeddedDocumentField(TaobaoShopExtendedInfo)
     meta = { 
         'db_alias' : 'guoku-db',
-        'collection' : 'taobao_shops_depot',
+        'collection' : 'taobao_shop',
         'indexes' : [ 'last_updated_time' ]
     }
