@@ -330,8 +330,8 @@ if __name__ == '__main__':
     #print(shopid)
     #r = fetch_taobao_web("19562854760")
     #print(r)
-    result = fetch_item("19562854760")
-    print result
+    result = fetch_item("35812699242")
+    print result['nick']
     
 
 
