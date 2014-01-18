@@ -2,6 +2,52 @@
  * Created by cuiwei on 13-12-26.
  */
 ;(function ($, document, window) {
+    var util = {
+        isUserLogined: function () {
+            // 通过前端简单检测用户是否登录，该方法是不可靠的，后端仍需要检测限制
+            // 除非用户特意更改，否则足以检测，就算更改，后端也会判断的
+
+            return !!$('#header').find('.user-avatar')[0];
+        },
+
+        popLoginBox: function () {
+            alert('test,未登录');
+            // TODO
+
+
+        },
+
+        like: function () {
+            // 喜爱 like entity
+
+            var self = this;
+
+            $('.like').on('click', function (e) {
+                e.preventDefault();
+
+                if (!self.isUserLogined()) {
+                    self.popLoginBox();
+                } else {
+                    var $like = $(this);
+                    var $counter = $like.find('.count');
+
+                    $.post($like[0].href, function (data) {
+                        var count = parseInt($counter.text());
+                        var result = parseInt(data);
+
+                        if (result === 1) {
+                            $counter.text(count + 1);
+                            $like.addClass('liked');
+                        } else if (result === 0) {
+                            $counter.text(count - 1);
+                            $like.removeClass('liked');
+                        }
+                    });
+                }
+            });
+        }
+    };
+
     var selection = {
         showEntityTitle: function ($selectionItem) {
             // 为精选添加 鼠标悬浮显示标题
@@ -104,40 +150,7 @@
             }
         },
 
-        clickComment: function ($noteItem) {
-            // 点击 为点评添加评论时候 的事件处理
-
-            var self = this;
-            var $noteDetail = $noteItem.find('.note-detail');
-
-            // 动态加载点评
-            $noteItem.find('.add-comment').on('click', function () {
-                var $noteComment = $noteItem.find('.note-comment');
-
-                if ($noteComment[0]) {
-                    $noteComment.slideToggle('fast');
-                } else {
-                    var url = '/note/' + $(this).attr('data-note') + '/comment/';
-
-                    $.get(url, function (result) {
-                        result = $.parseJSON(result);
-                        var status = parseInt(result.status);
-
-                        if (status === 1) {
-                            var $html = $(result.data);
-
-                            self.comment($html);
-                            $html.appendTo($noteDetail);
-                            $html.slideToggle('fast');
-                        } else if (status === 0) {
-                            // error
-                        }
-                    });
-                }
-            });
-        },
-
-        comment: function ($noteComment) {
+        noteComment: function ($noteComment) {
             // 用于添加点评时候的事件处理
 
             var $form = $noteComment.find('form');
@@ -180,48 +193,85 @@
             });
 
             $form.on('submit', function (e) {
-                var input = $commentText[0];
-                var text = $.trim(input.value);
+                if (!util.isUserLogined()) {
+                    util.popLoginBox();
+                } else {
+                    var input = $commentText[0];
+                    var text = $.trim(input.value);
 
-                text = text.replace(/^回复.*[:：]/, function (str, index) {
-                    if (index === 0) {
-                        return '';
+                    text = text.replace(/^回复.*[:：]/, function (str, index) {
+                        if (index === 0) {
+                            return '';
+                        }
+                        return str;
+                    });
+                    text = $.trim(text);
+
+                    if (text.length > 0) {
+                        var url = $form[0].action;
+                        var data = {
+                            comment_text: text,
+                            reply_to_user_id: replyToUser,
+                            reply_to_comment_id: replyToComment
+                        };
+
+                        $.post(url, data, function (result) {
+                            result = $.parseJSON(result);
+                            var status = parseInt(result.status);
+
+                            if (status === 1) {
+                                var $html = $(result.data);
+                                reply($html);
+
+                                $html.insertBefore($form);
+                            } else {
+                                // error
+                            }
+
+                            input.value = '';
+                            replyToUser = '';
+                            replyToComment = '';
+                        });
+                    } else {
+                        input.value = '';
+                        input.focus();
                     }
-                    return str;
-                });
-                text = $.trim(text);
+                }
 
-                if (text.length > 0) {
-                    var url = $form[0].action;
-                    var data = {
-                        comment_text: text,
-                        reply_to_user_id: replyToUser,
-                        reply_to_comment_id: replyToComment
-                    };
+                e.preventDefault();
+            });
+        },
 
-                    $.post(url, data, function (result) {
+        clickComment: function ($noteItem) {
+            // 点击 为点评添加评论时候 的事件处理
+
+            var self = this;
+            var $noteDetail = $noteItem.find('.note-detail');
+
+            // 动态加载点评的评论
+            $noteItem.find('.add-comment').on('click', function () {
+                var $noteComment = $noteItem.find('.note-comment');
+
+                if ($noteComment[0]) {
+                    $noteComment.slideToggle('fast');
+                } else {
+                    var url = '/note/' + $(this).attr('data-note') + '/comment/';
+
+                    $.get(url, function (result) {
                         result = $.parseJSON(result);
                         var status = parseInt(result.status);
 
                         if (status === 1) {
                             var $html = $(result.data);
-                            reply($html);
 
-                            $html.insertBefore($form);
-                        } else {
+                            self.noteComment($html);
+                            $html.appendTo($noteDetail);
+                            $html.slideToggle('fast');
+                        } else if (status === 0) {
                             // error
                         }
-
-                        input.value = '';
-                        replyToUser = '';
-                        replyToComment = '';
                     });
-                } else {
-                    input.value = '';
-                    input.focus();
                 }
-
-                e.preventDefault();
             });
         },
 
@@ -252,99 +302,76 @@
             // 写点评
 
             var self = this;
+            var $addNote = $('.add-note');
+            var $notes = $addNote.parent().find('.notes');
+            var $form = $addNote.find('form');
+            var $textarea = $addNote.find('textarea');
 
-            $('.add-note').each(function () {
-                var $this = $(this);
-                var $notes = $this.parent().find('.notes');
-                var $form = $this.find('form');
-                var $textarea = $this.find('textarea');
-
-                $textarea.on({
-                    focus: function () {
-                        // TODO 先判断是否登录
-                        $form.addClass('active');
-                    }
-                });
-
-                $form.find('.cancel').on('click', function () {
-                    $form.removeClass('active');
-                });
-
-                $form.on('submit', function (e) {
-                    var textarea = $textarea[0];
-
-                    if ($.trim(textarea.value).length === 0) {
-                        textarea.value = '';
-                        textarea.focus();
-                    } else {
-                        $.post(this.action, $form.serialize(), function (result) {
-                            result = $.parseJSON(result);
-                            var status = parseInt(result.status);
-
-                            if (status === 1) {
-                                var $html = $(result.data);
-                                self.updateNote($html);
-                                self.clickComment($html);
-
-                                $('<div class="sep"></div>').appendTo($notes);
-                                $html.appendTo($notes);
-
-                                $this.remove();
-                            } else if (status === 0) {
-                                // error
-                            }
-                        });
-                    }
-                    e.preventDefault();
-                });
+            $textarea.on('click', function () {
+                if (!util.isUserLogined()) {
+                    util.popLoginBox();
+                } else {
+                    $form.addClass('active');
+                }
             });
-        }
-    };
 
-    var util = {
-        poke: function () {
-            // 点评 点赞
-            $('.poke').on('click', function () {
-                var $poke = $(this);
-                var $counter = $poke.find('small');
-                var note_id = $poke.attr('data-note');
-                var url = '/note/' + note_id + '/poke/';
+            $form.find('.cancel').on('click', function () {
+                $form.removeClass('active');
+            });
 
-                $.post(url, function (data) {
-                    var count = parseInt($counter.text());
-                    var result = parseInt(data);
+            $form.on('submit', function (e) {
+                var textarea = $textarea[0];
 
-                    if (result === 1) {
-                        $counter.text(count + 1);
-                        $poke.addClass('already-poke');
-                    } else if (result === 0) {
-                        $counter.text(count - 1);
-                        $poke.removeClass('already-poke');
-                    }
-                });
+                if ($.trim(textarea.value).length === 0) {
+                    textarea.value = '';
+                    textarea.focus();
+                } else {
+                    $.post(this.action, $form.serialize(), function (result) {
+                        result = $.parseJSON(result);
+                        var status = parseInt(result.status);
+
+                        if (status === 1) {
+                            var $html = $(result.data);
+                            self.updateNote($html);
+                            self.clickComment($html);
+
+                            $('<div class="sep"></div>').appendTo($notes);
+                            $html.appendTo($notes);
+
+                            $addNote.remove();
+                        } else if (status === 0) {
+                            // error
+                        }
+                    });
+                }
+                e.preventDefault();
             });
         },
 
-        like: function () {
-            // 喜爱 like entity
-            $('.like').on('click', function (e) {
-                e.preventDefault();
+        poke: function () {
+            // 点评 点赞
+            $('.poke').on('click', function () {
+                if (!util.isUserLogined()) {
+                    util.popLoginBox();
+                } else {
+                    var $poke = $(this);
+                    var $counter = $poke.find('small');
+                    var note_id = $poke.attr('data-note');
+                    var url = '/note/' + note_id + '/poke/';
 
-                var $like = $(this);
-                var $counter = $like.find('.count');
+                    $.post(url, function (data) {
+                        var count = parseInt($counter.text());
+                        var result = parseInt(data);
 
-                $.post($like[0].href, function (data) {
-                    var count = parseInt($counter.text());
-                    var result = parseInt(data);
-
-                    if (result === 1) {
-                        $counter.text(count + 1);
-                        $like.addClass('liked');
-                    } else if (result === 0) {
-                        $counter.text(count - 1);
-                        $like.removeClass('liked');
-                    }
-                });
+                        if (result === 1) {
+                            $counter.text(count + 1);
+                            $poke.addClass('already-poke');
+                        } else if (result === 0) {
+                            $counter.text(count - 1);
+                            $poke.removeClass('already-poke');
+                        }
+                    });
+                }
             });
         }
     };
@@ -357,6 +384,7 @@
         detail.detailImageHover();
         detail.addNote();
         detail.noteItem();
+        detail.poke();
 
         util.poke();
         util.like();
