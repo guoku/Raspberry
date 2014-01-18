@@ -11,10 +11,6 @@ from base.note import Note
 from base.user import User
 
 
-def get_comment(request, note_id):
-    pass
-
-
 @login_required
 def poke_note(request, note_id):
     if request.method == 'POST':
@@ -107,6 +103,11 @@ def add_comment(request, note_id, template='note/note_comment.html'):
             _new_comment_id = _note.add_comment(_comment_text, _creator_id, reply_to_comment_id=_reply_to_comment_id,
                                                 reply_to_user_id=_reply_to_user_id)
             _comment_context = _note.read_comment(_new_comment_id)
+
+            if _reply_to_user_id is not None:
+                _nickname = User(_reply_to_user_id).read()['nickname']
+                _comment_context['reply_to_user_nickname'] = _nickname
+
             _creator_context = User(_creator_id).read()
 
             _t = loader.get_template(template)

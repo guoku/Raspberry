@@ -173,6 +173,7 @@
 
 .note-item .update-note-form div {
     height: 28px;
+    position: relative;
 }
 
 .note-item .update-note-form .cancel {

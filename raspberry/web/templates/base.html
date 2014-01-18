@@ -24,6 +24,17 @@
             <li {% if main_nav_deliver == 'discover' %}class="active"{% endif %}><a href="{% url 'web_discover' %}">发现</a></li>
         </ul>
 
+        <div class="user">
+            {% if user.is_authenticated  %}
+                <a href="{% url 'web_user_index' user.id %}" class="user-avatar">
+                    <img src="{{ user_context.avatar_small }}" width="30" height="30">
+                </a>
+            {% else %}
+                <a href="{% url 'web_register' %}">注册</a>
+                <a href="{% url 'web_login' %}">登录</a>
+            {% endif %}
+        </div>
+
         <form action="/search" method="GET">
             <input type="text" placeholder="搜你想要的" name="keyword" class="search">
             <button type="submit"><img src="{% static 'images/search_icon.png' %}"></button>

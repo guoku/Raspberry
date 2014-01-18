@@ -103,37 +103,59 @@ button {
     color: #fff;
 }
 
+#header .user {
+    position: absolute;
+    top: 0;
+    right: 305px;
+}
+
+#header .user .user-avatar {
+    display: table-cell;
+    height: 49px;
+    vertical-align: middle;
+}
+
+#header .user img {
+    border-radius: 50%;
+}
+
 #header form {
     position: absolute;
     top: 0;
     right: 0;
     height: 49px;
     line-height: 49px;
-    width: 310px;
+    width: 285px;
     background-color: #272727;
     background-color: rgba(37, 37, 37, 0.95);
 }
 
 #header form .search {
-    width: 250px;
+    width: 230px;
     height: 30px;
     line-height: 30px;
-    padding: 5px 2px 5px 10px;
+    margin: 0 5px;
+    padding: 0;
     border: none;
     outline: 0;
-    font-size: 14px;
     color: #fff;
     background-color: #272727;
     background-color: rgba(37, 37, 37, 0.95);
 }
 
 #header form button {
-    width: 42px;
     height: 49px;
     vertical-align: top;
+    padding: 8px 6px;
     border: none;
+    border-radius: 0;
     outline: 0;
     background-color: #272727;
+}
+
+#header form button img {
+    width: 26px;
+    height: 28px;
 }
 
 

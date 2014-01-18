@@ -296,16 +296,16 @@
 
     // 喜爱 like
     $('.like').on('click', function (e) {
+        e.preventDefault();
         like($(this));
     });
 
     function like($like) {
         // 喜爱 like entity
 
-        var url = $like.href;
         var $counter = $like.find('.count');
 
-        $.post(url, function (data) {
+        $.post($like[0].href, function (data) {
             var count = parseInt($counter.text());
             var result = parseInt(data);
 
@@ -317,9 +317,16 @@
                 $like.removeClass('liked');
             }
         });
-
-        e.preventDefault();
     }
+
+    $('#detail').each(function () {
+        // 鼠标放细节图上后效果
+
+        var $this = $(this);
+        $this.find('.detail-img img').on('mouseover', function () {
+            $this.find('.entity-img img')[0].src = this.src;
+        });
+    });
 
     // 关注
     $('.follow-user').on('click', function () {
