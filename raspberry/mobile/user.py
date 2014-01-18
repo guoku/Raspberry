@@ -227,6 +227,11 @@ def check_sina_user(request):
 @check_sign
 def user_tag_list(request, user_id):
     if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
         _user_context = MobileUser(user_id).read()
         _tag_list = Tag.user_tag_stat(user_id)
         _rslt = {
