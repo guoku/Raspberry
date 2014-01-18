@@ -112,7 +112,8 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    ('common', os.path.join(BASE_DIR, 'static')),
+    # ('common', os.path.join(BASE_DIR, 'static')),
+    ('common', os.path.join(os.path.dirname(__file__), 'static')),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
