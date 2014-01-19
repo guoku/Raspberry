@@ -1,33 +1,36 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% load web %}
 
 {% block title %}热门{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">{% endblock %}
-
 {% block content %}
     <div id="popular">
-        <div class="guoku-block nav">
-            <a href="">24 小时</a> | <a href="">7 天 </a> | <a href="">30 天</a>
-            <span>最近更新：10 分钟前</span>
+        <div class="time">
+            <div class="nav">
+                <a href="{% url 'web_popular' %}?group=d" {% if group == 'd' %}class="active"{% endif %}>24 小时</a>
+                <span class="sep">|</span>
+                <a href="{% url 'web_popular' %}?group=w" {% if group == 'w' %}class="active"{% endif %}>7 天</a>
+                <span class="sep">|</span>
+                <a href="{% url 'web_popular' %}?group=m" {% if group == 'm' %}class="active"{% endif %}>30 天</a>
+            </div>
+
+            <span class="recent">最近更新：{{ recent_time }}</span>
         </div>
 
-        <ul class="guoku-block">
+        <ul class="entities">
             {% for popular in popular_list %}
                 <li>
-                    <a href="{% url 'web.views.main.detail' popular.entity_context.entity_hash %}" class="entity-img"><img
-                            src="{{ popular.entity_context.chief_image.url }}"></a>
+                    <a href="{% url 'web.views.main.detail' popular.entity_context.entity_hash %}" class="entity-img">
+                        <img src="{{ popular.entity_context.chief_image.url }}">
+                    </a>
 
-                    <div>
-                        <a href="{% url 'web.views.user.user_index' popular.s_note_context.creator_id %}" class="avatar"><img
-                                src="{{ popular.s_creator_context.avatar_small }}" width="35" height="35"></a>
-                        <a href="{% url 'web.views.user.user_index' popular.s_note_context.creator_id %}"
-                           class="nickname">{{ popular.s_creator_context.nickname }}</a><br/>
-                        <span class="date">{{ popular.s_note_context.created_time|format_time }}</span>
-
-                        <p>{{ popular.s_note_context.content|truncatechars:100 }}</p>
-
-                        {% display_like_entity popular.entity_context popular.already_like %}
+                    <div class="detail">
+                        <a href="{% url 'web_like_entity' popular.entity_context.entity_id %}"
+                           class="like{% if popular.is_user_already_like %} liked{% endif %}">
+                            <span class="icon"></span>喜爱
+                            <span class="count">{{ popular.entity_context.like_count }}</span>
+                        </a>/
+                        <span class="hot">热度</span>
                     </div>
                 </li>
             {% endfor %}

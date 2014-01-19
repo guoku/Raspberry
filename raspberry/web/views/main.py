@@ -156,43 +156,29 @@ def detail(request, entity_hash, template='main/detail.html'):
 def popular(request, template='main/popular.html'):
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
-    _group = request.GET.get('group', 'daily')
+    _group = request.GET.get('group', 'd')  # d, w, m
 
     # 先用精选数据来模拟热门 TODO
-    _entity_id_list = map(lambda x: x['entity_id'], NoteSelection.objects.all()[0:30])
+    _entity_id_list = [x['entity_id'] for x in NoteSelection.objects.all()[0:30]]
     _popular_list = []
 
     for _id in _entity_id_list:
         _entity = Entity(_id)
         _entity_context = _entity.read()
-        _s_note_context = None
-        _s_creator_context = None
-        _note_id_list = Note.find(entity_id=_id)
-
-        _already_like = user_already_like_entity(request.user.id, _id)
-
-        # 找到精选点评 需优化? TODO
-        for _note_id in _note_id_list:
-            _note_context = Note(_note_id).read()
-            if _note_context['is_selected']:
-                _s_note_context = _note_context
-                break
-
-        if _s_note_context is not None:
-            _s_creator_context = User(_s_note_context['creator_id']).read()
+        _is_user_already_like = user_already_like_entity(request.user.id, _id)
 
         _popular_list.append({
-            'already_like' : _already_like,
+            'is_user_already_like' : _is_user_already_like,
             'entity_context' : _entity_context,
-            's_note_context' : _s_note_context,
-            's_creator_context' : _s_creator_context
         })
 
     return render_to_response(
         template,
         {
             'main_nav_deliver' : 'popular',
+            'group' : _group,
             'user_context' : _user_context,
+            'recent_time' : '10小时前',
             'popular_list' : _popular_list
         },
         context_instance=RequestContext(request)

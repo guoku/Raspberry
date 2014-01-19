@@ -1,5 +1,4 @@
 {% load staticfiles %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +20,6 @@
         <ul class="nav">
             <li {% if main_nav_deliver == 'selection' %}class="active"{% endif %}><a href="{% url 'web_selection' %}">精选</a></li>
             <li {% if main_nav_deliver == 'popular' %}class="active"{% endif %}><a href="{% url 'web_popular' %}">热门</a></li>
-            <li {% if main_nav_deliver == 'discover' %}class="active"{% endif %}><a href="{% url 'web_discover' %}">发现</a></li>
         </ul>
 
         <div class="user">

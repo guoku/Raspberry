@@ -15,6 +15,10 @@ urlpatterns = patterns(
     url('^activity/$', 'activity', name='web_activity')
 )
 
+urlpatterns += patterns(
+    'web.views.search',
+    url('^search/$', 'search', name='web_search')
+)
 
 urlpatterns += patterns(
     'web.views.account',

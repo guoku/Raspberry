@@ -1,42 +1,49 @@
-#popular .nav {
-    margin-top: 25px;
-    padding: 15px;
+#popular .time {
+    position: relative;
+    margin: 40px 0;
 }
 
-#popular .nav span {
-    float: right;
-    font-size: 12px;
+#popular .nav {
+    display: inline-block;
+    font-size: 18px;
+}
+
+#popular .nav .sep {
+    margin: 0 10px;
+}
+
+#popular .nav .active {
+    color: #333;
+}
+
+#popular .time .recent {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 16px;
 }
 
 #popular ul {
-    margin: 2px 0 0 0;
+    margin: 0 -30px 0 0;
     padding: 0;
     font-size: 0;
 }
 
-#popular li {
+#popular ul li {
     display: inline-block;
-    width: 319px;
-    height: 500px;
-    padding: 30px 0;
     vertical-align: top;
+    margin: 0 30px 30px 0;
     font-size: 14px;
-    border-right: 1px solid #f3f3f3;
-    border-bottom: 1px solid #f3f3f3;
+    border: 1px solid #eee;
 }
-
-#popular h3 {
-    margin: 25px 0 5px;
-    font-size: 14px;
-}
-
 
 #popular .entity-img {
-    display: block;
-    width: 290px;
-    max-height: 290px;
-    margin: 0 auto;
+    display: table-cell;
+    width: 215px;
+    height: 215px;
     text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
 }
 
 #popular .entity-img img {
@@ -44,28 +51,14 @@
     max-height: 100%;
 }
 
-#popular li div {
-    width: 290px;
-    margin: 10px auto;
+#popular .entities li .detail {
+    margin: 20px 10px 15px;
 }
 
-#popular .avatar {
-    float: left;
-    margin-right: 5px;
+#popular .entities .like {
+    text-decoration: none;
 }
 
-#popular .nickname {
-    color: #333;
-    font-weight: bold;
-    line-height: 1.5;
-}
-
-#popular .date {
-    font-size: 12px;
-}
-
-#popular p {
-    clear: left;
-    color: #666;
-    line-height: 1.5;
+#popular .entities .hot {
+    margin-left: 5px;
 }

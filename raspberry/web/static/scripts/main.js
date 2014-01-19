@@ -386,7 +386,6 @@
         detail.noteItem();
         detail.poke();
 
-        util.poke();
         util.like();
     })();
 
@@ -412,7 +411,7 @@
 
 
     // user center
-    $('#user-center').find('.entity-nav .filter').hover(function () {
+    $('#user-center').find('.user-like .prices').hover(function () {
         $(this).find('.price').css('display', 'block');
     }, function () {
         $(this).find('.price').hide();

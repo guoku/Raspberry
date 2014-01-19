@@ -1,256 +1,151 @@
+#user-center {
+    margin: 25px 15px 0;
+}
+
 #user-center ul {
     margin: 0;
     padding: 0;
 }
 
-#user-center .img-container {
-    display: inline-block;
-    margin: -30px 0 15px 15px;
-    padding: 5px 5px 12px;
-}
-
-#user-center .user {
-    margin-top: 25px;
-}
-
 #user-center .base {
     position: relative;
-    border-bottom: 1px solid #dedede;
+    height: 188px;
+    border: 1px solid #eee;
+    border-bottom: none;
 }
 
-#user-center h2 {
-    position: absolute;
-    left: 140px;
-    top: 0;
-    margin: 15px 0 0;
-    font-size: 22px;
-    font-weight: normal;
-    color: #666;
+#user-center .base img {
+    margin: 25px;
+    vertical-align: top;
+    border-radius: 50%;
 }
 
-#user-center .base small {
-    position: absolute;
-    left: 140px;
-    top: 43px;
-}
-
-#user-center .base address {
-    position: absolute;
-    left: 140px;
-    top: 75px;
-    font-style: normal;
-    font-size: 12px;
-    color: #666;
-}
-
-#user-center .base .follow-user {
-    position: absolute;
-    right: 15px;
-    top: 65px;
-}
-
-#user-center .follow-user {
-    text-decoration: none;
-    padding: 4px;
-    color: #999;
-    border: 1px solid #e1e1e1;
-    border-radius: 2px;
-    background: #fafafa;
-}
-
-#user-center .follow-user span {
+#user-center .base .info {
     display: inline-block;
-    width: 16px;
-    height: 13px;
-    background: url(/static/images/guoku_icon.png) no-repeat scroll -81px -18px;
-}
-
-#user-center .stat {
-    position: relative;
-    z-index: 1;
-    padding: 15px;
-    color: #666;
-}
-
-#user-center .stat a {
-    margin-right: 25px;
-}
-
-#user-center .stat .social {
-    float: right;
-    color: #999;
-}
-
-#user-center .stat .social a {
-    margin: 0 0 0 25px;
-}
-
-#user-center .entity-nav {
-    position: relative;
+    width: 500px;
     margin-top: 45px;
 }
 
-#user-center .categories {
-    display: inline-block;
-    margin: 0;
-    list-style: none;
-    padding: 15px;
-}
-
-#user-center .categories li {
-    display: inline;
-    margin-right: 15px;
-}
-
-#user-center .filter {
-    position: absolute;
-    right: 15px;
-    top: 8px;
-    width: 100px;
-    margin: 0;
-    padding: 5px 0;
-    line-height: 1.5;
-}
-
-#user-center .filter a {
+#user-center .base .nickname {
     display: block;
-    padding-left: 5px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #333;
 }
 
-#user-center .filter a.price {
-    display: none;
+#user-center .base .bio {
+    display: block;
+    height: 45px;
 }
 
-#user-center .filter a:hover {
+#user-center .base address {
+    font-style: normal;
+    color: #666;
+}
+
+#user-center .base .setting {
+    position: absolute;
+    top: 25px;
+    right: 15px;
+    padding: 6px 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
     text-decoration: none;
-    color: #fff;
-    background-color: #4db07a;
+    background-color: #fbfbfb;
 }
 
-#user-center li.entity {
+#user-center .nav {
+    border: 1px solid #eee;
+    background-color: #fbfbfb;
+}
+
+#user-center .nav a {
     display: inline-block;
-    width: 191px;
-    margin: 0;
-    padding: 30px 0;
-    border-width: 0 1px 1px 0;
-    border-style: solid;
-    border-color: #f3f3f3;
-    font-size: 14px;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 16px;
+    text-decoration: none;
+    font-size: 16px;
 }
 
-#user-center li.entity div {
-    width: 162px;
-    margin: 0 auto;
+#user-center .nav a.active {
+    color: #fff;
+    background-color: #427ec0;
 }
 
-#user-center li.entity div .price {
+#user-center .nav strong {
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+#user-center .nav div {
     float: right;
 }
 
-#user-center li.entity .entity-img {
-    display: block;
-    width: 162px;
-    height: 162px;
-    margin: 0 auto 20px;
-    text-align: center;
+
+/*user likes--------------------------------*/
+#user-center .user-like {
+    position: relative;
 }
 
-#user-center li.entity .entity-img img {
-    max-width: 100%;
-    max-height: 100%;
+#user-center .user-like .categories {
+    display: inline-block;
+    height: 95px;
+    line-height: 95px;
+    margin: 0;
+}
+
+
+#user-center .user-like .categories li {
+    display: inline;
+    margin: 0 5px;
+}
+
+#user-center .user-like .categories li.active {
+    color: #333;
+}
+
+#user-center .user-like .categories .sep {
+    margin: 0 5px;
+}
+
+#user-center .user-like .prices {
+    position: absolute;
+    right: 0;
+    top: 29px;
+    width: 100px;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    background-color: #fbfbfb;
+}
+
+#user-center .user-like .prices a {
+    display: block;
+    padding: 10px;
+}
+
+#user-center .user-like .prices a.price {
+    display: none;
+}
+
+#user-center .user-like .prices a:hover {
+    text-decoration: none;
+    color: #fff;
+    background-color: #427ec0;
 }
 
 #user-center .likes {
-    margin: -1px 0 0 0;
-    padding: 2px 0 0 0;
     font-size: 0;
+    margin-right: -30px;
 }
 
-#user-center .notes {
+
+/*user tags--------------------------------------------*/
+/*user following fan--------------------------------------------*/
+/*note-----------------------------------------*/
+#user-center .user-tag, #user-center .user-user,
+#user-center .user-note {
+    margin-top: 45px;
+    margin-right: -30px;
     font-size: 0;
-}
-
-#user-center .notes li {
-    display: inline-block;
-    width: 319px;
-    height: 478px;
-    padding: 30px 0;
-    vertical-align: top;
-    font-size: 14px;
-    border-right: 1px solid #f3f3f3;
-    border-bottom: 1px solid #f3f3f3;
-}
-
-#user-center h3 {
-    margin: 25px 0 5px;
-    font-size: 14px;
-}
-
-#user-center .notes .entity-img {
-    display: block;
-    width: 290px;
-    max-height: 290px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-#user-center .notes .entity-img img {
-    max-width: 100%;
-    max-height: 100%;
-}
-
-#user-center .notes li div {
-    width: 290px;
-    margin: 10px auto;
-}
-
-#user-center .notes .avatar {
-    float: left;
-    margin-right: 5px;
-}
-
-#user-center .notes .nickname {
-    color: #333;
-    font-weight: bold;
-    line-height: 1.5;
-}
-
-#user-center .notes .date {
-    font-size: 12px;
-}
-
-#user-center .notes p {
-    clear: left;
-    color: #666;
-    line-height: 1.5;
-}
-
-#user-center .tags ul {
-    margin: 0;
-    padding: 0;
-    font-size: 0;
-}
-
-#user-center .users {
-    padding: 0 15px;
-    font-size: 0;
-}
-
-#user-center .users li {
-    display: inline-block;
-    width: 310px;
-    height: 110px;
-    margin: 30px 0;
-    vertical-align: top;
-    font-size: 14px;
-}
-
-#user-center .users .avatar {
-    float: left;
-    margin-right: 10px;
-}
-
-#user-center .users li p {
-    margin: 5px 0 25px;
-    font-size: 12px;
 }
