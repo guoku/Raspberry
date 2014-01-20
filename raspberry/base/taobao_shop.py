@@ -2,6 +2,8 @@
 from django.conf import settings
 from base.stream_models import TaobaoShop as TaobaoShopModel
 from base.stream_models import TaobaoShopInfo
+from base.stream_models import TaobaoShopExtendedInfo
+from base.stream_models import CrawlerInfo
 import datetime
 import urllib
 import pymongo
@@ -25,7 +27,12 @@ class TaobaoShop(object):
                 shop_type = shop_type,
                 seller_id = int(seller_id),
                 pic_path = pic_path
-            )
+            ),
+            extended_info = TaobaoShopExtendedInfo(
+                orientational = False,
+                commission_rate = -1
+            ),
+            crawler_info = CrawlerInfo(priority = 10, cycle = 720)
         )
         shop.save()
         _inst = cls(nick)

@@ -10,13 +10,13 @@ ADMINS = (
 MANAGERS = ADMINS
 
 from mongoengine import register_connection 
-register_connection('guoku-db', 'guoku')
+register_connection('guoku-db', 'guoku_01_03')
 register_connection('log-db', 'guoku_log')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_12_12',
+        'NAME': 'guoku_01_03',
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': 'localhost',
@@ -28,7 +28,7 @@ DATABASES = {
     },
 }
 #DATABASE_ROUTERS = ['router.AuthRouter']
-
+'''
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.cache.RedisCache",
@@ -41,17 +41,18 @@ CACHES = {
         }
     }
 }
-#CACHES = {
-#    'default': {
-#        'BACKEND': 'redis_cache.RedisCache',
-#        'LOCATION': 'localhost:6379',
-#        'TIMEOUT:': 864000,
-#        'OPTIONS': {
-#            'DB': 1,
-#            'PARSER_CLASS': 'redis.connection.HiredisParser'
-#        },
-#    },
-#}
+'''
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'TIMEOUT:': 864000,
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        },
+    },
+}
 
 # session
 #SESSION_ENGINE = 'redis_sessions.session'
@@ -91,6 +92,7 @@ USE_I18N = False
 #CELERY_REDIS_HOST = "localhost"
 #CELERY_REDIS_PORT = 6379
 
+LOGIN_URL = '/login/'
 BROKER_HOST = "localhost"
 BROKER_PORT = 5672
 BROKER_USER = "guest"
@@ -211,7 +213,7 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.SHA1PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
 )
-
+MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14
 # taobao api key and sercet
 TAOBAO_APP_KEY = '12313170'
 TAOBAO_APP_SECRET = '90797bd8d5859aac971f8cc9d4e51105'
