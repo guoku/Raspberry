@@ -86,6 +86,13 @@
             }, function () {
                 $entityTitle.slideUp('fast');
             });
+        },
+
+        noteHover: function () {
+            var self = this;
+            $('.common-note').each(function () {
+                self.showEntityTitle($(this));
+            });
         }
     };
 
@@ -124,14 +131,6 @@
                     }
                 });
             }
-        },
-
-        selectionItem: function () {
-            // 为精选添加 鼠标悬浮显示标题
-
-            $('.selection-item').each(function () {
-                util.showEntityTitle($(this));
-            });
         }
     };
 
@@ -422,18 +421,45 @@
 
                 e.preventDefault();
             });
+        },
+
+        priceFilterHover: function () {
+            // user center
+            $('#user-center').find('.user-like .prices').hover(function () {
+                $(this).find('.price').css('display', 'block');
+            }, function () {
+                $(this).find('.price').hide();
+            });
+        }
+    };
+
+    var entity = {
+        addEntity: function () {
+            // 添加商品
+            var $addEntity = $('#add-entity');
+
+            $addEntity.find('.brand input').on('change', function () {
+                $('#entity-brand')[0].value = this.value;
+            });
+
+            $addEntity.find('.title input').on('change', function () {
+                $('#entity-title')[0].value = this.value;
+            });
+
+            // 切换图片
+            $addEntity.find('.detail-img img').on('click', function () {
+                $('#entity-img-url')[0].value = this.src;
+                $addEntity.find('.img-container img')[0].src = this.src;
+            });
         }
     };
 
 
     (function init() {
         util.like();
-        $('.common-note').each(function () {
-            util.showEntityTitle($(this));
-        });
+        util.noteHover();
 
         selection.loadSelections();
-        selection.selectionItem();
 
         detail.detailImageHover();
         detail.addNote();
@@ -441,32 +467,9 @@
         detail.poke();
 
         user.follow();
+        user.priceFilterHover();
+
+        entity.addEntity();
     })();
-
-
-
-
-    // user center
-    $('#user-center').find('.user-like .prices').hover(function () {
-        $(this).find('.price').css('display', 'block');
-    }, function () {
-        $(this).find('.price').hide();
-    });
-
-    // 添加商品
-    var $addEntity = $('#add-entity');
-
-    $addEntity.find('.brand input').on('change', function () {
-        $('#entity-brand')[0].value = this.value;
-    });
-
-    $addEntity.find('.title input').on('change', function () {
-        $('#entity-title')[0].value = this.value;
-    });
-
-    $addEntity.find('.detail-img img').on('click', function () {
-        $('#entity-img-url')[0].value = this.src;
-        $addEntity.find('.img-container img')[0].src = this.src;
-    });
 
 })(jQuery, document, window);
