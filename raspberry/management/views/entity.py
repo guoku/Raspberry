@@ -32,6 +32,7 @@ def _parse_taobao_id_from_url(url):
 
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = fetcher.fetch_item(taobao_id)
+    print "===========", taobao_item_info['nick']
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:
@@ -121,7 +122,7 @@ def new_entity(request):
                         'taobao_id': _taobao_id,
                         'cid': _taobao_item_info['cid'],
                         'taobao_title': _taobao_item_info['title'],
-                        'shop_nick': _taobao_item_info['shop_nick'],
+                        'shop_nick': _taobao_item_info['nick'],
                         'shop_link': _taobao_item_info['shop_link'],
                         'price': _taobao_item_info['price'],
                         'thumb_images': _taobao_item_info["thumb_images"],
@@ -238,6 +239,11 @@ def edit_entity(request, entity_id):
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
         _price = request.POST.get("price", None)
+        _reset_created_time = request.POST.get("reset_created_time", "off")
+        if _reset_created_time == "on":
+            _reset_created_time = True
+        else:
+            _reset_created_time = False
         _weight = int(request.POST.get("weight", '0'))
         _mark = int(request.POST.get("mark", '0'))
         _chief_image_id = request.POST.get("chief_image", None)
@@ -259,7 +265,8 @@ def edit_entity(request, entity_id):
             price = _price,
             chief_image_id = _chief_image_id,
             weight = _weight,
-            mark = _mark
+            mark = _mark,
+            reset_created_time = _reset_created_time
         )
 
         _note = request.POST.get("note", None)
@@ -357,7 +364,7 @@ def entity_list(request):
         _freeze_entity_count = Entity.count(category_id = _category_id, status = 'freeze')
         _recycle_entity_count = Entity.count(category_id = _category_id, status = 'recycle')
         
-        _sort_by = request.GET.get("sort_by", "updated")
+        _sort_by = request.GET.get("sort_by", "time")
         _reverse = request.GET.get("reverse", None)
         if _sort_by:
             _para["sort_by"] = _sort_by
