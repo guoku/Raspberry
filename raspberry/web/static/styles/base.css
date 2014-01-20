@@ -167,6 +167,118 @@ button {
     margin-left: 10px;
 }
 
+
+/*account-form--------------*/
+.account-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -267px;
+    margin-top: -302px;
+    width: 535px;
+    height: 605px;
+    border-radius: 5px;
+    background-color: #aaa;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.account-form .container {
+    width: 515px;
+    height: 585px;
+    background-color: #fff;
+    margin: 10px;
+}
+
+.account-form img.tip {
+    display: block;
+    width: 515px;
+    height: 125px;
+}
+
+.account-form .text {
+    display: block;
+    width: 243px;
+    margin: 0 auto 15px;
+    padding: 10px 5px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    background-color: #fbfbfb;
+    border: 1px solid #eee;
+    outline: none;
+}
+
+.account-form .submit {
+    display: block;
+    width: 255px;
+    height: 50px;
+    margin: 0 auto;
+    border: none;
+    font-size: 24px;
+    outline: none;
+    color: #fff;
+    background-color: #427ec0;
+}
+
+.login img.tip {
+    margin-bottom: 55px;
+}
+
+.login .remember {
+    position: relative;
+    width: 255px;
+    margin: 15px auto 40px;
+}
+
+.login .remember input {
+    margin-right: 5px;
+}
+
+.login .remember a {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: #427ec0;
+}
+
+.login .third-party {
+    width: 255px;
+    margin: 20px auto 0;
+}
+
+.login .third-party .weibo {
+    margin-right: 30px;
+}
+
+.login .to-reg {
+    text-align: center;
+    margin-top: 70px;
+    color: #427ec0;
+}
+
+.register img.tip {
+    margin-bottom: 65px;
+}
+
+.register .agreement {
+    display: block;
+    width: 255px;
+    margin: 15px auto 40px;
+}
+
+.register .agreement input {
+    margin-right: 5px;
+}
+
+.register .to-login {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.register .to-login a {
+    color: #427ec0;
+}
+
 /**entity like-------------------------------------*/
 .like {
     text-decoration: none;
@@ -207,7 +319,7 @@ button {
     line-height: 35px;
     width: 40px;
     text-align: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    border: 1px solid #eee;
     font-weight: bold;
     color: #999;
     background: #fff;
@@ -366,8 +478,6 @@ button {
     vertical-align: middle;
     margin-right: 5px;
 }
-
-
 
 /*common tag-------------------------------------------------------------*/
 .common-tag {

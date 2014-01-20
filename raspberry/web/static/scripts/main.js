@@ -11,10 +11,40 @@
         },
 
         popLoginBox: function () {
-            alert('test,未登录');
-            // TODO
+            var $accountForm = $('.account-form');
+            var $login = $('.account-form.login');
+            var $reg =  $('.account-form.register');
 
+            $accountForm.on('click', formClick);
+            function formClick(e) {
+                e.stopPropagation();
+            }
 
+            var flag = 0;
+            var $body = $('body');
+            $body.on('click', removeLogin);
+            function removeLogin() {
+                if (flag === 1) {
+                    $accountForm.hide();
+                    $body.off('click', removeLogin);
+                    $accountForm.off('click', formClick);
+                }
+                flag = 1;
+            }
+
+            $login.show();
+
+            $login.find('.to-reg').on('click', function (e) {
+                e.preventDefault();
+                $login.hide();
+                $reg.show();
+            });
+
+            $reg.find('.to-login').on('click', function (e) {
+                e.preventDefault();
+                $reg.hide();
+                $login.show();
+            });
         },
 
         like: function () {
@@ -23,8 +53,6 @@
             var self = this;
 
             $('.like').on('click', function (e) {
-                e.preventDefault();
-
                 if (!self.isUserLogined()) {
                     self.popLoginBox();
                 } else {
@@ -44,6 +72,8 @@
                         }
                     });
                 }
+
+                e.preventDefault();
             });
         },
 
@@ -190,49 +220,45 @@
             });
 
             $form.on('submit', function (e) {
-                if (!util.isUserLogined()) {
-                    util.popLoginBox();
-                } else {
-                    var input = $commentText[0];
-                    var text = $.trim(input.value);
+                var input = $commentText[0];
+                var text = $.trim(input.value);
 
-                    text = text.replace(/^回复.*[:：]/, function (str, index) {
-                        if (index === 0) {
-                            return '';
-                        }
-                        return str;
-                    });
-                    text = $.trim(text);
-
-                    if (text.length > 0) {
-                        var url = $form[0].action;
-                        var data = {
-                            comment_text: text,
-                            reply_to_user_id: replyToUser,
-                            reply_to_comment_id: replyToComment
-                        };
-
-                        $.post(url, data, function (result) {
-                            result = $.parseJSON(result);
-                            var status = parseInt(result.status);
-
-                            if (status === 1) {
-                                var $html = $(result.data);
-                                reply($html);
-
-                                $html.insertBefore($form);
-                            } else {
-                                // error
-                            }
-
-                            input.value = '';
-                            replyToUser = '';
-                            replyToComment = '';
-                        });
-                    } else {
-                        input.value = '';
-                        input.focus();
+                text = text.replace(/^回复.*[:：]/, function (str, index) {
+                    if (index === 0) {
+                        return '';
                     }
+                    return str;
+                });
+                text = $.trim(text);
+
+                if (text.length > 0) {
+                    var url = $form[0].action;
+                    var data = {
+                        comment_text: text,
+                        reply_to_user_id: replyToUser,
+                        reply_to_comment_id: replyToComment
+                    };
+
+                    $.post(url, data, function (result) {
+                        result = $.parseJSON(result);
+                        var status = parseInt(result.status);
+
+                        if (status === 1) {
+                            var $html = $(result.data);
+                            reply($html);
+
+                            $html.insertBefore($form);
+                        } else {
+                            // error
+                        }
+
+                        input.value = '';
+                        replyToUser = '';
+                        replyToComment = '';
+                    });
+                } else {
+                    input.value = '';
+                    input.focus();
                 }
 
                 e.preventDefault();
@@ -242,32 +268,37 @@
         clickComment: function ($noteItem) {
             // 点击 为点评添加评论时候 的事件处理
 
+
             var self = this;
             var $noteDetail = $noteItem.find('.note-detail');
 
             // 动态加载点评的评论
             $noteItem.find('.add-comment').on('click', function () {
-                var $noteComment = $noteItem.find('.note-comment');
-
-                if ($noteComment[0]) {
-                    $noteComment.slideToggle('fast');
+                if (!util.isUserLogined()) {
+                    util.popLoginBox();
                 } else {
-                    var url = '/note/' + $(this).attr('data-note') + '/comment/';
+                    var $noteComment = $noteItem.find('.note-comment');
 
-                    $.get(url, function (result) {
-                        result = $.parseJSON(result);
-                        var status = parseInt(result.status);
+                    if ($noteComment[0]) {
+                        $noteComment.slideToggle('fast');
+                    } else {
+                        var url = '/note/' + $(this).attr('data-note') + '/comment/';
 
-                        if (status === 1) {
-                            var $html = $(result.data);
+                        $.get(url, function (result) {
+                            result = $.parseJSON(result);
+                            var status = parseInt(result.status);
 
-                            self.noteComment($html);
-                            $html.appendTo($noteDetail);
-                            $html.slideToggle('fast');
-                        } else if (status === 0) {
-                            // error
-                        }
-                    });
+                            if (status === 1) {
+                                var $html = $(result.data);
+
+                                self.noteComment($html);
+                                $html.appendTo($noteDetail);
+                                $html.slideToggle('fast');
+                            } else if (status === 0) {
+                                // error
+                            }
+                        });
+                    }
                 }
             });
         },
