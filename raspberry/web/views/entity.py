@@ -209,8 +209,8 @@ def add_note(request, entity_id, template='entity/entity_note.html'):
         if _note_text is not None and len(_note_text) > 0:
             _entity = Entity(int(entity_id))
             # TODO 连接有问题 正式需要替换以下两句
-            # _note = _entity.add_note(request.user.id, _note_text)
-            _note = Note(312868)
+            _note = _entity.add_note(request.user.id, _note_text)
+            # _note = Note(312868)
             _note_context = _note.read()
             _user_context = User(request.user.id).read()
 

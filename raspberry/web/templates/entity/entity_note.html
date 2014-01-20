@@ -28,10 +28,14 @@
                 {% endif %}
 
                 <a href="javascript:;" class="poke" data-note="{{ note_context.note_id }}"><span></span>
-                    <small>{{ note_context.poke_count }}</small>
+                    {% if note_context.poke_count > 0 %}
+                        <small>{{ note_context.poke_count }}</small>
+                    {% endif %}
                 </a>
                 <a href="javascript:;" class="add-comment" data-note="{{ note_context.note_id }}"><span></span>
-                    <small>{{ note_context.comment_count }}</small>
+                    {% if note_context.comment_count > 0 %}
+                        <small>{{ note_context.comment_count }}</small>
+                    {% endif %}
                 </a>
 
                 <span class="create-time">{{ note_context.created_time|format_time }}</span>

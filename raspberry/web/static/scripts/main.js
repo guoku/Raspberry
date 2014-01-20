@@ -378,6 +378,8 @@
         poke: function () {
             // 点评 点赞
             $('.poke').on('click', function () {
+                var $this = $(this);
+
                 if (!util.isUserLogined()) {
                     util.popLoginBox();
                 } else {
@@ -387,15 +389,25 @@
                     var url = '/note/' + note_id + '/poke/';
 
                     $.post(url, function (data) {
-                        var count = parseInt($counter.text());
+                        var count = parseInt($counter.text()) || 0;
                         var result = parseInt(data);
 
                         if (result === 1) {
-                            $counter.text(count + 1);
-                            $poke.addClass('already-poke');
+                            count++;
+                            $counter.text(count);
+                            $poke.addClass('poked');
+
+                            if (count === 1) {
+                                $('<small>' + count + '</small>').appendTo($this);
+                            }
                         } else if (result === 0) {
+                            count--;
                             $counter.text(count - 1);
-                            $poke.removeClass('already-poke');
+                            $poke.removeClass('poked');
+
+                            if (count === 0) {
+                                $this.find('small').remove();
+                            }
                         }
                     });
                 }

@@ -122,7 +122,7 @@
     background-color: #427ec0;
 }
 
-/*--note-item--*/
+/*--note-item------------------------------------------*/
 .note-item {
     position: relative;
     font-size: 14px;
@@ -202,12 +202,36 @@
 }
 
 .note-item .poke {
+    display: inline-block;
     padding-right: 15px;
     border-right: 1px solid #eee;
 }
 
+.note-item .poke span {
+    display: inline-block;
+    vertical-align: middle;
+    width: 19px;
+    height: 19px;
+    margin-right: 5px;
+    background: url(/static/images/icon_poke.png);
+}
+
+.note-item .poked span {
+    background: url(/static/images/icon_poked.png);
+}
+
 .note-item .add-comment {
+    display: inline-block;
     margin: 0 15px;
+}
+
+.note-item .add-comment span {
+    display: inline-block;
+    vertical-align: middle;
+    width: 19px;
+    height: 19px;
+    margin-right: 5px;
+    background: url(/static/images/icon_comment.png);
 }
 
 .note-item .update-note {
@@ -299,7 +323,7 @@
     bottom: 0;
     background-color: #427ec0;
 }
-/*--note-item-end--*/
+/*--note-item-end------------------------------------------*/
 
 
 

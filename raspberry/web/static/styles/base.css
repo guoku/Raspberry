@@ -295,7 +295,7 @@ button {
 }
 
 .liked .icon {
-    background: url(/static/images/icon_like_press.png) no-repeat;
+    background: url(/static/images/icon_liked.png) no-repeat;
 }
 
 .like .count {
