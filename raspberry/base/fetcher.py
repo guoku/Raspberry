@@ -5,6 +5,7 @@ import cookielib
 from bs4 import BeautifulSoup
 import re
 from urlparse import parse_qs, urlparse
+from urllib import unquote
 
 IMG_POSTFIX = "_\d+x\d+.*\.jpg|_b\.jpg"
 
@@ -125,7 +126,6 @@ def fetch_item(itemid):
             nameurl = nametag['src']
             o = urlparse(nameurl)
             nick = parse_qs(o.query)['nick'][0]
-            nick= nick
             break
         except:
             pass
@@ -275,6 +275,7 @@ def fetch_tmall_web(itemid):
     cat = f.headers.get('X-Category')
     cid = int(cat[5:])
     nick = f.headers.get('At_Nick')
+    nick = unquote(nick)
     html = f.read()
     soup = BeautifulSoup(html)
     desc = soup.title.string[0:-12]
@@ -330,7 +331,7 @@ if __name__ == '__main__':
     #print(shopid)
     #r = fetch_taobao_web("19562854760")
     #print(r)
-    result = fetch_item("35812699242")
+    result = fetch_item("37014050227")
     print result['nick']
     
 
