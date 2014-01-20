@@ -6,7 +6,8 @@ from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
 from mobile.models import Session_Key
-from tasks import FollowUserTask, UnfollowUserTask
+from tasks import FollowUserTask, UnfollowUserTask, MobileLogTask
+from utils.lib import get_client_ip
 import datetime
     
 
@@ -86,6 +87,7 @@ def user_following(request, user_id):
         for _following_user_id in _following_user_id_list[_offset : _offset + _count]: 
             _rslt.append(MobileUser(_following_user_id).read(_request_user_id))
     
+        MobileLogTask.delay('USER_FOLLOWING', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -104,6 +106,7 @@ def user_fan(request, user_id):
         for _fan_user_id in _fan_user_id_list[_offset : _offset + _count]: 
             _rslt.append(MobileUser(_fan_user_id).read(_request_user_id))
     
+        MobileLogTask.delay('USER_FAN', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -136,6 +139,7 @@ def user_detail(request, user_id):
         if _last_like_entity_id != None:
             _rslt['last_like'] = MobileEntity(_last_like_entity_id).read(_request_user_id)
             
+        MobileLogTask.delay('USER', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -189,14 +193,18 @@ def user_entity_note(request, user_id):
         
         _rslt = []
         for _note_id in MobileNote.find(creator_set = [user_id], timestamp = _timestamp, offset = _offset, count = _count):
-            _note_context = MobileNote(_note_id).read(_request_user_id)
-            if _note_context.has_key('entity_id'):
-                _entity = MobileEntity(_note_context['entity_id'])
-                _rslt.append({
-                    'entity' : _entity.read(_request_user_id),
-                    'note' : _note_context, 
-                })
+            try:
+                _note_context = MobileNote(_note_id).read(_request_user_id)
+                if _note_context.has_key('entity_id'):
+                    _entity = MobileEntity(_note_context['entity_id'])
+                    _rslt.append({
+                        'entity' : _entity.read(_request_user_id),
+                        'note' : _note_context, 
+                    })
+            except:
+                pass
 
+        MobileLogTask.delay('USER_NOTE', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
         return SuccessJsonResponse(_rslt)
 
 #@check_sign
@@ -219,12 +227,18 @@ def check_sina_user(request):
 @check_sign
 def user_tag_list(request, user_id):
     if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
         _user_context = MobileUser(user_id).read()
         _tag_list = Tag.user_tag_stat(user_id)
         _rslt = {
             'user' : _user_context,
             'tags' : _tag_list
         }
+    MobileLogTask.delay('USER_TAG', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
     return SuccessJsonResponse(_rslt)
 
 
@@ -245,6 +259,8 @@ def user_tag_entity(request, user_id, tag):
         }
         for _entity_id in _entity_id_list: 
             _rslt['entity_list'].append(MobileEntity(_entity_id).read(_request_user_id))
+    
+    MobileLogTask.delay('USER_TAG_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id), 'tag' : tag })
     return SuccessJsonResponse(_rslt)
 
 
@@ -269,5 +285,6 @@ def search_user(request):
         for _user_id in _user_id_list: 
             _rslt.append(MobileUser(_user_id).read(_request_user_id))
         
+        MobileLogTask.delay('SEARCH_USER', request.REQUEST, get_client_ip(request), _request_user_id, { 'query' : _query_string })
         return SuccessJsonResponse(_rslt)
         

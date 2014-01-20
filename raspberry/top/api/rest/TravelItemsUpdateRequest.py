@@ -1,5 +1,5 @@
 '''
-Created by auto_sdk on 2013-08-28 14:05:29
+Created by auto_sdk on 2013-11-15 12:58:10
 '''
 from top.api.base import RestApi
 class TravelItemsUpdateRequest(RestApi):
@@ -18,10 +18,12 @@ class TravelItemsUpdateRequest(RestApi):
 		self.expirydate = None
 		self.fee_include = None
 		self.fee_not_include = None
+		self.flight_info = None
 		self.gathering_place = None
 		self.has_discount = None
 		self.has_invoice = None
 		self.has_showcase = None
+		self.hotel_info = None
 		self.image = None
 		self.input_pids = None
 		self.input_str = None
@@ -49,6 +51,7 @@ class TravelItemsUpdateRequest(RestApi):
 		self.sku_properties = None
 		self.sku_quantities = None
 		self.sub_stock = None
+		self.ticket_info = None
 		self.title = None
 		self.update_combo_price_calendar = None
 		self.update_or_add_props = None

@@ -20,7 +20,7 @@ import mimetypes
 定义一些系统变量
 '''
 
-SYSTEM_GENERATE_VERSION = "taobao-sdk-python-20130828"
+SYSTEM_GENERATE_VERSION = "taobao-sdk-python-20131115"
 
 P_APPKEY = "app_key"
 P_API = "method"

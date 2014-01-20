@@ -1,0 +1,55 @@
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL}}common/bootstrap/css/bootstrap.css">
+        <title>果库卖家 - 登录</title>
+
+    </head>
+    <body>
+       <div class="container">
+       <div class="navbar navbar-default navbar-static-top">
+          <div class="navbar-inner">
+            <a class="navbar-brand" href="/"><h2>果库卖家</h2></a>
+          </div>
+        </div>
+		<script type="text/javascript" src="{{ STATIC_URL}}common/management/js/jquery.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL}}common/bootstrap/js/bootstrap.min.js"></script>
+        <div class="container-fluid">
+            {% if error_msg %}
+                <em class="error" id="msg_error">{{ error_msg }}</em>
+            {% endif %}
+            <form class="form-horizontal well" method="POST" action="/login/">
+                <div class="control-group">
+                    <label class="control-label" for="user_email">Email</label>
+                    <div class="controls">
+                        <input id="user_email" name="email" type="text" class="input-medium">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="user_pass">Password</label>
+                    <div class="controls">
+                        <input id="user_pass" name="password" type="password" class="input-medium">
+                    </div>
+                </div>
+                <div clas="control-group">
+                    <div class="controls">
+                    <input type="checkbox" name="remember_me" {% if remember_me %}checked="checked"{% endif %}/>
+                    <span>记住我</span>
+                    </div>
+                </div>
+                {% if next %}
+                    <input name='next' value="{{ next }}" type="hidden"/>
+                {% endif %}
+                <div class="control-group">
+                    <div class ="controls">
+                    <button type="submit" class="btn">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+       </div>
+
+    </body>
+</html>
