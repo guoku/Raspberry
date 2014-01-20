@@ -45,25 +45,24 @@
                     });
                 }
             });
-        }
-    };
+        },
 
-    var selection = {
-        showEntityTitle: function ($selectionItem) {
+        showEntityTitle: function ($noteItem) {
             // 为精选添加 鼠标悬浮显示标题
 
-            var $entityTitle = $selectionItem.find('.entity .title');
-            $selectionItem.hover(function () {
+            var $entityTitle = $noteItem.find('.entity .title');
+            $noteItem.hover(function () {
                 $entityTitle.slideDown('fast');
             }, function () {
                 $entityTitle.slideUp('fast');
             });
-        },
+        }
+    };
 
+    var selection = {
         loadSelections: function () {
             // 动态加载selection
 
-            var self = this;
             var $selection = $('#selection');
 
             if ($selection[0]) {
@@ -85,7 +84,7 @@
                             if (status === 1) {
                                 var $html = $(result.data);
                                 $html.each(function () {
-                                    self.showEntityTitle($(this));
+                                    util.showEntityTitle($(this));
                                 });
                                 $html.appendTo($selection);
                             } else if (status === 0) {
@@ -100,10 +99,8 @@
         selectionItem: function () {
             // 为精选添加 鼠标悬浮显示标题
 
-            var self = this;
-
             $('.selection-item').each(function () {
-                self.showEntityTitle($(this));
+                util.showEntityTitle($(this));
             });
         }
     };
@@ -376,8 +373,36 @@
         }
     };
 
+    var user = {
+        follow: function () {
+            // 关注
+            $('.follow-user').on('click', function (e) {
+                var $this = $(this);
+                var user_id = $this.attr('data-user');
+                var url = '/u/' + user_id + '/follow/';
+
+                $.post(url, function (data) {
+                    var result = parseInt(data);
+
+                    if (result === 1) {
+                        $this.text('取消关注');
+                    } else if (result === 0) {
+                        $this.html('<span></span> 关注');
+                    }
+                });
+
+                e.preventDefault();
+            });
+        }
+    };
+
 
     (function init() {
+        util.like();
+        $('.common-note').each(function () {
+            util.showEntityTitle($(this));
+        });
+
         selection.loadSelections();
         selection.selectionItem();
 
@@ -386,28 +411,10 @@
         detail.noteItem();
         detail.poke();
 
-        util.like();
+        user.follow();
     })();
 
 
-
-
-    // 关注
-    $('.follow-user').on('click', function () {
-        var $this = $(this);
-        var user_id = $this.attr('data-user');
-        var url = '/u/' + user_id + '/follow/';
-
-        $.post(url, function (data) {
-            var result = parseInt(data);
-
-            if (result === 1) {
-                $this.text('取消关注');
-            } else if (result === 0) {
-                $this.html('<span></span> 关注');
-            }
-        });
-    });
 
 
     // user center

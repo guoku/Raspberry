@@ -92,8 +92,8 @@ def user_posts(request, user_id, template=TEMPLATE):
     return render_to_response(
         template,
         {
-            'content_tab' : 'post',
             'user_context' : _user_context,
+            'content_tab' : 'post',
             'query_user_context' : _query_user_context,
             'is_user_self' : _is_user_self,
             'is_user_already_follow' : _is_user_already_follow
@@ -131,27 +131,27 @@ def user_notes(request, user_id, template=TEMPLATE):
 
     _note_list = []
 
-    for _note in _note_id_list:
-        _note_context = Note(_note).read()
+    for _n_id in _note_id_list:
+        _note_context = Note(_n_id).read()
+        _entity_id = _note_context['entity_id']
         _creator_context = User(user_id).read()
-        _entity_context = Entity(_note_context['entity_id']).read()
-
-        _already_like = user_already_like_entity(request.user.id, _entity_context['entity_id'])
+        _entity_context = Entity(_entity_id).read()
+        _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
 
         _note_list.append(
             {
                 'entity_context' : _entity_context,
                 'note_context' : _note_context,
                 'creator_context' : _creator_context,
-                'already_like' : _already_like
+                'is_user_already_like' : _is_user_already_like
             }
         )
 
     return render_to_response(
         template,
         {
-            'content_tab' : 'note',
             'user_context' : _user_context,
+            'content_tab' : 'note',
             'query_user_context' : _query_user_context,
             'is_user_self' : _is_user_self,
             'is_user_already_follow' : _is_user_already_follow,
@@ -325,12 +325,13 @@ def user_fans(request, user_id, template=TEMPLATE):
 
 @login_required
 def follow(request, user_id):
-    _followee_id = int(user_id)
-    _user = User(request.user.id)
+    if request.method == 'POST':
+        _followee_id = int(user_id)
+        _user = User(request.user.id)
 
-    if _user.is_following(_followee_id):
-        _user.unfollow(_followee_id)
-        return HttpResponse('0')
-    else:
-        _user.follow(_followee_id)
-        return HttpResponse('1')
+        if _user.is_following(_followee_id):
+            _user.unfollow(_followee_id)
+            return HttpResponse('0')
+        else:
+            _user.follow(_followee_id)
+            return HttpResponse('1')

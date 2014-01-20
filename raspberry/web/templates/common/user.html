@@ -10,7 +10,11 @@
     </div>
 
     <div class="follow">
-        <a href="{% url 'web_follow' user_context.user_id %}">关注</a>
+        {% if user_context.is_user_already_follow %}
+            <a href="{% url 'web_follow' user_context.user_id %}" class="follow-user" data-user="{{ user_context.user_id }}">取消关注</a>
+        {% else %}
+            <a href="{% url 'web_follow' user_context.user_id %}" class="follow-user" data-user="{{ user_context.user_id }}">关注</a>
+        {% endif %}
     </div>
 
     <div class="avatars">
