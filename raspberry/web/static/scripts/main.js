@@ -409,10 +409,8 @@
             // 关注
             $('.follow-user').on('click', function (e) {
                 var $this = $(this);
-                var user_id = $this.attr('data-user');
-                var url = '/u/' + user_id + '/follow/';
 
-                $.post(url, function (data) {
+                $.post(this.href, function (data) {
                     var result = parseInt(data);
 
                     if (result === 1) {

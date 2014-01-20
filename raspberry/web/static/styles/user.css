@@ -43,7 +43,7 @@
     color: #666;
 }
 
-#user-center .base .setting {
+#user-center .base .setting, #user-center .base .follow-user {
     position: absolute;
     top: 25px;
     right: 15px;
@@ -55,6 +55,7 @@
 }
 
 #user-center .nav {
+    position: relative;
     border: 1px solid #eee;
     background-color: #fbfbfb;
 }
@@ -79,7 +80,9 @@
 }
 
 #user-center .nav div {
-    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 

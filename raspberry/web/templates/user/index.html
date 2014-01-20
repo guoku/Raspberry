@@ -14,7 +14,13 @@
                 <span class="bio">{{ query_user_context.bio }}</span>
                 <address>北京</address>
             </div>
-            <a class="setting" href="{% url 'web_setting' %}"><span></span>设置</a>
+            {% if is_user_self %}
+                <a class="setting" href="{% url 'web_setting' %}"><span></span>设置</a>
+            {% elif is_user_already_follow %}
+                <a href="{% url 'web_follow' query_user_context.user_id %}" class="follow-user">关注</a>
+            {% else %}
+                <a href="{% url 'web_follow' query_user_context.user_id %}" class="follow-user">取消关注</a>
+            {% endif %}
         </div>
 
         <div class="nav">
