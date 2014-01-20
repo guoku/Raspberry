@@ -149,6 +149,6 @@ def login(request, template="login.html"):
         if not remember_me:
             request.session.set_expiry(0)
         else:
-            request.session.set_expiry(settings.MAX_SESSION_EXPIRATION_TIME)
+            request.session.set_expiry(settings.SESSION_COOKIE_AGE)
         print redirect_url
         return HttpResponseRedirect(redirect_url)
