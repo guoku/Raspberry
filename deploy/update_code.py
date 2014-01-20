@@ -32,5 +32,5 @@ def upload_code():
  		)
 
 def upload():
-	execute(update_code)
+#	execute(update_code)
 	execute(upload_code)
