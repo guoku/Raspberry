@@ -9,14 +9,11 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-<<<<<<< HEAD
-from mongoengine import connect
-connect('guoku', host='10.0.2.200')
-=======
+
 from mongoengine import register_connection 
 register_connection('guoku-db', 'guoku')
 register_connection('log-db', 'guoku_log')
->>>>>>> e1b3fbdbd7e6ba4313f7429a24f1a2a98982681a
+
 
 DATABASES = {
     'default': {
@@ -190,13 +187,9 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
-<<<<<<< HEAD
-    'gunicorn',
-=======
     'seller',
     'web',
     # 'redis_admin',
->>>>>>> e1b3fbdbd7e6ba4313f7429a24f1a2a98982681a
 )
 
 LOGGING = {
