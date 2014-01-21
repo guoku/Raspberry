@@ -10,19 +10,19 @@ ADMINS = (
 MANAGERS = ADMINS
 
 
-from mongoengine import register_connection 
+from mongoengine import register_connection
 register_connection('guoku-db', 'guoku')
 register_connection('log-db', 'guoku_log')
 
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'guoku',
         'USER': 'qinzhoukan',
         'PASSWORD': 'qinzhoukan1@#',
         'HOST': '10.0.2.90',
-        'PORT': '',                      
+        'PORT': '',
         'OPTIONS': {
             'use_unicode':'utf-8',
             'init_command':'SET storage_engine=INNODB',
@@ -66,8 +66,8 @@ MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
 
 SPHINX_API_VERSION = 0x116
-SPHINX_SERVER = 'localhost' 
-SPHINX_port = 3312 
+SPHINX_SERVER = 'localhost'
+SPHINX_port = 3312
 
 
 #mongo db
@@ -75,13 +75,13 @@ MANGO_HOST = '10.0.2.200'
 MANGO_PORT = 27017
 
 
-JUMP_TO_TAOBAO = True 
+JUMP_TO_TAOBAO = True
 
-IMAGE_LOCAL = True 
+IMAGE_LOCAL = True
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
 APP_HOST = "http://10.0.1.109:8001"
 ALLOWED_HOSTS = ['*']
-#IMAGE_LOCAL = False 
+#IMAGE_LOCAL = False
 #IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 
 TIME_ZONE = 'Asia/Shanghai'
@@ -108,17 +108,12 @@ MEDIA_URL = ''
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
-BASE_DIR = os.getcwd()
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # ('common', os.path.join(BASE_DIR, 'static')),
-    ('common', os.path.join(os.path.dirname(__file__), 'static')),
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+
 )
 
 STATICFILES_FINDERS = (
@@ -220,12 +215,15 @@ TAOBAO_APP_SECRET = '90797bd8d5859aac971f8cc9d4e51105'
 TAOBAO_OAUTH_URL = 'https://oauth.taobao.com/authorize'
 TAOBAO_OAUTH_LOGOFF = 'https://oauth.taobao.com/logoff'
 
-TAOBAO_APP_INFO = { 
+TAOBAO_APP_INFO = {
     "default_app_key" : "12313170",
     "default_app_secret" : "90797bd8d5859aac971f8cc9d4e51105",
     "web_app_key" : "21419640",
-    "web_app_secret" : "df91464ae934bacca326450f8ade67f7" 
+    "web_app_secret" : "df91464ae934bacca326450f8ade67f7"
 }
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
 ALLOWED_HOSTS = ['*']

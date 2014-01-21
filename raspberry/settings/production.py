@@ -1,0 +1,199 @@
+import os.path
+#DEBUG = False
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
+
+#mongodb setting
+from mongoengine import register_connection
+register_connection('guoku-db', 'guoku', username='qinzhoukan', password='qinzhoukan1@#',host='10.0.2.200',
+        max_pool_size=200, auto_start_request=False, safe=True)
+register_connection('log-db', 'guoku_log', username='qinzhoukan', password='qinzhoukan1@#',host='10.0.2.200',
+        max_pool_size=200, auto_start_request=False, safe=True)
+
+MANGO_HOST = '10.0.2.200'
+MANGO_PORT = 27017
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'guoku',
+        'USER': 'qinzhoukan',
+        'PASSWORD': 'qinzhoukan1@#',
+        'HOST': '10.0.2.90',
+        'PORT': '',
+        'OPTIONS': {
+            'use_unicode':'utf-8',
+            'init_command':'SET storage_engine=INNODB',
+        }
+    },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': '10.0.2.49:6379',
+        'TIMEOUT:': 864000,
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        },
+    },
+}
+
+# session
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_HOST = '10.0.2.49'
+SESSION_REDIS_PORT = 6379
+SESSION_REDIS_DB = 2
+SESSION_COOKIE_AGE = 1209600
+MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
+MOGILEFS_DOMAIN = 'prod'
+MOGILEFS_TRACKERS = ['10.0.2.50:7001']
+
+SPHINX_API_VERSION = 0x116
+SPHINX_SERVER = '10.0.2.50'
+SPHINX_PORT = 9312
+
+JUMP_TO_TAOBAO = True
+IMAGE_LOCAL = False
+IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
+APP_HOST = 'http://www.guoku.com'
+TIME_ZONE = 'Asia/Shanghai'
+LANGUAGE_CODE = 'zh-cn'
+SITE_ID = 1
+USE_I18N = False
+
+CELERY_RESULT_BACKEND = "redis://10.0.2.100:6379/0"
+BROKER_TRANSPORT = "librabbitmq"
+BROKER_HOST = "10.0.2.100"
+BROKER_USER = "raspberry"
+BROKER_PASSWORD = "raspberry1@#"
+BROKER_VHOST = "raspberry"
+BROKER_POOL_LIMIT = 10
+CELERY_ACKS_LATE = True
+CELERYD_PREFETCH_MULTIPLIER = 1
+CELERY_DISABLE_RATE_LIMITS = True
+
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'uploads')
+MEDIA_URL = '/uploads/'
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
+STATIC_URL = '/static/'
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+#    ('common', os.path.join(os.path.dirname(__file__), 'static')),
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = '3psdgd-e9ggs-0bjm9ghuu)mqlpj0xo87k4xmq3w@xg8kuk69r'
+
+# List of callables that know how to import templates from various sources.
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+#     'django.template.loaders.eggs.Loader',
+)
+
+MIDDLEWARE_CLASSES = (
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+  'django.contrib.auth.context_processors.auth',
+  'django.core.context_processors.i18n',
+  'django.core.context_processors.request',
+  'django.core.context_processors.media',
+  'django.core.context_processors.static',
+  'django.contrib.messages.context_processors.messages',
+) # Optional
+
+
+ROOT_URLCONF = 'raspberry.urls'
+
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.staticfiles',
+    'django.contrib.messages',
+    'djcelery',
+    'base',
+    'management',
+    'mobile',
+    'seller',
+    'gunicorn',
+)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
+
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+)
+
+# taobao api key and sercet
+TAOBAO_APP_KEY = '12313170'
+TAOBAO_APP_SECRET = '90797bd8d5859aac971f8cc9d4e51105'
+TAOBAO_OAUTH_URL = 'https://oauth.taobao.com/authorize'
+TAOBAO_OAUTH_LOGOFF = 'https://oauth.taobao.com/logoff'
+
+TAOBAO_APP_INFO = {
+    "default_app_key" : "12313170",
+    "default_app_secret" : "90797bd8d5859aac971f8cc9d4e51105",
+    "web_app_key" : "21419640",
+    "web_app_secret" : "df91464ae934bacca326450f8ade67f7"
+}
+
+#GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
+GUOKU_APNS_KEY = '/data/www/raspberry/apns_key/'
+APNS_SERVER = {'HOST':'http://10.0.2.46:7077/'}
+
+
+SCP_HOST = '10.0.2.46'
+SCP_USER = 'jiaxin'
+SCP_KEY = os.path.join(os.path.dirname(__file__), 'scp_key/')
+SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'
+
+ALLOWED_HOSTS = ['*']
+
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
