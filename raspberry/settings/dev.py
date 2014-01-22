@@ -114,7 +114,6 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-
 )
 
 
