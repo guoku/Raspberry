@@ -125,7 +125,7 @@ def fetch_item(itemid):
         try:
             nameurl = nametag['src']
             o = urlparse(nameurl)
-            nick = parse_qs(unquote(o.query))['nick'][0]
+            nick = parse_qs(str(o.query))['nick'][0]
             nick= unquote(nick)
             break
         except Exception, e:
@@ -217,7 +217,7 @@ def fetch_taobao_web(itemid):
     cat = f.headers.get('X-Category')
     cid = int(cat[5:])
     nick = f.headers.get('At_Nick')
-    nick = unquote(nikc)
+    nick = unquote(str(nikc))
     html = f.read()
     soup = BeautifulSoup(html)
     desc = soup.title.string[0:-4]
@@ -278,7 +278,7 @@ def fetch_tmall_web(itemid):
     cat = f.headers.get('X-Category')
     cid = int(cat[5:])
     nick = f.headers.get('At_Nick')
-    nick = unquote(nick)
+    nick = unquote(str(nick))
     html = f.read()
     soup = BeautifulSoup(html)
     desc = soup.title.string[0:-12]
