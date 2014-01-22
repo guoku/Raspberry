@@ -1,5 +1,8 @@
 import os.path
 
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1

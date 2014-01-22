@@ -151,5 +151,3 @@ SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'
 
 ALLOWED_HOSTS = ['*']
 
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
