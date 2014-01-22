@@ -3,7 +3,6 @@ from defaults import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-JUMP_TO_TAOBAO = True 
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -70,6 +69,12 @@ SPHINX_SERVER = 'localhost'
 SPHINX_port = 3312 
 
 
+#mongo db
+MANGO_HOST = 'localhost'
+MANGO_PORT = 27017
+
+
+JUMP_TO_TAOBAO = True 
 
 IMAGE_LOCAL = True 
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
@@ -99,4 +104,73 @@ STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 BASE_DIR = os.getcwd()
 
+# Additional locations of static files
+STATICFILES_DIRS = (
+    # ('common', os.path.join(BASE_DIR, 'static')),
+    ('common', os.path.join(os.path.dirname(__file__), 'static')),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+)
+
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+]
+
+MIDDLEWARE_CLASSES = (
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+)
+
+ROOT_URLCONF = 'raspberry.urls'
+
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.messages',
+    'django.contrib.sessions',
+    'django.contrib.staticfiles',
+    'django.contrib.messages',
+    'debug_toolbar',
+    'djcelery',
+    'base',
+    'management',
+    'mobile',
+    'seller',
+    'web',
+    # 'redis_admin',
+)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        }, }
+}
 
