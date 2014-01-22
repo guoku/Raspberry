@@ -2,6 +2,7 @@
 from base.item import Item
 from base.entity import Entity
 from note import MobileNote
+from user import MobileUser
 import time
 
 class MobileItem(Item):
@@ -59,6 +60,12 @@ class MobileEntity(Entity):
         for _note_id in _context['entity']['note_id_list']:
             _context['note_list'].append(MobileNote(_note_id).read(request_user_id)) 
         del _context['entity']['note_id_list']
+        
+        _context['like_user_list'] = []
+        for _like_user in self.liker_list(0, 10):
+            _user_id = _like_user[0]
+            _context['like_user_list'].append(MobileUser(_user_id).read(request_user_id)) 
+
      
         return _context    
     

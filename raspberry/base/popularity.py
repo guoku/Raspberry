@@ -6,7 +6,8 @@ import datetime, time
 import random 
 
 from category import Category
-from models import Entity_Like 
+from models import Entity_Like, Note
+from tag import Tag
 
 
 ################# Popular Entity ###############################3
@@ -95,3 +96,34 @@ def read_popular_category(json = False):
         _context['updated_time'] = time.mktime(datetime.datetime.now().timetuple())
     return _context
 
+################## Popular Tag ###############################3
+#
+#def generate_popular_tag_to_cache():
+#    
+#    _cache_key = 'tag_popularity'
+#    _start_time = datetime.datetime(2013, 12, 9, 16, 0, 0) 
+##    _start_time = datetime.datetime.now()
+#    _t_delta = datetime.timedelta(hours = 24)
+#    
+#    _tag_stat = {}
+#    for _note_obj in Note.objects.filter(created_time__gt = _start_time  - _t_delta, created_time__lt = _start_time, selector_id__isnull = False):
+#        for _tag in Tag.Parser.parse(_note_obj.note):
+#            if not _tag_stat.has_key(_tag):
+#                _tag_stat[_tag] = 0
+#            _tag_stat[_tag] += 1
+#    
+#    print _tag_stat
+#
+#    #cache.set(_cache_key, _context, 600)
+#    #return _context 
+#
+#
+#def read_popular_tag(json = False):
+#    _cache_key = 'tag_popularity'
+#    _context = cache.get(_cache_key)
+#    if _context == None:
+#        _context = generate_popular_tag_to_cache() 
+#    if json:
+#        _context['updated_time'] = time.mktime(datetime.datetime.now().timetuple())
+#    return _context
+#

@@ -613,6 +613,18 @@ class Entity(object):
         return _set
         
     
+    def liker_list(self, offset = None, count = None):
+        _hdl = EntityLikeModel.objects.filter(entity_id = self.entity_id)
+        
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
+        _list = []
+        for _obj in _hdl:
+            _list.append([_obj.user_id, _obj.created_time])
+
+        return _list
+        
     @staticmethod
     def like_list_of_user(user_id, timestamp = None, offset = None, count = None):
         _user_id = int(user_id)
