@@ -55,8 +55,6 @@ SESSION_REDIS_DB = 2
 SESSION_COOKIE_AGE = 1209600
 MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14
 
-MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
-
 MOGILEFS_DOMAIN = 'prod'
 MOGILEFS_TRACKERS = ['10.0.2.50:7001']
 
@@ -66,13 +64,9 @@ SPHINX_PORT = 9312
 
 JUMP_TO_TAOBAO = True
 
-IMAGE_LOCAL = DEBUG
+IMAGE_LOCAL = False 
 IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 APP_HOST = 'http://www.guoku.com'
-TIME_ZONE = 'Asia/Shanghai'
-LANGUAGE_CODE = 'zh-cn'
-SITE_ID = 1
-USE_I18N = False
 
 CELERY_RESULT_BACKEND = "redis://10.0.2.100:6379/0"
 BROKER_TRANSPORT = "librabbitmq"
@@ -144,12 +138,6 @@ LOGGING = {
     }
 }
 
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.SHA1PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-)
-
-
 
 #GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
 GUOKU_APNS_KEY = '/data/www/raspberry/apns_key/'
@@ -163,5 +151,3 @@ SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'
 
 ALLOWED_HOSTS = ['*']
 
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
