@@ -1,0 +1,50 @@
+{% load web_common %}
+{% spaceless %}
+    <div class="note-item">
+        <a href="{% url 'web.views.user.user_index' creator_context.user_id %}" class="avatar">
+            <img src="{{ creator_context.avatar_small }}" width="50" height="50">
+        </a>
+
+        <div class="note-detail">
+            <a class="nickname" href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}</a>
+            {% if creator_context.bio %}
+                <small class="bio">{{ creator_context.bio }}</small>
+            {% endif %}
+            <p class="note-content">{{ note_context.content }}</p>
+
+            <div class="note-operate">
+                {# 判断是否当前用户发的点评，如果是则允许修改 #}
+                {% if user_context.user_id == creator_context.user_id %}
+                    <form class="clearfix update-note-form"
+                          action="{% url 'web.views.entity.update_note' note_context.entity_id note_context.note_id %}"
+                          method="POST" style="display: none">
+                        <textarea name="note_text">{{ note_context.content }}</textarea>
+
+                        <div>
+                            <button type="button" class="cancel">取消</button>
+                            <button type="submit" class="update">修改</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                <a href="javascript:;" class="poke" data-note="{{ note_context.note_id }}"><span></span>
+                    {% if note_context.poke_count > 0 %}
+                        <small>{{ note_context.poke_count }}</small>
+                    {% endif %}
+                </a>
+                <a href="javascript:;" class="add-comment" data-note="{{ note_context.note_id }}"><span></span>
+                    {% if note_context.comment_count > 0 %}
+                        <small>{{ note_context.comment_count }}</small>
+                    {% endif %}
+                </a>
+
+                <span class="create-time">{{ note_context.created_time|format_time }}</span>
+
+                {% if user_context.user_id == creator_context.user_id %}
+                    <a href="javascript:;" class="update-note">修改</a>
+                    <span class="my-note">你的点评</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endspaceless %}

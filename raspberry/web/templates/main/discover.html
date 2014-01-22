@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load web %}
+{% load staticfiles %}
+
+{% block title %}发现{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/discover.css' %}">{% endblock %}
+
+{% block content %}
+    <div id="discover">
+        <div class="product guoku-block">
+            <div class="nav">
+                <h2>发现好商品</h2>
+                <div>
+                    <a href=""></a>
+                </div>
+                <a href="" class="more">更多>></a>
+            </div>
+
+            <ul class="entities">
+                {% for entity_context in product_list %}
+                    <li>
+                        <a href="{% url 'web.views.main.detail' entity_context.entity_hash %}" class="entity-img"><img
+                                src="{{ entity_context.chief_image.url }}"></a>
+
+                        <div>
+                            <a href="javascript:;">喜爱
+                                <small>{{ entity_context.like_count }}</small>
+                            </a>
+                            <span>￥{{ entity_context.price }}</span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="tag guoku-block">
+            <div class="nav">
+                <h2>热门标签</h2>
+            </div>
+        </div>
+
+        <div class="shop guoku-block">
+            <div class="nav">
+                <h2>发现好店铺</h2>
+            </div>
+        </div>
+    </div>
+{% endblock %}

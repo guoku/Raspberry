@@ -1,0 +1,30 @@
+{% extends "account/account_base.html" %}
+
+{% block form %}
+    <form action="{% url 'web.views.account.register' %}" method="POST" id="register">
+        {% csrf_token %}
+
+        <h2>注册帐号</h2> | 已有帐号？<a href="{% url 'web.views.account.login' %}">请登录</a>
+
+        <div>
+            <input type="text" name="nickname" class="text-input" placeholder="昵称" id="nickname">
+            {% if error.nickname != None %}<span class="error-info">{{ error.nickname }}</span>{% endif %}
+        </div>
+
+        <div>
+            <input type="text" name="email" class="text-input" placeholder="邮箱" id="email">
+            {% if error.email != None %}<span class="error-info">{{ error.email }}</span>{% endif %}
+        </div>
+
+        <div>
+            <input type="password" name="psw" class="text-input" placeholder="密码" id="psw">
+            {% if error.psw != None %}<span class="error-info">{{ error.psw }}</span>{% endif %}
+        </div>
+
+        <div class="submit-row">
+            <label><input type="checkbox" name="agreement" checked id="agreement">同意果库</label>
+            <small><a href="">使用协议</a></small>
+            <input type="submit" value="注册" class="guoku-button">
+        </div>
+    </form>
+{% endblock %}

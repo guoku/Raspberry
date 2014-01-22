@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load web %}
+
+{% block title %}添加商品 － 果库{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/entity.css' %}">{% endblock %}
+
+{% block content %}
+    <div id="add-entity">
+        <h2>添加商品入库</h2>
+
+        <div class="entity">
+            <div class="guoku-block container">
+                <form action="{% url 'web_load_entity' %}" method="POST" class="load-entity">
+                    <p>选择货真价实，有用、有趣、有价值的好商品 </p>
+                    <input type="text" class="text-input" name="url" placeholder="粘贴商品链接到这里" value="{{ cand_url }}">
+                    <input type="submit" value="载入" class="guoku-button">
+                </form>
+
+                {% if is_post %}
+                    <div class="entity-detail">
+                        <div>
+                            <div class="brand">
+                                <span>品牌</span>
+                                <input type="text" class="text-input" placeholder="如果有">
+                            </div>
+                            <div class="title">
+                                <span>商品名称</span>
+                                <input type="text" class="text-input" value="{{ taobao_title }}">
+                            </div>
+                        </div>
+
+                        <h3>{{ taobao_title }}</h3>
+                        <div class="img-container">
+                            <img src="{{ chief_image_url }}">
+                        </div>
+                        <div class="detail-img">
+                            {% for url in thumb_images %}
+                                <div>
+                                    <img src="{{ url }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if is_post %}
+                <div class="add-note">
+                    <h3>点评</h3>
+
+                    <div class="guoku-block note-container">
+                        <a href="" class="avatar"><img src="{{ user_context.avatar_small }}" width="50" height="50"></a>
+
+                        <div class="detail">
+                            <span class="nickname">{{ user_context.nickname }}</span>
+
+                            <form action="{% url 'web_create_entity' %}" method="POST">
+                                <input type="hidden" name="url" value="{{ cand_url }}" id="entity-url">
+                                <input type="hidden" name="brand" id="entity-brand">
+                                <input type="hidden" name="title" value="{{ taobao_title }}" id="entity-title">
+                                <input type="hidden" name="chief_image_url" value="{{ chief_image_url }}" id="entity-img-url">
+
+                                <textarea class="text-input" name="note_text"></textarea>
+                                <div>来说说你的评价吧？欢迎真实、有用、有趣的商品点评。</div>
+                                <input type="submit" value="发表" class="guoku-button">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="aside guoku-block">
+            <div>
+                <h3>果库全是好商品</h3>
+                <p>如果，一件商品，<br>
+                    你愿意让家人使用或与朋友分享，也许这就应该是件不错的东西。</p>
+            </div>
+            <div>
+                <h3>创建人信息</h3>
+                <p>作为第一个把商品推荐到果库的人，你将被永久记录在商品页。</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

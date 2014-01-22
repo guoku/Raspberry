@@ -1,0 +1,28 @@
+<div class="common-user">
+    <a class="avatar" href="{% url 'web_user_index' user_context.user_id %}">
+        <img src="{{ user_context.avatar_small }}" width="80" height="80">
+    </a>
+    <a href="{% url 'web_user_index' user_context.user_id %}" class="nickname">{{ user_context.nickname|truncatechars:10 }}</a>
+
+    <div class="stat">
+        <span><strong>{{ user_context.fan_count }}</strong>粉丝</span>
+        <span class="follows"><strong>{{ user_context.following_count }}</strong>关注</span>
+    </div>
+
+    <div class="follow">
+        {% if user_context.is_user_already_follow %}
+            <a href="{% url 'web_follow' user_context.user_id %}" class="follow-user" data-user="{{ user_context.user_id }}">取消关注</a>
+        {% else %}
+            <a href="{% url 'web_follow' user_context.user_id %}" class="follow-user" data-user="{{ user_context.user_id }}">关注</a>
+        {% endif %}
+    </div>
+
+    <div class="avatars">
+        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
+        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
+        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
+        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
+        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
+        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
+    </div>
+</div>
