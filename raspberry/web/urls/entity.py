@@ -3,7 +3,7 @@ from django.conf.urls.defaults import url, patterns, include
 
 
 urlpatterns = patterns(
-    'web.views.entity',
+    'web.views',
     url('new/$', 'load_entity', name='web_load_entity'),
     url('^create/$', 'create_entity', name='web_create_entity'),
     url('^(?P<entity_id>\w+)/like/$', 'like_entity', name='web_like_entity'),

@@ -17,10 +17,11 @@ register_connection('log-db', 'guoku_log')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku',
+        'NAME': 'guoku_12_12',
         'USER': 'root',
-        'PASSWORD': 'cw12345',
-        'PORT': '',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '',                      
         'OPTIONS': {
             'use_unicode':'utf-8',
             'init_command':'SET storage_engine=INNODB',
@@ -29,28 +30,17 @@ DATABASES = {
 }
 #DATABASE_ROUTERS = ['router.AuthRouter']
 
-#CACHES = {
-#    "default": {
-#        "BACKEND": "redis_cache.cache.RedisCache",
-#        "LOCATION": [
-#            "localhost:6379:1",
-#        ],
-#        "OPTIONS": {
-#            "PARSER_CLASS": "redis.connection.HiredisParser",
-#            "CLIENT_CLASS": "redis_cache.client.ShardClient",
-#        }
-#    }
-#}
 CACHES = {
-   'default': {
-       'BACKEND': 'redis_cache.RedisCache',
-       'LOCATION': 'localhost:6379',
-       'TIMEOUT:': 864000,
-       'OPTIONS': {
-           'DB': 1,
-           'PARSER_CLASS': 'redis.connection.HiredisParser'
-       },
-   },
+    "default": {
+        "BACKEND": "redis_cache.cache.RedisCache",
+        "LOCATION": [
+            "localhost:6379:1",
+        ],
+        "OPTIONS": {
+            "PARSER_CLASS": "redis.connection.HiredisParser",
+            "CLIENT_CLASS": "redis_cache.client.ShardClient",
+        }
+    }
 }
 #CACHES = {
 #    'default': {
@@ -65,11 +55,6 @@ CACHES = {
 #}
 
 # session
-# SESSION_ENGINE = 'redis_sessions.session'
-# SESSION_REDIS_HOST = '10.0.2.49'
-# SESSION_REDIS_PORT = 6379
-# SESSION_REDIS_DB = 2
-# SESSION_COOKIE_AGE = 1209600
 #SESSION_ENGINE = 'redis_sessions.session'
 #SESSION_REDIS_HOST = 'localhost'
 #SESSION_REDIS_PORT = 6379
@@ -85,7 +70,6 @@ SPHINX_port = 3312
 
 
 #mongo db
-# MANGO_HOST = '10.0.2.200'
 MANGO_HOST = 'localhost'
 MANGO_PORT = 27017
 
@@ -119,10 +103,6 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 BASE_DIR = os.getcwd()
-
-#
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -175,7 +155,6 @@ INSTALLED_APPS = (
     'seller',
     'web',
     # 'redis_admin',
-    'web'
 )
 
 LOGGING = {

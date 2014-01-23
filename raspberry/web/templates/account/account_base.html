@@ -2,31 +2,31 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>欢迎加入果库</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
-</head>
-
-<body id="account">
-<div class="main">
-    <div class="container clearfix">
-        <a href="{% url 'web.views.main.selection' %}"><img src="{% static 'images/guoku_icon_56.png' %}"></a>
-        {% block form %}{% endblock %}
-    </div>
-
-    <div class="third-party">
-        <div>
-            <h2>第三方帐号登录</h2>
-            <a href="{% url 'web.views.account.login_by_sina' %}">新浪微博</a>
-            <a href="{% url 'web.views.account.login_by_taobao' %}">淘宝</a>
+    <head>
+        <meta charset="utf-8">
+        <title>欢迎加入果库</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
+    </head>
+    
+    <body id="account">
+        <div class="main">
+            <div class="container clearfix">
+                <a href="{% url 'web_selection' %}"><img src="{% static 'images/guoku_icon_56.png' %}"></a>
+                {% block form %}{% endblock %}
+            </div>
+        
+            <div class="third-party">
+                <div>
+                    <h2>第三方帐号登录</h2>
+                    <a href="{% url 'web.views.account.login_by_sina' %}">新浪微博</a>
+                    <a href="{% url 'web.views.account.login_by_taobao' %}">淘宝</a>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-
-<script src="{% static 'scripts/jquery.min.js' %}"></script>
-<script src="{% static 'scripts/account.js' %}"></script>
-</body>
+        
+        <script src="{% static 'scripts/jquery.min.js' %}"></script>
+        <script src="{% static 'scripts/account.js' %}"></script>
+    </body>
 </html>
