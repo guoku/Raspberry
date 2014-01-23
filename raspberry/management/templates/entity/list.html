@@ -109,10 +109,10 @@
                 <li {% if sort_by == None or sort_by == "random" and reverse == False %}class="active"{% endif %}>
                     <a href="javascript:;" id="random-order">随机</a>
                 </li>
-                <li {% if sort_by == None or sort_by == "updated" and reverse == False %}class="active"{% endif %}>
+                <li {% if sort_by == None or sort_by == "time" and reverse == False %}class="active"{% endif %}>
                     <a href="javascript:;" id="date-order">创建时间降序</a>
                 </li>
-                <li {% if sort_by == "updated" and reverse %}class="active"{% endif %}>
+                <li {% if sort_by == "time" and reverse %}class="active"{% endif %}>
                     <a href="javascript:;" id="date-order">创建时间升序</a>
                 </li>
                 <li {% if sort_by == "note" and reverse == False %}class="active"{% endif %}>
@@ -165,10 +165,10 @@
                 sort("random", 0);
             });
             sortButtons.eq(1).click(function () {
-                sort("updated", 0);
+                sort("time", 0);
             });
             sortButtons.eq(2).click(function () {
-                sort("updated", 1);
+                sort("time", 1);
             });
             sortButtons.eq(3).click(function () {
                 sort("note", 0);

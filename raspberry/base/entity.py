@@ -18,7 +18,7 @@ from models import Entity_Like as EntityLikeModel
 from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
 from models import Note as NoteModel
 from models import NoteSelection
-from tasks import CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
+from tasks import CleanNoteMessageTask, CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
 from note import Note
 from user import User 
 from hashlib import md5
@@ -325,7 +325,7 @@ class Entity(object):
 
         # TODO: removing entity_id in item
     
-    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None, mark = None):
+    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None, mark = None, reset_created_time = False):
         
         self.__ensure_entity_obj()
         if brand != None:
@@ -353,7 +353,11 @@ class Entity(object):
                 _detail_image_ids.insert(0, self.entity_obj.chief_image)
             self.entity_obj.detail_images =  "#".join(_detail_image_ids)
             self.entity_obj.chief_image = chief_image_id
-            
+        
+        if reset_created_time == True:
+            self.entity_obj.created_time = datetime.datetime.now()
+
+
         self.entity_obj.save()
         _basic_info = self.__load_basic_info_from_cache()
         if _basic_info != None:
@@ -609,6 +613,18 @@ class Entity(object):
         return _set
         
     
+    def liker_list(self, offset = None, count = None):
+        _hdl = EntityLikeModel.objects.filter(entity_id = self.entity_id)
+        
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
+        _list = []
+        for _obj in _hdl:
+            _list.append([_obj.user_id, _obj.created_time])
+
+        return _list
+        
     @staticmethod
     def like_list_of_user(user_id, timestamp = None, offset = None, count = None):
         _user_id = int(user_id)
@@ -669,8 +685,10 @@ class Entity(object):
             self.__reset_note_info_to_cache(_note_info)
         
         User(_note_context['creator_id']).update_user_entity_note_count(delta = -1)
-        for _doc in EntityNoteMessage.objects.filter(entity_id = self.entity_id, note_id = _note_id):
-            _doc.delete()
+        CleanNoteMessageTask.delay(
+            entity_id = self.entity_id, 
+            note_id = _note_id
+        )
     
     def update_note_selection_info(self, note_id, selector_id, selected_time, post_time):
         _note_id = int(note_id)

@@ -4,7 +4,8 @@ from lib.note import MobileNote
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
 from mobile.models import Session_Key
-from tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask 
+from tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask, MobileLogTask 
+from utils.lib import get_client_ip
 import datetime
 
 @check_sign
@@ -37,6 +38,7 @@ def category_entity_note(request, category_id):
                     'note' : _note_context,
                 })
             
+        MobileLogTask.delay('CATEGORY_NOTE_LIST', request.REQUEST, get_client_ip(request), _request_user_id, { 'category_id' : int(category_id) })
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -108,6 +110,8 @@ def entity_note_detail(request, note_id):
         _rslt = MobileNote(note_id).read_note_full_context(_request_user_id)
         if _rslt['note'].has_key('entity_id'):
             _rslt['entity'] = MobileEntity(_rslt['note']['entity_id']).read(_request_user_id)
+        
+        MobileLogTask.delay('NOTE', request.REQUEST, get_client_ip(request), _request_user_id, { 'note_id' : int(note_id) })
         return SuccessJsonResponse(_rslt)
 
 @check_sign

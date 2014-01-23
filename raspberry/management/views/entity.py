@@ -18,6 +18,7 @@ from base.item import Item
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
+from management.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 
@@ -31,6 +32,7 @@ def _parse_taobao_id_from_url(url):
 
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = fetcher.fetch_item(taobao_id)
+    print "===========", taobao_item_info['nick']
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:
@@ -120,7 +122,8 @@ def new_entity(request):
                         'taobao_id': _taobao_id,
                         'cid': _taobao_item_info['cid'],
                         'taobao_title': _taobao_item_info['title'],
-                        'shop_nick': _taobao_item_info['shop_nick'],
+                        'shop_nick': _taobao_item_info['nick'],
+                        'shop_link': _taobao_item_info['shop_link'],
                         'price': _taobao_item_info['price'],
                         'thumb_images': _taobao_item_info["thumb_images"],
                         'selected_category_id': _selected_category_id,
@@ -145,6 +148,7 @@ def create_entity_by_taobao_item(request):
         _taobao_id = request.POST.get("taobao_id", None)
         _cid = request.POST.get("cid", None)
         _taobao_shop_nick = request.POST.get("taobao_shop_nick", None)
+        _taobao_shop_link = request.POST.get("taobao_shop_link", None)
         _taobao_title = request.POST.get("taobao_title", None)
         _taobao_price = request.POST.get("taobao_price", None)
         _chief_image_url = request.POST.get("chief_image_url", None)
@@ -180,6 +184,8 @@ def create_entity_by_taobao_item(request):
         
         if _note != None and len(_note) > 0:
             _add_note_and_select_delay(_entity, _user_id, _note)
+
+        CreateTaobaoShopTask.delay(_taobao_shop_nick, _taobao_shop_link)
 
         return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
@@ -233,6 +239,11 @@ def edit_entity(request, entity_id):
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
         _price = request.POST.get("price", None)
+        _reset_created_time = request.POST.get("reset_created_time", "off")
+        if _reset_created_time == "on":
+            _reset_created_time = True
+        else:
+            _reset_created_time = False
         _weight = int(request.POST.get("weight", '0'))
         _mark = int(request.POST.get("mark", '0'))
         _chief_image_id = request.POST.get("chief_image", None)
@@ -254,7 +265,8 @@ def edit_entity(request, entity_id):
             price = _price,
             chief_image_id = _chief_image_id,
             weight = _weight,
-            mark = _mark
+            mark = _mark,
+            reset_created_time = _reset_created_time
         )
 
         _note = request.POST.get("note", None)
@@ -352,7 +364,7 @@ def entity_list(request):
         _freeze_entity_count = Entity.count(category_id = _category_id, status = 'freeze')
         _recycle_entity_count = Entity.count(category_id = _category_id, status = 'recycle')
         
-        _sort_by = request.GET.get("sort_by", "updated")
+        _sort_by = request.GET.get("sort_by", "time")
         _reverse = request.GET.get("reverse", None)
         if _sort_by:
             _para["sort_by"] = _sort_by
