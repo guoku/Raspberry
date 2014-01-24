@@ -11,7 +11,6 @@ import re
 import datetime
 import time
 import json
-from base import fetcher 
 from base.category import Category, Old_Category
 from base.entity import Entity
 from base.item import Item
@@ -21,6 +20,7 @@ from base.user import User
 from management.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
+from utils import fetcher 
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
