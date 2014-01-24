@@ -5,12 +5,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from management.tasks import PushMessageToUserTask
-from urlparse import urlparse
-import HTMLParser
-import re 
-import datetime
-import time
-import json
+
 
 from base.user import User
 from utils.authority import staff_only 
@@ -55,7 +50,7 @@ def user_list(request):
 def edit_user(request, user_id, template='user/edit.html'):
 
     if request.method == 'POST':
-        _user = User(user_id)
+        # _user = User(user_id)
         forms = UserForms(request.POST)
         if forms.is_valid():
             forms.update(user_id)
@@ -65,7 +60,7 @@ def edit_user(request, user_id, template='user/edit.html'):
                 template,
                 {
                     'forms':forms,
-                    'user_context' : _user.read(),
+                    'user_context' : User(user_id).read(),
                 },
                 context_instance = RequestContext(request)
             )
