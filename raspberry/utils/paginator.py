@@ -8,7 +8,7 @@ class Paginator(object):
         self.parameter_str = ""
         if parameters:
             for key, value in parameters.items():
-                self.parameter_str += "&" + str(key) + "=" + str(value)
+                self.parameter_str += "&" + str(key) + "=" + unicode(value)
 
     def validate_number(self, request_page_number):
         try:

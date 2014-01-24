@@ -4,6 +4,8 @@ from base.stream_models import TaobaoShop as TaobaoShopModel
 from base.stream_models import TaobaoShopInfo
 from base.stream_models import TaobaoShopExtendedInfo
 from base.stream_models import CrawlerInfo
+from base.stream_models import TaobaoShopVerificationInfo
+from base.stream_models import GuokuPriceApplication
 import datetime
 import urllib
 import pymongo
@@ -17,6 +19,20 @@ class TaobaoShop(object):
     def nick_exist(nick):
         return TaobaoShopModel.objects.filter(shop_info__nick = nick).count() > 0
 
+    @staticmethod
+    def find(nick, offset, num, sort_by, contained_gifts):
+        if nick:
+            _hdl = TaobaoShopModel.objects(shop_info__nick = nick)
+        else:
+            _hdl = TaobaoShopModel.objects
+        if contained_gifts:
+            _hdl = _hdl.filter(extended_info__gifts__in=contained_gifts)
+        count = _hdl.count()
+        if sort_by:
+            _hdl = _hdl.order_by(sort_by)
+        results = _hdl.skip(offset).limit(num)
+        return results, count
+        
     @classmethod
     def create(cls, nick, shop_id, title, shop_type, seller_id, pic_path):
         shop = TaobaoShopModel(
@@ -61,4 +77,29 @@ class TaobaoShop(object):
                 _context['commission_rate'] = _doc.extended_info.commission_rate
 
         return _context
+   
+    STATUS_WAITING = 'waiting'
+    STATUS_ACCEPTED = 'accepted'
+    STATUS_REJECTED = 'rejected'
     
+    def create_verification_info(self, intro):
+        info = TaobaoShopVerificationInfo(
+            shop_nick = self.nick,
+            intro = intro,
+            status = STATUS_WAITING,
+            created_time = datetime.datetime.now()
+            )
+        info.save()
+
+    def create_guoku_price_application(self, taobao_item_id, quantity, original_price, sale_price, duration):
+        item = GuokuPriceApplication(
+            shop_nick = self.nick,
+            taobao_item_id = taobao_item_id,
+            quantity = quantity,
+            original_price = original_price,
+            sale_price = sale_price,
+            duration = duration,
+            status = STATUS_WAITING,
+            created_time = datetime.datetime.now()
+            )
+        item.save()

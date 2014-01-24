@@ -32,7 +32,6 @@ def _parse_taobao_id_from_url(url):
 
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = fetcher.fetch_item(taobao_id)
-    print "===========", taobao_item_info['nick']
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:

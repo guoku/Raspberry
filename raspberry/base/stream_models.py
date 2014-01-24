@@ -153,3 +153,29 @@ class TaobaoShop(Document):
         'collection' : 'taobao_shop',
         'indexes' : [ 'last_updated_time' ]
     }
+
+class TaobaoShopVerificationInfo(DynamicDocument):
+    shop_nick = StringField()
+    intro = StringField()
+    status = StringField()
+    created_time = DateTimeField()
+    meta = {
+        'db_alias' : 'guoku-db',
+        'indexes' : ['shop_nick']
+    }
+
+class GuokuPriceApplication(DynamicDocument):
+    shop_nick = StringField(required = True)
+    taobao_item_id = StringField(required = True)
+    quantity = IntField()
+    original_price = FloatField()
+    sale_price = FloatField()
+    duration = IntField()
+    status = StringField()
+    editor_comment = StringField()
+    created_time = DateTimeField()
+    meta = {
+        'db_alias' : 'guoku-db',
+        'collection' : 'guoku_price_application',
+        'indexes' : [ 'shop_nick', 'taobao_item_id' ],
+    }
