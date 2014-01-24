@@ -54,19 +54,7 @@ def user_list(request):
 @staff_only
 def edit_user(request, user_id, template='user/edit.html'):
 
-    if request.method == 'GET':
-
-        _user_context = User(user_id).read()
-        forms = UserForms(initial=_user_context)
-        return render_to_response( 
-            template,
-            {
-                'forms': forms,
-                'user_context' : _user_context,
-            },
-            context_instance = RequestContext(request)
-        )
-    else:
+    if request.method == 'POST':
         _user = User(user_id)
         forms = UserForms(request.POST)
         if forms.is_valid():
@@ -81,6 +69,17 @@ def edit_user(request, user_id, template='user/edit.html'):
                 },
                 context_instance = RequestContext(request)
             )
+    else:
+        _user_context = User(user_id).read()
+        forms = UserForms(initial=_user_context)
+        return render_to_response(
+            template,
+            {
+                'forms': forms,
+                'user_context' : _user_context,
+            },
+            context_instance = RequestContext(request)
+        )
 
 @login_required
 @staff_only
