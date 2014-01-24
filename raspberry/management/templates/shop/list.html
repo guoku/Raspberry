@@ -18,19 +18,27 @@
         </form>   
         
         <form class="form-search" method="GET" action="{% url 'management_shop_list' %}">
-            <label>排序</label>
+            <h5>排序:</h5>
             <select id="sorting" name="sort_by">
                 <option value="created_time" {%if sort_by == "created_time" %} selected="selected" {% endif %}>创建时间</option>
                 <option value="priority" {% if sort_by == "priority" %} selected="selected" {% endif %}>优先级</option>
                 <option value="commission_rate"{%if sort_by == "commission_rate" %} selected="selected"{%endif%}>佣金</option>
             </select>
-            升序<input type="radio" name="order" value="asc" {% if  not order or order == "asc" %} checked {%endif%}/>
-            降序<input type="radio" name="order" value="desc" {% if order == "desc" %} checked {%endif%}/>
-            <label>过滤</label>
-            {% for gift in all_gifts %}
-                {{ gift }} <input type="checkbox" name="gifts" value="{{ gift }}" {% if gift in gifts %} checked {%endif%}>
-            {% endfor %}
-            <button type="submit" class="btn">确定</button>
+            <div>
+                <label>升序</label>
+                <input type="radio" name="order" value="asc" {% if  not order or order == "asc" %} checked {%endif%}/>
+                <label>降序</label>
+                <input type="radio" name="order" value="desc" {% if order == "desc" %} checked {%endif%}/>
+            </div>
+            <div>
+                <h5>过滤:</h5>
+                {% for gift in all_gifts %}
+                    {{ gift }} <input type="checkbox" name="gifts" value="{{ gift }}" {% if gift in gifts %} checked {%endif%}><br>
+                {% endfor %}
+            </div>
+            <div>
+                <button type="submit" class="btn">确定</button>
+            </div>
         </form>
     </div>
     <div class="span10">
