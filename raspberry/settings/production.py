@@ -1,7 +1,7 @@
 import os.path
 from defaults import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -79,9 +79,9 @@ CELERY_ACKS_LATE = True
 CELERYD_PREFETCH_MULTIPLIER = 1
 CELERY_DISABLE_RATE_LIMITS = True
 
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'uploads')
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
 MEDIA_URL = '/uploads/'
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static')
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
