@@ -186,12 +186,17 @@ def fetch_shop(shoplink):
         return None
     shoppic = img.attrs["src"]
     shoppic = re.sub(IMG_POSTFIX, "", shoppic, 1)
+    nicktag = soup.select("html body div.bd div.box div.detail a img")[-1]
+    src = nicktag.attrs["src"]
+    o = urlparse(src)
+    nick = parse_qs(str(o.query))['nick'][0]
     result = {
         "type" : shoptype,
         "seller_id" : sellerid,
         "shop_id" : shopid,
         "title" : title,
-        "pic" : shoppic
+        "pic" : shoppic,
+        "nick" : nick
     }
     return result
 
