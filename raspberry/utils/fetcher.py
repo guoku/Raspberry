@@ -4,8 +4,8 @@ import urllib2
 import cookielib
 from bs4 import BeautifulSoup
 import re
-from urllib import unquote
 from urlparse import parse_qs, urlparse
+from urllib import unquote
 
 IMG_POSTFIX = "_\d+x\d+.*\.jpg|_b\.jpg"
 
@@ -125,13 +125,11 @@ def fetch_item(itemid):
         try:
             nameurl = nametag['src']
             o = urlparse(nameurl)
-            nick = parse_qs(str(o.query))['nick'][0]
-            nick= unquote(nick)
+            nick = parse_qs(o.query)['nick'][0]
             break
-        except Exception, e:
-            print 'except', e
+        except:
             pass
-    print nick 
+    
     result = {
         "desc" : desc,
         "cid" : cid,
@@ -143,7 +141,7 @@ def fetch_item(itemid):
         "location" : location,
         "reviews" : reviews,
         "nick" : nick,
-        "shoplink" : shoplink
+        "shop_link" : shoplink
         #"sellerid":sellerid,
         #"shoptype":shoptype
     } 
@@ -188,12 +186,17 @@ def fetch_shop(shoplink):
         return None
     shoppic = img.attrs["src"]
     shoppic = re.sub(IMG_POSTFIX, "", shoppic, 1)
+    nicktag = soup.select("html body div.bd div.box div.detail a img")[-1]
+    src = nicktag.attrs["src"]
+    o = urlparse(src)
+    nick = parse_qs(str(o.query))['nick'][0]
     result = {
         "type" : shoptype,
         "seller_id" : sellerid,
         "shop_id" : shopid,
         "title" : title,
-        "pic" : shoppic
+        "pic" : shoppic,
+        "nick" : nick
     }
     return result
 
@@ -217,7 +220,6 @@ def fetch_taobao_web(itemid):
     cat = f.headers.get('X-Category')
     cid = int(cat[5:])
     nick = f.headers.get('At_Nick')
-    nick = unquote(str(nikc))
     html = f.read()
     soup = BeautifulSoup(html)
     desc = soup.title.string[0:-4]
@@ -278,7 +280,7 @@ def fetch_tmall_web(itemid):
     cat = f.headers.get('X-Category')
     cid = int(cat[5:])
     nick = f.headers.get('At_Nick')
-    nick = unquote(str(nick))
+    nick = unquote(nick)
     html = f.read()
     soup = BeautifulSoup(html)
     desc = soup.title.string[0:-12]
@@ -334,7 +336,7 @@ if __name__ == '__main__':
     #print(shopid)
     #r = fetch_taobao_web("19562854760")
     #print(r)
-    result = fetch_item("20304981206")
+    result = fetch_item("37014050227")
     print result['nick']
     
 
