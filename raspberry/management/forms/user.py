@@ -1,7 +1,8 @@
 # coding=utf8
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import User
+from base.user import User
+# from django.contrib.auth.models import User
 
 class UserForms(forms.Form):
 
@@ -22,6 +23,19 @@ class UserForms(forms.Form):
                           label = _('bio'), help_text = _(''))
     website = forms.URLField(required = False, widget = forms.TextInput(attrs = {'class' : 'input-xxlarge'}), label = _('website'), help_text = _(''))
 
+
+    def update(self, user_id):
+        _username = self.cleaned_data['username']
+        _nickname = self.cleaned_data['nickname']
+        _email = self.cleaned_data['email']
+        _gender = self.cleaned_data['gender']
+        _bio = self.cleaned_data['bio']
+        _website = self.cleaned_data['website']
+
+        _user = User(user_id)
+        _user.reset_account(username=_username, email=_email)
+        _user.set_profile(_nickname, gender=_gender, bio=_bio, website=_website)
+        return _user
 
     # def clean_email(self):
     #     _email = self.cleaned_data.get('email', None)

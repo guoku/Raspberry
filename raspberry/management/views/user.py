@@ -69,19 +69,8 @@ def edit_user(request, user_id, template='user/edit.html'):
     else:
         _user = User(user_id)
         forms = UserForms(request.POST)
-        # return HttpResponse("%s" % )
         if forms.is_valid():
-            _username = forms.cleaned_data['username']
-            _nickname = forms.cleaned_data['nickname']
-            _email = forms.cleaned_data['email']
-            _gender = forms.cleaned_data['gender']
-            _bio = forms.cleaned_data['bio']
-            _website = forms.cleaned_data['website']
-
-
-            _user.reset_account(username=_username, email=_email)
-            _user.set_profile(_nickname, gender=_gender, bio=_bio, website=_website)
-
+            forms.update(user_id)
             return HttpResponseRedirect(request.META['HTTP_REFERER'])
         else:
             return render_to_response(
@@ -105,7 +94,7 @@ def push_message_to_user(request, user_id):
             user_id = _user_id,
             badge = _badge,
             message = _message,
-            testor_id = request.user.id
+            testor_id = request.user.id,
         )
         
         return HttpResponseRedirect(request.META['HTTP_REFERER'] + "?apns=1")
