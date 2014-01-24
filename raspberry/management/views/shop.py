@@ -12,7 +12,7 @@ from base.taobao_shop import TaobaoShop
 
 from utils.authority import staff_only 
 from utils.paginator import Paginator
-from utils from fetcher
+from utils import fetcher
 
 NUM_EVERY_PAGE = 100
 ALL_GIFTS = [u"果库福利", u"应用市场活动", u"微博微信活动"]
@@ -21,7 +21,7 @@ ALL_GIFTS = [u"果库福利", u"应用市场活动", u"微博微信活动"]
 @login_required
 @staff_only
 def index(request):
-    return HttpResponseRedirect(reverse("management_shop_list"))
+    return HttpResponseRedirect(reverse('management_shop_list'))
 
 @login_required
 @staff_only
@@ -81,8 +81,8 @@ def add_shop(request):
                 TaobaoShop.create(nick = _shop_info['nick'],
                               shop_id = _shop_info['shop_id'],
                               seller_id = _shop_info['seller_id'],
-                              title = _shop_info['title']
-                              shop_type = _shop_info['type']
+                              title = _shop_info['title'],
+                              shop_type = _shop_info['type'],
                               pic_path = _shop_info['pic'])
             else:
                 messages.info(request, "该店铺已经存在")
