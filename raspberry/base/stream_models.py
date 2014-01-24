@@ -145,7 +145,6 @@ class TaobaoShop(Document):
     shop_info = EmbeddedDocumentField(TaobaoShopInfo)
     created_time = DateTimeField()
     last_updated_time = DateTimeField()
-    last_crawled_time = DateTimeField()
     crawler_info = EmbeddedDocumentField(CrawlerInfo)
     extended_info = EmbeddedDocumentField(TaobaoShopExtendedInfo)
     meta = { 

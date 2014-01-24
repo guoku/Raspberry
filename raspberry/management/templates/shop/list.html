@@ -3,8 +3,13 @@
 
 {% block content %}
     <div class="span2">
-        <form class="form-search" method="POST" action="/scheduler/add_shop">
-            <input type="text" class="input-medium search-query" name="shop_name">
+        {% for message in messages %}
+            <div>
+                {{ message }}
+            </div>
+        {% endfor %}
+        <form class="form-search" method="POST" action="{% url 'management_add_shop' %}">
+            <input type="text" class="input-medium search-query" name="shop_link">
             <button type="submit" class="btn">添加店铺首页URL</button>
         </form>   
         <form class="form-search" method="GET" action="{% url 'management_shop_list' %}">

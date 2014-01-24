@@ -35,6 +35,7 @@ class TaobaoShop(object):
         
     @classmethod
     def create(cls, nick, shop_id, title, shop_type, seller_id, pic_path):
+        _now = datetime.datetime.now()
         shop = TaobaoShopModel(
             shop_info = TaobaoShopInfo(
                 sid = int(shop_id),
@@ -48,7 +49,9 @@ class TaobaoShop(object):
                 orientational = False,
                 commission_rate = -1
             ),
-            crawler_info = CrawlerInfo(priority = 10, cycle = 720)
+            crawler_info = CrawlerInfo(priority = 10, cycle = 720),
+            created_time = _now,
+            last_updated_time = _now
         )
         shop.save()
         _inst = cls(nick)

@@ -49,6 +49,9 @@ def shop_list(request):
                 _sort_on = "-" + _sort_on
         else:
             _sort_on = "-created_time"
+            _sort_by = "created_time"
+            _order = "desc"
+
         _gifts = request.GET.getlist("gifts")
         if _gifts:
             _para['gifts'] = _gifts
@@ -73,7 +76,9 @@ def shop_list(request):
 @staff_only
 def add_shop(request):
     if request.method == "POST":
+        print request.POST
         _shop_link = request.POST.get("shop_link", None)
+        print _shop_link
         if _shop_link:
             _shop_info = fetcher.fetch_shop(_shop_link)
             
