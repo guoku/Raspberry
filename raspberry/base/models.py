@@ -3,6 +3,8 @@ from djangosphinx.models import SphinxSearch
 from django.contrib.auth.models import User
 from django.db import models
 from stream_models import *
+
+
 class User_Profile(models.Model):
     Man = u'M'
     Woman = u'F'

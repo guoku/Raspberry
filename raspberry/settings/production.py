@@ -1,6 +1,6 @@
 import os.path
 from defaults import *
-#DEBUG = False
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
@@ -72,7 +72,7 @@ APP_HOST = 'http://www.guoku.com'
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1
-USE_I18N = False
+USE_I18N = True
 
 CELERY_RESULT_BACKEND = "redis://10.0.2.100:6379/0"
 BROKER_TRANSPORT = "librabbitmq"

@@ -15,6 +15,7 @@ import json
 from base.user import User
 from utils.authority import staff_only 
 from utils.paginator import Paginator
+from management.forms.user import UserForms
 import logging
 logger = logging.getLogger('django.request')
 
@@ -51,31 +52,46 @@ def user_list(request):
 
 @login_required
 @staff_only
-def edit_user(request, user_id):
+def edit_user(request, user_id, template='user/edit.html'):
+
     if request.method == 'GET':
+
         _user_context = User(user_id).read()
+        forms = UserForms(initial=_user_context)
         return render_to_response( 
-            'user/edit.html', 
+            template,
             {
-                'active_division' : 'user',
+                'forms': forms,
                 'user_context' : _user_context,
             },
             context_instance = RequestContext(request)
         )
     else:
-        _username = request.POST.get("username", None)
-        _nickname = request.POST.get("nickname", None)
-        _gender = request.POST.get("gender", None)
-        _email = request.POST.get("email", None)
-        _bio = request.POST.get("bio", None)
-        _website = request.POST.get("website", None)
-
         _user = User(user_id)
-        _user.reset_account(username=_username, email=_email)
-        _user.set_profile(_nickname, gender=_gender, bio=_bio, website=_website)
+        forms = UserForms(request.POST)
+        # return HttpResponse("%s" % )
+        if forms.is_valid():
+            _username = forms.cleaned_data['username']
+            _nickname = forms.cleaned_data['nickname']
+            _email = forms.cleaned_data['email']
+            _gender = forms.cleaned_data['gender']
+            _bio = forms.cleaned_data['bio']
+            _website = forms.cleaned_data['website']
 
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+            _user.reset_account(username=_username, email=_email)
+            _user.set_profile(_nickname, gender=_gender, bio=_bio, website=_website)
+
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        else:
+            return render_to_response(
+                template,
+                {
+                    'forms':forms,
+                    'user_context' : _user.read(),
+                },
+                context_instance = RequestContext(request)
+            )
 
 @login_required
 @staff_only

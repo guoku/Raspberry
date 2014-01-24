@@ -1,7 +1,7 @@
 import os.path
 from defaults import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -18,18 +18,12 @@ register_connection('log-db', 'guoku_log')
 
 DATABASES = {
     'default': {
-<<<<<<< HEAD:raspberry/settings/dev.py
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'guoku',
         'USER': 'qinzhoukan',
         'PASSWORD': 'qinzhoukan1@#',
         'HOST': '10.0.2.90',
-=======
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku',
-        'USER': 'root',
-        'PASSWORD': 'cw12345',
->>>>>>> 0ebb172e5470b5f8a9011711086efe45814d2905:raspberry/settings.py
+
         'PORT': '',
         'OPTIONS': {
             'use_unicode':'utf-8',
@@ -39,7 +33,6 @@ DATABASES = {
 }
 #DATABASE_ROUTERS = ['router.AuthRouter']
 
-<<<<<<< HEAD:raspberry/settings/dev.py
 # CACHES = {
 #     "default": {
 #         "BACKEND": "redis_cache.cache.RedisCache",
@@ -56,24 +49,6 @@ CACHES = {
    'default': {
        'BACKEND': 'redis_cache.RedisCache',
        'LOCATION': '10.0.2.49:6379',
-=======
-#CACHES = {
-#    "default": {
-#        "BACKEND": "redis_cache.cache.RedisCache",
-#        "LOCATION": [
-#            "localhost:6379:1",
-#        ],
-#        "OPTIONS": {
-#            "PARSER_CLASS": "redis.connection.HiredisParser",
-#            "CLIENT_CLASS": "redis_cache.client.ShardClient",
-#        }
-#    }
-#}
-CACHES = {
-   'default': {
-       'BACKEND': 'redis_cache.RedisCache',
-       'LOCATION': 'localhost:6379',
->>>>>>> 0ebb172e5470b5f8a9011711086efe45814d2905:raspberry/settings.py
        'TIMEOUT:': 864000,
        'OPTIONS': {
            'DB': 1,
@@ -83,24 +58,12 @@ CACHES = {
 }
 
 # session
-<<<<<<< HEAD:raspberry/settings/dev.py
 SESSION_ENGINE = 'redis_sessions.session'
 SESSION_REDIS_HOST = '10.0.2.49'
 SESSION_REDIS_PORT = 6379
 SESSION_REDIS_DB = 2
 SESSION_COOKIE_AGE = 1209600
-=======
-# SESSION_ENGINE = 'redis_sessions.session'
-# SESSION_REDIS_HOST = '10.0.2.49'
-# SESSION_REDIS_PORT = 6379
-# SESSION_REDIS_DB = 2
-# SESSION_COOKIE_AGE = 1209600
-#SESSION_ENGINE = 'redis_sessions.session'
-#SESSION_REDIS_HOST = 'localhost'
-#SESSION_REDIS_PORT = 6379
-#SESSION_REDIS_DB = 2
-#SESSION_COOKIE_AGE = 1209600
->>>>>>> 0ebb172e5470b5f8a9011711086efe45814d2905:raspberry/settings.py
+
 
 MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
@@ -111,12 +74,7 @@ SPHINX_port = 3312
 
 
 #mongo db
-<<<<<<< HEAD:raspberry/settings/dev.py
 MANGO_HOST = '10.0.2.200'
-=======
-# MANGO_HOST = '10.0.2.200'
-MANGO_HOST = 'localhost'
->>>>>>> 0ebb172e5470b5f8a9011711086efe45814d2905:raspberry/settings.py
 MANGO_PORT = 27017
 
 
@@ -125,7 +83,7 @@ JUMP_TO_TAOBAO = True
 IMAGE_LOCAL = True
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
 APP_HOST = "http://10.0.1.109:8001"
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 #IMAGE_LOCAL = False
 #IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 
@@ -154,13 +112,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-<<<<<<< HEAD:raspberry/settings/dev.py
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
-=======
-#
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
->>>>>>> 0ebb172e5470b5f8a9011711086efe45814d2905:raspberry/settings.py
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -211,8 +163,6 @@ INSTALLED_APPS = (
     'mobile',
     'seller',
     'web',
-    # 'redis_admin',
-    'web'
 )
 
 LOGGING = {
