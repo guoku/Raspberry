@@ -430,7 +430,7 @@ class User(object):
     
     def set_profile(self, nickname, location = u'北京', city = u'朝阳', gender = 'O', bio = '', website = ''):
         self.__ensure_user_profile_obj()
-        
+
         if nickname != None:
             _nickname = nickname.strip()
             if self.user_profile_obj != None and _nickname != self.user_profile_obj.nickname:

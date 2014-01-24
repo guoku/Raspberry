@@ -1,6 +1,6 @@
 import os.path
 from defaults import *
-#DEBUG = False
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 

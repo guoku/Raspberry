@@ -1,7 +1,7 @@
 import os.path
 from defaults import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -23,6 +23,7 @@ DATABASES = {
         'USER': 'qinzhoukan',
         'PASSWORD': 'qinzhoukan1@#',
         'HOST': '10.0.2.90',
+
         'PORT': '',
         'OPTIONS': {
             'use_unicode':'utf-8',
@@ -63,6 +64,7 @@ SESSION_REDIS_PORT = 6379
 SESSION_REDIS_DB = 2
 SESSION_COOKIE_AGE = 1209600
 
+
 MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
 
@@ -81,7 +83,7 @@ JUMP_TO_TAOBAO = True
 IMAGE_LOCAL = True
 IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
 APP_HOST = "http://10.0.1.109:8001"
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 #IMAGE_LOCAL = False
 #IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 
@@ -160,7 +162,6 @@ INSTALLED_APPS = (
     'mobile',
     'seller',
     'web',
-    # 'redis_admin',
 )
 
 LOGGING = {

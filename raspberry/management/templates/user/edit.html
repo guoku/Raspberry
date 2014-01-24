@@ -34,63 +34,26 @@
             <fieldset>
                 <div class="control-group">
                     <label class="control-label" for="user_id">用户ID:</label>
-
                     <div class="controls">
                         <input class="input-xxlarge" type="text" id="user_id" name="user_id"
                                value="{{ user_context.user_id }}" disabled/>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="username">用户名:</label>
-
-                    <div class="controls">
-                        <input class="input-xxlarge" type="text" id="username" name="username"
-                               value="{{ user_context.username }}"/>
+                {% for field in forms %}
+                    <div class="control-group {% if field.errors %}error{% endif %}">
+                        <label class="control-label" for="id_for_label">{{ field.label }}:</label>
+                        <div class="controls">
+                            {{ field }}
+                            {% if field.errors %}
+                            <span class="help-inline">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </span>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="nickname">昵称:</label>
-
-                    <div class="controls">
-                        <input class="input-xxlarge" type="text" id="nickname" name="nickname"
-                               value="{{ user_context.nickname }}"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="gender">性别:</label>
-
-                    <div class="controls">
-                        <select id="gender" name="gender">
-                            <option value="M" {% if user_context.gender == "M" %}selected="selected" {% endif %}>男
-                            </option>
-                            <option value="F" {% if user_context.gender == "F" %}selected="selected" {% endif %}>女</option>
-                            <option value="O" {% if user_context.gender == "O" %}selected="selected" {% endif %}>其他</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="email">登录邮箱:</label>
-
-                    <div class="controls">
-                        <input class="input-xxlarge" type="text" id="email" name="email"
-                               value="{{ user_context.email }}"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="bio">个人简介:</label>
-
-                    <div class="controls">
-                        <textarea id="bio" name="bio" rows="3" class="input-xxlarge">{{ user_context.bio }}</textarea>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="website">网址:</label>
-
-                    <div class="controls">
-                        <input class="input-xxlarge" type="text" id="website" name="website"
-                               value="{{ user_context.website }}"/>
-                    </div>
-                </div>
+                {% endfor %}
             </fieldset>
 
             <div class="form-actions">
