@@ -14,7 +14,7 @@ MANAGERS = ADMINS
 from mongoengine import register_connection
 register_connection('guoku-db', 'guoku', username='qinzhoukan', password='qinzhoukan1@#',host='10.0.2.200',
         max_pool_size=200, auto_start_request=False, safe=True)
-register_connection('log-db', 'guoku_log', username='qinzhoukan', password='qinzhoukan1@#',host='10.0.2.200',
+register_connection('log-db', 'guoku_log', host='10.0.2.200',
         max_pool_size=200, auto_start_request=False, safe=True)
 
 MANGO_HOST = '10.0.2.200'
@@ -64,7 +64,7 @@ SPHINX_PORT = 9312
 
 JUMP_TO_TAOBAO = True
 
-IMAGE_LOCAL = False 
+IMAGE_LOCAL = DEBUG
 IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 APP_HOST = 'http://www.guoku.com'
 
