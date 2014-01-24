@@ -1,4 +1,5 @@
 import os.path
+from defaults import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -82,11 +83,6 @@ ALLOWED_HOSTS = ['*']
 #IMAGE_LOCAL = False 
 #IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 
-TIME_ZONE = 'Asia/Shanghai'
-LANGUAGE_CODE = 'zh-cn'
-SITE_ID = 1
-USE_I18N = False
-
 #CELERY_RESULT_BACKEND = "redis"
 #CELERY_REDIS_HOST = "localhost"
 #CELERY_REDIS_PORT = 6379
@@ -108,8 +104,6 @@ STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 BASE_DIR = os.getcwd()
 
-MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
-
 # Additional locations of static files
 STATICFILES_DIRS = (
     # ('common', os.path.join(BASE_DIR, 'static')),
@@ -118,33 +112,6 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '3psdgd-e9ggs-0bjm9ghuu)mqlpj0xo87k4xmq3w@xg8kuk69r'
-
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-  'django.contrib.auth.context_processors.auth',
-  #'django.core.context_processors.static',
-  'django.core.context_processors.i18n',
-  'django.core.context_processors.request',
-  'django.core.context_processors.media',
-  'django.contrib.messages.context_processors.messages',
-  'django.core.context_processors.static',
-  #'zinnia.context_processors.version',
-) # Optional
 
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
@@ -207,22 +174,3 @@ LOGGING = {
         }, }
 }
 
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.SHA1PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-)
-
-# taobao api key and sercet
-TAOBAO_APP_KEY = '12313170'
-TAOBAO_APP_SECRET = '90797bd8d5859aac971f8cc9d4e51105'
-TAOBAO_OAUTH_URL = 'https://oauth.taobao.com/authorize'
-TAOBAO_OAUTH_LOGOFF = 'https://oauth.taobao.com/logoff'
-
-TAOBAO_APP_INFO = { 
-    "default_app_key" : "12313170",
-    "default_app_secret" : "90797bd8d5859aac971f8cc9d4e51105",
-    "web_app_key" : "21419640",
-    "web_app_secret" : "df91464ae934bacca326450f8ade67f7" 
-}
-
-INTERNAL_IPS = ('127.0.0.1',)
