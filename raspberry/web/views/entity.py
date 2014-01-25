@@ -15,7 +15,7 @@ from base.entity import Note
 from base.user import User
 from base.item import Item
 from base.category import Category
-from base import fetcher
+from utils import fetcher
 
 
 def _parse_taobao_id_from_url(url):
