@@ -9,14 +9,15 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from base.taobao_shop import TaobaoShop
-
+from base.item import Item
+from base.entity import Entity
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 from utils import fetcher
 
 NUM_EVERY_PAGE = 100
 ALL_GIFTS = [u"果库福利", u"应用市场活动", u"微博微信活动"]
-
+SHOP_TYPES = ["taobao.com", "tmall.com", "global"]
 
 @login_required
 @staff_only
@@ -94,3 +95,32 @@ def add_shop(request):
             return HttpResponseRedirect(reverse("management_shop_list"))
     else:
         pass
+
+@login_required
+@staff_only
+def shop_detail(request):
+    if request.method == "GET":
+        _nick = request.GET.get("nick", None)
+        if _nick:
+            shop = TaobaoShop(_nick)
+            shop_context = shop.read()
+            print shop_context
+            item_list = Item.find_taobao_item(shop_nick =shop_context['shop_nick'], full_info=True) 
+            items = []
+            for item in item_list:
+                inst = Item(item['item_id'])
+                item_context = inst.read()
+                entity = Entity(item['entity_id'])
+                item_context['image'] = entity.read()['chief_image']
+                items.append(item_context)
+            print 'len', len(items)
+            return render_to_response("shop/detail.html",
+                                      { "shop" : shop_context,
+                                        "items" : items,
+                                        "gifts" : ALL_GIFTS,
+                                        "priorities" : range(11),
+                                        "taobao_shop_types" : SHOP_TYPES 
+                                      },
+                                      context_instance = RequestContext(request))
+            
+    return HttpResponse("OK")

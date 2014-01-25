@@ -43,7 +43,10 @@ class TaobaoShop(object):
                 title = title,
                 shop_type = shop_type,
                 seller_id = int(seller_id),
-                pic_path = pic_path
+                pic_path = pic_path,
+                shop_score = ShopScore(credit = "", praise_rate = 0),
+                main_products = "",
+                location = ""
             ),
             extended_info = TaobaoShopExtendedInfo(
                 orientational = False,
@@ -58,17 +61,19 @@ class TaobaoShop(object):
         return _inst 
 
 
-    def read(self):
+    def read(self, full_info = False):
         _hdl = TaobaoShopModel.objects.filter(shop_info__nick = self.nick)
         if _hdl.count() == 0:
             return None
         _doc = _hdl.first()
+        print _doc.crawler_info._data
         _context = {}
         _context['shop_nick'] = self.nick
         _context['shop_id'] = _doc.shop_info.sid
         _context['title'] = _doc.shop_info.title
         _context['shop_type'] = _doc.shop_info.shop_type 
         _context['seller_id'] = _doc.shop_info.seller_id 
+        '''
         _context['commission_rate'] = -1
         _context['commission_type'] = 'unknown' 
         if _doc.extended_info:
@@ -78,7 +83,15 @@ class TaobaoShop(object):
             elif _doc.extended_info.commission_rate != -1:
                 _context['commission_type'] = 'general'
                 _context['commission_rate'] = _doc.extended_info.commission_rate
+        if full_info:
+            _context
+        '''
 
+        _context['extended_info'] = _doc.extended_info._data
+        _context['crawler_info'] = _doc.crawler_info._data
+        if _doc.shop_info.shop_score:
+            _context['shop_score'] = _doc.shop_info.shop_score._data
+        
         return _context
    
     STATUS_WAITING = 'waiting'

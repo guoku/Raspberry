@@ -1,0 +1,120 @@
+{% extends "management_base.html" %}
+{% load management %}
+
+{% block content %}
+    <div class="span10">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <td>名称</td>
+                <td><a href="http://shop{{shop.shop_id}}.taobao.com">{{shop.title }}</a></td>
+            </tr>
+            <tr>
+                <td>店主昵称</td>
+                <td>{{ shop.shop_nick }}</td>
+            </tr>
+            <tr>
+                <td>店铺信息</td>
+                <td>
+                    <form class="form-horizontal" method="POST" action="/scheduler/update_taobaoshop_info">
+                
+                    <input type="hidden" name="sid" value="{{shop.shop_nick}">
+                    <div class="control-group">
+                        <label class="control-label" for="shop_priority">优先级：</label>
+                        <select id="shop_priority" name="priority">
+                            {% for p in priorities %}
+                            <option {% if shop.crawler_info.priority == p %}selected {%endif%}> {{ p }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_type">类型：</label>
+                        <select id="shop_type" name="shoptype">
+                            {% for shop_type  in taobao_shop_types %}
+                            <option {%if shop.shop_type == shop_type  %}selected {%endif%}> {{ shop_type }}</option>
+                         {% endfor %}
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_gifts">礼品：</label>
+                            {% for gift in gifts %}
+                            <input id="shop_gifts" type="checkbox" name="{{ gift }}" {% if gift in shop.extended_info.gifts %} checked {% endif %}/> {{ gift }} 
+                            {% endfor %}
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_cycle">周期(小时)：</label>
+                        <input id="shop_cycle" name="cycle" type="text" class="input-medium" value="{{ shop.crawler_info.cycle }}">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_orientational">是否定向：</label>
+                        <select id="shop_orientational" name="orientational">
+                            <option value="true" {%if shop.extended_info.orientational %}selected {%endif%}>yes</option>
+                            <option value="false" {%if not shop.extended_info.orientational %}selected {%endif%}>no</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_singletail">是否原单：</label>
+                        <select id="shop_singletail" name="singletail">
+                            <option value="true" {%if shop.extended_info.single_tail %}selected {%endif%}>yes</option>
+                            <option value="false" {%if not shop.extended_info.single_tail %}selected {%endif%}>no</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="original">是否原创：</label>
+                        <select id="shop_original" name = "original">
+                            <option value="true" {%if shop.extended_info.original%}selected{%endif%}>yes</option>
+                            <option value="false" {%if not shop.extended_info.Original%}selected{%endif%}>no</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_commission">是否佣金：</label>
+                        <select id="shop_commission" name="commission">
+                            <option value="true" {%if shop.extended_info.commission%} selected{% endif %}>yes</option>
+                            <option value="false" {%if not shop.extended_info.commission%}selected{%endif%}>no</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_commission_rate">佣金比例：</label>
+                        <input id="shop_commission_rate" name="commission_rate" type="text" class="input-medium" value="{{ shop.extended_info.commission_rate }}">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_main_products">主营类别：</label>
+                        <input id="shop_main_products" name="main_products" type="text" class="input-medium" value="{{shop.main_products}}">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_credit">卖家信誉：</label>
+                        {{shop.shop_score.credit}}
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="shop_praise_rate">好评率：</label>
+                        {{shop.shop_score.praise_rate}}
+                    </div>
+                    <div class="control-group">
+                        <div class ="controls">
+                        <button type="submit" class="btn">保存</button>
+                        </div>
+                    </div>
+                                
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="span10">
+        <table class="table table-bordered table-striped">
+            <th>Image</th>
+            <th>Title</th>
+            <th>Link</th>
+            <th>Price</th>
+            {% for item in items %}
+            <tr>
+                <td>
+                <img src="{{ item.image.url }}" width="100" height="100"/>
+                </td>
+                <td>{{ item.title}}</td>
+                <td><a href="http://item.taobao.com/item.htm?id={{ item.taobao_id }}">Link</a></td>
+                <td>{{item.price}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
