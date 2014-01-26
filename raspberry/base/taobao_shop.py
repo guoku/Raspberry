@@ -97,7 +97,32 @@ class TaobaoShop(object):
     STATUS_WAITING = 'waiting'
     STATUS_ACCEPTED = 'accepted'
     STATUS_REJECTED = 'rejected'
-    
+
+    def update(self, priority = None, cycle = None, shop_type = None,
+               orientational = None, commission = None, commission_rate = None,
+               original = None, gifts = None, main_products = None, single_tail = None):
+        shop = TaobaoShopModel.objects.filter(shop_info__nick = self.nick).first()
+        if shop:
+            if priority:
+                shop.crawler_info.priority = priority
+            if cycle:
+                shop.crawler_info.cycle = cycle
+            if shop_type:
+                shop.shop_info.shop_type = shop_type
+            if orientational:
+                shop.extended_info.orientational = orientational
+            if commission:
+                shop.extended_info.commission = commission
+            if commission_rate:
+                shop.extended_info.commission_rate = commission_rate
+            if gifts:
+                shop.extended_info.gifts = gifts
+            if main_products:
+                shop.extended_info.main_products = main_products
+            if single_tail:
+                shop.extended_info.single_tail = single_tail
+            shop.save()
+
     def create_verification_info(self, intro):
         info = TaobaoShopVerificationInfo(
             shop_nick = self.nick,

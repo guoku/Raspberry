@@ -124,3 +124,51 @@ def shop_detail(request):
                                       context_instance = RequestContext(request))
             
     return HttpResponse("OK")
+
+@login_required
+@staff_only
+def edit_shop(request):
+    if request.method == "POST":
+        _nick = request.POST.get("nick", None)
+        if _nick:
+            _priority = int(request.POST.get('priority', '10'))
+            _cycle = int(request.POST.get('cycle', '720'))
+            _shop_type = request.POST.get('shoptype', 'taobao.com')
+            _orientational = request.POST.get('orientational', 'false')
+            if _orientational == "false":
+                _orientational = False
+            else:
+                _orientational = True
+            _commission_rate = float(request.POST.get("commission_rate", "-1"))
+            _original = request.POST.get('original', 'false')
+            if _original == "false":
+                _original = False
+            else:
+                _original = True
+            _gifts = request.POST.getlist("gifts")
+            _commission = request.POST.get('commission', 'false')
+            if _commission == "false":
+                _commission = False
+            else:
+                _commission = True
+            _single_tail = request.POST.get('single_tail', 'false')
+            if _single_tail == "false":
+                _single_tail = False
+            else:
+                _single_tail = True
+
+            _main_products = request.POST.get('main_products', "")
+            shop = TaobaoShop(_nick)
+            shop.update(priority = _priority,
+                        cycle = _cycle,
+                        shop_type =_shop_type,
+                        orientational = _orientational,
+                        commission = _commission,
+                        commission_rate = _commission_rate,
+                        original = _original,
+                        gifts = _gifts,
+                        main_products = _main_products,
+                        single_tail = _single_tail)
+            return HttpResponseRedirect(reverse("management_shop_detail") + "?nick=" + _nick)
+    else:
+        pass

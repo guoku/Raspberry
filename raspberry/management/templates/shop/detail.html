@@ -15,9 +15,9 @@
             <tr>
                 <td>店铺信息</td>
                 <td>
-                    <form class="form-horizontal" method="POST" action="/scheduler/update_taobaoshop_info">
+                    <form class="form-horizontal" method="POST" action="{%url 'management_edit_shop'%}">
                 
-                    <input type="hidden" name="sid" value="{{shop.shop_nick}">
+                    <input type="hidden" name="nick" value="{{ shop.shop_nick }}">
                     <div class="control-group">
                         <label class="control-label" for="shop_priority">优先级：</label>
                         <select id="shop_priority" name="priority">
@@ -37,7 +37,7 @@
                     <div class="control-group">
                         <label class="control-label" for="shop_gifts">礼品：</label>
                             {% for gift in gifts %}
-                            <input id="shop_gifts" type="checkbox" name="{{ gift }}" {% if gift in shop.extended_info.gifts %} checked {% endif %}/> {{ gift }} 
+                            <input id="shop_gifts" type="checkbox" name="gifts" value="{{gift}}" {% if gift in shop.extended_info.gifts %} checked {% endif %}/> {{ gift }} 
                             {% endfor %}
                     </div>
                     <div class="control-group">
