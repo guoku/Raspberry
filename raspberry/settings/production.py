@@ -1,4 +1,4 @@
-import os.path
+# import os.path
 from defaults import *
 
 DEBUG = True
