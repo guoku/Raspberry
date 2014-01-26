@@ -17,7 +17,7 @@ from tasks import MarkFootprint, MobileLogTask
 from utils.lib import get_client_ip
 import time
 
-#@check_sign
+@check_sign
 def homepage(request):
     _start_at = datetime.datetime.now()
     _session = request.GET.get('session', None)
