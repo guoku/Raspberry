@@ -1,5 +1,11 @@
 import os.path
 
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
+
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 

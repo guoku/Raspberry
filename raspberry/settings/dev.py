@@ -4,16 +4,14 @@ from defaults import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
 
-MANAGERS = ADMINS
 
 
 from mongoengine import register_connection
-register_connection('guoku-db', 'guoku')
-register_connection('log-db', 'guoku_log')
+register_connection('guoku-db', 'guoku', username='qinzhoukan', password='qinzhoukan1@#',host='10.0.2.200',
+        max_pool_size=200, auto_start_request=False, safe=True)
+register_connection('log-db', 'guoku_log', host='10.0.2.200',
+        max_pool_size=200, auto_start_request=False, safe=True)
 
 
 DATABASES = {
@@ -31,20 +29,7 @@ DATABASES = {
         }
     },
 }
-#DATABASE_ROUTERS = ['router.AuthRouter']
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "redis_cache.cache.RedisCache",
-#         "LOCATION": [
-#             "localhost:6379:1",
-#         ],
-#         "OPTIONS": {
-#             "PARSER_CLASS": "redis.connection.HiredisParser",
-#             "CLIENT_CLASS": "redis_cache.client.ShardClient",
-#         }
-#     }
-# }
 CACHES = {
    'default': {
        'BACKEND': 'redis_cache.RedisCache',

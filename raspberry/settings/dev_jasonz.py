@@ -4,11 +4,6 @@ from defaults import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
 
 from mongoengine import register_connection 
 register_connection('guoku-db', 'guoku_01_03')
