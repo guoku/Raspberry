@@ -1,5 +1,5 @@
 #encoding=utf8
-from base.user import User 
+from base.models import User_Follow as FollowModel 
 from datetime import datetime
 from django.contrib.auth.models import User as AuthUser
 from django.db.models import Count
@@ -17,13 +17,29 @@ class UserStats(object):
             #_hd1.extra(select = {group : group+'(date_joined)'}).values(group)
             #        .annotate(available = Count('date_joined'))
             group = group.lower()
-            df = date_fromat("date_joined", group)
-            _hd1 = _hd1.objects.extra(select = {"date" : df})
+            df = date_format("date_joined", group)
+            _hd1 = _hd1.extra(select = {"date" : df})\
                         .values("date").annotate(count = Count('date_joined'))
         return list(_hd1.all())
+    
+    def new_follow_count(cls, start_time, end_time = datetime.now(),
+                        group = None):
+        _hd1 = FollowModel.objects.filter(followed_time__range = \
+                                        (start_time, end_time))
 
+        if group == None:
+            count = _hd1.count()
+            d = {"count" : count}
+            return [d]
+        else:
+            group = group.lower()
+            df = date_format("followed_time", group)
+            _hd1 = _hd1.extra(select = {"date" : df})\
+                    .values("date").annotate(count = Count("followed_time"))
 
-def date_fromat(field, group):
+        return list(_hd1.all())
+
+def date_format(field, group):
     d = ""
     if group == "year":
         d = """DATE_FORMAT({0}, '%%Y')"""

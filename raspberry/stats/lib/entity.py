@@ -2,8 +2,8 @@
 
 from datetime import datetime 
 from base.models import Entity
-from django.db.models import Count
-from user import date_fromat
+from django.db.models import Count,Sum
+from user import date_format
 
 class EntityStats(object):
 
@@ -16,9 +16,9 @@ class EntityStats(object):
         _hd1 = _hd1.filter(weight__gte = 0)
 
         if category_id != None:
-            _hd1.filter(category_id = int(category_id))
+            _hd1.filter(category__id = int(category_id))
         if neo_category_id != None:
-            _hd1.filter(neo_category_id = int(neo_category_id))
+            _hd1.filter(neo_category__id = int(neo_category_id))
 
         if group == None:
             count = _hd1.count()
@@ -26,7 +26,32 @@ class EntityStats(object):
             return [d]
         else:
             group = group.lower()
-            df = date_fromat("created_time", group)
-            _hd1.extra(select = {"date" : df}).values("date")\
+            df = date_format("created_time", group)
+            _hd1 = _hd1.extra(select = {"date" : df}).values("date")\
                     .annotate(count = Count('created_time'))
+        return list(_hd1.all())
+
+
+    @classmethod 
+    def new_like_count(cls, start_time, end_time = datetime.now(),
+            category_id = None, neo_category_id = None, group = None):
+        _hd1 = Entity.objects.filter(created_time__range = (start_time, end_time))
+
+        if category_id != None:
+            _hd1 = _hd1.filter(category__id = category_id)
+
+        if neo_category_id != None:
+            _hd1 = _hd1.filter(neo_category__id = neo_category_id)
+
+        if group == None:
+            count = _hd1.count()
+            d = {"count" : count}
+            return [d]
+
+        else:
+            group = group.lower()
+            df = date_format("created_time", group)
+            _hd1 = _hd1.extra(select = {"date" : df}).values("date")\
+                    .annotate(count = Sum("like_count"))
+
         return list(_hd1.all())
