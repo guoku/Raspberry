@@ -49,6 +49,9 @@ msgid "other"
 msgstr "其他"
 
 
+msgid "operate"
+msgstr "操作"
+
 msgid "username"
 msgstr "用户名"
 
@@ -66,3 +69,6 @@ msgstr "简介"
 
 msgid "website"
 msgstr ""
+
+msgid "update"
+msgstr "更新"
