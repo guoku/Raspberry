@@ -54,7 +54,7 @@
                     {% for shop in shops %}
                     <tr>
                         
-                        <td><a href="/scheduler/shop_detail/taobao/?sid={{ .ShopInfo.Sid }}">{{ shop.shop_info.nick }}</a></td>
+                        <td><a href="{% url 'management_shop_detail' %}?nick={{ shop.shop_info.nick }}">{{ shop.shop_info.nick }}</a></td>
                         <td>{{ shop.shop_info.title }} </td>
                         <td>{{ shop.crawler_info.priority }}</td>
                         <td>{{ shop.extended_info.commission_rate }}</td>

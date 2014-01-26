@@ -19,6 +19,7 @@ import time
 
 @check_sign
 def homepage(request):
+    _start_at = datetime.datetime.now()
     _session = request.GET.get('session', None)
     if _session != None:
         _request_user_id = Session_Key.objects.get_user_id(_session)
@@ -74,12 +75,13 @@ def homepage(request):
 #        _rslt['config']['jump_to_taobao'] = 0
     
         
-    
-    MobileLogTask.delay('HOMEPAGE', request.REQUEST, get_client_ip(request), _request_user_id)
+    _duration = datetime.datetime.now() - _start_at
+    MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'HOMEPAGE', request.REQUEST, get_client_ip(request), _request_user_id)
     return SuccessJsonResponse(_rslt)
 
 @check_sign
 def feed(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         _type = request.GET.get('type', 'entity')
@@ -125,11 +127,13 @@ def feed(request):
                     }
                 })
         
-        MobileLogTask.delay('FEED', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'FEED', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
         return SuccessJsonResponse(_rslt)
 
 @check_sign
 def message(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -224,11 +228,13 @@ def message(request):
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, message = True)
         
-        MobileLogTask.delay('MESSAGE', request.REQUEST, get_client_ip(request), _request_user_id)
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'MESSAGE', request.REQUEST, get_client_ip(request), _request_user_id)
         return SuccessJsonResponse(_rslt)
 
 @check_sign
 def selection(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -264,11 +270,13 @@ def selection(request):
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, selection = True)
         
-        MobileLogTask.delay('SELECTION', request.REQUEST, get_client_ip(request), _request_user_id, { 'root_category_id' : _root_cat_id })
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'SELECTION', request.REQUEST, get_client_ip(request), _request_user_id, { 'root_category_id' : _root_cat_id })
         return SuccessJsonResponse(_rslt)
 
 @check_sign
 def popular(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -298,7 +306,8 @@ def popular(request):
             else:
                 _log_appendix = { 'scale' : 'DAY' }
                 
-            MobileLogTask.delay('POPULAR', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
+            _duration = datetime.datetime.now() - _start_at
+            MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'POPULAR', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
             return SuccessJsonResponse(_rslt)
         else:
             return ErrorJsonResponse(
