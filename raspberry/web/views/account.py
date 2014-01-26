@@ -401,8 +401,6 @@ def update_avatar(request):
 
         return HttpResponse(json.dumps(_ret))
 
-<<<<<<< HEAD
-=======
 
 @login_required
 def bind_taobao(request):
@@ -537,4 +535,4 @@ def bind_taobao_shop(request):
 #            request.session.set_expiry(settings.SESSION_COOKIE_AGE)
 #        print redirect_url
 #        return HttpResponseRedirect(redirect_url)
->>>>>>> 6f8d585e38b3f2195756576ba76485eb3fb589cc
+

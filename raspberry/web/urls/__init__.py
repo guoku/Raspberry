@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.conf.urls.defaults import url, patterns, include
+from django.conf.urls import url, patterns, include
 
 urlpatterns = patterns(
     'web.views',
@@ -22,8 +22,7 @@ urlpatterns = patterns(
 
 
 urlpatterns += patterns(
-<<<<<<< HEAD
-=======
+
     'web.views.account',
     url(r'^login/$', 'login', name="login"),
     url(r'^taobao/bind/$', 'bind_taobao', name="bind_taobao"),
@@ -33,7 +32,6 @@ urlpatterns += patterns(
 )
 
 urlpatterns += patterns(
->>>>>>> 6f8d585e38b3f2195756576ba76485eb3fb589cc
     'web.views.search',
     url('^search/$', 'search', name='web_search')
 )

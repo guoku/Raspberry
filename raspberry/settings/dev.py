@@ -31,20 +31,7 @@ DATABASES = {
         }
     },
 }
-#DATABASE_ROUTERS = ['router.AuthRouter']
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "redis_cache.cache.RedisCache",
-#         "LOCATION": [
-#             "localhost:6379:1",
-#         ],
-#         "OPTIONS": {
-#             "PARSER_CLASS": "redis.connection.HiredisParser",
-#             "CLIENT_CLASS": "redis_cache.client.ShardClient",
-#         }
-#     }
-# }
 CACHES = {
    'default': {
        'BACKEND': 'redis_cache.RedisCache',
