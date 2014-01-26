@@ -32,6 +32,9 @@ msgstr "退出"
 msgid "selection"
 msgstr "精选"
 
+msgid "popular"
+msgstr "热门"
+
 msgid "Category"
 msgstr "分类"
 

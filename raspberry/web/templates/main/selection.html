@@ -2,7 +2,16 @@
 {% load i18n staticfiles %}
 {% load selection %}
 
-{% block title %}{% trans "selection" %}{% endblock %}
+{% block title %}
+    {% trans "selection" %}
+    {% block subtitle %}
+        {% for category in category_list %}
+            {% if category.category_id == curr_category_id %}
+                - {{ category.category_title }}
+            {% endif %}
+        {% endfor %}
+    {% endblock %}
+{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/selection.css' %}">{% endblock %}
 {% block content %}
     <div id="selection">

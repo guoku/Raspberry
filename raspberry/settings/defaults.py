@@ -20,8 +20,6 @@ LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), '../conf/locale'),
 )
 
-print LOCALE_PATHS
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
