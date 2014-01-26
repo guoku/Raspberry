@@ -149,12 +149,12 @@ def freeze_note(request, note_id):
 
 @login_required
 @staff_only
-def edit_note(request, note_id):
+def edit_note(request, note_id, template='note/edit.html'):
     if request.method == 'GET':
         _note_context = Note(note_id).read()
         _entity_context = Entity(_note_context['entity_id']).read()
         return render_to_response(
-            'note/edit.html', 
+            template,
             {
                 'active_division' : 'note',
                 'entity_context' : _entity_context,

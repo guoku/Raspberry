@@ -1,12 +1,18 @@
 import os.path
 
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
+
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1
-USE_I18N = False
+USE_I18N = True
 
 # List of finder classes that know how to find static files in
 # various locations.

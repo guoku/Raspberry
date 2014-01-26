@@ -1,5 +1,9 @@
 # coding=utf-8
 from django.conf.urls import url, patterns, include
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 
 urlpatterns = patterns(
     'web.views',
