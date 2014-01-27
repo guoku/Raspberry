@@ -22,10 +22,6 @@ urlpatterns = patterns(
 
 
 urlpatterns += patterns(
-<<<<<<< HEAD
-
-=======
->>>>>>> b68f12866de967deb43b4038684df07cab045f03
     'web.views.account',
     url(r'^login/$', 'login', name="login"),
     url(r'^logout/$', 'logout', name="logout"),
