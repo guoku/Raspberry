@@ -66,7 +66,6 @@ class TaobaoShop(object):
         if _hdl.count() == 0:
             return None
         _doc = _hdl.first()
-        print _doc.crawler_info._data
         _context = {}
         _context['shop_nick'] = self.nick
         _context['shop_id'] = _doc.shop_info.sid
