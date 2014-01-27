@@ -153,7 +153,7 @@ def login(request, template = 'account/login.html'):
             auth_login(request, _user)
             if _remember_me:
                 request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
-            return HttpResponse("OK")
+            return HttpResponseRedirect(reverse('web_selection'))
         else:
             return render_to_response(template,
                 {

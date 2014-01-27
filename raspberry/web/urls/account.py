@@ -4,11 +4,11 @@ from django.conf.urls import url, patterns
 
 urlpatterns = patterns(
     'web.views.account',
-    url('^login/$', 'login', name='web_login'),
+    # url('^login/$', 'login', name='web_login'),
     url('^login/sina/$', 'login_by_sina', name='web_login_by_sina'),
     url('^login/taobao/$', 'login_by_taobao', name='web_login_by_taobao'),
 
-    url('^logout/$', 'logout', name='web_logout'),
+    # url('^logout/$', 'logout', name='web_logout'),
 
     url('^register/$', 'register', name='web_register'),
     url('^register/bio/$', 'register_bio', name='web_register_bio'),
