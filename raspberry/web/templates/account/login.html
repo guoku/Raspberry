@@ -1,7 +1,10 @@
 {% extends "account/account_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'sign in' %}{% endblock %}
 
 {% block form %}
-    <form action="{% url 'web.views.account.login' %}" method="POST" id="login">
+    <form action="{% url 'web_login' %}" method="POST" id="login">
         {% csrf_token %}
 
         <h2>登录</h2> | 没有帐号？<a href="{% url 'web.views.account.register' %}">请注册</a>
@@ -10,20 +13,33 @@
             <input type="hidden" name="next" value="{{ next }}">
         {% endif %}
 
-        <div>
-            <input type="text" name="email" class="text-input" placeholder="邮箱" id="email" {% if email %}value="{{ email }}" {% endif %}>
-            {% if error.email != None %}<span class="error-info">{{ error.email }}</span>{% endif %}
-        </div>
-
-        <div>
-            <input type="password" name="psw" class="text-input" placeholder="密码" id="psw">
-            {% if error.psw != None %}<span class="error-info">{{ error.psw }}</span>{% endif %}
-        </div>
+        {% for field in forms %}
+            <div>
+                {{ field }}
+                {% if field.errors %}
+                    <span class="error-info">
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    </span>
+                {% endif %}
+            </div>
+        {% endfor %}
+{#        <div>#}
+{#            <input type="text" name="email" class="text-input" placeholder="邮箱" id="email" {% if email %}value="{{ email }}" {% endif %}>#}
+{#            {% if error.email != None %}<span class="error-info">{{ error.email }}</span>{% endif %}#}
+{#        </div>#}
+{##}
+{#        <div>#}
+{#            <input type="password" name="psw" class="text-input" placeholder="密码" id="psw">#}
+{#            {% if error.psw != None %}<span class="error-info">{{ error.psw }}</span>{% endif %}#}
+{#        </div>#}
 
         <div class="submit-row">
             <label><input type="checkbox" name="remember_me" id="remember-me">记住我</label>
             <small><a href="">忘了密码?</a></small>
-            <input type="submit" value="登录" class="guoku-button">
+            <input type="submit" value={% trans "sign in" %} class="guoku-button">
+{#            <input type="submit" value={% trans "sign in" %} class="guoku-button">#}
         </div>
     </form>
 {% endblock %}

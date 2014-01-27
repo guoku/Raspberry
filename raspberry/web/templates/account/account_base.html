@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>欢迎加入果库</title>
+        <title>果库 - {% block  title %}{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
@@ -27,6 +27,6 @@
         </div>
         
         <script src="{% static 'scripts/jquery.min.js' %}"></script>
-        <script src="{% static 'scripts/account.js' %}"></script>
+{#        <script src="{% static 'scripts/account.js' %}"></script>#}
     </body>
 </html>

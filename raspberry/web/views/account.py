@@ -9,6 +9,8 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 import json
 
+
+from web.forms.account import SignInAccountForm
 from base.user import User
 from validation import *
 
@@ -137,64 +139,79 @@ def login(request, template = 'account/login.html'):
     if request.user.is_authenticated():
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-    if request.method == 'GET':
+    if request.method == 'POST':
+        _forms = SignInAccountForm(request.POST)
+        if _forms.is_valid():
+            _next = _forms.signin()
+            return HttpResponseRedirect(_next)
+        else:
+            return render_to_response(template,
+                {
+                    'forms' : _forms,
+                },
+                context_instance = RequestContext(request)
+            )
+
+    elif request.method == 'GET':
         _next = request.GET.get('next', None)
-
+        _forms = SignInAccountForm(initial={'next': _next})
         return render_to_response(
             template,
             {
-                'next' : _next
+                'forms' : _forms,
+                # 'next' : _next,
             },
             context_instance = RequestContext(request)
         )
 
-    else:
-        _next = request.POST.get('next', None)
-        _email = request.POST.get('email', None)
-        _psw = request.POST.get('psw', None)
-        _remember_me = request.POST.get("remember_me", None)
-        _error = {}
+    # else:
 
-        _error['email'] = v_check_email(_email)
-
-        if _error['email'] is None:
-            _user_id = User.get_user_id_by_email(_email)
-
-            if _user_id is None:
-                _error['email'] = u'邮箱未注册'
-
-            else:
-                _error['psw'] = v_check_psw(_psw)
-
-                if _error['psw'] is None:
-                    _username = User(_user_id).get_username()
-                    _user = authenticate(username = _username, password = _psw)
-
-                    if _user is None:
-                        _error['psw'] = u'密码不正确'
-
-                    elif not _user.is_active:
-                        _error['email'] = u'帐号已冻结'
-
-                    else:
-                        auth_login(request, _user)
-
-                        if _remember_me is not None:
-                            request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
-
-                        if _next is not None:
-                            return HttpResponseRedirect(_next)
-
-                        return HttpResponseRedirect(reverse('web_selection'))
-
-        return render_to_response(
-            template,
-            {
-                'error' : _error,
-                'email' : _email
-            },
-            context_instance = RequestContext(request)
-        )
+        # _next = request.POST.get('next', None)
+        # _email = request.POST.get('email', None)
+        # _psw = request.POST.get('psw', None)
+        # _remember_me = request.POST.get("remember_me", None)
+        # _error = {}
+        #
+        # _error['email'] = v_check_email(_email)
+        #
+        # if _error['email'] is None:
+        #     _user_id = User.get_user_id_by_email(_email)
+        #
+        #     if _user_id is None:
+        #         _error['email'] = u'邮箱未注册'
+        #
+        #     else:
+        #         _error['psw'] = v_check_psw(_psw)
+        #
+        #         if _error['psw'] is None:
+        #             _username = User(_user_id).get_username()
+        #             _user = authenticate(username = _username, password = _psw)
+        #
+        #             if _user is None:
+        #                 _error['psw'] = u'密码不正确'
+        #
+        #             elif not _user.is_active:
+        #                 _error['email'] = u'帐号已冻结'
+        #
+        #             else:
+        #                 auth_login(request, _user)
+        #
+        #                 if _remember_me is not None:
+        #                     request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
+        #
+        #                 if _next is not None:
+        #                     return HttpResponseRedirect(_next)
+        #
+        #                 return HttpResponseRedirect(reverse('web_selection'))
+        #
+        # return render_to_response(
+        #     template,
+        #     {
+        #         'error' : _error,
+        #         'email' : _email
+        #     },
+        #     context_instance = RequestContext(request)
+        # )
 
 
 def login_by_sina(request):
