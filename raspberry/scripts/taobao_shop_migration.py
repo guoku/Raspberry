@@ -4,6 +4,7 @@ import pymongo
 import sys
 sys.path.append("..")
 from base.stream_models import *
+register_connection('guoku-db', 'guoku_01_03')
 
 conn = pymongo.Connection(host='10.0.1.23', port=27017)
 
@@ -12,7 +13,7 @@ col = db.taobao_shops_depot
 
 shops = col.find()
 
-connect("guoku_01_17_8", host="localhost")
+connect("guoku_01_03", host="localhost")
 for shop in shops:
     _shop_info = shop.get('shop_info', None)
     if not _shop_info:
