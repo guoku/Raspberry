@@ -36,8 +36,11 @@ def _get_ustation_entity(entity_id, update_ustation = False):
         if _item_context.has_key('shop_nick') and (not _item_context.has_key('ustation') or _item_context['ustation'] != 1):
             _shop_context = TaobaoShop(_item_context['shop_nick']).read()
             if _shop_context != None:
-                _entity_context['commission_rate'] = _shop_context['commission_rate']
-                _entity_context['commission_type'] = _shop_context['commission_type']
+                _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                if _shop_context['extended_info']['orientational']:
+                    _entity_context['commission_type'] = 'orientational'
+                else:
+                    _entity_context['commission_type'] = 'general'
                 if _entity_context['commission_rate'] > 0:
                     if update_ustation:
                         if not _item_context.has_key('ustation') or _item_context['ustation'] == None:
