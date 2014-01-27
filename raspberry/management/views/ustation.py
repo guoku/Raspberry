@@ -36,8 +36,11 @@ def _get_ustation_entity(entity_id, update_ustation = False):
         if _item_context.has_key('shop_nick') and (not _item_context.has_key('ustation') or _item_context['ustation'] != 1):
             _shop_context = TaobaoShop(_item_context['shop_nick']).read()
             if _shop_context != None:
-                _entity_context['commission_rate'] = _shop_context['commission_rate']
-                _entity_context['commission_type'] = _shop_context['commission_type']
+                _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                if _shop_context['extended_info']['orientational']:
+                    _entity_context['commission_type'] = 'orientational'
+                else:
+                    _entity_context['commission_type'] = 'general'
                 if _entity_context['commission_rate'] > 0:
                     if update_ustation:
                         if not _item_context.has_key('ustation') or _item_context['ustation'] == None:
@@ -61,11 +64,14 @@ def _available_ustation_list():
             _entity_id_set.add(_item_info['entity_id'])
             
     for _selection in NoteSelection.objects.filter(post_time__lt =  _t_top, post_time__gt = _t_bottom).order_by('-post_time'):
-        if not _selection.entity_id in _entity_id_set:
-            _entity_context = _get_ustation_entity(_selection.entity_id, True)
-            if _entity_context != None:
-                _entity_context_list.append(_entity_context)
-                _entity_id_set.add(_selection.entity_id)
+        try:
+            if not _selection.entity_id in _entity_id_set:
+                _entity_context = _get_ustation_entity(_selection.entity_id, True)
+                if _entity_context != None:
+                    _entity_context_list.append(_entity_context)
+                    _entity_id_set.add(_selection.entity_id)
+        except Exception, e:
+            pass
 
     return _entity_context_list
 
@@ -89,13 +95,16 @@ def sync_ustation(request):
     _entity_context_list = _available_ustation_list() 
     _rslt = []
     for _entity_context in _entity_context_list:
-        _note_id = Note.find(entity_id = _entity_context['entity_id'], selection = 1)[0]
-        _note_context = Note(_note_id).read()
-        _rslt.append({
-            'item_id' : _entity_context['taobao_id'],
-            'cid' : _entity_context['old_root_category_id'],
-            'note' : _note_context['content']
-        })
+        try:
+            _note_id = Note.find(entity_id = _entity_context['entity_id'], selection = 1)[0]
+            _note_context = Note(_note_id).read()
+            _rslt.append({
+                'item_id' : _entity_context['taobao_id'],
+                'cid' : _entity_context['old_root_category_id'],
+                'note' : _note_context['content']
+            })
+        except Exception, e:
+            pass
 
     return SuccessJsonResponse(_rslt)
 
@@ -124,12 +133,15 @@ def ustation_random_generate(request):
         _count = int(request.POST.get("count", None))
         _entity_id_list = Entity.random(status = 'select', count = _count * 6)
         _entity_context_list = []
-        for _entity_id in _entity_id_list: 
-            _entity_context = _get_ustation_entity(_entity_id, True)
-            if _entity_context != None:
-                _entity_context_list.append(_entity_context)
-                if len(_entity_context_list) >= _count:
-                    break
+        for _entity_id in _entity_id_list:
+            try:
+                _entity_context = _get_ustation_entity(_entity_id, True)
+                if _entity_context != None:
+                    _entity_context_list.append(_entity_context)
+                    if len(_entity_context_list) >= _count:
+                        break
+            except Exception, e:
+                pass
         
         return HttpResponseRedirect(reverse('management_ustation_list'))
          

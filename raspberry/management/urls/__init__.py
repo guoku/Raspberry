@@ -21,6 +21,7 @@ urlpatterns = patterns(
     url(r'^report/', include('management.urls.report')),
     url(r'^user/', include('management.urls.user')),
     url(r'^ustation/', include('management.urls.ustation')),
+    url(r'^shop/', include('management.urls.shop')),
 )
 
 __author__ = 'edison7500'

@@ -5,16 +5,12 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from management.tasks import PushMessageToUserTask
-from urlparse import urlparse
-import HTMLParser
-import re 
-import datetime
-import time
-import json
+
 
 from base.user import User
 from utils.authority import staff_only 
 from utils.paginator import Paginator
+from management.forms.user import UserForms
 import logging
 logger = logging.getLogger('django.request')
 
@@ -51,31 +47,34 @@ def user_list(request):
 
 @login_required
 @staff_only
-def edit_user(request, user_id):
-    if request.method == 'GET':
+def edit_user(request, user_id, template='user/edit.html'):
+
+    if request.method == 'POST':
+        # _user = User(user_id)
+        forms = UserForms(request.POST)
+        if forms.is_valid():
+            forms.update(user_id)
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        else:
+            return render_to_response(
+                template,
+                {
+                    'forms':forms,
+                    'user_context' : User(user_id).read(),
+                },
+                context_instance = RequestContext(request)
+            )
+    else:
         _user_context = User(user_id).read()
-        return render_to_response( 
-            'user/edit.html', 
+        forms = UserForms(initial=_user_context)
+        return render_to_response(
+            template,
             {
-                'active_division' : 'user',
+                'forms': forms,
                 'user_context' : _user_context,
             },
             context_instance = RequestContext(request)
         )
-    else:
-        _username = request.POST.get("username", None)
-        _nickname = request.POST.get("nickname", None)
-        _gender = request.POST.get("gender", None)
-        _email = request.POST.get("email", None)
-        _bio = request.POST.get("bio", None)
-        _website = request.POST.get("website", None)
-
-        _user = User(user_id)
-        _user.reset_account(username=_username, email=_email)
-        _user.set_profile(_nickname, gender=_gender, bio=_bio, website=_website)
-
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
 
 @login_required
 @staff_only
@@ -89,7 +88,7 @@ def push_message_to_user(request, user_id):
             user_id = _user_id,
             badge = _badge,
             message = _message,
-            testor_id = request.user.id
+            testor_id = request.user.id,
         )
         
         return HttpResponseRedirect(request.META['HTTP_REFERER'] + "?apns=1")

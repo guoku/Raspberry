@@ -11,7 +11,6 @@ import re
 import datetime
 import time
 import json
-from base import fetcher 
 from base.category import Category, Old_Category
 from base.entity import Entity
 from base.item import Item
@@ -21,6 +20,7 @@ from base.user import User
 from management.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
+from utils import fetcher 
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -32,7 +32,6 @@ def _parse_taobao_id_from_url(url):
 
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = fetcher.fetch_item(taobao_id)
-    print "===========", taobao_item_info['nick']
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:
@@ -209,8 +208,11 @@ def edit_entity(request, entity_id):
             if _item_context.has_key('shop_nick'):
                 _shop_context = TaobaoShop(_item_context['shop_nick']).read()
                 if _shop_context != None:
-                    _item_context['commission_rate'] = _shop_context['commission_rate']
-                    _item_context['commission_type'] = _shop_context['commission_type']
+                    _item_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                    if _shop_context['extended_info']['orientational']:
+                        _entity_context['commission_type'] = 'orientational'
+                    else:
+                        _entity_context['commission_type'] = 'general'
             _item_context_list.append(_item_context)
 
 
@@ -416,8 +418,11 @@ def entity_list(request):
                     if _item_context.has_key('shop_nick'):
                         _shop_context = TaobaoShop(_item_context['shop_nick']).read()
                         if _shop_context != None:
-                            _entity_context['commission_rate'] = _shop_context['commission_rate']
-                            _entity_context['commission_type'] = _shop_context['commission_type']
+                            _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                            if _shop_context['extended_info']['orientational']:
+                                _entity_context['commission_type'] = 'orientational'
+                            else:
+                                _entity_context['commission_type'] = 'general'
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''

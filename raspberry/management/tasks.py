@@ -6,7 +6,7 @@ from utils.apns_notification import APNSWrapper
 
 import base.selection as base_selection
 from base.taobao_shop import TaobaoShop 
-from base import fetcher 
+from utils import fetcher 
 
 import datetime
 import time

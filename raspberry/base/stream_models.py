@@ -84,6 +84,7 @@ class NoteSelection(Selection):
 
 class Log(Document):
     entry = StringField(required = True)
+    duration = IntField(required = False) 
     user_id = IntField(required = True) 
     ip = StringField(required = True)
     log_time = DateTimeField(required = True)
@@ -145,11 +146,36 @@ class TaobaoShop(Document):
     shop_info = EmbeddedDocumentField(TaobaoShopInfo)
     created_time = DateTimeField()
     last_updated_time = DateTimeField()
-    last_crawled_time = DateTimeField()
     crawler_info = EmbeddedDocumentField(CrawlerInfo)
     extended_info = EmbeddedDocumentField(TaobaoShopExtendedInfo)
     meta = { 
         'db_alias' : 'guoku-db',
         'collection' : 'taobao_shop',
         'indexes' : [ 'last_updated_time' ]
+    }
+
+class TaobaoShopVerificationInfo(DynamicDocument):
+    shop_nick = StringField()
+    intro = StringField()
+    status = StringField()
+    created_time = DateTimeField()
+    meta = {
+        'db_alias' : 'guoku-db',
+        'indexes' : ['shop_nick']
+    }
+
+class GuokuPriceApplication(DynamicDocument):
+    shop_nick = StringField(required = True)
+    taobao_item_id = StringField(required = True)
+    quantity = IntField()
+    original_price = FloatField()
+    sale_price = FloatField()
+    duration = IntField()
+    status = StringField()
+    editor_comment = StringField()
+    created_time = DateTimeField()
+    meta = {
+        'db_alias' : 'guoku-db',
+        'collection' : 'guoku_price_application',
+        'indexes' : [ 'shop_nick', 'taobao_item_id' ],
     }

@@ -401,7 +401,6 @@ def update_avatar(request):
 
         return HttpResponse(json.dumps(_ret))
 
-
 @login_required
 def bind_taobao(request):
     request.session['bind_taobao_next_url'] = request.GET.get('next', None)
