@@ -1,3 +1,5 @@
+#coding=utf-8
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template import RequestContext
@@ -8,7 +10,7 @@ from base.user import User
 from base.item import Item
 
 def index(request):
-    pass
+    return HttpResponseRedirect(reverse('seller_commodities'))
 
 def commodities(request):
     user_id = request.user.id
@@ -39,7 +41,7 @@ def verify(request):
             pass
     pass
 
-def apply_guoku_price(request):
+def apply_guoku_plus(request):
     if request.method == "POST":
         user_inst = User(request.user.id)
         user_context = user_inst.read()
@@ -51,10 +53,12 @@ def apply_guoku_price(request):
             sale_price = float(request.POST['sale_price'])
             duration = int(request.POST['duration'])       
             shop = TaobaoShop(shop_nick)
-            shop.create_guoku_price_application(taobao_item_id, quantity, original_price, sale_price, duration)
+            shop.create_guoku_plus_application(taobao_item_id, quantity, original_price, sale_price, duration)
             return HttpResponse("OK")   
         else:
             pass
     else:
         pass
 
+def guoku_plus_list(request):
+    pass

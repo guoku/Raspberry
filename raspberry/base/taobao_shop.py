@@ -5,7 +5,7 @@ from base.stream_models import TaobaoShopInfo
 from base.stream_models import TaobaoShopExtendedInfo
 from base.stream_models import CrawlerInfo
 from base.stream_models import TaobaoShopVerificationInfo
-from base.stream_models import GuokuPriceApplication
+from base.stream_models import GuokuPlusApplication
 import datetime
 import urllib
 import pymongo
@@ -132,8 +132,8 @@ class TaobaoShop(object):
             )
         info.save()
 
-    def create_guoku_price_application(self, taobao_item_id, quantity, original_price, sale_price, duration):
-        item = GuokuPriceApplication(
+    def create_guoku_plus_application(self, taobao_item_id, quantity, original_price, sale_price, duration):
+        item = GuokuPlusApplication(
             shop_nick = self.nick,
             taobao_item_id = taobao_item_id,
             quantity = quantity,

@@ -11,6 +11,7 @@
             <tr>
                 <td><a href="{{ item.item.buy_link}}">{{ item.item.title }}</a></td>
                 <td>{{ item.item.price }}</td>
+                <td><a href="{%url 'seller_apply_guoku_plus'%}taobao_id={{ item.item.taobao_id }}">申请果库+</a></td>
             </tr>
         {% endfor %}
         </table>

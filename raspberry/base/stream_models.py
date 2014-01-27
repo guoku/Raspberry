@@ -163,7 +163,7 @@ class TaobaoShopVerificationInfo(DynamicDocument):
         'indexes' : ['shop_nick']
     }
 
-class GuokuPriceApplication(DynamicDocument):
+class GuokuPlusApplication(DynamicDocument):
     shop_nick = StringField(required = True)
     taobao_item_id = StringField(required = True)
     quantity = IntField()
