@@ -4,9 +4,12 @@
 {% endblock %}
 
 {% block content %}
-    <div>
+    <div class="span10">
+        <h5>已在果库的商品</h5>
         <table class="table table-bordered table-striped">
-
+            <th>名称</th>
+            <th>价格</th>
+            <th>操作</th>
         {% for item in item_list %}
             <tr>
                 <td><a href="{{ item.item.buy_link}}">{{ item.item.title }}</a></td>
