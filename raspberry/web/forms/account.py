@@ -1,9 +1,15 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 # from django.contrib.auth import login as auth_login
 from base.user import User
+
+from django.utils.log import getLogger
+
+log = getLogger('django')
+
+
 
 class AccountFrom(forms.Form):
     error_messages = {
@@ -26,24 +32,19 @@ class AccountFrom(forms.Form):
             raise forms.ValidationError(
                 self.error_messages['email_not_exist']
             )
-        return cleaned_data
+        return user_id
 
 
 class SignInAccountForm(AccountFrom):
 
     def signin(self):
-        email = self.cleaned_data['email']
+        uid = self.cleaned_data['email']
         password = self.cleaned_data['password']
-        # next = self.cleaned_data['next']
-        uid = User.get_user_id_by_email(email)
         username = User(uid).get_username()
-        # _user = User.objects.get(email = email)
+        log.info("username %s" % password)
 
         _user = authenticate(username=username, password=password)
         return _user
-        # if self.next:
-        #     return self.next
-        # else:
 
 
 class SignUpAccountFrom(AccountFrom):

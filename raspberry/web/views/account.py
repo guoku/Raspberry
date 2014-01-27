@@ -9,7 +9,6 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 import json
 
-
 from web.forms.account import SignInAccountForm
 from base.user import User
 from validation import *
@@ -137,7 +136,13 @@ def register_bio(request, template = 'account/register_bio.html'):
 
 def login(request, template = 'account/login.html'):
     if request.user.is_authenticated():
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        try:
+            next_url = request.META['HTTP_REFERER']
+            return HttpResponseRedirect(next_url)
+        except KeyError:
+            next_url = reverse('web_selection')
+        finally:
+            return HttpResponseRedirect(next_url)
 
     if request.method == 'POST':
         _forms = SignInAccountForm(request.POST)
@@ -146,6 +151,8 @@ def login(request, template = 'account/login.html'):
             _user = _forms.signin()
 
             auth_login(request, _user)
+            if _remember_me:
+                request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
             return HttpResponse("OK")
         else:
             return render_to_response(template,
@@ -229,7 +236,12 @@ def login_by_taobao(request):
 def logout(request):
     auth_logout(request)
     request.session.set_expiry(0)
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    try:
+        next_url = request.META['HTTP_REFERER']
+    except KeyError:
+        next_url = reverse('web_selection')
+    finally:
+        return HttpResponseRedirect(next_url)
 
 
 @login_required
@@ -421,10 +433,6 @@ def update_avatar(request):
 
         return HttpResponse(json.dumps(_ret))
 
-<<<<<<< HEAD
-
-=======
->>>>>>> b68f12866de967deb43b4038684df07cab045f03
 @login_required
 def bind_taobao(request):
     request.session['bind_taobao_next_url'] = request.GET.get('next', None)
