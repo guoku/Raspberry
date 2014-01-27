@@ -29,6 +29,9 @@ msgstr "登录"
 msgid "sign out"
 msgstr "退出"
 
+msgid "remember me"
+msgstr "记住我"
+
 msgid "selection"
 msgstr "精选"
 
@@ -72,3 +75,8 @@ msgstr ""
 
 msgid "update"
 msgstr "更新"
+
+
+# error message
+msgid "email is not signed up."
+msgstr "邮箱没有被注册"

@@ -142,8 +142,11 @@ def login(request, template = 'account/login.html'):
     if request.method == 'POST':
         _forms = SignInAccountForm(request.POST)
         if _forms.is_valid():
-            _next = _forms.signin()
-            return HttpResponseRedirect(_next)
+            _remember_me = request.POST.get('remember_me', None)
+            _user = _forms.signin()
+
+            auth_login(request, _user)
+            return HttpResponse("OK")
         else:
             return render_to_response(template,
                 {
