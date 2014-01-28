@@ -87,6 +87,7 @@ class Tag(object):
                 entity_id = entity_id,
                 user_id = user_id,
                 tag_id = _tag_obj.id,
+                tag_text = _tag_obj.tag,
                 count = 0,
                 last_tagged_time = datetime.datetime.now()
             )
@@ -116,10 +117,9 @@ class Tag(object):
         _user_tags = []
         
         
-        for _data in EntityTagModel.objects.filter(user_id = _user_id).values('tag').annotate(entity_count = Count('entity')).order_by('-entity_count'):
+        for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text').annotate(entity_count=Count('entity')).order_by('-entity_count'):
             _user_tags.append({
-                'tag' : TagModel.objects.get(pk = _data['tag']).tag,
-                'tag_id' : _data['tag'],
+                'tag' : _data['tag_text'],
                 'entity_count' : _data['entity_count'],
             })
 

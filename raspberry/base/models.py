@@ -204,6 +204,7 @@ class Entity_Tag(models.Model):
     entity = models.ForeignKey(Entity)
     user = models.ForeignKey(User) 
     tag = models.ForeignKey(Tag)
+    tag_text = models.CharField(max_length = 128, null = False, db_index = True)
     count = models.IntegerField(default = 0)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     last_tagged_time = models.DateTimeField(db_index = True)
