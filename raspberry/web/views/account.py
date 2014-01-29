@@ -7,6 +7,7 @@ from django.template import RequestContext
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.conf import settings
 import json
 
 from web.forms.account import SignInAccountForm
@@ -14,7 +15,8 @@ from base.user import User
 from validation import *
 
 
-MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14  # two weeks
+
+MAX_SESSION_EXPIRATION_TIME = getattr(settings, 'SESSION_COOKIE_AGE', 1209600) # two weeks
 
 
 def check_nickname_available(request):

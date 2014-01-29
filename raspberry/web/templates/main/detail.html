@@ -11,7 +11,9 @@
     <div id="detail">
         <div class="main">
             <div class="entity">
-                <a href="" class="entity-img"><img src="{{ entity_context.chief_image.url }}"></a>
+                <a href="#" class="entity-img">
+                    <img src="{{ entity_context.chief_image.url }}">
+                </a>
                 <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</h2>
 
                 <a href="{% url 'web_like_entity' entity_context.entity_id %}"
