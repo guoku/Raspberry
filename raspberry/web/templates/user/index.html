@@ -2,7 +2,10 @@
 {% load i18n staticfiles %}
 {% load web_common %}
 
-{% block title %}{{ title|default:'我' }}的果库{% endblock %}
+{% block title %}
+    {{ title|default:'我' }}的果库
+    {% block  subtitle%}{% endblock %}
+{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">{% endblock %}
 {% block content %}
     <div id="user-center">
@@ -24,51 +27,56 @@
         </div>
 
         <div class="nav">
-            {% url 'web_user_likes' query_user_context.user_id  as web_user_likes_url %}
-            <a href="{{ web_user_likes_url }}" {% if web_user_likes_url in request.path %}class="active"{% endif %}>喜爱
+            {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
+            {% url 'web_user_posts' query_user_context.user_id as web_user_posts_url %}
+            {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
+            {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}
+            <a href="{{ web_user_likes_url }}" {% if web_user_likes_url in request.path %}class="active"{% endif %}>{% trans 'likes' %}
                 <strong>({{ query_user_context.like_count }})</strong>
             </a>
-            <a href="{% url 'web.views.user.user_posts' query_user_context.user_id %}" {% if content_tab == 'post' %}class="active"{% endif %}>添加
+            <a href="{{ web_user_posts_url }}" {% if web_user_posts_url in request.path %}class="active"{% endif %}>{% trans 'posts' %}
                 <strong>()</strong>
             </a>
-            <a href="{% url 'web.views.user.user_notes' query_user_context.user_id %}" {% if content_tab == 'note' %}class="active"{% endif %}>点评
+            <a href="{{ web_user_notes_url }}" {% if web_user_notes_url in request.path %}class="active"{% endif %}>{% trans 'notes' %}
                 <strong>({{ query_user_context.entity_note_count }})</strong>
             </a>
-            <a href="{% url 'web.views.user.user_tags' query_user_context.user_id %}" {% if content_tab == 'tag' %}class="active"{% endif %}>标签
+            <a href="{{ web_user_tags_url }}" {% if web_user_tags_url in request.path %}class="active"{% endif %}>{% trans 'tags' %}
                 <strong>({{ query_user_context.tag_count }})</strong>
             </a>
 
             <div class="social">
-                <a href="{% url 'web.views.user.user_followings' query_user_context.user_id %}" {% if content_tab == 'following' %}class="active"{% endif %}>关注了
+                {% url 'web_user_followings' query_user_context.user_id as web_user_followings_url %}
+                <a href="{{ web_user_followings_url }}" {% if web_user_followings_url in request.path %}class="active"{% endif %}>关注了
                     <strong>{{ query_user_context.following_count }}</strong>人
                 </a>
-                <a href="{% url 'web.views.user.user_fans' query_user_context.user_id %}" {% if content_tab == 'fan' %}class="active"{% endif %}>关注者
+                {% url 'web_user_fans' query_user_context.user_id as web_user_fans_url %}
+                <a href="{{ web_user_fans_url }}" {% if web_user_fans_url in request.path %}class="active"{% endif %}>关注者
                     <strong>{{ query_user_context.fan_count }}</strong>人
                 </a>
             </div>
         </div>
 
-        {% if content_tab == 'like' %}
+        {% if web_user_likes_url in request.path %}
             <div class="user-like">
                 <ul class="categories">
                     <li {% if category_id == None %}class="active"{% endif %}>
-                        <a href="{% url 'web_user_likes' query_user_context.user_id %}">所有</a>
+                        <a href="{{ web_user_likes_url }}">所有</a>
                     </li>
                     <span class="sep">|</span>
                     {% for category in category_list %}
                         <li {% if category.category_id == category_id %}class="active"{% endif %}>
-                            <a href="{% url 'web_user_likes' query_user_context.user_id %}?c={{ category.category_id }}">{{ category.category_title }}</a>
+                            <a href="{{ web_user_likes_url }}?c={{ category.category_id }}">{{ category.category_title }}</a>
                         </li>
                         {% if category_list|length > forloop.counter %}&sdot;{% endif %}
                     {% endfor %}
                 </ul>
 
                 <ul class="prices">
-                    <li><a href="{% url 'web_user_likes' query_user_context.user_id %}?c={{ category_id }}">按价格</a></li>
-                    <li><a href="{% url 'web_user_likes' query_user_context.user_id %}?c={{ category_id }}&price=1" class="price">0-99</a></li>
-                    <li><a href="{% url 'web_user_likes' query_user_context.user_id %}?c={{ category_id }}&price=2" class="price">100-499</a></li>
-                    <li><a href="{% url 'web_user_likes' query_user_context.user_id %}?c={{ category_id }}&price=3" class="price">500-999</a></li>
-                    <li><a href="{% url 'web_user_likes' query_user_context.user_id %}?c={{ category_id }}&price=4" class="price">1000+</a></li>
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}">按价格</a></li>
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=1" class="price">0-99</a></li>
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=2" class="price">100-499</a></li>
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=3" class="price">500-999</a></li>
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=4" class="price">1000+</a></li>
                 </ul>
 
                 {% if entity_list|length > 0 %}

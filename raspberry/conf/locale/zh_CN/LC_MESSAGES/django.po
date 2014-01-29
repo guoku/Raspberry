@@ -44,6 +44,17 @@ msgstr "热门"
 msgid "Category"
 msgstr "分类"
 
+msgid "likes"
+msgstr "喜欢"
+
+msgid "posts"
+msgstr "添加"
+
+msgid "notes"
+msgstr "点评"
+
+msgid "tags"
+msgstr "标签"
 
 msgid "male"
 msgstr "男"
