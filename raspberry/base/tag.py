@@ -137,6 +137,9 @@ class Tag(object):
         
         return _user_tags 
                 
+    @classmethod
+    def find_user_tag(cls):
+        return EntityTagModel.objects.values('user_id', 'tag_text').annotate(entity_count=Count('entity')).order_by('-entity_count')
     
     @classmethod
     def find_user_tag_entity(cls, user_id, tag):
