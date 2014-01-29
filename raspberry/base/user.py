@@ -29,8 +29,8 @@ from pymogile import Client
 from wand.image import Image
 import datetime
 
+
 class User(object):
-    
 
     class Avatar(object):
         
@@ -566,7 +566,8 @@ class User(object):
         return EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id).count()
         
     def find_like_entity(self, category_id, offset = None, count = 30, sort_by = None, reverse = False):
-        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id)
+        _hdl = EntityLikeModel.objects.\
+            filter(user_id = self.user_id, entity__neo_category_id = category_id).values_list('pk', flat=True)
         if sort_by == 'price':
             if reverse:
                 _hdl = _hdl.order_by('-entity__price')
@@ -583,8 +584,9 @@ class User(object):
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
 
-        _entity_id_list = map(lambda x: x.entity_id, _hdl)
-        return _entity_id_list
+        return _hdl
+        # _entity_id_list = map(lambda x: x.entity_id, _hdl)
+        # return _entity_id_list
     
     
     def __update_user_following_count(self, delta):

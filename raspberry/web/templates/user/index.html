@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load i18n staticfiles %}
 {% load web_common %}
 
 {% block title %}{{ title|default:'我' }}的果库{% endblock %}
@@ -7,15 +7,15 @@
 {% block content %}
     <div id="user-center">
         <div class="base">
-            <img src="{{ query_user_context.avatar_small }}" alt="user" width="120" height="120">
+            <img src="{{ query_user_context.avatar_large }}" alt="{{ query_user_context.nickname }}" width="120" height="120">
 
             <div class="info">
                 <span class="nickname">{{ query_user_context.nickname }}</span>
                 <span class="bio">{{ query_user_context.bio }}</span>
-                <address>北京</address>
+                <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
             </div>
             {% if is_user_self %}
-                <a class="setting" href="{% url 'web_setting' %}"><span></span>设置</a>
+                <a class="setting" href="{% url 'web_setting' %}"><span></span>{% trans "settings" %}</a>
             {% elif is_user_already_follow %}
                 <a href="{% url 'web_follow' query_user_context.user_id %}" class="follow-user">取消关注</a>
             {% else %}
@@ -24,7 +24,8 @@
         </div>
 
         <div class="nav">
-            <a href="{% url 'web.views.user.user_likes' query_user_context.user_id %}" {% if content_tab == 'like' %}class="active"{% endif %}>喜爱
+            {% url 'web_user_likes' query_user_context.user_id  as web_user_likes_url %}
+            <a href="{{ web_user_likes_url }}" {% if web_user_likes_url in request.path %}class="active"{% endif %}>喜爱
                 <strong>({{ query_user_context.like_count }})</strong>
             </a>
             <a href="{% url 'web.views.user.user_posts' query_user_context.user_id %}" {% if content_tab == 'post' %}class="active"{% endif %}>添加

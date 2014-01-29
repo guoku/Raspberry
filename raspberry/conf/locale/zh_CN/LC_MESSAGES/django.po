@@ -32,6 +32,9 @@ msgstr "退出"
 msgid "remember me"
 msgstr "记住我"
 
+msgid "settings"
+msgstr "设置"
+
 msgid "selection"
 msgstr "精选"
 
