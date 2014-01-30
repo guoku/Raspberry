@@ -47,7 +47,13 @@ class SignInAccountForm(AccountFrom):
         return _user
 
 
-class SignUpAccountFrom(AccountFrom):
-    nickname = forms.CharField(widget=forms.TextInput(), label=_('nickname'), help_text=_(''))
+class SignUpAccountFrom(forms.Form):
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'text-input', 'placeholder': _('email')}),
+                             label=_('email'), help_text=_(''))
+    nickname = forms.CharField(widget=forms.TextInput(attrs={'class': 'text-input', 'placeholder': _('nickname')}),
+                               label=_('nickname'), help_text=_(''))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('password')}),
+                               label=_('password'), help_text=_(''))
+
 
 __author__ = 'edison7500'

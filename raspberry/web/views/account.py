@@ -10,7 +10,7 @@ from django.contrib.auth import logout as auth_logout
 from django.conf import settings
 import json
 
-from web.forms.account import SignInAccountForm
+from web.forms.account import SignInAccountForm, SignUpAccountFrom
 from base.user import User
 from validation import *
 
@@ -40,13 +40,19 @@ def check_email_available(request):
 
 def register(request, template = 'account/register.html'):
     if request.method == 'GET':
+        forms = SignUpAccountFrom()
         return render_to_response(
             template,
-            {},
+            {
+                'forms': forms,
+            },
             context_instance = RequestContext(request)
         )
 
     else:
+        forms = SignUpAccountFrom(request.POST)
+        if forms.is_valid():
+            pass
         _nickname = request.POST.get('nickname', None)
         _email = request.POST.get('email', None)
         _psw = request.POST.get('psw', None)
