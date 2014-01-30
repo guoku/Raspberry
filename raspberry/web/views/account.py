@@ -15,7 +15,6 @@ from base.user import User
 from validation import *
 
 
-
 MAX_SESSION_EXPIRATION_TIME = getattr(settings, 'SESSION_COOKIE_AGE', 1209600) # two weeks
 
 
