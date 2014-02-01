@@ -39,17 +39,7 @@ def check_email_available(request):
 
 
 def register(request, template = 'account/register.html'):
-    if request.method == 'GET':
-        forms = SignUpAccountFrom()
-        return render_to_response(
-            template,
-            {
-                'forms': forms,
-            },
-            context_instance = RequestContext(request)
-        )
-
-    else:
+    if request.method == 'POST':
         forms = SignUpAccountFrom(request.POST)
         if forms.is_valid():
             _user = forms.signup()
@@ -62,6 +52,15 @@ def register(request, template = 'account/register.html'):
                 },
                 context_instance = RequestContext(request)
             )
+    else:
+        forms = SignUpAccountFrom()
+        return render_to_response(
+            template,
+            {
+                'forms': forms,
+            },
+            context_instance = RequestContext(request)
+        )
         # _nickname = request.POST.get('nickname', None)
         # _email = request.POST.get('email', None)
         # _psw = request.POST.get('psw', None)
