@@ -52,37 +52,46 @@ def register(request, template = 'account/register.html'):
     else:
         forms = SignUpAccountFrom(request.POST)
         if forms.is_valid():
-            pass
-        _nickname = request.POST.get('nickname', None)
-        _email = request.POST.get('email', None)
-        _psw = request.POST.get('psw', None)
-        _error = {}
-
-        _error['nickname'] = v_check_nickname(_nickname, must_not_exist = True)
-
-        if _error['nickname'] is None:
-            _error['email'] = v_check_email(_email, must_not_exist = True)
-
-            if _error['email'] is None:
-                _error['psw'] = v_check_psw(_psw)
-
-                if _error['psw'] is None:
-                    _new_user = User.create(_email, _psw)
-                    _new_user.set_profile(_nickname)
-
-                    _username = _new_user.get_username()
-                    _new_user = authenticate(username = _username, password = _psw)
-                    auth_login(request, _new_user)
-
-                    return HttpResponseRedirect(reverse('web_register_bio'))
-
-        return render_to_response(
-            template,
-            {
-                'error' : _error
-            },
-            context_instance = RequestContext(request)
-        )
+            _user = forms.signup()
+            auth_login(request, _user)
+            return HttpResponseRedirect(reverse('web_register_bio'))
+        else:
+            return render_to_response(template,
+                {
+                    'forms': forms,
+                },
+                context_instance = RequestContext(request)
+            )
+        # _nickname = request.POST.get('nickname', None)
+        # _email = request.POST.get('email', None)
+        # _psw = request.POST.get('psw', None)
+        # _error = {}
+        #
+        # _error['nickname'] = v_check_nickname(_nickname, must_not_exist = True)
+        #
+        # if _error['nickname'] is None:
+        #     _error['email'] = v_check_email(_email, must_not_exist = True)
+        #
+        #     if _error['email'] is None:
+        #         _error['psw'] = v_check_psw(_psw)
+        #
+        #         if _error['psw'] is None:
+        #             _new_user = User.create(_email, _psw)
+        #             _new_user.set_profile(_nickname)
+        #
+        #             _username = _new_user.get_username()
+        #             _new_user = authenticate(username = _username, password = _psw)
+        #             auth_login(request, _new_user)
+        #
+        #             return HttpResponseRedirect(reverse('web_register_bio'))
+        #
+        # return render_to_response(
+        #     template,
+        #     {
+        #         'error' : _error
+        #     },
+        #     context_instance = RequestContext(request)
+        # )
 
 
 @login_required
