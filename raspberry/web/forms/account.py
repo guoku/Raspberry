@@ -10,8 +10,7 @@ from django.utils.log import getLogger
 log = getLogger('django')
 
 
-
-class AccountFrom(forms.Form):
+class SignInAccountForm(forms.Form):
     error_messages = {
         'email_not_exist': _("email is not signed up."),
         # 'password_mismatch': _("The two password fields didn't match."),
@@ -33,9 +32,6 @@ class AccountFrom(forms.Form):
                 self.error_messages['email_not_exist']
             )
         return user_id
-
-
-class SignInAccountForm(AccountFrom):
 
     def signin(self):
         uid = self.cleaned_data['email']
@@ -89,5 +85,12 @@ class SignUpAccountFrom(forms.Form):
         _username = _new_user.get_username()
         _user =  authenticate(username=_username, password=_passwd)
         return _user
+
+
+class SettingAccountForm(forms.Form):
+    nickname = forms.CharField(label=_('nickname'), help_text=_(''))
+    email = forms.EmailField(label=_('email'), help_text=_(''))
+    bio = forms.CharField(widget=forms.Textarea(), label=_('bio'), help_text=_(''))
+    website = forms.URLField(label=_('website'), help_text=_(''))
 
 __author__ = 'edison7500'
