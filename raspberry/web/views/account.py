@@ -10,7 +10,7 @@ from django.contrib.auth import logout as auth_logout
 from django.conf import settings
 import json
 
-from web.forms.account import SignInAccountForm, SignUpAccountFrom
+from web.forms.account import SignInAccountForm, SignUpAccountFrom, SettingAccountForm
 from base.user import User
 from validation import *
 
@@ -388,16 +388,16 @@ def _set_psw(request, template):
 
 @login_required
 def setting(request, template = 'account/setting.html'):
-    if request.method == 'GET':
-        _user_context = User(request.user.id).read()
-
-        return render_to_response(
-            template,
-            {
-                'user_context' : _user_context,
-            },
-            context_instance = RequestContext(request)
-        )
+    # if request.method == 'GET':
+    #     _user_context = User(request.user.id).read()
+    #
+    #     return render_to_response(
+    #         template,
+    #         {
+    #             'user_context' : _user_context,
+    #         },
+    #         context_instance = RequestContext(request)
+    #     )
 
     if request.method == 'POST':
         _type = request.POST.get('type', None)
@@ -411,6 +411,18 @@ def setting(request, template = 'account/setting.html'):
 
             elif _type == 'psw':
                 return _set_psw(request, template)
+    else:
+        _user_context = User(request.user.id).read()
+        forms = SettingAccountForm(initial = _user_context)
+
+        return render_to_response(
+            template,
+            {
+                'user_context' : _user_context,
+                'forms': forms,
+            },
+            context_instance = RequestContext(request),
+        )
 
 
 @login_required

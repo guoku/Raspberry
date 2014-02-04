@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -8,6 +9,17 @@ from base.user import User
 from django.utils.log import getLogger
 
 log = getLogger('django')
+
+
+class LocationSelectWidget(widgets.MultiWidget):
+    def __init__(self, attrs = None):
+        _widgets = (
+            widgets.Select(attrs=attrs),
+            widgets.Select(attrs=attrs),
+        )
+
+        super(LocationSelectWidget, self).__init__(_widgets, attrs)
+
 
 
 class SignInAccountForm(forms.Form):
@@ -88,9 +100,25 @@ class SignUpAccountFrom(forms.Form):
 
 
 class SettingAccountForm(forms.Form):
-    nickname = forms.CharField(label=_('nickname'), help_text=_(''))
-    email = forms.EmailField(label=_('email'), help_text=_(''))
-    bio = forms.CharField(widget=forms.Textarea(), label=_('bio'), help_text=_(''))
-    website = forms.URLField(label=_('website'), help_text=_(''))
+
+    Man = u'M'
+    Woman = u'F'
+    Other = u'O'
+    GENDER_CHOICES = (
+        (Man, _('male')),
+        (Woman,  _('female')),
+        (Other,  _('other')),
+    )
+
+    nickname = forms.CharField(widget=forms.TextInput(attrs={'class':'text-input'}),
+                               label=_('nickname'), help_text=_(''))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class':'text-input'}),
+                             label=_('email'), help_text=_(''))
+    bio = forms.CharField(widget=forms.Textarea(attrs={'rows':'4', 'class':'text-input'}),
+                          label=_('bio'), help_text=_(''))
+    location = forms.ChoiceField(widget=LocationSelectWidget(), label=_('location'), help_text=_(''))
+    gender = forms.ChoiceField(widget=forms.RadioSelect(), choices = GENDER_CHOICES, label = _('gender'), help_text = _(''))
+    website = forms.URLField(widget=forms.TextInput(attrs={'class':'text-input'}),
+                             label=_('website'), help_text=_(''))
 
 __author__ = 'edison7500'
