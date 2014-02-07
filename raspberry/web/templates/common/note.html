@@ -12,7 +12,7 @@
 
         <a href="{% url 'web_detail' note.entity_context.entity_hash %}"
            class="entity-img">
-            <img src="{{ note.entity_context.chief_image.url }}" alt="entity image">
+            <img src="{{ note.entity_context.chief_image.url }}" alt="{{ note.entity_context.title }}">
         </a>
     </div>
 

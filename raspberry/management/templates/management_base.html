@@ -1,8 +1,8 @@
-{% load staticfiles %}
+{% load i18n staticfiles %}
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <link media="all" rel="stylesheet" type="text/css" href="{% static 'management/css/bootstrap-responsive.min.css' %}" />
     <link media="all" rel="stylesheet" type="text/css" href="{% static 'management/css/bootstrap.min.css' %}" />
@@ -17,7 +17,8 @@
                     <a class="brand" href="">Management</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
-                            jakrinchose
+{#                            jakrinchose#}
+                            {{ request.user }}
                         </p>
                         <ul class="nav">
                             <li class="divider-vertical"></li>
@@ -64,8 +65,7 @@
             </div>
         </div>
     {% endblock %}
-    
-     
+
     <div class="container-fluid">
         <div class="row-fluid">
             {% block content %}

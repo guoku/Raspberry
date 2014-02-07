@@ -1,4 +1,5 @@
 {% extends "management_base.html" %}
+{% load i18n %}
 {% load management %}
 
 {% block content %}
@@ -8,10 +9,10 @@
                 <thead>
                     <tr>
                         <th>id</th>
-                        <th>头像</th>
-                        <th>Username</th>
-                        <th>昵称</th>
-                        <th>操作</th>
+                        <th>{% trans "avatar" %}</th>
+                        <th>{% trans "username" %}</th>
+                        <th>{% trans "nickname" %}</th>
+                        <th>{% trans "operate" %}</th>
                     </tr>
                 </thead>
                 <tbody>

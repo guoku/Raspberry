@@ -1,7 +1,7 @@
 <form class="update-avatar clearfix" enctype="multipart/form-data"
       action="{% url 'web.views.account.update_avatar' %}" method="POST">
     {% csrf_token %}
-    <div class="avatar guoku-block"><img src="{{ user_context.avatar_small }}" height="100" width="100"></div>
+    <div class="avatar guoku-block"><img src="{{ user_context.avatar_large }}" height="100" width="100"></div>
 
     <a href="javascript:;">点击选择图片</a><span></span>
     <input type="file" name="avatar_img" class="file">

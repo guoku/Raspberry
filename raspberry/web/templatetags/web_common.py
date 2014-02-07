@@ -1,12 +1,25 @@
 # coding=utf-8
 
 from django import template
-import datetime
+# from django.conf import settings
+from django.utils.log import getLogger
+from datetime import datetime
+import time
+
+
 register = template.Library()
+
+log = getLogger('django')
 
 
 def format_time(value):
-    time_interval = (datetime.datetime.now() - value).total_seconds()
+
+    before_time = time.mktime(value.timetuple())
+    now = time.mktime(datetime.now().timetuple())
+    # log.info("time %s" % before_time)
+    time_interval = now - before_time
+    # time_interval = (datetime.utcnow() - value).total_seconds()
+
     if time_interval < 60:
         return "%d 秒前" % (time_interval)
     elif time_interval < 60 * 60:

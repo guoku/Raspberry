@@ -1,19 +1,14 @@
-import os.path
+# import os.path
 from defaults import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
-
-
 from mongoengine import register_connection
-register_connection('guoku-db', 'guoku')
-register_connection('log-db', 'guoku_log')
+register_connection('guoku-db', 'guoku', username='qinzhoukan', password='qinzhoukan1@#',host='10.0.2.200',
+        max_pool_size=200, auto_start_request=False, safe=True)
+register_connection('log-db', 'guoku_log', host='10.0.2.200',
+        max_pool_size=200, auto_start_request=False, safe=True)
 
 
 DATABASES = {
@@ -31,20 +26,7 @@ DATABASES = {
         }
     },
 }
-#DATABASE_ROUTERS = ['router.AuthRouter']
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "redis_cache.cache.RedisCache",
-#         "LOCATION": [
-#             "localhost:6379:1",
-#         ],
-#         "OPTIONS": {
-#             "PARSER_CLASS": "redis.connection.HiredisParser",
-#             "CLIENT_CLASS": "redis_cache.client.ShardClient",
-#         }
-#     }
-# }
 CACHES = {
    'default': {
        'BACKEND': 'redis_cache.RedisCache',
@@ -119,8 +101,6 @@ STATICFILES_DIRS = (
 )
 
 
-
-
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
     'debug_toolbar.panels.timer.TimerPanel',
@@ -164,22 +144,6 @@ INSTALLED_APPS = (
     'web',
 )
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        }, }
-}
 
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.SHA1PasswordHasher',

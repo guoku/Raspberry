@@ -10,6 +10,9 @@ class UploadFileForm(forms.Form):
         help_text = '10M 以内',
     )
 
+    def save(self):
+        pass
+
 __author__ = 'edison7500'
 
 

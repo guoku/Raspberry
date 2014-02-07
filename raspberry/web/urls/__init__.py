@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.conf.urls.defaults import url, patterns, include
+from django.conf.urls import url, patterns, include
 
 urlpatterns = patterns(
     'web.views',
@@ -23,8 +23,9 @@ urlpatterns = patterns(
 
 urlpatterns += patterns(
     'web.views.account',
-    url(r'^login/$', 'login', name="login"),
-    url(r'^logout/$', 'logout', name="logout"),
+    url(r'^login/$', 'login', name="web_login"),
+    url(r'^logout/$', 'logout', name="web_logout"),
+
     url(r'^taobao/bind/$', 'bind_taobao', name="bind_taobao"),
     url(r'^taobao/auth/$', 'taobao_auth', name="taobao_auth"),
     url(r'^taobao/binding/check/$', 'bind_taobao_check', name="check_taobao_binding"),
