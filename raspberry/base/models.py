@@ -216,6 +216,15 @@ class Entity_Tag(models.Model):
     def __unicode__(self):
         return self.tag
 
+class Recommend_User_Tag(models.Model):
+    user = models.ForeignKey(User) 
+    tag = models.CharField(max_length = 128, null = False, db_index = True)
+    entity_count = models.IntegerField(default = 0, db_index = True)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('user', 'tag')
+
 class User_Follow(models.Model):
     follower = models.ForeignKey(User, related_name = "followings")
     followee = models.ForeignKey(User, related_name = "fans")

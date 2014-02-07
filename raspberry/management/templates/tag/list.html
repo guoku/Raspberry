@@ -16,13 +16,17 @@
                 </thead>
                 <tbody>
                     {% for context in context_list %}
-                        <tr>
-                            <td><p class="text-info">{{ context.user.nickname }}</p></td>
-                            <td><p class="text-info">{{ context.tag }}</p></td>
+                        <tr{%if context.status == 1%} class="success"{%endif%}>
+                            <td><p class="text-info"><a href="{% url 'management_tag_list' %}?user={{context.user.user_id}}">{{ context.user.nickname }}</a></p></td>
+                            <td><p class="text-info"><a href="{% url 'management_tag_list' %}?tag={{context.tag}}">{{ context.tag }}</a></p></td>
                             <td><p class="text-info">{{ context.entity_count }}</p></td>
                             <td width="50">
                                 <div class="btn-group">
-                                    <a class="btn" href="">加热</a>
+                                    {% if context.status == 0 %}
+                                        <a class="btn" href="{% url 'management_transcend_user_tag' context.tag context.user.user_id %}">加热</a>
+                                    {% else %}
+                                        <a class="btn" href="{% url 'management_freeze_user_tag' context.tag context.user.user_id %}">冷却</a>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>
