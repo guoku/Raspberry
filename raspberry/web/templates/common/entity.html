@@ -1,6 +1,6 @@
 <div class="common-entity">
-    <a href="{% url 'web.views.main.detail' entity_context.entity_hash %}" class="entity-img">
-        <img src="{{ entity_context.chief_image.url }}">
+    <a href="{% url 'web_detail' entity_context.entity_hash %}" class="entity-img">
+        <img src="{{ entity_context.chief_image.url }}" alt="{{ entity_context.title }}">
     </a>
 
     <div class="detail">

@@ -100,7 +100,7 @@
         loadSelections: function () {
             // 动态加载selection
 
-            var $selection = $('#selection');
+            var $selection = $('.selections');
 
             if ($selection[0]) {
                 var counter = 1;

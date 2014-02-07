@@ -10,9 +10,9 @@ class UserForms(forms.Form):
     Woman = u'F'
     Other = u'O'
     GENDER_CHOICES = (
-        (Man, u'男'),
-        (Woman,  u'女'),
-        (Other,  u'其他')
+        (Man, _('male')),
+        (Woman,  _('female')),
+        (Other,  _('other')),
     )
 
     username = forms.CharField(max_length = 30, widget = forms.TextInput(attrs = {'class' : 'input-xxlarge'}), label = _('username'), help_text = _(''))
