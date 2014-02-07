@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="address">
-
+                    {{ forms.location }}
                 </div>
 
                 <div class="gender">
@@ -92,8 +92,8 @@
 {#                           class="text-input">#}
 {#                </div>#}
 
-                <input type="hidden" name="type" value="base">
-                <input type="submit" value="更改资料" class="guoku-button">
+{#                <input type="hidden" name="type" value="base">#}
+                <input type="submit" value="{% trans "update profile" %}" class="guoku-button">
             </form>
 
             <div class="bind"><span class="label">新浪微博</span><a href="">绑定新浪微博</a></div>

@@ -85,10 +85,13 @@ msgid "bio"
 msgstr "简介"
 
 msgid "website"
-msgstr ""
+msgstr "网址"
 
 msgid "update"
 msgstr "更新"
+
+msgid "update profile"
+msgstr "更新资料"
 
 
 # error message

@@ -14,7 +14,7 @@
             {% if field.errors %}
                 <span class="error-info">
                 {% for error in field.errors %}
-                    {{ error }}
+                    {{ error|escape }}
                 {% endfor %}
                 </span>
             {% endif %}
