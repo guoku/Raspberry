@@ -96,8 +96,8 @@ class Tag(object):
         _entity_tag_obj.count += 1
         _entity_tag_obj.save()
         
-        if RecommendUserTagModel.objects.filter(user_id = user_id, tag = tag):
-            cls.update_recommend_user_tag_entity_count()
+        if RecommendUserTagModel.objects.filter(user = user_id, tag = tag):
+            cls.update_recommend_user_tag_entity_count(user_id, tag)
        
 
     
@@ -112,8 +112,8 @@ class Tag(object):
             else:
                 _entity_tag_obj.delete()
             
-            if RecommendUserTagModel.objects.filter(user_id = user_id, tag = tag):
-                cls.update_recommend_user_tag_entity_count()
+            if RecommendUserTagModel.objects.filter(user = user_id, tag = tag):
+                cls.update_recommend_user_tag_entity_count(user_id, tag)
         except:
             pass
             
@@ -148,12 +148,12 @@ class Tag(object):
                 
     @classmethod
     def get_user_tag_entity_count(cls, user_id, tag):
-        return EntityTagModel.objects.filter(user_id = user_id, tag_text = tag).count()
+        return EntityTagModel.objects.filter(user = user_id, tag_text = tag).count()
         
     @classmethod
     def update_recommend_user_tag_entity_count(cls, user_id, tag): 
         try:
-            _obj = RecommendUserTagModel.objects.get(user_id = user_id, tag = tag)
+            _obj = RecommendUserTagModel.objects.get(user = user_id, tag = tag)
             _obj.entity_count = cls.get_user_tag_entity_count(user_id, tag)
             _obj.save()
         except RecommendUserTagModel.DoesNotExist:
