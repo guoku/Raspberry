@@ -30,7 +30,7 @@ def category_user_like(request, category_id, user_id):
             _reverse = True
         
         _entity_id_list = MobileUser(user_id).find_like_entity(
-            category_id = category_id,
+            neo_category_id = category_id,
             offset = _offset,
             count = _count,
             sort_by = _sort_by,
