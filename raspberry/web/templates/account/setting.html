@@ -2,7 +2,7 @@
 {% load i18n staticfiles %}
 {% load account %}
 
-{% block title %}设置 - 果库{% endblock %}
+{% block title %}设置{% endblock %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
 {% endblock %}
@@ -34,6 +34,7 @@
                 </div>
 
                 <div class="address">
+                    <span class="label">{{ forms.location.label }}</span>
                     {{ forms.location }}
                 </div>
 

@@ -413,13 +413,14 @@ def setting(request, template = 'account/setting.html'):
                 return _set_psw(request, template)
     else:
         _user_context = User(request.user.id).read()
-        forms = SettingAccountForm(initial = _user_context)
-
+        forms = SettingAccountForm(initial = _user_context, prefix="settings")
+        sub_forms = None
         return render_to_response(
             template,
             {
                 'user_context' : _user_context,
                 'forms': forms,
+                'sub_forms': sub_forms,
             },
             context_instance = RequestContext(request),
         )
