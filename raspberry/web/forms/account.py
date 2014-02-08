@@ -141,8 +141,8 @@ class SettingAccountForm(forms.Form):
                              label=_('email'), help_text=_(''))
     bio = forms.CharField(widget=forms.Textarea(attrs={'rows':'4', 'class':'text-input'}),
                           label=_('bio'), help_text=_(''))
-    location = forms.MultiValueField(widget=LocationSelectWidget(attrs={'class':'location'}),
-                                         label=_('location'), help_text=_(""))
+    # location = forms.MultiValueField(widget=LocationSelectWidget(attrs={'class':'location'}),
+                                         # label=_('location'), help_text=_(""))
     gender = forms.ChoiceField(widget=forms.RadioSelect(), choices = GENDER_CHOICES, label = _('gender'), help_text = _(''))
     website = forms.URLField(widget=forms.TextInput(attrs={'class':'text-input'}),
                              label=_('website'), help_text=_(''))
