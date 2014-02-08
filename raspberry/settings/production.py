@@ -106,6 +106,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.messages',
+    'django.contrib.formtools',
     'djcelery',
     'base',
     'management',
