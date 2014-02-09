@@ -8,6 +8,7 @@ class Report(Document):
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
     meta = {
+        'db_alias' : 'guoku-db',
         'indexes' : [ 
             'reporter_id' 
         ],

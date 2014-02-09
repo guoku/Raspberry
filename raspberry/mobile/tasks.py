@@ -11,6 +11,7 @@ from lib.user import MobileUser
 import datetime
 import time
 import logging
+import lib.logger as mobile_logger 
 logger = logging.getLogger('django.request')
 
 MAX_RETRIES = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRIES', 5)
@@ -18,9 +19,10 @@ RETRY_DELAY = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRY_DELAY', 60)
 
 class LikeEntityTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, entity_id, request_user_id = None):
         _entity_id = int(entity_id)
@@ -29,9 +31,10 @@ class LikeEntityTask(Task):
 
 class UnlikeEntityTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, entity_id, request_user_id = None):
         _entity_id = int(entity_id)
@@ -40,27 +43,30 @@ class UnlikeEntityTask(Task):
 
 class FollowUserTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, follower_id, followee_id):
         MobileUser(follower_id).follow(followee_id)
 
 class UnfollowUserTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, follower_id, followee_id):
         MobileUser(follower_id).unfollow(followee_id)
 
 class PokeEntityNoteTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, note_id, request_user_id = None):
         _note_id = int(note_id)
@@ -69,9 +75,10 @@ class PokeEntityNoteTask(Task):
 
 class DepokeEntityNoteTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 10
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, note_id, request_user_id = None):
         _note_id = int(note_id)
@@ -80,9 +87,10 @@ class DepokeEntityNoteTask(Task):
 
 class DeleteEntityNoteTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 20
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, entity_id, note_id):
         _entity = MobileEntity(entity_id)
@@ -90,9 +98,10 @@ class DeleteEntityNoteTask(Task):
 
 class DeleteEntityNoteCommentTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 20
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, note_id, comment_id):
         _note = MobileNote(note_id)
@@ -100,9 +109,10 @@ class DeleteEntityNoteCommentTask(Task):
 
 class RetrievePasswordTask(Task):
     ignore_result = True
-    time_limit = 60
+    time_limit = 30
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id):
         _user = MobileUser(user_id)
@@ -110,9 +120,10 @@ class RetrievePasswordTask(Task):
 
 class MarkFootprint(Task):
     ignore_result = True
-    time_limit = 5 
+    time_limit = 10 
     max_retries = MAX_RETRIES
     default_retry_delay = RETRY_DELAY
+    queue = "main"
     
     def run(self, user_id, message = False, selection = False, social_feed = False, friend_feed = False):
         MobileUser(user_id).mark_footprint(
@@ -121,3 +132,31 @@ class MarkFootprint(Task):
             social_feed = social_feed,
             friend_feed = friend_feed
         )
+
+class MobileLogTask(Task):
+    ignore_result = True
+    time_limit = 10 
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    queue = "log"
+    
+    def run(self, duration, view, request, ip, request_user_id = None, appendix = None):
+        _version = request.get('version', 'unkown')
+        _device = request.get('device', None)
+        _duid = request.get('duid', None)
+        _os = request.get('os', None)
+        _prev_str = request.get('prev', None)
+        
+        mobile_logger.log(
+            duration = duration,
+            ip = ip,
+            view = view,
+            request_user_id = request_user_id,
+            version = _version,
+            device = _device,
+            duid = _duid,
+            os = _os,
+            prev_str = _prev_str,
+            appendix = appendix,
+        )
+

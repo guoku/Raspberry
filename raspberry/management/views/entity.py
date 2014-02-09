@@ -17,8 +17,10 @@ from base.item import Item
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
+from management.tasks import CreateTaobaoShopTask
+from utils.authority import staff_only 
 from utils.paginator import Paginator
-from base import fetcher 
+from utils import fetcher 
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -29,7 +31,7 @@ def _parse_taobao_id_from_url(url):
     return None
 
 def _load_taobao_item_info(taobao_id):
-    taobao_item_info = fetcher.fetch(taobao_id)
+    taobao_item_info = fetcher.fetch_item(taobao_id)
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:
@@ -37,18 +39,19 @@ def _load_taobao_item_info(taobao_id):
     taobao_item_info["thumb_images"] = thumb_images
     taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
     
-    taobao_item_info["shop_nick"] = taobao_item_info["nick"] 
+    taobao_item_info["shop_nick"] = taobao_item_info["nick"]
+    
     return taobao_item_info
 
 
 def _get_special_names(request_user_id):
     if request_user_id in [22045, 19, 10, 79761, 66400, 195580]:
         if request_user_id == 22045:
-            _id_list = [ 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902]
+            _id_list = [ 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902, 79761, 66400]
         elif request_user_id in [10, 19]:
-            _id_list = [ 19, 10, 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902]
+            _id_list = [ 19, 10, 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902, 79761, 66400]
         elif request_user_id == 195580:
-            _id_list = [ 195580, 215653, 209071 ] 
+            _id_list = [ 195580, 215653, 209071, 79761, 66400 ] 
         elif request_user_id in [79761, 66400]:
             _id_list = [ 66400, 79761 ]
             
@@ -86,6 +89,7 @@ def _add_note_and_select_delay(entity, user_id, note):
 
 
 @login_required
+@staff_only
 def new_entity(request):
     if request.method == 'GET':
         return render_to_response(
@@ -117,7 +121,8 @@ def new_entity(request):
                         'taobao_id': _taobao_id,
                         'cid': _taobao_item_info['cid'],
                         'taobao_title': _taobao_item_info['title'],
-                        'shop_nick': _taobao_item_info['shop_nick'],
+                        'shop_nick': _taobao_item_info['nick'],
+                        'shop_link': _taobao_item_info['shop_link'],
                         'price': _taobao_item_info['price'],
                         'thumb_images': _taobao_item_info["thumb_images"],
                         'selected_category_id': _selected_category_id,
@@ -136,11 +141,13 @@ def new_entity(request):
                 
                 
 @login_required
+@staff_only
 def create_entity_by_taobao_item(request):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
         _cid = request.POST.get("cid", None)
         _taobao_shop_nick = request.POST.get("taobao_shop_nick", None)
+        _taobao_shop_link = request.POST.get("taobao_shop_link", None)
         _taobao_title = request.POST.get("taobao_title", None)
         _taobao_price = request.POST.get("taobao_price", None)
         _chief_image_url = request.POST.get("chief_image_url", None)
@@ -177,9 +184,12 @@ def create_entity_by_taobao_item(request):
         if _note != None and len(_note) > 0:
             _add_note_and_select_delay(_entity, _user_id, _note)
 
+        CreateTaobaoShopTask.delay(_taobao_shop_nick, _taobao_shop_link)
+
         return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
+@staff_only
 def edit_entity(request, entity_id):
     if request.method == 'GET':
         _code = request.GET.get("code", None)
@@ -198,8 +208,11 @@ def edit_entity(request, entity_id):
             if _item_context.has_key('shop_nick'):
                 _shop_context = TaobaoShop(_item_context['shop_nick']).read()
                 if _shop_context != None:
-                    _item_context['commission_rate'] = _shop_context['commission_rate']
-                    _item_context['commission_type'] = _shop_context['commission_type']
+                    _item_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                    if _shop_context['extended_info']['orientational']:
+                        _entity_context['commission_type'] = 'orientational'
+                    else:
+                        _entity_context['commission_type'] = 'general'
             _item_context_list.append(_item_context)
 
 
@@ -228,6 +241,11 @@ def edit_entity(request, entity_id):
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
         _price = request.POST.get("price", None)
+        _reset_created_time = request.POST.get("reset_created_time", "off")
+        if _reset_created_time == "on":
+            _reset_created_time = True
+        else:
+            _reset_created_time = False
         _weight = int(request.POST.get("weight", '0'))
         _mark = int(request.POST.get("mark", '0'))
         _chief_image_id = request.POST.get("chief_image", None)
@@ -249,7 +267,8 @@ def edit_entity(request, entity_id):
             price = _price,
             chief_image_id = _chief_image_id,
             weight = _weight,
-            mark = _mark
+            mark = _mark,
+            reset_created_time = _reset_created_time
         )
 
         _note = request.POST.get("note", None)
@@ -260,6 +279,7 @@ def edit_entity(request, entity_id):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
+@staff_only
 def edit_entity_image(request, entity_id):
     if request.method == 'GET':
         _entity_context = Entity(entity_id).read()
@@ -273,6 +293,7 @@ def edit_entity_image(request, entity_id):
         )
         
 @login_required
+@staff_only
 def search_entity(request):
     if request.method == 'POST':
         _query = request.POST.get("query", None)
@@ -314,19 +335,11 @@ def search_entity(request):
 
 
 @login_required
+@staff_only
 def entity_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id == None:
-        _status = request.GET.get("status", "all")
-        if _status == "freeze":
-            _status_code = -1 
-        elif _status == "recycle":
-            _status_code = -2 
-        elif _status == "normal":
-            _status_code = 1
-        else:
-            _status_code = 0
-    
+        _status = request.GET.get("status", "select")
         _para = { 
             "status" : _status
         }
@@ -348,15 +361,11 @@ def entity_list(request):
         
         
         _category_groups = Category.allgroups()
-        _normal_entity_count = Entity.count(category_id = _category_id, status = 0) 
-        _freeze_entity_count = Entity.count(category_id = _category_id, status = -1)
-        _recycle_entity_count = Entity.count(category_id = _category_id, status = -2)
+        _select_entity_count = Entity.count(category_id = _category_id, status = 'select') 
+        _novus_entity_count = Entity.count(category_id = _category_id, status = 'novus') 
+        _freeze_entity_count = Entity.count(category_id = _category_id, status = 'freeze')
+        _recycle_entity_count = Entity.count(category_id = _category_id, status = 'recycle')
         
-        _entity_count = Entity.count(
-            category_id = _category_id,
-            status = _status_code
-        )
-
         _sort_by = request.GET.get("sort_by", "time")
         _reverse = request.GET.get("reverse", None)
         if _sort_by:
@@ -366,17 +375,30 @@ def entity_list(request):
                 _reverse = True
             else:
                 _reverse = False
-
-        _paginator = Paginator(_page_num, 30, _entity_count, _para)
-
-        _entity_id_list = Entity.find(
-            category_id=_category_id,
-            status=_status_code,
-            offset=_paginator.offset,
-            count=_paginator.count_in_one_page,
-            sort_by=_sort_by,
-            reverse=_reverse
+        
+        _entity_count = Entity.count(
+            category_id = _category_id,
+            status = _status
         )
+    
+        if _sort_by == 'random':
+            _paginator = None
+            _entity_id_list = Entity.random(
+                status = _status,
+                count = 30
+            )
+        else:
+            _paginator = Paginator(_page_num, 30, _entity_count, _para)
+
+            _entity_id_list = Entity.find(
+                category_id = _category_id,
+                status = _status,
+                offset = _paginator.offset,
+                count = _paginator.count_in_one_page,
+                sort_by = _sort_by,
+                reverse = _reverse
+            )
+        
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
         for _entity_id in _entity_id_list:
@@ -396,8 +418,11 @@ def entity_list(request):
                     if _item_context.has_key('shop_nick'):
                         _shop_context = TaobaoShop(_item_context['shop_nick']).read()
                         if _shop_context != None:
-                            _entity_context['commission_rate'] = _shop_context['commission_rate']
-                            _entity_context['commission_type'] = _shop_context['commission_type']
+                            _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                            if _shop_context['extended_info']['orientational']:
+                                _entity_context['commission_type'] = 'orientational'
+                            else:
+                                _entity_context['commission_type'] = 'general'
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
@@ -416,21 +441,22 @@ def entity_list(request):
         return render_to_response( 
             'entity/list.html', 
             {
-                'active_division': 'entity',
-                'status_filter': _status,
-                'category_context': _category_context,
-                'category_groups': _category_groups,
-                'categories': _categories,
-                'category_group_id': _category_group_id,
-                'normal_entity_count': _normal_entity_count,
-                'freeze_entity_count': _freeze_entity_count,
-                'recycle_entity_count': _recycle_entity_count,
-                'entity_context_list': _entity_context_list,
-                'paginator': _paginator,
-                'sort_by': _sort_by,
-                'reverse': _reverse
+                'active_division' : 'entity',
+                'status_filter' : _status,
+                'category_context' : _category_context,
+                'category_groups' : _category_groups,
+                'categories' : _categories,
+                'category_group_id' : _category_group_id,
+                'select_entity_count' : _select_entity_count,
+                'novus_entity_count' : _novus_entity_count,
+                'freeze_entity_count' : _freeze_entity_count,
+                'recycle_entity_count' : _recycle_entity_count,
+                'entity_context_list' : _entity_context_list,
+                'paginator' : _paginator,
+                'sort_by' : _sort_by,
+                'reverse' : _reverse
             },
-            context_instance=RequestContext(request)
+            context_instance = RequestContext(request)
         )
     else:
         _categories = Category.find(group_id = int(_group_id))
@@ -456,6 +482,7 @@ def entity_list(request):
             return HttpResponseRedirect(reverse('management_entity_list') + '?cid=' + str(_categories[0]['category_id'])) 
 
 @login_required
+@staff_only
 def unbind_taobao_item_from_entity(request, entity_id, item_id):
     _entity = Entity(entity_id)
     _entity.unbind_item(item_id)
@@ -463,6 +490,7 @@ def unbind_taobao_item_from_entity(request, entity_id, item_id):
     return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
+@staff_only
 def bind_taobao_item_to_entity(request, entity_id, item_id):
     _entity = Entity(entity_id)
     _entity.bind_item(item_id)
@@ -470,6 +498,7 @@ def bind_taobao_item_to_entity(request, entity_id, item_id):
 
 
 @login_required
+@staff_only
 def load_taobao_item_for_entity(request, entity_id):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
@@ -517,6 +546,7 @@ def load_taobao_item_for_entity(request, entity_id):
             return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity_id }) + '?code=1')
     
 @login_required
+@staff_only
 def add_image_for_entity(request, entity_id):
     if request.method == "POST":
         _image_file = request.FILES.get('image', None)
@@ -537,6 +567,7 @@ def add_image_for_entity(request, entity_id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
+@staff_only
 def del_image_from_entity(request, entity_id, image_id):
     if request.method == "GET":
         _entity = Entity(entity_id)
@@ -547,6 +578,7 @@ def del_image_from_entity(request, entity_id, image_id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
+@staff_only
 def add_taobao_item_for_entity(request, entity_id):
     if request.method == 'POST':
         _taobao_id = request.POST.get("taobao_id", None)
@@ -573,6 +605,7 @@ def add_taobao_item_for_entity(request, entity_id):
         return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
+@staff_only
 def merge_entity(request, entity_id):
     if request.method == 'POST':
         _target_entity_id = request.POST.get("target_entity_id", None)
@@ -581,24 +614,31 @@ def merge_entity(request, entity_id):
         return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
 @login_required
+@staff_only
 def get_all_categories(request):
-    result = {}
-    new_category = {}
-    result['new_category'] = new_category
-    result['old_category'] = Old_Category.find()
-    groups_and_categories = Category.all_group_with_full_category()
+    if request.method == 'GET':
+        result = {}
+        new_category = {}
+        result['new_category'] = new_category
+        result['old_category'] = Old_Category.find()
+        groups_and_categories = Category.all_group_with_full_category()
 
-    for g_a_c in groups_and_categories:
-        categories = []
-        for cat in g_a_c['content']:
-            category = {}
-            category['category_title'] = cat['category_title']
-            category['category_id'] = cat['category_id']
-            categories.append(category)
-        new_category[g_a_c['title']] = categories
-    return HttpResponse(json.dumps(result))
+        for g_a_c in groups_and_categories:
+            categories = []
+
+            for cat in g_a_c['content']:
+                category = {
+                    'category_title' : cat['category_title'],
+                    'category_id' : cat['category_id']
+                }
+                categories.append(category)
+
+            new_category[g_a_c['title']] = categories
+
+        return HttpResponse(json.dumps(result))
 
 @login_required
+@staff_only
 def read_taobao_item_state(request):
     _taobao_url = request.GET.get("url", None)
     _item = None
@@ -621,10 +661,11 @@ def read_taobao_item_state(request):
     return HttpResponse(json.dumps(_result, cls=DjangoJSONEncoder))
 
 @login_required
+@staff_only
 def recycle_entity(request, entity_id):
-    if request.method == 'GET':
+    if request.method == 'POST':
         _entity = Entity(entity_id)
         _entity.update(
             weight = -2
         )
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        return HttpResponse(1)

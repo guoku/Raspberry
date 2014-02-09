@@ -6,7 +6,7 @@ from mongoengine import *
 from utils.apns_notification import APNSWrapper
 import datetime
 import urllib
-import random 
+import random
 import time
 
 
@@ -18,12 +18,11 @@ from models import Entity_Like as EntityLikeModel
 from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
 from models import Note as NoteModel
 from models import NoteSelection
-from tasks import CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
+from tasks import CleanNoteMessageTask, CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
 from note import Note
 from user import User 
 from hashlib import md5
-
-
+from utils.lib import roll
 
 
 class Entity(object):
@@ -179,9 +178,9 @@ class Entity(object):
         if image_id in self.entity_obj.detail_images:
             self.entity_obj.detail_images = self.entity_obj.detail_images.replace(image_id, '')
             self.entity_obj.detail_images = self.entity_obj.detail_images.replace('##', '#')
-            if self.entity_obj.detail_images[0] == '#':
+            if len(self.entity_obj.detail_images) > 1 and self.entity_obj.detail_images[0] == '#':
                 self.entity_obj.detail_images = self.entity_obj.detail_images[1:]
-            if self.entity_obj.detail_images[-1] == '#':
+            if len(self.entity_obj.detail_images) > 1 and self.entity_obj.detail_images[-1] == '#':
                 self.entity_obj.detail_images = self.entity_obj.detail_images[:-1]
         self.entity_obj.save()
     
@@ -238,6 +237,7 @@ class Entity(object):
             _basic_info['creator_id'] = self.entity_obj.creator_id
             _basic_info["entity_hash"] = self.entity_obj.entity_hash
             _basic_info["old_category_id"] = self.entity_obj.category_id
+            _basic_info['old_root_category_id'] = self.entity_obj.category.pid
             _basic_info["category_id"] = self.entity_obj.neo_category_id
             _basic_info['like_count'] = self.entity_obj.like_count 
             _basic_info["created_time"] = self.entity_obj.created_time
@@ -325,7 +325,7 @@ class Entity(object):
 
         # TODO: removing entity_id in item
     
-    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None, mark = None):
+    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None, mark = None, reset_created_time = False):
         
         self.__ensure_entity_obj()
         if brand != None:
@@ -353,31 +353,85 @@ class Entity(object):
                 _detail_image_ids.insert(0, self.entity_obj.chief_image)
             self.entity_obj.detail_images =  "#".join(_detail_image_ids)
             self.entity_obj.chief_image = chief_image_id
-            
+        
+        if reset_created_time == True:
+            self.entity_obj.created_time = datetime.datetime.now()
+
+
         self.entity_obj.save()
         _basic_info = self.__load_basic_info_from_cache()
         if _basic_info != None:
             _basic_info = self.__reset_basic_info_to_cache()
+    
             
+        
     @classmethod
-    def find(cls, root_old_category_id = None, category_id = None, like_word = None, timestamp = None, status = None, offset = None, count = 30, sort_by = None, reverse = False):
+    def random(cls, status = 'normal', category_id = None, count = 30):
         _hdl = EntityModel.objects.all()
+        _sql_query = 'SELECT id FROM base_entity WHERE weight'
+
+        if status == 'select':
+            _sql_query += '>0'
+            _hdl = _hdl.filter(weight__gt = 0)
+        elif status == 'novus':
+            _sql_query += '=0'
+            _hdl = _hdl.filter(weight = 0)
+        elif status == 'freeze':
+            _sql_query += '=-1'
+            _hdl = _hdl.filter(weight = -1)
+        elif status == 'recycle':
+            _sql_query += '=-2'
+            _hdl = _hdl.filter(weight = -2)
+        else:
+            _sql_query += '>=0'
+            _hdl = _hdl.filter(weight__gte = 0)
+        
+        if category_id != None:
+            _sql_query += ' AND neo_category_id=%d'%int(category_id)
+            _hdl = _hdl.filter(neo_category_id = category_id)
+        
+        _random_offset_list = roll(_hdl.count(), count)
+        
+        _entity_id_list = []
+        for k in _random_offset_list:
+            for _obj in EntityModel.objects.raw((_sql_query + ' LIMIT %d, 1')%(k)):
+                _entity_id_list.append(_obj.id) 
+        return _entity_id_list 
+
+
+    @classmethod
+    def find(cls, root_old_category_id = None, category_id = None, 
+                  like_word = None, timestamp = None, status = None, 
+                  offset = None, count = 30, 
+                  sort_by = None, reverse = False):
+        
+        _hdl = EntityModel.objects.all()
+        
         if root_old_category_id != None and root_old_category_id >= 1 and root_old_category_id <= 11:
             _hdl = _hdl.filter(category__pid = root_old_category_id)
+        
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
+        
         if like_word != None: 
             _q = Q(title__icontains = like_word)
             _hdl = _hdl.filter(_q)
-        if status == -1:
-            _hdl = _hdl.filter(weight = -1)
-        elif status == -2:
-            _hdl = _hdl.filter(weight = -2)
-        elif status >= 0:
-            _hdl = _hdl.filter(weight__gte = 0)
-        if timestamp != None:
-            _hdl = _hdl.filter(created_time__lt = timestamp)
         
+        if status == 'recycle':
+            _hdl = _hdl.filter(weight = -2)
+        elif status == 'freeze':
+            _hdl = _hdl.filter(weight = -1)
+        elif status == 'novus':
+            _hdl = _hdl.filter(weight = 0)
+        elif status == 'select':
+            _hdl = _hdl.filter(weight__gt = 0)
+        elif status == 'normal':
+            _hdl = _hdl.filter(weight__gte = 0)
+
+        
+        if timestamp != None:
+            _hdl = _hdl.filter(updated_time__lt = timestamp)
+       
         if sort_by == 'price':
             if reverse:
                 _hdl = _hdl.order_by('-price')
@@ -398,6 +452,11 @@ class Entity(object):
                 _hdl = _hdl.order_by('created_time')
             else:
                 _hdl = _hdl.order_by('-created_time')
+        elif sort_by == 'updated':
+            if reverse:
+                _hdl = _hdl.order_by('updated_time')
+            else:
+                _hdl = _hdl.order_by('-updated_time')
         else:
             _hdl = _hdl.order_by('-weight', '-like_count')
              
@@ -406,14 +465,13 @@ class Entity(object):
             _hdl = _hdl[offset : offset + count]
         
         _entity_id_list = map(lambda x: x.id, _hdl)
+        
         return _entity_id_list
     
     @classmethod
-    def search(cls, query_string, offset = 0, count = 30):
+    def search(cls, query_string):
         _query_set = EntityModel.search.query(query_string).filter(like_count__gte = 0)
-        _entity_id_list = []
-        for _result in _query_set[offset : offset + count]:
-            _entity_id_list.append(int(_result._sphinx["id"]))
+        _entity_id_list = map(lambda x : int(x._sphinx['id']), _query_set[0 : _query_set.count()])
         return _entity_id_list 
 
     @classmethod
@@ -455,15 +513,21 @@ class Entity(object):
     @classmethod
     def count(cls, category_id = None, status = None):
         _hdl = EntityModel.objects.all()
+        
         if category_id != None:
             _hdl = _hdl.filter(neo_category_id = category_id)
-        if status != None:
-            if status == -1:
-                _hdl = _hdl.filter(weight = -1)
-            elif status == -2:
-                _hdl = _hdl.filter(weight = -2)
-            elif status >= 0:
-                _hdl = _hdl.filter(weight__gte = 0)
+        
+        if status == 'recycle':
+            _hdl = _hdl.filter(weight = -2)
+        elif status == 'freeze':
+            _hdl = _hdl.filter(weight = -1)
+        elif status == 'novus':
+            _hdl = _hdl.filter(weight = 0)
+        elif status == 'select':
+            _hdl = _hdl.filter(weight__gt = 0)
+        elif status == 'normal':
+            _hdl = _hdl.filter(weight__gte = 0)
+        
         return _hdl.count()
     
     def bind_item(self, item_id):
@@ -541,15 +605,23 @@ class Entity(object):
         return EntityLikeModel.objects.filter(user_id = user_id, entity_id = self.entity_id).count() > 0 
 
     @staticmethod
-    def like_list_of_user(user_id, timestamp = None, offset = 0, count = 30):
+    def like_set_of_user(user_id):
         _user_id = int(user_id)
-        _hdl = EntityLikeModel.objects.filter(user_id = _user_id)
-        if timestamp != None:
-            _hdl = _hdl.filter(created_time__lt = timestamp)
+        _set = set()
+        for _obj in EntityLikeModel.objects.filter(user_id = _user_id):
+            _set.add(_obj.entity_id)
+        return _set
+        
+    
+    def liker_list(self, offset = None, count = None):
+        _hdl = EntityLikeModel.objects.filter(entity_id = self.entity_id)
+        
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
         
         _list = []
-        for _obj in _hdl[offset : offset + count]:
-            _list.append([_obj.entity_id, _obj.created_time])
+        for _obj in _hdl:
+            _list.append([_obj.user_id, _obj.created_time])
 
         return _list
         
@@ -596,8 +668,10 @@ class Entity(object):
             self.__reset_note_info_to_cache(_note_info)
         
         User(_note_context['creator_id']).update_user_entity_note_count(delta = -1)
-        for _doc in EntityNoteMessage.objects.filter(entity_id = self.entity_id, note_id = _note_id):
-            _doc.delete()
+        CleanNoteMessageTask.delay(
+            entity_id = self.entity_id, 
+            note_id = _note_id
+        )
     
     def update_note_selection_info(self, note_id, selector_id, selected_time, post_time):
         _note_id = int(note_id)
@@ -638,8 +712,8 @@ class Entity(object):
                 )
                 _doc.save()
                 
-                if self.entity_obj.weight < 0:
-                    self.update(weight = 0)
+                if self.entity_obj.weight <= 0:
+                    self.update(weight = 1)
                
                 _note_context = _note.read()
                 CreateNoteSelectionMessageTask.delay(

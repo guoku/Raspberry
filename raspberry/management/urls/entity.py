@@ -20,10 +20,9 @@ urlpatterns = patterns(
     url(r'^(?P<entity_id>\w+)/taobao/item/(?P<item_id>\w+)/bind/$', 'bind_taobao_item_to_entity', name = 'management_bind_taobao_item_to_entity'),
     url(r'^(?P<entity_id>\w+)/taobao/item/(?P<item_id>\w+)/unbind/$', 'unbind_taobao_item_from_entity', name = 'management_unbind_taobao_item_from_entity'),
     url(r'^categories$', 'get_all_categories'),
+    url(r'^item/taobao/state$', 'read_taobao_item_state')  # for chrome extension
 
 )
-
-
 
 __author__ = 'edison7500'
 

@@ -6,6 +6,7 @@ conn = pymongo.Connection('localhost', 27017)
 db = conn.guoku
 
 item_dict = {}
+user_dict = {}
 count = 0
 start_time = None
 end_time = None
@@ -18,6 +19,22 @@ for doc in db.logging_backup.find():
                     'count' : 0
                 }
             item_dict[doc['item_id']]['count'] += 1
+
+        if doc.has_key('user_id') and doc['user_id'] != -1:
+            if not user_dict.has_key(doc['user_id']):
+                user_dict[doc['user_id']] = {
+                    'count' : 0
+                }
+            user_dict[doc['user_id']]['count'] += 1
+        elif doc.has_key('outer_code') and len(doc['outer_code']) > 3:
+            user_id = int(doc['outer_code'][3:])
+            if not user_dict.has_key(user_id):
+                user_dict[user_id] = {
+                    'count' : 0
+                }
+            user_dict[user_id]['count'] += 1
+
+            
         
         count += 1
         if start_time == None or doc['logged_time'] < start_time:
@@ -29,9 +46,16 @@ for doc in db.logging_backup.find():
     except Exception, e:
         print e
 
+
 items_sorted = sorted(item_dict.items(), key = lambda x : x[1]['count'], reverse = True)
-fo = open('output.txt', 'w')
+fo = open('entities.txt', 'w')
 for item in items_sorted:
     fo.write("%d\t%d\t%d\n"%(item[1]['entity_id'], item[0], item[1]['count']))
+fo.close()
+
+users_sorted = sorted(user_dict.items(), key = lambda x : x[1]['count'], reverse = True)
+fo = open('users.txt', 'w')
+for item in users_sorted:
+    fo.write("%d\t%d\n"%(item[0], item[1]['count']))
 fo.close()
 print "from [%s]\n to [%s]"%(start_time, end_time)

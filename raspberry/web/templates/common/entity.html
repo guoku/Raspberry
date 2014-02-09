@@ -1,0 +1,14 @@
+<div class="common-entity">
+    <a href="{% url 'web_detail' entity_context.entity_hash %}" class="entity-img">
+        <img src="{{ entity_context.chief_image.url }}" alt="{{ entity_context.title }}">
+    </a>
+
+    <div class="detail">
+        <a href="{% url 'web_like_entity' entity_context.entity_id %}"
+           class="like{% if entity_context.is_user_already_like %} liked{% endif %}">
+            <span class="icon"></span>喜爱
+            <span class="count">{{ entity_context.like_count }}</span>
+        </a>
+        <span class="price">价格<span>&#65509;{{ entity_context.price }}</span></span>
+    </div>
+</div>

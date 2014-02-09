@@ -13,6 +13,7 @@ from models import Note_Poke as NotePokeModel
 from models import User_Censor as UserCensorModel 
 from models import Seed_User as SeedUserModel 
 from models import Sina_Token as SinaTokenModel 
+from models import Seller_Info as SellerInfoModel 
 from models import Taobao_Token as TaobaoTokenModel 
 from models import One_Time_Token as OneTimeTokenModel 
 from models import User_Profile as UserProfileModel 
@@ -28,8 +29,8 @@ from pymogile import Client
 from wand.image import Image
 import datetime
 
+
 class User(object):
-    
 
     class Avatar(object):
         
@@ -182,6 +183,18 @@ class User(object):
         def __str__(self):
             return repr(self.__message)
     
+    class UserBindTaobaoAlready(Exception):
+        def __init__(self):
+            self.__message = "bind taobao already" 
+        def __str__(self):
+            return repr(self.__message)
+    
+    class UserBindShopAlready(Exception):
+        def __init__(self):
+            self.__message = "bind shop already" 
+        def __str__(self):
+            return repr(self.__message)
+    
     def __init__(self, user_id):
         self.user_id = int(user_id) 
     
@@ -305,7 +318,7 @@ class User(object):
         return _user_inst
     
     @classmethod
-    def create_by_taobao(cls, taobao_id, screen_name, taobao_token, email, password, username = None):
+    def create_by_taobao(cls, taobao_id, screen_name, taobao_token, email, password, expires_in = 0, username = None):
         if TaobaoTokenModel.objects.filter(taobao_id = taobao_id).count() > 0:
             raise User.TaobaoIdExistAlready(taobao_id)
 
@@ -319,11 +332,49 @@ class User(object):
             user_id = _user_inst.user_id,
             taobao_id = taobao_id,
             screen_name = screen_name,
-            access_token = taobao_token
+            access_token = taobao_token,
+            expires_in = expires_in
         )
 
         return _user_inst
+    
+    
+    def bind_taobao(self, taobao_id, screen_name, taobao_token, expires_in = 0):
+        try:
+            _token = TaobaoTokenModel.objects.get(user_id = self.user_id, taobao_id = taobao_id)
+            _token.screen_name = screen_name
+            _token.access_token = taobao_token
+            _token.expires_in = expires_in
+            _token.save()
+        except TaobaoTokenModel.DoesNotExist:
+            if TaobaoTokenModel.objects.filter(taobao_id = taobao_id).count() > 0:
+                raise User.TaobaoIdExistAlready(taobao_id)
             
+            if TaobaoTokenModel.objects.filter(user_id = self.user_id).count() > 0:
+                raise User.UserBindTaobaoAlready()
+            
+            TaobaoTokenModel.objects.create(
+                user_id = self.user_id,
+                taobao_id = taobao_id,
+                screen_name = screen_name,
+                access_token = taobao_token,
+                expires_in = expires_in
+            )
+        self.__reset_basic_info_to_cache()
+    
+    def unbind_taobao(self):
+        try:
+            _taobao_token_obj = TaobaoTokenModel.objects.get(user_id = self.user_id)
+            _taobao_token_obj.delete()
+            self.__reset_basic_info_to_cache()
+        except TaobaoTokenModel.DoesNotExist:
+            pass
+        
+    def create_seller_info(self, taobao_shop_nick):
+        if SellerInfoModel.objects.filter(user_id = self.user_id).count() > 0:
+            raise User.UserBindShopAlready() 
+        SellerInfoModel.objects.create(user_id = self.user_id, shop_nick = taobao_shop_nick)
+        self.__reset_basic_info_to_cache()
     
     def delete(self):
         self.__ensure_user_obj()
@@ -379,7 +430,7 @@ class User(object):
     
     def set_profile(self, nickname, location = u'北京', city = u'朝阳', gender = 'O', bio = '', website = ''):
         self.__ensure_user_profile_obj()
-        
+
         if nickname != None:
             _nickname = nickname.strip()
             if self.user_profile_obj != None and _nickname != self.user_profile_obj.nickname:
@@ -465,7 +516,21 @@ class User(object):
         except SinaTokenModel.DoesNotExist:
             pass
         
+        try:
+            _taobao_token_obj = TaobaoTokenModel.objects.get(user_id = self.user_id)
+            _basic_info['taobao_nick'] = _taobao_token_obj.screen_name
+            _basic_info['taobao_token_expires_in'] = _taobao_token_obj.expires_in
+        except TaobaoTokenModel.DoesNotExist:
+            pass
+
+        try:
+            _seller_info_obj = SellerInfoModel.objects.get(user_id = self.user_id)
+            _basic_info['shop_nick'] = _seller_info_obj.shop_nick
+            _basic_info['shop_verified'] = _seller_info_obj.verified
+        except SellerInfoModel.DoesNotExist:
+            pass
         cache.set(_cache_key, _basic_info, 864000)
+        cache.delete("user_context_%s"%self.user_id)
             
         return _basic_info
     
@@ -500,8 +565,19 @@ class User(object):
     def entity_like_count(self, category_id):
         return EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id).count()
         
-    def find_like_entity(self, category_id, offset = None, count = 30, sort_by = None, reverse = False):
-        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id)
+    def find_like_entity(self, category_id = None, neo_category_id = None, timestamp = None, offset = None, count = 30, sort_by = None, reverse = False, with_timestamp = False):
+        
+        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id)
+        
+        if timestamp != None:
+            _hdl = _hdl.filter(created_time__lt = timestamp)
+        
+        if category_id != None:
+            _hdl = _hdl.filter(entity__category__pid = category_id)
+        
+        if neo_category_id != None:
+            _hdl = _hdl.filter(entity__neo_category_id = neo_category_id)
+        
         if sort_by == 'price':
             if reverse:
                 _hdl = _hdl.order_by('-entity__price')
@@ -517,9 +593,12 @@ class User(object):
        
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
-
-        _entity_id_list = map(lambda x: x.entity_id, _hdl)
-        return _entity_id_list
+        
+        if not with_timestamp:
+            return map(lambda x: x.entity_id, _hdl)
+        else:
+            return map(lambda x: [x.entity_id, x.created_time], _hdl)
+            
     
     
     def __update_user_following_count(self, delta):

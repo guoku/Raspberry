@@ -10,11 +10,13 @@ import re
 import datetime
 import time
 import json
-from base.entity import Entity
 
+from base.entity import Entity
 from base.category import Category, Category_Group
+from utils.authority import staff_only 
 
 @login_required
+@staff_only
 def create_category_group(request):
     if request.method == 'GET':
         return render_to_response( 
@@ -32,6 +34,7 @@ def create_category_group(request):
         return HttpResponseRedirect(reverse('management_entity_list') + '?gid=' + str(_category_group.category_group_id))
 
 @login_required
+@staff_only
 def edit_category_group(request, category_group_id):
     if request.method == 'GET':
         _category_group_context = Category_Group(category_group_id).read()
@@ -56,6 +59,7 @@ def edit_category_group(request, category_group_id):
 
 
 @login_required
+@staff_only
 def category_list(request):
     _group_id = request.GET.get("gid", None)
     if _group_id != None:
@@ -91,6 +95,7 @@ def category_list(request):
 
 
 @login_required
+@staff_only
 def create_category(request):
     if request.method == 'GET':
         _group_id = request.GET.get("gid", None)
@@ -116,6 +121,7 @@ def create_category(request):
         return HttpResponseRedirect(reverse('management_entity_list') + '?cid=' + str(_category.category_id)) 
 
 @login_required
+@staff_only
 def edit_category(request, category_id):
     if request.method == 'GET':
         _category_groups = Category.allgroups()

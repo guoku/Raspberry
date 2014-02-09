@@ -5,19 +5,12 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'management.views.index'),
-    #url(r'^management/', include('management.urls_bak')),
-    url(r'^management/', include('management.urls')),
-
+    (r'^management/', include('management.urls')),
+    (r'^seller/', include('seller.urls')),
     (r'^mobile/v3/', include('mobile.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'', include('web.urls'))
 )
-
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    )
 
 if settings.IMAGE_LOCAL:
     urlpatterns += patterns('',
@@ -31,4 +24,13 @@ if settings.DEBUG:
     import debug_toolbar
     urlpatterns += patterns('',
         url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
+
+    urlpatterns += patterns('',
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    )
+
+    urlpatterns += patterns('',
+        url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': settings.MEDIA_URL}),
     )

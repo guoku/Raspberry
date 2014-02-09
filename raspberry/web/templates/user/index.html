@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load i18n staticfiles %}
+{% load web_common %}
+
+{% block title %}
+    {{ title|default:'我' }}的果库
+    {% block subtitle %}{% endblock %}
+{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">{% endblock %}
+{% block content %}
+    <div id="user-center">
+        <div class="base">
+            <img src="{{ query_user_context.avatar_large }}" alt="{{ query_user_context.nickname }}" width="120" height="120">
+
+            <div class="info">
+                <span class="nickname">{{ query_user_context.nickname }}</span>
+                <span class="bio">{{ query_user_context.bio }}</span>
+                <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
+            </div>
+            {% if is_user_self %}
+                <a class="setting" href="{% url 'web_setting' %}"><span></span>{% trans "settings" %}</a>
+            {% elif is_user_already_follow %}
+                <a href="{% url 'web_follow' query_user_context.user_id %}" class="follow-user">取消关注</a>
+            {% else %}
+                <a href="{% url 'web_follow' query_user_context.user_id %}" class="follow-user">关注</a>
+            {% endif %}
+        </div>
+
+        <div class="nav">
+            {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
+            {% url 'web_user_posts' query_user_context.user_id as web_user_posts_url %}
+            {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
+            {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}
+            <a href="{{ web_user_likes_url }}" {% if web_user_likes_url in request.path %}class="active"{% endif %}>{% trans 'likes' %}
+                <strong>({{ query_user_context.like_count }})</strong>
+            </a>
+            <a href="{{ web_user_posts_url }}" {% if web_user_posts_url in request.path %}class="active"{% endif %}>{% trans 'posts' %}
+                <strong>()</strong>
+            </a>
+            <a href="{{ web_user_notes_url }}" {% if web_user_notes_url in request.path %}class="active"{% endif %}>{% trans 'notes' %}
+                <strong>({{ query_user_context.entity_note_count }})</strong>
+            </a>
+            <a href="{{ web_user_tags_url }}" {% if web_user_tags_url in request.path %}class="active"{% endif %}>{% trans 'tags' %}
+                <strong>({{ query_user_context.tag_count }})</strong>
+            </a>
+
+            <div class="social">
+                {% url 'web_user_followings' query_user_context.user_id as web_user_followings_url %}
+                <a href="{{ web_user_followings_url }}" {% if web_user_followings_url in request.path %}class="active"{% endif %}>关注了
+                    <strong>{{ query_user_context.following_count }}</strong>人
+                </a>
+                {% url 'web_user_fans' query_user_context.user_id as web_user_fans_url %}
+                <a href="{{ web_user_fans_url }}" {% if web_user_fans_url in request.path %}class="active"{% endif %}>关注者
+                    <strong>{{ query_user_context.fan_count }}</strong>人
+                </a>
+            </div>
+        </div>
+
+        {% if web_user_likes_url in request.path %}
+            <div class="user-like">
+                <ul class="categories">
+                    <li {% if category_id == None %}class="active"{% endif %}>
+                        <a href="{{ web_user_likes_url }}">所有</a>
+                    </li>
+                    <span class="sep">|</span>
+                    {% for category in category_list %}
+                        <li {% if category.category_id == category_id %}class="active"{% endif %}>
+                            <a href="{{ web_user_likes_url }}?c={{ category.category_id }}">{{ category.category_title }}</a>
+                        </li>
+                        {% if category_list|length > forloop.counter %}&sdot;{% endif %}
+                    {% endfor %}
+                </ul>
+
+                <ul class="prices">
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}">按价格</a></li>
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=1" class="price">0-99</a></li>
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=2" class="price">100-499</a></li>
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=3" class="price">500-999</a></li>
+                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=4" class="price">1000+</a></li>
+                </ul>
+
+                {% if entity_list|length > 0 %}
+                    <div class="likes">
+                        {% for entity_context in entity_list %}
+                            {% display_common_entity entity_context %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+        {% elif content_tab == 'post' %}
+            {% if entity_list|length > 0 %}
+                <div class="user-post">
+                    {% for entity_context in entity_list %}
+                        {% display_common_entity entity_context %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        {% elif content_tab == 'note' %}
+            {% if note_list|length > 0 %}
+                <div class="user-note">
+                    {% for note in note_list %}
+                        {% display_common_note note %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        {% elif content_tab == 'tag' %}
+            {% if tag_list|length > 0 %}
+                <div class="user-tag">
+                    {% for tag_context in tag_list %}
+                        {% display_common_tag tag_context %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        {% elif content_tab == 'following' %}
+            {% if user_list|length > 0 %}
+                <div class="user-user">
+                    {% for user_context in user_list %}
+                        {% display_common_user user_context %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        {% else %}
+            {% if user_list|length > 0 %}
+                <div class="user-user">
+                    {% for user_context in user_list %}
+                        {% display_common_user user_context %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        {% endif %}
+
+        {% if paginator %}
+            {% display_web_paginator paginator %}
+        {% endif %}
+    </div>
+{% endblock %}

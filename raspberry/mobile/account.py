@@ -3,7 +3,7 @@ from lib.apns import Apns
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
 from lib.user import MobileUser
-from mobile.models import Session_Key 
+from mobile.models import Session_Key
 from tasks import RetrievePasswordTask 
 
 @check_sign
@@ -360,7 +360,7 @@ def logout(request):
         _session_obj = Session_Key.objects.get(session_key = _session)
         _session_obj.delete()
         
-        return SuccessJsonResponse("1")
+        return SuccessJsonResponse({ 'success' : '1' }) 
 
 
 @check_sign
@@ -378,7 +378,7 @@ def forget_password(request):
             )
         RetrievePasswordTask.delay(_user_id)
 
-        return SuccessJsonResponse("1")
+        return SuccessJsonResponse({ 'success' : '1' }) 
 
 @check_sign
 def apns_token(request):

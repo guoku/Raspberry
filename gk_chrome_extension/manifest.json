@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "GuoKu chrome helper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "For guoku'er add taobao item",
   "author": "evantre",
   "browser_action": {
@@ -23,5 +23,5 @@
       "js": ["gk_content.js"]
     }
   ],
-  "permissions": ["tabs", "http://*.guoku.com/", "http://10.0.1.148:8000/"]
+  "permissions": ["tabs", "http://114.113.154.47:8000/", "http://10.0.1.148:8000/"]
 }

@@ -1,0 +1,41 @@
+{% load common %}
+
+{% spaceless %}
+    <div class="pagination">
+        <div class="container clearfix">
+            {% if paginator.has_previous %}
+                <a href="?{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}p={{ paginator.previous_page_number }}"><span class="previous"></span></a>
+            {% endif %}
+
+            {% if paginator.need_left_abbr %}
+                <a href="?p=1{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">1</a>
+                <a href="?p=2{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">2</a>
+                <a>...</a>
+                <a href="?p={{ paginator.current_page_number|minus:2 }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">{{ paginator.current_page_number|minus:2 }}</a>
+                <a href="?p={{ paginator.current_page_number|minus:1 }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">{{ paginator.current_page_number|minus:1 }}</a>
+            {% else %}
+                {% for i in paginator.left_pages %}
+                    <a href="?p={{ i }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">{{ i }}</a>
+                {% endfor %}
+            {% endif %}
+
+            <a class="active">{{ paginator.current_page_number }}</a>
+
+            {% if paginator.need_right_abbr %}
+                <a href="?p={{ paginator.current_page_number|add:1 }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">{{ paginator.current_page_number|add:1 }}</a>
+                <a href="?p={{ paginator.current_page_number|add:2 }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">{{ paginator.current_page_number|add:2 }}</a>
+                <a>...</a>
+                <a href="?p={{ paginator.total_page_count|minus:1 }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">{{ paginator.total_page_count|minus:1 }}</a>
+                <a href="?p={{ paginator.total_page_count}}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">{{ paginator.total_page_count}}</a>
+            {% else %}
+                {% for i in paginator.right_pages %}
+                    <a href="?p={{ i }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">{{ i }}</a>
+                {% endfor %}
+            {% endif %}
+
+            {% if paginator.has_next %}
+                <a href="?p={{ paginator.next_page_number }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}"><span  class="next"></span></a>
+            {% endif %}
+        </div>
+    </div>
+{% endspaceless %}

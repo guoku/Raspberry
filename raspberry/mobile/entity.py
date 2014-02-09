@@ -5,12 +5,14 @@ from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
 from mobile.models import Session_Key
-from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
+from tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask, MobileLogTask
+from utils.lib import get_client_ip
 import datetime
 import time
 
 @check_sign
 def entity_list(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -40,21 +42,28 @@ def entity_list(request):
             count = _count,
             sort_by = _sort_by,
             reverse = _reverse,
-            status = 1
+            status = 'novus' 
         )
+        
         _rslt = []
         for _entity_id in _entity_id_list:
             _entity = MobileEntity(_entity_id)
             _rslt.append(
                 _entity.read(_request_user_id)
             )
+        
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'NOVUS', request.REQUEST, get_client_ip(request), _request_user_id)
+        
         return SuccessJsonResponse(_rslt)
     
 
 @check_sign
 def search_entity(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
+        _type = request.GET.get('type', None)
         if _session != None:
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
@@ -65,19 +74,38 @@ def search_entity(request):
         _count = int(request.GET.get('count', '30'))
         
         _entity_id_list = MobileEntity.search(
-            query_string = _query_string
+            query_string = _query_string,
         )
-        _rslt = []
-        for _entity_id in _entity_id_list:
+        _rslt = {
+            'stat' : {
+                'all_count' : len(_entity_id_list),
+                'like_count' : 0,
+            },
+            'entity_list' : []
+        }
+       
+        if _request_user_id != None:
+            _like_set = MobileEntity.like_set_of_user(_request_user_id)
+            _like_entity_id_list = _like_set.intersection(_entity_id_list)
+            _rslt['stat']['like_count'] = len(_like_entity_id_list)
+            if _type == 'like':
+                _entity_id_list = list(_like_entity_id_list)
+
+        for _entity_id in _entity_id_list[_offset : _offset + _count]:
             _entity = MobileEntity(_entity_id)
-            _rslt.append(
+            _rslt['entity_list'].append(
                 _entity.read(_request_user_id)
             )
+        
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'SEARCH_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'query' : _query_string })
+        
         return SuccessJsonResponse(_rslt)
 
 
-#@check_sign
+@check_sign
 def category_entity(request, category_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -95,7 +123,7 @@ def category_entity(request, category_id):
         
         _entity_id_list = MobileEntity.find(
             category_id = category_id,
-            status = 1,
+            status = 'normal',
             sort_by = _sort_by,
             offset = _offset,
             count = _count,
@@ -108,11 +136,14 @@ def category_entity(request, category_id):
                 _entity.read(_request_user_id)
             )
             
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'CATEGORY_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'category_id' : int(category_id) })
         return SuccessJsonResponse(_rslt)
 
 
 @check_sign
 def entity_detail(request, entity_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -121,6 +152,10 @@ def entity_detail(request, entity_id):
             _request_user_id = None
 
         _rslt = MobileEntity(entity_id).read_full_context(_request_user_id)
+        
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'entity_id' : int(entity_id) })
+        
         return SuccessJsonResponse(_rslt)
         
 
@@ -190,6 +225,7 @@ def delete_entity_note(request, note_id):
 
 @check_sign
 def user_like(request, user_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -204,15 +240,18 @@ def user_like(request, user_id):
         
         _list = []
         _last_like_time = None
-        for _item in MobileEntity.like_list_of_user(user_id = user_id, timestamp = _timestamp, offset = _offset, count = _count):
+        for _item in MobileUser(user_id).find_like_entity(timestamp = _timestamp, offset = _offset, count = _count, with_timestamp = True):
             _list.append(MobileEntity(_item[0]).read(_request_user_id))
-            _last_like_time = _item[1]
+            if _last_like_time == None:
+                _last_like_time = _item[1]
 
         _rslt = {
             'timestamp' : time.mktime(_last_like_time.timetuple()),
             'entity_list' : _list
         }
 
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_LIKE', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
         return SuccessJsonResponse(_rslt)
     
     

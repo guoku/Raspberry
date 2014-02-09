@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-26 23:57+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "guoku"
+msgstr "果库"
+
+msgid "sign up"
+msgstr "注册"
+
+msgid "sign in"
+msgstr "登录"
+
+msgid "sign out"
+msgstr "退出"
+
+msgid "remember me"
+msgstr "记住我"
+
+msgid "settings"
+msgstr "设置"
+
+msgid "selection"
+msgstr "精选"
+
+msgid "popular"
+msgstr "热门"
+
+msgid "Category"
+msgstr "分类"
+
+msgid "likes"
+msgstr "喜欢"
+
+msgid "posts"
+msgstr "添加"
+
+msgid "notes"
+msgstr "点评"
+
+msgid "tags"
+msgstr "标签"
+
+msgid "male"
+msgstr "男"
+
+msgid "female"
+msgstr "女"
+
+msgid "other"
+msgstr "其他"
+
+
+msgid "operate"
+msgstr "操作"
+
+msgid "username"
+msgstr "用户名"
+
+msgid "nickname"
+msgstr "昵称"
+
+msgid "email"
+msgstr "邮箱"
+
+msgid "gender"
+msgstr "性别"
+
+msgid "bio"
+msgstr "简介"
+
+msgid "website"
+msgstr "网址"
+
+msgid "update"
+msgstr "更新"
+
+msgid "update profile"
+msgstr "更新资料"
+
+
+# error message
+msgid "email is not signed up."
+msgstr "邮箱没有被注册"

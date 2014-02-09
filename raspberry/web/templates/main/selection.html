@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n staticfiles %}
+{% load selection %}
+
+{% block title %}
+    {% trans "selection" %}
+    {% block subtitle %}
+        {% for category in category_list %}
+            {% if category.category_id == curr_category_id %}
+                - {{ category.category_title }}
+            {% endif %}
+        {% endfor %}
+    {% endblock %}
+{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/selection.css' %}">{% endblock %}
+{% block content %}
+    <div id="selection">
+        <ul class="nav">
+            <li {% if curr_category_id == None %}class="active"{% endif %}>
+                <a href="{% url 'web_selection' %}">所有</a>
+            </li>
+            <span class="sep">|</span>
+            {% for category in category_list %}
+                <li {% if category.category_id == curr_category_id %}class="active"{% endif %}>
+                    <a href="{% url 'web_selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a>
+                </li>
+                {% if category_list|length > forloop.counter %}&sdot;{% endif %}
+            {% endfor %}
+        </ul>
+
+        <div class="selections">
+            {% display_selections selection_list %}
+        </div>
+    </div>
+{% endblock %}

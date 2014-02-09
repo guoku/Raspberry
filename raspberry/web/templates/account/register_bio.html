@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n staticfiles %}
+{% load account %}
+
+{% block title %}完善信息 - 果库{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div id="setting">
+        <h2>帐号设置</h2>
+
+        <div class="guoku-block">
+            {% display_avatar_update user_context %}
+
+            <form method="POST" action="{% url 'web.views.account.register_bio' %}" class="base-info">
+                {% csrf_token %}
+                <h3>个人资料</h3>
+
+                {% if error != None %}
+                    <p class="error">{{ error }}</p>
+                {% endif %}
+
+                <div>
+                    <label for="bio">{% trans 'bio' %}</label>
+                    <textarea name="bio" id="bio" class="text-input" rows="4">{{ user_context.bio }}</textarea>
+                </div>
+
+                <div class="address">
+                    <span class="label">所在地</span>
+                    <select name="location" class="location" data-p="{{ user_context.location }}"></select>
+                    <select name="city" class="city" data-c="{{ user_context.city }}"></select>
+                </div>
+
+                <div class="gender">
+                    <span class="label">性别</span>
+                    <label>男 <input type="radio" name="gender" value="M"
+                                    {% if user_context.gender == 'M' %}checked{% endif %}></label>
+                    <label>女 <input type="radio" name="gender" value="F"
+                                    {% if user_context.gender == 'F' %}checked{% endif %}></label>
+                    <label>其他 <input type="radio" name="gender" value="O"
+                                     {% if user_context.gender == 'O' %}checked{% endif %}></label>
+                </div>
+
+                <div>
+                    <label for="website">网址</label>
+                    <input type="text" name="website" value="{{ user_context.website }}" id="website"
+                           class="text-input">
+                </div>
+
+                <input type="submit" value="完成" class="guoku-button">
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'scripts/account.js' %}"></script>
+{% endblock %}

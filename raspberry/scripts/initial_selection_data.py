@@ -45,8 +45,8 @@ else:
     mysql_host = "localhost" 
     mysql_user = "root" 
     mysql_password = "123456" 
-    mysql_database = "guoku_12_12" 
-    mongo_database = "guoku" 
+    mysql_database = "guoku_01_03" 
+    mongo_database = "guoku_01_03" 
     mongo_host = "localhost" 
 
 connect(mongo_database, host = mongo_host)

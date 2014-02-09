@@ -1,8 +1,8 @@
-{% load staticfiles %}
+{% load i18n staticfiles %}
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <link media="all" rel="stylesheet" type="text/css" href="{% static 'management/css/bootstrap-responsive.min.css' %}" />
     <link media="all" rel="stylesheet" type="text/css" href="{% static 'management/css/bootstrap.min.css' %}" />
@@ -17,7 +17,8 @@
                     <a class="brand" href="">Management</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
-                            jakrinchose
+{#                            jakrinchose#}
+                            {{ request.user }}
                         </p>
                         <ul class="nav">
                             <li class="divider-vertical"></li>
@@ -36,21 +37,35 @@
                             {% url 'management_user_list' as user_list_url %}
                             <li{% if user_list_url in request.path %} class="active"{%endif%}><a href="{{ user_list_url }}">User</a></li>
                             <li class="divider-vertical"></li>
+                            {% url 'management_tag_list' as tag_list_url %}
+                            <li{% if tag_list_url in request.path %} class="active"{%endif%}><a href="{{ tag_list_url }}">Tag</a></li>
+                            <li class="divider-vertical"></li>
                             {% url 'management_report_list' as report_list_url %}
                             <li{% if report_list_url in request.path %} class="active"{%endif%}><a href="{{ report_list_url }}">Report</a></li>
+                            <li class="divider-vertical"></li>
+                            {% url 'management_ustation_list' as ustation_list %}
+                            <li{% if ustation_list in request.path %} class="active" {% endif %}><a href="{{ ustation_list }}">UStation</a></li>
+                            <li class="divider-vertical"></li>
+                            {% url 'management_app_list' as app_list_url %}
+                            <li{% if app_list_url in request.path %} class="active" {% endif %}><a href="{{ app_list_url }}">Publish</a></li>
+                            {% url 'management_shop_list' as shop_list_url %}
+                            <li{% if shop_list in request.path %} class="active" {% endif %}><a href="{{ shop_list_url }}">Shop</a></li>
                             <li class="divider-vertical"></li>
                         </ul>
 {#                        <form class="navbar-form" action="{% url 'management.views.search_entity' %}" method="POST">#}
 {#                            <input class="span2" type="text" placeholder="搜索分类/商品" id="query" name="query" class="form-control" />#}
 {#                            <button type="submit" class="btn btn-success">Search</button>#}
 {#                        </form>#}
+
                     </div>
+{#                    <ul class="nav navbar-nav navbar-right">#}
+{#                        <li><a href="#">{{ request.user }}</a></li>#}
+{#                    </ul>#}
                 </div>
             </div>
         </div>
     {% endblock %}
-    
-     
+
     <div class="container-fluid">
         <div class="row-fluid">
             {% block content %}

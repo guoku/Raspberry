@@ -7,18 +7,20 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.lib.sign import check_sign
+from base.tag import *
 from account import *
 from category import *
 from entity import *
 from note import *
 from report import *
 from user import *
-from tasks import MarkFootprint
+from tasks import MarkFootprint, MobileLogTask
+from utils.lib import get_client_ip
 import time
-
 
 @check_sign
 def homepage(request):
+    _start_at = datetime.datetime.now()
     _session = request.GET.get('session', None)
     if _session != None:
         _request_user_id = Session_Key.objects.get_user_id(_session)
@@ -34,18 +36,34 @@ def homepage(request):
             'img' : _banner_context['image'] 
         })
     
+
+    _rslt['hottag'] = []
+    for _tag_data in Tag.get_recommend_user_tag_list():
+        _rslt['hottag'].append({
+            'tag_name' : _tag_data[1],
+            'entity_count' : _tag_data[2],
+            'user' : MobileUser(_tag_data[0]).read(_request_user_id)
+        })
+      
+    
     _rslt['config'] = {}
     _rslt['config']['taobao_ban_count'] = 2
+    _rslt['config']['url_ban_list'] = ['http://m.taobao.com/go/act/mobile/cloud-jump.html']
+
+
 #    if settings.JUMP_TO_TAOBAO: 
 #        _rslt['config']['jump_to_taobao'] = 1
 #    else:
 #        _rslt['config']['jump_to_taobao'] = 0
-        
     
+        
+    _duration = datetime.datetime.now() - _start_at
+    MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'HOMEPAGE', request.REQUEST, get_client_ip(request), _request_user_id)
     return SuccessJsonResponse(_rslt)
 
 @check_sign
 def feed(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         _type = request.GET.get('type', 'entity')
@@ -63,9 +81,11 @@ def feed(request):
 
         if _scale == 'friend':
             _following_user_id_list = MobileUser(_request_user_id).read_following_user_id_list()
+            _log_appendix = { 'scale' : 'FRIEND' }
             #MobileUser(_request_user_id).mark_footprint(friend_feed = True)
         else:
             _following_user_id_list = MobileUser.read_seed_users()
+            _log_appendix = { 'scale' : 'SOCIAL' }
             #MobileUser(_request_user_id).mark_footprint(social_feed = True)
         
         _note_id_list = MobileNote.find(
@@ -89,10 +109,13 @@ def feed(request):
                     }
                 })
         
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'FEED', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
         return SuccessJsonResponse(_rslt)
 
 @check_sign
 def message(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -187,10 +210,13 @@ def message(request):
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, message = True)
         
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'MESSAGE', request.REQUEST, get_client_ip(request), _request_user_id)
         return SuccessJsonResponse(_rslt)
 
 @check_sign
 def selection(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -226,10 +252,13 @@ def selection(request):
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, selection = True)
         
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'SELECTION', request.REQUEST, get_client_ip(request), _request_user_id, { 'root_category_id' : _root_cat_id })
         return SuccessJsonResponse(_rslt)
 
 @check_sign
 def popular(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -253,6 +282,14 @@ def popular(request):
                     'entity' : _entity_context,
                     'hotness' : _hotness
                 })
+            
+            if _scale == 'weekly':
+                _log_appendix = { 'scale' : 'WEEK' }
+            else:
+                _log_appendix = { 'scale' : 'DAY' }
+                
+            _duration = datetime.datetime.now() - _start_at
+            MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'POPULAR', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
             return SuccessJsonResponse(_rslt)
         else:
             return ErrorJsonResponse(

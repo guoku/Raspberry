@@ -1,0 +1,35 @@
+<div class="common-note">
+    <div class="entity">
+        <div class="title" style="display: none">
+            <h2>
+                <a href="{% url 'web_detail' note.entity_context.entity_hash %}">
+                    {% if note.entity_context.brand|length != 0 %}
+                        {{ note.entity_context.brand }}
+                        - {% endif %}{{ note.entity_context.title }}</a>
+            </h2>
+            <span class="price">&#65509;{{ note.entity_context.price }}</span>
+        </div>
+
+        <a href="{% url 'web_detail' note.entity_context.entity_hash %}"
+           class="entity-img">
+            <img src="{{ note.entity_context.chief_image.url }}" alt="{{ note.entity_context.title }}">
+        </a>
+    </div>
+
+    <div class="note">
+        <p>{{ note.note_context.content|truncatechars:90 }}</p>
+        <a href="{% url 'web_like_entity' note.entity_context.entity_id %}"
+           class="like{% if note.is_user_already_like %} liked{% endif %}">
+            <span class="icon"></span>
+            <span class="count">{{ note.entity_context.like_count }}</span>喜爱
+        </a>
+
+        <div class="creator">
+            <a href="{% url 'web_user_index' note.creator_context.user_id %}"
+               class="avatar"><img src="{{ note.creator_context.avatar_small }}" width="30"
+                                   height="30"></a>
+            <a href="{% url 'web_user_index' note.creator_context.user_id %}"
+               class="nickname">{{ note.creator_context.nickname|truncatechars:10 }}</a>
+        </div>
+    </div>
+</div>

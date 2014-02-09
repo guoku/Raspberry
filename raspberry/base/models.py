@@ -2,6 +2,8 @@
 from djangosphinx.models import SphinxSearch
 from django.contrib.auth.models import User
 from django.db import models
+from stream_models import *
+
 
 class User_Profile(models.Model):
     Man = u'M'
@@ -16,6 +18,7 @@ class User_Profile(models.Model):
     user = models.OneToOneField(User)
     nickname = models.CharField(max_length = 64, db_index = True, unique = True)
     location = models.CharField(max_length = 32, null = True, default = u'北京')
+    city = models.CharField(max_length = 32, null = True, default = u'朝阳')
     gender = models.CharField(max_length = 2, choices = GENDER_CHOICES, default = Other)
     bio = models.CharField(max_length = 1024, null = True, blank = True)
     website = models.CharField(max_length = 1024, null = True, blank = True)
@@ -201,6 +204,7 @@ class Entity_Tag(models.Model):
     entity = models.ForeignKey(Entity)
     user = models.ForeignKey(User) 
     tag = models.ForeignKey(Tag)
+    tag_text = models.CharField(max_length = 128, null = False, db_index = True)
     count = models.IntegerField(default = 0)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     last_tagged_time = models.DateTimeField(db_index = True)
@@ -211,6 +215,15 @@ class Entity_Tag(models.Model):
 
     def __unicode__(self):
         return self.tag
+
+class Recommend_User_Tag(models.Model):
+    user = models.ForeignKey(User) 
+    tag = models.CharField(max_length = 128, null = False, db_index = True)
+    entity_count = models.IntegerField(default = 0, db_index = True)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
+    class Meta:
+        ordering = ['-created_time']
+        unique_together = ('user', 'tag')
 
 class User_Follow(models.Model):
     follower = models.ForeignKey(User, related_name = "followings")
@@ -255,80 +268,8 @@ class User_Footprint(models.Model):
     last_read_social_feed_time = models.DateTimeField(null = True, db_index = True)
     last_read_friend_feed_time = models.DateTimeField(null = True, db_index = True)
 
+class Seller_Info(models.Model):
+    user = models.OneToOneField(User, related_name = "seller_info")
+    shop_nick = models.CharField(max_length = 64, db_index = True)
+    verified = models.BooleanField(default = False, db_index = True)
 
-from mongoengine import * 
-class Image(Document):
-    source = StringField(required = True)
-    origin_url  = URLField(required = False)
-    store_hash = StringField(required = False)
-    created_time = DateTimeField(required = True)
-    updated_time = DateTimeField(required = True)
-    meta = {
-        'indexes' : [ 
-            'source',
-            'origin_url',
-            'store_hash',
-        ],
-        'allow_inheritance' : True
-    }
-
-class Item(Document):
-    entity_id = IntField(required = True) 
-    source = StringField(required = True)
-    images = ListField(required = False)
-    created_time = DateTimeField(required = True)
-    updated_time = DateTimeField(required = True)
-    meta = {
-        'indexes' : [ 
-            'entity_id' 
-        ],
-        'allow_inheritance' : True
-    }
-
-class TaobaoItem(Item):
-    taobao_id = StringField(required = True, unique = True)
-    cid = IntField(required = True) 
-    title = StringField(required = True)
-    shop_nick = StringField(required = True)
-    price = DecimalField(required = True)
-    soldout = BooleanField(required = True) 
-
-    meta = {
-        'indexes' : [ 
-            'taobao_id',
-            'cid',
-            'shop_nick',
-            'price',
-            'soldout'
-        ],
-    }
-    
-class Selection(Document):
-    selector_id = IntField(required = True) 
-    selected_time = DateTimeField(required = True)
-    post_time = DateTimeField(required = True)
-    meta = {
-        "indexes" : [ 
-            "selector_id", 
-            "post_time" 
-        ],
-        "allow_inheritance" : True
-    }
-
-class NoteSelection(Selection):
-    entity_id = IntField(required = True) 
-    note_id = IntField(required = True) 
-    root_category_id = IntField(required = True) 
-    neo_category_group_id = IntField(required = True) 
-    neo_category_id = IntField(required = True) 
-    category_id = IntField(required = True) 
-    meta = {
-        "indexes" : [ 
-            "entity_id", 
-            "note_id",
-            "root_category_id",
-            "neo_category_group_id",
-            "neo_category_id",
-            "category_id" 
-        ]
-    }
