@@ -22,12 +22,17 @@ from validation import *
 
 MAX_SESSION_EXPIRATION_TIME = getattr(settings, 'SESSION_COOKIE_AGE', 1209600) # two weeks
 
+TEMPALTES = [
+    'account/register.html',
+    'account/register_bio.html',
+]
+
 
 class RegisterWizard(SessionWizardView):
 
     def get_template_names(self):
-
-        return ['account/register.html', 'account/register_bio.html']
+        # log.info("template %s" % self.steps.current)
+        return [TEMPALTES[int(self.steps.current)]]
 
     def done(self, form_list, **kwargs):
         log.info(form_list)

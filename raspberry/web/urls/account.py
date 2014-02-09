@@ -1,7 +1,7 @@
 # coding=utf-8
 from django.conf.urls import url, patterns
 from web.views.account import RegisterWizard
-from web.forms.account import SignUpAccountFrom
+from web.forms.account import SignUpAccountFrom, SignUpAccountBioFrom
 
 urlpatterns = patterns(
     'web.views.account',
@@ -10,7 +10,7 @@ urlpatterns = patterns(
     url('^login/taobao/$', 'login_by_taobao', name='web_login_by_taobao'),
 
     # url('^logout/$', 'logout', name='web_logout'),
-    url('register/$', RegisterWizard.as_view([SignUpAccountFrom]), name='web_register'),
+    url('register/$', RegisterWizard.as_view([SignUpAccountFrom, SignUpAccountBioFrom]), name='web_register'),
 
     # url('^register/$', 'register', name='web_register'),
     # url('^register/bio/$', 'register_bio', name='web_register_bio'),

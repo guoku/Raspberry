@@ -5,7 +5,7 @@
 {% block form %}
     <form action="{% url 'web_register' %}" method="POST" id="register">
         {% csrf_token %}
-
+        <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
         <h2>注册帐号</h2> | 已有帐号？<a href="{% url 'web_login' %}">请登录</a>
         {{ wizard.management_form }}
 {#        {{ wizard.form }}#}

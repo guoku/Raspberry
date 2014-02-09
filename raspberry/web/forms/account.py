@@ -11,6 +11,15 @@ from django.utils.log import getLogger
 log = getLogger('django')
 
 
+Man = u'M'
+Woman = u'F'
+Other = u'O'
+GENDER_CHOICES = (
+        (Man, _('male')),
+        (Woman,  _('female')),
+        (Other,  _('other')),
+    )
+
 class LocationSelectWidget(widgets.MultiWidget):
     def __init__(self, attrs = None):
         # years = [(year, year) for year in (2011, 2012, 2013)]
@@ -124,16 +133,13 @@ class SignUpAccountFrom(forms.Form):
         return _user
 
 
+class SignUpAccountBioFrom(forms.Form):
+    gender = forms.ChoiceField(widget = forms.RadioSelect(), choices = GENDER_CHOICES,
+                               label = _('gender'), help_text = _(''))
+
 class SettingAccountForm(forms.Form):
 
-    Man = u'M'
-    Woman = u'F'
-    Other = u'O'
-    GENDER_CHOICES = (
-        (Man, _('male')),
-        (Woman,  _('female')),
-        (Other,  _('other')),
-    )
+
 
     nickname = forms.CharField(widget=forms.TextInput(attrs={'class':'text-input'}),
                                label=_('nickname'), help_text=_(''))
