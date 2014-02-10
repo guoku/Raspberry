@@ -18,7 +18,7 @@
                 <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
             </div>
             {% if is_user_self %}
-                <a class="setting" href="{% url 'web_setting' %}"><span></span>{% trans "settings" %}</a>
+                <a class="setting" href="{% url 'web_setting' %}"><span>{% trans "settings" %}</span></a>
             {% elif is_user_already_follow %}
                 <a href="{% url 'web_follow' query_user_context.user_id %}" class="follow-user">取消关注</a>
             {% else %}

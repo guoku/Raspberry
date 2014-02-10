@@ -185,12 +185,13 @@ def login(request, template = 'account/login.html'):
         _forms = SignInAccountForm(request.POST)
         if _forms.is_valid():
             _remember_me = request.POST.get('remember_me', None)
+            _next_url = request.POST.get('next', reverse('web_selection'))
             _user = _forms.signin()
 
             auth_login(request, _user)
             if _remember_me:
                 request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
-            return HttpResponseRedirect(reverse('web_selection'))
+            return HttpResponseRedirect(_next_url)
         else:
             return render_to_response(template,
                 {
@@ -206,7 +207,7 @@ def login(request, template = 'account/login.html'):
             template,
             {
                 'forms' : _forms,
-                # 'next' : _next,
+                'next' : _next,
             },
             context_instance = RequestContext(request)
         )
