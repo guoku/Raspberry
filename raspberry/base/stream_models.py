@@ -174,8 +174,9 @@ class GuokuPlusApplication(DynamicDocument):
     status = StringField()
     editor_comment = StringField()
     created_time = DateTimeField()
+    updated_time = DateTimeField()
     meta = {
         'db_alias' : 'guoku-db',
-        'collection' : 'guoku_price_application',
-        'indexes' : [ 'shop_nick', 'taobao_item_id' ],
+        'collection' : 'guoku_plus_application',
+        'indexes' : [ 'shop_nick', 'taobao_item_id', 'updated_time'],
     }

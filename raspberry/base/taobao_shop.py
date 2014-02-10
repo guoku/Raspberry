@@ -6,9 +6,14 @@ from base.stream_models import TaobaoShopExtendedInfo
 from base.stream_models import CrawlerInfo
 from base.stream_models import TaobaoShopVerificationInfo
 from base.stream_models import GuokuPlusApplication
+from base.item import Item
 import datetime
 import urllib
 import pymongo
+   
+STATUS_WAITING = 'waiting'
+STATUS_ACCEPTED = 'accepted'
+STATUS_REJECTED = 'rejected'
 
 class TaobaoShop(object):
     
@@ -92,10 +97,6 @@ class TaobaoShop(object):
             _context['shop_score'] = _doc.shop_info.shop_score._data
         
         return _context
-   
-    STATUS_WAITING = 'waiting'
-    STATUS_ACCEPTED = 'accepted'
-    STATUS_REJECTED = 'rejected'
 
     def update(self, priority = None, cycle = None, shop_type = None,
                orientational = None, commission = None, commission_rate = None,
@@ -140,6 +141,28 @@ class TaobaoShop(object):
             sale_price = sale_price,
             duration = duration,
             status = STATUS_WAITING,
-            created_time = datetime.datetime.now()
+            created_time = datetime.datetime.now(),
+            updated_time = datetime.datetime.now()
             )
         item.save()
+   
+    def read_guoku_plus_list(self):
+        applications = GuokuPlusApplication.objects.filter(shop_nick = self.nick).order_by("-updated_time")
+        results = []
+        for app in applications:
+            result = app._data
+            item = Item.get_item_by_taobao_id(result['taobao_item_id'])
+            if item:
+                result['item_context'] = item.read()
+            results.append(result)
+        return results
+                
+
+    def item_exist(self, taobao_item_id):
+        item = Item.get_item_by_taobao_id(taobao_item_id)
+        if not item:
+            return False
+        item_context = item.read()
+        if item_context['shop_nick'] == self.nick:
+            return True
+        return False

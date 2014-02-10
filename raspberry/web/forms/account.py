@@ -138,9 +138,6 @@ class SignUpAccountBioFrom(forms.Form):
                                label = _('gender'), help_text = _(''))
 
 class SettingAccountForm(forms.Form):
-
-
-
     nickname = forms.CharField(widget=forms.TextInput(attrs={'class':'text-input'}),
                                label=_('nickname'), help_text=_(''))
     email = forms.EmailField(widget=forms.TextInput(attrs={'class':'text-input'}),
