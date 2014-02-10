@@ -20,15 +20,25 @@ import json
 @staff_only
 def user_tag_list(request):
     _page_num = int(request.GET.get("p", "1"))
+    _type = request.GET.get("type", "all")
     _user_id = request.GET.get("user", None)
     if _user_id != None:
         _user_id = int(_user_id)
     _tag = request.GET.get("tag", None)
 
-    _user_tag_list = Tag.find_user_tag(user_id = _user_id, tag = _tag) 
-    _paginator = Paginator(_page_num, 30, len(_user_tag_list))
-        
     _recommend_user_tag_list = Tag.get_recommend_user_tag_list(with_entity_count = False)
+    
+    if _type == 'recommend':
+        _user_tag_list = []
+        for _user_tag in _recommend_user_tag_list:
+            _user_tag_list.append({
+                'user_id' : _user_tag[0], 
+                'tag_text' : _user_tag[1], 
+                'entity_count' : Tag.get_user_tag_entity_count(_user_tag[0], _user_tag[1])
+            })
+    else:
+        _user_tag_list = Tag.find_user_tag(user_id = _user_id, tag = _tag)
+    _paginator = Paginator(_page_num, 30, len(_user_tag_list))
 
     _context_list = []
     for _data in _user_tag_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
@@ -52,6 +62,7 @@ def user_tag_list(request):
         'tag/list.html', 
         {
             'active_division' : 'tag',
+            'type' : _type,
             'context_list' : _context_list,
             'paginator' : _paginator,
         },
