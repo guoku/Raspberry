@@ -1,20 +1,15 @@
-import os.path
+# import os.path
 from defaults import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
 
 #mongodb setting
 from mongoengine import register_connection
 register_connection('guoku-db', 'guoku', username='qinzhoukan', password='qinzhoukan1@#',host='10.0.2.200',
         max_pool_size=200, auto_start_request=False, safe=True)
-register_connection('log-db', 'guoku_log', username='qinzhoukan', password='qinzhoukan1@#',host='10.0.2.200',
+register_connection('log-db', 'guoku_log', host='10.0.2.200',
         max_pool_size=200, auto_start_request=False, safe=True)
 
 MANGO_HOST = '10.0.2.200'
@@ -64,7 +59,7 @@ SPHINX_PORT = 9312
 
 JUMP_TO_TAOBAO = True
 
-IMAGE_LOCAL = False 
+IMAGE_LOCAL = DEBUG
 IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 APP_HOST = 'http://www.guoku.com'
 
@@ -79,15 +74,15 @@ CELERY_ACKS_LATE = True
 CELERYD_PREFETCH_MULTIPLIER = 1
 CELERY_DISABLE_RATE_LIMITS = True
 
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'uploads')
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
 MEDIA_URL = '/uploads/'
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static')
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-#    ('common', os.path.join(os.path.dirname(__file__), 'static')),
+
 )
 
 
@@ -120,28 +115,9 @@ INSTALLED_APPS = (
     'gunicorn',
 )
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
-
-
 #GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
 GUOKU_APNS_KEY = '/data/www/raspberry/apns_key/'
-APNS_SERVER = {'HOST':'http://10.0.2.46:7077/'}
+APNS_SERVER = {'HOST': 'http://10.0.2.46:7077/'}
 
 
 SCP_HOST = '10.0.2.46'

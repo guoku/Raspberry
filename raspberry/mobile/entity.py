@@ -12,6 +12,7 @@ import time
 
 @check_sign
 def entity_list(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -51,13 +52,15 @@ def entity_list(request):
                 _entity.read(_request_user_id)
             )
         
-        MobileLogTask.delay('NOVUS', request.REQUEST, get_client_ip(request), _request_user_id)
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'NOVUS', request.REQUEST, get_client_ip(request), _request_user_id)
         
         return SuccessJsonResponse(_rslt)
     
 
 @check_sign
 def search_entity(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         _type = request.GET.get('type', None)
@@ -94,13 +97,15 @@ def search_entity(request):
                 _entity.read(_request_user_id)
             )
         
-        MobileLogTask.delay('SEARCH_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'query' : _query_string })
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'SEARCH_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'query' : _query_string })
         
         return SuccessJsonResponse(_rslt)
 
 
 @check_sign
 def category_entity(request, category_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -131,12 +136,14 @@ def category_entity(request, category_id):
                 _entity.read(_request_user_id)
             )
             
-        MobileLogTask.delay('CATEGORY_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'category_id' : int(category_id) })
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'CATEGORY_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'category_id' : int(category_id) })
         return SuccessJsonResponse(_rslt)
 
 
 @check_sign
 def entity_detail(request, entity_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -146,7 +153,8 @@ def entity_detail(request, entity_id):
 
         _rslt = MobileEntity(entity_id).read_full_context(_request_user_id)
         
-        MobileLogTask.delay('ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'entity_id' : int(entity_id) })
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'entity_id' : int(entity_id) })
         
         return SuccessJsonResponse(_rslt)
         
@@ -217,6 +225,7 @@ def delete_entity_note(request, note_id):
 
 @check_sign
 def user_like(request, user_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -231,16 +240,18 @@ def user_like(request, user_id):
         
         _list = []
         _last_like_time = None
-        for _item in MobileEntity.like_list_of_user(user_id = user_id, timestamp = _timestamp, offset = _offset, count = _count):
+        for _item in MobileUser(user_id).find_like_entity(timestamp = _timestamp, offset = _offset, count = _count, with_timestamp = True):
             _list.append(MobileEntity(_item[0]).read(_request_user_id))
-            _last_like_time = _item[1]
+            if _last_like_time == None:
+                _last_like_time = _item[1]
 
         _rslt = {
             'timestamp' : time.mktime(_last_like_time.timetuple()),
             'entity_list' : _list
         }
 
-        MobileLogTask.delay('USER_LIKE', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_LIKE', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
         return SuccessJsonResponse(_rslt)
     
     

@@ -1,6 +1,7 @@
 # coding=utf8
 from models import Tag as TagModel
 from models import Entity_Tag as EntityTagModel
+from models import Recommend_User_Tag as RecommendUserTagModel 
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Count 
@@ -87,12 +88,18 @@ class Tag(object):
                 entity_id = entity_id,
                 user_id = user_id,
                 tag_id = _tag_obj.id,
+                tag_text = _tag_obj.tag,
                 count = 0,
                 last_tagged_time = datetime.datetime.now()
             )
-        
+
         _entity_tag_obj.count += 1
         _entity_tag_obj.save()
+        
+        if RecommendUserTagModel.objects.filter(user = user_id, tag = tag):
+            cls.update_recommend_user_tag_entity_count(user_id, tag)
+       
+
     
     @classmethod
     def del_entity_tag(cls, entity_id, user_id, tag):
@@ -104,6 +111,9 @@ class Tag(object):
                 _entity_tag_obj.save()
             else:
                 _entity_tag_obj.delete()
+            
+            if RecommendUserTagModel.objects.filter(user = user_id, tag = tag):
+                cls.update_recommend_user_tag_entity_count(user_id, tag)
         except:
             pass
             
@@ -116,10 +126,9 @@ class Tag(object):
         _user_tags = []
         
         
-        for _data in EntityTagModel.objects.filter(user_id = _user_id).values('tag').annotate(entity_count = Count('entity')).order_by('-entity_count'):
+        for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text').annotate(entity_count=Count('entity')).order_by('-entity_count'):
             _user_tags.append({
-                'tag' : TagModel.objects.get(pk = _data['tag']).tag,
-                'tag_id' : _data['tag'],
+                'tag' : _data['tag_text'],
                 'entity_count' : _data['entity_count'],
             })
 
@@ -137,6 +146,58 @@ class Tag(object):
         
         return _user_tags 
                 
+    @classmethod
+    def get_user_tag_entity_count(cls, user_id, tag):
+        return EntityTagModel.objects.filter(user = user_id, tag_text = tag).count()
+        
+    @classmethod
+    def update_recommend_user_tag_entity_count(cls, user_id, tag): 
+        try:
+            _obj = RecommendUserTagModel.objects.get(user = user_id, tag = tag)
+            _obj.entity_count = cls.get_user_tag_entity_count(user_id, tag)
+            _obj.save()
+        except RecommendUserTagModel.DoesNotExist:
+            pass
+        
+    @classmethod
+    def add_recommend_user_tag(cls, user_id, tag):
+        _entity_count = cls.get_user_tag_entity_count(user_id, tag)
+        RecommendUserTagModel.objects.create(
+            user_id = user_id,
+            tag = tag,
+            entity_count = _entity_count
+        )
+    
+    @classmethod
+    def del_recommend_user_tag(cls, user_id, tag):
+        try:
+            _obj = RecommendUserTagModel.objects.get(
+                user_id = user_id,
+                tag = tag
+            )
+            _obj.delete()
+        except RecommendUserTagModel.DoesNotExist:
+            pass
+    
+    @classmethod
+    def get_recommend_user_tag_list(cls, with_entity_count = True):
+        _list = []
+        for _obj in RecommendUserTagModel.objects.all():
+            if with_entity_count:
+                _list.append([_obj.user_id, _obj.tag, _obj.entity_count])
+            else:
+                _list.append([_obj.user_id, _obj.tag])
+        return _list
+                
+    
+    @classmethod
+    def find_user_tag(cls, user_id = None, tag = None):
+        _hdl = EntityTagModel.objects
+        if user_id != None:
+            _hdl = _hdl.filter(user_id = user_id) 
+        if tag != None:
+            _hdl = _hdl.filter(tag_text = tag) 
+        return _hdl.values('user_id', 'tag_text').annotate(entity_count=Count('entity')).order_by('-entity_count')
     
     @classmethod
     def find_user_tag_entity(cls, user_id, tag):

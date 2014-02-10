@@ -43,7 +43,10 @@ class TaobaoShop(object):
                 title = title,
                 shop_type = shop_type,
                 seller_id = int(seller_id),
-                pic_path = pic_path
+                pic_path = pic_path,
+                shop_score = ShopScore(credit = "", praise_rate = 0),
+                main_products = "",
+                location = ""
             ),
             extended_info = TaobaoShopExtendedInfo(
                 orientational = False,
@@ -58,7 +61,7 @@ class TaobaoShop(object):
         return _inst 
 
 
-    def read(self):
+    def read(self, full_info = False):
         _hdl = TaobaoShopModel.objects.filter(shop_info__nick = self.nick)
         if _hdl.count() == 0:
             return None
@@ -69,6 +72,7 @@ class TaobaoShop(object):
         _context['title'] = _doc.shop_info.title
         _context['shop_type'] = _doc.shop_info.shop_type 
         _context['seller_id'] = _doc.shop_info.seller_id 
+        '''
         _context['commission_rate'] = -1
         _context['commission_type'] = 'unknown' 
         if _doc.extended_info:
@@ -78,13 +82,46 @@ class TaobaoShop(object):
             elif _doc.extended_info.commission_rate != -1:
                 _context['commission_type'] = 'general'
                 _context['commission_rate'] = _doc.extended_info.commission_rate
+        if full_info:
+            _context
+        '''
 
+        _context['extended_info'] = _doc.extended_info._data
+        _context['crawler_info'] = _doc.crawler_info._data
+        if _doc.shop_info.shop_score:
+            _context['shop_score'] = _doc.shop_info.shop_score._data
+        
         return _context
    
     STATUS_WAITING = 'waiting'
     STATUS_ACCEPTED = 'accepted'
     STATUS_REJECTED = 'rejected'
-    
+
+    def update(self, priority = None, cycle = None, shop_type = None,
+               orientational = None, commission = None, commission_rate = None,
+               original = None, gifts = None, main_products = None, single_tail = None):
+        shop = TaobaoShopModel.objects.filter(shop_info__nick = self.nick).first()
+        if shop:
+            if priority:
+                shop.crawler_info.priority = priority
+            if cycle:
+                shop.crawler_info.cycle = cycle
+            if shop_type:
+                shop.shop_info.shop_type = shop_type
+            if orientational:
+                shop.extended_info.orientational = orientational
+            if commission:
+                shop.extended_info.commission = commission
+            if commission_rate:
+                shop.extended_info.commission_rate = commission_rate
+            if gifts:
+                shop.extended_info.gifts = gifts
+            if main_products:
+                shop.extended_info.main_products = main_products
+            if single_tail:
+                shop.extended_info.single_tail = single_tail
+            shop.save()
+
     def create_verification_info(self, intro):
         info = TaobaoShopVerificationInfo(
             shop_nick = self.nick,

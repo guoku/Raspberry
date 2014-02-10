@@ -140,7 +140,7 @@ class MobileLogTask(Task):
     default_retry_delay = RETRY_DELAY
     queue = "log"
     
-    def run(self, view, request, ip, request_user_id = None, appendix = None):
+    def run(self, duration, view, request, ip, request_user_id = None, appendix = None):
         _version = request.get('version', 'unkown')
         _device = request.get('device', None)
         _duid = request.get('duid', None)
@@ -148,6 +148,7 @@ class MobileLogTask(Task):
         _prev_str = request.get('prev', None)
         
         mobile_logger.log(
+            duration = duration,
             ip = ip,
             view = view,
             request_user_id = request_user_id,
@@ -156,6 +157,6 @@ class MobileLogTask(Task):
             duid = _duid,
             os = _os,
             prev_str = _prev_str,
-            appendix = appendix
+            appendix = appendix,
         )
 

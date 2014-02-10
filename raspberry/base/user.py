@@ -29,8 +29,8 @@ from pymogile import Client
 from wand.image import Image
 import datetime
 
+
 class User(object):
-    
 
     class Avatar(object):
         
@@ -565,8 +565,19 @@ class User(object):
     def entity_like_count(self, category_id):
         return EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id).count()
         
-    def find_like_entity(self, category_id, offset = None, count = 30, sort_by = None, reverse = False):
-        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id)
+    def find_like_entity(self, category_id = None, neo_category_id = None, timestamp = None, offset = None, count = 30, sort_by = None, reverse = False, with_timestamp = False):
+        
+        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id)
+        
+        if timestamp != None:
+            _hdl = _hdl.filter(created_time__lt = timestamp)
+        
+        if category_id != None:
+            _hdl = _hdl.filter(entity__category__pid = category_id)
+        
+        if neo_category_id != None:
+            _hdl = _hdl.filter(entity__neo_category_id = neo_category_id)
+        
         if sort_by == 'price':
             if reverse:
                 _hdl = _hdl.order_by('-entity__price')
@@ -582,9 +593,12 @@ class User(object):
        
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
-
-        _entity_id_list = map(lambda x: x.entity_id, _hdl)
-        return _entity_id_list
+        
+        if not with_timestamp:
+            return map(lambda x: x.entity_id, _hdl)
+        else:
+            return map(lambda x: [x.entity_id, x.created_time], _hdl)
+            
     
     
     def __update_user_following_count(self, delta):

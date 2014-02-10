@@ -84,6 +84,7 @@ class NoteSelection(Selection):
 
 class Log(Document):
     entry = StringField(required = True)
+    duration = IntField(required = False) 
     user_id = IntField(required = True) 
     ip = StringField(required = True)
     log_time = DateTimeField(required = True)

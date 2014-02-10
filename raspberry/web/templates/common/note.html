@@ -2,7 +2,7 @@
     <div class="entity">
         <div class="title" style="display: none">
             <h2>
-                <a href="{% url 'web.views.main.detail' note.entity_context.entity_hash %}">
+                <a href="{% url 'web_detail' note.entity_context.entity_hash %}">
                     {% if note.entity_context.brand|length != 0 %}
                         {{ note.entity_context.brand }}
                         - {% endif %}{{ note.entity_context.title }}</a>
@@ -10,9 +10,9 @@
             <span class="price">&#65509;{{ note.entity_context.price }}</span>
         </div>
 
-        <a href="{% url 'web.views.main.detail' note.entity_context.entity_hash %}"
+        <a href="{% url 'web_detail' note.entity_context.entity_hash %}"
            class="entity-img">
-            <img src="{{ note.entity_context.chief_image.url }}" alt="entity image">
+            <img src="{{ note.entity_context.chief_image.url }}" alt="{{ note.entity_context.title }}">
         </a>
     </div>
 
