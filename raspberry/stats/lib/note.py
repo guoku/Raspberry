@@ -9,7 +9,7 @@ class NoteStats(object):
 
     @classmethod 
     def new_note_count(cls,start_time,end_time = datetime.now(), entity_id=None, group = None):
-        ##返回的数据格式：[{'count':12,'date':"2012-01"}],date可能不存在
+        ##返回的数据格式：[{'count':12,'timestamp':"2012-01"}],date可能不存在
         _hd1 = NoteModel.objects.filter(created_time__range = 
                                         (start_time, end_time))
         if entity_id != None:
@@ -21,14 +21,14 @@ class NoteStats(object):
         else:
             group = group.lower()
             df = date_format("created_time", group)
-            _hd1 = _hd1.extra(select = {"date" : df}).values("date")\
+            _hd1 = _hd1.extra(select = {"timestamp" : df}).values("timestamp")\
                     .annotate(count = Count('created_time'))
         return list(_hd1.all())
     
     @classmethod
     def new_poke_count(cls, start_time, end_time = datetime.now(),
                         group = None):
-        _hd1 = PokeModel.objects.filter(created_time__rane = 
+        _hd1 = PokeModel.objects.filter(created_time__range = 
                                     (start_time, end_time))
         if group == None:
             count = _hd1.count()
@@ -37,8 +37,8 @@ class NoteStats(object):
         else:
             group = group.lower()
             df = date_format("created_time", group)
-            _hd1 = _hd1.extra(select = {"date" : df})\
-                    .values("date").annotate(count = Count("created_time"))
+            _hd1 = _hd1.extra(select = {"timestamp" : df})\
+                    .values("timestamp").annotate(count = Count("created_time"))
 
         return list(_hd1.all())
 
@@ -56,7 +56,7 @@ class NoteStats(object):
         else:
             group = group.lower()
             df = date_format("created_time", group)
-            _hd1 = _hd1.extra(select = {"date" : df})\
-                    .values("date").annotate(count = Count("created_time"))
+            _hd1 = _hd1.extra(select = {"timestamp" : df})\
+                    .values("timestamp").annotate(count = Count("created_time"))
 
         return list(_hd1.all())

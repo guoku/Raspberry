@@ -7,7 +7,7 @@ class UserStats(object):
 
     @classmethod 
     def new_user_count(cls,start_time, end_time = datetime.now(), group = None):
-        ##返回的数据格式：[{'count':12,'date':"2012-01"}],date可能不存在
+        ##返回的数据格式：[{'count':12,'timestamp':"2012-01"}],date可能不存在
         _hd1 = AuthUser.objects.filter(date_joined__range = (start_time, end_time)) 
         if group == None:
             count = _hd1.count()
@@ -18,10 +18,10 @@ class UserStats(object):
             #        .annotate(available = Count('date_joined'))
             group = group.lower()
             df = date_format("date_joined", group)
-            _hd1 = _hd1.extra(select = {"date" : df})\
-                        .values("date").annotate(count = Count('date_joined'))
+            _hd1 = _hd1.extra(select = {"timestamp" : df})\
+                        .values("timestamp").annotate(count = Count('date_joined'))
         return list(_hd1.all())
-    
+    @classmethod 
     def new_follow_count(cls, start_time, end_time = datetime.now(),
                         group = None):
         _hd1 = FollowModel.objects.filter(followed_time__range = \
@@ -34,8 +34,8 @@ class UserStats(object):
         else:
             group = group.lower()
             df = date_format("followed_time", group)
-            _hd1 = _hd1.extra(select = {"date" : df})\
-                    .values("date").annotate(count = Count("followed_time"))
+            _hd1 = _hd1.extra(select = {"timestamp" : df})\
+                    .values("timestamp").annotate(count = Count("followed_time"))
 
         return list(_hd1.all())
 

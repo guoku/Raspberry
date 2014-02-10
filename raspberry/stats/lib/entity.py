@@ -10,7 +10,7 @@ class EntityStats(object):
     @classmethod 
     def new_entity_count(cls, start_time, end_time = datetime.now(), 
             category_id = None,neo_category_id = None, group = None):
-        ##返回的数据格式：[{'count':12,'date':"2012-01"}],date可能不存在
+        ##返回的数据格式：[{'count':12,'timestamp':"2012-01"}],date可能不存在
         _hd1 = Entity.objects.filter(created_time__range = (start_time,
             end_time))
         _hd1 = _hd1.filter(weight__gte = 0)
@@ -27,7 +27,7 @@ class EntityStats(object):
         else:
             group = group.lower()
             df = date_format("created_time", group)
-            _hd1 = _hd1.extra(select = {"date" : df}).values("date")\
+            _hd1 = _hd1.extra(select = {"timestamp" : df}).values("timestamp")\
                     .annotate(count = Count('created_time'))
         return list(_hd1.all())
 
@@ -51,7 +51,7 @@ class EntityStats(object):
         else:
             group = group.lower()
             df = date_format("created_time", group)
-            _hd1 = _hd1.extra(select = {"date" : df}).values("date")\
+            _hd1 = _hd1.extra(select = {"timestamp" : df}).values("timestamp")\
                     .annotate(count = Sum("like_count"))
 
         return list(_hd1.all())

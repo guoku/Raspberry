@@ -21,7 +21,7 @@ class TagStats(object):
         else:
             group = group.lower()
             df = date_format("created_time", group)
-            _hd1 = _hd1.extra(select = {"date" : df}).values("date")\
+            _hd1 = _hd1.extra(select = {"timestamp" : df}).values("timestamp")\
                     .annotate(count = Count('created_time'))
 
             return list(_hd1.all())
