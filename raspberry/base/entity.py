@@ -625,23 +625,6 @@ class Entity(object):
 
         return _list
         
-    @staticmethod
-    def like_list_of_user(user_id, timestamp = None, offset = None, count = None):
-        _user_id = int(user_id)
-        _hdl = EntityLikeModel.objects.filter(user_id = _user_id)
-        
-        if timestamp != None:
-            _hdl = _hdl.filter(created_time__lt = timestamp)
-        
-        if offset != None and count != None:
-            _hdl = _hdl[offset : offset + count]
-        
-        _list = []
-        for _obj in _hdl:
-            _list.append([_obj.entity_id, _obj.created_time])
-
-        return _list
-        
     def add_note(self, creator_id, note_text, score = 0, image_data = None):
         _note = Note.create(
             entity_id = self.entity_id,

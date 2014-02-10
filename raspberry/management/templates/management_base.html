@@ -37,6 +37,9 @@
                             {% url 'management_user_list' as user_list_url %}
                             <li{% if user_list_url in request.path %} class="active"{%endif%}><a href="{{ user_list_url }}">User</a></li>
                             <li class="divider-vertical"></li>
+                            {% url 'management_tag_list' as tag_list_url %}
+                            <li{% if tag_list_url in request.path %} class="active"{%endif%}><a href="{{ tag_list_url }}">Tag</a></li>
+                            <li class="divider-vertical"></li>
                             {% url 'management_report_list' as report_list_url %}
                             <li{% if report_list_url in request.path %} class="active"{%endif%}><a href="{{ report_list_url }}">Report</a></li>
                             <li class="divider-vertical"></li>

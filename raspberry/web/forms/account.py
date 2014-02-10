@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -8,6 +9,51 @@ from base.user import User
 from django.utils.log import getLogger
 
 log = getLogger('django')
+
+
+Man = u'M'
+Woman = u'F'
+Other = u'O'
+GENDER_CHOICES = (
+        (Man, _('male')),
+        (Woman,  _('female')),
+        (Other,  _('other')),
+    )
+
+class LocationSelectWidget(widgets.MultiWidget):
+    def __init__(self, attrs = None):
+        # years = [(year, year) for year in (2011, 2012, 2013)]
+        _widgets = (
+            widgets.Select(attrs=attrs, choices=[]),
+            widgets.Select(attrs=attrs, choices=[]),
+        )
+
+        super(LocationSelectWidget, self).__init__(_widgets, attrs)
+
+    def decompress(self, value):
+        if value:
+            return [value]
+        return [None]
+
+
+class LocationSelectField(forms.MultiValueField):
+    widget = LocationSelectWidget
+    default_error_messages = {
+            'invalid_location':_(''),
+            'invalid_city':_(''),
+    }
+
+    def __init__(self, *args, **kwargs):
+        localize = kwargs.get('localize', False)
+        fields = (
+            widgets.Select(choices=[], localize=localize),
+        )
+        super(LocationSelectField, self).__init__(fields, *args, **kwargs)
+
+    def compress(self, data_list):
+        if data_list:
+            return data_list
+        return None
 
 
 class SignInAccountForm(forms.Form):
@@ -87,10 +133,24 @@ class SignUpAccountFrom(forms.Form):
         return _user
 
 
+class SignUpAccountBioFrom(forms.Form):
+    gender = forms.ChoiceField(widget = forms.RadioSelect(), choices = GENDER_CHOICES,
+                               label = _('gender'), help_text = _(''))
+
 class SettingAccountForm(forms.Form):
-    nickname = forms.CharField(label=_('nickname'), help_text=_(''))
-    email = forms.EmailField(label=_('email'), help_text=_(''))
-    bio = forms.CharField(widget=forms.Textarea(), label=_('bio'), help_text=_(''))
-    website = forms.URLField(label=_('website'), help_text=_(''))
+
+
+
+    nickname = forms.CharField(widget=forms.TextInput(attrs={'class':'text-input'}),
+                               label=_('nickname'), help_text=_(''))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class':'text-input'}),
+                             label=_('email'), help_text=_(''))
+    bio = forms.CharField(widget=forms.Textarea(attrs={'rows':'4', 'class':'text-input'}),
+                          label=_('bio'), help_text=_(''))
+    # location = forms.MultiValueField(widget=LocationSelectWidget(attrs={'class':'location'}),
+                                         # label=_('location'), help_text=_(""))
+    gender = forms.ChoiceField(widget=forms.RadioSelect(), choices = GENDER_CHOICES, label = _('gender'), help_text = _(''))
+    website = forms.URLField(widget=forms.TextInput(attrs={'class':'text-input'}),
+                             label=_('website'), help_text=_(''))
 
 __author__ = 'edison7500'

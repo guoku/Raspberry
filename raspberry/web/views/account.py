@@ -5,37 +5,59 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth import authenticate
+from django.contrib.formtools.wizard.views import SessionWizardView
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+
 from django.conf import settings
 import json
 
-from web.forms.account import SignInAccountForm, SignUpAccountFrom
-from base.user import User
+from web.forms.account import SignInAccountForm, SignUpAccountFrom, SettingAccountForm
+from django.utils.log import getLogger
+
+log = getLogger('django')
+# from base.user import User
 from validation import *
 
 
 MAX_SESSION_EXPIRATION_TIME = getattr(settings, 'SESSION_COOKIE_AGE', 1209600) # two weeks
 
-
-def check_nickname_available(request):
-    """注册时 Ajax 方式验证 nickname 是否可用"""
-
-    if request.method == 'GET':
-        _nickname = request.GET.get('nickname', None)
-        _ret = not User.nickname_exist(_nickname)
-
-        return HttpResponse(int(_ret))
+TEMPALTES = [
+    'account/register.html',
+    'account/register_bio.html',
+]
 
 
-def check_email_available(request):
-    """注册时 Ajax 方式验证 email 是否可用"""
+class RegisterWizard(SessionWizardView):
 
-    if request.method == 'GET':
-        _email = request.GET.get('email', None)
-        _ret = not User.email_exist(_email)
+    def get_template_names(self):
+        # log.info("template %s" % self.steps.current)
+        return [TEMPALTES[int(self.steps.current)]]
 
-        return HttpResponse(int(_ret))
+    def done(self, form_list, **kwargs):
+        log.info(form_list)
+        return HttpResponse("OK")
+
+
+
+# def check_nickname_available(request):
+#     """注册时 Ajax 方式验证 nickname 是否可用"""
+#
+#     if request.method == 'GET':
+#         _nickname = request.GET.get('nickname', None)
+#         _ret = not User.nickname_exist(_nickname)
+#
+#         return HttpResponse(int(_ret))
+#
+#
+# def check_email_available(request):
+#     """注册时 Ajax 方式验证 email 是否可用"""
+#
+#     if request.method == 'GET':
+#         _email = request.GET.get('email', None)
+#         _ret = not User.email_exist(_email)
+#
+#         return HttpResponse(int(_ret))
 
 
 def register(request, template = 'account/register.html'):
@@ -257,36 +279,36 @@ def logout(request):
         next_url = reverse('web_selection')
     finally:
         return HttpResponseRedirect(next_url)
+#
+#
+# @login_required
+# def s_check_nickname_available(request):
+#     """用户设置时 Ajax 方式验证 nickname 是否可用"""
+#
+#     if request.method == 'GET':
+#         _nickname = request.GET.get('nickname', None)
+#         _user_context = User(request.user.id).read()
+#         _ret = 1
+#
+#         if User.nickname_exist(_nickname) and _user_context['nickname'] != _nickname:
+#             _ret = 0
+#
+#         return HttpResponse(_ret)
 
 
-@login_required
-def s_check_nickname_available(request):
-    """用户设置时 Ajax 方式验证 nickname 是否可用"""
-
-    if request.method == 'GET':
-        _nickname = request.GET.get('nickname', None)
-        _user_context = User(request.user.id).read()
-        _ret = 1
-
-        if User.nickname_exist(_nickname) and _user_context['nickname'] != _nickname:
-            _ret = 0
-
-        return HttpResponse(_ret)
-
-
-@login_required
-def s_check_email_available(request):
-    """用户设置时 Ajax 方式验证 email 是否可用"""
-
-    if request.method == 'GET':
-        _email = request.GET.get('email', None)
-        _user_context = User(request.user.id).read()
-        _ret = 1
-
-        if User.email_exist(_email) and _user_context['email'] != _email:
-            _ret = 0
-
-        return HttpResponse(_ret)
+# @login_required
+# def s_check_email_available(request):
+#     """用户设置时 Ajax 方式验证 email 是否可用"""
+#
+#     if request.method == 'GET':
+#         _email = request.GET.get('email', None)
+#         _user_context = User(request.user.id).read()
+#         _ret = 1
+#
+#         if User.email_exist(_email) and _user_context['email'] != _email:
+#             _ret = 0
+#
+#         return HttpResponse(_ret)
 
 
 def _set_base(request, template):
@@ -388,16 +410,16 @@ def _set_psw(request, template):
 
 @login_required
 def setting(request, template = 'account/setting.html'):
-    if request.method == 'GET':
-        _user_context = User(request.user.id).read()
-
-        return render_to_response(
-            template,
-            {
-                'user_context' : _user_context,
-            },
-            context_instance = RequestContext(request)
-        )
+    # if request.method == 'GET':
+    #     _user_context = User(request.user.id).read()
+    #
+    #     return render_to_response(
+    #         template,
+    #         {
+    #             'user_context' : _user_context,
+    #         },
+    #         context_instance = RequestContext(request)
+    #     )
 
     if request.method == 'POST':
         _type = request.POST.get('type', None)
@@ -411,12 +433,23 @@ def setting(request, template = 'account/setting.html'):
 
             elif _type == 'psw':
                 return _set_psw(request, template)
-
+    else:
+        _user_context = User(request.user.id).read()
+        forms = SettingAccountForm(initial = _user_context, prefix="settings")
+        sub_forms = None
+        return render_to_response(
+            template,
+            {
+                'user_context' : _user_context,
+                'forms': forms,
+                'sub_forms': sub_forms,
+            },
+            context_instance = RequestContext(request),
+        )
 
 @login_required
 def upload_avatar(request):
     pass
-
 
 @login_required
 def update_avatar(request):
