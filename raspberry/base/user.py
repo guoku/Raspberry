@@ -61,12 +61,12 @@ class User(object):
         def get_large_link(self):
             if self.avatar_obj != None: 
                 return settings.IMAGE_SERVER + self.avatar_obj.avatar_large
-            return 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+            return 'http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png'
         
         def get_small_link(self):
             if self.avatar_obj != None:
                 return settings.IMAGE_SERVER + self.avatar_obj.avatar_small
-            return 'http://imgcdn.guoku.com/avatar/large_79761_fe9187b12ab58170abadbb1530f6f5d2.jpg'
+            return 'http://imgcdn.guoku.com/avatar/small_241170_ce838e0ed9c613bb06ce79842913c83f.png'
         
         @classmethod
         def create(cls, user_id, origin_data):
