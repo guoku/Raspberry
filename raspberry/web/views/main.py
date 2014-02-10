@@ -112,7 +112,7 @@ def popular(request, template='main/popular.html'):
     _group = request.GET.get('group', 'd')  # d, w, m
 
     # 先用精选数据来模拟热门 TODO
-    _entity_id_list = [x['entity_id'] for x in NoteSelection.objects.all()[0:30]]
+    _entity_id_list = [x['entity_id'] for x in NoteSelection.objects[0:30]]
     _popular_list = []
 
     for _id in _entity_id_list:

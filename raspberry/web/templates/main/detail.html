@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load i18n staticfiles %}
 {% load entity %}
 
 {% block title %}
@@ -21,7 +21,7 @@
                 <a href="{% url 'web_like_entity' entity_context.entity_id %}"
                    class="like{% if is_user_already_like %} liked{% endif %}">
                     <span class="icon"></span>
-                    <span class="count">{{ entity_context.like_count }}</span>喜爱
+                    <span class="count">{{ entity_context.like_count }}</span>{% trans 'likes' %}
                 </a>
                 {% if selection_note != None %}
                     <div class="selection-note">
@@ -71,7 +71,7 @@
             </div>
 
             <div class="likes">
-                <h3>100人喜爱</h3>
+                <h3>{{ entity_context.like_count }}人喜爱</h3>
                 <div>
                     <a href=""><img src="" height="25" width="25"></a>
                 </div>
