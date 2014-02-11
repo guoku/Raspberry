@@ -280,6 +280,12 @@ def logout(request):
         next_url = reverse('web_selection')
     finally:
         return HttpResponseRedirect(next_url)
+
+
+def forget_passwd(request):
+
+
+    return
 #
 #
 # @login_required
