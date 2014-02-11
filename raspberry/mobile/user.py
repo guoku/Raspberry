@@ -278,6 +278,36 @@ def user_tag_entity(request, user_id, tag):
 
 
 @check_sign
+def user_like(request, user_id):
+    _start_at = datetime.datetime.now()
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _timestamp = request.GET.get('timestamp', None)
+        if _timestamp != None:
+            _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
+        _offset = int(request.GET.get('offset', '0'))
+        _count = int(request.GET.get('count', '30'))
+        
+        _list = []
+        _last_like_time = None
+        for _item in MobileUser(user_id).find_like_entity(timestamp = _timestamp, offset = _offset, count = _count, with_timestamp = True):
+            _list.append(MobileEntity(_item[0]).read(_request_user_id))
+            _last_like_time = _item[1]
+
+        _rslt = {
+            'timestamp' : time.mktime(_last_like_time.timetuple()),
+            'entity_list' : _list
+        }
+
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_LIKE', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
+        return SuccessJsonResponse(_rslt)
+    
+@check_sign
 def search_user(request):
     _start_at = datetime.datetime.now()
     if request.method == "GET":
