@@ -78,6 +78,9 @@ msgstr "昵称"
 msgid "email"
 msgstr "邮箱"
 
+msgid "location"
+msgstr "所在地"
+
 msgid "gender"
 msgstr "性别"
 
