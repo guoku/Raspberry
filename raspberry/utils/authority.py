@@ -11,9 +11,7 @@ def staff_only(func=None):
     return staff_wrapped
 
 def seller_only(func = None):
-    print 'hhhhhhiiiiii'
     def seller_only_decorator(request, *args, **kwargs):
-        print 'iiiiihhhhhh'
         user_inst = User(request.user.id)
         user_context = user_inst.read()
         shop_nick = user_context.get("shop_nick", None)

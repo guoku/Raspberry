@@ -117,7 +117,7 @@ def shop_detail(request):
                                     "priorities" : range(11),
                                     "taobao_shop_types" : SHOP_TYPES 
                                   },
-                                  context_instance = RequestContext(request)
+                                  context_instance = RequestContext(request))
     else:
         return Http404()
 

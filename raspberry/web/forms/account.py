@@ -92,7 +92,8 @@ class SignInAccountForm(forms.Form):
 class SignUpAccountFrom(forms.Form):
     error_messages = {
         'email_exist': _("email is signed up."),
-        'nickname_exist': _("nickname is signed up.")
+        'nickname_exist': _("nickname is signed up."),
+        'not_agree_tos': _("you must agree terms of service.")
         # 'password_mismatch': _("The two password fields didn't match."),
     }
 
@@ -102,6 +103,8 @@ class SignUpAccountFrom(forms.Form):
                                label=_('nickname'), help_text=_(''))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('password')}),
                                label=_('password'), help_text=_(''))
+
+    agree_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs={'checked' : 'checked'}), required=False)
 
     def clean_email(self):
         cleaned_data = self.cleaned_data
@@ -122,6 +125,13 @@ class SignUpAccountFrom(forms.Form):
             )
         return nickname
 
+    def clean_agree_tos(self):
+        if not self.cleaned_data['agree_tos']:
+            raise forms.ValidationError(
+                self.error_messages['not_agree_tos'],
+            )
+        return self.cleaned_data['agree_tos']
+
     def signup(self):
         _email = self.cleaned_data['email']
         _nickname = self.cleaned_data['nickname']
@@ -134,8 +144,14 @@ class SignUpAccountFrom(forms.Form):
 
 
 class SignUpAccountBioFrom(forms.Form):
+    bio = forms.CharField(widget=forms.Textarea(attrs={'rows':'4', 'class':'text-input'}),
+                          label=_('bio'), help_text=_(''))
     gender = forms.ChoiceField(widget = forms.RadioSelect(), choices = GENDER_CHOICES,
                                label = _('gender'), help_text = _(''))
+    website = forms.URLField(widget=forms.TextInput(attrs={'class':'text-input'}),
+                             label=_('website'), help_text=_(''))
+    state = forms.CharField(widget=forms.Select(attrs={"name" : "location", "class" : "location"}))
+    city = forms.CharField(widget=forms.Select(attrs={'name' : 'city', 'class' : 'city'}))
 
 class SettingAccountForm(forms.Form):
     nickname = forms.CharField(widget=forms.TextInput(attrs={'class':'text-input'}),

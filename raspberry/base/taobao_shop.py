@@ -6,6 +6,7 @@ from base.stream_models import TaobaoShopExtendedInfo
 from base.stream_models import CrawlerInfo
 from base.stream_models import TaobaoShopVerificationInfo
 from base.stream_models import GuokuPlusApplication
+from base.stream_models import ShopScore
 from base.item import Item
 import datetime
 import urllib

@@ -8,10 +8,16 @@ from django.contrib.auth import authenticate
 from django.contrib.formtools.wizard.views import SessionWizardView
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-
+from django.contrib import messages
 from django.conf import settings
+from web import taobao_utils
+from web import web_utils
+from utils import fetcher
 import json
-
+import time
+import re
+from base.taobao_shop import TaobaoShop
+from urlparse import urlparse
 from web.forms.account import SignInAccountForm, SignUpAccountFrom, SettingAccountForm
 from django.utils.log import getLogger
 
@@ -22,20 +28,23 @@ from validation import *
 
 MAX_SESSION_EXPIRATION_TIME = getattr(settings, 'SESSION_COOKIE_AGE', 1209600) # two weeks
 
-TEMPALTES = [
-    'account/register.html',
-    'account/register_bio.html',
-]
+TEMPALTES = {
+    'register' : 'account/register.html',
+    'register-bio' : 'account/register_bio.html',
+}
 
 
 class RegisterWizard(SessionWizardView):
 
     def get_template_names(self):
         # log.info("template %s" % self.steps.current)
-        return [TEMPALTES[int(self.steps.current)]]
+        print self.steps.current
+        return [TEMPALTES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
         log.info(form_list)
+        print 'nofwnfiwfwei'
+        print form_list
         return HttpResponse("OK")
 
 
@@ -532,7 +541,6 @@ def bind_taobao_shop(request):
                 request_user_context['taobao_token_expired'] = True
             else:
                 request_user_context['taobao_token_expired'] = False
-        messages.info(request, "test, test" + unicode(int(time.time())))
         return render_to_response("bind_taobao_shop.html",
                                  { "request_user_context" : request_user_context },
                                  context_instance=RequestContext(request)
@@ -553,7 +561,7 @@ def bind_taobao_shop(request):
             nick = taobao_item_info['nick']
             if request_user_context.get('taobao_nick') == nick:
                 user_inst.create_seller_info(nick)
-                if TaobaoShop.nick_exist(nick):
+                if not TaobaoShop.nick_exist(nick):
                     shop_info = fetcher.fetch_shop(taobao_item_info['shop_link'])
                     TaobaoShop.create(nick,
                                       shop_info['shop_id'],
