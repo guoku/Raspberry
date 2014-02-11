@@ -18,7 +18,7 @@
                 {% csrf_token %}
                 {{ wizard.management_form }}
                 <h3>个人资料</h3>
-
+                {{ wizard.form.errors }}
                 <div>
                     <label for="bio">{% trans 'bio' %}</label>
                     {#<textarea name="bio" id="bio" class="text-input" rows="4">{{ user_context.bio }}</textarea>#}
