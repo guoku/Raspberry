@@ -4,7 +4,8 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template import loader
-import json
+from django.utils.log import getLogger
+# import json
 from utils.http import JSONResponse
 from datetime import datetime
 
@@ -16,6 +17,8 @@ from base.user import User
 from base.category import Old_Category
 from util import get_request_user, get_request_user_context, user_already_like_entity
 
+log = getLogger('django')
+
 def index(request):
     return HttpResponseRedirect(reverse('web_selection'))
 
@@ -26,7 +29,7 @@ def selection(request, template='main/selection.html'):
 
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
-
+    log.info(datetime.now())
     # 判断是否ajax方式加载,如不是则强制返回首页
     # 见https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.is_ajax
     if not request.is_ajax():

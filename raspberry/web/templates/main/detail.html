@@ -63,6 +63,7 @@
 
                 {% if entity_context.detail_images|length > 0 %}
                     <div class="detail-img">
+                        <a href=""><img src="{{ entity_context.chief_image.url }}"></a>
                         {% for img in entity_context.detail_images %}
                             <a href="javascript:;"><img src="{{ img.url }}"></a>
                         {% endfor %}
