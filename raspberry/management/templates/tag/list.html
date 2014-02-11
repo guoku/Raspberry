@@ -4,6 +4,20 @@
 
 {% block content %}
     <div class="span10">
+        <div class="sub-nav">
+            <ul class="nav nav-pills">
+                <li{%if type == 'recommend'%} class="active"{%endif%}>
+                    <a href="{% url 'management_tag_list' %}?type=recommend">
+                        选中    
+                    </a>
+                </li>
+                <li{%if type != 'recommend'%} class="active"{%endif%}>
+                    <a href="{% url 'management_tag_list' %}">
+                        全部
+                    </a>
+                </li>
+            </ul>
+        </div>
         <div>
             <table class="table table-striped table-bordered table-condensed">
                 <thead>

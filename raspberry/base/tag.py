@@ -191,6 +191,11 @@ class Tag(object):
                 
     
     @classmethod
+    def get_user_tag_entity_count(cls, user_id, tag):
+        return EntityTagModel.objects.filter(user = user_id, tag_text = tag).count()
+        
+    
+    @classmethod
     def find_user_tag(cls, user_id = None, tag = None):
         _hdl = EntityTagModel.objects
         if user_id != None:
