@@ -148,6 +148,7 @@ INSTALLED_APPS = (
     'management',
     'mobile',
     'seller',
+    'stats',
     'web',
     # 'redis_admin',
 )
