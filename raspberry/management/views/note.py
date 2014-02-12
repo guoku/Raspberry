@@ -108,10 +108,9 @@ def note_list(request):
             _entity_id = _note_context['entity_id']
             _entity_context = Entity(_entity_id).read()
             # log.info(_entity_context)
-            log.info( _note_context['post_time'] )
-            if _note_context['post_time'] is None:
-                _is_future = 0
-            else:
+            # log.info( _note_context['post_time'] )
+            _is_future = 0
+            if _note_context['post_time'] is not None:
                 post_time = time.mktime( _note_context['post_time'].timetuple() )
                 bench_time = time.mktime( datetime.datetime(2100, 1, 1).timetuple() )
             # log.info( bench_time, post_time )
