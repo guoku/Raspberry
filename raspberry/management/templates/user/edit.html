@@ -1,4 +1,5 @@
 {% extends "management_base.html" %}
+{% load i18n %}
 {% load common %}
 
 {% block cssstyle %}
@@ -24,7 +25,7 @@
             </div>
             <div class="stat-info"><span>关注者: </span><span>{{ user_context.fan_count }}</span></div>
             <div class="stat-info"><span>喜爱: </span><span>{{ user_context.like_count }}</span></div>
-            <div class="stat-info"><span>标签: </span><span>{{ user_context.tag_count }}</span></div>
+            <div class="stat-info"><span>标签: </span><span><a href="{%url 'management_tag_list'%}?user={{user_context.user_id}}">{{ user_context.tag_count }}</a></span></div>
             <div class="stat-info"><span>添加: </span><span>{{ user_context.entity_note_count }}</span></div>
             <div class="stat-info"><span>赞: </span><span>{{ user_context.entity_note_poke_count }}</span></div>
         </div>
@@ -57,7 +58,7 @@
             </fieldset>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">更新</button>
+                <button type="submit" class="btn btn-primary">{% trans "update" %}</button>
             </div>
         </form>
         <form class="well form-horizontal" action="{% url 'management_push_message_to_user' user_context.user_id %}" method="POST">

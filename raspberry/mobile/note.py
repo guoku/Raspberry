@@ -7,9 +7,11 @@ from mobile.models import Session_Key
 from tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask, MobileLogTask 
 from utils.lib import get_client_ip
 import datetime
+import time 
 
 @check_sign
 def category_entity_note(request, category_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -38,7 +40,8 @@ def category_entity_note(request, category_id):
                     'note' : _note_context,
                 })
             
-        MobileLogTask.delay('CATEGORY_NOTE_LIST', request.REQUEST, get_client_ip(request), _request_user_id, { 'category_id' : int(category_id) })
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'CATEGORY_NOTE_LIST', request.REQUEST, get_client_ip(request), _request_user_id, { 'category_id' : int(category_id) })
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -99,6 +102,7 @@ def update_entity_note(request, note_id):
 
 @check_sign
 def entity_note_detail(request, note_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -111,7 +115,8 @@ def entity_note_detail(request, note_id):
         if _rslt['note'].has_key('entity_id'):
             _rslt['entity'] = MobileEntity(_rslt['note']['entity_id']).read(_request_user_id)
         
-        MobileLogTask.delay('NOTE', request.REQUEST, get_client_ip(request), _request_user_id, { 'note_id' : int(note_id) })
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'NOTE', request.REQUEST, get_client_ip(request), _request_user_id, { 'note_id' : int(note_id) })
         return SuccessJsonResponse(_rslt)
 
 @check_sign

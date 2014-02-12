@@ -1,12 +1,24 @@
 import os.path
 
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
+
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 
 TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1
-USE_I18N = False
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
+LOCALE_PATHS = (
+    os.path.join(os.path.dirname(__file__), '../conf/locale'),
+)
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -34,8 +46,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.media',
   'django.contrib.messages.context_processors.messages',
   'django.core.context_processors.static',
-  #'zinnia.context_processors.version',
-) # Optional
+)
 
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
@@ -44,6 +55,49 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.SHA1PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
+        },
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file': {
+          'level': 'ERROR',
+          'class': 'logging.FileHandler',
+          'formatter': 'verbose',
+          'filename': '/tmp/djanog.log',
+          'mode': 'a',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['file', 'console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    }
+}
 
 INTERNAL_IPS = ('127.0.0.1',)
 

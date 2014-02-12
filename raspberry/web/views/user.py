@@ -1,8 +1,10 @@
 # coding=utf-8
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.utils.log import getLogger
 
 from utils.paginator import Paginator
 from util import *
@@ -14,11 +16,12 @@ from base.models import NoteSelection
 from base.tag import Tag
 
 
-def user_index(request, user_id):
-    return user_likes(request, user_id)
-
-
 TEMPLATE = 'user/index.html'
+log = getLogger('django')
+
+def user_index(request, user_id):
+    return HttpResponseRedirect(reverse('web_user_likes', args=[user_id]))
+    # return user_likes(request, user_id)
 
 
 def user_likes(request, user_id, template=TEMPLATE):
@@ -28,9 +31,10 @@ def user_likes(request, user_id, template=TEMPLATE):
 
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
-
+    # log.info(_user_context)
     _query_user_id = int(user_id)
     _query_user = User(_query_user_id)
+    # log.info(_query_user)
     _query_user_context = _query_user.read()
 
     _is_user_self = (request.user.id == _query_user_id)  # 是否是自己的页面
@@ -45,9 +49,10 @@ def user_likes(request, user_id, template=TEMPLATE):
     _old_category_list = Old_Category.find()[0:12]
 
     # TODO
-    # _entity_id_list = _query_user.find_like_entity(None, offset=0, count=30)
+    _entity_id_list = _query_user.find_like_entity(_category_id, offset=0, count=30)
+    log.info(_entity_id_list)
     # 没数据 用精选模拟
-    _entity_id_list = [x['entity_id'] for x in NoteSelection.objects.all()[0:30]]
+    # _entity_id_list = [x['entity_id'] for x in NoteSelection.objects.all()[0:30]]
     _entity_list = []
 
     for _e_id in _entity_id_list:

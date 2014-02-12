@@ -4,11 +4,6 @@ from defaults import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
 
 from mongoengine import register_connection 
 register_connection('guoku-db', 'guoku')
@@ -153,24 +148,8 @@ INSTALLED_APPS = (
     'management',
     'mobile',
     'seller',
+    'stats',
     'web',
     # 'redis_admin',
 )
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        }, }
-}
 

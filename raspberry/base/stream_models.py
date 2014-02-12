@@ -56,7 +56,8 @@ class Selection(Document):
     post_time = DateTimeField(required = True)
     meta = {
         'db_alias' : 'guoku-db',
-        "indexes" : [ 
+        'ordering' : ['-post_time'],
+        "indexes" : [
             "selector_id", 
             "post_time" 
         ],
@@ -72,7 +73,7 @@ class NoteSelection(Selection):
     category_id = IntField(required = True) 
     meta = {
         'db_alias' : 'guoku-db',
-        "indexes" : [ 
+        "indexes" : [
             "entity_id", 
             "note_id",
             "root_category_id",
@@ -84,6 +85,7 @@ class NoteSelection(Selection):
 
 class Log(Document):
     entry = StringField(required = True)
+    duration = IntField(required = False) 
     user_id = IntField(required = True) 
     ip = StringField(required = True)
     log_time = DateTimeField(required = True)

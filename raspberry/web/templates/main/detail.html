@@ -1,23 +1,27 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load i18n staticfiles %}
 {% load entity %}
 
 {% block title %}
-    {% if entity_context.brand|length != 0 %}{{ entity_context.brand }}
-        - {% endif %}{{ entity_context.title }}
+    {% if entity_context.brand|length != 0 %}
+        {% block subtitle %}{{ entity_context.brand }} - {% endblock %}
+    {% endif %}
+    {{ entity_context.title }}
 {% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/detail.css' %}">{% endblock %}
 {% block content %}
     <div id="detail">
         <div class="main">
             <div class="entity">
-                <a href="" class="entity-img"><img src="{{ entity_context.chief_image.url }}"></a>
+                <a href="#" class="entity-img">
+                    <img src="{{ entity_context.chief_image.url }}" alt="{{ entity_context.title }}">
+                </a>
                 <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</h2>
 
                 <a href="{% url 'web_like_entity' entity_context.entity_id %}"
                    class="like{% if is_user_already_like %} liked{% endif %}">
                     <span class="icon"></span>
-                    <span class="count">{{ entity_context.like_count }}</span>喜爱
+                    <span class="count">{{ entity_context.like_count }}</span>{% trans 'likes' %}
                 </a>
                 {% if selection_note != None %}
                     <div class="selection-note">
@@ -59,6 +63,7 @@
 
                 {% if entity_context.detail_images|length > 0 %}
                     <div class="detail-img">
+                        <a href=""><img src="{{ entity_context.chief_image.url }}"></a>
                         {% for img in entity_context.detail_images %}
                             <a href="javascript:;"><img src="{{ img.url }}"></a>
                         {% endfor %}
@@ -67,7 +72,7 @@
             </div>
 
             <div class="likes">
-                <h3>100人喜爱</h3>
+                <h3>{{ entity_context.like_count }}人喜爱</h3>
                 <div>
                     <a href=""><img src="" height="25" width="25"></a>
                 </div>

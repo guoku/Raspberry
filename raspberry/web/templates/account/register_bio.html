@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load i18n staticfiles %}
 {% load account %}
 
 {% block title %}完善信息 - 果库{% endblock %}
@@ -23,7 +23,7 @@
                 {% endif %}
 
                 <div>
-                    <label for="bio">个人介绍</label>
+                    <label for="bio">{% trans 'bio' %}</label>
                     <textarea name="bio" id="bio" class="text-input" rows="4">{{ user_context.bio }}</textarea>
                 </div>
 

@@ -12,11 +12,11 @@ import datetime
 import time
 import json
 
-from base.entity import Entity 
+from base.entity import Entity
 from base.note import Note
 from base.user import User
 from management.tasks import ArrangeSelectionTask
-from utils.authority import staff_only 
+from utils.authority import staff_only
 from utils.paginator import Paginator
 
 log = getLogger('django')
@@ -25,15 +25,15 @@ log = getLogger('django')
 @staff_only
 def arrange_selection(request):
     if request.method == 'GET':
-        _t_start = datetime.datetime.now() + datetime.timedelta(days = 1) 
+        _t_start = datetime.datetime.now() + datetime.timedelta(days = 1)
         _year = _t_start.year
         _month = _t_start.month
         _date = _t_start.day
-        _start_time = "%d-%d-%d 8:00:00"%(_year, _month, _date) 
-        
+        _start_time = "%d-%d-%d 8:00:00"%(_year, _month, _date)
+
         _pending_note_count = Note.count(pending_selection = True)
-        return render_to_response( 
-            'note/arrange.html', 
+        return render_to_response(
+            'note/arrange.html',
             {
                 'active_division' : 'note',
                 'pending_note_count' : _pending_note_count,
@@ -52,7 +52,7 @@ def arrange_selection(request):
             interval_secs = _interval
         )
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
-        
+
 
 
 @login_required
@@ -64,22 +64,22 @@ def note_list(request):
     _sort_by = None
     _para = {}
     if _selection == 'only':
-        _selection = 1 
+        _selection = 1
         _nav_filter = 'selection_only'
-        _sort_by = 'selection_post_time' 
-        _para['selection'] = 'only' 
+        _sort_by = 'selection_post_time'
+        _para['selection'] = 'only'
     elif _selection == 'none':
-        _selection = -1 
+        _selection = -1
         _nav_filter = 'selection_none'
-        _para['selection'] = 'none' 
+        _para['selection'] = 'none'
     else:
         _selection = 0
-    
+
     _freezed = request.GET.get("freeze", None)
     if _freezed == '1':
-        _status = -1 
+        _status = -1
         _nav_filter = 'freezed'
-        _para['freeze'] = '1' 
+        _para['freeze'] = '1'
     else:
         _status = 1
 
@@ -98,7 +98,7 @@ def note_list(request):
         _note_count = Note.count(entity_id=_select_entity_id)
         _paginator = Paginator(_page_num, 30, _note_count, _para)
         _note_id_list = Note.find(entity_id=_select_entity_id)
-        
+
     _context_list = []
     # log.info(_note_id_list)
     for _note_id in _note_id_list:
@@ -108,13 +108,16 @@ def note_list(request):
             _entity_id = _note_context['entity_id']
             _entity_context = Entity(_entity_id).read()
             # log.info(_entity_context)
+<<<<<<< HEAD
             log.info( _note_context['post_time'] )
 
+=======
+>>>>>>> jiaxin
             if _note_context['post_time'] == datetime.datetime(2100, 1, 1):
                 _is_future = 1
             else:
                 _is_future = 0
-
+            log.info(_note_context['post_time'])
             _context_list.append({
                 'entity': _entity_context,
                 'note': _note_context,
@@ -124,11 +127,16 @@ def note_list(request):
         except Exception, e:
             log.error("Error: %s" % e.message)
         # log.info(_context_list)
+<<<<<<< HEAD
     return render_to_response( 
         'note/list.html', 
+=======
+    return render_to_response(
+        'note/list.html',
+>>>>>>> jiaxin
         {
             'active_division' : 'note',
-            'nav_filter' : _nav_filter, 
+            'nav_filter' : _nav_filter,
             'context_list' : _context_list,
             'paginator' : _paginator,
             'select_entity_id': _select_entity_id
@@ -146,7 +154,7 @@ def freeze_note(request, note_id):
         _entity = Entity(_entity_id)
         _entity.update_note(
             note_id = note_id,
-            weight = -1 
+            weight = -1
         )
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -159,7 +167,7 @@ def edit_note(request, note_id):
         _note_context = Note(note_id).read()
         _entity_context = Entity(_note_context['entity_id']).read()
         return render_to_response(
-            'note/edit.html', 
+            'note/edit.html',
             {
                 'active_division' : 'note',
                 'entity_context' : _entity_context,

@@ -22,6 +22,7 @@ urlpatterns = patterns(
     url(r'^user/', include('management.urls.user')),
     url(r'^ustation/', include('management.urls.ustation')),
     url(r'^shop/', include('management.urls.shop')),
+    url(r'^tag/', include('management.urls.tag')),
 )
 
 __author__ = 'edison7500'

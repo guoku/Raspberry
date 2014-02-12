@@ -15,7 +15,65 @@ from base.entity import Note
 from base.user import User
 from base.item import Item
 from base.category import Category
-# from base import fetcher
+from base import fetcher
+from util import *
+
+from django.utils.log import getLogger
+
+log = getLogger('django')
+
+
+def entity_detail(request, entity_hash, template='main/detail.html'):
+    _user = get_request_user(request.user.id)
+    _user_context = get_request_user_context(_user)
+
+    _entity_id = Entity.get_entity_id_by_hash(entity_hash)
+    _entity_context = Entity(_entity_id).read()
+    # log.info(_entity_context)
+    _note_id_list = Note.find(entity_id=_entity_id)
+    # log.info(_note_id_list)
+    _selection_note = None
+    _common_note_list = []
+    _is_user_already_note = False
+    _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
+
+    for _note_id in _note_id_list:
+        _note = Note(_note_id)
+        _note_context = _note.read()
+        log.info(_note_context)
+        _creator_context = User(_note_context['creator_id']).read()
+
+        if _creator_context['user_id'] == request.user.id:
+            _is_user_already_note = True
+
+        # 判断是否是精选
+        if _note_context['is_selected']:
+            _selection_note = {
+                'note_context' : _note_context,
+                'creator_context' : _creator_context,
+                'user_context' : _user_context
+            }
+        else:
+            _common_note_list.append(
+                {
+                    'note_context' : _note_context,
+                    'creator_context' : _creator_context,
+                    'user_context' : _user_context
+                }
+            )
+
+    return render_to_response(
+        template,
+        {
+            'user_context' : _user_context,
+            'entity_context' : _entity_context,
+            'is_user_already_note' : _is_user_already_note,
+            'is_user_already_like' : _is_user_already_like,
+            'selection_note' : _selection_note,
+            'common_note_list' : _common_note_list,
+        },
+        context_instance=RequestContext(request)
+    )
 
 
 def _parse_taobao_id_from_url(url):

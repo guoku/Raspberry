@@ -3,43 +3,53 @@
 
 {% block content %}
     <div class="span2">
-        {% for message in messages %}
-            <div>
-                {{ message }}
-            </div>
-        {% endfor %}
-        <form class="form-search" method="POST" action="{% url 'management_add_shop' %}">
-            <input type="text" class="input-medium search-query" name="shop_link">
-            <button type="submit" class="btn">添加店铺首页URL</button>
-        </form>   
-        <form class="form-search" method="GET" action="{% url 'management_shop_list' %}">
-            <input type="text" class="input-medium search-query" name="nick">
-            <button type="submit" class="btn">查找店铺昵称</button>
-        </form>   
-        
-        <form class="form-search" method="GET" action="{% url 'management_shop_list' %}">
-            <h5>排序:</h5>
-            <select id="sorting" name="sort_by">
-                <option value="created_time" {%if sort_by == "created_time" %} selected="selected" {% endif %}>创建时间</option>
-                <option value="priority" {% if sort_by == "priority" %} selected="selected" {% endif %}>优先级</option>
-                <option value="commission_rate"{%if sort_by == "commission_rate" %} selected="selected"{%endif%}>佣金</option>
-            </select>
-            <div>
-                <label>升序</label>
-                <input type="radio" name="order" value="asc" {% if  not order or order == "asc" %} checked {%endif%}/>
-                <label>降序</label>
-                <input type="radio" name="order" value="desc" {% if order == "desc" %} checked {%endif%}/>
-            </div>
-            <div>
-                <h5>过滤:</h5>
-                {% for gift in all_gifts %}
-                    {{ gift }} <input type="checkbox" name="gifts" value="{{ gift }}" {% if gift in gifts %} checked {%endif%}><br>
-                {% endfor %}
-            </div>
-            <div>
-                <button type="submit" class="btn">确定</button>
-            </div>
-        </form>
+        <div class="well sidebar-nav">
+            {% for message in messages %}
+                <div class="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <form class="form-search" method="POST" action="{% url 'management_add_shop' %}">
+                <input type="text" class="input-medium search-query" name="shop_link">
+                <button type="submit" class="btn">添加店铺首页URL</button>
+            </form>   
+            <form class="form-search" method="GET" action="{% url 'management_shop_list' %}">
+                <input type="text" class="input-medium search-query" name="nick">
+                <button type="submit" class="btn">查找店铺昵称</button>
+            </form>   
+        </div>
+        <div class="well sidebar-nav">
+            <form class="form-search" method="GET" action="{% url 'management_shop_list' %}">
+                <fieldset>
+                <label class="nav-header">排序:</label>
+                <select id="sorting" name="sort_by">
+                    <option value="created_time" {%if sort_by == "created_time" %} selected="selected" {% endif %}>创建时间</option>
+                    <option value="priority" {% if sort_by == "priority" %} selected="selected" {% endif %}>优先级</option>
+                    <option value="commission_rate"{%if sort_by == "commission_rate" %} selected="selected"{%endif%}>佣金</option>
+                </select>
+                <div>
+                    <label>升序
+                    <input type="radio" name="order" value="asc" {% if  not order or order == "asc" %} checked {%endif%}/>
+                    </label>
+                    <label>降序
+                    <input type="radio" name="order" value="desc" {% if order == "desc" %} checked {%endif%}/>
+                    </label>
+                </div>
+                <div>
+                    <div>
+                    <label class="nav-header">过滤:</label>
+                    </div>
+                    {% for gift in all_gifts %}
+                        {{ gift }} <input type="checkbox" name="gifts" value="{{ gift }}" {% if gift in gifts %} checked {%endif%}><br>
+                    {% endfor %}
+                </div>
+                <div>
+                    <button type="submit" class="btn">确定</button>
+                </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
     <div class="span10">
         <div>
@@ -54,7 +64,7 @@
                     {% for shop in shops %}
                     <tr>
                         
-                        <td><a href="/scheduler/shop_detail/taobao/?sid={{ .ShopInfo.Sid }}">{{ shop.shop_info.nick }}</a></td>
+                        <td><a href="{% url 'management_shop_detail' %}?nick={{ shop.shop_info.nick }}">{{ shop.shop_info.nick }}</a></td>
                         <td>{{ shop.shop_info.title }} </td>
                         <td>{{ shop.crawler_info.priority }}</td>
                         <td>{{ shop.extended_info.commission_rate }}</td>

@@ -1,14 +1,9 @@
-import os.path
+# import os.path
 from defaults import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
 
 #mongodb setting
 from mongoengine import register_connection
@@ -87,7 +82,7 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-#    ('common', os.path.join(os.path.dirname(__file__), 'static')),
+
 )
 
 
@@ -111,37 +106,20 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.messages',
+    'django.contrib.formtools',
     'djcelery',
     'base',
     'management',
     'mobile',
     'seller',
+    'stats',
     'web',
     'gunicorn',
 )
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
-
-
 #GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
 GUOKU_APNS_KEY = '/data/www/raspberry/apns_key/'
-APNS_SERVER = {'HOST':'http://10.0.2.46:7077/'}
+APNS_SERVER = {'HOST': 'http://10.0.2.46:7077/'}
 
 
 SCP_HOST = '10.0.2.46'

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
+{% load i18n staticfiles %}
 
 {% block title %}热门{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">{% endblock %}
@@ -20,7 +20,7 @@
         <ul class="entities">
             {% for popular in popular_list %}
                 <li>
-                    <a href="{% url 'web.views.main.detail' popular.entity_context.entity_hash %}" class="entity-img">
+                    <a href="{% url 'web_detail' popular.entity_context.entity_hash %}" class="entity-img">
                         <img src="{{ popular.entity_context.chief_image.url }}">
                     </a>
 
