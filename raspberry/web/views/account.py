@@ -115,6 +115,12 @@ def logout(request):
     finally:
         return HttpResponseRedirect(next_url)
 
+
+def forget_passwd(request):
+
+
+    return
+
 def _set_base(request, template):
     _user = User(request.user.id)
     _user_context = _user.read()

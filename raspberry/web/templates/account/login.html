@@ -1,8 +1,7 @@
 {% extends "account/account_base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans 'sign in' %}{% endblock %}
-
+{% block title %}{% trans "sign in" %}{% endblock %}
 {% block form %}
     <form action="{% url 'web_login' %}" method="POST" id="login">
         {% csrf_token %}

@@ -46,8 +46,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.media',
   'django.contrib.messages.context_processors.messages',
   'django.core.context_processors.static',
-  #'zinnia.context_processors.version',
-) # Optional
+)
 
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'

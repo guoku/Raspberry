@@ -1,6 +1,7 @@
 # coding=utf-8
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.utils.log import getLogger
@@ -19,7 +20,8 @@ TEMPLATE = 'user/index.html'
 log = getLogger('django')
 
 def user_index(request, user_id):
-    return user_likes(request, user_id)
+    return HttpResponseRedirect(reverse('web_user_likes', args=[user_id]))
+    # return user_likes(request, user_id)
 
 
 def user_likes(request, user_id, template=TEMPLATE):

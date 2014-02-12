@@ -4,6 +4,11 @@ from defaults import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
 
 from mongoengine import register_connection 
 register_connection('guoku-db', 'guoku')
@@ -12,7 +17,7 @@ register_connection('log-db', 'guoku_log')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_12_12',
+        'NAME': 'guoku_11_21',
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': 'localhost',
@@ -24,7 +29,7 @@ DATABASES = {
     },
 }
 #DATABASE_ROUTERS = ['router.AuthRouter']
-
+'''
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.cache.RedisCache",
@@ -37,17 +42,18 @@ CACHES = {
         }
     }
 }
-#CACHES = {
-#    'default': {
-#        'BACKEND': 'redis_cache.RedisCache',
-#        'LOCATION': 'localhost:6379',
-#        'TIMEOUT:': 864000,
-#        'OPTIONS': {
-#            'DB': 1,
-#            'PARSER_CLASS': 'redis.connection.HiredisParser'
-#        },
-#    },
-#}
+'''
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'TIMEOUT:': 864000,
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        },
+    },
+}
 
 # session
 #SESSION_ENGINE = 'redis_sessions.session'
@@ -148,8 +154,24 @@ INSTALLED_APPS = (
     'management',
     'mobile',
     'seller',
-    'stats',
     'web',
     # 'redis_admin',
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        }, }
+}
 
