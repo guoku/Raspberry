@@ -108,15 +108,18 @@ def note_list(request):
             _entity_id = _note_context['entity_id']
             _entity_context = Entity(_entity_id).read()
             # log.info(_entity_context)
-            # log.info( )
-            post_time = time.mktime( _note_context['post_time'].timetuple() )
-            bench_time = time.mktime( datetime.datetime(2100, 1, 1).timetuple() )
+            log.info( _note_context['post_time'] )
+            if _note_context['post_time'] is None:
+                _is_future = 0
+            else:
+                post_time = time.mktime( _note_context['post_time'].timetuple() )
+                bench_time = time.mktime( datetime.datetime(2100, 1, 1).timetuple() )
             # log.info( bench_time, post_time )
             # if _note_context['post_time'] == datetime.datetime(2100, 1, 1):
-            if post_time == bench_time:
-                _is_future = 1
-            else:
-                _is_future = 0
+                if post_time == bench_time:
+                    _is_future = 1
+                # else:
+                #     _is_future = 0
             # log.info(_note_context['post_time'])
             _context_list.append({
                 'entity': _entity_context,
@@ -125,8 +128,7 @@ def note_list(request):
                 'is_future': _is_future,
             })
         except Exception, e:
-            pass
-            # log.error("Error: %s" % e.message)
+            log.error("Error: %s" % e.message)
         # log.info(_context_list)
 
     return render_to_response( 
