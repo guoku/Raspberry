@@ -1,7 +1,10 @@
 # coding=utf-8
+from django.utils.log import getLogger
 from django import template
 from django.conf import settings
 register = template.Library()
+
+log = getLogger('django')
 
 
 def display_entity_row(entity_context):
@@ -33,6 +36,7 @@ def display_category_row(category_context):
 register.inclusion_tag("category/partial/row.html")(display_category_row)
 
 def display_note_row(context):
+    log.info(context)
     return {
         "note_context" : context['note'],
         "entity_context" : context['entity'],

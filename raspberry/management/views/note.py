@@ -4,9 +4,10 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from urlparse import urlparse
-import HTMLParser
-import re 
+from django.utils.log import getLogger
+# from urlparse import urlparse
+# import HTMLParser
+# import re
 import datetime
 import time
 import json
@@ -18,6 +19,7 @@ from management.tasks import ArrangeSelectionTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 
+log = getLogger('django')
 
 @login_required
 @staff_only
@@ -98,12 +100,15 @@ def note_list(request):
         _note_id_list = Note.find(entity_id=_select_entity_id)
         
     _context_list = []
+    # log.info(_note_id_list)
     for _note_id in _note_id_list:
         try:
             _note = Note(_note_id)
             _note_context = _note.read()
             _entity_id = _note_context['entity_id']
             _entity_context = Entity(_entity_id).read()
+            # log.info(_entity_context)
+            log.info( _note_context['post_time'] )
 
             if _note_context['post_time'] == datetime.datetime(2100, 1, 1):
                 _is_future = 1
@@ -117,8 +122,8 @@ def note_list(request):
                 'is_future': _is_future,
             })
         except Exception, e:
-            pass
-
+            log.error("Error: %s" % e.message)
+        # log.info(_context_list)
     return render_to_response( 
         'note/list.html', 
         {
