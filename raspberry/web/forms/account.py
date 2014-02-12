@@ -59,7 +59,7 @@ class LocationSelectField(forms.MultiValueField):
 class SignInAccountForm(forms.Form):
     error_messages = {
         'email_not_exist': _("email is not signed up."),
-        # 'password_mismatch': _("The two password fields didn't match."),
+        'wrong_password': _("The password is wrong."),
     }
 
     next = forms.CharField(required=False, widget=forms.HiddenInput())
@@ -79,15 +79,18 @@ class SignInAccountForm(forms.Form):
             )
         return user_id
 
-    def signin(self):
-        uid = self.cleaned_data['email']
-        password = self.cleaned_data['password']
+    def clean(self):
+        cleaned_data = super(SignInAccountForm, self).clean()
+        uid = cleaned_data['email']
+        password = cleaned_data['password']
         username = User(uid).get_username()
-        log.info("username %s" % password)
-
         _user = authenticate(username=username, password=password)
-        return _user
-
+        if not _user:
+            raise forms.ValidationError(
+                self.error_messages['wrong_password']
+            )
+        cleaned_data['user'] = _user
+        return cleaned_data
 
 class SignUpAccountFrom(forms.Form):
     error_messages = {
@@ -150,7 +153,7 @@ class SignUpAccountBioFrom(forms.Form):
                                label = _('gender'), help_text = _(''))
     website = forms.URLField(widget=forms.TextInput(attrs={'class':'text-input'}),
                              label=_('website'), help_text=_(''))
-    state = forms.CharField(widget=forms.Select(attrs={"name" : "location", "class" : "location"}))
+    location = forms.CharField(widget=forms.Select(attrs={"name" : "location", "class" : "location"}))
     city = forms.CharField(widget=forms.Select(attrs={'name' : 'city', 'class' : 'city'}))
 
 class SettingAccountForm(forms.Form):
