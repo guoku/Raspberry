@@ -108,16 +108,16 @@ def note_list(request):
             _entity_id = _note_context['entity_id']
             _entity_context = Entity(_entity_id).read()
             # log.info(_entity_context)
-<<<<<<< HEAD
-            log.info( _note_context['post_time'] )
-
-=======
->>>>>>> jiaxin
-            if _note_context['post_time'] == datetime.datetime(2100, 1, 1):
+            # log.info( )
+            post_time = time.mktime( _note_context['post_time'].timetuple() )
+            bench_time = time.mktime( datetime.datetime(2100, 1, 1).timetuple() )
+            # log.info( bench_time, post_time )
+            # if _note_context['post_time'] == datetime.datetime(2100, 1, 1):
+            if post_time == bench_time:
                 _is_future = 1
             else:
                 _is_future = 0
-            log.info(_note_context['post_time'])
+            # log.info(_note_context['post_time'])
             _context_list.append({
                 'entity': _entity_context,
                 'note': _note_context,
@@ -125,15 +125,12 @@ def note_list(request):
                 'is_future': _is_future,
             })
         except Exception, e:
-            log.error("Error: %s" % e.message)
+            pass
+            # log.error("Error: %s" % e.message)
         # log.info(_context_list)
-<<<<<<< HEAD
+
     return render_to_response( 
-        'note/list.html', 
-=======
-    return render_to_response(
         'note/list.html',
->>>>>>> jiaxin
         {
             'active_division' : 'note',
             'nav_filter' : _nav_filter,
