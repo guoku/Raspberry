@@ -44,7 +44,7 @@ class EntityStats(object):
             _hd1 = _hd1.filter(neo_category__id = neo_category_id)
 
         if group == None:
-            count = _hd1.count()
+            count = _hd1.aggregate(Sum('like_count'))['like_count__sum']
             d = {"count" : count}
             return [d]
 
