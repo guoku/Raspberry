@@ -114,13 +114,21 @@ def selection(request, template='main/selection.html'):
 
 @require_http_methods(['GET'])
 def popular(request, template='main/popular.html'):
+    _scale = {
+        'd': 'daily',
+        'w': 'weekly',
+        'm': 'monthly',
+    }
+
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
-    _scale = request.GET.get('group', 'daily')  # d, w, m
+    _group = request.GET.get('group', 'd')  # d, w, m
+
+
 
     # 先用精选数据来模拟热门 TODO
     # _entity_id_list = [x['entity_id'] for x in NoteSelection.objects[0:60]]
-    _popular_entities = popularity.read_popular_entity_from_cache(scale = _scale)
+    _popular_entities = popularity.read_popular_entity_from_cache(scale = _scale[_group])
     # log.info(_popular_entities['data'])
     # return HttpResponse(_popular_entities)
     _popular_list = []
@@ -140,7 +148,7 @@ def popular(request, template='main/popular.html'):
         template,
         {
             # 'main_nav_deliver' : 'popular',
-            'group' : _scale,
+            'group' : _group,
             'user_context' : _user_context,
             'recent_time' : '10小时前',
             'popular_list' : _popular_list
