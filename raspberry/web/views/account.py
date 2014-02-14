@@ -11,6 +11,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 from django.conf import settings
 from web import taobao_utils
+from web import sina_utils
 from web import web_utils
 from utils import fetcher
 import json
@@ -58,9 +59,20 @@ class RegisterWizard(SessionWizardView):
             auth_login(request, _user)
             _user_inst = User(_user.id)
             bio_data = bio_form.cleaned_data
-            _user_inst.set_profile(None, location = bio_data['location'], city = bio_data['city'], gender = bio_data['gender'], bio = bio_data['bio'], website = bio_data['website']) 
+            _user_inst.set_profile(None, location = bio_data['location'], city = bio_data['city'],
+                                   gender = bio_data['gender'], bio = bio_data['bio'], website = bio_data['website']) 
             return HttpResponseRedirect(reverse("web_selection"))
         return HttpResponse("OK")
+
+def ThirdPartyRegisterWizard(SessionWizardView):
+    def get_template_names(self):
+        pass
+
+    def render(self, form=None, **kwargs):
+        pass
+
+    def done(self, form_list, **kwargs):
+        pass
 
 def login(request, template = 'account/login.html'):
     redirect_url = web_utils.get_login_redirect_url(request)
@@ -96,13 +108,33 @@ def login(request, template = 'account/login.html'):
             context_instance = RequestContext(request)
         )
 
+@require_GET
 def login_by_sina(request):
-    pass
+    request.session['auth_source'] = "login_page"
+    return HttpResponseRedirect(sina_utils.get_login_url())
 
+@require_GET
+def auth_by_sina(request):
+    code = request.GET.get("code", None)
+    if code:
+        sina_data = sina_utils.get_auth_data(code)
+        source = request.session.get('auth_source', None)
+        if source:
+            pass
+#        next_url = request.session.get("next_redirect_url", None)
+#        if not next_url:
+#            return HttpResponse("第三方登录失败，可能是因为您没有启用cookies，请启用cookies重试")
+#        return HttpResponseRedirect(next_url)
+#    else:
+#        return HttpResponse("第三方登录失败, 认证方返回结果异常，请稍后再试")
 
 def login_by_taobao(request):
     pass
 
+
+def third_party_login_check(request):
+
+    pass  
 
 @login_required
 def logout(request):
@@ -329,7 +361,6 @@ def bind_taobao_check(request):
             return HttpResponse("unknow error")
     else:
         HttpResponseRedirect(request.META['HTTP_REFERER'])
-
 
 @login_required
 def bind_taobao_shop(request):

@@ -10,9 +10,7 @@ urlpatterns = patterns(
     'web.views.account',
     # url('^login/$', 'login', name='web_login'),
     url(r'^forget-passwd/', 'forget_passwd', name='web_forget_passwd'),
-    url('^login/sina/$', 'login_by_sina', name='web_login_by_sina'),
-    url('^login/taobao/$', 'login_by_taobao', name='web_login_by_taobao'),
-
+    url('^thirdparty/login/check/$', 'third_party_login_check', name='web_third_party_login_check'),)
     # url('^logout/$', 'logout', name='web_logout'),
     url('register/$', RegisterWizard.as_view(FORMS), name='web_register'),
 

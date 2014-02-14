@@ -26,7 +26,9 @@ urlpatterns += patterns(
     'web.views.account',
     url(r'^login/$', 'login', name="web_login"),
     url(r'^logout/$', 'logout', name="web_logout"),
-
+    url(r'^sina/login$', 'login_by_sina', name="web_login_by_sina"),
+    url(r'^sina/auth/$', 'auth_by_sina', name="web_auth_by_sina"),
+    url('^taobao/login/$', 'login_by_taobao', name='web_login_by_taobao'),
     url(r'^taobao/bind/$', 'bind_taobao', name="bind_taobao"),
     url(r'^taobao/auth/$', 'taobao_auth', name="taobao_auth"),
     url(r'^taobao/binding/check/$', 'bind_taobao_check', name="check_taobao_binding"),
