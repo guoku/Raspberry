@@ -121,6 +121,12 @@
                 <li {% if sort_by == "note" and reverse %}class="active"{% endif %}>
                     <a href="javascript:;" id="note-order">点评数升序</a>
                 </li>
+                <li {% if sort_by == "like" and reverse == False %}class="active"{% endif %}>
+                    <a href="javascript:;" id="like-order">喜爱数降序</a>
+                </li>
+                <li {% if sort_by == "like" and reverse %}class="active"{% endif %}>
+                    <a href="javascript:;" id="like-order">喜爱数升序</a>
+                </li>
             </ul>
         </div>
 
@@ -137,7 +143,8 @@
                         <th>计划</th>
                         <th>分成</th>
                         <th>创建时间</th>
-                        <th>点评数</th>
+                        <th>点评</th>
+                        <th>喜爱</th>
                         <th>购买链接</th>
                         <th>操作</th>
                     </tr>
@@ -175,6 +182,12 @@
             });
             sortButtons.eq(4).click(function () {
                 sort("note", 1);
+            });
+            sortButtons.eq(5).click(function () {
+                sort("like", 0);
+            });
+            sortButtons.eq(6).click(function () {
+                sort("like", 1);
             });
 
             function sort(type, order) {
