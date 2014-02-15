@@ -23,6 +23,7 @@
     <td><p class="text-info">{%if entity_context.commission_rate > 0 %}{{ entity_context.commission_rate }}{%endif%}</p></td>
     <td width="100"><p class="text-info">{{ entity_context.created_time|date_format }}</p></td>
     <td width="50"><p class="text-info">{{ entity_context.note_id_list|count }}</p></td>
+    <td width="50"><p class="text-info">{{ entity_context.like_count }}</p></td>
     <td width="80"><p class="text-info">{{ entity_context.item_id_list|count }}</p></td>
     <td width="80">
         <div class="btn-group">

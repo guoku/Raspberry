@@ -381,7 +381,7 @@ def entity_list(request):
             category_id = _category_id,
             status = _status
         )
-    
+        
         if _sort_by == 'random':
             _paginator = None
             _entity_id_list = Entity.random(
