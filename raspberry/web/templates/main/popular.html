@@ -11,7 +11,7 @@
                 <span class="sep">|</span>
                 <a href="{% url 'web_popular' %}?group=w" {% if group == 'w' %}class="active"{% endif %}>7 天</a>
                 <span class="sep">|</span>
-                <a href="{% url 'web_popular' %}?group=m" {% if group == 'm' %}class="active"{% endif %}>30 天</a>
+{#                <a href="{% url 'web_popular' %}?group=m" {% if group == 'm' %}class="active"{% endif %}>30 天</a>#}
             </div>
 
             <span class="recent">最近更新：{{ recent_time }}</span>

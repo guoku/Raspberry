@@ -117,7 +117,7 @@ def popular(request, template='main/popular.html'):
     _scale = {
         'd': 'daily',
         'w': 'weekly',
-        'm': 'monthly',
+        # 'm': 'monthly',
     }
 
     _user = get_request_user(request.user.id)
@@ -128,7 +128,11 @@ def popular(request, template='main/popular.html'):
 
     # 先用精选数据来模拟热门 TODO
     # _entity_id_list = [x['entity_id'] for x in NoteSelection.objects[0:60]]
-    _popular_entities = popularity.read_popular_entity_from_cache(scale = _scale[_group])
+    try:
+        _popular_entities = popularity.read_popular_entity_from_cache(scale = _scale[_group])
+    except KeyError, e:
+        log.info("INFO: %s" % e.message)
+        raise Http404
     # log.info(_popular_entities['data'])
     # return HttpResponse(_popular_entities)
     _popular_list = []
