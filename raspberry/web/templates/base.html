@@ -45,9 +45,9 @@
                 <a href="{% url 'web_user_index' user.id %}" class="user-avatar">
                     <img src="{{ user_context.avatar_small }}" width="30" height="30">
                 </a>
-            {% else %}
-                <a href="{% url 'web_register' %}">{% trans "sign up" %}</a>
-                <a href="{% url 'web_login' %}">{% trans "sign in" %}</a>
+{#            {% else %}#}
+{#                <a href="{% url 'web_register' %}">{% trans "sign up" %}</a>#}
+{#                <a href="{% url 'web_login' %}">{% trans "sign in" %}</a>#}
             {% endif %}
         </div>
 
@@ -59,6 +59,12 @@
 </div>
 
 <div id="main" class="clearfix">
+    {% if not user.is_authenticated %}
+    <div>
+        <a href="{% url 'web_register' %}">{% trans "sign up" %}</a>
+        <a href="{% url 'web_login' %}">{% trans "sign in" %}</a>
+    </div>
+    {% endif %}
     {% block content %}{% endblock %}
 </div>
 

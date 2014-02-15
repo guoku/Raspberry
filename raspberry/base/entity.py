@@ -208,7 +208,7 @@ class Entity(object):
 
     @classmethod
     def get_entity_id_by_hash(cls, entity_hash):
-        _cache_key = 'entity_%s_hash_to_id'%entity_hash
+        _cache_key = 'entity_%s_hash_to_id' % entity_hash
         _entity_id = cache.get(_cache_key)
         if _entity_id == None:
             try:
