@@ -139,11 +139,37 @@ button {
     height: 28px;
 }
 
+/* welcome----------------- */
+#welcome {
+    /*display: none;*/
+    position: relative;
+    background-color: #fbfbfb;
+    top: 49px;
+    height: 165px;
+    width: 100%;
+}
+
+#welcome p {
+    position: relative;
+    top: 0;
+    margin: auto 50px;
+}
+
+#welcome ul {
+    position: absolute;
+}
+
+#welcome li {
+    float: left;
+}
+
+/* ------------------------- */
 
 /*-----------------------------------------*/
 #main {
     width: 960px;
     margin: 75px auto 50px;
+    /*margin: 240px auto 50px;*/
 }
 
 /*--------------------------------------------*/
@@ -166,6 +192,9 @@ button {
 #footer .site-info a, #footer .site-info span {
     margin-left: 10px;
 }
+
+
+
 
 
 /*account-form--------------*/
