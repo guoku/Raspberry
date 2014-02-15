@@ -208,11 +208,12 @@ def edit_entity(request, entity_id):
             if _item_context.has_key('shop_nick'):
                 _shop_context = TaobaoShop(_item_context['shop_nick']).read()
                 if _shop_context != None:
-                    _item_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
-                    if _shop_context['extended_info']['orientational']:
-                        _entity_context['commission_type'] = 'orientational'
-                    else:
-                        _entity_context['commission_type'] = 'general'
+                    if _shop_context['extended_info']['commission'] == True:
+                        _item_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                        if _shop_context['extended_info']['orientational']:
+                            _entity_context['commission_type'] = 'orientational'
+                        else:
+                            _entity_context['commission_type'] = 'general'
             _item_context_list.append(_item_context)
 
 
@@ -418,11 +419,12 @@ def entity_list(request):
                     if _item_context.has_key('shop_nick'):
                         _shop_context = TaobaoShop(_item_context['shop_nick']).read()
                         if _shop_context != None:
-                            _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
-                            if _shop_context['extended_info']['orientational']:
-                                _entity_context['commission_type'] = 'orientational'
-                            else:
-                                _entity_context['commission_type'] = 'general'
+                            if _shop_context['extended_info']['commission'] == True:
+                                _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                                if _shop_context['extended_info']['orientational']:
+                                    _entity_context['commission_type'] = 'orientational'
+                                else:
+                                    _entity_context['commission_type'] = 'general'
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
