@@ -2,6 +2,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth import authenticate
@@ -110,17 +111,38 @@ def login(request, template = 'account/login.html'):
 
 @require_GET
 def login_by_sina(request):
-    request.session['auth_source'] = "login_page"
+    request.session['auth_source'] = "login"
+    next_url = request.GET.get('next', None)
+    if next_url:
+        request.session['auth_next_url'] = next_url 
     return HttpResponseRedirect(sina_utils.get_login_url())
 
 @require_GET
 def auth_by_sina(request):
     code = request.GET.get("code", None)
     if code:
-        sina_data = sina_utils.get_auth_data(code)
+        _sina_data = sina_utils.get_auth_data(code)
+        try:
+            _user_inst = User.login_by_sina(_sina_data['sina_id'], sina_token = _sina_data['access_token'],
+                           screen_name = _sina_data['screen_name'], expires_in = _sina_data['expires_in'])
+        except User.LoginSinaIdDoesNotExist, e:
+            _user_inst = None
         source = request.session.get('auth_source', None)
         if source:
-            pass
+            if source == "login":
+                if _user_inst:
+                    user = _user_inst.authenticate_without_password()
+                    auth_login(request, user)
+                    next_url = request.session.get('auth_next_url', reverse("web_selection"))
+                    return HttpResponseRedirect(next_url)
+                else:
+                    token = web_utils.generate_random_storage_key("sina_login")
+                    web_utils.create_temporary_storage(token, sina_data)
+                    return HttpResponseRedirect(reverse("web_third_party_register") + "?source=sina&token=" + token)
+            elif source == "bind":
+                pass
+                
+        
 #        next_url = request.session.get("next_redirect_url", None)
 #        if not next_url:
 #            return HttpResponse("第三方登录失败，可能是因为您没有启用cookies，请启用cookies重试")

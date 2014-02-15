@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core.cache import cache
 
-import 
 def get_login_redirect_url(request):
     next_url = get_redirect_url(request)
     if next_url:

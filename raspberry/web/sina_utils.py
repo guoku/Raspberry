@@ -1,18 +1,17 @@
 from django.conf import settings
-from base.cache import set_to_cache, get_from_cache, remove_from_cache
 from weibo import APIClient
 
 APP_KEY = getattr(settings, 'SINA_APP_KEY', None)
 APP_SECRET = getattr(settings, 'SINA_APP_SECRET', None)
 CALLBACK_URL = getattr(settings, 'SINA_BACK_URL', None)
 
-def get_login_url(token):
-    auth_client = APIClient(APP_KEY, APP_SECRET, CALLBACK_URL + "?token=" + token)
+def get_login_url():
+    auth_client = APIClient(APP_KEY, APP_SECRET, CALLBACK_URL)
     return auth_client.get_authorize_url()
 
 def get_sina_user_info(access_token, expires_in):
     auth_client = APIClient(APP_KEY, APP_SECRET, CALLBACK_URL)
-    auth_client.set_access_token(access_token = access_token, expires_in = expires_in)
+    auth_client.set_access_token(access_token, expires_in)
     sina_id = auth_client.get.account__get_uid()['uid']
     return auth_client.get.users__show(access_token = access_token, uid = sina_id)
 
