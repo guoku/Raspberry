@@ -8,6 +8,8 @@ def get_login_redirect_url(request):
 
 def get_redirect_url(request):
     next_url = request.REQUEST.get("next", None)
+    if not next_url:
+        next_url = request.META.get('HTTP_REFERER', None)
     return next_url
 
 def parse_taobao_id_from_url(url):

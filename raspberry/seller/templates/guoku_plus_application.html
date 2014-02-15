@@ -1,0 +1,13 @@
+{% extends "seller_base.html" %}
+{% block title %}
+    果库卖家
+{% endblock %}
+
+{% block content %}
+    <div class="span10">
+        <form action="{% url 'seller_apply_guoku_plus' %}" method="post">
+            {{ form.as_table }}
+            <input type="submit" value="提交"/>
+        </form>
+    </div>
+{% endblock %}

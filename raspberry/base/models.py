@@ -75,6 +75,9 @@ class Neo_Category(models.Model):
     class Meta:
         ordering = ['id']
 
+    def __unicode__(self):
+        return self.title
+
 class Category(models.Model):
     pid = models.IntegerField(default = 0)
     title = models.CharField(max_length = 256)
