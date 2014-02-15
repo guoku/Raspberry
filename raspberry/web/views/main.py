@@ -1,5 +1,6 @@
 # coding=utf-8
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.views.decorators.http import require_http_methods
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -15,6 +16,7 @@ from base.note import Note
 from base.entity import Entity
 from base.user import User
 from base.category import Old_Category
+import base.popularity as popularity
 from util import get_request_user, get_request_user_context, user_already_like_entity
 
 log = getLogger('django')
@@ -22,6 +24,7 @@ log = getLogger('django')
 def index(request):
     return HttpResponseRedirect(reverse('web_selection'))
 
+@require_http_methods(['GET'])
 def selection(request, template='main/selection.html'):
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
@@ -109,19 +112,36 @@ def selection(request, template='main/selection.html'):
         return JSONResponse(data=_ret)
         # return HttpResponse(json.dumps(_ret))
 
+@require_http_methods(['GET'])
 def popular(request, template='main/popular.html'):
+    _scale = {
+        'd': 'daily',
+        'w': 'weekly',
+        # 'm': 'monthly',
+    }
+
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
     _group = request.GET.get('group', 'd')  # d, w, m
 
+
+
     # 先用精选数据来模拟热门 TODO
-    _entity_id_list = [x['entity_id'] for x in NoteSelection.objects[0:30]]
+    # _entity_id_list = [x['entity_id'] for x in NoteSelection.objects[0:60]]
+    try:
+        _popular_entities = popularity.read_popular_entity_from_cache(scale = _scale[_group])
+    except KeyError, e:
+        log.info("INFO: %s" % e.message)
+        raise Http404
+    # log.info(_popular_entities['data'])
+    # return HttpResponse(_popular_entities)
     _popular_list = []
 
-    for _id in _entity_id_list:
-        _entity = Entity(_id)
+    for row in _popular_entities['data'][0:60]:
+        # log.info(_id)
+        _entity = Entity(row[0])
         _entity_context = _entity.read()
-        _is_user_already_like = user_already_like_entity(request.user.id, _id)
+        _is_user_already_like = user_already_like_entity(request.user.id, row[0])
 
         _popular_list.append({
             'is_user_already_like' : _is_user_already_like,
@@ -131,7 +151,7 @@ def popular(request, template='main/popular.html'):
     return render_to_response(
         template,
         {
-            'main_nav_deliver' : 'popular',
+            # 'main_nav_deliver' : 'popular',
             'group' : _group,
             'user_context' : _user_context,
             'recent_time' : '10小时前',
