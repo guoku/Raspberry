@@ -41,10 +41,10 @@ class RegisterWizard(SessionWizardView):
 
     def get_template_names(self):
         # log.info("template %s" % self.steps.current)
-        print self.steps.current
         return [TEMPALTES[self.steps.current]]
 
     def render(self, form=None, **kwargs):
+        print self.steps.current, self.request.GET
         if self.request.user.is_authenticated():
             next_url = self.request.META.get('HTTP_REFERER', reverse("web_selection"))
             return HttpResponseRedirect(next_url)
@@ -55,13 +55,13 @@ class RegisterWizard(SessionWizardView):
         log.info(form_list)
         signup_form = form_list[0]
         bio_form = form_list[1]
-        if signup_from.is_valid():
+        if signup_form.is_valid():
             _user = signup_form.signup()
-            auth_login(request, _user)
             _user_inst = User(_user.id)
             bio_data = bio_form.cleaned_data
             _user_inst.set_profile(None, location = bio_data['location'], city = bio_data['city'],
                                    gender = bio_data['gender'], bio = bio_data['bio'], website = bio_data['website']) 
+            auth_login(self.request, _user)
             return HttpResponseRedirect(reverse("web_selection"))
         return HttpResponse("OK")
 
