@@ -100,26 +100,18 @@ def note_list(request):
         _note_id_list = Note.find(entity_id=_select_entity_id)
 
     _context_list = []
-    # log.info(_note_id_list)
     for _note_id in _note_id_list:
         try:
             _note = Note(_note_id)
             _note_context = _note.read()
             _entity_id = _note_context['entity_id']
             _entity_context = Entity(_entity_id).read()
-            # log.info(_entity_context)
-            # log.info( _note_context['post_time'] )
             _is_future = 0
             if _note_context['post_time'] is not None:
                 post_time = time.mktime( _note_context['post_time'].timetuple() )
                 bench_time = time.mktime( datetime.datetime(2100, 1, 1).timetuple() )
-            # log.info( bench_time, post_time )
-            # if _note_context['post_time'] == datetime.datetime(2100, 1, 1):
                 if post_time == bench_time:
                     _is_future = 1
-                # else:
-                #     _is_future = 0
-            # log.info(_note_context['post_time'])
             _context_list.append({
                 'entity': _entity_context,
                 'note': _note_context,
@@ -128,7 +120,6 @@ def note_list(request):
             })
         except Exception, e:
             log.error("Error: %s" % e.message)
-        # log.info(_context_list)
 
     return render_to_response( 
         'note/list.html',
@@ -237,3 +228,34 @@ def post_selection_delay(request, entity_id, note_id):
         post_time = _post_time
     )
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+@staff_only
+def note_comment_list(request):
+    _page_num = int(request.GET.get("p", "1"))
+    _comment_count = Note.comment_count()
+    _paginator = Paginator(_page_num, 30, _comment_count)
+    
+    _context_list = []
+    for _comment in Note.find_comment(offset=_paginator.offset, count=_paginator.count_in_one_page):
+        #try:
+            print _comment[0]
+            print _comment[1]
+            _comment_context = Note(_comment[0]).read_comment(_comment[1]) 
+            print _comment_context
+            _comment_context['creator'] = User(_comment_context['creator_id']).read() 
+            _context_list.append(_comment_context)
+        #except Exception, e:
+        #    print e
+        #    pass
+    
+    return render_to_response( 
+        'note/comment_list.html',
+        {
+            'active_division' : 'note',
+            'context_list' : _context_list,
+            'paginator' : _paginator,
+        },
+        context_instance = RequestContext(request)
+    )

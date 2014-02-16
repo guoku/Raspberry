@@ -372,6 +372,32 @@ class Note(object):
             return True
         return False
 
+    @classmethod
+    def comment_count(cls, entity_id = None, note_id = None):
+        _hdl = NoteCommentModel.objects.all()
+        if entity_id != None:
+            _hdl = _hdl.filter(entity_id = entity_id)
+        if note_id != None:
+            _hdl = _hdl.filter(note_id = note_id)
+        return _hdl.count()
+        
+    
+    @classmethod
+    def find_comment(cls, entity_id = None, note_id = None, offset = None, count = None):
+        _hdl = NoteCommentModel.objects.all()
+        if entity_id != None:
+            _hdl = _hdl.filter(entity_id = entity_id)
+        if note_id != None:
+            _hdl = _hdl.filter(note_id = note_id)
+        
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
+        _list = map(lambda x: [x.note_id, x.id], _hdl)
+        return _list
+
+
+
     def read_comment(self, comment_id, json = False):
         _cache_key = 'note_comment_%s_context'%comment_id
         _context = cache.get(_cache_key)
