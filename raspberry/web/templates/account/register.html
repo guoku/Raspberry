@@ -5,6 +5,20 @@
 {% block form %}
     <form action="" method="POST" id="register">
         {% csrf_token %}
+        {% if third_party_data%}
+        <fieldset>
+            <div id="third_party_info">
+                <div class="third-party-user">
+                    <div class="avatar">
+                        <img src="{{ third_party_data.avatar_large }}" />
+                    </div>
+                    <h4 class="heading m0">Hi {{ third_party_data.screen_name }}，</h4>
+                    <span>欢迎通过{%if source == 'sina' %}新浪微博{% else %} {% if source == 'taobao' %}淘宝{% endif %}{% endif %}，创建果库帐号</span>
+                </div>
+            
+            </div>
+        </fieldset>
+        {% endif %}
         <h2>注册帐号</h2> | 已有帐号？<a href="{% url 'web_login' %}">请登录</a>
         <p>第{{ wizard.steps.step1 }}步，共{{ wizard.steps.count }}步</p>
         {{ wizard.management_form }}
@@ -38,4 +52,11 @@
             </div>
         </div>
     </form>
+{% endblock %}
+
+{% block third_party_login %}
+    {% if third_party_data %}
+    {% else %}
+        {{ block.super }}
+    {% endif %}
 {% endblock %}

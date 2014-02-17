@@ -349,6 +349,37 @@ class User(object):
         except:
             return None
 
+    def bind_sina(self, sina_id, screen_name, access_token, expires_in = 0):
+        try:
+            _token = SinaTokenModel.objects.get(user_id = self.user_id, sina_id = sina_id)
+            _token.screen_name = screen_name
+            _token.access_token = access_token
+            _token.expires_in = expires_in
+            _token.save()
+        except SinaTokenModel.DoesNotExist:
+            if SinaTokenModel.objects.filter(sina_id = sina_id).count() > 0:
+                raise User.SinaIdExistAlready(sina_id)
+            
+            if SinaTokenModel.objects.filter(user_id = self.user_id).count() > 0:
+                raise User.UserBindSinaAlready()
+            
+            SinaTokenModel.objects.create(
+                user_id = self.user_id,
+                sina_id = sina_id,
+                screen_name = screen_name,
+                access_token = access_token,
+                expires_in = expires_in
+            )
+        self.__reset_basic_info_to_cache()
+    
+    def unbind_sina(self):
+        try:
+            _sina_token_obj = SinaTokenModel.objects.get(user_id = self.user_id)
+            _sina_token_obj.delete()
+            self.__reset_basic_info_to_cache()
+        except SinaTokenModel.DoesNotExist:
+            pass
+ 
     def bind_taobao(self, taobao_id, screen_name, taobao_token, expires_in = 0):
         try:
             _token = TaobaoTokenModel.objects.get(user_id = self.user_id, taobao_id = taobao_id)

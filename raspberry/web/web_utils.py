@@ -1,6 +1,19 @@
 from django.conf import settings
 from django.core.cache import cache
 
+from base.user import User
+import random
+import string
+def signup(email, password, nickname, **kwargs):
+    _new_user = User.create(email = email, password = password)
+    _new_user.set_profile(nickname = nickname,
+                          location = kwargs.get("location"),
+                          city = kwargs.get("city"),
+                          gender = kwargs.get("gender"),
+                          bio = kwargs.get("bio"),
+                          website = kwargs.get("website"))
+    return _new_user
+
 def get_login_redirect_url(request):
     next_url = get_redirect_url(request)
     if next_url:
@@ -43,3 +56,4 @@ def update_temporary_storage(key, **kwargs):
     data = get_temporary_storage(key)
     data.update(kwargs)
     cache.set(key, data)
+

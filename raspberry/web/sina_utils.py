@@ -31,21 +31,6 @@ def get_sina_user_friends(sina_id, access_token, expires_in):
             break
     return friends
 
-#def _gen_sina_user_info_cache_key(sina_id):
-#    return "sina_user_info_cache_key_%s" % sina_id
-#
-#def set_sina_user_info_cache(sina_id, sina_user_info):
-#    context = {}
-#    context['screen_name'] = sina_user_info.name
-#    context['avatar_small'] = sina_user_info.profile_image_url
-#    context['avatar_large'] = sina_user_info.avatar_large
-#    context['location'] = sina_user_info.location
-#    context['gender'] = sina_user_info.gender
-#    set_to_cache(_gen_sina_user_info_cache_key(sina_id), context)
-#
-#def get_sina_user_info_cache(sina_id):
-#    return get_from_cache(_gen_sina_user_info_cache_key(sina_id))
-
 def get_auth_data(code):
     auth_client = APIClient(APP_KEY, APP_SECRET, CALLBACK_URL)
     auth_record = auth_client.request_access_token(code)
@@ -57,4 +42,8 @@ def get_auth_data(code):
     sina_data['expires_in'] = auth_record.expires_in
     sina_data['sina_id'] = sina_user.id
     sina_data['screen_name'] = sina_user.name
+    sina_data['avatar_small'] = sina_user.profile_image_url
+    sina_data['avatar_large'] = sina_user.avatar_large
+    sina_data['gender'] = sina_user.gender
+    sina_data['location'] = sina_user.location
     return sina_data

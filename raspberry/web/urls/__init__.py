@@ -28,6 +28,7 @@ urlpatterns += patterns(
     url(r'^logout/$', 'logout', name="web_logout"),
     url(r'^sina/login$', 'login_by_sina', name="web_login_by_sina"),
     url(r'^sina/auth/$', 'auth_by_sina', name="web_auth_by_sina"),
+    url(r'^sina/unbind/$', 'unbind_sina', name="web_unbind_sina"),
     url('^taobao/login/$', 'login_by_taobao', name='web_login_by_taobao'),
     url(r'^taobao/bind/$', 'bind_taobao', name="bind_taobao"),
     url(r'^taobao/auth/$', 'taobao_auth', name="taobao_auth"),
