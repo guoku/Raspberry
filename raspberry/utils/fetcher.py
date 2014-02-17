@@ -125,7 +125,7 @@ def fetch_item(itemid):
         try:
             nameurl = nametag['src']
             o = urlparse(nameurl)
-            nick = parse_qs(o.query)['nick'][0]
+            nick = parse_qs(str(o.query))['nick'][0]
             break
         except:
             pass
@@ -336,7 +336,7 @@ if __name__ == '__main__':
     #print(shopid)
     #r = fetch_taobao_web("19562854760")
     #print(r)
-    result = fetch_item("37014050227")
+    result = fetch_item("36077442884")
     print result['nick']
     
 

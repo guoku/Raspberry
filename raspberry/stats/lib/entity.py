@@ -3,7 +3,7 @@
 from datetime import datetime 
 from base.models import Entity
 from django.db.models import Count,Sum
-from user import date_format
+from user import date_format,week_reformat
 
 class EntityStats(object):
 
@@ -29,8 +29,11 @@ class EntityStats(object):
             df = date_format("created_time", group)
             _hd1 = _hd1.extra(select = {"timestamp" : df}).values("timestamp")\
                     .annotate(count = Count('created_time'))
-        return list(_hd1.all())
-
+            
+            result = list(_hd1.all())
+            if group == "week":
+                result = week_reformat(result)
+            return result
 
     @classmethod 
     def new_like_count(cls, start_time, end_time = datetime.now(),
@@ -53,5 +56,8 @@ class EntityStats(object):
             df = date_format("created_time", group)
             _hd1 = _hd1.extra(select = {"timestamp" : df}).values("timestamp")\
                     .annotate(count = Sum("like_count"))
-
-        return list(_hd1.all())
+            
+            result = list(_hd1.all())
+            if group == "week":
+                result = week_reformat(result)
+            return result
