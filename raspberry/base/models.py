@@ -182,7 +182,6 @@ class Note_Poke(models.Model):
         unique_together = ('note', 'user_id')
 
 class Note_Comment(models.Model):
-    entity_id = models.IntegerField(null = False, db_index = True)
     note = models.ForeignKey(Note)
     creator = models.ForeignKey(User)
     comment = models.TextField(null = False)

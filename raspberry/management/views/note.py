@@ -59,10 +59,10 @@ def arrange_selection(request):
 @staff_only
 def note_list(request):
     _selection = request.GET.get("selection", None)
-    _select_entity_id = request.GET.get("entity_id", None)
     _nav_filter = 'all'
     _sort_by = None
     _para = {}
+    _select_entity_id = request.GET.get("entity_id", None)
     if _selection == 'only':
         _selection = 1
         _nav_filter = 'selection_only'
@@ -95,9 +95,14 @@ def note_list(request):
             sort_by = _sort_by
         )
     else:
+        _para['entity_id'] = _select_entity_id
         _note_count = Note.count(entity_id=_select_entity_id)
         _paginator = Paginator(_page_num, 30, _note_count, _para)
-        _note_id_list = Note.find(entity_id=_select_entity_id)
+        _note_id_list = Note.find(
+            entity_id = _select_entity_id,
+            offset = _paginator.offset,
+            count = _paginator.count_in_one_page
+        )
 
     _context_list = []
     for _note_id in _note_id_list:

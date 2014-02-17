@@ -249,6 +249,14 @@ class Note(object):
                 tag = _tag
             )
     
+    def clean_cache(self):
+        cache.delete('note_%s_context'%self.note_id)
+        cache.delete("note_context_%s"%self.note_id)
+
+        for _comment_obj in NoteCommentModel.objects.filter(note_id = self.note_id):
+            cache.delete('note_comment_%s_context'%_comment_obj.id)
+            
+    
     def __load_note_context_from_cache(self):
         _cache_key = 'note_%s_context'%self.note_id
         _context = cache.get(_cache_key)
@@ -383,10 +391,8 @@ class Note(object):
         
     
     @classmethod
-    def find_comment(cls, entity_id = None, note_id = None, offset = None, count = None):
+    def find_comment(cls, note_id = None, offset = None, count = None):
         _hdl = NoteCommentModel.objects.all()
-        if entity_id != None:
-            _hdl = _hdl.filter(entity_id = entity_id)
         if note_id != None:
             _hdl = _hdl.filter(note_id = note_id)
         
