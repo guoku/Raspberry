@@ -100,7 +100,6 @@ def shop_detail(request):
     if _nick:
         shop = TaobaoShop(_nick)
         shop_context = shop.read()
-        print shop_context
         item_list = Item.find_taobao_item(shop_nick =shop_context['shop_nick'], full_info=True) 
         items = []
         for item in item_list:
@@ -109,7 +108,6 @@ def shop_detail(request):
             entity = Entity(item['entity_id'])
             item_context['image'] = entity.read()['chief_image']
             items.append(item_context)
-        print 'len', len(items)
         return render_to_response("shop/detail.html",
                                   { "shop" : shop_context,
                                     "items" : items,
