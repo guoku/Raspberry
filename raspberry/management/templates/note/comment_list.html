@@ -13,6 +13,16 @@
                             精选排时间 
                         </a>
                     </li>
+                    <li>
+                        <a href="{% url 'management_note_list' %}">
+                            点评
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'management_note_comment_list' %}">
+                            评论  
+                        </a>
+                    </li>
                 </ul>
         
             </div>
@@ -40,7 +50,7 @@
                                 <td width="400"><p class="text-info">{{ comment_context.content }}</p></td>
                                 <td width="50">
                                     <div class="btn-group">
-                                        <a class="btn" href="">删</a>
+                                        <a class="btn" href="{% url 'management_delete_note_comment' comment_context.note_id comment_context.comment_id %}">删</a>
                                     </div>
                                 </td>
                             </tr>

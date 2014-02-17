@@ -239,16 +239,12 @@ def note_comment_list(request):
     
     _context_list = []
     for _comment in Note.find_comment(offset=_paginator.offset, count=_paginator.count_in_one_page):
-        #try:
-            print _comment[0]
-            print _comment[1]
+        try:
             _comment_context = Note(_comment[0]).read_comment(_comment[1]) 
-            print _comment_context
             _comment_context['creator'] = User(_comment_context['creator_id']).read() 
             _context_list.append(_comment_context)
-        #except Exception, e:
-        #    print e
-        #    pass
+        except Exception, e:
+            pass
     
     return render_to_response( 
         'note/comment_list.html',
@@ -259,3 +255,10 @@ def note_comment_list(request):
         },
         context_instance = RequestContext(request)
     )
+
+@login_required
+@staff_only
+def delete_note_comment(request, note_id, comment_id):
+    _note = Note(note_id)
+    _note.del_comment(comment_id)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])

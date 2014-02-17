@@ -38,7 +38,7 @@ def user_tag_list(request):
             })
     else:
         _user_tag_list = Tag.find_user_tag(user_id = _user_id, tag = _tag)
-    _paginator = Paginator(_page_num, 30, len(_user_tag_list))
+    _paginator = Paginator(_page_num, 30, len(_user_tag_list), {"type" : _type})
 
     _context_list = []
     for _data in _user_tag_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
