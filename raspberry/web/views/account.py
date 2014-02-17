@@ -2,6 +2,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth import authenticate
@@ -11,6 +12,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 from django.conf import settings
 from web import taobao_utils
+from web import sina_utils
 from web import web_utils
 from utils import fetcher
 import json
@@ -29,38 +31,75 @@ from validation import *
 
 MAX_SESSION_EXPIRATION_TIME = getattr(settings, 'SESSION_COOKIE_AGE', 1209600) # two weeks
 
-TEMPALTES = {
+REGISTER_TEMPLATES = {
     'register' : 'account/register.html',
     'register-bio' : 'account/register_bio.html',
 }
 
-
 class RegisterWizard(SessionWizardView):
-
     def get_template_names(self):
-        # log.info("template %s" % self.steps.current)
-        print self.steps.current
-        return [TEMPALTES[self.steps.current]]
+        return [REGISTER_TEMPLATES[self.steps.current]]
 
     def render(self, form=None, **kwargs):
         if self.request.user.is_authenticated():
             next_url = self.request.META.get('HTTP_REFERER', reverse("web_selection"))
             return HttpResponseRedirect(next_url)
         return super(RegisterWizard, self).render(form, **kwargs)
-        
 
-    def done(self, form_list, **kwargs):
-        log.info(form_list)
+    def signup(self, form_list):
         signup_form = form_list[0]
         bio_form = form_list[1]
-        if signup_from.is_valid():
-            _user = signup_form.signup()
-            auth_login(request, _user)
-            _user_inst = User(_user.id)
-            bio_data = bio_form.cleaned_data
-            _user_inst.set_profile(None, location = bio_data['location'], city = bio_data['city'], gender = bio_data['gender'], bio = bio_data['bio'], website = bio_data['website']) 
-            return HttpResponseRedirect(reverse("web_selection"))
-        return HttpResponse("OK")
+        signup_data = signup_form.cleaned_data
+        bio_data = bio_form.cleaned_data
+        _user_inst = web_utils.signup(
+            signup_data['email'], signup_data['password'], signup_data['nickname'],
+            location = bio_data['location'],
+            city = bio_data['city'],
+            gender = bio_data['gender'],
+            bio = bio_data['bio'],
+            website = bio_data['website'])
+        _user = _user_inst.authenticate_without_password()
+        auth_login(self.request, _user)
+        return _user_inst
+
+    def done(self, form_list, **kwargs):
+        self.signup(form_list)
+        return HttpResponseRedirect(reverse("web_selection"))
+
+class ThirdPartyRegisterWizard(RegisterWizard):
+    def get_template_names(self):
+        return [REGISTER_TEMPLATES[self.steps.current]]
+
+    def get_context_data(self, form, **kwargs):
+        context = super(ThirdPartyRegisterWizard, self).get_context_data(form = form, **kwargs)
+        if self.steps.current == 'register':
+            token = self.request.GET.get("token", None)
+            if not token:
+                raise Http404
+            context['third_party_data'] = web_utils.get_temporary_storage(token)
+            context['source'] = self.request.GET.get("source", None)
+        return context
+                
+    def done(self, form_list, **kwargs):
+        token = self.request.GET.get('token', None)
+        source = self.request.GET.get('source', None)
+        if not token:
+            raise Http404
+        third_party_data = web_utils.get_temporary_storage(token)
+        _user_inst = self.signup(form_list)
+        if source == "sina":
+            _user_inst.bind_sina(sina_id = third_party_data['sina_id'],
+                                 screen_name = third_party_data['screen_name'],
+                                 access_token = third_party_data['access_token'],
+                                 expires_in = third_party_data['expires_in'])
+        elif source == "taobao":
+            _user_inst.bind_taobao(taobao_id = third_party_data['taobao_id'],
+                                   screen_name = third_party_data['screen_name'],
+                                   taobao_token = third_party_data['access_token'],
+                                   expires_in = third_party_data['expires_in'])
+        else:
+            raise Http404
+        return HttpResponseRedirect(reverse("web_selection"))
 
 def login(request, template = 'account/login.html'):
     redirect_url = web_utils.get_login_redirect_url(request)
@@ -80,29 +119,67 @@ def login(request, template = 'account/login.html'):
             return HttpResponseRedirect(redirect_url)
         else:
             return render_to_response(template,
-                {
-                    'forms' : _forms,
-                },
-                context_instance = RequestContext(request)
-            )
+                                      { 'forms' : _forms,},
+                                      context_instance = RequestContext(request))
 
     elif request.method == 'GET':
         _forms = SignInAccountForm(initial={'next': redirect_url})
-        return render_to_response(
-            template,
-            {
-                'forms' : _forms,
-            },
-            context_instance = RequestContext(request)
-        )
+        return render_to_response(template,
+                                  { 'forms' : _forms, },
+                                  context_instance = RequestContext(request))
 
+@require_GET
 def login_by_sina(request):
-    pass
+    request.session['auth_source'] = "login"
+    next_url = request.GET.get('next', None)
+    if next_url:
+        request.session['auth_next_url'] = next_url 
+    return HttpResponseRedirect(sina_utils.get_login_url())
 
+@require_GET
+def auth_by_sina(request):
+    code = request.GET.get("code", None)
+    if code:
+        _sina_data = sina_utils.get_auth_data(code)
+        try:
+            _user_inst = User.login_by_sina(_sina_data['sina_id'], sina_token = _sina_data['access_token'],
+                           screen_name = _sina_data['screen_name'], expires_in = _sina_data['expires_in'])
+        except User.LoginSinaIdDoesNotExist, e:
+            _user_inst = None
+        source = request.session.get('auth_source', None)
+        if source:
+            if source == "login":
+                if _user_inst:
+                    user = _user_inst.authenticate_without_password()
+                    auth_login(request, user)
+                    next_url = request.session.get('auth_next_url', reverse("web_selection"))
+                    return HttpResponseRedirect(next_url)
+                else:
+                    token = web_utils.generate_random_storage_key("sina_login")
+                    web_utils.create_temporary_storage(token, **_sina_data)
+                    return HttpResponseRedirect(reverse("web_third_party_register") + "?source=sina&token=" + token)
+            elif source == "bind":
+                pass
+            else:
+                pass
+        else:
+            pass
+                
+        
+#        next_url = request.session.get("next_redirect_url", None)
+#        if not next_url:
+#            return HttpResponse("第三方登录失败，可能是因为您没有启用cookies，请启用cookies重试")
+#        return HttpResponseRedirect(next_url)
+#    else:
+#        return HttpResponse("第三方登录失败, 认证方返回结果异常，请稍后再试")
 
 def login_by_taobao(request):
     pass
 
+
+def third_party_login_check(request):
+
+    pass  
 
 @login_required
 def logout(request):
@@ -115,10 +192,15 @@ def logout(request):
     finally:
         return HttpResponseRedirect(next_url)
 
+@require_GET
+@login_required
+def unbind_sina(request):
+    _user_inst = User(request.user.id)
+    _user_inst.unbind_sina()
+    redirect_url = request.GET.get("next", reverse("web_selection"))
+    return HttpResponseRedirect(redirect_url)
 
 def forget_passwd(request):
-
-
     return
 
 def _set_base(request, template):
@@ -330,7 +412,6 @@ def bind_taobao_check(request):
     else:
         HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-
 @login_required
 def bind_taobao_shop(request):
     user_id = request.user.id
@@ -376,51 +457,4 @@ def bind_taobao_shop(request):
                 return HttpResponseRedirect(reverse('bind_taobao_shop'))
         else:
             return HttpResponseRedirect(reverse('bind_taobao_shop'))
-
-#def login(request, template="login.html"):
-#    redirect_url = web_utils.get_login_redirect_url(request)
-#    if request.user.is_authenticated():
-#        return HttpResponseRedirect(redirect_url)
-#    
-#    if request.method == "GET":
-#        return render_to_response(template,
-#                                  { "remember_me" : True, "next" : web_utils.get_redirect_url(request)},
-#                                    context_instance=RequestContext(request))
-#
-#    elif request.method == "POST":
-#        email = request.POST.get('email', None)
-#        password = request.POST.get('password', None)
-#        remember_me = request.POST.get("remember_me", None)
-#        try:
-#            user_inst = User.login(email, password)
-#        except User.LoginEmailDoesNotExist, e: 
-#            return render_to_response(template,
-#                                      {'email' : email,
-#                                       'remember_me' : remember_me,
-#                                       'error_msg' : web_text.LOGIN_WRONG_EMAIL
-#                                      },
-#                                      context_instance=RequestContext(request))
-#        except User.LoginPasswordIncorrect, e:
-#            return render_to_response(template,
-#                                      {'email' : email,
-#                                       'remember_me' : remember_me,
-#                                       'error_msg' : web_utils.LOGIN_WRONG_PASSWORD
-#                                      },
-#                                      context_instance=RequestContext(request))
-#        user_context = user_inst.read()
-#        user = authenticate(username = user_context['username'], password = password)
-#        if not user.is_active:
-#            return render_to_response(template,
-#                                      {'email' : email,
-#                                       'remember_me' : remember_me,
-#                                       'error_msg' : web_utils.LOGIN_USER_NOT_ACTIVE
-#                                      },
-#                                      context_instance=RequestContext(request))
-#        auth_login(request, user)
-#        if not remember_me:
-#            request.session.set_expiry(0)
-#        else:
-#            request.session.set_expiry(settings.SESSION_COOKIE_AGE)
-#        print redirect_url
-#        return HttpResponseRedirect(redirect_url)
 

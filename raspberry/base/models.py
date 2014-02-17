@@ -183,7 +183,7 @@ class Note_Poke(models.Model):
 
 class Note_Comment(models.Model):
     note = models.ForeignKey(Note)
-    creator_id = models.IntegerField(null = False, db_index = True)
+    creator = models.ForeignKey(User)
     comment = models.TextField(null = False)
     replied_comment_id = models.IntegerField(default = None, null = True, db_index = True)
     replied_user_id = models.IntegerField(default = None, null = True, db_index = True)

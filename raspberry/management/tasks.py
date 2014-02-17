@@ -5,6 +5,7 @@ from django.conf import settings
 from utils.apns_notification import APNSWrapper
 
 import base.selection as base_selection
+from base.entity import Entity 
 from base.taobao_shop import TaobaoShop 
 from utils import fetcher 
 
@@ -77,6 +78,18 @@ class CreateTaobaoShopTask(Task):
                 seller_id = _shop_info['seller_id'],
                 pic_path = _shop_info['pic']
             )
+
+class MergeEntityTask(Task):
+    ignore_result = True
+    time_limit = 30
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    queue = "main"
+    
+    def run(self, entity_id, target_entity_id):
+        _entity = Entity(entity_id)
+        _entity.merge(target_entity_id)
+
 
 class PublishApkTask(Task):
     ignore_result = True

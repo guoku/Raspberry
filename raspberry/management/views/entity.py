@@ -17,7 +17,7 @@ from base.item import Item
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
-from management.tasks import CreateTaobaoShopTask
+from management.tasks import CreateTaobaoShopTask, MergeEntityTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 from utils import fetcher 
@@ -611,9 +611,8 @@ def add_taobao_item_for_entity(request, entity_id):
 def merge_entity(request, entity_id):
     if request.method == 'POST':
         _target_entity_id = request.POST.get("target_entity_id", None)
-        _entity = Entity(entity_id)
-        _entity.merge(_target_entity_id)
-        return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
+        MergeEntityTask.delay(entity_id, _target_entity_id)
+        return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : entity_id }))
 
 @login_required
 @staff_only
