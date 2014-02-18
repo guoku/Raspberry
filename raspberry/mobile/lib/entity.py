@@ -52,7 +52,7 @@ class MobileEntity(Entity):
         _context['entity'] = self._read(request_user_id) 
         
         _context['entity']['item_list'] = []
-        for _item_id in _context['entity']['item_id_list']:
+        for _item_id in Item.find(entity_id = self.entity_id)[0:1]: 
             _context['entity']['item_list'].append(MobileItem(_item_id).read())
         del _context['entity']['item_id_list']
     

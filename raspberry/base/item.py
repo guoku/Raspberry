@@ -44,7 +44,7 @@ class Item(object):
         _inst.item_obj = _item_obj
         return _inst
     
-    def update(self, cid = None, title = None, shop_nick = None, price = None, soldout = None, ustation = None):
+    def update(self, cid = None, title = None, shop_nick = None, price = None, soldout = None, ustation = None, weight = None):
         self.__ensure_item_obj()
         if cid != None:
             self.item_obj.cid = int(cid)
@@ -58,6 +58,8 @@ class Item(object):
             self.item_obj.soldout = soldout
         if ustation != None:
             self.item_obj.ustation = ustation
+        if weight != None:
+            self.item_obj.weight = weight
         self.item_obj.updated_time = datetime.datetime.now()
         self.item_obj.save()
 
@@ -72,6 +74,7 @@ class Item(object):
         _context["title"] = self.item_obj.title
         _context["shop_nick"] = self.item_obj.shop_nick
         _context["price"] = float(self.item_obj.price)
+        _context["weight"] = self.item_obj.weight
         _context["soldout"] = self.item_obj.soldout
         _context["ustation"] = self.item_obj.ustation
         _context['buy_link'] = Item.generate_taobao_item_url(_context['taobao_id'])
@@ -103,7 +106,7 @@ class Item(object):
             _entity_id = int(entity_id)
             _hdl = _hdl.filter(entity_id = _entity_id)
         _item_list = []
-        for _doc in _hdl.order_by('-created_time')[offset : offset + count]:
+        for _doc in _hdl.order_by('-weight', '-created_time')[offset : offset + count]:
             if full_info:
                 _item_list.append({
                     'item_id' : str(_doc.id),
@@ -153,9 +156,3 @@ class Item(object):
         _url = settings.APP_HOST + "/visit_item?item_id=%s" % taobao_id + "&type=mobile"
         return _url
 
-    @staticmethod
-    def get_item_id_list_by_entity_id(entity_id):
-        _list = []
-        for _item in ItemDocument.objects.filter(entity_id = entity_id):
-            _list.append(str(_item.id))
-        return _list

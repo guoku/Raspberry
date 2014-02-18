@@ -184,7 +184,7 @@
                 </div>
             </form>
             {% for item_context in item_context_list %}
-                <form class="well form-horizontal" action="" method="POST">
+                <form class="well form-horizontal" action="{% url 'management_update_item' item_context.item_id %}" method="POST">
                     <fieldset>
                         <div class="control-group">
                             <label class="control-label" for="item_id_display">item id:</label>
@@ -234,6 +234,12 @@
                             </div>
                         </div>
                         <div class="control-group">
+                            <label class="control-label" for="weight">权重</label>
+                            <div class="controls">
+                                <input class="input-xxlarge" type="text" id="weight" name="weight" value="{{ item_context.weight }}" />
+                            </div>
+                        </div>
+                        <div class="control-group">
                             <label class="control-label" for="soldout">已下架</label>
                             <div class="controls">
                                 <input class="input-xxlarge" type="text" id="soldout" name="soldout" value="{%if item_context.soldout%}1{%else%}0{%endif%}" />
@@ -241,6 +247,7 @@
                         </div>
                     </fieldset>
                     <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">更新</button>
                         <a class="btn" href="{% url 'management_unbind_taobao_item_from_entity' entity_context.entity_id item_context.item_id %}">删除</a>
                     </div>
                 </form>

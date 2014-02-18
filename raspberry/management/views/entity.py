@@ -199,7 +199,7 @@ def edit_entity(request, entity_id):
             _message = None
         _entity_context = Entity(entity_id).read()
         _item_context_list = []
-        for _item_id in _entity_context['item_id_list']:
+        for _item_id in Item.find(entity_id = entity_id): 
             _item_context = Item(_item_id).read()
             if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
                 _entity_context['recommend_title'] = _item_context['title']
@@ -498,6 +498,25 @@ def bind_taobao_item_to_entity(request, entity_id, item_id):
     _entity.bind_item(item_id)
     return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
+
+@login_required
+@staff_only
+def update_item(request, item_id):
+    if request.method == 'POST':
+        _price = request.POST.get("price", None)
+        _soldout = request.POST.get("soldout", None)
+        if _soldout != None:
+            if _soldout == '1':
+                _soldout = True
+            else:
+                _soldout = False
+        _weight = request.POST.get("weight", None)
+        Item(item_id).update(
+            price = _price,
+            soldout = _soldout,
+            weight = _weight
+        )
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 @staff_only
