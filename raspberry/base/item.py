@@ -1,5 +1,6 @@
 # coding=utf8
 from django.conf import settings
+from django.core.cache import cache
 from models import Item as ItemDocument
 from models import TaobaoItem as TaobaoItemDocument
 from utils.lib import roll
@@ -62,6 +63,10 @@ class Item(object):
             self.item_obj.weight = weight
         self.item_obj.updated_time = datetime.datetime.now()
         self.item_obj.save()
+       
+        
+        ## CLEAN_OLD_CACHE ## 
+        cache.delete("entity_context_%s"%self.item_obj.entity_id)
 
     
     def __load_taobao_item(self):
