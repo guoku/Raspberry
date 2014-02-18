@@ -142,8 +142,11 @@ def auth_by_sina(request):
     if code:
         _sina_data = sina_utils.get_auth_data(code)
         try:
-            _user_inst = User.login_by_sina(_sina_data['sina_id'], sina_token = _sina_data['access_token'],
-                           screen_name = _sina_data['screen_name'], expires_in = _sina_data['expires_in'])
+            _user_inst = User.login_by_sina(
+                _sina_data['sina_id'],
+                sina_token = _sina_data['access_token'],
+                screen_name = _sina_data['screen_name'],
+                expires_in = _sina_data['expires_in'])
         except User.LoginSinaIdDoesNotExist, e:
             _user_inst = None
         source = request.session.get('auth_source', None)
@@ -164,23 +167,45 @@ def auth_by_sina(request):
                 pass
         else:
             pass
-                
-        
-#        next_url = request.session.get("next_redirect_url", None)
-#        if not next_url:
-#            return HttpResponse("第三方登录失败，可能是因为您没有启用cookies，请启用cookies重试")
-#        return HttpResponseRedirect(next_url)
-#    else:
-#        return HttpResponse("第三方登录失败, 认证方返回结果异常，请稍后再试")
 
 def login_by_taobao(request):
-    pass
+    request.session['auth_source'] = "login"
+    next_url = request.GET.get('next', None)
+    if next_url:
+        request.session['auth_next_url'] = next_url 
+    return HttpResponseRedirect(sina_utils.get_login_url())
 
-
-def third_party_login_check(request):
-
-    pass  
-
+def auth_by_taobao(request):
+    code = request.GET.get("code", None)
+    if code:
+        _taobao_data = taobao_utils.get_auth_data(code)
+        try:
+            _user_inst = User.login_by_taobao(
+                _taobao_data['taobao_id'],
+                taobao_token = _taobao_data['access_token'],
+                screen_name = _taobao_data['screen_name'],
+                expires_in = _taobao_data['expires_in'])
+        except User.LoginTaobaoIdDoesNotExist, e:
+            _user_inst = None
+        source = request.session.get('auth_source', None)
+        if source:
+            if source == "login":
+                if _user_inst:
+                    user = _user_inst.authenticate_without_password()
+                    auth_login(request, user)
+                    next_url = request.session.get('auth_next_url', reverse("web_selection"))
+                    return HttpResponseRedirect(next_url)
+                else:
+                    token = web_utils.generate_random_storage_key("taobao_login")
+                    web_utils.create_temporary_storage(token, **_taobao_data)
+                    return HttpResponseRedirect(reverse("web_third_party_register") + "?source=taobao&token=" + token)
+            elif source == "bind":
+                pass
+            else:
+                pass
+        else:
+            pass
+    
 @login_required
 def logout(request):
     auth_logout(request)

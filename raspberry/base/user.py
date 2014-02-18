@@ -263,21 +263,23 @@ class User(object):
             _sina_token_obj.expires_in = expires_in
         _sina_token_obj.save()
         _inst = cls(_sina_token_obj.user_id)
-        
         return _inst
     
     @classmethod
-    def login_by_taobao(cls, taobao_id, taobao_token = None):
+    def login_by_taobao(cls, taobao_id, taobao_token = None, screen_name = None, expires_in = None):
         try:
             _taobao_token_obj = TaobaoTokenModel.objects.get(taobao_id = taobao_id)
         except TaobaoTokenModel.DoesNotExist, e:
             raise User.LoginTaobaoIdDoesNotExist(taobao_id)
     
-        if taobao_token != None:
+        if taobao_token:
             _taobao_token_obj.access_token = taobao_token
-            _taobao_token_obj.save()
+        if screen_name:
+            _taobao_token_obj.screen_name = screen_name
+        if expires_in:
+            _taobao_token_obj.expires_in = expires_in
+        _taobao_token_obj.save()
         _inst = cls(_taobao_token_obj.user_id)
-        
         return _inst
    
     @staticmethod
