@@ -410,8 +410,8 @@ class User(object):
             _taobao_token_obj = TaobaoTokenModel.objects.get(user_id = self.user_id)
             _taobao_token_obj.delete()
             self.__reset_basic_info_to_cache()
-        except TaobaoTokenModel.DoesNotExist:
-            pass
+        except TaobaoTokenModel.DoesNotExist, e:
+            print e
         
     def create_seller_info(self, taobao_shop_nick):
         if SellerInfoModel.objects.filter(user_id = self.user_id).count() > 0:
