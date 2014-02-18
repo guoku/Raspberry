@@ -199,7 +199,7 @@ def login_by_taobao(request):
     next_url = request.GET.get('next', None)
     if next_url:
         request.session['auth_next_url'] = next_url 
-    return HttpResponseRedirect(sina_utils.get_login_url())
+    return HttpResponseRedirect(taobao_utils.get_login_url())
 
 def auth_by_taobao(request):
     code = request.GET.get("code", None)
@@ -213,6 +213,7 @@ def auth_by_taobao(request):
                 screen_name = _taobao_data['screen_name'],
                 expires_in = _taobao_data['expires_in'])
         except User.LoginTaobaoIdDoesNotExist, e:
+            print e
             _user_inst = None
         except:
             return HttpResponseServerError()
@@ -252,7 +253,7 @@ def bind_taobao(request):
     
 @require_GET
 @login_required
-def unbind_sina(request):
+def unbind_taobao(request):
     _user_inst = User(request.user.id)
     _user_inst.unbind_taobao()
     redirect_url = request.GET.get("next", reverse("web_selection"))
