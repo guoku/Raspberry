@@ -41,6 +41,7 @@
                             <td width="50"><p class="text-info">{{ banner_context.weight }}</p></td>
                             <td width="50">
                                 <div class="btn-group">
+                                    <a class="btn" href="{% url 'management_edit_banner' banner_context.banner_id %}">编</a>
                                     <a class="btn" href="{% url 'management_delete_banner' banner_context.banner_id %}">删</a>
                                 </div>
                             </td>
