@@ -16,9 +16,10 @@ from report import *
 from user import *
 from tasks import MarkFootprint, MobileLogTask
 from utils.lib import get_client_ip
+import random 
 import time
 
-@check_sign
+#@check_sign
 def homepage(request):
     _start_at = datetime.datetime.now()
     _session = request.GET.get('session', None)
@@ -38,7 +39,10 @@ def homepage(request):
     
 
     _rslt['hottag'] = []
-    for _tag_data in Tag.get_recommend_user_tag_list():
+    _recommend_user_tag_list = Tag.get_recommend_user_tag_list()
+    if len(_recommend_user_tag_list) > 3:
+        _recommend_user_tag_list = random.sample(_recommend_user_tag_list, 3)
+    for _tag_data in _recommend_user_tag_list:
         _rslt['hottag'].append({
             'tag_name' : _tag_data[1],
             'entity_count' : _tag_data[2],

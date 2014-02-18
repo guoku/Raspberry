@@ -17,7 +17,7 @@ from base.item import Item
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
-from management.tasks import CreateTaobaoShopTask
+from management.tasks import CreateTaobaoShopTask, MergeEntityTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 from utils import fetcher 
@@ -208,11 +208,12 @@ def edit_entity(request, entity_id):
             if _item_context.has_key('shop_nick'):
                 _shop_context = TaobaoShop(_item_context['shop_nick']).read()
                 if _shop_context != None:
-                    _item_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
-                    if _shop_context['extended_info']['orientational']:
-                        _entity_context['commission_type'] = 'orientational'
-                    else:
-                        _entity_context['commission_type'] = 'general'
+                    if _shop_context['extended_info']['commission'] == True:
+                        _item_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                        if _shop_context['extended_info']['orientational']:
+                            _entity_context['commission_type'] = 'orientational'
+                        else:
+                            _entity_context['commission_type'] = 'general'
             _item_context_list.append(_item_context)
 
 
@@ -380,7 +381,7 @@ def entity_list(request):
             category_id = _category_id,
             status = _status
         )
-    
+        
         if _sort_by == 'random':
             _paginator = None
             _entity_id_list = Entity.random(
@@ -418,11 +419,12 @@ def entity_list(request):
                     if _item_context.has_key('shop_nick'):
                         _shop_context = TaobaoShop(_item_context['shop_nick']).read()
                         if _shop_context != None:
-                            _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
-                            if _shop_context['extended_info']['orientational']:
-                                _entity_context['commission_type'] = 'orientational'
-                            else:
-                                _entity_context['commission_type'] = 'general'
+                            if _shop_context['extended_info']['commission'] == True:
+                                _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                                if _shop_context['extended_info']['orientational']:
+                                    _entity_context['commission_type'] = 'orientational'
+                                else:
+                                    _entity_context['commission_type'] = 'general'
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
@@ -609,9 +611,8 @@ def add_taobao_item_for_entity(request, entity_id):
 def merge_entity(request, entity_id):
     if request.method == 'POST':
         _target_entity_id = request.POST.get("target_entity_id", None)
-        _entity = Entity(entity_id)
-        _entity.merge(_target_entity_id)
-        return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
+        MergeEntityTask.delay(entity_id, _target_entity_id)
+        return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : entity_id }))
 
 @login_required
 @staff_only

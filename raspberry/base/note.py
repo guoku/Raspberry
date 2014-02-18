@@ -249,6 +249,14 @@ class Note(object):
                 tag = _tag
             )
     
+    def clean_cache(self):
+        cache.delete('note_%s_context'%self.note_id)
+        cache.delete("note_context_%s"%self.note_id)
+
+        for _comment_obj in NoteCommentModel.objects.filter(note_id = self.note_id):
+            cache.delete('note_comment_%s_context'%_comment_obj.id)
+            
+    
     def __load_note_context_from_cache(self):
         _cache_key = 'note_%s_context'%self.note_id
         _context = cache.get(_cache_key)
@@ -371,6 +379,30 @@ class Note(object):
         if NotePokeModel.objects.filter(note_id = self.note_id, user_id = user_id).count() > 0:
             return True
         return False
+
+    @classmethod
+    def comment_count(cls, entity_id = None, note_id = None):
+        _hdl = NoteCommentModel.objects.all()
+        if entity_id != None:
+            _hdl = _hdl.filter(entity_id = entity_id)
+        if note_id != None:
+            _hdl = _hdl.filter(note_id = note_id)
+        return _hdl.count()
+        
+    
+    @classmethod
+    def find_comment(cls, note_id = None, offset = None, count = None):
+        _hdl = NoteCommentModel.objects.all()
+        if note_id != None:
+            _hdl = _hdl.filter(note_id = note_id)
+        
+        if offset != None and count != None:
+            _hdl = _hdl[offset : offset + count]
+        
+        _list = map(lambda x: [x.note_id, x.id], _hdl)
+        return _list
+
+
 
     def read_comment(self, comment_id, json = False):
         _cache_key = 'note_comment_%s_context'%comment_id

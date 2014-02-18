@@ -84,7 +84,7 @@ class SignInAccountForm(forms.Form):
         uid = cleaned_data['email']
         password = cleaned_data['password']
         username = User(uid).get_username()
-        _user = authenticate(username=username, password=password)
+        _user = authenticate(username = username, password = password)
         if not _user:
             raise forms.ValidationError(
                 self.error_messages['wrong_password']
@@ -107,7 +107,7 @@ class SignUpAccountFrom(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('password')}),
                                label=_('password'), help_text=_(''))
 
-    agree_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs={'checked' : 'checked'}), required=False)
+    agree_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs={'checked' : 'checked'}))
 
     def clean_email(self):
         cleaned_data = self.cleaned_data
@@ -134,27 +134,27 @@ class SignUpAccountFrom(forms.Form):
                 self.error_messages['not_agree_tos'],
             )
         return self.cleaned_data['agree_tos']
-
-    def signup(self):
-        _email = self.cleaned_data['email']
-        _nickname = self.cleaned_data['nickname']
-        _passwd = self.cleaned_data['password']
-        _new_user = User.create(email=_email, password=_passwd)
-        _new_user.set_profile(nickname=_nickname)
-        _username = _new_user.get_username()
-        _user =  authenticate(username=_username, password=_passwd)
-        return _user
-
+#
+#    def signup(self):
+#        _email = self.cleaned_data['email']
+#        _nickname = self.cleaned_data['nickname']
+#        _passwd = self.cleaned_data['password']
+#        _new_user = User.create(email=_email, password=_passwd)
+#        _new_user.set_profile(nickname=_nickname)
+#        _username = _new_user.get_username()
+#        _user =  authenticate(username=_username, password=_passwd)
+#        return _user
+#
 
 class SignUpAccountBioFrom(forms.Form):
     bio = forms.CharField(widget=forms.Textarea(attrs={'rows':'4', 'class':'text-input'}),
-                          label=_('bio'), help_text=_(''))
+                          label=_('bio'), help_text=_(''), required = False)
     gender = forms.ChoiceField(widget = forms.RadioSelect(), choices = GENDER_CHOICES,
-                               label = _('gender'), help_text = _(''))
+                               label = _('gender'), help_text = _(''), required = False)
     website = forms.URLField(widget=forms.TextInput(attrs={'class':'text-input'}),
-                             label=_('website'), help_text=_(''))
-    location = forms.CharField(widget=forms.Select(attrs={"name" : "location", "class" : "location"}))
-    city = forms.CharField(widget=forms.Select(attrs={'name' : 'city', 'class' : 'city'}))
+                             label=_('website'), help_text=_(''), required = False)
+    location = forms.CharField(widget=forms.Select(attrs={"name" : "location", "class" : "location"}), required = False)
+    city = forms.CharField(widget=forms.Select(attrs={'name' : 'city', 'class' : 'city'}), required = False)
 
 class SettingAccountForm(forms.Form):
     nickname = forms.CharField(widget=forms.TextInput(attrs={'class':'text-input'}),

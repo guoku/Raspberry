@@ -125,7 +125,7 @@ def fetch_item(itemid):
         try:
             nameurl = nametag['src']
             o = urlparse(nameurl)
-            nick = parse_qs(o.query)['nick'][0]
+            nick = parse_qs(str(o.query))['nick'][0]
             break
         except:
             pass
