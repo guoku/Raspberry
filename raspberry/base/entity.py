@@ -147,8 +147,7 @@ class Entity(object):
 
     
     def merge(self, target_entity_id):
-        _item_id_list = Item.get_item_id_list_by_entity_id(target_entity_id)
-        for _item_id in _item_id_list:
+        for _item_id in Item.find(entity_id = target_entity_id):
             _item = Item(_item_id)
             _item.bind(self.entity_id)
     

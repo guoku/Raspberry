@@ -12,6 +12,8 @@ urlpatterns = patterns(
     url(r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/post/selection/instant/$', 'note.post_selection_instant', name = 'management_post_selection_instant'),
     url(r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/post/selection/delay/$', 'note.post_selection_delay', name = 'management_post_selection_delay'),
     url(r'^entity/(?P<entity_id>\w+)/note/(?P<note_id>\w+)/update/selection/info/$', 'note.update_note_selection_info', name = 'management_update_note_selection_info'),
+    
+    url(r'^item(?P<item_id>\w+)/update/$', 'entity.update_item', name = 'management_update_item'),
 
     url(r'^banner/', include('management.urls.banner')),
     url(r'^category/', include('management.urls.category')),
