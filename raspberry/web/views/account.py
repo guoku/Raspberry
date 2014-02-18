@@ -262,12 +262,8 @@ def unbind_sina(request):
 def logout(request):
     auth_logout(request)
     request.session.set_expiry(0)
-    try:
-        next_url = request.META['HTTP_REFERER']
-    except KeyError:
-        next_url = reverse('web_selection')
-    finally:
-        return HttpResponseRedirect(next_url)
+    next_url = request.META.get('HTTP_REFERER', reverse('web_selection'))
+    return HttpResponseRedirect(next_url)
 
 def forget_passwd(request):
     return
