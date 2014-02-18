@@ -31,11 +31,14 @@ def homepage(request):
     _rslt['discover'] = popularity.read_popular_category()['data'][0:8]
     
     _rslt['banner'] = []
-    for _banner_context in Banner.find():
-        _rslt['banner'].append({
-            'url' : _banner_context['url'], 
-            'img' : _banner_context['image'] 
-        })
+    for _banner_context in Banner.find(status = 'active'):
+        try:
+            _rslt['banner'].append({
+                'url' : _banner_context['url'], 
+                'img' : _banner_context['image'] 
+            })
+        except Exception, e:
+            pass
     
 
     _rslt['hottag'] = []
