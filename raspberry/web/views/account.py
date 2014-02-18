@@ -103,8 +103,10 @@ class ThirdPartyRegisterWizard(RegisterWizard):
 
 def login(request, template = 'account/login.html'):
     redirect_url = web_utils.get_login_redirect_url(request)
+    print redirect_url
     if not redirect_url:
         redirect_url = reverse('web_selection')
+    print redirect_url
     if request.user.is_authenticated():
         return HttpResponseRedirect(redirect_url)
 
