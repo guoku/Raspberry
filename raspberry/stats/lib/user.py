@@ -24,7 +24,7 @@ class UserStats(object):
             result = list(_hd1.all())
             if group == "week":
                 result = week_reformat(result)
-            return result
+            return result.reverse()
     @classmethod 
     def new_follow_count(cls, start_time, end_time = datetime.now(),
                         group = None):
