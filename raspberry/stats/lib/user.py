@@ -3,6 +3,7 @@ from base.models import User_Follow as FollowModel
 from datetime import datetime
 from django.contrib.auth.models import User as AuthUser
 from django.db.models import Count
+import time
 class UserStats(object):
 
     @classmethod 
@@ -20,7 +21,10 @@ class UserStats(object):
             df = date_format("date_joined", group)
             _hd1 = _hd1.extra(select = {"timestamp" : df})\
                         .values("timestamp").annotate(count = Count('date_joined'))
-        return list(_hd1.all())
+            result = list(_hd1.all())
+            if group == "week":
+                result = week_reformat(result)
+            return result.reverse()
     @classmethod 
     def new_follow_count(cls, start_time, end_time = datetime.now(),
                         group = None):
@@ -36,9 +40,19 @@ class UserStats(object):
             df = date_format("followed_time", group)
             _hd1 = _hd1.extra(select = {"timestamp" : df})\
                     .values("timestamp").annotate(count = Count("followed_time"))
+            
+            result = list(_hd1.all())
+            if group == "week":
+                result= week_reformat(result)
+            return result
 
-        return list(_hd1.all())
 
+def week_reformat(result):
+    for i in range(len(result)):
+        w = result[i]['timestamp']+'-1'
+        t = time.strptime(w,'%Y-%W-%w')
+        result[i]['timestamp'] = '%d-%d-%d'%(t.tm_year, t.tm_mon, t.tm_mday)
+    return result
 def date_format(field, group):
     d = ""
     if group == "year":
@@ -50,7 +64,7 @@ def date_format(field, group):
     elif group == "hour":
         d = """DATE_FORMAT({0}, '%%Y-%%m-%%d-%%H')"""
     else:
-        d = """DATE_FORMAT({0}, '%%x-%%m-%%v')"""
+        d = """DATE_FORMAT({0}, '%%x-%%u')"""
     return d.format(field)
 
 

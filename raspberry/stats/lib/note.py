@@ -23,8 +23,11 @@ class NoteStats(object):
             df = date_format("created_time", group)
             _hd1 = _hd1.extra(select = {"timestamp" : df}).values("timestamp")\
                     .annotate(count = Count('created_time'))
-        return list(_hd1.all())
     
+            result = list(_hd1.all())
+            if group == "week":
+                result = week_reformat(result)
+            return result
     @classmethod
     def new_poke_count(cls, start_time, end_time = datetime.now(),
                         group = None):
@@ -40,7 +43,11 @@ class NoteStats(object):
             _hd1 = _hd1.extra(select = {"timestamp" : df})\
                     .values("timestamp").annotate(count = Count("created_time"))
 
-        return list(_hd1.all())
+            result = list(_hd1.all())
+            if group == "week":
+                result = week_reformat(result)
+            return result
+
 
     @classmethod
     def new_note_comment(cls, start_time, end_time = datetime.now(),
@@ -59,4 +66,7 @@ class NoteStats(object):
             _hd1 = _hd1.extra(select = {"timestamp" : df})\
                     .values("timestamp").annotate(count = Count("created_time"))
 
-        return list(_hd1.all())
+            result = list(_hd1.all())
+            if group == "week":
+                result = week_reformat(result)
+            return result
