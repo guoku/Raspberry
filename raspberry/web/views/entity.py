@@ -29,7 +29,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
-    log.info(_entity_context)
+    _liker_list = Entity(_entity_id).liker_list(offset=0, count=20)
+    # log.info(_liker_list)
     _note_id_list = Note.find(entity_id=_entity_id)
     # log.info(_note_id_list)
     _selection_note = None
@@ -71,6 +72,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'is_user_already_like' : _is_user_already_like,
             'selection_note' : _selection_note,
             'common_note_list' : _common_note_list,
+            'liker_list' : _liker_list,
         },
         context_instance=RequestContext(request)
     )
