@@ -14,6 +14,5 @@ urlpatterns = patterns(
     url(r'^thirdparty/register$', ThirdPartyRegisterWizard.as_view(FORMS), name='web_third_party_register'),
 
     url(r'^setting/$', 'setting', name='web_setting'),
-    url(r'^setting/upload_avatar/$', 'upload_avatar', name='web_upload_avatar'),
     url(r'^setting/update_avatar$', 'update_avatar', name='web_update_avatar')
 )
