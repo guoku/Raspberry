@@ -23,5 +23,8 @@ class TagStats(object):
             df = date_format("created_time", group)
             _hd1 = _hd1.extra(select = {"timestamp" : df}).values("timestamp")\
                     .annotate(count = Count('created_time'))
-
-            return list(_hd1.all())
+            
+            result = list(_hd1.all())
+            if group == "week":
+                result = week_reformat(result)
+            return result
