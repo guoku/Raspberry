@@ -52,12 +52,15 @@ class RegisterWizard(SessionWizardView):
         signup_data = signup_form.cleaned_data
         bio_data = bio_form.cleaned_data
         _user_inst = web_utils.signup(
-            signup_data['email'], signup_data['password'], signup_data['nickname'],
+            signup_data['email'], 
+            signup_data['password'], 
+            signup_data['nickname'],
             location = bio_data['location'],
             city = bio_data['city'],
             gender = bio_data['gender'],
             bio = bio_data['bio'],
-            website = bio_data['website'])
+            website = bio_data['website']
+        )
         _user = _user_inst.authenticate_without_password()
         auth_login(self.request, _user)
         return _user_inst
@@ -88,15 +91,19 @@ class ThirdPartyRegisterWizard(RegisterWizard):
         third_party_data = web_utils.get_temporary_storage(token)
         _user_inst = self.signup(form_list)
         if source == "sina":
-            _user_inst.bind_sina(sina_id = third_party_data['sina_id'],
-                                 screen_name = third_party_data['screen_name'],
-                                 access_token = third_party_data['access_token'],
-                                 expires_in = third_party_data['expires_in'])
+            _user_inst.bind_sina(
+                sina_id = third_party_data['sina_id'],
+                screen_name = third_party_data['screen_name'],
+                access_token = third_party_data['access_token'],
+                expires_in = third_party_data['expires_in']
+            )
         elif source == "taobao":
-            _user_inst.bind_taobao(taobao_id = third_party_data['taobao_id'],
-                                   screen_name = third_party_data['screen_name'],
-                                   taobao_token = third_party_data['access_token'],
-                                   expires_in = third_party_data['expires_in'])
+            _user_inst.bind_taobao(
+                taobao_id = third_party_data['taobao_id'],
+                screen_name = third_party_data['screen_name'],
+                taobao_token = third_party_data['access_token'],
+                expires_in = third_party_data['expires_in']
+            )
         else:
             raise Http404
         return HttpResponseRedirect(reverse("web_selection"))
@@ -120,15 +127,23 @@ def login(request, template = 'account/login.html'):
                 request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
             return HttpResponseRedirect(redirect_url)
         else:
-            return render_to_response(template,
-                                      { 'forms' : _forms,},
-                                      context_instance = RequestContext(request))
+            return render_to_response(
+                template,
+                { 
+                    'forms' : _forms, 
+                },
+                context_instance = RequestContext(request)
+            )
 
     elif request.method == 'GET':
         _forms = SignInAccountForm(initial={'next': redirect_url})
-        return render_to_response(template,
-                                  { 'forms' : _forms, },
-                                  context_instance = RequestContext(request))
+        return render_to_response(
+            template,
+            { 
+                'forms' : _forms, 
+            },
+            context_instance = RequestContext(request)
+        )
 
 @require_GET
 def login_by_sina(request):
@@ -146,10 +161,11 @@ def auth_by_sina(request):
         next_url = request.session.get('auth_next_url', reverse("web_selection"))
         try:
             _user_inst = User.login_by_sina(
-                _sina_data['sina_id'],
+                _sina_data['sina_id'], 
                 sina_token = _sina_data['access_token'],
-                screen_name = _sina_data['screen_name'],
-                expires_in = _sina_data['expires_in'])
+                screen_name = _sina_data['screen_name'], 
+                expires_in = _sina_data['expires_in']
+            )
         except User.LoginSinaIdDoesNotExist, e:
             _user_inst = None
         except:
@@ -308,8 +324,14 @@ def _set_base(request, template):
                     _success = '设置成功'
 
                     try:
-                        _user.set_profile(_nickname, location = _location, city = _city, gender = _gender,
-                                          bio = _bio, website = _website)
+                        _user.set_profile(
+                            _nickname, 
+                            location = _location, 
+                            city = _city, 
+                            gender = _gender,
+                            bio = _bio, 
+                            website = _website
+                        )
                     except User.NicknameExistAlready:
                         _error = u'昵称已经被占用'
                         _success = None
@@ -452,10 +474,13 @@ def bind_taobao_shop(request):
                 request_user_context['taobao_token_expired'] = True
             else:
                 request_user_context['taobao_token_expired'] = False
-        return render_to_response("bind_taobao_shop.html",
-                                 { "request_user_context" : request_user_context },
-                                 context_instance=RequestContext(request)
-                                 )
+        return render_to_response(
+            "bind_taobao_shop.html",
+            { 
+                "request_user_context" : request_user_context 
+            },
+            context_instance=RequestContext(request)
+        )
     elif request.method == "POST":
         if not request_user_context.get("taobao_nick"):
             messages.info(request, "尚未绑定淘宝帐号") 
@@ -474,12 +499,14 @@ def bind_taobao_shop(request):
                 user_inst.create_seller_info(nick)
                 if not TaobaoShop.nick_exist(nick):
                     shop_info = fetcher.fetch_shop(taobao_item_info['shop_link'])
-                    TaobaoShop.create(nick,
-                                      shop_info['shop_id'],
-                                      shop_info['title'],
-                                      shop_info['type'],
-                                      shop_info['seller_id'],
-                                      shop_info['pic']) 
+                    TaobaoShop.create(
+                        nick,
+                        shop_info['shop_id'],
+                        shop_info['title'],
+                        shop_info['type'],
+                        shop_info['seller_id'],
+                        shop_info['pic']
+                    ) 
                 return HttpResponseRedirect(reverse('bind_taobao_shop'))
             else:
                 message.info(request, "错误的商品地址，请输入淘宝商品地址")

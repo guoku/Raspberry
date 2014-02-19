@@ -3,9 +3,10 @@ from django.conf.urls import url, patterns
 from web.views.account import RegisterWizard, ThirdPartyRegisterWizard
 from web.forms.account import SignUpAccountFrom, SignUpAccountBioFrom
 
-FORMS = [('register', SignUpAccountFrom),
-         ('register-bio', SignUpAccountBioFrom)
-        ]
+FORMS = [
+    ('register', SignUpAccountFrom),
+    ('register-bio', SignUpAccountBioFrom)
+]
 urlpatterns = patterns(
     'web.views.account',
     url(r'^forget-passwd/', 'forget_passwd', name='web_forget_passwd'),
