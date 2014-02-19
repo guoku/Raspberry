@@ -183,10 +183,12 @@ def auth_by_sina(request):
                     return HttpResponseRedirect(reverse("web_third_party_register") + "?source=sina&token=" + token)
             elif source == "bind":
                 try:
-                    _user_inst.bind_sina(sina_id = third_party_data['sina_id'],
-                                        screen_name = third_party_data['screen_name'],
-                                        access_token = third_party_data['access_token'],
-                                        expires_in = third_party_data['expires_in'])
+                    _user_inst.bind_sina(
+                        sina_id = third_party_data['sina_id'],
+                        screen_name = third_party_data['screen_name'],
+                        access_token = third_party_data['access_token'],
+                        expires_in = third_party_data['expires_in']
+                    )
                 except:
                     pass
                 return HttpResponseRedirect(next_url)
@@ -248,10 +250,12 @@ def auth_by_taobao(request):
                     return HttpResponseRedirect(reverse("web_third_party_register") + "?source=taobao&token=" + token)
             elif source == "bind":
                 try:
-                    _user_inst.bind_taobao(taobao_id = third_party_data['taobao_id'],
-                                           screen_name = third_party_data['screen_name'],
-                                           taobao_token = third_party_data['access_token'],
-                                           expires_in = third_party_data['expires_in'])
+                    _user_inst.bind_taobao(
+                        taobao_id = third_party_data['taobao_id'],
+                        screen_name = third_party_data['screen_name'],
+                        taobao_token = third_party_data['access_token'],
+                        expires_in = third_party_data['expires_in']
+                    )
                 except:
                     pass
                 return HttpResponseRedirect(next_url)
