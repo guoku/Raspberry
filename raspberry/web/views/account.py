@@ -103,10 +103,8 @@ class ThirdPartyRegisterWizard(RegisterWizard):
 
 def login(request, template = 'account/login.html'):
     redirect_url = web_utils.get_login_redirect_url(request)
-    print redirect_url
     if not redirect_url:
         redirect_url = reverse('web_selection')
-    print redirect_url
     if request.user.is_authenticated():
         return HttpResponseRedirect(redirect_url)
 
@@ -215,7 +213,6 @@ def auth_by_taobao(request):
                 screen_name = _taobao_data['screen_name'],
                 expires_in = _taobao_data['expires_in'])
         except User.LoginTaobaoIdDoesNotExist, e:
-            print e
             _user_inst = None
         except:
             return HttpResponseServerError()
@@ -251,7 +248,7 @@ def bind_taobao(request):
     next_url = request.GET.get('next', None)
     if next_url:
         request.session['auth_next_url'] = next_url
-    return HttpResponseRedirect(sina_utils.get_login_url())
+    return HttpResponseRedirect(taobao_utils.get_login_url())
     
 @require_GET
 @login_required
