@@ -283,6 +283,7 @@ def update_profile(request):
     form = SettingAccountForm(request.POST)
     _user = User(request.user.id)
     if form.is_valid():
+        print form.cleaned_data
         _user.set_profile(
             nickname = form.cleaned_data['nickname'],
             location = form.cleaned_data['location'],
@@ -299,6 +300,7 @@ def setting(request, template = 'account/setting.html'):
     _user_context = User(request.user.id).read()
     profile_form = SettingAccountForm(initial = _user_context)
     password_form = ChangePasswordForm(request.user)
+    print _user_context
     return render_to_response(
         template,
         {

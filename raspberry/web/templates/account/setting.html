@@ -31,7 +31,10 @@
                     <label for="{{ profile_form.bio.id_for_label }}">{{ profile_form.bio.label }}</label>
                     {{ profile_form.bio }}
                 </div>
-
+                <div style="display: none;"> 
+                    <p id="default_location_value">{{ profile_form.location.value }}</p>
+                    <p id="default_city_value">{{ profile_form.city.value }}</p>
+                </div>
                 <div class="address">
                     <span class="label">{{ profile_form.location.label }}</span>
                     {{ profile_form.location }}
