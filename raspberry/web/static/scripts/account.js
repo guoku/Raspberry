@@ -31,21 +31,21 @@
             })(options[i]);
         }
         
-        $form.on('submit', function (e) {
-            for (var i = 0; i < options.length; i++) {
-                var selector = options[i].selector;
-                var validator = options[i].validator;
-                var url = options[i].url;
-
-                self[validator]($form.find(selector), url);
-            }
-
-            if (self.isValid()) {
-                return;
-            }
-            
-            e.preventDefault();
-        });
+//        $form.on('submit', function (e) {
+//            for (var i = 0; i < options.length; i++) {
+//                var selector = options[i].selector;
+//                var validator = options[i].validator;
+//                var url = options[i].url;
+//
+//                self[validator]($form.find(selector), url);
+//            }
+//
+//            if (self.isValid()) {
+//                return;
+//            }
+//            
+//            e.preventDefault();
+//        });
     };
 
     V.fn._show = function ($formEle, msg) {

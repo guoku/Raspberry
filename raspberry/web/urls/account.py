@@ -8,10 +8,12 @@ FORMS = [('register', SignUpAccountFrom),
         ]
 urlpatterns = patterns(
     'web.views.account',
-    url(r'^forget-passwd/', 'forget_passwd', name='web_forget_passwd'),
+    url(r'^forget-passwd/$', 'forget_passwd', name='web_forget_passwd'),
     url(r'^register/$', RegisterWizard.as_view(FORMS), name='web_register'),
-    url(r'^thirdparty/register$', ThirdPartyRegisterWizard.as_view(FORMS), name='web_third_party_register'),
+    url(r'^thirdparty/register/$', ThirdPartyRegisterWizard.as_view(FORMS), name='web_third_party_register'),
 
     url(r'^setting/$', 'setting', name='web_setting'),
-    url(r'^setting/update_avatar$', 'update_avatar', name='web_update_avatar')
+    url(r'^setting/update_profile/$', 'update_profile', name='web_update_profile'),
+    url(r'^setting/change_password/$', 'change_password', name='web_change_password'),
+    url(r'^setting/update_avatar/$', 'update_avatar', name='web_update_avatar')
 )
