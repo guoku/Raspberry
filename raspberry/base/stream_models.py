@@ -21,10 +21,12 @@ class Item(Document):
     images = ListField(required = False)
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
+    weight = IntField(required = True, default = 0) 
     meta = {
         'db_alias' : 'guoku-db',
         'indexes' : [ 
-            'entity_id' 
+            'entity_id', 
+            'weight'
         ],
         'allow_inheritance' : True
     }

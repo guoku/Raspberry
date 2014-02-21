@@ -19,7 +19,7 @@ from utils.lib import get_client_ip
 import random 
 import time
 
-#@check_sign
+@check_sign
 def homepage(request):
     _start_at = datetime.datetime.now()
     _session = request.GET.get('session', None)
@@ -31,11 +31,14 @@ def homepage(request):
     _rslt['discover'] = popularity.read_popular_category()['data'][0:8]
     
     _rslt['banner'] = []
-    for _banner_context in Banner.find():
-        _rslt['banner'].append({
-            'url' : _banner_context['url'], 
-            'img' : _banner_context['image'] 
-        })
+    for _banner_context in Banner.find(status = 'active'):
+        try:
+            _rslt['banner'].append({
+                'url' : _banner_context['url'], 
+                'img' : _banner_context['image'] 
+            })
+        except Exception, e:
+            pass
     
 
     _rslt['hottag'] = []
@@ -101,17 +104,20 @@ def feed(request):
 
         
         _rslt = []
-        for _note_id in _note_id_list: 
-            _note_context = MobileNote(_note_id).read(_request_user_id)
-            if _note_context.has_key('entity_id'):
-                _entity = MobileEntity(_note_context['entity_id'])
-                _rslt.append({
-                    'type' : 'entity',
-                    'content' : {
-                        'entity' : _entity.read(_request_user_id),
-                        'note' : _note_context
-                    }
-                })
+        for _note_id in _note_id_list:
+            try:
+                _note_context = MobileNote(_note_id).read(_request_user_id)
+                if _note_context.has_key('entity_id'):
+                    _entity = MobileEntity(_note_context['entity_id'])
+                    _rslt.append({
+                        'type' : 'entity',
+                        'content' : {
+                            'entity' : _entity.read(_request_user_id),
+                            'note' : _note_context
+                        }
+                    })
+            except Exception, e:
+                pass
         
         _duration = datetime.datetime.now() - _start_at
         MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'FEED', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)

@@ -76,6 +76,28 @@ def create_banner(request):
 
 @login_required
 @staff_only
+def edit_banner(request, banner_id):
+    if request.method == 'GET':
+        _banner_context = Banner(banner_id).read()
+        return render_to_response( 
+            'banner/edit.html', 
+            {
+                'active_division' : 'banner',
+                'banner_context' : _banner_context
+            },
+            context_instance = RequestContext(request)
+        )
+    else:
+        _weight = request.POST.get("weight", None)
+        Banner(banner_id).update(_weight)
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+        
+    
+
+@login_required
+@staff_only
 def delete_banner(request, banner_id):
     Banner(banner_id).delete()
     return HttpResponseRedirect(reverse('management_banner_list'))

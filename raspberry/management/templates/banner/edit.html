@@ -1,0 +1,42 @@
+{% extends "management_base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row-fluid" id="chlid-images">
+        <ul class="thumbnails">
+            <li class="span4">
+                <a href="" >
+                    <img id="main-image" class="img-polaroid" src="{{ banner_context.image }}" alt="" style="max-width: 280px;max-height: 280px">
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <form enctype="multipart/form-data" class="well form-horizontal" action="{% url 'management_edit_banner' banner_context.banner_id %}" method="POST">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="content_type">content_type:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" id="content_type" name="content_type" value="{{ banner_context.content_type }}" disabled/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="key">key:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" id="key" name="key" value="{{ banner_context.key }}" disabled/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="weight">weight:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" id="weight" name="weight" value="{{ banner_context.weight }}" />
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">更新</button>
+                <a class="btn" href="{% url 'management_delete_banner' banner_context.banner_id %}">删除</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
