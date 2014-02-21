@@ -18,7 +18,7 @@
                 <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
             </div>
             {% if is_user_self %}
-                <a class="setting" href="{% url 'web_setting' %}"><span></span>{% trans "settings" %}</a>
+                <a class="setting" href="{% url 'web_setting' %}"><span>{% trans "settings" %}</span></a>
             {% elif is_user_already_follow %}
                 <a href="{% url 'web_follow' query_user_context.user_id %}" class="follow-user">取消关注</a>
             {% else %}
@@ -28,15 +28,15 @@
 
         <div class="nav">
             {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
-            {% url 'web_user_posts' query_user_context.user_id as web_user_posts_url %}
+{#            {% url 'web_user_posts' query_user_context.user_id as web_user_posts_url %}#}
             {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
             {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}
             <a href="{{ web_user_likes_url }}" {% if web_user_likes_url in request.path %}class="active"{% endif %}>{% trans 'likes' %}
                 <strong>({{ query_user_context.like_count }})</strong>
             </a>
-            <a href="{{ web_user_posts_url }}" {% if web_user_posts_url in request.path %}class="active"{% endif %}>{% trans 'posts' %}
-                <strong>()</strong>
-            </a>
+{#            <a href="{{ web_user_posts_url }}" {% if web_user_posts_url in request.path %}class="active"{% endif %}>{% trans 'posts' %}#}
+{#                <strong>()</strong>#}
+{#            </a>#}
             <a href="{{ web_user_notes_url }}" {% if web_user_notes_url in request.path %}class="active"{% endif %}>{% trans 'notes' %}
                 <strong>({{ query_user_context.entity_note_count }})</strong>
             </a>

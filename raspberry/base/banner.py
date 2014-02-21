@@ -17,7 +17,7 @@ class Banner(object):
         self.banner_id = int(banner_id)
    
     def read(self):
-        _obj = BannerModel.objects.get(pk = self.banner_id).order_by('-weight')
+        _obj = BannerModel.objects.get(pk = self.banner_id)
         return {
             'banner_id' : _obj.id,
             'image' : Image(_obj.image).getlink(),
@@ -46,14 +46,22 @@ class Banner(object):
 
         return _banner_obj.id
     
+    def update(self, weight):
+        _obj = BannerModel.objects.get(pk = self.banner_id)
+        _obj.weight = int(weight)
+        _obj.save()
+    
+    
     def delete(self):
         _obj = BannerModel.objects.get(pk = self.banner_id)
         _obj.delete()
 
     @classmethod
-    def find(cls, offset = None, count = None):
+    def find(cls, offset = None, count = None, status = None):
         _hdl = BannerModel.objects.all()
         _hdl = _hdl.order_by('-weight')
+        if status == 'active':
+            _hdl = _hdl.filter(weight__gt = 0)
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]    
         _banner_context_list = []

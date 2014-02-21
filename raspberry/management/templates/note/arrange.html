@@ -2,38 +2,63 @@
 {% load common %}
 
 {% block content %}
-    <div class="container">
-        <div>
-            <form class="well form-horizontal" action="{% url 'management_arrange_selection' %}" method="POST">
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="pending_selection_count" style="padding-top: 0">待发布精选:</label>
-                        <div class="controls">{{ pending_note_count }}</div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="count">数量:</label>
-                        <div class="controls">
-                            <input type="text" id="count" name="count" value="91" />
+    <div class="span12">
+        <div class="span2">
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li class="nav-header">操作</li>
+                    <li class="active">
+                        <a href="{% url 'management_arrange_selection' %}">
+                            精选排时间 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'management_note_list' %}">
+                            点评
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'management_note_comment_list' %}">
+                            评论  
+                        </a>
+                    </li>
+                </ul>
+        
+            </div>
+        </div>
+        <div class="container">
+            <div>
+                <form class="well form-horizontal" action="{% url 'management_arrange_selection' %}" method="POST">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="pending_selection_count" style="padding-top: 0">待发布精选:</label>
+                            <div class="controls">{{ pending_note_count }}</div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="start_time">起始时间:</label>
-                        <div class="controls vDateClass" id="pub-time">
-                            <input type="text" id="start_time" name="start_time" value="{{ start_time }}" />
-                            <button class="btn" type="button">现在</button>
+                        <div class="control-group">
+                            <label class="control-label" for="count">数量:</label>
+                            <div class="controls">
+                                <input type="text" id="count" name="count" value="91" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="interval">间隔（秒）:</label>
-                        <div class="controls">
-                            <input type="text" id="interval" name="interval" value="600" />
+                        <div class="control-group">
+                            <label class="control-label" for="start_time">起始时间:</label>
+                            <div class="controls vDateClass" id="pub-time">
+                                <input type="text" id="start_time" name="start_time" value="{{ start_time }}" />
+                                <button class="btn" type="button">现在</button>
+                            </div>
                         </div>
+                        <div class="control-group">
+                            <label class="control-label" for="interval">间隔（秒）:</label>
+                            <div class="controls">
+                                <input type="text" id="interval" name="interval" value="600" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">执行</button>
                     </div>
-                </fieldset>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">执行</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock %}

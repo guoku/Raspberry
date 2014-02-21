@@ -242,8 +242,7 @@ def user_like(request, user_id):
         _last_like_time = None
         for _item in MobileUser(user_id).find_like_entity(timestamp = _timestamp, offset = _offset, count = _count, with_timestamp = True):
             _list.append(MobileEntity(_item[0]).read(_request_user_id))
-            if _last_like_time == None:
-                _last_like_time = _item[1]
+            _last_like_time = _item[1]
 
         _rslt = {
             'timestamp' : time.mktime(_last_like_time.timetuple()),

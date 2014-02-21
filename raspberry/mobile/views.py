@@ -16,6 +16,7 @@ from report import *
 from user import *
 from tasks import MarkFootprint, MobileLogTask
 from utils.lib import get_client_ip
+import random 
 import time
 
 @check_sign
@@ -30,15 +31,21 @@ def homepage(request):
     _rslt['discover'] = popularity.read_popular_category()['data'][0:8]
     
     _rslt['banner'] = []
-    for _banner_context in Banner.find():
-        _rslt['banner'].append({
-            'url' : _banner_context['url'], 
-            'img' : _banner_context['image'] 
-        })
+    for _banner_context in Banner.find(status = 'active'):
+        try:
+            _rslt['banner'].append({
+                'url' : _banner_context['url'], 
+                'img' : _banner_context['image'] 
+            })
+        except Exception, e:
+            pass
     
 
     _rslt['hottag'] = []
-    for _tag_data in Tag.get_recommend_user_tag_list():
+    _recommend_user_tag_list = Tag.get_recommend_user_tag_list()
+    if len(_recommend_user_tag_list) > 3:
+        _recommend_user_tag_list = random.sample(_recommend_user_tag_list, 3)
+    for _tag_data in _recommend_user_tag_list:
         _rslt['hottag'].append({
             'tag_name' : _tag_data[1],
             'entity_count' : _tag_data[2],
@@ -97,17 +104,20 @@ def feed(request):
 
         
         _rslt = []
-        for _note_id in _note_id_list: 
-            _note_context = MobileNote(_note_id).read(_request_user_id)
-            if _note_context.has_key('entity_id'):
-                _entity = MobileEntity(_note_context['entity_id'])
-                _rslt.append({
-                    'type' : 'entity',
-                    'content' : {
-                        'entity' : _entity.read(_request_user_id),
-                        'note' : _note_context
-                    }
-                })
+        for _note_id in _note_id_list:
+            try:
+                _note_context = MobileNote(_note_id).read(_request_user_id)
+                if _note_context.has_key('entity_id'):
+                    _entity = MobileEntity(_note_context['entity_id'])
+                    _rslt.append({
+                        'type' : 'entity',
+                        'content' : {
+                            'entity' : _entity.read(_request_user_id),
+                            'note' : _note_context
+                        }
+                    })
+            except Exception, e:
+                pass
         
         _duration = datetime.datetime.now() - _start_at
         MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'FEED', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)

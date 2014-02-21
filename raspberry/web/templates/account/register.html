@@ -3,12 +3,27 @@
 
 {% block title %}{% trans 'sign up' %}{% endblock %}
 {% block form %}
-    <form action="{% url 'web_register' %}" method="POST" id="register">
+    <form action="" method="POST" id="register">
         {% csrf_token %}
-
+        {% if third_party_data%}
+        <fieldset>
+            <div id="third_party_info">
+                <div class="third-party-user">
+                    <div class="avatar">
+                        <img src="{{ third_party_data.avatar_large }}" />
+                    </div>
+                    <h4 class="heading m0">Hi {{ third_party_data.screen_name }}，</h4>
+                    <span>欢迎通过{%if source == 'sina' %}新浪微博{% else %} {% if source == 'taobao' %}淘宝{% endif %}{% endif %}，创建果库帐号</span>
+                </div>
+            
+            </div>
+        </fieldset>
+        {% endif %}
         <h2>注册帐号</h2> | 已有帐号？<a href="{% url 'web_login' %}">请登录</a>
-
-        {% for field in forms %}
+        <p>第{{ wizard.steps.step1 }}步，共{{ wizard.steps.count }}步</p>
+        {{ wizard.management_form }}
+        {% for field in wizard.form %}
+            {% if field.name != "agree_tos" %}
             <div>
                 {{ field }}
             {% if field.errors %}
@@ -19,26 +34,29 @@
                 </span>
             {% endif %}
             </div>
+            {% endif %}
         {% endfor %}
-{#        <div>#}
-{#            <input type="text" name="nickname" class="text-input" placeholder="昵称" id="nickname">#}
-{#            {% if error.nickname != None %}<span class="error-info">{{ error.nickname }}</span>{% endif %}#}
-{#        </div>#}
-{##}
-{#        <div>#}
-{#            <input type="text" name="email" class="text-input" placeholder="邮箱" id="email">#}
-{#            {% if error.email != None %}<span class="error-info">{{ error.email }}</span>{% endif %}#}
-{#        </div>#}
-{##}
-{#        <div>#}
-{#            <input type="password" name="psw" class="text-input" placeholder="密码" id="psw">#}
-{#            {% if error.psw != None %}<span class="error-info">{{ error.psw }}</span>{% endif %}#}
-{#        </div>#}
 
         <div class="submit-row">
-            <label><input type="checkbox" name="agreement" checked id="agreement">同意果库</label>
+            <label>{{ wizard.form.agree_tos }}同意果库</label>
             <small><a href="">使用协议</a></small>
-            <input type="submit" value="{% trans 'sign up' %}" class="guoku-button">
+            {% if wizard.form.agree_tos.errors %}
+                <span class "error-info">
+                    {% for error in wizard.form.agree_tos.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                </span>
+            {% endif %}
+            <div>
+                <input type="submit" value="下一步" class="guoku-button">
+            </div>
         </div>
     </form>
+{% endblock %}
+
+{% block third_party_login %}
+    {% if third_party_data %}
+    {% else %}
+        {{ block.super }}
+    {% endif %}
 {% endblock %}

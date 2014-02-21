@@ -21,10 +21,12 @@ class Item(Document):
     images = ListField(required = False)
     created_time = DateTimeField(required = True)
     updated_time = DateTimeField(required = True)
+    weight = IntField(required = True, default = 0) 
     meta = {
         'db_alias' : 'guoku-db',
         'indexes' : [ 
-            'entity_id' 
+            'entity_id', 
+            'weight'
         ],
         'allow_inheritance' : True
     }
@@ -56,7 +58,8 @@ class Selection(Document):
     post_time = DateTimeField(required = True)
     meta = {
         'db_alias' : 'guoku-db',
-        "indexes" : [ 
+        'ordering' : ['-post_time'],
+        "indexes" : [
             "selector_id", 
             "post_time" 
         ],
@@ -72,7 +75,7 @@ class NoteSelection(Selection):
     category_id = IntField(required = True) 
     meta = {
         'db_alias' : 'guoku-db',
-        "indexes" : [ 
+        "indexes" : [
             "entity_id", 
             "note_id",
             "root_category_id",
@@ -164,7 +167,7 @@ class TaobaoShopVerificationInfo(DynamicDocument):
         'indexes' : ['shop_nick']
     }
 
-class GuokuPriceApplication(DynamicDocument):
+class GuokuPlusApplication(DynamicDocument):
     shop_nick = StringField(required = True)
     taobao_item_id = StringField(required = True)
     quantity = IntField()
@@ -174,8 +177,9 @@ class GuokuPriceApplication(DynamicDocument):
     status = StringField()
     editor_comment = StringField()
     created_time = DateTimeField()
+    updated_time = DateTimeField()
     meta = {
         'db_alias' : 'guoku-db',
-        'collection' : 'guoku_price_application',
-        'indexes' : [ 'shop_nick', 'taobao_item_id' ],
+        'collection' : 'guoku_plus_application',
+        'indexes' : [ 'shop_nick', 'taobao_item_id', 'updated_time'],
     }

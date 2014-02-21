@@ -1,9 +1,14 @@
 # coding=utf-8
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.views.decorators.http import require_http_methods
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template import loader
-import json
+from django.utils.log import getLogger
+# import json
+from utils.http import JSONResponse
+from datetime import datetime
 
 from utils.paginator import Paginator
 from base.models import NoteSelection
@@ -11,9 +16,15 @@ from base.note import Note
 from base.entity import Entity
 from base.user import User
 from base.category import Old_Category
-from util import *
+import base.popularity as popularity
+from util import get_request_user, get_request_user_context, user_already_like_entity
 
+log = getLogger('django')
 
+def index(request):
+    return HttpResponseRedirect(reverse('web_selection'))
+
+@require_http_methods(['GET'])
 def selection(request, template='main/selection.html'):
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
@@ -21,18 +32,17 @@ def selection(request, template='main/selection.html'):
 
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
-
+    log.info(datetime.now())
     # 判断是否ajax方式加载,如不是则强制返回首页
     # 见https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.is_ajax
     if not request.is_ajax():
         _page_num = 1
 
     if _category_id is None:
-        _hdl = NoteSelection.objects.all()
+        _hdl = NoteSelection.objects(post_time__lt = datetime.now())
     else:
         _category_id = int(_category_id)
-        _hdl = NoteSelection.objects.filter(category_id=_category_id)
-
+        _hdl = NoteSelection.objects(category_id=_category_id, post_time__lt = datetime.now())
     _total_count = _hdl.count()
     _count_in_one_page = 24
     if _page_num != 1:
@@ -40,7 +50,8 @@ def selection(request, template='main/selection.html'):
         _count_in_one_page = 15
     _paginator = Paginator(_page_num, _count_in_one_page, _total_count)
 
-    _hdl.order_by('-post_time')
+    # _hdl.order_by('-post_time')
+
     _offset = _paginator.offset
     _note_selection_list = _hdl[_offset: _offset + _count_in_one_page]
 
@@ -98,74 +109,39 @@ def selection(request, template='main/selection.html'):
                 'status' : '1',
                 'data' : _data
             }
+        return JSONResponse(data=_ret)
+        # return HttpResponse(json.dumps(_ret))
 
-        return HttpResponse(json.dumps(_ret))
-
-
-def detail(request, entity_hash, template='main/detail.html'):
-    _user = get_request_user(request.user.id)
-    _user_context = get_request_user_context(_user)
-
-    _entity_id = Entity.get_entity_id_by_hash(entity_hash)
-    _entity_context = Entity(_entity_id).read()
-    _note_id_list = Note.find(entity_id=_entity_id)
-
-    _selection_note = None
-    _common_note_list = []
-    _is_user_already_note = False
-    _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
-
-    for _note_id in _note_id_list:
-        _note = Note(_note_id)
-        _note_context = _note.read()
-        _creator_context = User(_note_context['creator_id']).read()
-
-        if _creator_context['user_id'] == request.user.id:
-            _is_user_already_note = True
-
-        # 判断是否是精选
-        if _note_context['is_selected']:
-            _selection_note = {
-                'note_context' : _note_context,
-                'creator_context' : _creator_context,
-                'user_context' : _user_context
-            }
-        else:
-            _common_note_list.append(
-                {
-                    'note_context' : _note_context,
-                    'creator_context' : _creator_context,
-                    'user_context' : _user_context
-                }
-            )
-
-    return render_to_response(
-        template,
-        {
-            'user_context' : _user_context,
-            'entity_context' : _entity_context,
-            'is_user_already_note' : _is_user_already_note,
-            'is_user_already_like' : _is_user_already_like,
-            'selection_note' : _selection_note,
-            'common_note_list' : _common_note_list,
-        },
-        context_instance=RequestContext(request)
-    )
-
-
+@require_http_methods(['GET'])
 def popular(request, template='main/popular.html'):
+    _scale = {
+        'd': 'daily',
+        'w': 'weekly',
+        # 'm': 'monthly',
+    }
+
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
     _group = request.GET.get('group', 'd')  # d, w, m
 
+
+
     # 先用精选数据来模拟热门 TODO
-    _entity_id_list = [x['entity_id'] for x in NoteSelection.objects.all()[0:30]]
+    # _entity_id_list = [x['entity_id'] for x in NoteSelection.objects[0:60]]
+    try:
+        _popular_entities = popularity.read_popular_entity_from_cache(scale = _scale[_group])
+    except KeyError, e:
+        log.info("INFO: %s" % e.message)
+        raise Http404
+    # log.info(_popular_entities['data'])
+    # return HttpResponse(_popular_entities)
     _popular_list = []
 
-    for _id in _entity_id_list:
-        _entity = Entity(_id)
+    for row in _popular_entities['data'][0:60]:
+        # log.info(_id)
+        _entity = Entity(row[0])
         _entity_context = _entity.read()
-        _is_user_already_like = user_already_like_entity(request.user.id, _id)
+        _is_user_already_like = user_already_like_entity(request.user.id, row[0])
 
         _popular_list.append({
             'is_user_already_like' : _is_user_already_like,
@@ -175,7 +151,7 @@ def popular(request, template='main/popular.html'):
     return render_to_response(
         template,
         {
-            'main_nav_deliver' : 'popular',
+            # 'main_nav_deliver' : 'popular',
             'group' : _group,
             'user_context' : _user_context,
             'recent_time' : '10小时前',
@@ -190,7 +166,7 @@ def discover(request, template='main/discover.html'):
     _user_context = get_request_user_context(_user)
 
     # 先用精选数据来模拟 TODO
-    _product_list = map(lambda x: Entity(x['entity_id']).read(), NoteSelection.objects.all()[0:10])
+    _product_list = map(lambda x: Entity(x['entity_id']).read(), NoteSelection.objects[0:10])
 
     return render_to_response(
         template,
@@ -213,7 +189,7 @@ def shop(request, shop_id):
 
 def message(request, template='main/message.html'):
     if request.method == 'GET':
-        _user = User(request.user.id)
+        _user = get_request_user(request.user.id)
         _user_context = _user.read()
 
         # TODO
@@ -229,7 +205,7 @@ def message(request, template='main/message.html'):
 
 def activity(request, template='main/activity.html'):
     if request.method == "GET":
-        _user = User(request.user.id)
+        _user = get_request_user(request.user.id)
         _user_context = _user.read()
 
         # TODO

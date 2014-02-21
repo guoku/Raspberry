@@ -249,16 +249,18 @@ class User(object):
         return _inst
 
     @classmethod
-    def login_by_sina(cls, sina_id, sina_token = None, screen_name = None):
+    def login_by_sina(cls, sina_id, sina_token = None, screen_name = None, expires_in = None):
         try:
             _sina_token_obj = SinaTokenModel.objects.get(sina_id = sina_id)
         except SinaTokenModel.DoesNotExist, e:
             raise User.LoginSinaIdDoesNotExist(sina_id)
     
-        if sina_token != None:
+        if sina_token:
             _sina_token_obj.access_token = sina_token
-        if screen_name != None:
+        if screen_name:
             _sina_token_obj.screen_name = screen_name
+        if expires_in:
+            _sina_token_obj.expires_in = expires_in
         _sina_token_obj.save()
         _inst = cls(_sina_token_obj.user_id)
         
@@ -277,7 +279,7 @@ class User(object):
         _inst = cls(_taobao_token_obj.user_id)
         
         return _inst
-    
+   
     @staticmethod
     def email_exist(email):
         if AuthUser.objects.filter(email = email).count() > 0:
@@ -338,7 +340,46 @@ class User(object):
 
         return _user_inst
     
+   
+    def authenticate_without_password(self):
+        try:
+            _user = AuthUser.objects.get(pk = self.user_id)
+            _user.backend = 'django.contrib.auth.backends.ModelBackend'
+            return _user
+        except:
+            return None
+
+    def bind_sina(self, sina_id, screen_name, access_token, expires_in = 0):
+        try:
+            _token = SinaTokenModel.objects.get(user_id = self.user_id, sina_id = sina_id)
+            _token.screen_name = screen_name
+            _token.access_token = access_token
+            _token.expires_in = expires_in
+            _token.save()
+        except SinaTokenModel.DoesNotExist:
+            if SinaTokenModel.objects.filter(sina_id = sina_id).count() > 0:
+                raise User.SinaIdExistAlready(sina_id)
+            
+            if SinaTokenModel.objects.filter(user_id = self.user_id).count() > 0:
+                raise User.UserBindSinaAlready()
+            
+            SinaTokenModel.objects.create(
+                user_id = self.user_id,
+                sina_id = sina_id,
+                screen_name = screen_name,
+                access_token = access_token,
+                expires_in = expires_in
+            )
+        self.__reset_basic_info_to_cache()
     
+    def unbind_sina(self):
+        try:
+            _sina_token_obj = SinaTokenModel.objects.get(user_id = self.user_id)
+            _sina_token_obj.delete()
+            self.__reset_basic_info_to_cache()
+        except SinaTokenModel.DoesNotExist:
+            pass
+ 
     def bind_taobao(self, taobao_id, screen_name, taobao_token, expires_in = 0):
         try:
             _token = TaobaoTokenModel.objects.get(user_id = self.user_id, taobao_id = taobao_id)

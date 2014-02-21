@@ -33,7 +33,7 @@
                     你的淘宝帐号授权已过期，请重新绑定
                 </div>
             {% endif %}
-            <a href="{% url 'bind_taobao' %}">绑定</a>
+            <a href="{% url 'bind_taobao' %}?next=/taobao/shop/bind/">绑定</a>
         {% else %}
             <div>
                 请输入你店铺某一件商品的地址

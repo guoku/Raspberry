@@ -1,13 +1,12 @@
 {% extends "account/account_base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans 'sign in' %}{% endblock %}
-
+{% block title %}{% trans "sign in" %}{% endblock %}
 {% block form %}
     <form action="{% url 'web_login' %}" method="POST" id="login">
         {% csrf_token %}
 
-        <h2>登录</h2> | 没有帐号？<a href="{% url 'web.views.account.register' %}">请注册</a>
+        <h2>登录</h2> | 没有帐号？<a href="{% url 'web_register' %}">请注册</a>
 
         {% if next != None %}
             <input type="hidden" name="next" value="{{ next }}">

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load i18n staticfiles %}
 {% load entity %}
 
 {% block title %}
@@ -14,14 +14,14 @@
         <div class="main">
             <div class="entity">
                 <a href="#" class="entity-img">
-                    <img src="{{ entity_context.chief_image.url }}" alt="{{ entity_context.title }}">
+                    <img src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
                 </a>
                 <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</h2>
 
                 <a href="{% url 'web_like_entity' entity_context.entity_id %}"
                    class="like{% if is_user_already_like %} liked{% endif %}">
                     <span class="icon"></span>
-                    <span class="count">{{ entity_context.like_count }}</span>喜爱
+                    <span class="count">{{ entity_context.like_count }}</span>{% trans 'likes' %}
                 </a>
                 {% if selection_note != None %}
                     <div class="selection-note">
@@ -42,17 +42,19 @@
             </div>
 
             {# 判断有没有点评过 #}
-            {% if not is_user_already_note %}
-                <div class="add-note">
-                    <img src="{{ user_context.avatar_small }}" width="50" height="50">
-                    <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">
-                        <textarea name="note_text" placeholder="写点评 ＃贴标签"></textarea>
-                        <div>
-                            <button type="button" class="cancel">取消</button>
-                            <button type="submit" class="submit">点评</button>
-                        </div>
-                    </form>
-                </div>
+            {% if user.is_authenticated  %}
+                {% if not is_user_already_note %}
+                    <div class="add-note">
+                        <img src="{{ user_context.avatar_small }}" width="50" height="50">
+                        <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">
+                            <textarea name="note_text" placeholder="写点评 ＃贴标签"></textarea>
+                            <div>
+                                <button type="button" class="cancel">取消</button>
+                                <button type="submit" class="submit">点评</button>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
 
@@ -63,21 +65,22 @@
 
                 {% if entity_context.detail_images|length > 0 %}
                     <div class="detail-img">
+                        <a href=""><img src="{{ entity_context.chief_image.url|resize:'64' }}"></a>
                         {% for img in entity_context.detail_images %}
-                            <a href="javascript:;"><img src="{{ img.url }}"></a>
+                            <a href="javascript:;"><img src="{{ img.url|resize:'64' }}"></a>
                         {% endfor %}
                     </div>
                 {% endif %}
             </div>
 
             <div class="likes">
-                <h3>100人喜爱</h3>
+                <h3>{{ entity_context.like_count }}人喜爱</h3>
                 <div>
                     <a href=""><img src="" height="25" width="25"></a>
                 </div>
             </div>
 
-            <p class="category">[杂七杂八]</p>
+            <p class="category">[{{ entity_context.category_id|trans_category }}]</p>
 
             <div class="tag">
                 <h3>该商品的标签</h3>

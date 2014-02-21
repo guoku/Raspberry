@@ -1,0 +1,67 @@
+{% extends "management_base.html" %}
+{% load management %}
+
+
+{% block content %}
+    <div class="span12">
+        <div class="span2">
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li class="nav-header">操作</li>
+                    <li>
+                        <a href="{% url 'management_arrange_selection' %}">
+                            精选排时间 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'management_note_list' %}">
+                            点评
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'management_note_comment_list' %}">
+                            评论  
+                        </a>
+                    </li>
+                </ul>
+        
+            </div>
+        </div>
+        <div class="span10">
+            <div>
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>entity</th>
+                            <th>note</th>
+                            <th>用户</th>
+                            <th>评论</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment_context in context_list %}
+                            <tr class="success">
+                                <td width="50"><p class="text-info">{{ comment_context.comment_id }}</p></td>
+                                <td width="50"><a>{{ comment_context.entity_id }}</a></td>
+                                <td width="50"><a>{{ comment_context.note_id }}</a></td>
+                                <td width="100"><p class="text-info">{{ comment_context.creator.nickname }}</p></td>
+                                <td width="400"><p class="text-info">{{ comment_context.content }}</p></td>
+                                <td width="50">
+                                    <div class="btn-group">
+                                        <a class="btn" href="{% url 'management_delete_note_comment' comment_context.note_id comment_context.comment_id %}">删</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        
+            {% if paginator %}
+                {% display_paginator paginator %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

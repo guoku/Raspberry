@@ -13,40 +13,34 @@
 
         <div class="guoku-block">
             {% display_avatar_update user_context %}
-
-            <form method="POST" action="{% url 'web.views.account.register_bio' %}" class="base-info">
+            
+            <form method="POST" action="" class="base-info">
                 {% csrf_token %}
+                {{ wizard.management_form }}
                 <h3>个人资料</h3>
-
-                {% if error != None %}
-                    <p class="error">{{ error }}</p>
-                {% endif %}
-
+                {{ wizard.form.errors }}
                 <div>
                     <label for="bio">{% trans 'bio' %}</label>
-                    <textarea name="bio" id="bio" class="text-input" rows="4">{{ user_context.bio }}</textarea>
+                    {#<textarea name="bio" id="bio" class="text-input" rows="4">{{ user_context.bio }}</textarea>#}
+                    {{ wizard.form.bio }}
                 </div>
 
                 <div class="address">
                     <span class="label">所在地</span>
-                    <select name="location" class="location" data-p="{{ user_context.location }}"></select>
-                    <select name="city" class="city" data-c="{{ user_context.city }}"></select>
+                    {{ wizard.form.location }}
+                    {{ wizard.form.city }}
                 </div>
 
                 <div class="gender">
                     <span class="label">性别</span>
-                    <label>男 <input type="radio" name="gender" value="M"
-                                    {% if user_context.gender == 'M' %}checked{% endif %}></label>
-                    <label>女 <input type="radio" name="gender" value="F"
-                                    {% if user_context.gender == 'F' %}checked{% endif %}></label>
-                    <label>其他 <input type="radio" name="gender" value="O"
-                                     {% if user_context.gender == 'O' %}checked{% endif %}></label>
+                    {% for radio in wizard.form.gender %}
+                        <label> {{ radio.choice_label }} {{radio.tag }}</label>
+                    {% endfor %}
                 </div>
 
                 <div>
                     <label for="website">网址</label>
-                    <input type="text" name="website" value="{{ user_context.website }}" id="website"
-                           class="text-input">
+                    {{ wizard.form.website }}
                 </div>
 
                 <input type="submit" value="完成" class="guoku-button">

@@ -12,11 +12,15 @@
 #detail .entity-img {
     display: block;
     width: 580px;
+    height: 580px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 #detail .entity-img img {
     display: block;
-    max-width: 100%;
+    max-width: 580px;
+    max-height: 580px;
 }
 
 #detail h2 {

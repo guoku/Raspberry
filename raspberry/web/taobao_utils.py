@@ -55,7 +55,7 @@ def get_taobao_user_info(access_token):
 
 def auth(request):
     code = request.GET.get('code', None)
-    redirect_url = get_referer_url(request, request.session['back_to_url'])
+    redirect_url = get_referer_url(request, request.session.get('back_to_url', None))
     auth_client = TaobaoClient(code = code,
                                app_key = APP_KEY,
                                app_secret = APP_SECRET,

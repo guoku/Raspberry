@@ -17,6 +17,7 @@ from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
 from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
 from models import Note as NoteModel
+from models import Note_Comment as NoteCommentModel
 from models import NoteSelection
 from tasks import CleanNoteMessageTask, CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
 from note import Note
@@ -146,10 +147,15 @@ class Entity(object):
 
     
     def merge(self, target_entity_id):
-        _item_id_list = Item.get_item_id_list_by_entity_id(target_entity_id)
-        for _item_id in _item_id_list:
+        for _item_id in Item.find(entity_id = target_entity_id):
             _item = Item(_item_id)
             _item.bind(self.entity_id)
+    
+        self.clean_cache()
+        for _note_obj in NoteModel.objects.filter(entity_id = target_entity_id):
+            _note_obj.entity_id = self.entity_id 
+            _note_obj.save()
+            Note(_note_obj.id).clean_cache()
         
         _target_entity = Entity(target_entity_id)
         _target_entity.delete()
@@ -208,7 +214,7 @@ class Entity(object):
 
     @classmethod
     def get_entity_id_by_hash(cls, entity_hash):
-        _cache_key = 'entity_%s_hash_to_id'%entity_hash
+        _cache_key = 'entity_%s_hash_to_id' % entity_hash
         _entity_id = cache.get(_cache_key)
         if _entity_id == None:
             try:
@@ -217,6 +223,14 @@ class Entity(object):
             except EntityModel.DoesNotExist, e:
                 pass
         return _entity_id 
+    
+    def clean_cache(self):
+        cache.delete('entity_%s_basic_info'%self.entity_id)
+        cache.delete('entity_%s_note_info'%self.entity_id)
+        
+        ## CLEAN_OLD_CACHE ## 
+        cache.delete("entity_key_note_id_%s"%self.entity_id)
+        cache.delete("entity_note_context_list_%s"%self.entity_id)
     
 
     def __load_basic_info_from_cache(self):

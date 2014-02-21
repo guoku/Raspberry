@@ -4,34 +4,36 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from urlparse import urlparse
-import HTMLParser
-import re 
+from django.utils.log import getLogger
+# from urlparse import urlparse
+# import HTMLParser
+# import re
 import datetime
 import time
 import json
 
-from base.entity import Entity 
+from base.entity import Entity
 from base.note import Note
 from base.user import User
 from management.tasks import ArrangeSelectionTask
-from utils.authority import staff_only 
+from utils.authority import staff_only
 from utils.paginator import Paginator
 
+log = getLogger('django')
 
 @login_required
 @staff_only
 def arrange_selection(request):
     if request.method == 'GET':
-        _t_start = datetime.datetime.now() + datetime.timedelta(days = 1) 
+        _t_start = datetime.datetime.now() + datetime.timedelta(days = 1)
         _year = _t_start.year
         _month = _t_start.month
         _date = _t_start.day
-        _start_time = "%d-%d-%d 8:00:00"%(_year, _month, _date) 
-        
+        _start_time = "%d-%d-%d 8:00:00"%(_year, _month, _date)
+
         _pending_note_count = Note.count(pending_selection = True)
-        return render_to_response( 
-            'note/arrange.html', 
+        return render_to_response(
+            'note/arrange.html',
             {
                 'active_division' : 'note',
                 'pending_note_count' : _pending_note_count,
@@ -50,34 +52,34 @@ def arrange_selection(request):
             interval_secs = _interval
         )
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
-        
+
 
 
 @login_required
 @staff_only
 def note_list(request):
     _selection = request.GET.get("selection", None)
-    _select_entity_id = request.GET.get("entity_id", None)
     _nav_filter = 'all'
     _sort_by = None
     _para = {}
+    _select_entity_id = request.GET.get("entity_id", None)
     if _selection == 'only':
-        _selection = 1 
+        _selection = 1
         _nav_filter = 'selection_only'
-        _sort_by = 'selection_post_time' 
-        _para['selection'] = 'only' 
+        _sort_by = 'selection_post_time'
+        _para['selection'] = 'only'
     elif _selection == 'none':
-        _selection = -1 
+        _selection = -1
         _nav_filter = 'selection_none'
-        _para['selection'] = 'none' 
+        _para['selection'] = 'none'
     else:
         _selection = 0
-    
+
     _freezed = request.GET.get("freeze", None)
     if _freezed == '1':
-        _status = -1 
+        _status = -1
         _nav_filter = 'freezed'
-        _para['freeze'] = '1' 
+        _para['freeze'] = '1'
     else:
         _status = 1
 
@@ -93,10 +95,15 @@ def note_list(request):
             sort_by = _sort_by
         )
     else:
+        _para['entity_id'] = _select_entity_id
         _note_count = Note.count(entity_id=_select_entity_id)
         _paginator = Paginator(_page_num, 30, _note_count, _para)
-        _note_id_list = Note.find(entity_id=_select_entity_id)
-        
+        _note_id_list = Note.find(
+            entity_id = _select_entity_id,
+            offset = _paginator.offset,
+            count = _paginator.count_in_one_page
+        )
+
     _context_list = []
     for _note_id in _note_id_list:
         try:
@@ -104,12 +111,12 @@ def note_list(request):
             _note_context = _note.read()
             _entity_id = _note_context['entity_id']
             _entity_context = Entity(_entity_id).read()
-
-            if _note_context['post_time'] == datetime.datetime(2100, 1, 1):
-                _is_future = 1
-            else:
-                _is_future = 0
-
+            _is_future = 0
+            if _note_context['post_time'] is not None:
+                post_time = time.mktime( _note_context['post_time'].timetuple() )
+                bench_time = time.mktime( datetime.datetime(2100, 1, 1).timetuple() )
+                if post_time == bench_time:
+                    _is_future = 1
             _context_list.append({
                 'entity': _entity_context,
                 'note': _note_context,
@@ -117,13 +124,13 @@ def note_list(request):
                 'is_future': _is_future,
             })
         except Exception, e:
-            pass
+            log.error("Error: %s" % e.message)
 
     return render_to_response( 
-        'note/list.html', 
+        'note/list.html',
         {
             'active_division' : 'note',
-            'nav_filter' : _nav_filter, 
+            'nav_filter' : _nav_filter,
             'context_list' : _context_list,
             'paginator' : _paginator,
             'select_entity_id': _select_entity_id
@@ -141,7 +148,7 @@ def freeze_note(request, note_id):
         _entity = Entity(_entity_id)
         _entity.update_note(
             note_id = note_id,
-            weight = -1 
+            weight = -1
         )
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -149,12 +156,12 @@ def freeze_note(request, note_id):
 
 @login_required
 @staff_only
-def edit_note(request, note_id, template='note/edit.html'):
+def edit_note(request, note_id):
     if request.method == 'GET':
         _note_context = Note(note_id).read()
         _entity_context = Entity(_note_context['entity_id']).read()
         return render_to_response(
-            template,
+            'note/edit.html',
             {
                 'active_division' : 'note',
                 'entity_context' : _entity_context,
@@ -225,4 +232,38 @@ def post_selection_delay(request, entity_id, note_id):
         selected_time = _selected_time,
         post_time = _post_time
     )
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+@staff_only
+def note_comment_list(request):
+    _page_num = int(request.GET.get("p", "1"))
+    _comment_count = Note.comment_count()
+    _paginator = Paginator(_page_num, 30, _comment_count)
+    
+    _context_list = []
+    for _comment in Note.find_comment(offset=_paginator.offset, count=_paginator.count_in_one_page):
+        try:
+            _comment_context = Note(_comment[0]).read_comment(_comment[1]) 
+            _comment_context['creator'] = User(_comment_context['creator_id']).read() 
+            _context_list.append(_comment_context)
+        except Exception, e:
+            pass
+    
+    return render_to_response( 
+        'note/comment_list.html',
+        {
+            'active_division' : 'note',
+            'context_list' : _context_list,
+            'paginator' : _paginator,
+        },
+        context_instance = RequestContext(request)
+    )
+
+@login_required
+@staff_only
+def delete_note_comment(request, note_id, comment_id):
+    _note = Note(note_id)
+    _note.del_comment(comment_id)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])

@@ -12,7 +12,7 @@ register_connection('log-db', 'guoku_log')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'guoku_12_12',
+        'NAME': 'guoku_02_11',
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': 'localhost',
@@ -148,6 +148,7 @@ INSTALLED_APPS = (
     'management',
     'mobile',
     'seller',
+    'stats',
     'web',
     # 'redis_admin',
 )
