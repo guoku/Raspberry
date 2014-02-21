@@ -93,8 +93,13 @@ def roll(request):
     _acc_obj.save()
     _player.roll_count += 1
     _player.save()
+
+    _left_roll_count = _player.share_count - _player.roll_count
     
-    return SuccessJsonResponse({ 'code': 0 })
+    return SuccessJsonResponse({ 
+        'code' :  _code,
+        'leftrollcount' : str(_left_roll_count) 
+    })
      
 
 def share_to_sina_weibo(request):

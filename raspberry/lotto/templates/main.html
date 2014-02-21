@@ -105,7 +105,7 @@
                         今天的抽奖机会已经用完了 :( 
                     {% else %}
                         今天还有
-                        <span id="count">{{count}}</span>
+                        <span id="left-roll-count">{{count}}</span>
                         次抽奖机会
                     {% endif %}
                 </div>
@@ -197,18 +197,23 @@
                                       type: "GET",
                                       success: function(data) {
                                         var code = data['code'];
+                                        var left_roll_count = data['leftrollcount'];
                                         if (code == 0) {
+                                            $('#left-roll-count').text(left_roll_count)
                                             var angle = [0,120, 240];
                                             angle = angle[Math.floor(Math.random() * angle.length)]
                                             rotateStart(0, angle, '很遗憾，这次您未抽中奖')
                                         }
                                         if (code == 1) {
+                                            $('#left-roll-count').text(left_roll_count)
                                             rotateStart(1, 180, '恭喜您抽中的一等奖')
                                         }
                                         if (code == 2) {
+                                            $('#left-roll-count').text(left_roll_count)
                                             rotateStart(2, 300, '恭喜您抽中的二等奖')
                                         }
                                         if (code == 3) {
+                                            $('#left-roll-count').text(left_roll_count)
                                             rotateStart(3, 60, '恭喜您抽中的三等奖')
                                         }
                                         if (code == 4) {
@@ -217,7 +222,6 @@
                                         if (code == 5) {
                                             alert('请先去分享')
                                         }
-            
 
                                       },
                                       error: function(data) {
