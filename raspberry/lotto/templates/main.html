@@ -99,9 +99,15 @@
             <div>
                 <div id="sina-btn" style="color:#898989;font-size:12px;height:20px;margin-top:10px;" >
                     <img src="{% static 'images/share.png' %}" width=9 height=12>
-                    分享就抽奖，今天还可以分享并抽
-                    <span id="count">2</span>
-                    次
+                    {% if count == -1 %}
+                        分享到微博就能抽奖，赶紧来试试手气！
+                    {% elif count == 0 %}
+                        今天的抽奖机会已经用完了 :( 
+                    {% else %}
+                        今天还有
+                        <span id="count">{{count}}</span>
+                        次抽奖机会
+                    {% endif %}
                 </div>
             </div>
             <div class="rotate">
@@ -146,9 +152,15 @@
 <script src="{% static 'scripts/jquery.js' %}"></script>
 <script src="{% static 'scripts/jqueryrotate.js' %}"></script>
 <script type="text/javascript">
-    var count = 1;
-    var token = "";
+    {% if infocode == '0' %}
+        alert('abc');
+    {% endif %}
+</script>
+<script type="text/javascript">
+    var count = {{count}};
+    var token = "{{token}}";
     var session = "{{session}}";
+    
     $(function () {
         var rotateStart = function (awards, angle, text) {  //awards:奖项，angle:奖项对应的角度
             $('.btn-lottery').stopRotate();
@@ -238,7 +250,7 @@
 //              }});
 //            }
 
-        )
+//        )
     });
 </script>
 <script type="text/javascript">
