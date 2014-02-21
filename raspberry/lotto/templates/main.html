@@ -115,7 +115,7 @@
                 <div class="btn-lottery"></div>
             </div>
             <div>
-                <a href="{% url 'lotto_share_to_sina_weibo' %}">
+                <a href="{% url 'lotto_share_to_sina_weibo' %}?session={{session}}&token={{token}}">
                     <div id="sina-btn" class="sina-btn" >
                         <img src="{% static 'images/sina.png' %}" width=17 height=13>微博分享试一下
                     </div>

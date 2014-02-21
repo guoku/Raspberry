@@ -34,10 +34,22 @@ def main(request, template='main.html'):
     _token = request.GET.get('token', '')
     _infocode = request.GET.get('ifc', None)
     _count = -1 
-    
-    if _token != '' and _token != None:
+        
+
+    _player = None
+    if _token != '': 
         _player = Player.objects.get(token = _token)
-        _count = _cal_available_roll_count(_player.share_count, _player.roll_count, _player.last_share_time) 
+    elif _session != '':
+        _request_user_id = Session_Key.objects.get_user_id(_session)
+        try:
+            _player = Player.objects.get(user_id = _request_user_id)
+            _token = _player.token
+        except:
+            pass
+    
+    if _player != None:
+        _count = _cal_available_roll_count(_player.share_count, _player.roll_count, _player.last_share_time)
+
     
     return render_to_response(
         template, 
