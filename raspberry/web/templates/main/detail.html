@@ -90,8 +90,9 @@
             <div class="tag">
                 <h3>该商品的标签</h3>
                 <div>
-                    <a href="">＃test</a>
-                    <a href="">＃测试</a>
+                    {% for tag in tag_list %}
+                        <a href="#">＃{{ tag.tag }}</a>
+                    {% endfor %}
                 </div>
             </div>
 

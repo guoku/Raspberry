@@ -9,7 +9,7 @@ log = getLogger('django')
 
 def show_avater(value, size=64):
     _user_context = User(value).read()
-    log.info(_user_context)
+    # log.info(_user_context)
     _avatar_url = _user_context['avatar_large']
     if size <= 50:
         _avatar_url = _user_context['avatar_small']
