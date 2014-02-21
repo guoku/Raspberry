@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from mobile.lib.http import SuccessJsonResponse 
 from mobile.models import Session_Key
-from models import Accumulate, Player
+from models import Accumulate, Player, Reward
 from weibo import APIClient
 from web import sina_utils
 import datetime
@@ -72,7 +72,12 @@ def roll(request):
     
     _acc_obj.count += 1
     if _acc_obj.count % 50 == 0:
-        _code = 3 
+        _code = 3
+        Reward.objects.create(
+            player_id = _player.id,
+            level = 3
+        )
+        
     _acc_obj.save()
     _player.roll_count += 1
     _player.save()

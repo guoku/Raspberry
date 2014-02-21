@@ -19,3 +19,9 @@ class Player(models.Model):
     last_share_time = models.DateTimeField(null=True, default=None)
     created_time = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_time = models.DateTimeField(auto_now=True, db_index=True)
+
+
+class Reward(models.Model):
+    player = models.ForeignKey(Player)
+    level = models.IntegerField(db_index=True, null=False)
+    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
