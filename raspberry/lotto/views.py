@@ -101,7 +101,9 @@ def share_to_sina_weibo(request):
     _session = request.GET.get('session', '')
     _token = request.GET.get('token', '')
     if _token == '' or _token == None:
-        request.session['auth_source'] = "lotto"
+        request.session['auth_source'] = 'lotto'
+        if _session != '':
+            request.session['mobile_session'] = _session 
         return HttpResponseRedirect(sina_utils.get_login_url())
    
     _player = Player.objects.get(token=_token)

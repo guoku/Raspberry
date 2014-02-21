@@ -1,9 +1,10 @@
 # coding=utf8
 from lotto.models import Player
+from mobile.models import Session_Key
 from hashlib import md5
 import datetime
 
-def check_player(sina_id, screen_name, access_token, expires_in):
+def check_player(sina_id, screen_name, access_token, expires_in, mobile_session=None):
     try:
         _player = Player.objects.get(sina_id=sina_id)
     except Player.DoesNotExist:
@@ -13,8 +14,15 @@ def check_player(sina_id, screen_name, access_token, expires_in):
                 Player.objects.get(token = _token)
             except:
                 break
+        _user_id = None
+        try:
+            if mobile_session != None:
+                _user_id = Session_Key.objects.get_user_id(mobile_session)
+        except:
+            pass
         _player = Player.objects.create(
             sina_id = sina_id,
+            user_id = _user_id,
             token = _token,
             screen_name = screen_name, 
             access_token = access_token,

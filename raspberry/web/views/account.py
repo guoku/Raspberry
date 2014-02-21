@@ -111,10 +111,8 @@ class ThirdPartyRegisterWizard(RegisterWizard):
 
 def login(request, template = 'account/login.html'):
     redirect_url = web_utils.get_login_redirect_url(request)
-    print redirect_url
     if not redirect_url:
         redirect_url = reverse('web_selection')
-    print redirect_url
     if request.user.is_authenticated():
         return HttpResponseRedirect(redirect_url)
 
@@ -194,11 +192,13 @@ def auth_by_sina(request):
                     pass
                 return HttpResponseRedirect(next_url)
             elif source == "lotto":
+                _mobile_session = request.session.get('mobile_session', None)
                 _lotto_token = check_player(
                     sina_id = _sina_data['sina_id'],
                     screen_name = _sina_data['screen_name'],
                     access_token = _sina_data['access_token'],
-                    expires_in = _sina_data['expires_in']
+                    expires_in = _sina_data['expires_in'],
+                    mobile_session = _mobile_session
                 )
                 return HttpResponseRedirect(reverse('lotto_share_to_sina_weibo') + '?token=' + _lotto_token)
 
