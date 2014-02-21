@@ -22,7 +22,7 @@
             {% for popular in popular_list %}
                 <li>
                     <a href="{% url 'web_detail' popular.entity_context.entity_hash %}" class="entity-img">
-                        <img src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
+                        <img alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
                     </a>
 
                     <div class="detail">

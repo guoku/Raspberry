@@ -1,6 +1,8 @@
+{% load entity %}
+
 <div class="common-entity">
     <a href="{% url 'web_detail' entity_context.entity_hash %}" class="entity-img">
-        <img src="{{ entity_context.chief_image.url }}" alt="{{ entity_context.title }}">
+        <img src="{{ entity_context.chief_image.url|resize:'240' }}" alt="{{ entity_context.title }}">
     </a>
 
     <div class="detail">
