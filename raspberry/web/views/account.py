@@ -15,6 +15,7 @@ from web import taobao_utils
 from web import sina_utils
 from web import web_utils
 from utils import fetcher
+from lotto.lib.player import check_player 
 import json
 import time
 import re
@@ -150,7 +151,7 @@ def login_by_sina(request):
     request.session['auth_source'] = "login"
     next_url = request.GET.get('next', None)
     if next_url:
-        request.session['auth_next_url'] = next_url 
+        request.session['auth_next_url'] = next_url
     return HttpResponseRedirect(sina_utils.get_login_url())
 
 @require_GET
@@ -192,6 +193,15 @@ def auth_by_sina(request):
                 except:
                     pass
                 return HttpResponseRedirect(next_url)
+            elif source == "lotto":
+                _lotto_token = check_player(
+                    sina_id = _sina_data['sina_id'],
+                    screen_name = _sina_data['screen_name'],
+                    access_token = _sina_data['access_token'],
+                    expires_in = _sina_data['expires_in']
+                )
+                return HttpResponseRedirect(reverse('lotto_share_to_sina_weibo') + '?token=' + _lotto_token)
+
             else:
                 pass
         else:
@@ -218,7 +228,7 @@ def login_by_taobao(request):
     request.session['auth_source'] = "login"
     next_url = request.GET.get('next', None)
     if next_url:
-        request.session['auth_next_url'] = next_url 
+        request.session['auth_next_url'] = next_url
     return HttpResponseRedirect(taobao_utils.get_login_url())
 
 def auth_by_taobao(request):

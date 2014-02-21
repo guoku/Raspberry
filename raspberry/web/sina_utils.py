@@ -22,8 +22,11 @@ def get_sina_user_friends(sina_id, access_token, expires_in):
     count = 200
     friends = []
     while True:
-        result = auth_client.get.friendships__friends(access_token = access_token, uid = sina_id,
-                                                      cursor = cursor, count = count)
+        result = auth_client.get.friendships__friends(
+            access_token = access_token, 
+            uid = sina_id,
+            cursor = cursor, count = count
+        )
         friends += result['users']
         if result['next_cursor'] != 0:
             cursor = result['next_cursor']
