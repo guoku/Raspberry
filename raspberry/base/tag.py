@@ -14,6 +14,10 @@ import random
 import hmac
 import hashlib
 
+from django.utils.log import getLogger
+
+log = getLogger('django')
+
 
 class Tag(object):
 
@@ -122,11 +126,13 @@ class Tag(object):
     @classmethod
     def entity_tag_stat(cls, entity_id):
         _entity_id = int(entity_id)
-        _tag_id_mapping = {}
+        # _tag_id_mapping = {}
         _entity_tags = []
         
-        for _data in EntityTagModel.objects.filter(entity_id=_entity_id).values('tag_text').annotate(user_count=Count('user')).order_by('-user_count'):
+        for _data in EntityTagModel.objects.filter(entity_id=_entity_id).values('tag_text', 'tag_id').annotate(user_count=Count('user')).order_by('-user_count'):
+            log.info(_data)
             _entity_tags.append({
+                'tag_id' : _data['tag_id'],
                 'tag' : _data['tag_text'],
                 'user_count' : _data['user_count'],
             })
@@ -140,8 +146,9 @@ class Tag(object):
         _user_tags = []
         
         
-        for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text').annotate(entity_count=Count('entity')).order_by('-entity_count'):
+        for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text', 'tag_id').annotate(entity_count=Count('entity')).order_by('-entity_count'):
             _user_tags.append({
+                'tag_id' : _data['tag_id'],
                 'tag' : _data['tag_text'],
                 'entity_count' : _data['entity_count'],
             })
