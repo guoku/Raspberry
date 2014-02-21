@@ -14,6 +14,7 @@ from base.entity import Entity
 from base.entity import Note
 from base.user import User
 from base.item import Item
+from base.tag import Tag 
 from base.category import Category
 from base import fetcher
 from util import *
@@ -36,6 +37,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     _common_note_list = []
     _is_user_already_note = False
     _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
+    
+    _tag_list = Tag.entity_tag_stat(_entity_id)
 
     for _note_id in _note_id_list:
         _note = Note(_note_id)

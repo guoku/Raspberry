@@ -120,6 +120,20 @@ class Tag(object):
         
 
     @classmethod
+    def entity_tag_stat(cls, entity_id):
+        _entity_id = int(entity_id)
+        _tag_id_mapping = {}
+        _entity_tags = []
+        
+        for _data in EntityTagModel.objects.filter(entity_id=_entity_id).values('tag_text').annotate(user_count=Count('user')).order_by('-user_count'):
+            _entity_tags.append({
+                'tag' : _data['tag_text'],
+                'user_count' : _data['user_count'],
+            })
+        return _entity_tags
+    
+    
+    @classmethod
     def user_tag_stat(cls, user_id):
         _user_id = int(user_id)
         _tag_id_mapping = {}
