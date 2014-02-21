@@ -21,7 +21,6 @@ urlpatterns += patterns(
     url(r'^note/', include('web.urls.note')),
 )
 
-
 urlpatterns += patterns(
     'web.views.account',
     url(r'^login/$', 'login', name="web_login"),
@@ -34,7 +33,6 @@ urlpatterns += patterns(
     url(r'^taobao/bind/$', 'bind_taobao', name="web_bind_taobao"),
     url(r'^taobao/unbind/$', 'unbind_taobao', name="web_unbind_taobao"),
     url(r'^taobao/auth/$', 'auth_by_taobao', name="web_auth_by_taobao"),
-    url(r'^taobao/shop/bind/$', 'bind_taobao_shop', name="web_bind_taobao_shop"),
 
     url(r'^account/', include('web.urls.account')),
     url(r'^u/', include('web.urls.user')),

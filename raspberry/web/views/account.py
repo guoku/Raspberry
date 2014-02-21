@@ -181,10 +181,12 @@ def auth_by_sina(request):
                     return HttpResponseRedirect(reverse("web_third_party_register") + "?source=sina&token=" + token)
             elif source == "bind":
                 try:
-                    _user_inst.bind_sina(sina_id = third_party_data['sina_id'],
-                                        screen_name = third_party_data['screen_name'],
-                                        access_token = third_party_data['access_token'],
-                                        expires_in = third_party_data['expires_in'])
+                    _user_inst = User(request.user.id)
+                    _user_inst.bind_sina(
+                        sina_id = _sina_data['sina_id'],
+                        screen_name = _sina_data['screen_name'],
+                        access_token = _sina_data['access_token'],
+                        expires_in = _sina_data['expires_in'])
                 except:
                     pass
                 return HttpResponseRedirect(next_url)
@@ -245,12 +247,15 @@ def auth_by_taobao(request):
                     return HttpResponseRedirect(reverse("web_third_party_register") + "?source=taobao&token=" + token)
             elif source == "bind":
                 try:
-                    _user_inst.bind_taobao(taobao_id = third_party_data['taobao_id'],
-                                           screen_name = third_party_data['screen_name'],
-                                           taobao_token = third_party_data['access_token'],
-                                           expires_in = third_party_data['expires_in'])
-                except:
-                    pass
+                    if not _user_inst:
+                        _user_inst = User(request.user.id)
+                        _user_inst.bind_taobao(
+                            taobao_id = _taobao_data['taobao_id'],
+                            screen_name = _taobao_data['screen_name'],
+                            taobao_token = _taobao_data['access_token'],
+                            expires_in = _taobao_data['expires_in'])
+                except e:
+                    print e
                 return HttpResponseRedirect(next_url)
             else:
                 pass
@@ -316,7 +321,6 @@ def setting(request, template = 'account/setting.html'):
     _user_context = User(request.user.id).read()
     profile_form = SettingAccountForm(initial = _user_context)
     password_form = ChangePasswordForm(request.user)
-    print _user_context
     return render_to_response(
         template,
         {
@@ -358,55 +362,4 @@ def update_avatar(request):
                 _image_data = _avatar_img.read()
 
         return HttpResponse(json.dumps(_ret))
-
-@login_required
-def bind_taobao_shop(request):
-    user_id = request.user.id
-    user_inst = User(user_id)
-    request_user_context = user_inst.read()
-    if request.method == "GET":
-        if request_user_context.get("taobao_screen_name"):
-            if request_user_context['taobao_token_expires_in'] < time.time():
-                request_user_context['taobao_token_expired'] = True
-            else:
-                request_user_context['taobao_token_expired'] = False
-        return render_to_response(
-            "bind_taobao_shop.html",
-            { 
-                "request_user_context" : request_user_context 
-            },
-            context_instance=RequestContext(request)
-        )
-    elif request.method == "POST":
-        if not request_user_context.get("taobao_nick"):
-            messages.info(request, "尚未绑定淘宝帐号") 
-            return HttpResponseRedirect(reverse('bind_taobao_shop'))
-        item_url = request.POST.get('item_url', None)
-        if not item_url:
-            message.info(request, "请输入商品地址")
-            return HttpResponseRedirect(reverse('bind_taobao_shop'))
-      
-        hostname = urlparse(item_url).hostname
-        if re.search(r"\b(tmall|taobao)\.(com|hk)$", hostname) != None:
-            taobao_id = web_utils.parse_taobao_id_from_url(item_url)
-            taobao_item_info = fetcher.fetch_item(taobao_id)
-            nick = taobao_item_info['nick']
-            if request_user_context.get('taobao_nick') == nick:
-                user_inst.create_seller_info(nick)
-                if not TaobaoShop.nick_exist(nick):
-                    shop_info = fetcher.fetch_shop(taobao_item_info['shop_link'])
-                    TaobaoShop.create(
-                        nick,
-                        shop_info['shop_id'],
-                        shop_info['title'],
-                        shop_info['type'],
-                        shop_info['seller_id'],
-                        shop_info['pic']
-                    ) 
-                return HttpResponseRedirect(reverse('bind_taobao_shop'))
-            else:
-                message.info(request, "错误的商品地址，请输入淘宝商品地址")
-                return HttpResponseRedirect(reverse('bind_taobao_shop'))
-        else:
-            return HttpResponseRedirect(reverse('bind_taobao_shop'))
 

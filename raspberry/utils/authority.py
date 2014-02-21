@@ -22,5 +22,5 @@ def seller_only(func = None):
             print func
             return func(request, *args, **kwargs)
         else:
-            return HttpResponseRedirect(reverse("bind_taobao_shop"))
+            return HttpResponseRedirect(reverse("seller_bind_taobao_shop"))
     return seller_only_decorator

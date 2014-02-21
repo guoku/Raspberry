@@ -13,12 +13,6 @@ from base.item import Item
 from forms import GuokuPlusApplicationForm
 from utils.authority import seller_only
 
-@require_GET
-@login_required
-@seller_only
-def index(request, user_context, shop_inst):
-    return HttpResponseRedirect(reverse('seller_commodities'))
-
 
 @require_GET
 @login_required
