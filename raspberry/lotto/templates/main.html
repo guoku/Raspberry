@@ -177,8 +177,13 @@
         $(".btn-lottery").rotate({
             bind: {
                 click: function () {
-                            if (count == 0) {
-                                alert('先分享，后抽奖！');
+                            if (count <= 0) {
+                                if (count == -1) {
+                                    alert('先分享，后抽奖！');
+                                }
+                                else {
+                                    alert('抽奖机会已经用完了！');
+                                }
                                 return;
                              }
                              else
@@ -192,7 +197,7 @@
                                       type: "GET",
                                       success: function(data) {
                                         var code = data['code'];
-                                        if (data == 0) {
+                                        if (code == 0) {
                                             var angle = [0,120, 240];
                                             angle = angle[Math.floor(Math.random() * angle.length)]
                                             rotateStart(0, angle, '很遗憾，这次您未抽中奖')

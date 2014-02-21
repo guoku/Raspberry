@@ -3,6 +3,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Accumulate(models.Model):
+    key = models.IntegerField(db_index=True, null=False)
+    count = models.IntegerField(null=False)
+
 class Player(models.Model):
     user_id = models.IntegerField(db_index=True, null=True, default=None)
     sina_id = models.CharField(max_length=64, null=True, db_index=True)
@@ -15,4 +19,3 @@ class Player(models.Model):
     last_share_time = models.DateTimeField(null=True, default=None)
     created_time = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_time = models.DateTimeField(auto_now=True, db_index=True)
-    

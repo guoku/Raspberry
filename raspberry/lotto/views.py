@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from mobile.lib.http import SuccessJsonResponse 
 from mobile.models import Session_Key
-from models import Player
+from models import Accumulate, Player
 from weibo import APIClient
 from web import sina_utils
 import datetime
@@ -50,9 +50,11 @@ def main(request, template='main.html'):
         context_instance=RequestContext(request)
     )
 
+CURRENT_KEY = 1
 def roll(request):
     _token = request.GET.get('token', None)
     _player = Player.objects.get(token=_token)
+    _code = 0
     
     if not _is_the_same_date(_player.last_share_time, datetime.datetime.now()):
         return SuccessJsonResponse({ 'code': 5 })
@@ -60,7 +62,22 @@ def roll(request):
     if _player.share_count <= _player.roll_count:
         return SuccessJsonResponse({ 'code': 4 })
 
-    return SuccessJsonResponse({ 'code': 3 })
+    try:
+        _acc_obj = Accumulate.objects.get(key=CURRENT_KEY)
+    except Accumulate.DoesNotExist:
+        _acc_obj = Accumulate.objects.create(
+            key=CURRENT_KEY,
+            count=0
+        )
+    
+    _acc_obj.count += 1
+    if _acc_obj.count % 50 == 0:
+        _code = 3 
+    _acc_obj.save()
+    _player.roll_count += 1
+    _player.save()
+    
+    return SuccessJsonResponse({ 'code': 0 })
      
 
 def share_to_sina_weibo(request):
