@@ -22,8 +22,11 @@ def get_sina_user_friends(sina_id, access_token, expires_in):
     count = 200
     friends = []
     while True:
-        result = auth_client.get.friendships__friends(access_token = access_token, uid = sina_id,
-                                                      cursor = cursor, count = count)
+        result = auth_client.get.friendships__friends(
+            access_token = access_token, 
+            uid = sina_id,
+            cursor = cursor, count = count
+        )
         friends += result['users']
         if result['next_cursor'] != 0:
             cursor = result['next_cursor']
@@ -47,3 +50,12 @@ def get_auth_data(code):
     sina_data['gender'] = sina_user.gender
     sina_data['location'] = sina_user.location
     return sina_data
+
+def post_weibo(access_token, expires_in, text, pic=None):
+    auth_client = APIClient(APP_KEY, APP_SECRET, CALLBACK_URL)
+    auth_client.set_access_token(access_token, expires_in)
+    if pic == None:
+        auth_client.statuses.update.post(status=text)
+    else:
+        auth_client.statuses.upload.post(status=text, pic=pic)
+    
