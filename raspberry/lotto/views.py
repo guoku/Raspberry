@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template import RequestContext
+from django.templatetags.static import static
 from django.shortcuts import render_to_response
 from mobile.lib.http import SuccessJsonResponse 
 from mobile.models import Session_Key
@@ -101,7 +102,7 @@ def roll(request):
         'leftrollcount' : str(_left_roll_count) 
     })
      
-
+import os
 def share_to_sina_weibo(request):
     _session = request.GET.get('session', '')
     _token = request.GET.get('token', '')
@@ -110,12 +111,16 @@ def share_to_sina_weibo(request):
         if _session != '':
             request.session['mobile_session'] = _session 
         return HttpResponseRedirect(sina_utils.get_login_url())
+    
    
     _player = Player.objects.get(token=_token)
     _today_has_shared_already = _is_the_same_date(_player.last_share_time, datetime.datetime.now())
     if _today_has_shared_already and _player.share_count >= 2:
         return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token+'&ifc=0')
-    #TODO: share to weibo
+    
+    pic_f = open(os.path.dirname(os.path.realpath(__file__)) + '/iphone.png', 'rb') 
+    sina_utils.post_weibo(_player.access_token, _player.expires_in, u'果库是只大白兔。', pic_f) 
+    
     _player.last_share_time = datetime.datetime.now()
     if _today_has_shared_already:
         _player.share_count += 1
