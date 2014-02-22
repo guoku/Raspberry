@@ -153,7 +153,9 @@
 <script src="{% static 'scripts/jqueryrotate.js' %}"></script>
 <script type="text/javascript">
     {% if infocode == '0' %}
-        alert('abc');
+        alert('每天只能分享两次。明天请早哦亲！');
+    {% elif infocode == '1' %}
+        alert('分享成功，赶紧试试手气！');
     {% endif %}
 </script>
 <script type="text/javascript">

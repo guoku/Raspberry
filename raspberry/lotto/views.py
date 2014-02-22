@@ -12,6 +12,7 @@ from weibo import APIClient
 from web import sina_utils
 import datetime
 import time
+import os
 
 def _is_the_same_date(dt1, dt2):
     if dt1 == None or dt2 == None:
@@ -102,7 +103,6 @@ def roll(request):
         'leftrollcount' : str(_left_roll_count) 
     })
      
-import os
 def share_to_sina_weibo(request):
     _session = request.GET.get('session', '')
     _token = request.GET.get('token', '')
@@ -112,14 +112,21 @@ def share_to_sina_weibo(request):
             request.session['mobile_session'] = _session 
         return HttpResponseRedirect(sina_utils.get_login_url())
     
-   
     _player = Player.objects.get(token=_token)
+    
+    _timestamp = datetime.datetime.fromtimestamp(float(_player.expires_in))
+    if _timestamp <= datetime.datetime.now():
+        request.session['auth_source'] = 'lotto'
+        if _session != '':
+            request.session['mobile_session'] = _session 
+        return HttpResponseRedirect(sina_utils.get_login_url())
+
     _today_has_shared_already = _is_the_same_date(_player.last_share_time, datetime.datetime.now())
     if _today_has_shared_already and _player.share_count >= 2:
         return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token+'&ifc=0')
     
     pic_f = open(os.path.dirname(os.path.realpath(__file__)) + '/iphone.png', 'rb') 
-    sina_utils.post_weibo(_player.access_token, _player.expires_in, u'果库是只大白兔。', pic_f) 
+    sina_utils.post_weibo(_player.access_token, _player.expires_in, u'千万不要下载果库这个 APP ！点进去会发现太多好物，一不小心就让你的购物车爆满，还会在点评里看到太多好玩的用户和吐槽帝，夜夜笑喷。不少专业人士和微博红人也在偷偷用，你猜得出来哪个 ID 是他们？ 戳这下载 http://www.guoku.com/download/ios/ （分享自@果库）', pic_f) 
     
     _player.last_share_time = datetime.datetime.now()
     if _today_has_shared_already:
@@ -128,7 +135,7 @@ def share_to_sina_weibo(request):
         _player.share_count = 1
     _player.save()
 
-    return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token)
+    return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token+'&ifc=1')
 
     
 
