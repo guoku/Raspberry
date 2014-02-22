@@ -58,13 +58,28 @@
     </div>
 </div>
 
-<div id="main" class="clearfix">
-    {% if not user.is_authenticated %}
-    <div>
-        <a href="{% url 'web_register' %}">{% trans "sign up" %}</a>
-        <a href="{% url 'web_login' %}">{% trans "sign in" %}</a>
+{% if not user.is_authenticated %}
+{% block welcome %}
+    <div id="welcome">
+        <p>大开眼界的剁手指南，</p>
+        <p>一目了然的优质生活主张。</p>
+        <ul>
+            <li>
+                <a class="" href="{% url 'web_register' %}">注册账号</a>
+            </li>
+            <li>
+                <span>已有账号，</span>
+            </li>
+            <li>
+                <a href="{% url 'web_login' %}">从这里登陆</a>
+            </li>
+        </ul>
     </div>
-    {% endif %}
+{% endblock %}
+{% endif %}
+
+<div id="main" class="clearfix">
+
     {% block content %}{% endblock %}
 </div>
 

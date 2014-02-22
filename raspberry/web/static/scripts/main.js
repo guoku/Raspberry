@@ -308,7 +308,9 @@
             $('#detail').each(function () {
                 var $this = $(this);
                 $this.find('.detail-img img').on('mouseover', function () {
-                    $this.find('.entity-img img')[0].src = this.src;
+                    var re = /64x64/;
+                    var urlstr = this.src.replace(re, '640x640');
+                    $this.find('.entity-img img')[0].src = urlstr;
                 });
             });
         },

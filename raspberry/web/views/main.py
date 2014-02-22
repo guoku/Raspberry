@@ -42,7 +42,7 @@ def selection(request, template='main/selection.html'):
         _hdl = NoteSelection.objects(post_time__lt = datetime.now())
     else:
         _category_id = int(_category_id)
-        _hdl = NoteSelection.objects(category_id=_category_id, post_time__lt = datetime.now())
+        _hdl = NoteSelection.objects(root_category_id=_category_id, post_time__lt = datetime.now())
     _total_count = _hdl.count()
     _count_in_one_page = 24
     if _page_num != 1:
