@@ -141,7 +141,7 @@ def category_entity(request, category_id):
         return SuccessJsonResponse(_rslt)
 
 
-@check_sign
+#@check_sign
 def entity_detail(request, entity_id):
     _start_at = datetime.datetime.now()
     if request.method == "GET":

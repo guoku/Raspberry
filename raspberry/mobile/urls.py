@@ -50,5 +50,6 @@ urlpatterns = patterns('mobile.views',
     (r'^user/update/$', 'update_user'),
     (r'^user/search/$', 'search_user'),
     (r'^sina/user/check/$', 'check_sina_user'),
+    (r'^item/(?P<item_id>\w+)/visit/$', 'visit_item'),
 )
 

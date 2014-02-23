@@ -82,7 +82,7 @@ class Item(object):
         _context["weight"] = self.item_obj.weight
         _context["soldout"] = self.item_obj.soldout
         _context["ustation"] = self.item_obj.ustation
-        _context['buy_link'] = Item.generate_taobao_item_url(_context['taobao_id'])
+        _context['buy_link'] = Item.generate_taobao_item_url(str(self.item_obj.id))
         _context["volume"] = 0 
         return _context
 
@@ -157,7 +157,9 @@ class Item(object):
         return None
     
     @staticmethod
-    def generate_taobao_item_url(taobao_id):
-        _url = "http://www.guoku.com/visit_item?item_id=%s" % taobao_id + "&type=mobile"
+    #def generate_taobao_item_url(taobao_id):
+    def generate_taobao_item_url(item_id):
+        #_url = "http://www.guoku.com/visit_item?item_id=%s" % taobao_id + "&type=mobile"
+        _url = "http://10.0.1.109/mobile/v3/item/%s/visit/" % item_id + "?type=mobile"
         return _url
 
