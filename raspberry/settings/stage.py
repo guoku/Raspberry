@@ -114,6 +114,7 @@ INSTALLED_APPS = (
     'seller',
     'stats',
     'web',
+    'lotto',
     'gunicorn',
 )
 
