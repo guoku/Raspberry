@@ -129,11 +129,12 @@ class Tag(object):
         # _tag_id_mapping = {}
         _entity_tags = []
         
-        for _data in EntityTagModel.objects.filter(entity_id=_entity_id).values('tag_text', 'tag_id').annotate(user_count=Count('user')).order_by('-user_count'):
+        for _data in EntityTagModel.objects.filter(entity_id=_entity_id).values('tag_text', 'tag_id', 'tag_hash').annotate(user_count=Count('user')).order_by('-user_count'):
             log.info(_data)
             _entity_tags.append({
                 'tag_id' : _data['tag_id'],
                 'tag' : _data['tag_text'],
+                'tag_hash' : _data['tag_hash'],
                 'user_count' : _data['user_count'],
             })
         return _entity_tags
@@ -146,10 +147,11 @@ class Tag(object):
         _user_tags = []
         
         
-        for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text', 'tag_id').annotate(entity_count=Count('entity')).order_by('-entity_count'):
+        for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text', 'tag_id', 'tag_hash').annotate(entity_count=Count('entity')).order_by('-entity_count'):
             _user_tags.append({
                 'tag_id' : _data['tag_id'],
                 'tag' : _data['tag_text'],
+                'tag_hash' : _data['tag_hash'],
                 'entity_count' : _data['entity_count'],
             })
 
