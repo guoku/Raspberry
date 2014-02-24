@@ -31,7 +31,7 @@ def _cal_available_roll_count(share_count, roll_count, last_share_time):
             return _count
     return -1 
 
-def main(request, template='main.html'):
+def main(request, template='lotto.html'):
     _session = request.GET.get('session', '')
     _token = request.GET.get('token', '')
     _infocode = request.GET.get('ifc', None)
@@ -54,7 +54,7 @@ def main(request, template='main.html'):
 
     
     return render_to_response(
-        template, 
+        template,
         {
             'count' : _count,
             'session' : _session, 
