@@ -1,7 +1,7 @@
 # import os.path
 from defaults import *
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 
@@ -76,8 +76,9 @@ CELERY_DISABLE_RATE_LIMITS = True
 
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
 MEDIA_URL = '/uploads/'
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static')
-STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static')
+STATIC_ROOT = '/tmp/static/'
+STATIC_URL = '/static/v3/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
