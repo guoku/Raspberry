@@ -126,7 +126,7 @@ def share_to_sina_weibo(request):
         return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token+'&ifc=0')
     
     pic_f = open(os.path.dirname(os.path.realpath(__file__)) + '/iphone.png', 'rb') 
-    sina_utils.post_weibo(_player.access_token, _player.expires_in, u'千万不要下载果库这个 APP ！点进去会发现太多好物，一不小心就让你的购物车爆满，还会在点评里看到太多好玩的用户和吐槽帝，夜夜笑喷。不少专业人士和微博红人也在偷偷用，你猜得出来哪个 ID 是他们？ 戳这下载 http://www.guoku.com/download/ios/ （分享自@果库）', pic_f) 
+    sina_utils.post_weibo(_player.access_token, _player.expires_in, u'快去下载果库 3.0 ！！不少专业人士和微博红人都在偷偷用哟。果库精选了太多好物，一不小心就让你的购物车爆满，还能看到太多好玩的用户点评和吐槽，实用、有趣的个人标签… 以果库的方式，发现生活之美。戳这里下载 http://www.guoku.com/download/ios/ （分享自@果库）', pic_f) 
     
     _player.last_share_time = datetime.datetime.now()
     if _today_has_shared_already:
