@@ -133,6 +133,7 @@ def share_to_sina_weibo(request):
         _player.share_count += 1
     else:
         _player.share_count = 1
+        _player.roll_count = 0
     _player.save()
 
     return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token+'&ifc=1')
