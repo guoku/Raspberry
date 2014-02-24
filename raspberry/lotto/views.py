@@ -133,9 +133,17 @@ def share_to_sina_weibo(request):
         _player.share_count += 1
     else:
         _player.share_count = 1
+        _player.roll_count = 0
     _player.save()
 
     return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token+'&ifc=1')
 
     
+def guoku_generation_3_activity(request, template='activity.html'):
+    return render_to_response(
+        template, 
+        {
+        }, 
+        context_instance=RequestContext(request)
+    )
 

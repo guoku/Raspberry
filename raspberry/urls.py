@@ -11,7 +11,8 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^stats/', include('stats.urls')),
     (r'^lotto/', include('lotto.urls')),
-    (r'', include('web.urls'))
+    (r'', include('web.urls')),
+    (r'^3.0/activity/$', 'lotto.views.guoku_generation_3_activity'),
 )
 
 if settings.IMAGE_LOCAL:
