@@ -257,7 +257,6 @@ class Taobao_Token(models.Model):
     re_expires_in = models.PositiveIntegerField(default = 0)
     updated_time = models.DateTimeField(auto_now = True, null = True)
 
-
 class One_Time_Token(models.Model):
     user = models.ForeignKey(User, related_name = "one_time_token") 
     token = models.CharField(max_length = 255, db_index = True)
@@ -275,4 +274,15 @@ class Seller_Info(models.Model):
     user = models.OneToOneField(User, related_name = "seller_info")
     shop_nick = models.CharField(max_length = 64, db_index = True)
     verified = models.BooleanField(default = False, db_index = True)
+
+class Guoku_Plus(models.Model):
+    entity = models.ForeignKey(Entity)
+    item_id = models.CharField(max_length = 32,db_index = True)
+    taobao_id = models.CharField(max_length = 32, db_index = True)
+    sale_price = models.FloatField()
+    total_volume = models.IntegerField()
+    sales_volume = models.IntegerField()
+    start_time = models.DateTimeField()
+    created_time = models.DateTimeField()
+    status = models.CharField(max_length = 32, db_index = True)
 

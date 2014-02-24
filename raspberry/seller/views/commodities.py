@@ -71,7 +71,7 @@ def apply_guoku_plus(request, user_context, shop_inst):
 @login_required
 @seller_only
 def guoku_plus_list(request, user_context, shop_inst):
-    items = shop_inst.read_guoku_plus_list()
+    items = shop_inst.read_guoku_plus_application_list()
     return render_to_response("guoku_plus_list.html",
                               {'items' : items},
                               context_instance = RequestContext(request))

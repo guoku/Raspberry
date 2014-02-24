@@ -7,6 +7,7 @@ from base.stream_models import CrawlerInfo
 from base.stream_models import TaobaoShopVerificationInfo
 from base.stream_models import GuokuPlusApplication
 from base.stream_models import ShopScore
+from base.entity import Entity
 from base.item import Item
 import datetime
 import urllib
@@ -133,29 +134,23 @@ class TaobaoShop(object):
             )
         info.save()
 
-    def create_guoku_plus_application(self, taobao_item_id, quantity, original_price, sale_price, duration):
+    def create_guoku_plus_application(self, taobao_item_id, quantity, sale_price, remarks):
         item = GuokuPlusApplication(
             shop_nick = self.nick,
             taobao_item_id = taobao_item_id,
             quantity = quantity,
-            original_price = original_price,
             sale_price = sale_price,
-            duration = duration,
             status = STATUS_WAITING,
             created_time = datetime.datetime.now(),
             updated_time = datetime.datetime.now()
             )
         item.save()
    
-    def read_guoku_plus_list(self):
+    def read_guoku_plus_application_list(self):
         applications = GuokuPlusApplication.objects.filter(shop_nick = self.nick).order_by("-updated_time")
         results = []
         for app in applications:
-            result = app._data
-            item = Item.get_item_by_taobao_id(result['taobao_item_id'])
-            if item:
-                result['item_context'] = item.read()
-            results.append(result)
+            results.append(TaobaoShop.normalize_guoku_plus_application_data(app))
         return results
                 
 
@@ -167,3 +162,27 @@ class TaobaoShop(object):
         if item_context['shop_nick'] == self.nick:
             return True
         return False
+
+    @classmethod
+    def find_guoku_plus_applications(cls, shop_nick = None, status = None, offset = 0, count = 100):
+        _hdl = GuokuPlusApplication.objects
+        if shop_nick:
+            _hdl = _hdl.filter(shop_nick = shop_nick)
+        if status:
+            _hdl = _hdl.filter(status = status)
+        _count = _hdl.count()
+        _results = _hdl.skip(offset).limit(count)
+        results = []
+        for app in _results:
+            results.append(TaobaoShop.normalize_guoku_plus_application_data(app))
+        return results, _count
+
+    @staticmethod
+    def normalize_guoku_plus_application_data(application):
+        result = application._data
+        entity = Entity(application.entity_id)
+        result['entity_context'] = entity.read()
+        item = Item.get_item_by_taobao_id(result['taobao_item_id'])
+        if item:
+            result['item_context'] = item.read()
+        return result 

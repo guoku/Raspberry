@@ -2,6 +2,7 @@
 {% load management %}
 
 {% block content %}
+    {% display_shop_navigator "shops" %}
     <div class="span2">
         <div class="well sidebar-nav">
             {% for message in messages %}
@@ -51,7 +52,7 @@
             </form>
         </div>
     </div>
-    <div class="span10">
+    <div class="span9">
         <div>
             <table class="table table-striped table-bordered table-condensed">
                 <thead>

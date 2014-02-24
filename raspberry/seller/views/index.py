@@ -6,8 +6,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from utils.authority import seller_only
 from base.user import User
+from base.taobao_shop import TaobaoShop
+import re
+from web import web_utils
+from utils.authority import seller_only
+from utils import fetcher
+from urlparse import urlparse
+
 @require_GET
 @login_required
 @seller_only
@@ -64,3 +70,4 @@ def bind_taobao_shop(request):
                 return HttpResponseRedirect(reverse('bind_taobao_shop'))
         else:
             return HttpResponseRedirect(reverse('bind_taobao_shop'))
+

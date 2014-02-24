@@ -61,3 +61,8 @@ def display_paginator(paginator):
     }
 register.inclusion_tag("partial_paginator.html")(display_paginator)
 
+def display_shop_navigator(current_tab):
+    return {
+        "current_tab" : current_tab,
+    }
+register.inclusion_tag("shop/navigator.html")(display_shop_navigator)

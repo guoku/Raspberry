@@ -167,15 +167,20 @@ class TaobaoShopVerificationInfo(DynamicDocument):
         'indexes' : ['shop_nick']
     }
 
+class GuokuPlusApplicationComment(EmbeddedDocument):
+    content = StringField()
+    created_time = DateTimeField()
+    author = StringField()
+
 class GuokuPlusApplication(DynamicDocument):
     shop_nick = StringField(required = True)
     taobao_item_id = StringField(required = True)
+    entity_id = IntField()
     quantity = IntField()
-    original_price = FloatField()
     sale_price = FloatField()
-    duration = IntField()
     status = StringField()
-    editor_comment = StringField()
+    editor_comments = ListField(EmbeddedDocumentField(GuokuPlusApplicationComment))
+    seller_comments = ListField(EmbeddedDocumentField(GuokuPlusApplicationComment))
     created_time = DateTimeField()
     updated_time = DateTimeField()
     meta = {
