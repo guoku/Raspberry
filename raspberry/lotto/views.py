@@ -139,4 +139,11 @@ def share_to_sina_weibo(request):
     return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token+'&ifc=1')
 
     
+def guoku_generation_3_activity(request, template='activity.html'):
+    return render_to_response(
+        template, 
+        {
+        }, 
+        context_instance=RequestContext(request)
+    )
 
