@@ -89,7 +89,7 @@
                 <div id="award-winner" style="margin-top:86px;font-size:10px;color:#5f4614">
                     <div style="width:900px;height:20px;white-space: nowrap;overflow:hidden;" id="scroll_div" class="scroll_div">
                         <div id="scroll_begin">
-                            huiter 中了一等奖 huiter 中了一等奖 huiter 中了一等奖 huiter 中了一等奖 huiter 中了一等奖 huiter 中了一等奖 huiter 中了一等奖 huiter 中了一等奖 huiter 中了一等奖
+                            随时随地刷果库！@发炎君 是个大娘炮！@果库某工程师 为女用户加持！@果库一枝花 祝你一路顺风！@蜗牛大爷君 为每个男用户默念祝福！随时随地刷果库！@发炎君 是个大娘炮！@果库某工程师 为女用户加持！@果库一枝花 祝你一路顺风！@蜗牛大爷君 为每个男用户默念祝福！
                         </div>
                         <div id="scroll_end"></div>
                     </div>
@@ -100,7 +100,7 @@
                 <div id="sina-btn" style="color:#898989;font-size:12px;height:20px;margin-top:10px;" >
                     <img src="{% static 'images/share.png' %}" width=9 height=12>
                     {% if count == -1 %}
-                        分享到微博就能抽奖，赶紧来试试手气！
+                        先分享到微博，再开始抽奖！ 
                     {% elif count == 0 %}
                         今天的抽奖机会已经用完了 :( 
                     {% else %}
@@ -133,7 +133,7 @@
                 <div style="padding:10px 25px 10px 25px;">
                     <p style="margin-top:0px;">
                         <span style="font-size:13px;color:#666;">活动时间：</span>
-                        2014年2月25日 - 2014年3月4日
+                        2014年2月25日 - 3月4日
                     </p>
                     <p style="margin-top:10px;">
                         <span style="font-size:13px;color:#666;">活动规则：</span>
@@ -142,6 +142,9 @@
                     <p style="margin-top:10px;">
                         <span style="font-size:13px;color:#666;">奖品发放：</span>
                         转盘获奖后，请耐心等待。活动结束后一周内，果库工作人员会统一通过微博私信联系所有获奖用户，安排奖品发送。
+                    </p>
+                    <p style="margin-top:10px;">
+                        本活动一切解释权归果库所有。若发现作弊及僵尸用户，果库有权取消其获奖资格。
                     </p>
                 </div>
             </div>
@@ -153,9 +156,9 @@
 <script src="{% static 'scripts/jqueryrotate.js' %}"></script>
 <script type="text/javascript">
     {% if infocode == '0' %}
-        alert('每天只能分享两次。明天请早哦亲！');
+        alert('每天只能分享两次哦');
     {% elif infocode == '1' %}
-        alert('分享成功，赶紧试试手气！');
+        alert('分享成功，开始抽奖！');
     {% endif %}
 </script>
 <script type="text/javascript">
@@ -181,10 +184,10 @@
                 click: function () {
                             if (count <= 0) {
                                 if (count == -1) {
-                                    alert('先分享，后抽奖！');
+                                    alert('请先分享到微博');
                                 }
                                 else {
-                                    alert('抽奖机会已经用完了！');
+                                    alert('每天只有两次机会哦');
                                 }
                                 return;
                              }
@@ -204,25 +207,25 @@
                                             $('#left-roll-count').text(left_roll_count)
                                             var angle = [0,120, 240];
                                             angle = angle[Math.floor(Math.random() * angle.length)]
-                                            rotateStart(0, angle, '很遗憾，这次您未抽中奖')
+                                            rotateStart(0, angle, '很遗憾，这次你没中奖')
                                         }
                                         if (code == 1) {
                                             $('#left-roll-count').text(left_roll_count)
-                                            rotateStart(1, 180, '恭喜您抽中的一等奖')
+                                            rotateStart(1, 180, '恭喜你抽中一等奖')
                                         }
                                         if (code == 2) {
                                             $('#left-roll-count').text(left_roll_count)
-                                            rotateStart(2, 300, '恭喜您抽中的二等奖')
+                                            rotateStart(2, 300, '恭喜你抽中二等奖')
                                         }
                                         if (code == 3) {
                                             $('#left-roll-count').text(left_roll_count)
-                                            rotateStart(3, 60, '恭喜您抽中的三等奖')
+                                            rotateStart(3, 60, '恭喜你抽中三等奖')
                                         }
                                         if (code == 4) {
-                                            alert('抽奖次数超限')
+                                            alert('每天只有两次机会哦')
                                         }
                                         if (code == 5) {
-                                            alert('请先去分享')
+                                            alert('请先分享到微博')
                                         }
 
                                       },
