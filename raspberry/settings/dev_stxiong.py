@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'djcelery',
     'base',
+    'edm',
     'management',
     'mobile',
     'seller',
