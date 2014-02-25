@@ -30,6 +30,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
+    # log.info(_entity_context)
     _liker_list = Entity(_entity_id).liker_list(offset=0, count=20)
     # log.info(_liker_list)
     _note_id_list = Note.find(entity_id=_entity_id)
@@ -40,6 +41,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
     
     _tag_list = Tag.entity_tag_stat(_entity_id)
+    # log.info(_tag_list)
 
     for _note_id in _note_id_list:
         _note = Note(_note_id)
@@ -76,6 +78,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'selection_note' : _selection_note,
             'common_note_list' : _common_note_list,
             'liker_list' : _liker_list,
+            'tag_list' : _tag_list,
         },
         context_instance=RequestContext(request)
     )

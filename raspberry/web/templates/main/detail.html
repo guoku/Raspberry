@@ -10,7 +10,14 @@
 {% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/detail.css' %}">{% endblock %}
 {% block content %}
+
     <div id="detail">
+        <div class="breadcrumb">
+        <ul>
+            <li><a href="#">{{ entity_context.category_id|trans_category }}</a></li>
+            <li>{{ entity_context.title }}</li>
+        </ul>
+        </div>
         <div class="main">
             <div class="entity">
                 <a href="#" class="entity-img">
@@ -85,15 +92,18 @@
                 </div>
             </div>
 
-            <p class="category">[{{ entity_context.category_id|trans_category }}]</p>
+            <p class="category"><a href="#">[{{ entity_context.category_id|trans_category }}]</a></p>
 
+            {% if teg_list|length > 0 %}
             <div class="tag">
                 <h3>该商品的标签</h3>
                 <div>
-                    <a href="">＃test</a>
-                    <a href="">＃测试</a>
+                    {% for tag in tag_list %}
+                        <a href="{{ tag.tag_hash }}">＃{{ tag.tag }}</a>
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
 
             <div class="share">
                 <a href="">分享到微博</a>

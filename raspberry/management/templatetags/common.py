@@ -50,8 +50,3 @@ def html_unescape(text):
     return HTMLParser.HTMLParser().unescape(text) 
 register.filter(html_unescape)
 
-def display_paginator(paginator):
-    return {
-            "paginator" : paginator,
-           }
-register.inclusion_tag("partial/paginator.html")(display_paginator)

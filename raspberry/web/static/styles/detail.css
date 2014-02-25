@@ -4,6 +4,17 @@
     margin-bottom: 45px;
 }
 
+#detail .breadcrumb ul {
+    /*margin: 35px 0;*/
+    /*padding: 0;*/
+    list-style: none;
+}
+
+#detail .breadcrumb li {
+    display: inline;
+    /*float: left;*/
+}
+
 #detail .entity {
     padding: 25px;
     border: 1px solid #eee;

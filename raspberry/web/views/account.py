@@ -15,6 +15,7 @@ from web import taobao_utils
 from web import sina_utils
 from web import web_utils
 from utils import fetcher
+from lotto.lib.player import check_player 
 import json
 import time
 import re
@@ -148,7 +149,7 @@ def login_by_sina(request):
     request.session['auth_source'] = "login"
     next_url = request.GET.get('next', None)
     if next_url:
-        request.session['auth_next_url'] = next_url 
+        request.session['auth_next_url'] = next_url
     return HttpResponseRedirect(sina_utils.get_login_url())
 
 @require_GET
@@ -187,9 +188,21 @@ def auth_by_sina(request):
                         screen_name = _sina_data['screen_name'],
                         access_token = _sina_data['access_token'],
                         expires_in = _sina_data['expires_in'])
+                    )
                 except:
                     pass
                 return HttpResponseRedirect(next_url)
+            elif source == "lotto":
+                _mobile_session = request.session.get('mobile_session', None)
+                _lotto_token = check_player(
+                    sina_id = _sina_data['sina_id'],
+                    screen_name = _sina_data['screen_name'],
+                    access_token = _sina_data['access_token'],
+                    expires_in = _sina_data['expires_in'],
+                    mobile_session = _mobile_session
+                )
+                return HttpResponseRedirect(reverse('lotto_share_to_sina_weibo') + '?token=' + _lotto_token)
+
             else:
                 pass
         else:
@@ -216,7 +229,7 @@ def login_by_taobao(request):
     request.session['auth_source'] = "login"
     next_url = request.GET.get('next', None)
     if next_url:
-        request.session['auth_next_url'] = next_url 
+        request.session['auth_next_url'] = next_url
     return HttpResponseRedirect(taobao_utils.get_login_url())
 
 def auth_by_taobao(request):
@@ -253,7 +266,8 @@ def auth_by_taobao(request):
                             taobao_id = _taobao_data['taobao_id'],
                             screen_name = _taobao_data['screen_name'],
                             taobao_token = _taobao_data['access_token'],
-                            expires_in = _taobao_data['expires_in'])
+                            expires_in = _taobao_data['expires_in']
+                        )
                 except e:
                     print e
                 return HttpResponseRedirect(next_url)
