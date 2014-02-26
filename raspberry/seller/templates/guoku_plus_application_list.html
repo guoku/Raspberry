@@ -1,0 +1,29 @@
+{% extends "seller_base.html" %}
+{% block title %}
+    果库卖家
+{% endblock %}
+
+{% block content %}
+    <div class="span10">
+        <table class="table table-bordered table-striped">
+            <th>名称</th>
+            <th>淘宝链接</th>
+            <th>原价</th>
+            <th>优惠价</th>
+            <th>状态</th>
+            <th>更新时间</th>
+            <th>详情</th>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.item_context.title }}</td>
+                <td><a href="http://item.taobao.com/item.htm?id={{ item.taobao_item_id }}">{{ item.taobao_item_id }}</a></td>
+                <td>{{ item.item_context.price }}</td>
+                <td>{{ item.sale_price }} </td>
+                <td>{{ item.status }} </td>
+                <td>{{ item.updated_time }} </td>
+                <td>详情</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

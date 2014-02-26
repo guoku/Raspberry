@@ -134,16 +134,20 @@ class TaobaoShop(object):
             )
         info.save()
 
-    def create_guoku_plus_application(self, taobao_item_id, quantity, sale_price, remarks):
+    def create_guoku_plus_application(self, taobao_item_id, entity_id, quantity, sale_price, remarks):
         item = GuokuPlusApplication(
             shop_nick = self.nick,
             taobao_item_id = taobao_item_id,
+            entity_id = entity_id,
             quantity = quantity,
             sale_price = sale_price,
             status = STATUS_WAITING,
+            remarks = remarks,
+            editor_comments = [],
+            seller_comments = [],
             created_time = datetime.datetime.now(),
             updated_time = datetime.datetime.now()
-            )
+        )
         item.save()
    
     def read_guoku_plus_application_list(self):
@@ -152,7 +156,6 @@ class TaobaoShop(object):
         for app in applications:
             results.append(TaobaoShop.normalize_guoku_plus_application_data(app))
         return results
-                
 
     def item_exist(self, taobao_item_id):
         item = Item.get_item_by_taobao_id(taobao_item_id)
@@ -181,6 +184,7 @@ class TaobaoShop(object):
     def normalize_guoku_plus_application_data(application):
         result = application._data
         entity = Entity(application.entity_id)
+        print application.entity_id
         result['entity_context'] = entity.read()
         item = Item.get_item_by_taobao_id(result['taobao_item_id'])
         if item:

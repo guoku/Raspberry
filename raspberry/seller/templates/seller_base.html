@@ -22,8 +22,11 @@
             <li {% if "commodities" in request.path%}class="active" {%endif%}>
                 <a href="{%url 'seller_commodities'%}">我的商品</a>
             </li>
-            <li {% if "guokuplus" in request.path %}class="active" {%endif%}>
-                <a href="{%url 'seller_guoku_plus_list'%}">我的果库+</a>
+            <li {% if "guokuplus/applications" in request.path %}class="active" {%endif%}>
+                <a href="{%url 'seller_guoku_plus_applications_list'%}">我的果库+申请</a>
+            </li>
+            <li {% if "guokuplus/activities/" in request.path %}class="active" {%endif%}>
+                <a href="{%url 'seller_guoku_plus_applications_list'%}">我的果库+活动</a>
             </li>
         </ul>
     </div>

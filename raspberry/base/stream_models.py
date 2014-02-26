@@ -179,6 +179,7 @@ class GuokuPlusApplication(DynamicDocument):
     quantity = IntField()
     sale_price = FloatField()
     status = StringField()
+    remarks = StringField()
     editor_comments = ListField(EmbeddedDocumentField(GuokuPlusApplicationComment))
     seller_comments = ListField(EmbeddedDocumentField(GuokuPlusApplicationComment))
     created_time = DateTimeField()

@@ -187,7 +187,7 @@ def auth_by_sina(request):
                         sina_id = _sina_data['sina_id'],
                         screen_name = _sina_data['screen_name'],
                         access_token = _sina_data['access_token'],
-                        expires_in = _sina_data['expires_in'])
+                        expires_in = _sina_data['expires_in']
                     )
                 except:
                     pass

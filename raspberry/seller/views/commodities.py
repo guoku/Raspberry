@@ -44,13 +44,14 @@ def apply_guoku_plus(request, user_context, shop_inst):
         form = GuokuPlusApplicationForm(request.POST)
         if form.is_valid():
             taobao_item_id = form.cleaned_data["taobao_item_id"]
+            item_inst = Item.get_item_by_taobao_id(taobao_item_id)
+            item_context = item_inst.read()
             if shop_inst.item_exist(taobao_item_id):
                 quantity = form.cleaned_data["quantity"]
-                original_price = form.cleaned_data['original_price']
                 sale_price = form.cleaned_data['sale_price']
-                duration = form.cleaned_data['duration']       
-                shop_inst.create_guoku_plus_application(taobao_item_id, quantity, original_price, sale_price, duration)
-                return HttpResponseRedirect(reverse("seller_guoku_plus_list"))
+                remarks = form.cleaned_data['remarks']
+                shop_inst.create_guoku_plus_application(taobao_item_id, item_context['entity_id'], quantity, sale_price, remarks)
+                return HttpResponseRedirect(reverse("seller_guoku_plus_applications_list"))
             else:
                 return HttpResponseForbidden()
         return render_to_response("guoku_plus_application.html",
@@ -59,9 +60,12 @@ def apply_guoku_plus(request, user_context, shop_inst):
     elif request.method == "GET":
         taobao_item_id = request.GET.get('taobao_id', None)
         if shop_inst.item_exist(taobao_item_id):
-            form = GuokuPlusApplicationForm({"taobao_item_id" : taobao_item_id})
+            item = Item.get_item_by_taobao_id(taobao_item_id)
+            item_context = item.read()
+            form = GuokuPlusApplicationForm({"taobao_item_id" : taobao_item_id, 'original_price': item_context['price']})
             return render_to_response("guoku_plus_application.html",
-                                      {"form" : form},
+                                      {"form" : form,
+                                       "taobao_item": item_context},
                                       context_instance = RequestContext(request)) 
         else:
             return HttpResponseForbidden()
@@ -70,8 +74,8 @@ def apply_guoku_plus(request, user_context, shop_inst):
 @require_GET
 @login_required
 @seller_only
-def guoku_plus_list(request, user_context, shop_inst):
+def guoku_plus_applications_list(request, user_context, shop_inst):
     items = shop_inst.read_guoku_plus_application_list()
-    return render_to_response("guoku_plus_list.html",
+    return render_to_response("guoku_plus_application_list.html",
                               {'items' : items},
                               context_instance = RequestContext(request))
