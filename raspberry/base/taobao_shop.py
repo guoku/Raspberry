@@ -184,7 +184,6 @@ class TaobaoShop(object):
     def normalize_guoku_plus_application_data(application):
         result = application._data
         entity = Entity(application.entity_id)
-        print application.entity_id
         result['entity_context'] = entity.read()
         item = Item.get_item_by_taobao_id(result['taobao_item_id'])
         if item:
