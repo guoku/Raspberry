@@ -144,11 +144,12 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'djcelery',
     'base',
+    'edm',
     'management',
     'mobile',
     'seller',
     'stats',
-    'lotto',
+    #'lotto',
     'web',
     # 'redis_admin',
 )
