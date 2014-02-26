@@ -170,11 +170,21 @@ def edit_shop(request):
 @require_GET
 @login_required
 @staff_only
-def guokuplus_list(request):
-    GuokuPlusApplication.objects.all()
-    pass
-
+def guokuplus_applications_list(request):
+    _p = int(request.GET.get("p", "1"))
+    _para = {}
+    _num_every_page = 50
+    _results, _total = TaobaoShop.find_guoku_plus_applications(offset = (_p - 1) * 50, count = _num_every_page)
+    _paginator = Paginator(_p, _num_every_page, _total, _para)
+    return render_to_response(
+        "shop/application_list.html",
+        {
+            "applications" : _results,
+            "paginator" : _paginator,
+        },
+        context_instance = RequestContext(request))
+                                
 @login_required
 @staff_only
-def guokuplus_item_update(request):
+def guokuplus_application_update(request):
     pass

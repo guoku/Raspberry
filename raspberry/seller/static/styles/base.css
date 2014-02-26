@@ -139,41 +139,12 @@ button {
     height: 28px;
 }
 
-/* welcome----------------- */
-#welcome {
-    /*display: none;*/
-    position: relative;
-    background-color: #fbfbfb;
-    top: 49px;
-    height: 165px;
-    width: 100%;
-}
-
-#welcome p {
-    position: relative;
-    top: 0;
-    margin: auto 50px;
-}
-
-#welcome ul {
-    position: absolute;
-}
-
-#welcome li {
-    float: left;
-    margin-left: 25px;
-    padding: 5px;
-}
-
-/* ------------------------- */
 
 /*-----------------------------------------*/
 #main {
     width: 960px;
     margin: 75px auto 50px;
-    /*margin: 240px auto 50px;*/
 }
-
 
 /*--------------------------------------------*/
 #footer {
@@ -195,9 +166,6 @@ button {
 #footer .site-info a, #footer .site-info span {
     margin-left: 10px;
 }
-
-
-
 
 
 /*account-form--------------*/
@@ -402,8 +370,8 @@ button {
 }
 
 .common-entity .entity-img img {
-    max-width: 210px;
-    max-height: 210px;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .common-entity .detail {

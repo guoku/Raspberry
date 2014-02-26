@@ -1,6 +1,7 @@
 # coding=utf-8
 from django.utils.log import getLogger
 from django import template
+from base.category import Category
 
 import re
 
@@ -18,9 +19,11 @@ register.inclusion_tag("entity/entity_note.html")(display_note_item)
 
 
 def trans_category(value):
-    log.info(value)
+    # log.info(value)
+    _category_context = Category(value).read()
 
-    return "分类"
+    log.info(_category_context)
+    return _category_context['category_title']
 register.filter('trans_category', trans_category)
 
 def resize_image(value, size=640):

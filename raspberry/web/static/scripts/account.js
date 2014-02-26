@@ -31,21 +31,21 @@
             })(options[i]);
         }
         
-        $form.on('submit', function (e) {
-            for (var i = 0; i < options.length; i++) {
-                var selector = options[i].selector;
-                var validator = options[i].validator;
-                var url = options[i].url;
-
-                self[validator]($form.find(selector), url);
-            }
-
-            if (self.isValid()) {
-                return;
-            }
-            
-            e.preventDefault();
-        });
+//        $form.on('submit', function (e) {
+//            for (var i = 0; i < options.length; i++) {
+//                var selector = options[i].selector;
+//                var validator = options[i].validator;
+//                var url = options[i].url;
+//
+//                self[validator]($form.find(selector), url);
+//            }
+//
+//            if (self.isValid()) {
+//                return;
+//            }
+//            
+//            e.preventDefault();
+//        });
     };
 
     V.fn._show = function ($formEle, msg) {
@@ -237,11 +237,9 @@
         var $city = $setting.find('.city');
         var l = Location.location;
         var c = Location.city;
-
-        var currP = $.trim($location.attr('data-p')) || '北京';
-        var currC = $.trim($city.attr('data-c'));
+        var currP = $.trim($("#default_location_value").text()) || '北京';
+        var currC = $.trim($("#default_city_value").text());
         var selectedP;
-
         for (var i = 0; i < l.length; i++) {
             var $option = $('<option>').val(l[i])
                 .text(l[i])

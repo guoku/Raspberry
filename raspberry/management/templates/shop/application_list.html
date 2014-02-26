@@ -1,0 +1,42 @@
+{% extends "management_base.html" %}
+{% load management %}
+
+{% block content %}
+    {% display_shop_navigator "guoku_plus_applications" %}
+    <div class="span2">
+    </div>
+    <div class="span9">
+        <table class="table table-stdiped table-bordered table-condensed">
+            <thead>
+                <th>店铺</th>
+                <th>商品名称</th>
+                <th>图片</th>
+                <th>原价</th>
+                <th>优惠价</th>
+                <th>数量</th>
+                <th>备注</th>
+                <th>状态</th>
+                <th>编辑</th>
+            </thead>
+            <tbody>
+            
+                {% for app in applications %}
+                <tr>
+                <td>{{ app.shop_nick }}</td>
+                <td>{{ app.item_context.title }}</td>
+                <td>
+                    <img width="80" src="{{ app.entity_context.chief_image.url }}"/>
+                </td>
+                <td>{{ app.item_context.price }}</td>
+                <td>{{ app.sale_price }}</td>
+                <td>{{ app.quantity }}</td>
+                <td>{{ app.remarks }}</td>
+                <td>{{ app.status }}</td>
+                <td><a href="#">编辑</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

@@ -114,6 +114,7 @@ INSTALLED_APPS = (
     'seller',
     'stats',
     'web',
+    'lotto',
     'gunicorn',
 )
 
@@ -133,3 +134,4 @@ APP_HOST = "http://test.guoku.com"
 SINA_APP_KEY = '2830558576'
 SINA_APP_SECRET = 'a4861c4ea9facd833eb5d828794a2fb2'
 SINA_BACK_URL = APP_HOST + '/sina/auth'
+TAOBAO_BACK_URL = APP_HOST + "/taobao/auth"

@@ -13,11 +13,12 @@ Config.read('config.ini')
 
 root_dir = os.path.join(os.getcwd(), '..')
 
-env.hosts = ['114.113.154.47' ]
+env.hosts = ['114.113.154.47', '114.113.154.49' ]
 
 env.user = Config.get('global', 'user')
 #env.key = Config.get('global', 'key')
 env.key = os.path.join(root_dir, Config.get('global', 'key')) 
+env.password = 'jessie1@#'
 
 #env.local_root = Config.get('local', 'project_dir')
 env.local_root = os.path.join(root_dir, Config.get('local', 'project_dir'))

@@ -1,0 +1,63 @@
+{% load i18n staticfiles %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <title>{% trans "guoku" %} - {% block title %}{% block subtitle %}{% endblock %}{% endblock %}</title>
+
+    <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+    {% block css %}{% endblock %}
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-24696872-5', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+    <!-- End Google Analytics -->
+</head>
+<body>
+<div id="header">
+    <div class="header-container">
+        {% url 'web_selection' as web_selection_url %}
+        {% url 'web_popular' as web_popular_url %}
+        <div class="title">
+            <h1 style="display: none"><a href="{{ web_selection_url }}">{% trans "guoku" %}</a></h1>
+            <a href="{{ web_selection_url }}" class="logo"><img src="{% static 'images/logo.png' %}"></a>
+        </div>
+    </div>
+</div>
+
+<div id="main" class="clearfix">
+    {% block content %}{% endblock %}
+</div>
+
+<div id="footer">
+    <div class="container">
+        <span>京ICP备11036615号-1 京公网安备11010502019958</span>
+
+        <div class="site-info">
+            <a href="/download/ios/" target="_blank" bi="download_iphone">iPhone</a>
+            <a href="/download/ios/" target="_blank" bi="download_ipad">iPad</a>
+            <a href="http://app.guoku.com/android/latest/guoku.apk" target="_blank" bi="download_android">Android</a>
+
+            <a href="mailto:hi@guoku.com" alt="Keep in touch :)">邮件反馈</a>
+            <a href="" target="_blank">关于我们</a>
+            <a href="" target="_blank">用户协议</a>
+            <span>&#169; 2013 {% trans "guoku" %}</span>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'scripts/jquery.min.js' %}"></script>
+{% block script %}
+{% endblock %}
+</body>
+</html>
