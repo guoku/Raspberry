@@ -31,7 +31,7 @@ class GK3EDMTask(PeriodicTask):
             except Exception, e:
                 logger.error("[edm][error] %s", e)
             count +=1
-            if count >= 500:
+            if count >= 1000:
                 break
 
 
