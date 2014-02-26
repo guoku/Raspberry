@@ -104,6 +104,7 @@ def feed(request):
             offset = _offset,
             count = _count
         )
+        _log_appendix['result_notes'] = _note_id_list
 
         
         _rslt = []
@@ -250,6 +251,7 @@ def selection(request):
         
 
         _rslt = []
+        _entity_id_list = []
         for _selection in _hdl.order_by('-post_time')[0:30]:
             if isinstance(_selection, NoteSelection):
                 _context = {
@@ -261,12 +263,23 @@ def selection(request):
                     }
                 }
                 _rslt.append(_context)
+                _entity_id_list.append(_selection.entity_id)
         
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, selection = True)
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'SELECTION', request.REQUEST, get_client_ip(request), _request_user_id, { 'root_category_id' : _root_cat_id })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'SELECTION', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            request_user_id = _request_user_id,
+            appendix = { 
+                'root_category_id' : int(_root_cat_id),
+                'result_entities' : _entity_id_list,
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -287,6 +300,7 @@ def popular(request):
                 'updated_time' : _popular_entities['updated_time'],
                 'content' : []
             }
+            _entity_id_list = []
             for _row in _popular_entities['data'][0:60]:
                 _entity_id = _row[0]
                 _hotness = _row[1] 
@@ -295,11 +309,13 @@ def popular(request):
                     'entity' : _entity_context,
                     'hotness' : _hotness
                 })
+                _entity_id_list.append(_entity_id)
             
             if _scale == 'weekly':
                 _log_appendix = { 'scale' : 'WEEK' }
             else:
                 _log_appendix = { 'scale' : 'DAY' }
+            _log_appendix['result_entities'] = _entity_id_list
                 
             _duration = datetime.datetime.now() - _start_at
             MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'POPULAR', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
