@@ -16,25 +16,22 @@ root_dir = os.path.join(os.getcwd(), '..')
 env.hosts = ['114.113.154.47', '114.113.154.49' ]
 
 env.user = Config.get('global', 'user')
-#env.key = Config.get('global', 'key')
 env.key = os.path.join(root_dir, Config.get('global', 'key')) 
 env.password = 'jessie1@#'
 
-#env.local_root = Config.get('local', 'project_dir')
 env.local_root = os.path.join(root_dir, Config.get('local', 'project_dir'))
 env.project_root = Config.get('server', 'project_dir')
-
-# print env.local_root
 
 def update_code():
     local('git pull origin master')
 
 
+@parallel
 def upload_code():
  	rsync_project(
  			remote_dir = env.project_root,
  			local_dir = env.local_root,
- 			exclude = 'settings.py'
+            delete = True,
  		)
 
 def upload():

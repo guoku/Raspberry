@@ -36,8 +36,8 @@
         </div>
 
         <ul class="nav">
-            <li {% if request.path in web_selection_url %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
-            <li {% if request.path in web_popular_url %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
+            <li {% if web_selection_url in request.path %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
+            <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
         </ul>
 
         <div class="user">

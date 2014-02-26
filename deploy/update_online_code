@@ -6,4 +6,5 @@ FAB=`which fab`
 
 ${FAB} -f update_code.py upload
 ${FAB} -f reload_server.py reload
+${FAB} -f upload_static.py deploy_static
 
