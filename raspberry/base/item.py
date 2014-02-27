@@ -22,7 +22,7 @@ class Item(object):
         return self.item_obj.entity_id
     
     @classmethod
-    def create_taobao_item(cls, entity_id, images, taobao_id, cid, title, shop_nick, price, soldout): 
+    def create_taobao_item(cls, entity_id, images, taobao_id, cid, title, shop_nick, price, soldout, weight=0): 
         _taobao_id = taobao_id.strip()
         _title = title.strip()
         _shop_nick = shop_nick.strip()
@@ -37,6 +37,7 @@ class Item(object):
             shop_nick = _shop_nick,
             price = price,
             soldout = soldout,
+            weight = weight,
             created_time = datetime.datetime.now(),
             updated_time = datetime.datetime.now() 
         )

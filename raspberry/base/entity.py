@@ -83,6 +83,7 @@ class Entity(object):
         return _hash 
     
     def __insert_taobao_item(self, taobao_item_info, images):
+        _weight = taobao_item_info['weight'] if taobao_item_info.has_key('weight') else 0 
         _taobao_item = Item.create_taobao_item( 
             entity_id = self.entity_id,
             images = images,
@@ -91,7 +92,8 @@ class Entity(object):
             title = taobao_item_info["title"],
             shop_nick = taobao_item_info["shop_nick"], 
             price = taobao_item_info["price"], 
-            soldout = taobao_item_info["soldout"], 
+            soldout = taobao_item_info["soldout"],
+            weight = _weight 
         )
         return _taobao_item.item_id
     
