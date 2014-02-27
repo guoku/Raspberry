@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseServerError
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
@@ -117,6 +117,7 @@ def login(request, template = 'account/login.html'):
         return HttpResponseRedirect(redirect_url)
 
     if request.method == 'POST':
+        log.info(request.POST)
         _forms = SignInAccountForm(request.POST)
         if _forms.is_valid():
             _remember_me = request.POST.get('remember_me', None)

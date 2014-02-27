@@ -152,6 +152,7 @@ button {
 #welcome p {
     position: relative;
     top: 0;
+    font-size: 24px;
     margin: auto 50px;
 }
 
