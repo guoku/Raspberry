@@ -101,6 +101,7 @@ def create_entity_from_offline(request):
             _taobao_soldout = False
         else:
             _taobao_soldout = True
+        _rank_score = int(request.POST.get("item_score", '0'))
         _chief_image_url = request.POST.get("chief_image_url", None)
         _brand = request.POST.get("brand", "")
         _title = request.POST.get("title", "")
@@ -130,6 +131,7 @@ def create_entity_from_offline(request):
                 intro = _intro,
                 detail_image_urls = _detail_image_urls,
                 weight = -1,
+                rank_score = _rank_score
             )
             _rslt = {
                 'entity_id' : _entity.entity_id,

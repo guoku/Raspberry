@@ -122,6 +122,7 @@ class Entity(models.Model):
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
     weight = models.IntegerField(default = 0, db_index = True)
+    rank_score = models.IntegerField(default = 0, db_index = True)
     
     search = SphinxSearch( 
         index = 'entities',

@@ -105,8 +105,8 @@ class Entity(object):
     
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, chief_image_url, 
-                              taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = [], 
-                              weight = 0):
+                              taobao_item_info, brand="", title="", intro="", detail_image_urls=[], 
+                              weight=0, rank_score=0):
         
         _item = Item.get_item_by_taobao_id(taobao_item_info['taobao_id'])
         if _item == None:
@@ -143,7 +143,8 @@ class Entity(object):
                 price = taobao_item_info["price"], 
                 chief_image = _chief_image_id,
                 detail_images = "#".join(_detail_image_ids),
-                weight = weight
+                weight = weight,
+                rank_score = rank_score
             )
             
             try:
@@ -354,7 +355,7 @@ class Entity(object):
 
         # TODO: removing entity_id in item
     
-    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None, mark = None, reset_created_time = False):
+    def update(self, category_id=None, old_category_id=None, brand=None, title=None, intro=None, price=None, chief_image_id=None, weight=None, mark=None, rank_score=None, reset_created_time=False):
         
         self.__ensure_entity_obj()
         if brand != None:
@@ -371,6 +372,8 @@ class Entity(object):
             self.entity_obj.category_id = int(old_category_id) 
         if weight != None:
             self.entity_obj.weight = int(weight)
+        if rank_score != None:
+            self.entity_obj.rank_score = int(rank_score)
         if mark != None:
             self.entity_obj.mark = int(mark)
         
@@ -457,6 +460,14 @@ class Entity(object):
         elif status == 'normal':
             _hdl = _hdl.filter(weight__gte = 0)
 
+        ########## Magic Code for NOVUS editor ##############
+
+        if sort_by == 'rank_score':
+            _hdl = _hdl.filter(id__gt = 200000)
+
+
+        #####################################################
+
         
         if timestamp != None:
             _hdl = _hdl.filter(updated_time__lt = timestamp)
@@ -486,6 +497,11 @@ class Entity(object):
                 _hdl = _hdl.order_by('updated_time')
             else:
                 _hdl = _hdl.order_by('-updated_time')
+        elif sort_by == 'rank_score':
+            if reverse:
+                _hdl = _hdl.order_by('rank_score')
+            else:
+                _hdl = _hdl.order_by('-rank_score')
         else:
             _hdl = _hdl.order_by('-weight', '-like_count')
              
