@@ -13,7 +13,7 @@ logger = logging.getLogger('django.request')
 class GK3EDMTask(PeriodicTask):
     run_every = datetime.timedelta(seconds=3600) 
     ignore_result = True
-    time_limit = 3500 
+    time_limit = 1800 
     queue = "edm"
     
     def run(self):
