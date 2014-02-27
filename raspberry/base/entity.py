@@ -28,6 +28,12 @@ from utils.lib import roll
 
 class Entity(object):
     
+    class FailToCreateEntity(Exception):
+        def __init__(self, message):
+            self.__message = "fail to create entity : %s"%message
+        def __str__(self):
+            return repr(self.__message)
+    
     class Mark(object):
         promoted = 1
         first = 2
@@ -93,7 +99,7 @@ class Entity(object):
             shop_nick = taobao_item_info["shop_nick"], 
             price = taobao_item_info["price"], 
             soldout = taobao_item_info["soldout"],
-            weight = _weight 
+            weight = _weight,
         )
         return _taobao_item.item_id
     
@@ -102,50 +108,57 @@ class Entity(object):
                               taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = [], 
                               weight = 0):
         
-        _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
-        if _chief_image_id == None:
-            _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
-            _chief_image_id = _chief_image_obj.image_id
-        
-        _detail_image_ids = []
-        for _image_url in detail_image_urls:
-            _image_id = Image.get_image_id_by_origin_url(_image_url)
-            if _image_id == None:
-                _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
-                _image_id = _image_obj.image_id
-            _detail_image_ids.append(_image_id)
+        _item = Item.get_item_by_taobao_id(taobao_item_info['taobao_id'])
+        if _item == None:
+            _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
+            if _chief_image_id == None:
+                _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
+                _chief_image_id = _chief_image_obj.image_id
             
-        
-        _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'] + taobao_item_info['title'] + taobao_item_info['shop_nick'])
-        
-        try:
-            _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = taobao_item_info["cid"])
-            _old_category_id = _obj.guoku_category_id
-        except:
-            _old_category_id = 12
+            _detail_image_ids = []
+            for _image_url in detail_image_urls:
+                _image_id = Image.get_image_id_by_origin_url(_image_url)
+                if _image_id == None:
+                    _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
+                    _image_id = _image_obj.image_id
+                _detail_image_ids.append(_image_id)
+                
             
-        _entity_obj = EntityModel.objects.create( 
-            entity_hash = _entity_hash,
-            creator_id = creator_id,
-            category_id = _old_category_id,
-            neo_category_id = category_id,
-            brand = brand,
-            title = title,
-            intro = intro,
-            price = taobao_item_info["price"], 
-            chief_image = _chief_image_id,
-            detail_images = "#".join(_detail_image_ids),
-            weight = weight
-        )
-         
-        _item_images = _detail_image_ids
-        _item_images.append(_chief_image_id)
+            _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'] + taobao_item_info['title'] + taobao_item_info['shop_nick'])
+            
+            try:
+                _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = taobao_item_info["cid"])
+                _old_category_id = _obj.guoku_category_id
+            except:
+                _old_category_id = 12
+                
+            _entity_obj = EntityModel.objects.create( 
+                entity_hash = _entity_hash,
+                creator_id = creator_id,
+                category_id = _old_category_id,
+                neo_category_id = category_id,
+                brand = brand,
+                title = title,
+                intro = intro,
+                price = taobao_item_info["price"], 
+                chief_image = _chief_image_id,
+                detail_images = "#".join(_detail_image_ids),
+                weight = weight
+            )
+            
+            try:
+                _item_images = _detail_image_ids
+                _item_images.append(_chief_image_id)
+                
+                _inst = cls(_entity_obj.id)
+                _inst.entity_obj = _entity_obj
+                _taobao_item_id = _inst.__insert_taobao_item(taobao_item_info, _item_images)
         
-        _inst = cls(_entity_obj.id)
-        _inst.entity_obj = _entity_obj
-        _taobao_item_id = _inst.__insert_taobao_item(taobao_item_info, _item_images)
-
-        return _inst
+                return _inst
+            except Exception, e:
+                _entity_obj.delete()
+                raise Entity.FailToCreateEntity(str(e))
+                
 
     
     def merge(self, target_entity_id):
