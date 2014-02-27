@@ -6,6 +6,7 @@ from base.stream_models import TaobaoShopExtendedInfo
 from base.stream_models import CrawlerInfo
 from base.stream_models import TaobaoShopVerificationInfo
 from base.stream_models import GuokuPlusApplication
+from base.stream_models import GuokuPlusApplicationComment
 from base.stream_models import ShopScore
 from base.entity import Entity
 from base.item import Item
@@ -79,19 +80,6 @@ class TaobaoShop(object):
         _context['title'] = _doc.shop_info.title
         _context['shop_type'] = _doc.shop_info.shop_type 
         _context['seller_id'] = _doc.shop_info.seller_id 
-        '''
-        _context['commission_rate'] = -1
-        _context['commission_type'] = 'unknown' 
-        if _doc.extended_info:
-            if _doc.extended_info.orientational:
-                _context['commission_type'] = 'orientational'
-                _context['commission_rate'] = _doc.extended_info.commission_rate
-            elif _doc.extended_info.commission_rate != -1:
-                _context['commission_type'] = 'general'
-                _context['commission_rate'] = _doc.extended_info.commission_rate
-        if full_info:
-            _context
-        '''
 
         _context['extended_info'] = _doc.extended_info._data
         _context['crawler_info'] = _doc.crawler_info._data
@@ -145,17 +133,15 @@ class TaobaoShop(object):
             remarks = remarks,
             editor_comments = [],
             seller_comments = [],
+            has_new_editor_comment = False,
+            has_new_seller_comment = False,
             created_time = datetime.datetime.now(),
             updated_time = datetime.datetime.now()
         )
         item.save()
    
-    def read_guoku_plus_application_list(self):
-        applications = GuokuPlusApplication.objects.filter(shop_nick = self.nick).order_by("-updated_time")
-        results = []
-        for app in applications:
-            results.append(TaobaoShop.normalize_guoku_plus_application_data(app))
-        return results
+    def read_guoku_plus_application_list(self, offset = 0, count = 100):
+        return GuokuPlusApp.find(shop_nick = self.nick, offset = offset, count = count) 
 
     def item_exist(self, taobao_item_id):
         item = Item.get_item_by_taobao_id(taobao_item_id)
@@ -166,27 +152,80 @@ class TaobaoShop(object):
             return True
         return False
 
+class GuokuPlusApp(object):
+    def __init__(self, app_id):
+        self.app_id = app_id
+
     @classmethod
-    def find_guoku_plus_applications(cls, shop_nick = None, status = None, offset = 0, count = 100):
+    def find(cls, shop_nick = None, status = None, offset = 0, count = 100):
         _hdl = GuokuPlusApplication.objects
         if shop_nick:
             _hdl = _hdl.filter(shop_nick = shop_nick)
         if status:
             _hdl = _hdl.filter(status = status)
+        _hdl = _hdl.order_by("-updated_time")
         _count = _hdl.count()
         _results = _hdl.skip(offset).limit(count)
         results = []
         for app in _results:
-            results.append(TaobaoShop.normalize_guoku_plus_application_data(app))
+            results.append(GuokuPlusApp.normalize_guoku_plus_application_data(app))
         return results, _count
 
     @staticmethod
     def normalize_guoku_plus_application_data(application):
         result = application._data
         entity = Entity(application.entity_id)
-        print application.entity_id
         result['entity_context'] = entity.read()
         item = Item.get_item_by_taobao_id(result['taobao_item_id'])
         if item:
             result['item_context'] = item.read()
-        return result 
+        return result
+
+    def add_editor_comment(self, comment):
+        app = GuokuPlusApplication.objects.filter(_id = self.app_id).first()
+        if app:
+            _comment = GuokuPlusApplicationComment(content = comment, created_time = datetime.datetime.now())
+            app.update_one(push__editor_comments = _comment)
+            app.has_new_editor_comment = True
+            app.save()
+
+    def add_seller_comment(self, comment):
+        app = GuokuPlusApplication.objects.filter(_id = self.app_id).first()
+        if app:
+            _comment = GuokuPlusApplicationComment(content = comment, created_time = datetime.datetime.now())
+            app.update_one(push__editor_comments = _comment)
+            app.has_new_seller_comment = True
+            app.save()
+
+    def mark_editor_comment_as_read(self):
+        app = GuokuPlusApplication.objects.filter(_id = self.app_id).first()
+        if app:
+            app.has_new_editor_comment = False
+            app.save()
+    
+    def mark_seller_comment_as_read(self):
+        app = GuokuPlusApplication.objects.filter(_id = self.app_id).first()
+        if app:
+            app.has_new_seller_comment = False
+            app.save()
+
+class GuokuPlusActivity(object):
+    def __init__(self, activity_id):
+        self.activity_id = activity_id
+
+    @classmethod
+    def create(cls, ):
+        pass
+
+    def stop(self):
+        pass
+
+    def update(self):
+        pass
+
+    def test_token(self):
+        pass
+
+    def read(self):
+        pass
+
