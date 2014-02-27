@@ -1,0 +1,64 @@
+#popular .time {
+    position: relative;
+    margin: 40px 0;
+}
+
+#popular .nav {
+    display: inline-block;
+    font-size: 18px;
+}
+
+#popular .nav .sep {
+    margin: 0 10px;
+}
+
+#popular .nav .active {
+    color: #333;
+}
+
+#popular .time .recent {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 16px;
+}
+
+#popular ul {
+    margin: 0 -30px 0 0;
+    padding: 0;
+    font-size: 0;
+}
+
+#popular ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 30px 30px 0;
+    font-size: 14px;
+    border: 1px solid #eee;
+}
+
+#popular .entity-img {
+    display: table-cell;
+    width: 215px;
+    height: 215px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
+}
+
+#popular .entity-img img {
+    max-width: 215px;
+    max-height: 215px;
+}
+
+#popular .entities li .detail {
+    margin: 20px 10px 15px;
+}
+
+#popular .entities .like {
+    text-decoration: none;
+}
+
+#popular .entities .hot {
+    margin-left: 5px;
+}
