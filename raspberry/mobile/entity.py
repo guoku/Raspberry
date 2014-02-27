@@ -53,7 +53,14 @@ def entity_list(request):
             )
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'NOVUS', request.REQUEST, get_client_ip(request), _request_user_id)
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'NOVUS', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            request_user_id = _request_user_id,
+            appendix = { 'result_entities' : _entity_id_list },
+        )
         
         return SuccessJsonResponse(_rslt)
     
@@ -98,7 +105,17 @@ def search_entity(request):
             )
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'SEARCH_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'query' : _query_string })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'SEARCH_ENTITY', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            request_user_id = _request_user_id,
+            appendix = { 
+                'query' : _query_string,
+                'result_entities' : _entity_id_list[_offset : _offset + _count], 
+            },
+        )
         
         return SuccessJsonResponse(_rslt)
 
@@ -137,7 +154,18 @@ def category_entity(request, category_id):
             )
             
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'CATEGORY_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'category_id' : int(category_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'CATEGORY_ENTITY', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            request_user_id = _request_user_id,
+            appendix = { 
+                'neo_category_id' : int(category_id),
+                'result_entities' : _entity_id_list 
+            },
+        )
+        
         return SuccessJsonResponse(_rslt)
 
 
@@ -224,54 +252,8 @@ def delete_entity_note(request, note_id):
 
 
 @check_sign
-def user_like(request, user_id):
-    _start_at = datetime.datetime.now()
-    if request.method == "GET":
-        _session = request.GET.get('session', None)
-        if _session != None:
-            _request_user_id = Session_Key.objects.get_user_id(_session)
-        else:
-            _request_user_id = None
-        _timestamp = request.GET.get('timestamp', None)
-        if _timestamp != None:
-            _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
-        _offset = int(request.GET.get('offset', '0'))
-        _count = int(request.GET.get('count', '30'))
-        
-        _list = []
-        _last_like_time = None
-        for _item in MobileUser(user_id).find_like_entity(timestamp = _timestamp, offset = _offset, count = _count, with_timestamp = True):
-            _list.append(MobileEntity(_item[0]).read(_request_user_id))
-            _last_like_time = _item[1]
-
-        _rslt = {
-            'timestamp' : time.mktime(_last_like_time.timetuple()),
-            'entity_list' : _list
-        }
-
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_LIKE', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
-        return SuccessJsonResponse(_rslt)
-    
-    
-@check_sign
-def search(request):
-    if request.method == "GET":
-        _query = request.GET.get('q', None)
-        _session = request.GET.get('session', None)
-        if _session != None:
-            _request_user_id = Session_Key.objects.get_user_id(_session)
-        else:
-            _request_user_id = None
-        _rslt = []
-        for _entity_id in MobileEntity.search(_query):
-            _rslt.append(MobileEntity(_entity_id).read(_request_user_id))
-        
-        return SuccessJsonResponse(_rslt)
-
-
-@check_sign
 def guess_entity(request):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -283,8 +265,23 @@ def guess_entity(request):
         if _category_id != None:
             _category_id = int(_category_id)
         _rslt = []
+        _entity_id_list = []
         for _entity_id in MobileEntity.roll(category_id = _category_id, count = _count):
             _rslt.append(MobileEntity(_entity_id).read(_request_user_id))
+            _entity_id_list.append(_entity_id)
+        
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'GUESS_ENTITY', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            request_user_id = _request_user_id,
+            appendix = { 
+                'neo_category_id' : int(_category_id),
+                'result_entities' : _entity_id_list
+            },
+        )
         
         return SuccessJsonResponse(_rslt)
 
