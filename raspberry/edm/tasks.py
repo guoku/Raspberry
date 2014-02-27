@@ -9,7 +9,9 @@ import datetime
 import logging
 import time
 
-logger = logging.getLogger('django.request')
+logger = logging.getLogger('django')
+
+
 class GK3EDMTask(PeriodicTask):
     run_every = datetime.timedelta(seconds=3600) 
     ignore_result = True
