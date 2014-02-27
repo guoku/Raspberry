@@ -36,8 +36,8 @@
         </div>
 
         <ul class="nav">
-            <li {% if request.path in web_selection_url %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
-            <li {% if request.path in web_popular_url %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
+            <li {% if web_selection_url in request.path %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
+            <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
         </ul>
 
         <div class="user">
@@ -51,10 +51,12 @@
             {% endif %}
         </div>
 
-        <form action="/search" method="GET">
-            <input type="text" placeholder="搜你想要的" name="k" class="search">
-            <button type="submit"><img src="{% static 'images/search_icon.png' %}"></button>
-        </form>
+        {% block search %}
+            <form action="{% url 'web_search' %}" method="GET">
+                <input type="text" placeholder="搜你想要的" name="q" class="search">
+                <button type="submit"><img src="{% static 'images/search_icon.png' %}"></button>
+            </form>
+        {% endblock %}
     </div>
 </div>
 
@@ -79,7 +81,6 @@
 {% endif %}
 
 <div id="main" class="clearfix">
-
     {% block content %}{% endblock %}
 </div>
 

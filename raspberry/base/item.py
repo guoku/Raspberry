@@ -22,7 +22,7 @@ class Item(object):
         return self.item_obj.entity_id
     
     @classmethod
-    def create_taobao_item(cls, entity_id, images, taobao_id, cid, title, shop_nick, price, soldout): 
+    def create_taobao_item(cls, entity_id, images, taobao_id, cid, title, shop_nick, price, soldout, weight=0): 
         _taobao_id = taobao_id.strip()
         _title = title.strip()
         _shop_nick = shop_nick.strip()
@@ -37,6 +37,7 @@ class Item(object):
             shop_nick = _shop_nick,
             price = price,
             soldout = soldout,
+            weight = weight,
             created_time = datetime.datetime.now(),
             updated_time = datetime.datetime.now() 
         )
@@ -82,7 +83,7 @@ class Item(object):
         _context["weight"] = self.item_obj.weight
         _context["soldout"] = self.item_obj.soldout
         _context["ustation"] = self.item_obj.ustation
-        _context['buy_link'] = Item.generate_taobao_item_url(_context['taobao_id'])
+        _context['buy_link'] = Item.generate_taobao_item_url(str(self.item_obj.taobao_id))
         _context["volume"] = 0 
         return _context
 
@@ -159,5 +160,6 @@ class Item(object):
     @staticmethod
     def generate_taobao_item_url(taobao_id):
         _url = "http://www.guoku.com/visit_item?item_id=%s" % taobao_id + "&type=mobile"
+        #_url = "http://10.0.1.109/mobile/v3/item/%s/visit/" % item_id + "?type=mobile"
         return _url
 

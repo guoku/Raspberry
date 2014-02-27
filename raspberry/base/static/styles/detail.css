@@ -21,7 +21,7 @@
 }
 
 #detail .entity-img {
-    display: block;
+    display: table-cell;
     width: 580px;
     height: 580px;
     text-align: center;
@@ -29,7 +29,7 @@
 }
 
 #detail .entity-img img {
-    display: block;
+    /*display: block;*/
     max-width: 580px;
     max-height: 580px;
 }

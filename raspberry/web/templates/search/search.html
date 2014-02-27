@@ -2,16 +2,16 @@
 {% load staticfiles %}
 {% load web_common %}
 
-{% block title %}{{ title|default:'我' }}商品搜索 － 果库{% endblock %}
+{% block title %}商品搜索 － {{ keyword }}{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/search.css' %}">{% endblock %}
 {% block content %}
     <div id="search">
         <h2><span>[{{ keyword }}]</span>的搜索结果</h2>
 
         <div class="nav">
-            <a href="{% url 'web_search' %}?k={{ keyword }}&g=e" {% if group == 'e' %}class="active"{% endif %}>商品</a>
-            <a href="{% url 'web_search' %}?k={{ keyword }}&g=u" {% if group == 'u' %}class="active"{% endif %}>用户</a>
-            <a href="{% url 'web_search' %}?k={{ keyword }}&g=t" {% if group == 't' %}class="active"{% endif %}>标签</a>
+            <a href="{% url 'web_search' %}?q={{ keyword }}&g=e" {% if group == 'e' %}class="active"{% endif %}>商品</a>
+            <a href="{% url 'web_search' %}?q={{ keyword }}&g=u" {% if group == 'u' %}class="active"{% endif %}>用户</a>
+            <a href="{% url 'web_search' %}?q={{ keyword }}&g=t" {% if group == 't' %}class="active"{% endif %}>标签</a>
         </div>
 
         {% if group == 'e' %}
