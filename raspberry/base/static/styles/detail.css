@@ -228,11 +228,11 @@
     width: 19px;
     height: 19px;
     margin-right: 5px;
-    background: url(/static/images/icon_poke.png);
+    background: url(/static/v3/images/icon_poke.png);
 }
 
 .note-item .poked span {
-    background: url(/static/images/icon_poked.png);
+    background: url(/static/v3/images/icon_poked.png);
 }
 
 .note-item .add-comment {
@@ -246,7 +246,7 @@
     width: 19px;
     height: 19px;
     margin-right: 5px;
-    background: url(/static/images/icon_comment.png);
+    background: url(/static/v3/images/icon_comment.png);
 }
 
 .note-item .update-note {
