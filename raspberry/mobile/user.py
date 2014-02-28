@@ -50,6 +50,7 @@ def category_user_like(request, category_id, user_id):
             view = 'CATEGORY_USER_LIKE', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'neo_category_id' : int(category_id),
@@ -109,6 +110,7 @@ def user_following(request, user_id):
             view = 'USER_FOLLOWING', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'user_id' : int(user_id),
@@ -140,6 +142,7 @@ def user_fan(request, user_id):
             view = 'USER_FAN', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'user_id' : int(user_id),
@@ -180,7 +183,17 @@ def user_detail(request, user_id):
             _rslt['last_like'] = MobileEntity(_last_like_entity_id).read(_request_user_id)
             
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'USER', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'user_id' : int(user_id),
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -253,6 +266,7 @@ def user_entity_note(request, user_id):
             view = 'USER_NOTE', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'user_id' : int(user_id),
@@ -300,6 +314,7 @@ def user_tag_list(request, user_id):
             view = 'USER_TAG', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'user_id' : int(user_id),
@@ -329,7 +344,18 @@ def user_tag_entity(request, user_id, tag):
             _rslt['entity_list'].append(MobileEntity(_entity_id).read(_request_user_id))
     
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_TAG_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id), 'tag' : tag })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'USER_TAG_ENTITY', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'user_id' : int(user_id),
+                'tag' : tag 
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 
@@ -367,6 +393,7 @@ def user_like(request, user_id):
             view = 'USER_LIKE', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'user_id' : int(user_id),
@@ -403,6 +430,7 @@ def search_user(request):
             view = 'SEARCH_USER', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'query' : _query_string, 

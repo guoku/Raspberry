@@ -31,21 +31,28 @@ def homepage(request):
         _request_user_id = Session_Key.objects.get_user_id(_session)
     else:
         _request_user_id = None
+
+    _log_appendix = {}
+
     _rslt = {}
     _rslt['discover'] = popularity.read_popular_category()['data'][0:8]
+    _log_appendix['discover'] = map(lambda x: x['category_id'], _rslt['discover'])
     
     _rslt['banner'] = []
+    _log_appendix['banner'] = []
     for _banner_context in Banner.find(status = 'active'):
         try:
             _rslt['banner'].append({
                 'url' : _banner_context['url'], 
                 'img' : _banner_context['image'] 
             })
+            _log_appendix['banner'].append(_banner_context['banner_id'])
         except Exception, e:
             pass
     
 
     _rslt['hottag'] = []
+    _log_appendix['hottag'] = []
     _recommend_user_tag_list = Tag.get_recommend_user_tag_list()
     if len(_recommend_user_tag_list) > 3:
         _recommend_user_tag_list = random.sample(_recommend_user_tag_list, 3)
@@ -55,7 +62,7 @@ def homepage(request):
             'entity_count' : _tag_data[2],
             'user' : MobileUser(_tag_data[0]).read(_request_user_id)
         })
-      
+        _log_appendix['hottag'].append([_tag_data[0], _tag_data[1]])
     
     _rslt['config'] = {}
     _rslt['config']['taobao_ban_count'] = 2
@@ -69,7 +76,15 @@ def homepage(request):
     
         
     _duration = datetime.datetime.now() - _start_at
-    MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'HOMEPAGE', request.REQUEST, get_client_ip(request), _request_user_id)
+    MobileLogTask.delay(
+        duration = _duration.seconds * 1000000 + _duration.microseconds, 
+        view = 'HOMEPAGE', 
+        request = request.REQUEST, 
+        ip = get_client_ip(request), 
+        log_time = datetime.datetime.now(),
+        request_user_id = _request_user_id,
+        appendix = _log_appendix 
+    )
     return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -125,7 +140,16 @@ def feed(request):
                 pass
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'FEED', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'FEED', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request),
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = _log_appendix 
+        )
+        
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -226,7 +250,14 @@ def message(request):
             MarkFootprint.delay(user_id = _request_user_id, message = True)
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'MESSAGE', request.REQUEST, get_client_ip(request), _request_user_id)
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'MESSAGE', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -275,6 +306,7 @@ def selection(request):
             view = 'SELECTION', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'root_category_id' : int(_root_cat_id),
@@ -319,7 +351,15 @@ def popular(request):
             _log_appendix['result_entities'] = _entity_id_list
                 
             _duration = datetime.datetime.now() - _start_at
-            MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'POPULAR', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
+            MobileLogTask.delay(
+                duration = _duration.seconds * 1000000 + _duration.microseconds, 
+                view = 'POPULAR', 
+                request = request.REQUEST, 
+                ip = get_client_ip(request), 
+                log_time = datetime.datetime.now(),
+                request_user_id = _request_user_id,
+                appendix =  _log_appendix 
+            )
             return SuccessJsonResponse(_rslt)
         else:
             return ErrorJsonResponse(
