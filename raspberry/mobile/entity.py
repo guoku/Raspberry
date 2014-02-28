@@ -57,7 +57,8 @@ def entity_list(request):
             duration = _duration.seconds * 1000000 + _duration.microseconds, 
             view = 'NOVUS', 
             request = request.REQUEST, 
-            ip = get_client_ip(request), 
+            ip = get_client_ip(request),
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 'result_entities' : _entity_id_list },
         )
@@ -110,6 +111,7 @@ def search_entity(request):
             view = 'SEARCH_ENTITY', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'query' : _query_string,
@@ -159,6 +161,7 @@ def category_entity(request, category_id):
             view = 'CATEGORY_ENTITY', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'neo_category_id' : int(category_id),
@@ -182,7 +185,17 @@ def entity_detail(request, entity_id):
         _rslt = MobileEntity(entity_id).read_full_context(_request_user_id)
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'entity_id' : int(entity_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'ENTITY', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'entity_id' : int(entity_id) 
+            },
+        )
         
         return SuccessJsonResponse(_rslt)
         
@@ -276,6 +289,7 @@ def guess_entity(request):
             view = 'GUESS_ENTITY', 
             request = request.REQUEST, 
             ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
             request_user_id = _request_user_id,
             appendix = { 
                 'neo_category_id' : int(_category_id),
