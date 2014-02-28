@@ -1,5 +1,6 @@
 # coding=utf8
 from django.conf import settings
+from base.models import Guoku_Plus as GuokuPlusModel
 from base.stream_models import TaobaoShop as TaobaoShopModel
 from base.stream_models import TaobaoShopInfo
 from base.stream_models import TaobaoShopExtendedInfo
@@ -171,6 +172,13 @@ class GuokuPlusApp(object):
             results.append(GuokuPlusApp.normalize_guoku_plus_application_data(app))
         return results, _count
 
+    def read(self):
+        app = GuokuPlusApplication.objects.filter(id = app_id).first()
+        if app:
+            return normalize_guoku_plus_application_data(app)
+        else:
+            return None
+
     @staticmethod
     def normalize_guoku_plus_application_data(application):
         result = application._data
@@ -179,6 +187,12 @@ class GuokuPlusApp(object):
         item = Item.get_item_by_taobao_id(result['taobao_item_id'])
         if item:
             result['item_context'] = item.read()
+        result['editor_comments'] = []
+        result['seller_comments'] = []
+        for comment in application.editor_comments:
+            result['editor_comments'].append(comment._data)
+        for comment in application.seller_comments:
+            result['seller_comments'].append(comment._data)
         return result
 
     def add_editor_comment(self, comment):
@@ -214,10 +228,10 @@ class GuokuPlusActivity(object):
         self.activity_id = activity_id
 
     @classmethod
-    def create(cls, ):
-        pass
-
-    def stop(self):
+    def create(cls, entity_id, taobao_id, sale_price, total_volume, sales_volume, start_time, created_time):
+        GuokuPlusModel.objects.create(
+            entity_id = entity_id,
+            taobao_id = taobao_id)   
         pass
 
     def update(self):

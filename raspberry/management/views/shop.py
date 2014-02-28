@@ -1,6 +1,7 @@
 #coding=utf-8
 
 from django.contrib import messages
+
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.serializers.json import DjangoJSONEncoder
@@ -9,7 +10,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
 
-from base.taobao_shop import TaobaoShop
+from base.taobao_shop import TaobaoShop, GuokuPlusApp
 from base.item import Item
 from base.entity import Entity
 from utils.authority import staff_only 
@@ -170,11 +171,11 @@ def edit_shop(request):
 @require_GET
 @login_required
 @staff_only
-def guokuplus_applications_list(request):
+def guokuplus_application_list(request):
     _p = int(request.GET.get("p", "1"))
     _para = {}
     _num_every_page = 50
-    _results, _total = TaobaoShop.find_guoku_plus_applications(offset = (_p - 1) * 50, count = _num_every_page)
+    _results, _total = GuokuPlusApp.find(offset = (_p - 1) * 50, count = _num_every_page)
     _paginator = Paginator(_p, _num_every_page, _total, _para)
     return render_to_response(
         "shop/application_list.html",
@@ -183,8 +184,38 @@ def guokuplus_applications_list(request):
             "paginator" : _paginator,
         },
         context_instance = RequestContext(request))
-                                
+
+
+@require_GET
 @login_required
 @staff_only
-def guokuplus_application_update(request):
-    pass
+def guokuplus_application_detail(request):
+    app_id = request.GET.get('app_id', None)
+    app = GuokuPlusApp(app_id)
+    app_context = app.read()
+    return render_to_response(
+        "shop/application_detail.html",
+        {
+            "app_context" : app_context,
+        },
+        context_instance = RequestContext(request)
+    )
+    
+
+@require_POST
+@login_required
+@staff_only
+def add_guokuplus_application_comment(request):
+    app_id = request.POST.get('app_id', None)
+    comment = request.POST.get("comment", None)
+    guoku_plus_app = GuokuPlusApp(app_id)
+    guoku_plus_app.add_editor_comment(comment)
+    return HttpResponse("ok")
+
+
+@require_POST
+@login_required
+@staff_only
+def approve_guokuplus_application(request):
+    app_id = request.POST.get('app_id', None)
+    return HttpResponse("ok")

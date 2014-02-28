@@ -1,0 +1,77 @@
+{% extends "management_base.html" %}
+{% load management %}
+
+{% block content %}
+    {% display_shop_navigator "guoku_plus_applications" %}
+    <div class="span3">
+        <table class="table table-stdiped table-bordered table-condensed">
+            <tr>
+                <td>店铺</td>
+                <td>{{app_context.shop_nick}}</td>
+            </tr>
+            <tr>
+                <td>名称</td>
+                <td>{{app_context.item_context.title}}</td>
+            </tr>
+            <tr>
+                <td>图片</td>
+                <td><img width="180" src="{{app_context.entity_context.chief_image.url}}"/></td>
+            </tr>
+            <tr>
+                <td>原价</td>
+                <td>{{app_context.item_context.price}}</td>
+            </tr>
+            <tr>
+                <td>优惠价</td>
+                <td>{{app_context.sale_price}}</td>
+            </tr>
+            <tr>
+                <td>数量</td>
+                <td>{{app_context.quantity}}</td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td>{{app_context.remarks}}</td>
+            </tr>
+            <tr>
+                <td>状态</td>
+                <td>{{app_context.status}}</td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="span8">
+        <table class="table table-stdiped table-bordered table-condensed">
+            <th>卖家回复</th>
+            <th>编辑回复</th>
+            <tr>
+                <td>
+                    <table>
+                    {% for comment in app_context.seller_comments%}
+                        <tr>
+                            <td>
+                                {{comment.content}}
+                            </td>
+                            <td>
+                                {{comment.created_time}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </td>
+                <td>
+                    {% for comment in app_context.editor_comments%}
+                        <tr>
+                            <td>
+                                {{comment.content}}
+                            </td>
+                            <td>
+                                {{comment.created_time}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table> 
+    </div>
+{% endblock %}

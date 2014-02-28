@@ -170,7 +170,6 @@ class TaobaoShopVerificationInfo(DynamicDocument):
 class GuokuPlusApplicationComment(EmbeddedDocument):
     content = StringField()
     created_time = DateTimeField()
-    author = StringField()
 
 class GuokuPlusApplication(DynamicDocument):
     shop_nick = StringField(required = True)
@@ -182,6 +181,8 @@ class GuokuPlusApplication(DynamicDocument):
     remarks = StringField()
     editor_comments = ListField(EmbeddedDocumentField(GuokuPlusApplicationComment))
     seller_comments = ListField(EmbeddedDocumentField(GuokuPlusApplicationComment))
+    has_new_editor_comment = BooleanField()
+    has_new_seller_comment = BooleanField()
     created_time = DateTimeField()
     updated_time = DateTimeField()
     meta = {
