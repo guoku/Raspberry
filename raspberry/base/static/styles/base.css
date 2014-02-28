@@ -319,11 +319,11 @@ button {
     width: 20px;
     height: 17px;
     margin-right: 5px;
-    background: url(/static/images/icon_like.png) no-repeat;
+    background: url(/static/v3/images/icon_like.png) no-repeat;
 }
 
 .liked .icon {
-    background: url(/static/images/icon_liked.png) no-repeat;
+    background: url(/static/v3/images/icon_liked.png) no-repeat;
 }
 
 .like .count {
@@ -370,11 +370,11 @@ button {
 }
 
 .pagination a .previous {
-    background: url(/static/images/guoku_icon.png) no-repeat scroll -157px -3px;
+    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -157px -3px;
 }
 
 .pagination a .next {
-    background: url(/static/images/guoku_icon.png) no-repeat scroll -170px -3px;
+    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -170px -3px;
 }
 
 
