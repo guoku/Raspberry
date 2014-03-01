@@ -63,20 +63,20 @@
 {% if not user.is_authenticated %}
 {% block welcome %}
     <div id="welcome">
-        <div style="width: 960px;margin:auto;">
-        <p>大开眼界的剁手指南，</p>
-        <p>一目了然的优质生活主张。</p>
-        <ul>
-            <li>
-                <a class="btn btn-primary" href="{% url 'web_register' %}">注册账号</a>
-            </li>
-            <li>
-                <span class="btn">已有账号，</span>
-            </li>
-            <li>
-                <a class="btn btn-link" href="{% url 'web_login' %}">从这里登陆</a>
-            </li>
-        </ul>
+        <div class="intro">
+            <p>大开眼界的剁手指南，</p>
+            <p>一目了然的优质生活主张。</p>
+            <ul>
+                <li>
+                    <a class="btn btn-primary" href="{% url 'web_register' %}">注册账号</a>
+                </li>
+                <li>
+                    <span class="btn">已有账号，</span>
+                </li>
+                <li>
+                    <a class="btn btn-link" href="{% url 'web_login' %}">从这里登陆</a>
+                </li>
+            </ul>
         </div>
     </div>
 {% endblock %}

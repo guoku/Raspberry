@@ -193,8 +193,12 @@ button {
 
 #welcome li {
     float: left;
-    margin-left: 25px;
-    /*padding: 5px;*/
+    margin-left: 5px;
+}
+
+#welcome .intro {
+    width: 960px;
+    margin: auto;
 }
 
 /* ------------------------- */
