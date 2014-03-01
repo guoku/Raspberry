@@ -173,15 +173,16 @@ class GuokuPlusApp(object):
         return results, _count
 
     def read(self):
-        app = GuokuPlusApplication.objects.filter(id = app_id).first()
+        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
         if app:
-            return normalize_guoku_plus_application_data(app)
+            return GuokuPlusApp.normalize_guoku_plus_application_data(app)
         else:
             return None
 
     @staticmethod
     def normalize_guoku_plus_application_data(application):
-        result = application._data
+        result = {}
+        result.update(application._data)
         entity = Entity(application.entity_id)
         result['entity_context'] = entity.read()
         item = Item.get_item_by_taobao_id(result['taobao_item_id'])
@@ -190,35 +191,37 @@ class GuokuPlusApp(object):
         result['editor_comments'] = []
         result['seller_comments'] = []
         for comment in application.editor_comments:
+            print comment
+            print comment._data
             result['editor_comments'].append(comment._data)
         for comment in application.seller_comments:
             result['seller_comments'].append(comment._data)
         return result
 
     def add_editor_comment(self, comment):
-        app = GuokuPlusApplication.objects.filter(_id = self.app_id).first()
+        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
         if app:
             _comment = GuokuPlusApplicationComment(content = comment, created_time = datetime.datetime.now())
-            app.update_one(push__editor_comments = _comment)
+            app.update(push__editor_comments = _comment)
             app.has_new_editor_comment = True
             app.save()
 
     def add_seller_comment(self, comment):
-        app = GuokuPlusApplication.objects.filter(_id = self.app_id).first()
+        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
         if app:
             _comment = GuokuPlusApplicationComment(content = comment, created_time = datetime.datetime.now())
-            app.update_one(push__editor_comments = _comment)
+            app.update(push__editor_comments = _comment)
             app.has_new_seller_comment = True
             app.save()
 
     def mark_editor_comment_as_read(self):
-        app = GuokuPlusApplication.objects.filter(_id = self.app_id).first()
+        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
         if app:
             app.has_new_editor_comment = False
             app.save()
     
     def mark_seller_comment_as_read(self):
-        app = GuokuPlusApplication.objects.filter(_id = self.app_id).first()
+        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
         if app:
             app.has_new_seller_comment = False
             app.save()

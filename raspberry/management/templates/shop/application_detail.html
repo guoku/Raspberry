@@ -60,6 +60,7 @@
                     </table>
                 </td>
                 <td>
+                    <table>
                     {% for comment in app_context.editor_comments%}
                         <tr>
                             <td>
@@ -70,6 +71,12 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    </table>
+                    <form action="{%url 'management_add_guokuplus_app_editor_comment' %}" method="POST">
+                        <textarea rows="6" cols="50" name="content"> </textarea><br>
+                        <input name="app_id" value="{{app_context.id}}" type="hidden"/>
+                        <input type="submit" value="submit"/>
+                    </form>
                 </td>
             </tr>
         </table> 

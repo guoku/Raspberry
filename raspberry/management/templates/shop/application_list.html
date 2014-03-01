@@ -32,7 +32,7 @@
                 <td>{{ app.quantity }}</td>
                 <td>{{ app.remarks }}</td>
                 <td>{{ app.status }}</td>
-                <td><a href="{% url 'management_guokuplus_application_detail' %}">编辑</a></td>
+                <td><a href="{% url 'management_guokuplus_application_detail' %}?app_id={{app.id}}">编辑</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -205,12 +205,13 @@ def guokuplus_application_detail(request):
 @require_POST
 @login_required
 @staff_only
-def add_guokuplus_application_comment(request):
+def add_guokuplus_application_editor_comment(request):
     app_id = request.POST.get('app_id', None)
-    comment = request.POST.get("comment", None)
+    comment = request.POST.get("content", None)
+    print app_id, comment
     guoku_plus_app = GuokuPlusApp(app_id)
     guoku_plus_app.add_editor_comment(comment)
-    return HttpResponse("ok")
+    return HttpResponseRedirect(reverse('management_guokuplus_application_detail') + "?app_id=" + app_id)
 
 
 @require_POST
