@@ -303,14 +303,17 @@ def random_user_tag(request):
             _request_user_id = None
         
         _rslt = []
-        for _user_tag in Tag.random_user_tag(_count):
+        _recommend_user_tag_list = Tag.get_recommend_user_tag_list()
+        if len(_recommend_user_tag_list) > _count:
+            _recommend_user_tag_list = random.sample(_recommend_user_tag_list, _count)
+        for _tag_data in _recommend_user_tag_list:
             _data = {
-                'tag_name' : _user_tag['tag_text'],
-                'entity_count' : _user_tag['entity_count'],
-                'user' : MobileUser(_user_tag['user_id']).read(_request_user_id),
+                'tag_name' : _tag_data[1],
+                'entity_count' : _tag_data[2],
+                'user' : MobileUser(_tag_data[0]).read(_request_user_id),
                 'entity_list' : []
             }
-            for _entity_id in Tag.find_user_tag_entity(_user_tag['user_id'], _user_tag['tag_text'])[0:3]:
+            for _entity_id in Tag.find_user_tag_entity(_tag_data[0], _tag_data[1])[0:3]:
                 _data['entity_list'].append(MobileEntity(_entity_id).read(_request_user_id))
             _rslt.append(_data)
         return SuccessJsonResponse(_rslt)

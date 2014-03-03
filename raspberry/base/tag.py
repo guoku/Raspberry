@@ -205,7 +205,8 @@ class Tag(object):
     @classmethod
     def get_recommend_user_tag_list(cls, with_entity_count = True):
         _list = []
-        for _obj in RecommendUserTagModel.objects.all():
+        _hdl = RecommendUserTagModel.objects.all()
+        for _obj in _hdl: 
             if with_entity_count:
                 _list.append([_obj.user_id, _obj.tag, _obj.entity_count])
             else:
@@ -217,11 +218,6 @@ class Tag(object):
     def get_user_tag_entity_count(cls, user_id, tag):
         return EntityTagModel.objects.filter(user = user_id, tag_text = tag).count()
         
-    
-    @classmethod
-    def random_user_tag(cls, count):
-        _hdl = EntityTagModel.objects
-        return _hdl.values('user_id', 'tag_text').annotate(entity_count=Count('entity')).order_by('?')[0:count]
     
     @classmethod
     def find_user_tag(cls, user_id = None, tag = None):
