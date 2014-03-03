@@ -226,15 +226,25 @@ class GuokuPlusApp(object):
             app.has_new_seller_comment = False
             app.save()
 
+GUOKU_PLUS_NORMAL = "normal"
+GUOKU_PLUS_STOPPED = "stopped"
+GUOKU_PLUS_EXPIRED = "expired"
 class GuokuPlusActivity(object):
     def __init__(self, activity_id):
         self.activity_id = activity_id
 
     @classmethod
-    def create(cls, entity_id, taobao_id, sale_price, total_volume, sales_volume, start_time, created_time):
+    def create(cls, entity_id, item_id, taobao_id, sale_price, total_volume, start_time):
         GuokuPlusModel.objects.create(
             entity_id = entity_id,
-            taobao_id = taobao_id)   
+            item_id = item_id,
+            taobao_id = taobao_id,
+            sale_price = sale_price,
+            total_volume = total_volume,
+            sales_volume = 0,
+            start_time = start_time,
+            status = GUOKU_PLUS_NORMAL,
+            created_time = datetime.datetime.now())   
         pass
 
     def update(self):

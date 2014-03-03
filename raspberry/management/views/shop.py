@@ -10,9 +10,10 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
 
-from base.taobao_shop import TaobaoShop, GuokuPlusApp
+from base.taobao_shop import TaobaoShop, GuokuPlusApp, GuokuPlusActivity
 from base.item import Item
 from base.entity import Entity
+from management.forms.shop import GuokuPlusActivityForm
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 from utils import fetcher
@@ -197,6 +198,7 @@ def guokuplus_application_detail(request):
         "shop/application_detail.html",
         {
             "app_context" : app_context,
+            "approve_form" : GuokuPlusActivityForm()
         },
         context_instance = RequestContext(request)
     )
@@ -218,5 +220,15 @@ def add_guokuplus_application_editor_comment(request):
 @login_required
 @staff_only
 def approve_guokuplus_application(request):
-    app_id = request.POST.get('app_id', None)
-    return HttpResponse("ok")
+    form = GuokuPlusActivityForm(request.POST)
+    guoku_plus_app = GuokuPlusApp(form.cleaned_data['app_id'])
+    app_context = guoku_plus_app.read()
+    GuokuPlusActivity.create(
+        entity_id = app_context['entity_context']['entity_id'],
+        item_id = app_context['item_context']['item_id'],
+        taobao_id = app_context['taobao_id'],
+        sale_price = app_context['sale_price'],
+        total_volume = app_context['quantity'],
+        start_time = form.cleaned_data['start_time']
+    )
+    return HttpResponseRedirect(reverse('management_guokuplus_application_detail') + "?app_id=" + form.cleaned_data['app_id'])
