@@ -335,6 +335,7 @@ def search_entity(request):
     )
 
 
+
 @login_required
 @staff_only
 def entity_list(request):

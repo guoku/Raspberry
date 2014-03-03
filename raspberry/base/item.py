@@ -124,15 +124,17 @@ class Item(object):
         return _item_list
 
     @classmethod
-    def find_taobao_item(cls, entity_id = None, shop_nick = None, offset = 0, count = 30, full_info = False):
+    def find_taobao_item(cls, entity_id=None, shop_nick=None, offset=0, count=30, full_info=False, order_by=None):
         _hdl = TaobaoItemDocument.objects.all()
         if entity_id != None:
             _entity_id = int(entity_id)
             _hdl = _hdl.filter(entity_id = _entity_id)
         if shop_nick != None:
             _hdl = _hdl.filter(shop_nick = shop_nick)
+        _hdl = _hdl.order_by('-created_time')
+            
         _item_list = []
-        for _doc in _hdl.order_by('-created_time')[offset : offset + count]:
+        for _doc in _hdl[offset : offset + count]:
             if full_info:
                 _item_list.append({
                     'item_id' : str(_doc.id),

@@ -28,6 +28,12 @@ from utils.lib import roll
 
 class Entity(object):
     
+    class FailToCreateEntity(Exception):
+        def __init__(self, message):
+            self.__message = "fail to create entity : %s"%message
+        def __str__(self):
+            return repr(self.__message)
+    
     class Mark(object):
         promoted = 1
         first = 2
@@ -93,59 +99,67 @@ class Entity(object):
             shop_nick = taobao_item_info["shop_nick"], 
             price = taobao_item_info["price"], 
             soldout = taobao_item_info["soldout"],
-            weight = _weight 
+            weight = _weight,
         )
         return _taobao_item.item_id
     
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, chief_image_url, 
-                              taobao_item_info, brand = "", title = "", intro = "", detail_image_urls = [], 
-                              weight = 0):
+                              taobao_item_info, brand="", title="", intro="", detail_image_urls=[], 
+                              weight=0, rank_score=0):
         
-        _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
-        if _chief_image_id == None:
-            _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
-            _chief_image_id = _chief_image_obj.image_id
-        
-        _detail_image_ids = []
-        for _image_url in detail_image_urls:
-            _image_id = Image.get_image_id_by_origin_url(_image_url)
-            if _image_id == None:
-                _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
-                _image_id = _image_obj.image_id
-            _detail_image_ids.append(_image_id)
+        _item = Item.get_item_by_taobao_id(taobao_item_info['taobao_id'])
+        if _item == None:
+            _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
+            if _chief_image_id == None:
+                _chief_image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], chief_image_url)
+                _chief_image_id = _chief_image_obj.image_id
             
-        
-        _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'] + taobao_item_info['title'] + taobao_item_info['shop_nick'])
-        
-        try:
-            _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = taobao_item_info["cid"])
-            _old_category_id = _obj.guoku_category_id
-        except:
-            _old_category_id = 12
+            _detail_image_ids = []
+            for _image_url in detail_image_urls:
+                _image_id = Image.get_image_id_by_origin_url(_image_url)
+                if _image_id == None:
+                    _image_obj = Image.create('tb_' + taobao_item_info['taobao_id'], _image_url)
+                    _image_id = _image_obj.image_id
+                _detail_image_ids.append(_image_id)
+                
             
-        _entity_obj = EntityModel.objects.create( 
-            entity_hash = _entity_hash,
-            creator_id = creator_id,
-            category_id = _old_category_id,
-            neo_category_id = category_id,
-            brand = brand,
-            title = title,
-            intro = intro,
-            price = taobao_item_info["price"], 
-            chief_image = _chief_image_id,
-            detail_images = "#".join(_detail_image_ids),
-            weight = weight
-        )
-         
-        _item_images = _detail_image_ids
-        _item_images.append(_chief_image_id)
+            _entity_hash = cls.cal_entity_hash(taobao_item_info['taobao_id'] + taobao_item_info['title'] + taobao_item_info['shop_nick'])
+            
+            try:
+                _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = taobao_item_info["cid"])
+                _old_category_id = _obj.guoku_category_id
+            except:
+                _old_category_id = 12
+                
+            _entity_obj = EntityModel.objects.create( 
+                entity_hash = _entity_hash,
+                creator_id = creator_id,
+                category_id = _old_category_id,
+                neo_category_id = category_id,
+                brand = brand,
+                title = title,
+                intro = intro,
+                price = taobao_item_info["price"], 
+                chief_image = _chief_image_id,
+                detail_images = "#".join(_detail_image_ids),
+                weight = weight,
+                rank_score = rank_score
+            )
+            
+            try:
+                _item_images = _detail_image_ids
+                _item_images.append(_chief_image_id)
+                
+                _inst = cls(_entity_obj.id)
+                _inst.entity_obj = _entity_obj
+                _taobao_item_id = _inst.__insert_taobao_item(taobao_item_info, _item_images)
         
-        _inst = cls(_entity_obj.id)
-        _inst.entity_obj = _entity_obj
-        _taobao_item_id = _inst.__insert_taobao_item(taobao_item_info, _item_images)
-
-        return _inst
+                return _inst
+            except Exception, e:
+                _entity_obj.delete()
+                raise Entity.FailToCreateEntity(str(e))
+                
 
     
     def merge(self, target_entity_id):
@@ -341,7 +355,7 @@ class Entity(object):
 
         # TODO: removing entity_id in item
     
-    def update(self, category_id = None, old_category_id = None, brand = None, title = None, intro = None, price = None, chief_image_id = None, weight = None, mark = None, reset_created_time = False):
+    def update(self, category_id=None, old_category_id=None, brand=None, title=None, intro=None, price=None, chief_image_id=None, weight=None, mark=None, rank_score=None, reset_created_time=False):
         
         self.__ensure_entity_obj()
         if brand != None:
@@ -358,6 +372,8 @@ class Entity(object):
             self.entity_obj.category_id = int(old_category_id) 
         if weight != None:
             self.entity_obj.weight = int(weight)
+        if rank_score != None:
+            self.entity_obj.rank_score = int(rank_score)
         if mark != None:
             self.entity_obj.mark = int(mark)
         
@@ -444,6 +460,14 @@ class Entity(object):
         elif status == 'normal':
             _hdl = _hdl.filter(weight__gte = 0)
 
+        ########## Magic Code for NOVUS editor ##############
+
+        if sort_by == 'rank_score':
+            _hdl = _hdl.filter(id__gt = 200000)
+
+
+        #####################################################
+
         
         if timestamp != None:
             _hdl = _hdl.filter(updated_time__lt = timestamp)
@@ -473,6 +497,11 @@ class Entity(object):
                 _hdl = _hdl.order_by('updated_time')
             else:
                 _hdl = _hdl.order_by('-updated_time')
+        elif sort_by == 'rank_score':
+            if reverse:
+                _hdl = _hdl.order_by('rank_score')
+            else:
+                _hdl = _hdl.order_by('-rank_score')
         else:
             _hdl = _hdl.order_by('-weight', '-like_count')
              

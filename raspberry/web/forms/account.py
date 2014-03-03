@@ -30,11 +30,13 @@ class SignInAccountForm(forms.Form):
     email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'text-input', 'placeholder': _('email')}),
                              label=_('email'), help_text=_(''))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('password')}),
-                               label=_('password'), help_text=_(''), min_length=8, max_length=20)
+                               label=_('password'), help_text=_(''), min_length=6, max_length=20)
 
     def clean_email(self):
+        # log.info(self.cleaned_data )
         cleaned_data = self.cleaned_data
-        data_email = cleaned_data['email']
+        log.info(cleaned_data)
+        data_email = cleaned_data.get('email', None)
         user_id = User.get_user_id_by_email(data_email)
         # is_exist = User.objects.filter(email=data_email).exists()
         if not user_id:
@@ -45,8 +47,9 @@ class SignInAccountForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(SignInAccountForm, self).clean()
-        uid = cleaned_data['email']
-        password = cleaned_data['password']
+        log.info(cleaned_data)
+        uid = cleaned_data.get('email', None)
+        password = cleaned_data.get('password', None)
         username = User(uid).get_username()
         _user = authenticate(username = username, password = password)
         if not _user:
