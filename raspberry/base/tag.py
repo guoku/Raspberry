@@ -219,6 +219,11 @@ class Tag(object):
         
     
     @classmethod
+    def random_user_tag(cls, count):
+        _hdl = EntityTagModel.objects
+        return _hdl.values('user_id', 'tag_text').annotate(entity_count=Count('entity')).order_by('?')[0:count]
+    
+    @classmethod
     def find_user_tag(cls, user_id = None, tag = None):
         _hdl = EntityTagModel.objects
         if user_id != None:
