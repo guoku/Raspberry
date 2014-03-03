@@ -296,20 +296,24 @@ button {
     margin: 10px;
 }
 
-.account-form .tip {
-    display: block;
-    width: 515px;
-    height: 125px;
-    background-color: #fbfbfb;
-    margin-bottom: 55px;
-}
-
-.account-form .tip img{
+/*.account-form .tip {*/
     /*display: block;*/
     /*width: 515px;*/
     /*height: 125px;*/
     /*background-color: #fbfbfb;*/
-}
+    /*margin-bottom: 55px;*/
+    /*text-align: center;*/
+    /*vertical-align: bottom;*/
+/*}*/
+
+/*.account-form .tip img{*/
+    /*display: block;*/
+    /*margin-top: 30px;*/
+    /*margin-left: 175px;*/
+    /*width: 165px;*/
+    /*height: 90px;*/
+    /*background-color: #fbfbfb;*/
+/*}*/
 
 .account-form .text {
     display: block;
@@ -336,8 +340,19 @@ button {
     background-color: #427ec0;
 }
 
-.login img.tip {
+.login .tip {
+    /*margin-bottom: 55px;*/
+    display: block;
+    width: 515px;
+    height: 125px;
+    background-color: #fbfbfb;
     margin-bottom: 55px;
+    text-align: center;
+    /*vertical-align: bottom;*/
+}
+
+.login .tip img {
+    margin-top: 35px;
 }
 
 .login .remember {
@@ -372,8 +387,18 @@ button {
     color: #427ec0;
 }
 
-.register img.tip {
+.register .tip {
+    display: block;
+    width: 515px;
+    height: 125px;
+    background-color: #fbfbfb;
+    /*margin-bottom: 55px;*/
+    text-align: center;
     margin-bottom: 65px;
+}
+
+.register .tip img {
+    margin-top: 30px;
 }
 
 .register .agreement {
