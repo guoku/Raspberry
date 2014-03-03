@@ -22,6 +22,7 @@ GENDER_CHOICES = (
 
 class SignInAccountForm(forms.Form):
     error_messages = {
+        'wrong_email': _("Your email is wrong."),
         'email_not_exist': _("email is not signed up."),
         'wrong_password': _("The password is wrong."),
     }
@@ -35,11 +36,11 @@ class SignInAccountForm(forms.Form):
     def clean_email(self):
         # log.info(self.cleaned_data )
         cleaned_data = self.cleaned_data
-        log.info(cleaned_data)
+        # log.info(cleaned_data)
         data_email = cleaned_data.get('email', None)
         user_id = User.get_user_id_by_email(data_email)
         # is_exist = User.objects.filter(email=data_email).exists()
-        if not user_id:
+        if user_id is None:
             raise forms.ValidationError(
                 self.error_messages['email_not_exist']
             )
@@ -49,6 +50,10 @@ class SignInAccountForm(forms.Form):
         cleaned_data = super(SignInAccountForm, self).clean()
         log.info(cleaned_data)
         uid = cleaned_data.get('email', None)
+        if not uid:
+            raise forms.ValidationError(
+                self.error_messages['wrong_email'],
+            )
         password = cleaned_data.get('password', None)
         username = User(uid).get_username()
         _user = authenticate(username = username, password = password)
