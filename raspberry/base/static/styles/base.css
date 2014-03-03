@@ -176,19 +176,25 @@ button {
     position: relative;
     background-color: #fbfbfb;
     top: 49px;
-    height: 165px;
+    height: 200px;
     width: 100%;
 }
 
 #welcome p {
-    position: relative;
-    top: 0;
+    position: absolute;
+    top: 40px;
+    left: 380px;
     font-size: 24px;
+    line-height: 39px;
+    font-weight: 100;
+    /*text-align: center;*/
     margin: auto 50px;
 }
 
 #welcome ul {
     position: absolute;
+    top: 128px;
+    left: 380px;
 }
 
 #welcome li {
@@ -197,10 +203,21 @@ button {
 }
 
 #welcome .intro {
+    position: relative;
     width: 960px;
     margin: auto;
 }
 
+#welcome .brand {
+    position: absolute;
+    top: 10px;
+    left: 95px;
+    /*background-image: url(/static/v3/images/brand.png);*/
+    width: 285px;
+    /*height: 165px;*/
+}
+
+/*#welcome .*/
 /* ------------------------- */
 
 /*-----------------------------------------*/
