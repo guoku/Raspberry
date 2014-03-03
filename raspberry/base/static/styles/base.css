@@ -33,14 +33,20 @@ button {
     outline: none;
 }
 
+/*@font-face {*/
+    /*font-family: "FZLTXHK";*/
+    /*src: url("/static/v3/fonts/FZLTXHK0-1.eot");*/
+    /*src: url("/static/v3/fonts/FZLTXHK0-1.TTF") format('truetype');*/
+/*}*/
+
 .btn {
     -moz-user-select: none;
     display: inline-block;
     background-image: none;
     border-radius: 4px 4px 4px 4px;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 400;
-    padding: 6px 6px;
+    padding: 6px;
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
@@ -50,12 +56,19 @@ button {
     background-color: #FFFFFF;
     border-color: #cccccc;
     color: #333333;
+    /*font-size: 18px;*/
 }
 
 .btn-primary {
     background-color: #427ec0;
     border-color: #357ebd;
     color: #FFFFFF;
+    font-size: 20px;
+    width: 130px;
+    height: 28px;
+    padding: 6px 6px 6px 0;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .btn-link {
@@ -63,6 +76,7 @@ button {
     color: #428bca;
     cursor: pointer;
     font-weight: 400;
+    padding: 6px 0 6px 0;
 }
 /*--------------------------------------------*/
 #header {
@@ -180,28 +194,39 @@ button {
     width: 100%;
 }
 
-#welcome p {
+#welcome h2 {
     position: absolute;
+    font-weight: 100;
     top: 40px;
     left: 380px;
     font-size: 24px;
-    line-height: 39px;
-    font-weight: 100;
+    line-height: 34px;
     color: #666666;
-    /*text-align: center;*/
-    margin: auto 50px;
+    margin: auto 60px;
 }
 
 #welcome ul {
     position: absolute;
     top: 128px;
     left: 380px;
+    padding: 0;
+    margin: auto 55px;
 }
 
 #welcome li {
     float: left;
     margin-left: 5px;
     color: #666666;
+    font-size: 14px;
+}
+
+#welcome span {
+    display: inline-block;
+    background-image: none;
+    font-size: 18px;
+    color: #666666;
+    padding: 6px 0 6px 0;
+    margin-left: 25px;
 }
 
 #welcome .intro {
@@ -271,10 +296,19 @@ button {
     margin: 10px;
 }
 
-.account-form img.tip {
+.account-form .tip {
     display: block;
     width: 515px;
     height: 125px;
+    background-color: #fbfbfb;
+    margin-bottom: 55px;
+}
+
+.account-form .tip img{
+    /*display: block;*/
+    /*width: 515px;*/
+    /*height: 125px;*/
+    /*background-color: #fbfbfb;*/
 }
 
 .account-form .text {
