@@ -14,7 +14,7 @@
     <div id="detail">
         <div class="breadcrumb">
         <ul>
-            <li><a href="#">{{ entity_context.category_id|trans_category }}</a></li>
+            <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
             <li>{{ entity_context.title }}</li>
         </ul>
         </div>

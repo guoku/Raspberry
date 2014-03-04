@@ -1,10 +1,9 @@
 from django import template
-register = template.Library()
 
 from base.user import User
-
 from django.utils.log import getLogger
 
+register = template.Library()
 log = getLogger('django')
 
 def show_avater(value, size=64):
@@ -21,3 +20,12 @@ def show_avater(value, size=64):
     }
 
 register.inclusion_tag("user/partial/avatar.html")(show_avater)
+
+
+def show_auth_user(user_id):
+    _user_context = User(user_id).read()
+    log.info(_user_context)
+    return {
+        'user_context':_user_context,
+    }
+register.inclusion_tag("user/partial/auth.html")(show_auth_user)
