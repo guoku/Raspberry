@@ -121,10 +121,9 @@
         <div class="recommend">
             <h2>相似推荐</h2>
             <div>
-                <a href=""><img src="{{ entity_context.chief_image.url|resize:"240" }}" alt=""></a>
-                <a href=""><img src="{{ entity_context.chief_image.url|resize:"240" }}"></a>
-                <a href=""><img src="{{ entity_context.chief_image.url|resize:"240" }}"></a>
-                <a href=""><img src="{{ entity_context.chief_image.url|resize:"240" }}"></a>
+                {% for entity_context in guess_entity_context %}
+                    <a href="{% url 'web_detail' entity_context.entity_hash %}"><img src="{{ entity_context.chief_image.url|resize:'240' }}" alt=""></a>
+                {% endfor %}
             </div>
         </div>
     </div>

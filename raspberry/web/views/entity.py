@@ -68,6 +68,14 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                 }
             )
 
+    _guess_entity_context = []
+    for _guess_entity_id in Entity.roll(category_id=_entity_context['category_id'], count=5):
+        if _guess_entity_id != _entity_id: 
+            _guess_entity_context.append(Entity(_guess_entity_id).read())
+            if len(_guess_entity_context) == 4:
+                break
+    
+
     return render_to_response(
         template,
         {
@@ -79,6 +87,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'common_note_list' : _common_note_list,
             'liker_list' : _liker_list,
             'tag_list' : _tag_list,
+            'guess_entity_context' : _guess_entity_context,
         },
         context_instance=RequestContext(request)
     )
