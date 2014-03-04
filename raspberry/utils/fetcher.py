@@ -210,7 +210,7 @@ def fetch_redirect(itemid):
 
 
 def fetch_taobao_web(itemid):
-    #目前只针对普通淘宝店，天猫店暂时不能处理
+    #目前只针对普通淘宝店电脑版，天猫店暂时不能处理
     cookie = cookielib.CookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
     urllib2.install_opener(opener)
@@ -337,9 +337,8 @@ if __name__ == '__main__':
     #r = fetch_taobao_web("19562854760")
     #print(r)
     result = fetch_item("18461799844")
-    print result['imgs']
+    print result['category'][1]
 
-    print len(result['imgs'])
     
 
 
