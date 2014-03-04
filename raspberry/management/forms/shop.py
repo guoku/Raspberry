@@ -6,7 +6,7 @@ from datetime import date
 
 class GuokuPlusActivityForm(forms.Form):
     app_id = forms.CharField(max_length = 32, widget = forms.HiddenInput())
-    start_time = forms.DateField(widget = forms.DateInput())
+    start_time = forms.DateField(widget = forms.DateInput(attrs={'id' : 'dateinput', 'readonly' : 'readonly'}))
 
     def clean_start_time(self):
         if self.cleaned_data['start_time'] <= date.today():

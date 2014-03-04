@@ -88,3 +88,10 @@
         </form>
     </div>
 {% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+        $('#dateinput').datepicker();
+        });
+    </script>
+{% endblock %}

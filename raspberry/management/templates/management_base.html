@@ -6,6 +6,7 @@
 <head>
     <link media="all" rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap-responsive.min.css' %}" />
     <link media="all" rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap.min.css' %}" />
+    <link media="all" rel="stylesheet" type="text/css" href="{% static 'styles/jquery-ui-1.9.2.custom.css' %}" />
     {% block cssstyle %}{% endblock %}
     <title>果库后台</title>
 </head>
@@ -75,11 +76,14 @@
     
     {% block js %}
         <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'scripts/jquery-ui-1.9.2.custom.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'scripts/misc.js' %}"></script>
         <script type="text/javascript" src="{% static 'scripts/date.format.js' %}"></script>
     {% endblock %}
     {% block extra %}
+    {% endblock %}
+    {% block scripts %}
     {% endblock %}
 </body>
 </html>
