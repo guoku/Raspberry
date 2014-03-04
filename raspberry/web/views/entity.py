@@ -30,23 +30,18 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
-    # log.info(_entity_context)
     _liker_list = Entity(_entity_id).liker_list(offset=0, count=20)
-    # log.info(_liker_list)
     _note_id_list = Note.find(entity_id=_entity_id)
-    # log.info(_note_id_list)
     _selection_note = None
     _common_note_list = []
     _is_user_already_note = False
     _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
     
     _tag_list = Tag.entity_tag_stat(_entity_id)
-    # log.info(_tag_list)
 
     for _note_id in _note_id_list:
         _note = Note(_note_id)
         _note_context = _note.read()
-        # log.info(_note_context)
         _creator_context = User(_note_context['creator_id']).read()
 
         if _creator_context['user_id'] == request.user.id:

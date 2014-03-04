@@ -236,3 +236,34 @@ class Tag(object):
        
         return _entity_id_list
     
+    
+    @classmethod
+    def __load_tag_prefix_index_from_cache(cls):
+        _cache_key = 'tag_prefix_index'
+        _index = cache.get(_cache_key)
+        return _index
+    
+    @classmethod
+    def __reset_tag_prefix_index_to_cache(cls):
+        _cache_key = 'tag_prefix_index'
+        _index = cache.get(_cache_key)
+        _all_tags_sorted = map(lambda x: x.tag, TagModel.objects.all().order_by('tag')) 
+        _index = {}
+        for _tag in _all_tags_sorted:
+            i = 0
+            while i < len(_tag):
+                _prefix = _tag[0 : i + 1]
+                if not _index.has_key(_prefix):
+                    _index[_prefix] = []
+                _index[_prefix].append(_tag)
+                i += 1
+        cache.set(_cache_key, _index, 864000)
+        return _index 
+
+   
+    @classmethod
+    def read_tag_prefix_index(cls):
+        _tag_prefix_index = cls.__load_tag_prefix_index_from_cache()
+        if _tag_prefix_index == None:
+            _tag_prefix_index = cls.__reset_tag_prefix_index_to_cache()
+        return _tag_prefix_index 
