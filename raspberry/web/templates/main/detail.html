@@ -14,8 +14,10 @@
     <div id="detail">
         <div class="breadcrumb">
         <ul>
+            {% if selection_note %}
             <li><a href="{% url 'web_selection' %}">{% trans 'selection' %}</a></li>
             <li>&frasl;</li>
+            {% endif %}
             <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
             <li>&frasl;</li>
             <li>{{ entity_context.title }}</li>

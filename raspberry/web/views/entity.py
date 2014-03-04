@@ -25,6 +25,9 @@ log = getLogger('django')
 
 
 def entity_detail(request, entity_hash, template='main/detail.html'):
+
+
+
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
 
