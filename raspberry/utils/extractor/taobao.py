@@ -6,15 +6,17 @@ from bs4 import BeautifulSoup
 import re
 from urlparse import parse_qs, urlparse
 from urllib import unquote
-class Taobao:
+
+class TaobaoExtractor:
     
     IMG_POSTFIX = "_\d+x\d+.*\.jpg|_b\.jpg"
 
-    def fetch_item(self,itemid):
+    @staticmethod
+    def fetch_item(itemid):
         
         response = urllib2.urlopen('http://a.m.taobao.com/i' + itemid + '.htm')
         if response.url.find("cloud-jump") > -1:
-            return self.fetch_redirect(itemid)
+            return TaobaoExtractor.fetch_redirect(itemid)
         shoptype = "taobao.com"
         if response.url.find("tmall") >= 0:
             shoptype = "tmall.com"
@@ -63,7 +65,7 @@ class Taobao:
         for tag in imgtags:
             imgurl = tag['src']
             #imgurl = imgurl.replace('_70x70.jpg','')
-            imgurl = re.sub(self.IMG_POSTFIX, '', imgurl)
+            imgurl = re.sub(TaobaoExtractor.IMG_POSTFIX, '', imgurl)
             imgurls.append(imgurl)
 
                 
@@ -149,7 +151,8 @@ class Taobao:
         return result
 
 
-    def fetch_shop(self, shoplink):
+    @staticmethod
+    def fetch_shop(shoplink):
         if shoplink.find(".m.") >= 0:
             shoplink = shoplink.replace(".m.", ".", 1)
         resp = urllib2.urlopen(shoplink)
@@ -186,7 +189,7 @@ class Taobao:
         if img == None:
             return None
         shoppic = img.attrs["src"]
-        shoppic = re.sub(self.IMG_POSTFIX, "", shoppic, 1)
+        shoppic = re.sub(TaobaoExtractor.IMG_POSTFIX, "", shoppic, 1)
         nicktag = soup.select("html body div.bd div.box div.detail a img")[-1]
         src = nicktag.attrs["src"]
         o = urlparse(src)
@@ -202,15 +205,17 @@ class Taobao:
         return result
 
 
-    def fetch_redirect(self,itemid):
-        result = self.fetch_taobao_web(itemid)
+    @staticmethod
+    def fetch_redirect(itemid):
+        result = TaobaoExtractor.fetch_taobao_web(itemid)
         if result == None:
-            return self.fetch_tmall_web(itemid)
+            return TaobaoExtractor.fetch_tmall_web(itemid)
         return result
 
 
 
-    def fetch_taobao_web(self,itemid):
+    @staticmethod
+    def fetch_taobao_web(itemid):
 
         #目前只针对普通淘宝店电脑版，天猫店暂时不能处理
         cookie = cookielib.CookieJar()
@@ -241,13 +246,13 @@ class Taobao:
             #print 'pic is none'
             return None 
         fjpg = fimg[0].attrs['data-src']
-        fjpg = re.sub(self.IMG_POSTFIX,"",fjpg)
+        fjpg = re.sub(TaobaoExtractor.IMG_POSTFIX,"",fjpg)
         #print fjpg
         imgs.append(fjpg)
         
         optimgs = soup.select("ul#J_UlThumb li div a img")
         for op in optimgs:
-            op = re.sub(self.IMG_POSTFIX,"",op.attrs["data-src"])
+            op = re.sub(TaobaoExtractor.IMG_POSTFIX,"",op.attrs["data-src"])
             #print op
             imgs.append(op)
         shopidtag = re.findall('shopId:"(\d+)',html)
@@ -272,7 +277,8 @@ class Taobao:
 
 
 
-    def fetch_tmall_web(self, itemid):
+    @staticmethod
+    def fetch_tmall_web(itemid):
         cookie=cookielib.CookieJar()
         opener=urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
         urllib2.install_opener(opener)
@@ -292,12 +298,12 @@ class Taobao:
             #print 'pic is none'
             return None 
         fjpg = fimg[0].attrs['src']
-        fjpg = re.sub(self.IMG_POSTFIX,"",fjpg)
+        fjpg = re.sub(TaobaoExtractor.IMG_POSTFIX,"",fjpg)
         #print fjpg
         imgs.append(fjpg)
         optimgs = soup.select("ul#J_UlThumb li a img")
         for op in optimgs:
-            op = re.sub(self.IMG_POSTFIX,"",op.attrs["src"])
+            op = re.sub(TaobaoExtractor.IMG_POSTFIX,"",op.attrs["src"])
             imgs.append(op)
         shopidtag = re.findall('shopId:"(\d+)',html)
         if len(shopidtag) == 0:
@@ -332,7 +338,3 @@ class Taobao:
         return result
 
 
-if __name__ == '__main__':
-    tc = Taobao()
-    result = tc.fetch_item("18461799844")
-    print result

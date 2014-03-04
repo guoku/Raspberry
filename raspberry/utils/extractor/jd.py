@@ -4,10 +4,12 @@ import urllib2
 from bs4 import BeautifulSoup
 import re 
 import json
-class JD:
-    def fetch_item(self, itemid):
+
+class JDExtractor:
+    
+    @staticmethod
+    def fetch_item(itemid):
         link = ""
-        self.itemid = itemid
         if type(itemid) == int:
             link = "http://item.jd.com/%d.html"%itemid
         else:
@@ -17,9 +19,10 @@ class JD:
         html = resp.read()
         html = html.decode("gbk").encode("utf8")
 
-        return self.parser(html,itemid)
+        return JDExtractor.parser(html, itemid)
 
-    def parser(self, html, itemid):
+    @staticmethod
+    def parser(html, itemid):
         soup = BeautifulSoup(html)
 
         title = soup.title.string
@@ -58,18 +61,12 @@ class JD:
         price = float(pj['p'])
 
         result = {
-            "desc":title,
-            "price":price,
-            "category":category,
-            "imgs":imgs,
-            "nick":nick,
-            "shop_link":shop_link
+            "desc" : title,
+            "price" : price,
+            "category" : category,
+            "imgs" : imgs,
+            "nick" : nick,
+            "shop_link" : shop_link
         }
 
         return result
-
-
-if __name__ == '__main__':
-    jd = JD()
-    result = jd.fetch_item(1069437177)
-    print result
