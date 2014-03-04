@@ -293,6 +293,34 @@ def check_sina_user(request):
         return SuccessJsonResponse(_rslt)
 
 @check_sign
+def random_user_tag(request):
+    if request.method == "GET":
+        _count = int(request.GET.get('count', '10'))
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        
+        _rslt = []
+        _recommend_user_tag_list = Tag.get_recommend_user_tag_list()
+        if len(_recommend_user_tag_list) > _count:
+            _recommend_user_tag_list = random.sample(_recommend_user_tag_list, _count)
+        for _tag_data in _recommend_user_tag_list:
+            _data = {
+                'tag_name' : _tag_data[1],
+                'entity_count' : _tag_data[2],
+                'user' : MobileUser(_tag_data[0]).read(_request_user_id),
+                'entity_list' : []
+            }
+            for _entity_id in Tag.find_user_tag_entity(_tag_data[0], _tag_data[1])[0:3]:
+                _data['entity_list'].append(MobileEntity(_entity_id).read(_request_user_id))
+            _rslt.append(_data)
+        return SuccessJsonResponse(_rslt)
+        
+
+
+@check_sign
 def user_tag_list(request, user_id):
     _start_at = datetime.datetime.now()
     if request.method == "GET":

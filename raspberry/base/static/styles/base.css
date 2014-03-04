@@ -33,6 +33,37 @@ button {
     outline: none;
 }
 
+.btn {
+    -moz-user-select: none;
+    display: inline-block;
+    background-image: none;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 6px 6px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.btn-default {
+    background-color: #FFFFFF;
+    border-color: #cccccc;
+    color: #333333;
+}
+
+.btn-primary {
+    background-color: #427ec0;
+    border-color: #357ebd;
+    color: #FFFFFF;
+}
+
+.btn-link {
+    background-color: rgba(0,0,0,0);
+    color: #428bca;
+    cursor: pointer;
+    font-weight: 400;
+}
 /*--------------------------------------------*/
 #header {
     position: fixed;
@@ -145,27 +176,48 @@ button {
     position: relative;
     background-color: #fbfbfb;
     top: 49px;
-    height: 165px;
+    height: 200px;
     width: 100%;
 }
 
 #welcome p {
-    position: relative;
-    top: 0;
+    position: absolute;
+    top: 40px;
+    left: 380px;
     font-size: 24px;
+    line-height: 39px;
+    font-weight: 100;
+    /*text-align: center;*/
     margin: auto 50px;
 }
 
 #welcome ul {
     position: absolute;
+    top: 128px;
+    left: 380px;
 }
 
 #welcome li {
     float: left;
-    margin-left: 25px;
-    padding: 5px;
+    margin-left: 5px;
 }
 
+#welcome .intro {
+    position: relative;
+    width: 960px;
+    margin: auto;
+}
+
+#welcome .brand {
+    position: absolute;
+    top: 10px;
+    left: 95px;
+    /*background-image: url(/static/v3/images/brand.png);*/
+    width: 285px;
+    /*height: 165px;*/
+}
+
+/*#welcome .*/
 /* ------------------------- */
 
 /*-----------------------------------------*/
@@ -319,11 +371,11 @@ button {
     width: 20px;
     height: 17px;
     margin-right: 5px;
-    background: url(/static/images/icon_like.png) no-repeat;
+    background: url(/static/v3/images/icon_like.png) no-repeat;
 }
 
 .liked .icon {
-    background: url(/static/images/icon_liked.png) no-repeat;
+    background: url(/static/v3/images/icon_liked.png) no-repeat;
 }
 
 .like .count {
@@ -370,11 +422,11 @@ button {
 }
 
 .pagination a .previous {
-    background: url(/static/images/guoku_icon.png) no-repeat scroll -157px -3px;
+    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -157px -3px;
 }
 
 .pagination a .next {
-    background: url(/static/images/guoku_icon.png) no-repeat scroll -170px -3px;
+    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -170px -3px;
 }
 
 
