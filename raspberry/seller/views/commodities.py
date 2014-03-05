@@ -80,7 +80,6 @@ def apply_guoku_plus(request, user_context, shop_inst):
                                       context_instance = RequestContext(request)) 
         else:
             return HttpResponseForbidden()
-        
 
 @require_GET
 @login_required
@@ -90,3 +89,9 @@ def guoku_plus_applications_list(request, user_context, shop_inst):
     return render_to_response("guoku_plus_application_list.html",
                     {'items' : items},
                     context_instance = RequestContext(request))
+
+@require_GET
+@login_required
+@seller_only
+def guoku_plus_activity_list(request, user_context, shop_inst):
+    

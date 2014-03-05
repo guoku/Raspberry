@@ -254,3 +254,11 @@ def approve_shop_verification(request):
     TaobaoShop.approve_shop_verification(shop_nick)
     return HttpResponseRedirect(reverse("management_shop_verification_list"))
 
+
+@require_GET
+@login_required
+@staff_only
+def guoku_plus_activity_list(request):
+    
+    pass
+
