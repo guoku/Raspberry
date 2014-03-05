@@ -42,26 +42,25 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     for _note_id in _note_id_list:
         _note = Note(_note_id)
         _note_context = _note.read()
-        _creator_context = User(_note_context['creator_id']).read()
-
-        if _creator_context['user_id'] == request.user.id:
-            _is_user_already_note = True
-
-        # 判断是否是精选
-        if _note_context['is_selected']:
-            _selection_note = {
-                'note_context' : _note_context,
-                'creator_context' : _creator_context,
-                'user_context' : _user_context
-            }
-        else:
-            _common_note_list.append(
-                {
+        if _note_context['weight'] >= 0:
+            _creator_context = User(_note_context['creator_id']).read()
+    
+            if _creator_context['user_id'] == request.user.id:
+                _is_user_already_note = True
+    
+            # 判断是否是精选
+            if _note_context['is_selected']:
+                _selection_note = {
                     'note_context' : _note_context,
                     'creator_context' : _creator_context,
                     'user_context' : _user_context
                 }
-            )
+            else:
+                _common_note_list.append({
+                    'note_context' : _note_context,
+                    'creator_context' : _creator_context,
+                    'user_context' : _user_context
+                })
 
     _guess_entity_context = []
     for _guess_entity_id in Entity.roll(category_id=_entity_context['category_id'], count=5):
@@ -86,7 +85,6 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         },
         context_instance=RequestContext(request)
     )
-
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]

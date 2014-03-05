@@ -63,6 +63,7 @@ def note_list(request):
     _sort_by = None
     _para = {}
     _select_entity_id = request.GET.get("entity_id", None)
+    _select_user_id = request.GET.get("user_id", None)
     if _selection == 'only':
         _selection = 1
         _nav_filter = 'selection_only'
@@ -84,24 +85,25 @@ def note_list(request):
         _status = 1
 
     _page_num = int(request.GET.get("p", "1"))
-    if not _select_entity_id:
-        _note_count = Note.count(selection = _selection, status = _status)
+    if not _select_entity_id and not _select_user_id:
+        _note_count = Note.count(selection=_selection, status=_status)
         _paginator = Paginator(_page_num, 30, _note_count, _para)
         _note_id_list = Note.find(
-            offset = _paginator.offset,
-            count = _paginator.count_in_one_page,
-            selection = _selection,
-            status = _status,
-            sort_by = _sort_by
+            offset=_paginator.offset,
+            count=_paginator.count_in_one_page,
+            selection=_selection,
+            status=_status,
+            sort_by=_sort_by
         )
     else:
         _para['entity_id'] = _select_entity_id
         _note_count = Note.count(entity_id=_select_entity_id)
         _paginator = Paginator(_page_num, 30, _note_count, _para)
         _note_id_list = Note.find(
-            entity_id = _select_entity_id,
-            offset = _paginator.offset,
-            count = _paginator.count_in_one_page
+            entity_id=_select_entity_id,
+            user_id=_select_user_id,
+            offset=_paginator.offset,
+            count=_paginator.count_in_one_page
         )
 
     _context_list = []

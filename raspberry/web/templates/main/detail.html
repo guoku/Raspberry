@@ -14,7 +14,13 @@
     <div id="detail">
         <div class="breadcrumb">
         <ul>
-            <li><a href="#">{{ entity_context.category_id|trans_category }}</a></li>
+            <li><span class="home"></span></li>
+            {% if selection_note %}
+            <li><a href="{% url 'web_selection' %}">{% trans 'selection' %}</a></li>
+            <li>&frasl;</li>
+            {% endif %}
+            <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
+            <li>&frasl;</li>
             <li>{{ entity_context.title }}</li>
         </ul>
         </div>
@@ -92,9 +98,11 @@
                 </div>
             </div>
 
-            <p class="category"><a href="#">[{{ entity_context.category_id|trans_category }}]</a></p>
+            <p class="category">
+                <a href="{% url 'web_category' entity_context.category_id  %}">[{{ entity_context.category_id|trans_category }}]</a>
+            </p>
 
-            {% if teg_list %}
+            {% if tag_list|length > 0 %}
             <div class="tag">
                 <h3>该商品的标签</h3>
                 <div>
@@ -111,7 +119,6 @@
 
             <div class="download">
                 <h3>下载果库客户端</h3>
-
                 <div>
                     <a href="">iPhone</a> / <a href="">iPhone</a> / <a href="">iPhone</a>
                 </div>

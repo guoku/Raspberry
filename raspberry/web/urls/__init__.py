@@ -12,6 +12,9 @@ urlpatterns = patterns(
     url(r'^shop/(?P<shop_id>\w+)/$', 'shop', name='web_shop'),
     url(r'^message/$', 'message', name='web_message'),
     url(r'^activity/$', 'activity', name='web_activity'),
+
+    url(r'^c/', include('web.urls.category')),
+    # url(r'^t/', include('web.urls.category')),
 )
 
 urlpatterns += patterns(
