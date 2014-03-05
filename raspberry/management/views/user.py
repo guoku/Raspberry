@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from management.tasks import PushMessageToUserTask
+from management.tasks import FreezeUserEntityNoteAll, PushMessageToUserTask
 
 
 from base.user import User
@@ -93,5 +93,14 @@ def push_message_to_user(request, user_id):
         
         return HttpResponseRedirect(request.META['HTTP_REFERER'] + "?apns=1")
 
+
+@login_required
+@staff_only
+def freeze_user_note_all(request, user_id):
+    _user_id = int(user_id)
+    FreezeUserEntityNoteAll.delay(
+        user_id = _user_id,
+    )
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
