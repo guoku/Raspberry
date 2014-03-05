@@ -1,0 +1,728 @@
+body {
+    color: #999;
+    background-color: #fff;
+    font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/*-----------------------------------------------------*/
+.clearfix:before, .clearfix:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+
+button {
+    display: inline-block;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    outline: none;
+}
+
+/*@font-face {*/
+    /*font-family: "FZLTXHK";*/
+    /*src: url("/static/v3/fonts/FZLTXHK0-1.eot");*/
+    /*src: url("/static/v3/fonts/FZLTXHK0-1.TTF") format('truetype');*/
+/*}*/
+
+.btn {
+    -moz-user-select: none;
+    display: inline-block;
+    background-image: none;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 18px;
+    font-weight: 400;
+    padding: 6px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.btn-default {
+    background-color: #FFFFFF;
+    border-color: #cccccc;
+    color: #333333;
+    /*font-size: 18px;*/
+}
+
+.btn-primary {
+    background-color: #427ec0;
+    border-color: #357ebd;
+    color: #FFFFFF;
+    font-size: 20px;
+    width: 130px;
+    height: 28px;
+    padding: 6px 6px 6px 0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.btn-link {
+    background-color: rgba(0,0,0,0);
+    color: #428bca;
+    cursor: pointer;
+    font-weight: 400;
+    padding: 6px 0 6px 0;
+}
+/*--------------------------------------------*/
+#header {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    height: 49px;
+    width: 100%;
+    color: #fff;
+    background-color: #343434;
+    background-color: rgba(52, 52, 52, .95);
+}
+
+#header .header-container {
+    position: relative;
+    width: 960px;
+    height: 49px;
+    margin: 0 auto;
+}
+
+#header h1 {
+    margin: 0;
+    line-height: 49px;
+}
+
+#header .logo {
+    position: absolute;
+    left: 0;
+    top: 9px;
+}
+
+#header ul {
+    position: absolute;
+    top: 0;
+    left: 127px;
+    height: 49px;
+    line-height: 49px;
+    margin: 0;
+    padding: 0;
+}
+
+#header li {
+    float: left;
+    margin-right: 25px;
+    padding: 0 11px;
+    color: #cdcbcb;
+}
+
+#header li.active {
+    color: #fff;
+}
+
+#header .user {
+    position: absolute;
+    top: 0;
+    right: 305px;
+}
+
+#header .user .user-avatar {
+    display: table-cell;
+    height: 49px;
+    vertical-align: middle;
+}
+
+#header .user img {
+    border-radius: 50%;
+}
+
+#header form {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 49px;
+    line-height: 49px;
+    width: 285px;
+    background-color: #272727;
+    background-color: rgba(37, 37, 37, 0.95);
+}
+
+#header form .search {
+    width: 230px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 5px;
+    padding: 0;
+    border: none;
+    outline: 0;
+    color: #fff;
+    background-color: #272727;
+    background-color: rgba(37, 37, 37, 0.95);
+}
+
+#header form button {
+    height: 49px;
+    vertical-align: top;
+    padding: 8px 6px;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    background-color: #272727;
+}
+
+#header form button img {
+    width: 26px;
+    height: 28px;
+}
+
+/* welcome----------------- */
+#welcome {
+    /*display: none;*/
+    position: relative;
+    background-color: #fbfbfb;
+    top: 49px;
+    height: 200px;
+    width: 100%;
+}
+
+#welcome h2 {
+    position: absolute;
+    font-weight: 100;
+    top: 40px;
+    left: 380px;
+    font-size: 24px;
+    line-height: 34px;
+    color: #666666;
+    margin: auto 60px;
+}
+
+#welcome ul {
+    position: absolute;
+    top: 128px;
+    left: 380px;
+    padding: 0;
+    margin: auto 55px;
+}
+
+#welcome li {
+    float: left;
+    margin-left: 5px;
+    color: #666666;
+    font-size: 14px;
+}
+
+#welcome span {
+    display: inline-block;
+    background-image: none;
+    font-size: 18px;
+    color: #666666;
+    padding: 6px 0 6px 0;
+    margin-left: 25px;
+}
+
+#welcome .intro {
+    position: relative;
+    width: 960px;
+    margin: auto;
+}
+
+#welcome .brand {
+    position: absolute;
+    top: 10px;
+    left: 95px;
+    /*background-image: url(/static/v3/images/brand.png);*/
+    width: 285px;
+    /*height: 165px;*/
+}
+
+/*#welcome .*/
+/* ------------------------- */
+
+/*-----------------------------------------*/
+#main {
+    width: 960px;
+    margin: 75px auto 50px;
+    /*margin: 240px auto 50px;*/
+}
+
+/*--------------------------------------------*/
+#footer {
+    clear: both;
+    padding: 15px 0;
+    border-top: 1px solid #dedede;
+    font-size: 12px;
+}
+
+#footer .container {
+    width: 960px;
+    margin: 0 auto;
+}
+
+#footer .site-info {
+    float: right;
+}
+
+#footer .site-info a, #footer .site-info span {
+    margin-left: 10px;
+}
+
+/*account-form--------------*/
+.account-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -267px;
+    margin-top: -302px;
+    width: 535px;
+    height: 605px;
+    border-radius: 5px;
+    background-color: #aaa;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.account-form .container {
+    width: 515px;
+    height: 585px;
+    background-color: #fff;
+    margin: 10px;
+}
+
+/*.account-form .tip {*/
+    /*display: block;*/
+    /*width: 515px;*/
+    /*height: 125px;*/
+    /*background-color: #fbfbfb;*/
+    /*margin-bottom: 55px;*/
+    /*text-align: center;*/
+    /*vertical-align: bottom;*/
+/*}*/
+
+/*.account-form .tip img{*/
+    /*display: block;*/
+    /*margin-top: 30px;*/
+    /*margin-left: 175px;*/
+    /*width: 165px;*/
+    /*height: 90px;*/
+    /*background-color: #fbfbfb;*/
+/*}*/
+
+.account-form .text {
+    display: block;
+    width: 243px;
+    margin: 0 auto 15px;
+    padding: 10px 5px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    background-color: #fbfbfb;
+    border: 1px solid #eee;
+    outline: none;
+}
+
+.account-form .submit {
+    display: block;
+    width: 255px;
+    height: 50px;
+    margin: 0 auto;
+    border: none;
+    font-size: 24px;
+    outline: none;
+    color: #fff;
+    background-color: #427ec0;
+}
+
+.login .tip {
+    /*margin-bottom: 55px;*/
+    display: block;
+    width: 515px;
+    height: 125px;
+    background-color: #fbfbfb;
+    margin-bottom: 55px;
+    text-align: center;
+    /*vertical-align: bottom;*/
+}
+
+.login .tip img {
+    margin-top: 35px;
+}
+
+.login .remember {
+    position: relative;
+    width: 255px;
+    margin: 15px auto 40px;
+}
+
+.login .remember input {
+    margin-right: 5px;
+}
+
+.login .remember a {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: #427ec0;
+}
+
+.login .third-party {
+    width: 255px;
+    margin: 20px auto 0;
+}
+
+.login .third-party .weibo {
+    margin-right: 30px;
+}
+
+.login .to-reg {
+    text-align: center;
+    margin-top: 70px;
+    color: #427ec0;
+}
+
+.register .tip {
+    display: block;
+    width: 515px;
+    height: 125px;
+    background-color: #fbfbfb;
+    /*margin-bottom: 55px;*/
+    text-align: center;
+    margin-bottom: 65px;
+}
+
+.register .tip img {
+    margin-top: 30px;
+}
+
+.register .agreement {
+    display: block;
+    width: 255px;
+    margin: 15px auto 40px;
+}
+
+.register .agreement input {
+    margin-right: 5px;
+}
+
+.register .to-login {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.register .to-login a {
+    color: #427ec0;
+}
+
+/**entity like-------------------------------------*/
+.like {
+    text-decoration: none;
+}
+
+.like .icon {
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    width: 20px;
+    height: 17px;
+    margin-right: 5px;
+    background: url(/static/v3/images/icon_like.png) no-repeat;
+}
+
+.liked .icon {
+    background: url(/static/v3/images/icon_liked.png) no-repeat;
+}
+
+.like .count {
+    margin-right: 5px;
+}
+
+
+/*------------------------------*/
+.pagination {
+    text-align: center;
+}
+
+.pagination .container {
+    display: inline-block;
+    margin-top: 30px;
+}
+
+.pagination a {
+    float: left;
+    height: 35px;
+    line-height: 35px;
+    width: 40px;
+    text-align: center;
+    border: 1px solid #eee;
+    font-weight: bold;
+    color: #999;
+    background: #fff;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    background-color: #f6f6f6;
+}
+
+.pagination .active {
+    background-color: #f6f6f6;
+}
+
+.pagination a .previous,
+.pagination a .next {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+}
+
+.pagination a .previous {
+    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -157px -3px;
+}
+
+.pagination a .next {
+    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -170px -3px;
+}
+
+
+/*common entity-------------------------------------------------------------*/
+.common-entity {
+    display: inline-block;
+    width: 208px;
+    height: 258px;
+    margin: 0 30px 30px 0;
+    border: 1px solid #eee;
+    font-size: 14px;
+}
+
+.common-entity .entity-img {
+    display: table-cell;
+    width: 210px;
+    height: 210px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
+}
+
+.common-entity .entity-img img {
+    max-width: 210px;
+    max-height: 210px;
+}
+
+.common-entity .detail {
+    position: relative;
+    margin: 15px 10px 0;
+}
+
+.common-entity .detail .like {
+    text-decoration: none;
+}
+
+.common-entity .price {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-family: Georgia, serif;
+}
+
+
+/*common note-------------------------------------------------------------*/
+.common-note {
+    display: inline-block;
+    width: 298px;
+    height: 448px;
+    vertical-align: top;
+    margin: 0 15px 15px 0;
+    border: 1px solid #eee;
+    font-size: 14px;
+
+}
+
+.common-note .entity .title {
+    position: absolute;
+    width: 268px;
+    padding: 30px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #fbfbfb;
+    background-color: rgba(251, 251, 251, .95);
+    font-size: 16px;
+}
+
+.common-note .entity h2 {
+    display: inline-block;
+    width: 160px;
+    margin: 0 10px 0 0;
+    line-height: 1.3;
+    font-size: 14px;
+    font-weight: normal;
+    color: #333;
+}
+
+.common-note .entity .title span {
+    float: right;
+    vertical-align: top;
+    font-family: Georgia, serif;
+    color: #427ec0;
+}
+
+.common-note .entity-img {
+    /*background-color: #eeeeee;*/
+    display: table-cell;
+    /*max-width: 100%;*/
+    padding: 2px;
+    width: 296px;
+    height: 270px;
+    text-align: center;
+    vertical-align: middle;
+    /*padding: auto;*/
+    font-size: 0;
+}
+
+.common-note .entity-img img {
+    max-width: 296px;
+    max-height: 270px;
+    /*max-width: 100%;*/
+    /*max-height: 100%;*/
+}
+
+.common-note .note {
+    position: relative;
+    height: 147px;
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+.common-note .note p {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    color: #888;
+}
+
+.common-note .like {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    line-height: 30px;
+}
+
+.common-note .creator {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    color: #777;
+    font-size: 15px;
+}
+
+.common-note .creator img {
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+/*common tag-------------------------------------------------------------*/
+.common-tag {
+    display: inline-block;
+    width: 208px;
+    height: 308px;
+    vertical-align: top;
+    margin: 0 30px 30px 0;
+    border: 1px solid #eee;
+}
+
+.common-tag h4 {
+    height: 57px;
+    line-height: 57px;
+    font-size: 14px;
+    margin: 0 0 0 15px;
+}
+
+.common-tag .entities {
+    height: 210px;
+}
+
+.common-tag .entity-img {
+    display: inline-block;
+    width: 104px;
+    height: 104px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.common-tag .entity-img img {
+    width: 100%;
+    height: 100%;
+}
+
+.common-tag .more {
+    display: block;
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    background-color: #fbfbfb;
+}
+
+/*common user-------------------------------------------------------------*/
+.common-user {
+    display: inline-block;
+    width: 208px;
+    height: 368px;
+    margin: 0 30px 30px 0;
+    border: 1px solid #eee;
+    font-size: 14px;
+}
+
+.common-user .avatar {
+    display: block;
+    width: 80px;
+    margin: 15px auto;
+}
+
+.common-user .avatar img {
+    border-radius: 50%;
+}
+
+.common-user .nickname {
+    display: block;
+    text-align: center;
+}
+
+.common-user .stat {
+    position: relative;
+    width: 150px;
+    margin: 16px auto;
+}
+
+.common-user .stat .follows {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.common-user .follow {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.common-user .follow a {
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    width: 80px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #427ec0;
+    text-decoration: none;
+}
+
+.common-user .avatars {
+    font-size: 0;
+}

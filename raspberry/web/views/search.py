@@ -1,18 +1,18 @@
 # coding=utf-8
-from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+# from django.contrib.auth.decorators import login_required
+# from django.core.urlresolvers import reverse
+# from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.template import loader
-import json
+# from django.template import loader
+# import json
 
 from util import *
 from utils.paginator import Paginator
 from base.user import User
-from base.category import Old_Category
+# from base.category import Old_Category
 from base.entity import Entity
-from base.note import Note
+# from base.note import Note
 from base.models import NoteSelection
 from base.tag import Tag
 
@@ -21,7 +21,7 @@ def search(request, template='search/search.html'):
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
 
-    _keyworld = request.GET.get('k', None)
+    _keyword = request.GET.get('q', None)
     _group = request.GET.get('g', 'e')  # e->entity, u->user, t->tag
     _page = request.GET.get('p', 1)
 
@@ -31,7 +31,7 @@ def search(request, template='search/search.html'):
 
     # TODO
     # entity example ------------------------
-    _entity_id_list = [x['entity_id'] for x in NoteSelection.objects.all()[0:30]]
+    _entity_id_list = [x['entity_id'] for x in NoteSelection.objects[0:30]]
 
     for _e_id in _entity_id_list:
         _entity_context = Entity(_e_id).read()
@@ -90,7 +90,7 @@ def search(request, template='search/search.html'):
         template,
         {
             'user_context' : _user_context,
-            'keyword' : _keyworld,
+            'keyword' : _keyword,
             'group' : _group,
             'entity_list' : _entity_list,
             'user_list' : _user_list,

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 
 from base.user import User
 import random
@@ -18,12 +19,10 @@ def get_login_redirect_url(request):
     next_url = get_redirect_url(request)
     if next_url:
         return next_url
-    return settings.LOGIN_REDIRECT_URL
+    return reverse("web_selection")
 
 def get_redirect_url(request):
     next_url = request.REQUEST.get("next", None)
-    if not next_url:
-        next_url = request.META.get('HTTP_REFERER', None)
     return next_url
 
 def parse_taobao_id_from_url(url):

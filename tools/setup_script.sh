@@ -35,4 +35,6 @@ sudo pip install gunicorn
 sudo pip install django-storages
 sudo pip install pyapns
 sudo pip install scp 
+sudo pip install sinaweibopy 
+sudo pip install Wand 
 sudo easy_install django-sphinx

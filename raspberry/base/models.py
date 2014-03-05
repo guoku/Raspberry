@@ -122,6 +122,7 @@ class Entity(models.Model):
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
     weight = models.IntegerField(default = 0, db_index = True)
+    rank_score = models.IntegerField(default = 0, db_index = True)
     
     search = SphinxSearch( 
         index = 'entities',
@@ -208,6 +209,7 @@ class Entity_Tag(models.Model):
     user = models.ForeignKey(User) 
     tag = models.ForeignKey(Tag)
     tag_text = models.CharField(max_length = 128, null = False, db_index = True)
+    tag_hash = models.CharField(max_length = 32, db_index = True)
     count = models.IntegerField(default = 0)
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     last_tagged_time = models.DateTimeField(db_index = True)
@@ -257,7 +259,6 @@ class Taobao_Token(models.Model):
     re_expires_in = models.PositiveIntegerField(default = 0)
     updated_time = models.DateTimeField(auto_now = True, null = True)
 
-
 class One_Time_Token(models.Model):
     user = models.ForeignKey(User, related_name = "one_time_token") 
     token = models.CharField(max_length = 255, db_index = True)
@@ -275,4 +276,15 @@ class Seller_Info(models.Model):
     user = models.OneToOneField(User, related_name = "seller_info")
     shop_nick = models.CharField(max_length = 64, db_index = True)
     verified = models.BooleanField(default = False, db_index = True)
+
+class Guoku_Plus(models.Model):
+    entity = models.ForeignKey(Entity)
+    item_id = models.CharField(max_length = 32,db_index = True)
+    taobao_id = models.CharField(max_length = 32, db_index = True)
+    sale_price = models.FloatField()
+    total_volume = models.IntegerField()
+    sales_volume = models.IntegerField()
+    start_time = models.DateTimeField()
+    created_time = models.DateTimeField()
+    status = models.CharField(max_length = 32, db_index = True)
 

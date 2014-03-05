@@ -13,6 +13,7 @@ import time
 
 @check_sign
 def category_user_like(request, category_id, user_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -42,6 +43,21 @@ def category_user_like(request, category_id, user_id):
             _rslt.append(
                 _entity.read(_request_user_id)
             )
+        
+        _duration = datetime.datetime.now() - _start_at
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'CATEGORY_USER_LIKE', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'neo_category_id' : int(category_id),
+                'user_id' : int(user_id),
+                'result_entities' : _entity_id_list
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 
@@ -89,7 +105,18 @@ def user_following(request, user_id):
             _rslt.append(MobileUser(_following_user_id).read(_request_user_id))
     
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_FOLLOWING', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'USER_FOLLOWING', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'user_id' : int(user_id),
+                'result_users' : _following_user_id_list[_offset : _offset + _count]
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -110,7 +137,18 @@ def user_fan(request, user_id):
             _rslt.append(MobileUser(_fan_user_id).read(_request_user_id))
     
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_FAN', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'USER_FAN', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'user_id' : int(user_id),
+                'result_users' : _fan_user_id_list[_offset : _offset + _count]
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -145,7 +183,17 @@ def user_detail(request, user_id):
             _rslt['last_like'] = MobileEntity(_last_like_entity_id).read(_request_user_id)
             
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'USER', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'user_id' : int(user_id),
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -199,7 +247,8 @@ def user_entity_note(request, user_id):
         _count = int(request.GET.get('count', '30'))
         
         _rslt = []
-        for _note_id in MobileNote.find(creator_set = [user_id], timestamp = _timestamp, offset = _offset, count = _count):
+        _note_id_list = MobileNote.find(creator_set = [user_id], timestamp = _timestamp, offset = _offset, count = _count)
+        for _note_id in _note_id_list: 
             try:
                 _note_context = MobileNote(_note_id).read(_request_user_id)
                 if _note_context.has_key('entity_id'):
@@ -212,7 +261,18 @@ def user_entity_note(request, user_id):
                 pass
 
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_NOTE', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'USER_NOTE', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'user_id' : int(user_id),
+                'result_notes' : _note_id_list
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 #@check_sign
@@ -233,6 +293,34 @@ def check_sina_user(request):
         return SuccessJsonResponse(_rslt)
 
 @check_sign
+def random_user_tag(request):
+    if request.method == "GET":
+        _count = int(request.GET.get('count', '10'))
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        
+        _rslt = []
+        _recommend_user_tag_list = Tag.get_recommend_user_tag_list()
+        if len(_recommend_user_tag_list) > _count:
+            _recommend_user_tag_list = random.sample(_recommend_user_tag_list, _count)
+        for _tag_data in _recommend_user_tag_list:
+            _data = {
+                'tag_name' : _tag_data[1],
+                'entity_count' : _tag_data[2],
+                'user' : MobileUser(_tag_data[0]).read(_request_user_id),
+                'entity_list' : []
+            }
+            for _entity_id in Tag.find_user_tag_entity(_tag_data[0], _tag_data[1])[0:3]:
+                _data['entity_list'].append(MobileEntity(_entity_id).read(_request_user_id))
+            _rslt.append(_data)
+        return SuccessJsonResponse(_rslt)
+        
+
+
+@check_sign
 def user_tag_list(request, user_id):
     _start_at = datetime.datetime.now()
     if request.method == "GET":
@@ -249,7 +337,18 @@ def user_tag_list(request, user_id):
         }
     
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_TAG', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'USER_TAG', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'user_id' : int(user_id),
+                'result_tags' : map(lambda x: x['tag'], _tag_list)
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 
@@ -273,7 +372,18 @@ def user_tag_entity(request, user_id, tag):
             _rslt['entity_list'].append(MobileEntity(_entity_id).read(_request_user_id))
     
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_TAG_ENTITY', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id), 'tag' : tag })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'USER_TAG_ENTITY', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'user_id' : int(user_id),
+                'tag' : tag 
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 
@@ -294,8 +404,10 @@ def user_like(request, user_id):
         
         _list = []
         _last_like_time = None
+        _entity_id_list = []
         for _item in MobileUser(user_id).find_like_entity(timestamp = _timestamp, offset = _offset, count = _count, with_timestamp = True):
             _list.append(MobileEntity(_item[0]).read(_request_user_id))
+            _entity_id_list.append(_item[0])
             _last_like_time = _item[1]
 
         _rslt = {
@@ -304,7 +416,18 @@ def user_like(request, user_id):
         }
 
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'USER_LIKE', request.REQUEST, get_client_ip(request), _request_user_id, { 'user_id' : int(user_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'USER_LIKE', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'user_id' : int(user_id),
+                'result_entities' : _entity_id_list
+            },
+        )
         return SuccessJsonResponse(_rslt)
     
 @check_sign
@@ -330,6 +453,17 @@ def search_user(request):
             _rslt.append(MobileUser(_user_id).read(_request_user_id))
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'SEARCH_USER', request.REQUEST, get_client_ip(request), _request_user_id, { 'query' : _query_string })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'SEARCH_USER', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'query' : _query_string, 
+                'result_users' : _user_id_list
+            },
+        )
         return SuccessJsonResponse(_rslt)
         

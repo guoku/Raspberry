@@ -22,7 +22,7 @@ class Item(object):
         return self.item_obj.entity_id
     
     @classmethod
-    def create_taobao_item(cls, entity_id, images, taobao_id, cid, title, shop_nick, price, soldout): 
+    def create_taobao_item(cls, entity_id, images, taobao_id, cid, title, shop_nick, price, soldout, weight=0): 
         _taobao_id = taobao_id.strip()
         _title = title.strip()
         _shop_nick = shop_nick.strip()
@@ -37,6 +37,7 @@ class Item(object):
             shop_nick = _shop_nick,
             price = price,
             soldout = soldout,
+            weight = weight,
             created_time = datetime.datetime.now(),
             updated_time = datetime.datetime.now() 
         )
@@ -82,7 +83,7 @@ class Item(object):
         _context["weight"] = self.item_obj.weight
         _context["soldout"] = self.item_obj.soldout
         _context["ustation"] = self.item_obj.ustation
-        _context['buy_link'] = Item.generate_taobao_item_url(_context['taobao_id'])
+        _context['buy_link'] = Item.generate_taobao_item_url(str(self.item_obj.taobao_id))
         _context["volume"] = 0 
         return _context
 
@@ -123,15 +124,17 @@ class Item(object):
         return _item_list
 
     @classmethod
-    def find_taobao_item(cls, entity_id = None, shop_nick = None, offset = 0, count = 30, full_info = False):
+    def find_taobao_item(cls, entity_id=None, shop_nick=None, offset=0, count=30, full_info=False, order_by=None):
         _hdl = TaobaoItemDocument.objects.all()
         if entity_id != None:
             _entity_id = int(entity_id)
             _hdl = _hdl.filter(entity_id = _entity_id)
         if shop_nick != None:
             _hdl = _hdl.filter(shop_nick = shop_nick)
+        _hdl = _hdl.order_by('-created_time')
+            
         _item_list = []
-        for _doc in _hdl.order_by('-created_time')[offset : offset + count]:
+        for _doc in _hdl[offset : offset + count]:
             if full_info:
                 _item_list.append({
                     'item_id' : str(_doc.id),
@@ -158,6 +161,7 @@ class Item(object):
     
     @staticmethod
     def generate_taobao_item_url(taobao_id):
-        _url = settings.APP_HOST + "/visit_item?item_id=%s" % taobao_id + "&type=mobile"
+        _url = "http://www.guoku.com/visit_item?item_id=%s" % taobao_id + "&type=mobile"
+        #_url = "http://10.0.1.109/mobile/v3/item/%s/visit/" % item_id + "?type=mobile"
         return _url
 

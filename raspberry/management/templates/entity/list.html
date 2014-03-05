@@ -127,6 +127,9 @@
                 <li {% if sort_by == "like" and reverse %}class="active"{% endif %}>
                     <a href="javascript:;" id="like-order">喜爱数升序</a>
                 </li>
+                <li {% if sort_by == "rank_score" and reverse == False %}class="active"{% endif %}>
+                    <a href="javascript:;" id="rank-score-order">rank降序</a>
+                </li>
             </ul>
         </div>
 
@@ -188,6 +191,9 @@
             });
             sortButtons.eq(6).click(function () {
                 sort("like", 1);
+            });
+            sortButtons.eq(7).click(function () {
+                sort("rank_score", 0);
             });
 
             function sort(type, order) {

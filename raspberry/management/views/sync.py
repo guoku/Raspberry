@@ -9,7 +9,7 @@ from base.models import Entity as EntityModel
 from base.models import NoteSelection 
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 import time
-#import json
+import re 
 
 def sync_category(request):
     _all_categories = Category.all_group_with_full_category()
@@ -101,12 +101,17 @@ def create_entity_from_offline(request):
             _taobao_soldout = False
         else:
             _taobao_soldout = True
+        _rank_score = int(request.POST.get("item_score", '0'))
         _chief_image_url = request.POST.get("chief_image_url", None)
+        _chief_image_url = re.sub('_\d+x\d+\.jpg|_b.jpg', '', _chief_image_url)
         _brand = request.POST.get("brand", "")
         _title = request.POST.get("title", "")
         _intro = request.POST.get("intro", "")
         _category_id = Category.get_category_by_taobao_cid(_cid)
-        _detail_image_urls = request.POST.getlist("image_url")
+        _origin_detail_image_urls = request.POST.getlist("image_url")
+        _detail_image_urls = []
+        for _url in _origin_detail_image_urls:
+            _detail_image_urls.append(re.sub('_\d+x\d+\.jpg|_b.jpg', '', _url))
         
         if _chief_image_url in _detail_image_urls:
             _detail_image_urls.remove(_chief_image_url)
@@ -123,13 +128,14 @@ def create_entity_from_offline(request):
                     'title' : _taobao_title,
                     'shop_nick' : _taobao_shop_nick,
                     'price' : _taobao_price,
-                    'soldout' : _taobao_soldout 
+                    'soldout' : _taobao_soldout,
                 },
                 brand = _brand,
                 title = _title,
                 intro = _intro,
                 detail_image_urls = _detail_image_urls,
                 weight = -1,
+                rank_score = _rank_score
             )
             _rslt = {
                 'entity_id' : _entity.entity_id,

@@ -1,4 +1,5 @@
 {% load i18n staticfiles %}
+{% load user %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
@@ -36,35 +37,56 @@
         </div>
 
         <ul class="nav">
-            <li {% if request.path in web_selection_url %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
-            <li {% if request.path in web_popular_url %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
+            <li {% if web_selection_url in request.path %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
+            <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
         </ul>
 
         <div class="user">
-            {% if user.is_authenticated  %}
-                <a href="{% url 'web_user_index' user.id %}" class="user-avatar">
-                    <img src="{{ user_context.avatar_small }}" width="30" height="30">
-                </a>
-{#            {% else %}#}
-{#                <a href="{% url 'web_register' %}">{% trans "sign up" %}</a>#}
-{#                <a href="{% url 'web_login' %}">{% trans "sign in" %}</a>#}
+            {% if request.user.is_authenticated  %}
+                {% show_auth_user request.user.id %}
+{#                <a href="{% url 'web_user_index' request.user.id %}" class="user-avatar">#}
+{#                    <img src="{{ user_context.avatar_small }}" width="30" height="30">#}
+{#                </a>#}
             {% endif %}
         </div>
 
-        <form action="/search" method="GET">
-            <input type="text" placeholder="搜你想要的" name="k" class="search">
-            <button type="submit"><img src="{% static 'images/search_icon.png' %}"></button>
-        </form>
+        {% block search %}
+            <form action="{% url 'web_search' %}" method="GET">
+                <input type="text" placeholder="搜你想要的" name="q" class="search">
+                <button type="submit"><img src="{% static 'images/search_icon.png' %}"></button>
+            </form>
+        {% endblock %}
     </div>
 </div>
 
-<div id="main" class="clearfix">
-    {% if not user.is_authenticated %}
-    <div>
-        <a href="{% url 'web_register' %}">{% trans "sign up" %}</a>
-        <a href="{% url 'web_login' %}">{% trans "sign in" %}</a>
+{% if not user.is_authenticated %}
+{% block welcome %}
+    <div id="welcome">
+        <div class="intro">
+            <div class="brand">
+                <img src="http://static.guoku.com/static/v3/images/brand.png">
+            </div>
+            <h2>大开眼界的剁手指南，
+                <br />
+                一目了然的优质生活主张。
+            </h2>
+            <ul>
+                <li>
+                    <a class="btn btn-primary" href="{% url 'web_register' %}">注册账号</a>
+                </li>
+                <li>
+                    <span>已有账号，</span>
+                </li>
+                <li>
+                    <a class="btn btn-link" href="{% url 'web_login' %}">从这里登陆</a>
+                </li>
+            </ul>
+        </div>
     </div>
-    {% endif %}
+{% endblock %}
+{% endif %}
+
+<div id="main" class="clearfix">
     {% block content %}{% endblock %}
 </div>
 

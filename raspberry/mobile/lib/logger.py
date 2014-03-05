@@ -6,11 +6,6 @@ import datetime
 class MobileLogPrev(EmbeddedDocument):
     view = StringField(required = True)
     appendix = DictField(required = False)
-    meta = {
-        'indexes' : [ 
-            'view'
-        ]
-    }
 
 class MobileLog(Log):
     view = StringField(required = True)
@@ -19,16 +14,6 @@ class MobileLog(Log):
     duid = StringField(required = False)
     os = StringField(required = False)
     prev = EmbeddedDocumentField(MobileLogPrev, required = False) 
-    meta = {
-        'indexes' : [ 
-            'view', 
-            'version', 
-            'device',
-            'duid',
-            'os',
-            'prev',
-        ]
-    }
 
 def _gen_prev(prev_str):
     _tokens = prev_str.split('_')
@@ -71,14 +56,14 @@ def _gen_prev(prev_str):
         _prev_doc.appendix = _appendix
     return _prev_doc
 
-def log(duration, view, version, ip, request_user_id = None, device = None, duid = None, os = None, prev_str = None, appendix = None):
+def log(duration, view, version, ip, log_time, request_user_id = None, device = None, duid = None, os = None, prev_str = None, appendix = None):
     _doc = MobileLog(
         entry = 'mobile',
         duration = duration,
         ip = ip,
         view = view.upper(),
         version = version,
-        log_time = datetime.datetime.now(),
+        log_time = log_time, 
     )
     if request_user_id == None:
         _doc.user_id = -1

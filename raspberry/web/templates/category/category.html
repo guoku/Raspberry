@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n staticfiles %}
+{% load entity web_common %}
+
+{% block title %}品类 － {{ category_id|trans_category }}{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/category.css' %}">{% endblock %}
+{% block content %}
+    <div id="category">
+        <div class="nav">
+            <ul>
+                <li>{{ category_id|trans_category }}</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            {% spaceless %}
+                {% for entity in entities %}
+{#                    {{ entity.title }}#}
+                    {% display_common_entity entity %}
+                {% endfor %}
+            {% endspaceless %}
+        </div>
+    </div>
+{% endblock %}

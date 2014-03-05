@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n staticfiles %}
-{% load entity %}
+{% load entity user %}
 
 {% block title %}
     {% if entity_context.brand|length != 0 %}
@@ -10,7 +10,20 @@
 {% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/detail.css' %}">{% endblock %}
 {% block content %}
+
     <div id="detail">
+        <div class="breadcrumb">
+        <ul>
+            <li><span class="home"></span></li>
+            {% if selection_note %}
+            <li><a href="{% url 'web_selection' %}">{% trans 'selection' %}</a></li>
+            <li>&frasl;</li>
+            {% endif %}
+            <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
+            <li>&frasl;</li>
+            <li>{{ entity_context.title }}</li>
+        </ul>
+        </div>
         <div class="main">
             <div class="entity">
                 <a href="#" class="entity-img">
@@ -61,7 +74,7 @@
         <div class="aside">
             <div class="entity-info">
                 <a href="" class="price">详情<span>&#65509;{{ entity_context.price }}</span></a>
-                <div class="shop">来自于<a href="">url需替换</a></div>
+{#                <div class="shop">来自于<a href="">url需替换</a></div>#}
 
                 {% if entity_context.detail_images|length > 0 %}
                     <div class="detail-img">
@@ -76,19 +89,29 @@
             <div class="likes">
                 <h3>{{ entity_context.like_count }}人喜爱</h3>
                 <div>
-                    <a href=""><img src="" height="25" width="25"></a>
+                    {% for liker, date in liker_list %}
+                    <a href="{% url 'web_user_likes' liker %}">
+{#                        <img src="{{ liker }}" height="25" width="25">#}
+                        {% show_avater liker 25 %}
+                    </a>
+                    {% endfor %}
                 </div>
             </div>
 
-            <p class="category">[{{ entity_context.category_id|trans_category }}]</p>
+            <p class="category">
+                <a href="{% url 'web_category' entity_context.category_id  %}">[{{ entity_context.category_id|trans_category }}]</a>
+            </p>
 
+            {% if tag_list|length > 0 %}
             <div class="tag">
                 <h3>该商品的标签</h3>
                 <div>
-                    <a href="">＃test</a>
-                    <a href="">＃测试</a>
+                    {% for tag in tag_list %}
+                        <a href="{{ tag.tag_hash }}">＃{{ tag.tag }}</a>
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
 
             <div class="share">
                 <a href="">分享到微博</a>
@@ -96,7 +119,6 @@
 
             <div class="download">
                 <h3>下载果库客户端</h3>
-
                 <div>
                     <a href="">iPhone</a> / <a href="">iPhone</a> / <a href="">iPhone</a>
                 </div>
@@ -106,10 +128,9 @@
         <div class="recommend">
             <h2>相似推荐</h2>
             <div>
-                <a href=""><img src=""></a>
-                <a href=""><img src=""></a>
-                <a href=""><img src=""></a>
-                <a href=""><img src=""></a>
+                {% for entity_context in guess_entity_context %}
+                    <a href="{% url 'web_detail' entity_context.entity_hash %}"><img src="{{ entity_context.chief_image.url|resize:'240' }}" alt=""></a>
+                {% endfor %}
             </div>
         </div>
     </div>

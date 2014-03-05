@@ -14,6 +14,10 @@ import random
 import hmac
 import hashlib
 
+from django.utils.log import getLogger
+
+log = getLogger('django')
+
 
 class Tag(object):
 
@@ -120,15 +124,34 @@ class Tag(object):
         
 
     @classmethod
+    def entity_tag_stat(cls, entity_id):
+        _entity_id = int(entity_id)
+        # _tag_id_mapping = {}
+        _entity_tags = []
+        
+        for _data in EntityTagModel.objects.filter(entity_id=_entity_id).values('tag_text', 'tag_id', 'tag_hash').annotate(user_count=Count('user')).order_by('-user_count'):
+            log.info(_data)
+            _entity_tags.append({
+                'tag_id' : _data['tag_id'],
+                'tag' : _data['tag_text'],
+                'tag_hash' : _data['tag_hash'],
+                'user_count' : _data['user_count'],
+            })
+        return _entity_tags
+    
+    
+    @classmethod
     def user_tag_stat(cls, user_id):
         _user_id = int(user_id)
         _tag_id_mapping = {}
         _user_tags = []
         
         
-        for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text').annotate(entity_count=Count('entity')).order_by('-entity_count'):
+        for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text', 'tag_id', 'tag_hash').annotate(entity_count=Count('entity')).order_by('-entity_count'):
             _user_tags.append({
+                'tag_id' : _data['tag_id'],
                 'tag' : _data['tag_text'],
+                'tag_hash' : _data['tag_hash'],
                 'entity_count' : _data['entity_count'],
             })
 
@@ -182,7 +205,8 @@ class Tag(object):
     @classmethod
     def get_recommend_user_tag_list(cls, with_entity_count = True):
         _list = []
-        for _obj in RecommendUserTagModel.objects.all():
+        _hdl = RecommendUserTagModel.objects.all()
+        for _obj in _hdl: 
             if with_entity_count:
                 _list.append([_obj.user_id, _obj.tag, _obj.entity_count])
             else:
@@ -212,3 +236,34 @@ class Tag(object):
        
         return _entity_id_list
     
+    
+    @classmethod
+    def __load_tag_prefix_index_from_cache(cls):
+        _cache_key = 'tag_prefix_index'
+        _index = cache.get(_cache_key)
+        return _index
+    
+    @classmethod
+    def __reset_tag_prefix_index_to_cache(cls):
+        _cache_key = 'tag_prefix_index'
+        _index = cache.get(_cache_key)
+        _all_tags_sorted = map(lambda x: x.tag, TagModel.objects.all().order_by('tag')) 
+        _index = {}
+        for _tag in _all_tags_sorted:
+            i = 0
+            while i < len(_tag):
+                _prefix = _tag[0 : i + 1]
+                if not _index.has_key(_prefix):
+                    _index[_prefix] = []
+                _index[_prefix].append(_tag)
+                i += 1
+        cache.set(_cache_key, _index, 864000)
+        return _index 
+
+   
+    @classmethod
+    def read_tag_prefix_index(cls):
+        _tag_prefix_index = cls.__load_tag_prefix_index_from_cache()
+        if _tag_prefix_index == None:
+            _tag_prefix_index = cls.__reset_tag_prefix_index_to_cache()
+        return _tag_prefix_index 

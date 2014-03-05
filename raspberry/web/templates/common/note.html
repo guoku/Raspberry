@@ -1,3 +1,5 @@
+{% load entity %}
+
 <div class="common-note">
     <div class="entity">
         <div class="title" style="display: none">
@@ -12,7 +14,7 @@
 
         <a href="{% url 'web_detail' note.entity_context.entity_hash %}"
            class="entity-img">
-            <img src="{{ note.entity_context.chief_image.url }}" alt="{{ note.entity_context.title }}">
+            <img src="{{ note.entity_context.chief_image.url|resize:'310' }}" alt="{{ note.entity_context.title }}">
         </a>
     </div>
 

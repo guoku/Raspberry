@@ -14,7 +14,7 @@ LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+# USE_TZ = True
 
 LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), '../conf/locale'),
@@ -118,3 +118,9 @@ TAOBAO_APP_INFO = {
 SINA_APP_KEY = '1459383851'
 SINA_APP_SECRET = 'bfb2e43c3fa636f102b304c485fa2110'
 SINA_BACK_URL = APP_HOST + '/sina/auth'
+
+
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+MAILGUN_ACCESS_KEY = 'key-7n8gut3y8rpk1u-0edgmgaj7vs50gig8'
+MAILGUN_SERVER_NAME = 'post.guoku.com'
+EMAIL_SUBJECT_PREFIX = '[guoku]'

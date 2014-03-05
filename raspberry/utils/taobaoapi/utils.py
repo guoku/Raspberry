@@ -24,9 +24,7 @@ def load_taobao_shop_info_from_api(shop_nick):
 
 def taobaoke_mobile_item_convert(num_iid, outer_code = "", fields = None):
     request = TaobaokeMobileItem(APP_KEY, APP_SECRET)
-    print "get"
     res = request.convert_items(num_iid, outer_code)
-    print res
     try:
         return res['tbk_mobile_items_convert_response']['tbk_items']['tbk_item'][0]
     except:

@@ -41,7 +41,18 @@ def category_entity_note(request, category_id):
                 })
             
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'CATEGORY_NOTE_LIST', request.REQUEST, get_client_ip(request), _request_user_id, { 'category_id' : int(category_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'CATEGORY_NOTE_LIST', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'neo_category_id' : int(category_id),
+                'result_notes' : _note_id_list
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -116,7 +127,17 @@ def entity_note_detail(request, note_id):
             _rslt['entity'] = MobileEntity(_rslt['note']['entity_id']).read(_request_user_id)
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'NOTE', request.REQUEST, get_client_ip(request), _request_user_id, { 'note_id' : int(note_id) })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'NOTE', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'note_id' : int(note_id), 
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign

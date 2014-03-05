@@ -20,7 +20,7 @@ from base.user import User
 from management.tasks import CreateTaobaoShopTask, MergeEntityTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
-from utils import fetcher 
+from utils.extractor.taobao import TaobaoExtractor 
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -31,7 +31,7 @@ def _parse_taobao_id_from_url(url):
     return None
 
 def _load_taobao_item_info(taobao_id):
-    taobao_item_info = fetcher.fetch_item(taobao_id)
+    taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:
@@ -333,6 +333,7 @@ def search_entity(request):
         },
         context_instance = RequestContext(request)
     )
+
 
 
 @login_required

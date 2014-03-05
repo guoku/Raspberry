@@ -5,6 +5,7 @@ from base.models import Selection, NoteSelection
 import base.popularity as popularity 
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from mobile.lib.http import SuccessJsonResponse, ErrorJsonResponse
 from mobile.lib.sign import check_sign
 from base.tag import *
@@ -14,8 +15,11 @@ from entity import *
 from note import *
 from report import *
 from user import *
+from base.item import Item
 from tasks import MarkFootprint, MobileLogTask
 from utils.lib import get_client_ip
+from utils.taobao import * 
+from utils.taobaoapi.utils import taobaoke_mobile_item_convert 
 import random 
 import time
 
@@ -27,21 +31,28 @@ def homepage(request):
         _request_user_id = Session_Key.objects.get_user_id(_session)
     else:
         _request_user_id = None
+
+    _log_appendix = {}
+
     _rslt = {}
     _rslt['discover'] = popularity.read_popular_category()['data'][0:8]
+    _log_appendix['discover'] = map(lambda x: x['category_id'], _rslt['discover'])
     
     _rslt['banner'] = []
+    _log_appendix['banner'] = []
     for _banner_context in Banner.find(status = 'active'):
         try:
             _rslt['banner'].append({
                 'url' : _banner_context['url'], 
                 'img' : _banner_context['image'] 
             })
+            _log_appendix['banner'].append(_banner_context['banner_id'])
         except Exception, e:
             pass
     
 
     _rslt['hottag'] = []
+    _log_appendix['hottag'] = []
     _recommend_user_tag_list = Tag.get_recommend_user_tag_list()
     if len(_recommend_user_tag_list) > 3:
         _recommend_user_tag_list = random.sample(_recommend_user_tag_list, 3)
@@ -51,7 +62,7 @@ def homepage(request):
             'entity_count' : _tag_data[2],
             'user' : MobileUser(_tag_data[0]).read(_request_user_id)
         })
-      
+        _log_appendix['hottag'].append([_tag_data[0], _tag_data[1]])
     
     _rslt['config'] = {}
     _rslt['config']['taobao_ban_count'] = 2
@@ -65,7 +76,15 @@ def homepage(request):
     
         
     _duration = datetime.datetime.now() - _start_at
-    MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'HOMEPAGE', request.REQUEST, get_client_ip(request), _request_user_id)
+    MobileLogTask.delay(
+        duration = _duration.seconds * 1000000 + _duration.microseconds, 
+        view = 'HOMEPAGE', 
+        request = request.REQUEST, 
+        ip = get_client_ip(request), 
+        log_time = datetime.datetime.now(),
+        request_user_id = _request_user_id,
+        appendix = _log_appendix 
+    )
     return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -101,6 +120,7 @@ def feed(request):
             offset = _offset,
             count = _count
         )
+        _log_appendix['result_notes'] = _note_id_list
 
         
         _rslt = []
@@ -120,7 +140,16 @@ def feed(request):
                 pass
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'FEED', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'FEED', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request),
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = _log_appendix 
+        )
+        
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -221,7 +250,14 @@ def message(request):
             MarkFootprint.delay(user_id = _request_user_id, message = True)
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'MESSAGE', request.REQUEST, get_client_ip(request), _request_user_id)
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'MESSAGE', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -247,6 +283,7 @@ def selection(request):
         
 
         _rslt = []
+        _entity_id_list = []
         for _selection in _hdl.order_by('-post_time')[0:30]:
             if isinstance(_selection, NoteSelection):
                 _context = {
@@ -258,12 +295,24 @@ def selection(request):
                     }
                 }
                 _rslt.append(_context)
+                _entity_id_list.append(_selection.entity_id)
         
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, selection = True)
         
         _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'SELECTION', request.REQUEST, get_client_ip(request), _request_user_id, { 'root_category_id' : _root_cat_id })
+        MobileLogTask.delay(
+            duration = _duration.seconds * 1000000 + _duration.microseconds, 
+            view = 'SELECTION', 
+            request = request.REQUEST, 
+            ip = get_client_ip(request), 
+            log_time = datetime.datetime.now(),
+            request_user_id = _request_user_id,
+            appendix = { 
+                'root_category_id' : int(_root_cat_id),
+                'result_entities' : _entity_id_list,
+            },
+        )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -284,6 +333,7 @@ def popular(request):
                 'updated_time' : _popular_entities['updated_time'],
                 'content' : []
             }
+            _entity_id_list = []
             for _row in _popular_entities['data'][0:60]:
                 _entity_id = _row[0]
                 _hotness = _row[1] 
@@ -292,14 +342,24 @@ def popular(request):
                     'entity' : _entity_context,
                     'hotness' : _hotness
                 })
+                _entity_id_list.append(_entity_id)
             
             if _scale == 'weekly':
                 _log_appendix = { 'scale' : 'WEEK' }
             else:
                 _log_appendix = { 'scale' : 'DAY' }
+            _log_appendix['result_entities'] = _entity_id_list
                 
             _duration = datetime.datetime.now() - _start_at
-            MobileLogTask.delay(_duration.seconds * 1000000 + _duration.microseconds, 'POPULAR', request.REQUEST, get_client_ip(request), _request_user_id, _log_appendix)
+            MobileLogTask.delay(
+                duration = _duration.seconds * 1000000 + _duration.microseconds, 
+                view = 'POPULAR', 
+                request = request.REQUEST, 
+                ip = get_client_ip(request), 
+                log_time = datetime.datetime.now(),
+                request_user_id = _request_user_id,
+                appendix =  _log_appendix 
+            )
             return SuccessJsonResponse(_rslt)
         else:
             return ErrorJsonResponse(
@@ -320,3 +380,17 @@ def unread_count(request):
             'unread_selection_count' : MobileUser(_request_user_id).get_unread_selection_count()
         })
         
+def visit_item(request, item_id):
+    if request.method == "GET":
+        _ttid = request.GET.get("ttid", None)
+        _sid = request.GET.get("sid", None)
+        _outer_code = request.GET.get("outer_code", None)
+        _sche = request.GET.get("sche", None)
+        _item_context = Item(item_id).read()
+        _taobaoke_info = taobaoke_mobile_item_convert(_item_context['taobao_id'])
+       	if _taobaoke_info and _taobaoke_info.has_key('click_url'):
+            return HttpResponseRedirect(decorate_taobao_url(_taobaoke_info['click_url'], _ttid, _sid, _outer_code, _sche))
+        
+        return HttpResponseRedirect(decorate_taobao_url(get_taobao_url(_item_context['taobao_id'], True), _ttid, _sid, _outer_code, _sche))
+            
+

@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
@@ -15,13 +15,14 @@ from web import taobao_utils
 from web import sina_utils
 from web import web_utils
 from utils import fetcher
+from lotto.lib.player import check_player 
 import json
 import time
 import re
 from base.taobao_shop import TaobaoShop
 from base.user import User
 from urlparse import urlparse
-from web.forms.account import SignInAccountForm, SignUpAccountFrom, SettingAccountForm
+from web.forms.account import SignInAccountForm, SignUpAccountFrom, SettingAccountForm, ChangePasswordForm
 from django.utils.log import getLogger
 
 log = getLogger('django')
@@ -52,12 +53,15 @@ class RegisterWizard(SessionWizardView):
         signup_data = signup_form.cleaned_data
         bio_data = bio_form.cleaned_data
         _user_inst = web_utils.signup(
-            signup_data['email'], signup_data['password'], signup_data['nickname'],
+            signup_data['email'], 
+            signup_data['password'], 
+            signup_data['nickname'],
             location = bio_data['location'],
             city = bio_data['city'],
             gender = bio_data['gender'],
             bio = bio_data['bio'],
-            website = bio_data['website'])
+            website = bio_data['website']
+        )
         _user = _user_inst.authenticate_without_password()
         auth_login(self.request, _user)
         return _user_inst
@@ -88,15 +92,19 @@ class ThirdPartyRegisterWizard(RegisterWizard):
         third_party_data = web_utils.get_temporary_storage(token)
         _user_inst = self.signup(form_list)
         if source == "sina":
-            _user_inst.bind_sina(sina_id = third_party_data['sina_id'],
-                                 screen_name = third_party_data['screen_name'],
-                                 access_token = third_party_data['access_token'],
-                                 expires_in = third_party_data['expires_in'])
+            _user_inst.bind_sina(
+                sina_id = third_party_data['sina_id'],
+                screen_name = third_party_data['screen_name'],
+                access_token = third_party_data['access_token'],
+                expires_in = third_party_data['expires_in']
+            )
         elif source == "taobao":
-            _user_inst.bind_taobao(taobao_id = third_party_data['taobao_id'],
-                                   screen_name = third_party_data['screen_name'],
-                                   taobao_token = third_party_data['access_token'],
-                                   expires_in = third_party_data['expires_in'])
+            _user_inst.bind_taobao(
+                taobao_id = third_party_data['taobao_id'],
+                screen_name = third_party_data['screen_name'],
+                taobao_token = third_party_data['access_token'],
+                expires_in = third_party_data['expires_in']
+            )
         else:
             raise Http404
         return HttpResponseRedirect(reverse("web_selection"))
@@ -109,6 +117,7 @@ def login(request, template = 'account/login.html'):
         return HttpResponseRedirect(redirect_url)
 
     if request.method == 'POST':
+        # log.info(request.POST)
         _forms = SignInAccountForm(request.POST)
         if _forms.is_valid():
             _remember_me = request.POST.get('remember_me', None)
@@ -118,22 +127,30 @@ def login(request, template = 'account/login.html'):
                 request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
             return HttpResponseRedirect(redirect_url)
         else:
-            return render_to_response(template,
-                                      { 'forms' : _forms,},
-                                      context_instance = RequestContext(request))
+            return render_to_response(
+                template,
+                { 
+                    'forms' : _forms, 
+                },
+                context_instance = RequestContext(request)
+            )
 
     elif request.method == 'GET':
         _forms = SignInAccountForm(initial={'next': redirect_url})
-        return render_to_response(template,
-                                  { 'forms' : _forms, },
-                                  context_instance = RequestContext(request))
+        return render_to_response(
+            template,
+            { 
+                'forms' : _forms, 
+            },
+            context_instance = RequestContext(request)
+        )
 
 @require_GET
 def login_by_sina(request):
     request.session['auth_source'] = "login"
     next_url = request.GET.get('next', None)
     if next_url:
-        request.session['auth_next_url'] = next_url 
+        request.session['auth_next_url'] = next_url
     return HttpResponseRedirect(sina_utils.get_login_url())
 
 @require_GET
@@ -141,56 +158,65 @@ def auth_by_sina(request):
     code = request.GET.get("code", None)
     if code:
         _sina_data = sina_utils.get_auth_data(code)
+        next_url = request.session.get('auth_next_url', reverse("web_selection"))
         try:
-            _user_inst = User.login_by_sina(_sina_data['sina_id'], sina_token = _sina_data['access_token'],
-                           screen_name = _sina_data['screen_name'], expires_in = _sina_data['expires_in'])
+            _user_inst = User.login_by_sina(
+                _sina_data['sina_id'], 
+                sina_token = _sina_data['access_token'],
+                screen_name = _sina_data['screen_name'], 
+                expires_in = _sina_data['expires_in']
+            )
         except User.LoginSinaIdDoesNotExist, e:
             _user_inst = None
+        except:
+            return HttpResponseServerError()
         source = request.session.get('auth_source', None)
         if source:
             if source == "login":
                 if _user_inst:
                     user = _user_inst.authenticate_without_password()
                     auth_login(request, user)
-                    next_url = request.session.get('auth_next_url', reverse("web_selection"))
                     return HttpResponseRedirect(next_url)
                 else:
                     token = web_utils.generate_random_storage_key("sina_login")
                     web_utils.create_temporary_storage(token, **_sina_data)
                     return HttpResponseRedirect(reverse("web_third_party_register") + "?source=sina&token=" + token)
             elif source == "bind":
-                pass
+                try:
+                    _user_inst = User(request.user.id)
+                    _user_inst.bind_sina(
+                        sina_id = _sina_data['sina_id'],
+                        screen_name = _sina_data['screen_name'],
+                        access_token = _sina_data['access_token'],
+                        expires_in = _sina_data['expires_in']
+                    )
+                except:
+                    pass
+                return HttpResponseRedirect(next_url)
+            elif source == "lotto":
+                _mobile_session = request.session.get('mobile_session', None)
+                _lotto_token = check_player(
+                    sina_id = _sina_data['sina_id'],
+                    screen_name = _sina_data['screen_name'],
+                    access_token = _sina_data['access_token'],
+                    expires_in = _sina_data['expires_in'],
+                    mobile_session = _mobile_session
+                )
+                return HttpResponseRedirect(reverse('lotto_share_to_sina_weibo') + '?token=' + _lotto_token)
+
             else:
                 pass
         else:
             pass
-                
-        
-#        next_url = request.session.get("next_redirect_url", None)
-#        if not next_url:
-#            return HttpResponse("第三方登录失败，可能是因为您没有启用cookies，请启用cookies重试")
-#        return HttpResponseRedirect(next_url)
-#    else:
-#        return HttpResponse("第三方登录失败, 认证方返回结果异常，请稍后再试")
 
-def login_by_taobao(request):
-    pass
-
-
-def third_party_login_check(request):
-
-    pass  
-
+@require_GET
 @login_required
-def logout(request):
-    auth_logout(request)
-    request.session.set_expiry(0)
-    try:
-        next_url = request.META['HTTP_REFERER']
-    except KeyError:
-        next_url = reverse('web_selection')
-    finally:
-        return HttpResponseRedirect(next_url)
+def bind_sina(request):
+    request.session['auth_source'] = "bind"
+    next_url = request.GET.get('next', None)
+    if next_url:
+        request.session['auth_next_url'] = next_url
+    return HttpResponseRedirect(sina_utils.get_login_url())
 
 @require_GET
 @login_required
@@ -200,144 +226,125 @@ def unbind_sina(request):
     redirect_url = request.GET.get("next", reverse("web_selection"))
     return HttpResponseRedirect(redirect_url)
 
+def login_by_taobao(request):
+    request.session['auth_source'] = "login"
+    next_url = request.GET.get('next', None)
+    if next_url:
+        request.session['auth_next_url'] = next_url
+    return HttpResponseRedirect(taobao_utils.get_login_url())
+
+def auth_by_taobao(request):
+    code = request.GET.get("code", None)
+    if code:
+        _taobao_data = taobao_utils.get_auth_data(code)
+        next_url = request.session.get('auth_next_url', reverse("web_selection"))
+        try:
+            _user_inst = User.login_by_taobao(
+                _taobao_data['taobao_id'],
+                taobao_token = _taobao_data['access_token'],
+                screen_name = _taobao_data['screen_name'],
+                expires_in = _taobao_data['expires_in'])
+        except User.LoginTaobaoIdDoesNotExist, e:
+            _user_inst = None
+        except:
+            return HttpResponseServerError()
+        source = request.session.get('auth_source', None)
+        if source:
+            if source == "login":
+                if _user_inst:
+                    user = _user_inst.authenticate_without_password()
+                    auth_login(request, user)
+                    return HttpResponseRedirect(next_url)
+                else:
+                    token = web_utils.generate_random_storage_key("taobao_login")
+                    web_utils.create_temporary_storage(token, **_taobao_data)
+                    return HttpResponseRedirect(reverse("web_third_party_register") + "?source=taobao&token=" + token)
+            elif source == "bind":
+                try:
+                    if not _user_inst:
+                        _user_inst = User(request.user.id)
+                        _user_inst.bind_taobao(
+                            taobao_id = _taobao_data['taobao_id'],
+                            screen_name = _taobao_data['screen_name'],
+                            taobao_token = _taobao_data['access_token'],
+                            expires_in = _taobao_data['expires_in']
+                        )
+                except e:
+                    print e
+                return HttpResponseRedirect(next_url)
+            else:
+                pass
+        else:
+            pass
+
+@require_GET
+@login_required
+def bind_taobao(request):
+    request.session['auth_source'] = "bind"
+    next_url = request.GET.get('next', None)
+    if next_url:
+        request.session['auth_next_url'] = next_url
+    return HttpResponseRedirect(taobao_utils.get_login_url())
+    
+@require_GET
+@login_required
+def unbind_taobao(request):
+    _user_inst = User(request.user.id)
+    _user_inst.unbind_taobao()
+    redirect_url = request.GET.get("next", reverse("web_selection"))
+    return HttpResponseRedirect(redirect_url)
+
+@login_required
+def logout(request):
+    auth_logout(request)
+    request.session.set_expiry(0)
+    next_url = request.META.get('HTTP_REFERER', reverse('web_selection'))
+    return HttpResponseRedirect(next_url)
+
 def forget_passwd(request):
     return
 
-def _set_base(request, template):
+@require_POST
+@login_required
+def change_password(request):
+    form = ChangePasswordForm(request.user, request.POST)
     _user = User(request.user.id)
-    _user_context = _user.read()
-    _error = None
-    _success = None
+    if form.is_valid():
+        _user.reset_account(password = form.cleaned_data['new_password'])
+    return HttpResponseRedirect(reverse("web_setting"))
 
-    _nickname = request.POST.get('nickname', None)
-    _email = request.POST.get('email', None)
-    _bio = request.POST.get('bio', None)
-    _location = request.POST.get('location', None)
-    _city = request.POST.get('city', None)
-    _gender = request.POST.get('gender', None)
-    _website = request.POST.get('website', None)
-
-    _error = v_check_nickname(_nickname)
-
-    if _error is None:
-        _error = v_check_email(_email)
-
-        if _error is None:
-            _error = v_check_bio(_bio)
-
-            if _error is None:
-                _error = v_check_website(_website)
-
-                if _error is None:
-                    # 验证性别和地理位置是否合法 不合法则用原值
-                    if not v_validate_gender(_gender):
-                        _gender = _user_context['gender']
-
-                    if not v_validate_location(_location, _city):
-                        _location = _user_context['location']
-                        _city = _user_context['city']
-
-                    _success = '设置成功'
-
-                    try:
-                        _user.set_profile(_nickname, location = _location, city = _city, gender = _gender,
-                                          bio = _bio, website = _website)
-                    except User.NicknameExistAlready:
-                        _error = u'昵称已经被占用'
-                        _success = None
-
-                    try:
-                        _user.reset_account(email = _email)
-                    except User.EmailExistAlready:
-                        _error = u'邮箱已经被占用'
-                        _success = None
-
-                    # 读取最新信息
-                    _user_context = User(request.user.id).read()
-
-    return render_to_response(
-        template,
-        {
-            'user_context' : _user_context,
-            'base_error' : _error,
-            'base_success' : _success
-        },
-        context_instance = RequestContext(request)
-    )
-
-
-def _set_psw(request, template):
+@require_POST
+@login_required
+def update_profile(request):
+    form = SettingAccountForm(request.POST)
     _user = User(request.user.id)
-    _user_context = _user.read()
-    _error = None
-    _success = None
+    if form.is_valid():
+        print form.cleaned_data
+        _user.set_profile(
+            nickname = form.cleaned_data['nickname'],
+            location = form.cleaned_data['location'],
+            city = form.cleaned_data['city'],
+            gender = form.cleaned_data['gender'],
+            bio = form.cleaned_data['bio'],
+            website = form.cleaned_data['website'],
+        )
+    return HttpResponseRedirect(reverse("web_setting"))
 
-    _curr_psw = request.POST.get('current_psw', None)
-    _new_psw = request.POST.get('new_psw', None)
-    _confirm_psw = request.POST.get('confirm_psw', None)
-
-    if _curr_psw is None or len(_curr_psw) < 6 or not _user.check_auth(_curr_psw):
-        _error = u'当前密码不正确'
-
-    elif len(_new_psw) < 6 or len(_confirm_psw) < 6:
-        _error = u'秘密不能少于6位'
-
-    elif _new_psw != _confirm_psw:
-        _error = u'两次密码不一致'
-
-    else:
-        _user.reset_account(password = _new_psw)
-        _success = u'密码设置成功'
-
-    return render_to_response(
-        template,
-        {
-            'user_context' : _user_context,
-            'psw_error' : _error,
-            'psw_success' : _success
-        },
-        context_instance = RequestContext(request)
-    )
-
-
+@require_GET
 @login_required
 def setting(request, template = 'account/setting.html'):
-    # if request.method == 'GET':
-    #     _user_context = User(request.user.id).read()
-    #
-    #     return render_to_response(
-    #         template,
-    #         {
-    #             'user_context' : _user_context,
-    #         },
-    #         context_instance = RequestContext(request)
-    #     )
-
-    if request.method == 'POST':
-        _type = request.POST.get('type', None)
-        # 根据表单字段 type 判断是设置基本信息还是密码 type 只能是 base 或 psw
-
-        if _type is not None:
-            _type = _type.strip()
-
-            if _type == 'base':
-                return _set_base(request, template)
-
-            elif _type == 'psw':
-                return _set_psw(request, template)
-    else:
-        _user_context = User(request.user.id).read()
-        forms = SettingAccountForm(initial = _user_context, prefix="settings")
-        sub_forms = None
-        return render_to_response(
-            template,
-            {
-                'user_context' : _user_context,
-                'forms': forms,
-                'sub_forms': sub_forms,
-            },
-            context_instance = RequestContext(request),
-        )
+    _user_context = User(request.user.id).read()
+    profile_form = SettingAccountForm(initial = _user_context)
+    password_form = ChangePasswordForm(request.user)
+    return render_to_response(
+        template,
+        {
+            'user_context' : _user_context,
+            'profile_form': profile_form,
+            'password_form': password_form,
+        },
+        context_instance = RequestContext(request),
+    )
 
 @login_required
 def upload_avatar(request):
@@ -369,92 +376,5 @@ def update_avatar(request):
             else:
                 _image_data = _avatar_img.read()
 
-            # TODO
-
         return HttpResponse(json.dumps(_ret))
-
-@login_required
-def bind_taobao(request):
-    request.session['bind_taobao_next_url'] = request.GET.get('next', None)
-    request.session['back_to_url'] = reverse('check_taobao_binding')
-    return HttpResponseRedirect(taobao_utils.get_login_url())
-
-def taobao_auth(request):
-    return HttpResponseRedirect(taobao_utils.auth(request))
-
-def bind_taobao_check(request):
-    access_token = request.session['taobao_access_token']
-    taobao_id = request.session['taobao_id']
-    expires_in = int(time.time()) + int(request.session['taobao_expires_in'])
-
-    taobao_user = taobao_utils.get_taobao_user_info(access_token)
-    user_id = request.user.id
-    user_inst = User(user_id)
-    if taobao_user:
-        try:
-            user_inst.bind_taobao(taobao_id, taobao_user['nick'], access_token, expires_in)
-            if request.session.get('bind_taobao_next_url', None):
-                next_url = request.session['bind_taobao_next_url']
-                try:
-                    del request.session['bind_taobao_next_url']
-                except KeyError:
-                  return HttpResponseRedirect(request.META['HTTP_REFERER'])
-                return HttpResponseRedirect(next_url)
-            else:
-                return HttpResponseRedirect(request.META['HTTP_REFERER'])
-        except User.TaobaoIdExistAlready, e:
-            return HttpResponse("taobao id exsits")
-        except User.UserBindTaobaoAlready, e:
-            return HttpResponse("you have binded taobao")
-        except Exception, e:
-            print e
-            return HttpResponse("unknow error")
-    else:
-        HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-@login_required
-def bind_taobao_shop(request):
-    user_id = request.user.id
-    user_inst = User(user_id)
-    request_user_context = user_inst.read()
-    if request.method == "GET":
-        if request_user_context.get("taobao_screen_name"):
-            if request_user_context['taobao_token_expires_in'] < time.time():
-                request_user_context['taobao_token_expired'] = True
-            else:
-                request_user_context['taobao_token_expired'] = False
-        return render_to_response("bind_taobao_shop.html",
-                                 { "request_user_context" : request_user_context },
-                                 context_instance=RequestContext(request)
-                                 )
-    elif request.method == "POST":
-        if not request_user_context.get("taobao_nick"):
-            messages.info(request, "尚未绑定淘宝帐号") 
-            return HttpResponseRedirect(reverse('bind_taobao_shop'))
-        item_url = request.POST.get('item_url', None)
-        if not item_url:
-            message.info(request, "请输入商品地址")
-            return HttpResponseRedirect(reverse('bind_taobao_shop'))
-      
-        hostname = urlparse(item_url).hostname
-        if re.search(r"\b(tmall|taobao)\.(com|hk)$", hostname) != None:
-            taobao_id = web_utils.parse_taobao_id_from_url(item_url)
-            taobao_item_info = fetcher.fetch_item(taobao_id)
-            nick = taobao_item_info['nick']
-            if request_user_context.get('taobao_nick') == nick:
-                user_inst.create_seller_info(nick)
-                if not TaobaoShop.nick_exist(nick):
-                    shop_info = fetcher.fetch_shop(taobao_item_info['shop_link'])
-                    TaobaoShop.create(nick,
-                                      shop_info['shop_id'],
-                                      shop_info['title'],
-                                      shop_info['type'],
-                                      shop_info['seller_id'],
-                                      shop_info['pic']) 
-                return HttpResponseRedirect(reverse('bind_taobao_shop'))
-            else:
-                message.info(request, "错误的商品地址，请输入淘宝商品地址")
-                return HttpResponseRedirect(reverse('bind_taobao_shop'))
-        else:
-            return HttpResponseRedirect(reverse('bind_taobao_shop'))
 
