@@ -14,7 +14,7 @@ urlpatterns = patterns(
     url(r'^activity/$', 'activity', name='web_activity'),
 
     url(r'^c/', include('web.urls.category')),
-    # url(r'^t/', include('web.urls.category')),
+    url(r'^t/', include('web.urls.tags')),
 )
 
 urlpatterns += patterns(

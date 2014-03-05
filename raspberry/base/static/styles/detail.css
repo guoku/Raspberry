@@ -5,7 +5,8 @@
 }
 
 #detail .breadcrumb {
-
+    font-size: 16px;
+    color: #898989;
 }
 
 #detail .breadcrumb .home {
@@ -20,14 +21,11 @@
     /*margin: 35px 0;*/
     padding: 0;
     list-style: none;
-    font-size: 16px;
 }
 
 #detail .breadcrumb li {
-    display: inline;
+    display: inline-block;
     margin: 0 5px 0 5px;
-    /*float: left;*/
-    color: #898989;
 }
 
 #detail .breadcrumb a {

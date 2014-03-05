@@ -334,7 +334,10 @@ button {
     height: 50px;
     margin: 0 auto;
     border: none;
-    font-size: 24px;
+    font-size: 22px;
+    /*vertical-position: 2px;*/
+    vertical-align: middle;
+    letter-spacing: 4px;
     outline: none;
     color: #fff;
     background-color: #427ec0;
