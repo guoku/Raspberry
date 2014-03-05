@@ -267,3 +267,27 @@ class Tag(object):
         if _tag_prefix_index == None:
             _tag_prefix_index = cls.__reset_tag_prefix_index_to_cache()
         return _tag_prefix_index 
+
+
+    @classmethod
+    def __load_user_latest_tag_list(cls, user_id):
+        _cache_key = 'user_latest_tag_list_%s'%user_id 
+        _list = cache.get(_cache_key)
+        return _list
+    
+    @classmethod
+    def __reset_user_latest_tag_list(cls, user_id):
+        _cache_key = 'user_latest_tag_list_%s'%user_id
+        _list = []
+        for _tag_obj in EntityTagModel.objects.filter(user=user_id).order_by("-created_time")[0:10]:
+            if not _tag_obj.tag_text in _list:
+                _list.append(_tag_obj.tag_text)
+        return _list
+    
+    
+    @classmethod
+    def read_user_latest_tag_list(cls, user_id):
+        _user_latest_tag_list = cls.__load_user_latest_tag_list(user_id)
+        if _user_latest_tag_list == None:
+            _user_latest_tag_list = cls.__reset_user_latest_tag_list(user_id)
+        return _user_latest_tag_list 
