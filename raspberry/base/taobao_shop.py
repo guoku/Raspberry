@@ -1,6 +1,7 @@
 # coding=utf8
 from django.conf import settings
 from base.models import Guoku_Plus as GuokuPlusModel
+from base.models import Seller_Info as SellerInfoModel
 from base.stream_models import TaobaoShop as TaobaoShopModel
 from base.stream_models import TaobaoShopInfo
 from base.stream_models import TaobaoShopExtendedInfo
@@ -114,9 +115,16 @@ class TaobaoShop(object):
                 shop.extended_info.single_tail = single_tail
             shop.save()
 
-    def create_verification_info(self, intro):
+    def create_verification_info(self, user_id, shop_type, comany_name, qq_account, email, mobile, main_products, intro):
         info = TaobaoShopVerificationInfo(
+            user_id = user_id,
             shop_nick = self.nick,
+            shop_type = shop_type,
+            company_name = company_name,
+            email = email,
+            qq_account = qq_account,
+            mobile = mobile,
+            main_products = main_products,
             intro = intro,
             status = STATUS_WAITING,
             created_time = datetime.datetime.now()
@@ -152,6 +160,26 @@ class TaobaoShop(object):
         if item_context['shop_nick'] == self.nick:
             return True
         return False
+
+    @classmethod
+    def read_shop_verification_list(cls, offset, count):
+        _hdl = TaobaoShopVerificationInfo.objects
+        _count = _hdl.count()
+        _results = _hdl.order_by("-created_time").skip(offset).limit(count)
+        results = []
+        for item in _results:
+            results.append(item._data)
+        return results, _count
+
+    @classmethod
+    def approve_shop_verification(cls, shop_nick):
+        _record = TaobaoShopVerificationInfo.objects.filter(shop_nick = shop_nick).first()
+        if _record:
+            SellerInfoModel.objects.create(
+                    
+            )
+        return
+
 
 class GuokuPlusApp(object):
     def __init__(self, app_id):
@@ -191,13 +219,26 @@ class GuokuPlusApp(object):
         result['editor_comments'] = []
         result['seller_comments'] = []
         for comment in application.editor_comments:
-            print comment
-            print comment._data
             result['editor_comments'].append(comment._data)
         for comment in application.seller_comments:
             result['seller_comments'].append(comment._data)
         return result
 
+    def approve(self, start_time):
+        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
+        if app:
+            app_context = self.read()
+            GuokuPlusActivity.create(
+                entity_id = app_context['entity_context']['entity_id'],
+                item_id = app_context['item_context']['item_id'],
+                taobao_id = app_context['taobao_item_id'],
+                sale_price = app_context['sale_price'],
+                total_volume = app_context['quantity'],
+                start_time = start_time
+            )
+            app.status = STATUS_ACCEPTED
+            app.save()
+        
     def add_editor_comment(self, comment):
         app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
         if app:

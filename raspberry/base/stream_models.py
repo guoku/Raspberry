@@ -158,7 +158,14 @@ class TaobaoShop(Document):
     }
 
 class TaobaoShopVerificationInfo(DynamicDocument):
+    user_id = IntField(required = True)
     shop_nick = StringField()
+    shop_type = StringField()
+    company_name = StringField()
+    qq_account = StringField()
+    email = StringField()
+    mobile = StringField()
+    main_products = StringField()
     intro = StringField()
     status = StringField()
     created_time = DateTimeField()

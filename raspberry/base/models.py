@@ -275,6 +275,13 @@ class User_Footprint(models.Model):
 class Seller_Info(models.Model):
     user = models.OneToOneField(User, related_name = "seller_info")
     shop_nick = models.CharField(max_length = 64, db_index = True)
+    shop_type = models.CharField(max_length = 20, db_index = True)
+    company_name = models.CharField(null = True, max_length = 100)
+    qq_account = models.CharField(null = True, max_length = 50)
+    email = models.CharField(null = True, max_length = 50)
+    mobile = models.CharField(null = True, max_length = 20)
+    main_products = models.CharField(null = True, max_length = 50)
+    intro = models.CharField(null = True, max_length = 500)
     verified = models.BooleanField(default = False, db_index = True)
 
 class Guoku_Plus(models.Model):

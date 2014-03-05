@@ -198,7 +198,7 @@ def guokuplus_application_detail(request):
         "shop/application_detail.html",
         {
             "app_context" : app_context,
-            "approve_form" : GuokuPlusActivityForm()
+            "approve_form" : GuokuPlusActivityForm({"app_id" : app_id})
         },
         context_instance = RequestContext(request)
     )
@@ -210,7 +210,6 @@ def guokuplus_application_detail(request):
 def add_guokuplus_application_editor_comment(request):
     app_id = request.POST.get('app_id', None)
     comment = request.POST.get("content", None)
-    print app_id, comment
     guoku_plus_app = GuokuPlusApp(app_id)
     guoku_plus_app.add_editor_comment(comment)
     return HttpResponseRedirect(reverse('management_guokuplus_application_detail') + "?app_id=" + app_id)
@@ -221,14 +220,35 @@ def add_guokuplus_application_editor_comment(request):
 @staff_only
 def approve_guokuplus_application(request):
     form = GuokuPlusActivityForm(request.POST)
-    guoku_plus_app = GuokuPlusApp(form.cleaned_data['app_id'])
-    app_context = guoku_plus_app.read()
-    GuokuPlusActivity.create(
-        entity_id = app_context['entity_context']['entity_id'],
-        item_id = app_context['item_context']['item_id'],
-        taobao_id = app_context['taobao_id'],
-        sale_price = app_context['sale_price'],
-        total_volume = app_context['quantity'],
-        start_time = form.cleaned_data['start_time']
+    if form.is_valid():
+        guoku_plus_app = GuokuPlusApp(form.cleaned_data['app_id'])
+        guoku_plus_app.approve(form.cleaned_data['start_time'])
+        return HttpResponseRedirect(reverse('management_guokuplus_application_detail') + "?app_id=" + form.cleaned_data['app_id'])
+    else:
+        return HttpResponse(form.errors)
+
+
+@require_GET
+@login_required
+@staff_only
+def shop_verification_list(request):
+    _num_every_page = 30
+    _p = int(request.GET.get("p", "1"))
+    _para = {}
+    _results, _total = TaobaoShop.read_shop_verification_list((_p - 1) * _num_every_page, _num_every_page)
+    _paginator = Paginator(_p, _num_every_page, _total, _para)
+    return render_to_response(
+        'shop/shop_verification_list.html',
+        {
+            'results' : _results,
+            'paginator' : _paginator,
+        },
+        context_instance = RequestContext(request)
     )
-    return HttpResponseRedirect(reverse('management_guokuplus_application_detail') + "?app_id=" + form.cleaned_data['app_id'])
+
+@require_POST
+@login_required
+@staff_only
+def approve_shop_verification(request):
+    pass
+
