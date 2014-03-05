@@ -58,7 +58,9 @@ class MobileEntity(Entity):
     
         _context['note_list'] = []
         for _note_id in _context['entity']['note_id_list']:
-            _context['note_list'].append(MobileNote(_note_id).read(request_user_id)) 
+            _note_context = MobileNote(_note_id).read(request_user_id)
+            if _note_context['weight'] >= 0:
+                _context['note_list'].append(_note_context)
         del _context['entity']['note_id_list']
         
         _context['like_user_list'] = []
