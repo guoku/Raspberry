@@ -71,5 +71,5 @@ class JD:
 
 if __name__ == '__main__':
     jd = JD()
-    result = jd.fetch_item(1069437177)
+    result = jd.fetch_item(1066602)
     print result
