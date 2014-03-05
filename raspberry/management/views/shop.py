@@ -250,5 +250,7 @@ def shop_verification_list(request):
 @login_required
 @staff_only
 def approve_shop_verification(request):
-    pass
+    shop_nick = request.POST.get("shop_nick", None)
+    TaobaoShop.approve_shop_verification(shop_nick)
+    return HttpResponseRedirect(reverse("management_shop_verification_list"))
 

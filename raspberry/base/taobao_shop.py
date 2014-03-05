@@ -1,6 +1,7 @@
 # coding=utf8
 from django.conf import settings
 from base.models import Guoku_Plus as GuokuPlusModel
+from base.models import Guoku_Plus as GuokuPlusTokenModel
 from base.models import Seller_Info as SellerInfoModel
 from base.stream_models import TaobaoShop as TaobaoShopModel
 from base.stream_models import TaobaoShopInfo
@@ -269,7 +270,7 @@ class GuokuPlusApp(object):
 
 GUOKU_PLUS_NORMAL = "normal"
 GUOKU_PLUS_STOPPED = "stopped"
-GUOKU_PLUS_EXPIRED = "expired"
+GUOKU_PLUS_FINISHED = "finished"
 class GuokuPlusActivity(object):
     def __init__(self, activity_id):
         self.activity_id = activity_id
@@ -288,12 +289,48 @@ class GuokuPlusActivity(object):
             created_time = datetime.datetime.now())   
         pass
 
+    def create_token(self, user_id):
+        GuokuPlusTokenModel.objects.create(
+            user_id = user_id,
+            guoku_plus_activity_id = self.activity_id,
+            token = "xxxx",
+            used = False,
+            created_time = datetime.datetime.now()
+        )
+    
+    def use_token(self, token):
+        try:
+            token_obj = GuokuPlusTokenModel.objects.get(token = token) 
+        except:
+            return False
+        if token_obj.used:
+            return False
+        try:
+            activity = GuokuPlusModel.objects.get(id = token.guoku_plus_activity_id)
+        except:
+            return False
+        if activity.status != GUOKU_PLUS_NORMAL:
+            return False
+        activity.sales_volume = activity.sales_volume + 1
+        if activity.sales_volume >= activity.total_volume:
+            activity.status = GUOKU_PLUS_FINISHED
+        activity.save()
+        token_obj.used = True
+        token_obj.used_time = datetime.datetime.now()
+        token_obj.save()
+        return True
+        
     def update(self):
         pass
 
-    def test_token(self):
-        pass
-
+    @classmethod
+    def get_activity_by_token(cls, token):
+        try:
+            token_obj = GuokuPlusTokenModel.objects.get(token = token) 
+        except:
+            return None
+        return cls(token_obj.guoku_plus_activity_id)
+        
     def read(self):
         pass
 
