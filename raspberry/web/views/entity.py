@@ -86,7 +86,6 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         context_instance=RequestContext(request)
     )
 
-
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
 

@@ -6,7 +6,7 @@ from pyapns import configure, provision, notify
 
 from mobile.models import User_Apns
 import logging
-logger = logging.getLogger('django.request')
+logger = logging.getLogger('django')
 
 PyAPNS_Server = getattr(settings, 'APNS_SERVER', None)
 GUOKU_APNS_KEY = getattr(settings, 'GUOKU_APNS_KEY', None)
