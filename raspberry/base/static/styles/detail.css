@@ -9,7 +9,7 @@
 }
 
 #detail .breadcrumb .home {
-
+    background-image: url("/static/v3/images/home.png");
 }
 
 #detail .breadcrumb ul {
@@ -23,7 +23,6 @@
     display: inline;
     margin: 0 5px 0 5px;
     /*float: left;*/
-
     color: #898989;
 }
 
