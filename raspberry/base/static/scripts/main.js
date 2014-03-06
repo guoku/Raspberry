@@ -93,6 +93,27 @@
             $('.common-note').each(function () {
                 self.showEntityTitle($(this));
             });
+        },
+
+        loadData: function(counter, object) {
+            var url = window.location.href;
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {'p': counter },
+                success: function(data) {
+//                    return data;
+                    result =  $.parseJSON(data);
+                    var status = parseInt(result.status);
+                    if (status == 1) {
+                        var $html = $(result.data);
+                        $html.each(function () {
+                            util.showEntityTitle($(this));
+                        });
+                        $html.appendTo(object);
+                    }
+                }
+            });
         }
     };
 
@@ -104,33 +125,44 @@
 
             if ($selection[0]) {
                 var counter = 1;
-                var top = 3000;
+//                var top = 3000;
 
                 $(window).scroll(function () {
                     var $this = $(this);
-
-                    if ($this.scrollTop() > top) {
+                    if (($(window).height() + $(window).scrollTop()) >= $(document).height()) {
+//                    if ($this.scrollTop() > top) {
                         counter++;
-                        top += 2300;
+                        util.loadData(counter, $selection);
+//                        top += 2300;
 //                        var url = '/selected/?p=' + counter;
-                        var url = window.location.href;
-//                        console.log(url);
-                        $.ajax({
-                            url: url,
-                            type: "GET",
-                            data: {'p': counter},
-                            success: function(data) {
-                                result = $.parseJSON(data);
-                                var status = parseInt(result.status);
-                                if (status == 1) {
-                                    var $html = $(result.data);
-                                    $html.each(function() {
-                                        util.showEntityTitle($(this));
-                                    });
-                                    $html.appendTo($selection);
-                                }
-                            }
-                        });
+//                        var result = util.loadData(counter);
+//
+//                        var status = parseInt(result.status);
+//                        if (status == 1) {
+//                            var $html = $(result.data);
+//                            $html.each(function(){
+//                                util.showEntityTitle($(this));
+//                            });
+//                            $html.appendTo($selection);
+//                        }
+//                        var url = window.location.href;
+////                        console.log(url);
+//                        $.ajax({
+//                            url: url,
+//                            type: "GET",
+//                            data: {'p': counter},
+//                            success: function(data) {
+//                                result = $.parseJSON(data);
+//                                var status = parseInt(result.status);
+//                                if (status == 1) {
+//                                    var $html = $(result.data);
+//                                    $html.each(function() {
+//                                        util.showEntityTitle($(this));
+//                                    });
+//                                    $html.appendTo($selection);
+//                                }
+//                            }
+//                        });
 //                        $.get(url, function (result) {
 //                            result = $.parseJSON(result);
 //                            var status = parseInt(result.status);
