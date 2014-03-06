@@ -19,7 +19,6 @@ def seller_only(func = None):
             shop_inst = TaobaoShop(shop_nick)
             kwargs['user_context'] = user_context
             kwargs['shop_inst'] = shop_inst
-            print func
             return func(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse("seller_bind_taobao_shop"))

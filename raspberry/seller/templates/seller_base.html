@@ -7,7 +7,7 @@
     <title>
         {% block title %}果库{% endblock %}
     </title>
-    <link media="all" rel="stylesheet" type="text/css" href="{% static 'management/css/bootstrap.min.css' %}">
+    <link media="all" rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap.min.css' %}">
     {% block css %}{% endblock %}
 </head>
 <body>
@@ -35,8 +35,8 @@
 <div id="footer">{% block footer %}{% endblock %}</div>
 
 {% block javascript %}
-    <script type="text/javascript" src="{% static 'management/js/jquery.js' %}"></script>
-    <script type="text/javascript" src="{% static 'management/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
 {% endblock %}
 {% block script %}{% endblock %}
 </body>
