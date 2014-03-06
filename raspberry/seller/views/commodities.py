@@ -10,7 +10,7 @@ from base.entity import Entity
 from base.taobao_shop import TaobaoShop
 from base.user import User
 from base.item import Item
-from forms import GuokuPlusApplicationForm
+from forms import GuokuPlusApplicationForm, ShopVerificationForm 
 from utils.authority import seller_only
 
 
@@ -22,10 +22,12 @@ def commodities(request, user_context, shop_inst):
     for i in range(len(item_list)):
         item = Item(item_list[i]['item_id'])
         item_list[i]['item'] = item.read()
-    
+    verification_form = ShopVerificationForm()
+    print verification_form.as_table()
     return render_to_response("commodities.html",
                               {"item_list": item_list,
-                               "user_context": user_context},
+                               "user_context": user_context,
+                               "verification_form" : verification_form},
                               context_instance=RequestContext(request))
 
 @require_http_methods(["GET", "POST"])
@@ -45,7 +47,7 @@ def verify(request, user_context, shop_inst):
                 main_products = form.cleaned_data['main_products'],
                 intro = form.cleaned_data['intro']
             )
-        return HttpResponseRedirect()
+        return HttpResponseRedirect(reverse('seller_commodities'))
 
 @require_http_methods(["GET", "POST"])
 @login_required
@@ -94,4 +96,4 @@ def guoku_plus_applications_list(request, user_context, shop_inst):
 @login_required
 @seller_only
 def guoku_plus_activity_list(request, user_context, shop_inst):
-    
+    pass    

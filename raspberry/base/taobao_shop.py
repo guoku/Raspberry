@@ -116,7 +116,7 @@ class TaobaoShop(object):
                 shop.extended_info.single_tail = single_tail
             shop.save()
 
-    def create_verification_info(self, user_id, shop_type, comany_name, qq_account, email, mobile, main_products, intro):
+    def create_verification_info(self, user_id, shop_type, company_name, qq_account, email, mobile, main_products, intro):
         info = TaobaoShopVerificationInfo(
             user_id = user_id,
             shop_nick = self.nick,

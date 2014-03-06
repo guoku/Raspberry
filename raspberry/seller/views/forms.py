@@ -17,7 +17,7 @@ class GuokuPlusApplicationForm(forms.Form):
         return data
 
 class ShopVerificationForm(forms.Form):
-    shop_type = forms.ChoiceField(widge = forms.RadioSelect(), choices = ['公司','个体','业余'])
+    shop_type = forms.ChoiceField(widget = forms.RadioSelect(), choices = [u'公司',u'个体', u'业余'] )
     company_name = forms.CharField(max_length = 100)
     qq_account = forms.CharField(max_length = 50)
     email = forms.EmailField(max_length = 50)
