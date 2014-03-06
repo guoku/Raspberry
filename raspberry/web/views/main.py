@@ -14,6 +14,7 @@ from utils.paginator import Paginator
 from base.models import NoteSelection
 from base.note import Note
 from base.entity import Entity
+from base.tag import Tag 
 from base.user import User
 from base.category import Old_Category
 import base.popularity as popularity
@@ -26,6 +27,8 @@ def index(request):
 
 @require_http_methods(['GET'])
 def selection(request, template='main/selection.html'):
+    
+    _list = Tag.find_tag_entity(tag_hash='794092df')
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
     _old_category_list = Old_Category.find()[0:12]

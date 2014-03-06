@@ -218,6 +218,10 @@ class Tag(object):
     def get_user_tag_entity_count(cls, user_id, tag):
         return EntityTagModel.objects.filter(user = user_id, tag_text = tag).count()
         
+    @classmethod
+    def find_tag_entity(cls, tag_hash):
+        return map(lambda x: x, EntityTagModel.objects.filter(tag_hash = tag_hash, entity__weight__gt=0).order_by('-created_time').values_list('entity', flat=True).distinct())
+        
     
     @classmethod
     def find_user_tag(cls, user_id = None, tag = None):
