@@ -312,6 +312,8 @@
                 var $noteContent = $noteItem.find('.note-content');
                 var originNoteText;
 
+                $textarea.TagAC();
+
                 $noteItem.find('.update-note').on('click', function () {
                     originNoteText = textarea.value;
                     $noteContent.hide();
@@ -495,67 +497,6 @@
         },
 
         addNote: function () {
-            // 写点评
-            var pos, tag, cursor, length, timeout,
-                start = -1,
-                ereg = /^[0-9a-zA-Z\u4e00-\u9fff\u3040-\u30FF\u30A0-\u30FF]*$/,
-                dom = $('<div class="tag-auto-complete"><span>选择 # 标记或直接输入</span></div>');
-            function init(){
-                tag = "";
-                cursor = -1;
-                length = 0;
-                dom.css("margin", "0");
-                clearTimeout(timeout);
-    
-                $(".tag-auto-complete, .text_area").hide();
-            }
-            
-            function getRes(obj, word, callback){
-                var word = word || "";
-                var callback = callback || function(){};
-    
-                var url = "/tag/suggest/";
-                if (word) {
-                    if (!ereg.test(word)){
-                        init();
-                        return false;
-                    }
-    
-                    url = url + "?prefix=" + word;
-                    dom.find("span").text();
-                }
-                $.post(url, {}, function(xhr){
-                    dom.find("p").remove();
-    
-                    if (xhr == "[]"){
-                        dom.find("span").text("轻敲空格完成输入");
-                    }
-                    else {
-                        dom.find("span").text("选择 # 标记或直接输入");
-                        var arr = eval(xhr);
-                        for(var i in arr){
-                            dom.append("<p># " + arr[i] + "</p>");
-                        }
-                        dom.find("p:first").addClass("hover");
-                    }
-    
-                    callback();
-    
-                    dom.css("margin-left", pos.left-5).css("margin-top", pos.top+25);
-                    dom.show();
-                    dom.find("p").mouseover(function(){
-                        dom.find("p").removeClass("hover");
-                        $(this).addClass("hover");
-                    }).click(function(){
-                        var text = $(this).text().replace("# ", "");
-                        var front = obj.val().slice(0, start);
-                        var back = obj.val().slice(cursor);
-                        obj.val(front + text + " " + back);
-    
-                        init();
-                    });
-                });
-            }
 
             var self = this;
             var $addNote = $('.add-note');
