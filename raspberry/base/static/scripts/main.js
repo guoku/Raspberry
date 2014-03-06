@@ -112,27 +112,59 @@
                     if ($this.scrollTop() > top) {
                         counter++;
                         top += 2300;
-                        var url = '/selected/?p=' + counter;
-
-                        $.get(url, function (result) {
-                            result = $.parseJSON(result);
-                            var status = parseInt(result.status);
-
-                            if (status === 1) {
-                                var $html = $(result.data);
-                                $html.each(function () {
-                                    util.showEntityTitle($(this));
-                                });
-                                $html.appendTo($selection);
-                            } else if (status === 0) {
-                                // 没有数据可以加载了
+//                        var url = '/selected/?p=' + counter;
+                        var url = window.location.href;
+//                        console.log(url);
+                        $.ajax({
+                            url: url,
+                            type: "GET",
+                            data: {'p': counter},
+                            success: function(data) {
+                                result = $.parseJSON(data);
+                                var status = parseInt(result.status);
+                                if (status == 1) {
+                                    var $html = $(result.data);
+                                    $html.each(function() {
+                                        util.showEntityTitle($(this));
+                                    });
+                                    $html.appendTo($selection);
+                                }
                             }
                         });
+//                        $.get(url, function (result) {
+//                            result = $.parseJSON(result);
+//                            var status = parseInt(result.status);
+//
+//                            if (status === 1) {
+//                                var $html = $(result.data);
+//                                $html.each(function () {
+//                                    util.showEntityTitle($(this));
+//                                });
+//                                $html.appendTo($selection);
+//                            } else if (status === 0) {
+//                                // 没有数据可以加载了
+//                            }
+//                        });
                     }
                 });
             }
         }
     };
+
+    var category = {
+        loadCategory: function () {
+            var $category = $('.category');
+            if ($category[0]) {
+                var counter = 1;
+                var top = 3000;
+
+                $(window).scroll(function () {
+                    var $this = $(this);
+//                    console.log($this);
+                });
+            }
+        }
+    }
 
     var detail = {
         updateNote: function ($noteItem) {
@@ -474,6 +506,7 @@
         util.noteHover();
 
         selection.loadSelections();
+        category.loadCategory();
 
         detail.detailImageHover();
         detail.addNote();
