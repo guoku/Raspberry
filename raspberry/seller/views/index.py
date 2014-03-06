@@ -11,7 +11,7 @@ from base.taobao_shop import TaobaoShop
 import re
 from web import web_utils
 from utils.authority import seller_only
-from utils import fetcher
+from utils.extractor.taobao import TaobaoExtractor
 from urlparse import urlparse
 
 @require_GET
@@ -50,12 +50,12 @@ def bind_taobao_shop(request):
         hostname = urlparse(item_url).hostname
         if re.search(r"\b(tmall|taobao)\.(com|hk)$", hostname) != None:
             taobao_id = web_utils.parse_taobao_id_from_url(item_url)
-            taobao_item_info = fetcher.fetch_item(taobao_id)
+            taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
             nick = taobao_item_info['nick']
             if request_user_context.get('taobao_nick') == nick:
                 user_inst.create_seller_info(nick)
                 if not TaobaoShop.nick_exist(nick):
-                    shop_info = fetcher.fetch_shop(taobao_item_info['shop_link'])
+                    shop_info = TaobaoExtractor.fetch_shop(taobao_item_info['shop_link'])
                     TaobaoShop.create(
                         nick,
                         shop_info['shop_id'],

@@ -59,18 +59,25 @@ class JDExtractor:
         data = data[5:-4]
         pj = json.loads(data)
         price = float(pj['p'])
-
+        
+        brandtag = soup.select("ul.detail-list li a")
+        brand = ""
+        if len(brandtag)>0:
+            brand = brandtag[0].string
+            brand = brand.replace("旗舰店","")
+            brand = brand.replace("官方","")
         result = {
             "desc" : title,
             "price" : price,
             "category" : category,
             "imgs" : imgs,
             "nick" : nick,
+            "brand":brand,
             "shop_link" : shop_link
         }
 
         return result
 if __name__ == '__main__':
     jd = JDExtractor()
-    result = jd.fetch_item(1066602)
-    print result
+    result = jd.fetch_item(1077000089)
+    print result['brand']
