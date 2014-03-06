@@ -1,0 +1,9 @@
+#tags {
+    margin: 0 15px;
+}
+
+#tags .nav {
+    border: 1px solid #eee;
+    background-color: #fbfbfb;
+    height: 40px;
+}
