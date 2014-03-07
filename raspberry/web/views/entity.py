@@ -16,8 +16,8 @@ from base.user import User
 from base.item import Item
 from base.tag import Tag 
 from base.category import Category
-from base import fetcher
 from util import *
+from utils.extractor.taobao import TaobaoExtractor 
 
 from django.utils.log import getLogger
 
@@ -97,7 +97,7 @@ def _parse_taobao_id_from_url(url):
 
 
 def _load_taobao_item_info(taobao_id):
-    taobao_item_info = fetcher.fetch_item(taobao_id)
+    taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
     thumb_images = []
 
     for _img_url in taobao_item_info["imgs"]:
