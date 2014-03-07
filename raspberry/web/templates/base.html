@@ -42,9 +42,9 @@
         </ul>
 
         {% if request.user.is_authenticated  %}
-        <div class="user">
+        <ul class="user">
             {% show_auth_user request.user.id %}
-        </div>
+        </ul>
         {% endif %}
 
         {% block search %}

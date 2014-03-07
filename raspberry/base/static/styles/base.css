@@ -103,15 +103,7 @@ button {
     top: 9px;
 }
 
-#header ul {
-    position: absolute;
-    top: 0;
-    left: 127px;
-    height: 49px;
-    line-height: 49px;
-    margin: 0;
-    padding: 0;
-}
+
 
 #header li {
     float: left;
@@ -124,31 +116,52 @@ button {
     color: #fff;
 }
 
+#header .nav {
+    /*float: left;*/
+    position: absolute;
+    top: 0;
+    left: 127px;
+    height: 49px;
+    line-height: 49px;
+    margin: 0;
+    padding: 0;
+}
+
 #header .user {
     position: absolute;
+    /*top: 0;*/
+    /*float: right;*/
     top: 0;
     right: 0;
 }
 
-#header .user ul {
-    display: inline;
-    /*top: 0;*/
-    left: 0;
+#header .user li ul {
+    display: none;
 }
-#header .user li  {
-    width: 135px;
-    height: 45px;
-    text-align: right;
-    vertical-align: middle;
+#header .user li:hover ul {
+    display: block;
 }
 
-#header .user li ul {
-    display: block;
-    position: absolute;
-    top: 49px;
-    left: 0;
-    line-height: 25px;
-}
+/*#header .user ul {*/
+    /*position: absolute;*/
+    /*display: inline-block;*/
+    /*top: 49px;*/
+    /*left: 0;*/
+/*}*/
+/*#header .user li  {*/
+    /*width: 135px;*/
+    /*height: 45px;*/
+    /*text-align: right;*/
+    /*vertical-align: middle;*/
+/*}*/
+
+/*#header .user li ul {*/
+    /*display: block;*/
+    /*position: absolute;*/
+    /*top: 49px;*/
+    /*left: 0;*/
+    /*line-height: 25px;*/
+/*}*/
 
 /*#header .user li:hover ul {*/
     /*display: block;*/
