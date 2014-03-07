@@ -8,7 +8,11 @@ import base.selection as base_selection
 from base.entity import Entity 
 from base.note import Note 
 from base.taobao_shop import TaobaoShop 
+<<<<<<< HEAD
 # from utils import fetcher
+=======
+from utils.extractor.taobao import TaobaoExtractor 
+>>>>>>> e83efb6cbaafe14d9c5e2725aefea35ac90ef0e9
 
 import datetime
 import time
@@ -70,7 +74,7 @@ class CreateTaobaoShopTask(Task):
     
     def run(self, nick, shop_link):
         if not TaobaoShop.nick_exist(nick):
-            _shop_info = fetcher.fetch_shop(shop_link)
+            _shop_info = TaobaoExtractor.fetch_shop(shop_link)
             _shop = TaobaoShop.create(
                 nick = nick,
                 shop_id = _shop_info['shop_id'],
