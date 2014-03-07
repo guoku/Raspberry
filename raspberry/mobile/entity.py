@@ -279,7 +279,7 @@ def guess_entity(request):
             _category_id = int(_category_id)
         _rslt = []
         _entity_id_list = []
-        for _entity_id in MobileEntity.roll(category_id = _category_id, count = _count):
+        for _entity_id in MobileEntity.roll(category_id=_category_id, count=_count):
             _rslt.append(MobileEntity(_entity_id).read(_request_user_id))
             _entity_id_list.append(_entity_id)
         

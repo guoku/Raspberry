@@ -25,26 +25,19 @@ log = getLogger('django')
 
 
 def entity_detail(request, entity_hash, template='main/detail.html'):
-
-
-
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
-    # log.info(_entity_context)
     _liker_list = Entity(_entity_id).liker_list(offset=0, count=20)
-    # log.info(_liker_list)
     _note_id_list = Note.find(entity_id=_entity_id)
-    # log.info(_note_id_list)
     _selection_note = None
     _common_note_list = []
     _is_user_already_note = False
     _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
     
     _tag_list = Tag.entity_tag_stat(_entity_id)
-    # log.info(_tag_list)
 
     for _note_id in _note_id_list:
         _note = Note(_note_id)
@@ -63,13 +56,19 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                     'user_context' : _user_context
                 }
             else:
-                _common_note_list.append(
-                    {
-                        'note_context' : _note_context,
-                        'creator_context' : _creator_context,
-                        'user_context' : _user_context
-                    }
-                )
+                _common_note_list.append({
+                    'note_context' : _note_context,
+                    'creator_context' : _creator_context,
+                    'user_context' : _user_context
+                })
+
+    _guess_entity_context = []
+    for _guess_entity_id in Entity.roll(category_id=_entity_context['category_id'], count=5):
+        if _guess_entity_id != _entity_id: 
+            _guess_entity_context.append(Entity(_guess_entity_id).read())
+            if len(_guess_entity_context) == 4:
+                break
+    
 
     return render_to_response(
         template,
@@ -82,6 +81,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'common_note_list' : _common_note_list,
             'liker_list' : _liker_list,
             'tag_list' : _tag_list,
+            'guess_entity_context' : _guess_entity_context,
         },
         context_instance=RequestContext(request)
     )

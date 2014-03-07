@@ -2,6 +2,172 @@
  * Created by cuiwei on 13-12-26.
  */
 ;(function ($, document, window) {
+    $.fn.TagAC = function (){
+        var pos, tag, cursor, length, timeout,
+            start = -1,
+            ereg = /^[0-9a-zA-Z\u4e00-\u9fff\u3040-\u30FF\u30A0-\u30FF]*$/,
+            dom = $('<div class="tag-auto-complete"><span>选择 # 标记或直接输入</span></div>');
+        function init(){
+            tag = "";
+            cursor = -1;
+            length = 0;
+            dom.css("margin", "0");
+            clearTimeout(timeout);
+
+            $(".tag-auto-complete, .text_area").hide();
+        }
+        function getRes(obj, word, callback){
+            var word = word || "";
+            var callback = callback || function(){};
+
+            var url = "/tag/suggest/";
+            if (word) {
+                if (!ereg.test(word)){
+                    init();
+                    return false;
+                }
+
+                url = url + "?prefix=" + word;
+                dom.find("span").text();
+            }
+            $.post(url, {}, function(xhr){
+                dom.find("p").remove();
+
+                if (xhr == "[]"){
+                    dom.find("span").text("轻敲空格完成输入");
+                }
+                else {
+                    dom.find("span").text("选择 # 标记或直接输入");
+                    var arr = eval(xhr);
+                    for(var i in arr){
+                        dom.append("<p># " + arr[i] + "</p>");
+                    }
+                    dom.find("p:first").addClass("hover");
+                }
+
+                callback();
+
+                dom.css("margin-left", pos.left-5).css("margin-top", pos.top+25);
+                dom.show();
+                dom.find("p").mouseover(function(){
+                    dom.find("p").removeClass("hover");
+                    $(this).addClass("hover");
+                }).click(function(){
+                    var text = $(this).text().replace("# ", "");
+                    var front = obj.val().slice(0, start);
+                    var back = obj.val().slice(cursor);
+                    obj.val(front + text + " " + back);
+
+                    init();
+                });
+            });
+        }
+        
+        init();
+
+        return this.live("keyup", function(e){
+            var obj = $(this);
+            var e = e||window.event;
+            var code = e.which;
+            cursor = e.target.selectionEnd;
+
+            if (code == 51 && e.shiftKey){
+                init();
+                start = e.target.selectionEnd;
+                length = obj.val().length;
+
+                var div_text = $('<div class="text_area"></div>');
+                obj.after(div_text);
+                div_text.html(obj.val().slice(0,start).replace(/\n/g, "<br>").replace(/\s/g, "&nbsp;") + "<span class='pos'>&nbsp;</span>");
+
+                pos = div_text.find(".pos").position();
+
+                getRes(obj, tag, function(){
+                    if (obj.parent().find(".tag-auto-complete").get(0) == undefined)
+                        obj.after(dom);
+                })
+            }
+            else if (start >= 0 && length != obj.val().length && !(code > 36 && code < 41) ){
+                clearTimeout(timeout);
+                length = obj.val().length;
+                tag = obj.val().slice(start, cursor);
+
+                timeout = setTimeout( function(){getRes(obj, tag);}, 300);
+            }
+
+        }).live("keydown", function(e){
+            if (start < 0)
+                return true;
+
+            var obj = $(this);
+            var e = e||window.event;
+            var code = e.which;
+            cursor = e.target.selectionEnd;
+
+            if (code == 8){
+                if (start == cursor){
+                    init();
+                    start = -1;
+                }
+            }
+            else if (code == 27){
+                obj.blur();
+            }
+            else if (code == 13){
+                if (dom.css("display") == "none")
+                    return true;
+                var cur = dom.find("p.hover");
+                cur.click();
+                e.preventDefault();
+            }
+            else if (code == 38){
+                if (dom.css("display") == "none")
+                    return true;
+
+                var cur = dom.find("p.hover");
+                if (cur.get(0) == dom.find("p:first").get(0) ){
+                    dom.find("p:last").mouseover();
+                }
+                else {
+                    cur.prev().mouseover();
+                }
+                e.preventDefault();
+            }
+            else if (code == 40){
+                if (dom.css("display") == "none")
+                    return true;
+
+                var cur = dom.find("p.hover");
+                if (cur.get(0) == dom.find("p:last").get(0) ){
+                    dom.find("p:first").mouseover();
+                }
+                else {
+                    cur.next().mouseover();
+                }
+                e.preventDefault();
+            }
+            else if (code == 37){
+                clearTimeout(timeout);
+                if (cursor-1 < start) {
+                    dom.hide();
+                    return true;
+                }
+                tag = obj.val().slice(start, cursor-1);
+                timeout = setTimeout( function(){getRes(obj, tag);}, 300);
+            }
+            else if (code == 39){
+                clearTimeout(timeout);
+                if (cursor+1 >= start) {
+                    tag = obj.val().slice(start, cursor+1);
+                    timeout = setTimeout( function(){getRes(obj, tag);}, 300);
+                }
+            }
+            
+        }).live("blur", function(){
+            init();
+        });
+    };
+    
     var util = {
         isUserLogined: function () {
             // 通过前端简单检测用户是否登录，该方法是不可靠的，后端仍需要检测限制
@@ -210,6 +376,8 @@
                 var $noteContent = $noteItem.find('.note-content');
                 var originNoteText;
 
+                $textarea.TagAC();
+
                 $noteItem.find('.update-note').on('click', function () {
                     originNoteText = textarea.value;
                     $noteContent.hide();
@@ -332,6 +500,7 @@
             // 点击 为点评添加评论时候 的事件处理
 
 
+            $(".note-comment input.text").TagAC();
             var self = this;
             var $noteDetail = $noteItem.find('.note-detail');
 
@@ -392,7 +561,6 @@
         },
 
         addNote: function () {
-            // 写点评
 
             var self = this;
             var $addNote = $('.add-note');
@@ -407,6 +575,8 @@
                     $form.addClass('active');
                 }
             });
+                
+            $textarea.TagAC();
 
             $form.find('.cancel').on('click', function () {
                 $form.removeClass('active');
