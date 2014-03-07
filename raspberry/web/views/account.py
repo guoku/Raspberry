@@ -262,7 +262,8 @@ def auth_by_taobao(request):
                 try:
                     if not _user_inst:
                         _user_inst = User(request.user.id)
-                        _user_inst.bind_taobao(
+                        #Todo: handle errors
+			_user_inst.bind_taobao(
                             taobao_id = _taobao_data['taobao_id'],
                             screen_name = _taobao_data['screen_name'],
                             taobao_token = _taobao_data['access_token'],

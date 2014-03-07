@@ -44,9 +44,9 @@ if len(sys.argv) >= 6:
 else:
     mysql_host = "localhost" 
     mysql_user = "root" 
-    mysql_password = "123456" 
-    mysql_database = "guoku_01_03" 
-    mongo_database = "guoku_01_03" 
+    mysql_password = "wxl12345" 
+    mysql_database = "guoku20140305" 
+    mongo_database = "guoku" 
     mongo_host = "localhost" 
 
 connect(mongo_database, host = mongo_host)

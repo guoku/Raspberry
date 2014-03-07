@@ -1,4 +1,4 @@
-body {
+bdy {
     color: #999;
     background-color: #fff;
     font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -730,6 +730,34 @@ button {
     font-size: 0;
 }
 
+/*
+**  click to top style 
+**   @author xiaolin
+*/
+.click_to_top{
+    width:30px;
+    height:30px;
+    position: fixed;
+    background: #eeeeee;
+    bottom: 55px;
+    right: 10px;
+    z-index: 1000000;
+    display: none;
+}
+.click_to_top:hover{
+	background: #e0e0e0;
+}
+.click_em{
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	background: url("../images/icon_back_to_top.png") center center no-repeat;
+}
+.click_em:hover{
+	width: 30px;
+	height: 30px;
+	background: url("../images/icon_back_to_top_press.png") center center no-repeat;
+}
 /* tag */
 a.tag {color:#0084B4 !important;}
 a.tag:hover {text-decoration:underline;}

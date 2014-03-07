@@ -242,7 +242,6 @@
                 e.preventDefault();
             });
         },
-
         showEntityTitle: function ($noteItem) {
             // 为精选添加 鼠标悬浮显示标题
 
@@ -294,8 +293,18 @@
 //                var top = 3000;
 
                 $(window).scroll(function () {
+                    if($(window).scrollTop()>100){
+                        if($(".click_to_top").css("display") == "none"){
+                            clickToTop.caculateRight();
+                            $(".click_to_top").fadeIn();
+                        }
+                    }else{
+                        if($(".click_to_top").css("display") == "block")
+                        $(".click_to_top").fadeOut();
+                    }
                     var $this = $(this);
                     if (($(window).height() + $(window).scrollTop()) >= $(document).height()) {
+                            
 //                    if ($this.scrollTop() > top) {
                         counter++;
                         util.loadData(counter, $selection);
@@ -702,10 +711,26 @@
         }
     };
 
+    var clickToTop = {
+        caculateRight:function(){
+            var right = $("#selection").offset().left+$("#selection").width();
+            $(".click_to_top").css("left",right+10);
+        },
+        bindClick:function(){
+            $(".click_to_top").click(function(){
+                $("body").animate({
+                    scrollTop:0,
+                },500);
+            });
+        }
+    };
 
     (function init() {
         util.like();
         util.noteHover();
+
+        clickToTop.caculateRight();
+        clickToTop.bindClick();
 
         selection.loadSelections();
         category.loadCategory();
