@@ -18,6 +18,11 @@ urlpatterns = patterns(
 )
 
 urlpatterns += patterns(
+    'web.views.tag',
+    url(r'^tag/suggest/$', 'tag_suggest', name='web_tag_suggest'),
+)
+
+urlpatterns += patterns(
     'web.views.entity',
     url(r'^detail/(?P<entity_hash>\w+)/$', 'entity_detail', name='web_detail'),
     url(r'^entity/', include('web.urls.entity')),
