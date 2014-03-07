@@ -11,4 +11,6 @@ urlpatterns = patterns(
     url(r'^guokuplus/application/detail/$', 'guokuplus_application_detail', name = 'management_guokuplus_application_detail'),
     url(r'^guokuplus/application/approve/$', 'approve_guokuplus_application', name = 'management_approve_guokuplus_application'),
     url(r'^guokuplus/application/editor_comment/add/$', 'add_guokuplus_application_editor_comment', name = 'management_add_guokuplus_app_editor_comment'),
+    url(r'^shop/verification/list/$', 'shop_verification_list', name = 'management_shop_verification_list'),
+    url(r'^guokuplus/activity/list/$', 'guokuplus_activity_list', name = 'management_guokuplus_activity_list'),
 )

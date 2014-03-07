@@ -238,7 +238,7 @@ def shop_verification_list(request):
     _results, _total = TaobaoShop.read_shop_verification_list((_p - 1) * _num_every_page, _num_every_page)
     _paginator = Paginator(_p, _num_every_page, _total, _para)
     return render_to_response(
-        'shop/shop_verification_list.html',
+        'shop/verification_list.html',
         {
             'results' : _results,
             'paginator' : _paginator,
@@ -258,7 +258,7 @@ def approve_shop_verification(request):
 @require_GET
 @login_required
 @staff_only
-def guoku_plus_activity_list(request):
+def guokuplus_activity_list(request):
     
     pass
 
