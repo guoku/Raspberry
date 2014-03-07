@@ -29,7 +29,7 @@ def tag_suggest(request):
     return JSONResponse(data=_rslt)
 
         
-def tags(request, tag_hash, template="tags/tags.html"):
+def tags(request, tag_hash, template="tag/tags.html"):
 
     return render_to_response(template,
         {

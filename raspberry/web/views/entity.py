@@ -38,7 +38,6 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
     
     _tag_list = Tag.entity_tag_stat(_entity_id)
-
     for _note_id in _note_id_list:
         _note = Note(_note_id)
         _note_context = _note.read()
@@ -69,7 +68,6 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             if len(_guess_entity_context) == 4:
                 break
     
-
     return render_to_response(
         template,
         {
