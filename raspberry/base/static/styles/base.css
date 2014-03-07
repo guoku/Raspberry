@@ -33,12 +33,6 @@ button {
     outline: none;
 }
 
-/*@font-face {*/
-    /*font-family: "FZLTXHK";*/
-    /*src: url("/static/v3/fonts/FZLTXHK0-1.eot");*/
-    /*src: url("/static/v3/fonts/FZLTXHK0-1.TTF") format('truetype');*/
-/*}*/
-
 .btn {
     -moz-user-select: none;
     display: inline-block;
@@ -78,6 +72,7 @@ button {
     font-weight: 400;
     padding: 6px 0 6px 0;
 }
+
 /*--------------------------------------------*/
 #header {
     position: fixed;
@@ -132,7 +127,26 @@ button {
 #header .user {
     position: absolute;
     top: 0;
-    right: 305px;
+    right: 0;
+}
+
+#header .user ul {
+    display: inline;
+    /*top: 0;*/
+    left: 0;
+}
+
+#header .user  li ul {
+    display: none;
+    position: absolute;
+    top: 49px;
+    left: 0;
+    line-height: 25px;
+
+}
+
+#header .user li:hover ul {
+    display: block;
 }
 
 #header .user .user-avatar {
@@ -145,14 +159,22 @@ button {
     border-radius: 50%;
 }
 
+/*#header .user .menu {*/
+    /*display: inline;*/
+    /*top: 49px;*/
+    /*left: 0;*/
+    /*height: 40px;*/
+/*}*/
+
+
 #header form {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 50px;
     height: 49px;
     line-height: 49px;
     width: 285px;
-    background-color: #272727;
+    /*background-color: #272727;*/
     background-color: rgba(37, 37, 37, 0.95);
 }
 
@@ -165,7 +187,7 @@ button {
     border: none;
     outline: 0;
     color: #fff;
-    background-color: #272727;
+    /*background-color: #272727;*/
     background-color: rgba(37, 37, 37, 0.95);
 }
 

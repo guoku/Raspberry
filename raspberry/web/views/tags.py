@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.utils.log import getLogger
 
 
+
 log = getLogger('django')
 
 def tags(request, tag_hash, template="tags/tags.html"):

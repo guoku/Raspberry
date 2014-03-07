@@ -41,14 +41,11 @@
             <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
         </ul>
 
+        {% if request.user.is_authenticated  %}
         <div class="user">
-            {% if request.user.is_authenticated  %}
-                {% show_auth_user request.user.id %}
-{#                <a href="{% url 'web_user_index' request.user.id %}" class="user-avatar">#}
-{#                    <img src="{{ user_context.avatar_small }}" width="30" height="30">#}
-{#                </a>#}
-            {% endif %}
+            {% show_auth_user request.user.id %}
         </div>
+        {% endif %}
 
         {% block search %}
             <form action="{% url 'web_search' %}" method="GET">
