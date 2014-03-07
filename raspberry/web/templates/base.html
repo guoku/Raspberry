@@ -1,5 +1,5 @@
 {% load i18n staticfiles %}
-{% load user %}
+{% load account %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
@@ -41,11 +41,16 @@
             <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
         </ul>
 
-        {% if request.user.is_authenticated  %}
+
         <ul class="user">
-            {% show_auth_user request.user.id %}
+            {% if request.user.is_authenticated  %}
+                {% show_auth_user request.user.id %}
+            {% else %}
+                <li><a href="#">{% trans 'sign in' %}</a></li>
+                <li><a href="#">{% trans 'sign up' %}</a></li>
+            {% endif %}
         </ul>
-        {% endif %}
+
 
         {% block search %}
             <form action="{% url 'web_search' %}" method="GET">
