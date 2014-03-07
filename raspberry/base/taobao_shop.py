@@ -117,6 +117,8 @@ class TaobaoShop(object):
             shop.save()
 
     def create_verification_info(self, user_id, shop_type, company_name, qq_account, email, mobile, main_products, intro):
+        if TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).count() > 0:
+            return False
         info = TaobaoShopVerificationInfo(
             user_id = user_id,
             shop_nick = self.nick,
@@ -131,6 +133,7 @@ class TaobaoShop(object):
             created_time = datetime.datetime.now()
             )
         info.save()
+        return True
 
     def create_guoku_plus_application(self, taobao_item_id, entity_id, quantity, sale_price, remarks):
         item = GuokuPlusApplication(
@@ -161,6 +164,13 @@ class TaobaoShop(object):
         if item_context['shop_nick'] == self.nick:
             return True
         return False
+
+    def read_shop_verification(self):
+        verification = TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).first()
+        if verification:
+            return verification._data
+        else:
+            return None
 
     @classmethod
     def read_shop_verification_list(cls, offset, count):

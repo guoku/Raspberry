@@ -14,6 +14,7 @@ from utils.paginator import Paginator
 from base.models import NoteSelection
 from base.note import Note
 from base.entity import Entity
+from base.tag import Tag 
 from base.user import User
 from base.category import Old_Category
 import base.popularity as popularity
@@ -26,37 +27,26 @@ def index(request):
 
 @require_http_methods(['GET'])
 def selection(request, template='main/selection.html'):
+    
+    _list = Tag.find_tag_entity(tag_hash='794092df')
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
     _old_category_list = Old_Category.find()[0:12]
 
     _page_num = int(request.GET.get('p', 1))
     _category_id = request.GET.get('c', None)
-    log.info(datetime.now())
     # 判断是否ajax方式加载,如不是则强制返回首页
     # 见https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.is_ajax
-    if not request.is_ajax():
-        _page_num = 1
 
-    if _category_id is None:
-        _hdl = NoteSelection.objects(post_time__lt = datetime.now())
-    else:
-        _category_id = int(_category_id)
-        _hdl = NoteSelection.objects(root_category_id=_category_id, post_time__lt = datetime.now())
-    _total_count = _hdl.count()
-    _count_in_one_page = 24
-    if _page_num != 1:
-        # 每次ajax加载的数量
-        _count_in_one_page = 15
-    _paginator = Paginator(_page_num, _count_in_one_page, _total_count)
-
-    # _hdl.order_by('-post_time')
-
-    _offset = _paginator.offset
-    _note_selection_list = _hdl[_offset: _offset + _count_in_one_page]
+    _hdl = NoteSelection.objects.filter(post_time__lt = datetime.now())
+    if _category_id != None:
+        _hdl = _hdl.filter(root_category_id=int(_category_id))
+    _hdl.order_by('-post_time')
+    
+    _paginator = Paginator(_page_num, 30, _hdl.count())
+    _note_selection_list = _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
 
     _selection_list = []
-
     for _note_selection in _note_selection_list:
         _selection_note_id = _note_selection['note_id']
         _entity_id = _note_selection['entity_id']
@@ -110,7 +100,6 @@ def selection(request, template='main/selection.html'):
                 'data' : _data
             }
         return JSONResponse(data=_ret)
-        # return HttpResponse(json.dumps(_ret))
 
 @require_http_methods(['GET'])
 def popular(request, template='main/popular.html'):
