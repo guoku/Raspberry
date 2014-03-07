@@ -135,19 +135,26 @@ button {
     /*top: 0;*/
     left: 0;
 }
+#header .user li  {
+    width: 135px;
+    height: 45px;
+    text-align: right;
+    vertical-align: middle;
+}
 
-#header .user  li ul {
-    display: none;
+#header .user li ul {
+    display: block;
     position: absolute;
     top: 49px;
     left: 0;
     line-height: 25px;
-
 }
 
-#header .user li:hover ul {
-    display: block;
-}
+/*#header .user li:hover ul {*/
+    /*display: block;*/
+/*}*/
+
+
 
 #header .user .user-avatar {
     display: table-cell;
@@ -170,25 +177,28 @@ button {
 #header form {
     position: absolute;
     top: 0;
-    right: 50px;
+    right: 135px;
     height: 49px;
     line-height: 49px;
-    width: 285px;
+
+    /*width: 285px;*/
     /*background-color: #272727;*/
-    background-color: rgba(37, 37, 37, 0.95);
+    /*background-color: rgba(37, 37, 37, 0.95);*/
 }
 
 #header form .search {
-    width: 230px;
+    width: 145px;
     height: 30px;
     line-height: 30px;
-    margin: 0 5px;
+    /*margin: 0 5px;*/
     padding: 0;
     border: none;
     outline: 0;
     color: #fff;
+    /*border-radius: 4px 4px 4px 4px;*/
+    /*background-color: #DCDCDC;*/
     /*background-color: #272727;*/
-    background-color: rgba(37, 37, 37, 0.95);
+    background-color: rgba(220, 220, 220, 0.95);
 }
 
 #header form button {
@@ -198,7 +208,8 @@ button {
     border: none;
     border-radius: 0;
     outline: 0;
-    background-color: #272727;
+    background-color: #DCDCDC;
+    /*background-color: #272727;*/
 }
 
 #header form button img {
