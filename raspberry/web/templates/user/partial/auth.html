@@ -1,7 +1,6 @@
 {% load i18n %}
 {#<div class="dropdown">#}
-{#<ul>#}
-{#    <li>#}
+    <li>
         <a href="{% url 'web_user_index' user_context.user_id %}" class="user-avatar">
             <img src="{{ user_context.avatar_small }}" width="30" height="30">
         </a>
@@ -13,6 +12,5 @@
                 <a href="{% url 'web_logout' %}">{% trans "logout" %}</a>
             </li>
         </ul>
-{#    </li>#}
-{#</ul>#}
+    </li>
 {#</div>#}

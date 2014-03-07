@@ -8,11 +8,7 @@ import base.selection as base_selection
 from base.entity import Entity 
 from base.note import Note 
 from base.taobao_shop import TaobaoShop 
-<<<<<<< HEAD
-# from utils import fetcher
-=======
 from utils.extractor.taobao import TaobaoExtractor 
->>>>>>> e83efb6cbaafe14d9c5e2725aefea35ac90ef0e9
 
 import datetime
 import time
