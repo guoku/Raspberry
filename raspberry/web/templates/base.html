@@ -46,8 +46,9 @@
             {% if request.user.is_authenticated  %}
                 {% show_auth_user request.user.id %}
             {% else %}
-                <li><a href="#">{% trans 'sign in' %}</a></li>
-                <li><a href="#">{% trans 'sign up' %}</a></li>
+                <li><a href="{% url 'web_login' %}">{% trans 'sign in' %}</a></li>
+                <li><span>&#124;</span></li>
+                <li><a href="{% url 'web_register' %}">{% trans 'sign up' %}</a></li>
             {% endif %}
         </ul>
 
