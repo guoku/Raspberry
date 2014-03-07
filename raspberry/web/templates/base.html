@@ -36,7 +36,7 @@
             <a href="{{ web_selection_url }}" class="logo"><img src="{% static 'images/logo.png' %}"></a>
         </div>
 
-        <ul class="nav">
+        <ul class="nav-bar">
             <li {% if web_selection_url in request.path %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
             <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
         </ul>

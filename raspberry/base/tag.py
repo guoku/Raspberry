@@ -72,8 +72,17 @@ class Tag(object):
                 TagModel.objects.get(tag_hash = _hash)
             except:
                 break
-        return _hash 
-    
+        return _hash
+
+    @classmethod
+    def tag_name(cls, tag_hash):
+        try:
+            _tag = TagModel.objects.get(tag_hash=tag_hash)
+            return _tag.tag
+        except TagModel.DoesNotExist, e:
+            log.error("Error: %s" % e)
+        return None
+
     @classmethod
     def add_entity_tag(cls, entity_id, user_id, tag):
         try:
@@ -146,8 +155,7 @@ class Tag(object):
         _user_id = int(user_id)
         _tag_id_mapping = {}
         _user_tags = []
-        
-        
+
         for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text', 'tag_id', 'tag_hash').annotate(entity_count=Count('entity')).order_by('-entity_count'):
             _user_tags.append({
                 'tag_id' : _data['tag_id'],

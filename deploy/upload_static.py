@@ -31,5 +31,5 @@ def deploy_static():
     rsync_project(
         remote_dir = env.remote_static_root,
         local_dir = env.local_static_root,
-        delete = True
+#        delete = True
     )

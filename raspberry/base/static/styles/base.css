@@ -1,4 +1,4 @@
-bdy {
+body {
     color: #999;
     background-color: #fff;
     font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -116,7 +116,7 @@ button {
     color: #fff;
 }
 
-#header .nav {
+#header .nav-bar {
     /*float: left;*/
     position: absolute;
     top: 0;
@@ -138,28 +138,37 @@ button {
 }
 
 #header .user .menu {
-    position: absolute;
-    /*right: 25px;*/
     margin: 0;
     padding: 0;
 
-    overflow: hidden;
+    /*overflow: hidden;*/
     border: 1px solid rgba(0, 0, 0, 0.15);
 
 }
 #header .user .menu li {
-    text-align: right;
+    /*text-align: right;*/
     /*vertical-align: middle;*/
-    height: 45px;
-    line-height: 24px;
-    width: 135px;
+    /*height: 45px;*/
+    /*line-height: 24px;*/
+    /*width: 135px;*/
     padding: 0;
     margin: 0;
 }
 
+#header .user .menu li a {
+    display: block;
+    background-color: #FFFFFF;
+    text-decoration: none;
+}
+
+#header .user .menu li a:hover {
+    background-color: #000000;
+}
+
 
 #header .user li ul {
-    display: block;
+    display: none;
+    position: absolute;
 }
 #header .user li:hover ul {
     display: block;
