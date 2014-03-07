@@ -4,15 +4,31 @@
     margin-bottom: 45px;
 }
 
+#detail .breadcrumb {
+
+}
+
+#detail .breadcrumb .home {
+    background-image: url("/static/v3/images/home.png");
+}
+
 #detail .breadcrumb ul {
     /*margin: 35px 0;*/
-    /*padding: 0;*/
+    padding: 0;
     list-style: none;
+    font-size: 16px;
 }
 
 #detail .breadcrumb li {
     display: inline;
+    margin: 0 5px 0 5px;
     /*float: left;*/
+    color: #898989;
+}
+
+#detail .breadcrumb a {
+    /*font-size: 16px;*/
+    color: #444444;
 }
 
 #detail .entity {

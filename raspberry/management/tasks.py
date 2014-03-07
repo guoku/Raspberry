@@ -6,6 +6,7 @@ from utils.apns_notification import APNSWrapper
 
 import base.selection as base_selection
 from base.entity import Entity 
+from base.note import Note 
 from base.taobao_shop import TaobaoShop 
 from utils import fetcher 
 
@@ -16,7 +17,7 @@ import logging
 from paramiko import SSHClient, AutoAddPolicy
 from scp import SCPClient
 
-logger = logging.getLogger('django.request')
+logger = logging.getLogger('django')
 
 MAX_RETRIES = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRIES', 5)
 RETRY_DELAY = getattr(settings, 'QUEUED_REMOTE_STORAGE_RETRY_DELAY', 60)
@@ -89,6 +90,28 @@ class MergeEntityTask(Task):
     def run(self, entity_id, target_entity_id):
         _entity = Entity(entity_id)
         _entity.merge(target_entity_id)
+
+class FreezeUserEntityNoteAll(Task):
+    ignore_result = True
+    time_limit = 30
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    queue = "main"
+    
+    def run(self, user_id):
+        _user_id = int(user_id)
+        for _note_id in Note.find(user_id=_user_id, status=1):
+            try:
+                _note = Note(_note_id)
+                _entity_id = _note.get_entity_id()
+                _entity = Entity(_entity_id)
+                _entity.update_note(
+                    note_id = _note_id,
+                    weight = -1 
+                )
+            except Exception, e:
+                pass
+            logger.info("entity note [%d] of [%d] freezed..."%(_note_id, _user_id))
 
 
 class PublishApkTask(Task):

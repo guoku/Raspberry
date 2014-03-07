@@ -61,10 +61,12 @@ class Note(object):
         return _hdl.count() 
     
     @classmethod
-    def find(cls, timestamp = None, entity_id = None, category_id = None, creator_set = None, offset = None, count = None, sort_by = None, selection = 0, status = 0):
+    def find(cls, timestamp=None, entity_id=None, user_id=None, category_id=None, creator_set=None, offset=None, count=None, sort_by=None, selection=0, status=0):
         _hdl = NoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
+        if user_id != None:
+            _hdl = _hdl.filter(creator_id = user_id)
         if category_id != None:
             _hdl = _hdl.filter(entity__neo_category_id = category_id)
         if timestamp != None:

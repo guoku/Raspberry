@@ -17,6 +17,18 @@
 {% endblock %}
 
 {% block content %}
+    <div class="span2">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">操作</li>
+                <li>
+                    <a href="{% url 'management_freeze_user_note_all' user_context.user_id %}">
+                        冻结全部点评  
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="container">
         <div class="well">
             <img id="main-image" class="img-polaroid" src="{{ user_context.avatar_large }}" alt="">
@@ -25,8 +37,8 @@
             </div>
             <div class="stat-info"><span>关注者: </span><span>{{ user_context.fan_count }}</span></div>
             <div class="stat-info"><span>喜爱: </span><span>{{ user_context.like_count }}</span></div>
-            <div class="stat-info"><span>标签: </span><span><a href="{%url 'management_tag_list'%}?user={{user_context.user_id}}">{{ user_context.tag_count }}</a></span></div>
-            <div class="stat-info"><span>添加: </span><span>{{ user_context.entity_note_count }}</span></div>
+            <div class="stat-info"><span>标签: </span><span><a href="{%url 'management_tag_list'%}?user={{user_context.user_id}}" target="_blank">{{ user_context.tag_count }}</a></span></div>
+            <div class="stat-info"><span>点评: </span><span><a href="{%url 'management_note_list'%}?user_id={{user_context.user_id}}" target="_blank">{{ user_context.entity_note_count }}</a></span></div>
             <div class="stat-info"><span>赞: </span><span>{{ user_context.entity_note_poke_count }}</span></div>
         </div>
 

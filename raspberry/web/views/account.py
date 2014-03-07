@@ -117,7 +117,7 @@ def login(request, template = 'account/login.html'):
         return HttpResponseRedirect(redirect_url)
 
     if request.method == 'POST':
-        log.info(request.POST)
+        # log.info(request.POST)
         _forms = SignInAccountForm(request.POST)
         if _forms.is_valid():
             _remember_me = request.POST.get('remember_me', None)

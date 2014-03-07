@@ -17,12 +17,11 @@ def display_note_item(note):
 
 register.inclusion_tag("entity/entity_note.html")(display_note_item)
 
-
 def trans_category(value):
     # log.info(value)
     _category_context = Category(value).read()
 
-    log.info(_category_context)
+    # log.info(_category_context)
     return _category_context['category_title']
 register.filter('trans_category', trans_category)
 
