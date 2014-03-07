@@ -515,7 +515,7 @@ class Entity(object):
     
     @classmethod
     def search(cls, query_string):
-        _query_set = EntityModel.search.query(query_string).filter(like_count__gte = 0)
+        _query_set = EntityModel.search.query(query_string).filter(like_count__gt=0, entity_weight__gte=0)
         _entity_id_list = map(lambda x : int(x._sphinx['id']), _query_set[0 : _query_set.count()])
         return _entity_id_list 
 
