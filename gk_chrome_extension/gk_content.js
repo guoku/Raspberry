@@ -1,5 +1,5 @@
 //var gk_host = "http://10.0.1.148:8000/";
-var gk_host = "http://114.113.154.47:8000/";
+var gk_host = "http://admin.guoku.com/";
 
 var gk_add_url = gk_host + "management/entity/new/";
 var gk_read_state_url = gk_host + "management/entity/item/taobao/state";
@@ -16,7 +16,7 @@ if (/id|item_id/ig.test(location_href)) {
             var body = document.body;
             init_ui(body, JSON.parse(data));
         } else {
-            console.log("Error: " + JSON.stringify(err));
+            console.log("Error:" + JSON.stringify(err));
         }
     });
 }
@@ -111,7 +111,6 @@ function http_request(options, callback) {
     var method = options.method || "GET";
     var async = options.async || true;
     var data = options.data || null;
-
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {

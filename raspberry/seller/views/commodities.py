@@ -10,9 +10,8 @@ from base.entity import Entity
 from base.taobao_shop import TaobaoShop
 from base.user import User
 from base.item import Item
-from forms import GuokuPlusApplicationForm
+from forms import GuokuPlusApplicationForm, ShopVerificationForm 
 from utils.authority import seller_only
-
 
 @require_GET
 @login_required
@@ -22,10 +21,17 @@ def commodities(request, user_context, shop_inst):
     for i in range(len(item_list)):
         item = Item(item_list[i]['item_id'])
         item_list[i]['item'] = item.read()
-    
+    verification_form = ShopVerificationForm()
+    if not user_context['shop_verified']:
+        shop_verification = shop_inst.read_shop_verification()
+    else:
+        shop_verification = None
+    print verification_form.as_table()
     return render_to_response("commodities.html",
                               {"item_list": item_list,
-                               "user_context": user_context},
+                               "user_context": user_context,
+                               "verification_form" : verification_form,
+                               "shop_verification" : shop_verification},
                               context_instance=RequestContext(request))
 
 @require_http_methods(["GET", "POST"])
@@ -33,8 +39,19 @@ def commodities(request, user_context, shop_inst):
 @seller_only
 def verify(request, user_context, shop_inst):
     if request.method == "POST":
-        intro = request.POST.get("intro", "")
-        shop_inst.create_verification_info(intro)
+        form = ShopVerificationForm(request.POST)
+        if form.is_valid():
+            shop_inst.create_verification_info(
+                user_id = request.user.id,
+                shop_type = form.cleaned_data['shop_type'],
+                company_name = form.cleaned_data['company_name'],
+                email = form.cleaned_data['email'],
+                mobile = form.cleaned_data['mobile'],
+                qq_account = form.cleaned_data['qq_account'],
+                main_products = form.cleaned_data['main_products'],
+                intro = form.cleaned_data['intro']
+            )
+        return HttpResponseRedirect(reverse('seller_commodities'))
 
 @require_http_methods(["GET", "POST"])
 @login_required
@@ -69,7 +86,6 @@ def apply_guoku_plus(request, user_context, shop_inst):
                                       context_instance = RequestContext(request)) 
         else:
             return HttpResponseForbidden()
-        
 
 @require_GET
 @login_required
@@ -77,5 +93,11 @@ def apply_guoku_plus(request, user_context, shop_inst):
 def guoku_plus_applications_list(request, user_context, shop_inst):
     items = shop_inst.read_guoku_plus_application_list()
     return render_to_response("guoku_plus_application_list.html",
-                              {'items' : items},
-                              context_instance = RequestContext(request))
+                    {'items' : items},
+                    context_instance = RequestContext(request))
+
+@require_GET
+@login_required
+@seller_only
+def guoku_plus_activity_list(request, user_context, shop_inst):
+    pass    

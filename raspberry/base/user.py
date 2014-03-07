@@ -569,6 +569,13 @@ class User(object):
         try:
             _seller_info_obj = SellerInfoModel.objects.get(user_id = self.user_id)
             _basic_info['shop_nick'] = _seller_info_obj.shop_nick
+            _basic_info['shop_type'] = _seller_info_obj.shop_type
+            _basic_info['shop_company_name'] = _seller_info_obj.company_name
+            _basic_info['shop_qq_account'] = _seller_info_obj.qq_account
+            _basic_info['shop_email'] = _seller_info_obj.email
+            _basic_info['shop_mobile'] = _seller_info_obj.shop_type
+            _basic_info['shop_main_products'] = _seller_info_obj.main_products
+            _basic_info['shop_intro'] = _seller_info_obj.intro
             _basic_info['shop_verified'] = _seller_info_obj.verified
         except SellerInfoModel.DoesNotExist:
             pass

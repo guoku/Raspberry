@@ -1,14 +1,10 @@
 #account {
-    background: url("/static/images/iconwall.png") repeat;
+    background: #fbfbfb;
 }
 
 #account .main {
     width: 100%;
     position: absolute;
-    top: 50%;
-    margin-top: -170px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
-    background-color: #fff;
 }
 
 #account .container {
@@ -29,7 +25,11 @@
 }
 
 #account form {
-    display: inline-block;
+    width: 450px;
+    height: 500px;
+    padding: 20px;
+    margin:50px auto;
+    background: #fff;
 }
 
 #account form a {
@@ -38,9 +38,13 @@
 
 #account form .text-input {
     width: 270px;
-    padding: 5px;
+    height: 30px;
+    line-height: 30px;
     margin-top: 15px;
-    line-height: 1.3;
+    padding: 10px 5px;
+    background: #fbfbfb;
+    border: 1px solid #eee;
+    outline: none;
 }
 
 #account form .submit-row {
@@ -70,7 +74,6 @@
 
 #account .third-party {
     clear: right;
-    border-top: 1px solid #dedede;
 }
 
 #account .third-party div {
