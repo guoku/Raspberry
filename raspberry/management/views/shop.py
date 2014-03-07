@@ -16,7 +16,7 @@ from base.entity import Entity
 from management.forms.shop import GuokuPlusActivityForm
 from utils.authority import staff_only 
 from utils.paginator import Paginator
-from utils import fetcher
+from utils.extractor.taobao import TaobaoExtractor 
 
 NUM_EVERY_PAGE = 100
 ALL_GIFTS = [u"果库福利", u"应用市场活动", u"微博微信活动"]
@@ -81,7 +81,7 @@ def shop_list(request):
 def add_shop(request):
     _shop_link = request.POST.get("shop_link", None)
     if _shop_link:
-        _shop_info = fetcher.fetch_shop(_shop_link)
+        _shop_info = TaobaoExtractor.fetch_shop(_shop_link)
         
         if not TaobaoShop.nick_exist(_shop_info['nick']):
             TaobaoShop.create(nick = _shop_info['nick'],

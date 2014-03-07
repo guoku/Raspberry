@@ -63,6 +63,7 @@ class Tag(object):
         
     @classmethod
     def cal_tag_hash(cls, tag_hash_string):
+        _hash = None
         while True:
             _time_stamp = str(int(time.time()))
             _message = tag_hash_string.encode("utf8") + _time_stamp

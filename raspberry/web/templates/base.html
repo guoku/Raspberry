@@ -59,7 +59,8 @@
     </div>
 </div>
 
-{% if not user.is_authenticated %}
+{#{% url 'web_selection' as web_selection_url %}#}
+{% if not user.is_authenticated and web_selection_url in request.path %}
 {% block welcome %}
     <div id="welcome">
         <div class="intro">

@@ -14,7 +14,6 @@ from django.conf import settings
 from web import taobao_utils
 from web import sina_utils
 from web import web_utils
-from utils import fetcher
 from lotto.lib.player import check_player 
 import json
 import time

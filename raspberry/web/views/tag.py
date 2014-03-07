@@ -1,9 +1,14 @@
 # coding=utf-8
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from base.tag import Tag
 from utils.http import JSONResponse
+from django.utils.log import getLogger
 
+
+log = getLogger('django')
 
 @login_required
 def tag_suggest(request):
@@ -24,3 +29,12 @@ def tag_suggest(request):
     return JSONResponse(data=_rslt)
 
         
+def tags(request, tag_hash, template="tag/tags.html"):
+
+    return render_to_response(template,
+        {
+
+        },
+        context_instance = RequestContext(request)
+    )
+
