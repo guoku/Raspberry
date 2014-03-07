@@ -20,7 +20,7 @@
             var word = word || "";
             var callback = callback || function(){};
 
-            var url = "/tag/suggest/";
+            var url = "/t/suggest/";
             if (word) {
                 if (!ereg.test(word)){
                     init();
