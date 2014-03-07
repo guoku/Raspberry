@@ -13,7 +13,6 @@ from base.item import Item
 from forms import GuokuPlusApplicationForm, ShopVerificationForm 
 from utils.authority import seller_only
 
-
 @require_GET
 @login_required
 @seller_only
@@ -23,11 +22,16 @@ def commodities(request, user_context, shop_inst):
         item = Item(item_list[i]['item_id'])
         item_list[i]['item'] = item.read()
     verification_form = ShopVerificationForm()
+    if not user_context['shop_verified']:
+        shop_verification = shop_inst.read_shop_verification()
+    else:
+        shop_verification = None
     print verification_form.as_table()
     return render_to_response("commodities.html",
                               {"item_list": item_list,
                                "user_context": user_context,
-                               "verification_form" : verification_form},
+                               "verification_form" : verification_form,
+                               "shop_verification" : shop_verification},
                               context_instance=RequestContext(request))
 
 @require_http_methods(["GET", "POST"])
