@@ -7,11 +7,6 @@
     position: absolute;
 }
 
-#account .container {
-    margin: 30px auto;
-    width: 650px;
-}
-
 #account .container img {
     float: left;
     margin: 40px 60px 0 0;
@@ -26,7 +21,6 @@
 
 #account form {
     width: 450px;
-    height: 500px;
     padding: 20px;
     margin:50px auto;
     background: #fff;
