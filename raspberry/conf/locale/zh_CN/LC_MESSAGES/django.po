@@ -45,7 +45,7 @@ msgid "Category"
 msgstr "分类"
 
 msgid "likes"
-msgstr "喜欢"
+msgstr "喜爱"
 
 msgid "posts"
 msgstr "添加"
