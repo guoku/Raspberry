@@ -784,7 +784,7 @@ button {
     position: fixed;
     background: #eeeeee;
     bottom: 55px;
-    right: 10px;
+    left: 10px;
     z-index: 1000000;
     display: none;
 }

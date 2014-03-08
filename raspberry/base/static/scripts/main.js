@@ -736,8 +736,10 @@ function initTag(){
 
     var clickToTop = {
         caculateRight:function(){
-            var right = $("#selection").offset().left+$("#selection").width();
-            $(".click_to_top").css("left",right+10);
+            if($("#selection").size()>0){
+                var right = $("#selection").offset().left+$("#selection").width();
+                $(".click_to_top").css("left",right+10);
+            }
         },
         bindClick:function(){
             $(".click_to_top").click(function(){
