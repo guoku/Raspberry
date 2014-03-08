@@ -14,7 +14,12 @@ urlpatterns = patterns(
     url(r'^activity/$', 'activity', name='web_activity'),
 
     url(r'^c/', include('web.urls.category')),
-    url(r'^t/', include('web.urls.tags')),
+    url(r'^t/', include('web.urls.tag')),
+)
+
+urlpatterns += patterns(
+    'web.views.tag',
+    url(r'^tag/suggest/$', 'tag_suggest', name='web_tag_suggest'),
 )
 
 urlpatterns += patterns(
@@ -22,7 +27,6 @@ urlpatterns += patterns(
     url(r'^detail/(?P<entity_hash>\w+)/$', 'entity_detail', name='web_detail'),
     url(r'^entity/', include('web.urls.entity')),
     url(r'^note/', include('web.urls.note')),
-    url(r'^tag/', include('web.urls.tag')),
 )
 
 urlpatterns += patterns(
