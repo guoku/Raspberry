@@ -29,9 +29,10 @@ def search(request, template='search/search.html'):
     _user_list = []
     _tag_list = []
 
-    # TODO
-    # entity example ------------------------
-    _entity_id_list = [x['entity_id'] for x in NoteSelection.objects[0:30]]
+    _entity_id_list = Entity.search(
+        query_string = _keyword,
+    )
+    
 
     for _e_id in _entity_id_list:
         _entity_context = Entity(_e_id).read()

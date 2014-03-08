@@ -1,6 +1,28 @@
 /**
  * Created by cuiwei on 13-12-26.
  */
+function initTag(){
+    var array = $(".with-tag");
+    for (var i=0; i<array.length; i++) {
+        var str = array.eq(i).html(array.eq(i).html().replace(/\<br[!>]*\>/g, "\n")).text();
+        if (str == undefined)
+            continue;
+
+        var ereg = /[#＃][0-9a-zA-Z\u4e00-\u9fff\u3040-\u30FF\u30A0-\u30FF]+/g;
+        var cut = str.match(ereg);
+        if (cut == null){
+            array.eq(i).html(str.replace(/\n/g, "<br>"));
+            continue;
+        }
+            
+        for (var j in cut){
+            str = str.replace(cut[j], "<a class='tag_display' rel='nofollow' href='/tag/"+encodeURI(cut[j].replace(/[#＃]/,""))+"' >"+cut[j]+"</a>&nbsp;");
+        }
+
+        array.eq(i).html(str.replace(/\n/g, "<br>"));
+    }
+}
+
 ;(function ($, document, window) {
     $.fn.TagAC = function (){
         var pos, tag, cursor, length, timeout,
@@ -535,6 +557,7 @@
                                 self.noteComment($html);
                                 $html.appendTo($noteDetail);
                                 $html.slideToggle('fast');
+                                initTag();
                             } else if (status === 0) {
                                 // error
                             }
@@ -570,7 +593,7 @@
         },
 
         addNote: function () {
-
+            
             var self = this;
             var $addNote = $('.add-note');
             var $notes = $addNote.parent().find('.notes');
@@ -737,6 +760,7 @@
 
         detail.detailImageHover();
         detail.addNote();
+        initTag();
         detail.noteItem();
         detail.poke();
 

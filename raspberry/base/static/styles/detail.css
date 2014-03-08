@@ -477,6 +477,12 @@
     margin-top: 10px;
 }
 
+a.tag_display {
+    color:#0084B4 !important;
+}
+a.tag_display:hover {
+    text-decoration:underline;
+}
 
 /*---------------------------------------------------------------------------------------------------------------------*/
 #detail .recommend {

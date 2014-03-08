@@ -33,12 +33,6 @@ button {
     outline: none;
 }
 
-/*@font-face {*/
-    /*font-family: "FZLTXHK";*/
-    /*src: url("/static/v3/fonts/FZLTXHK0-1.eot");*/
-    /*src: url("/static/v3/fonts/FZLTXHK0-1.TTF") format('truetype');*/
-/*}*/
-
 .btn {
     -moz-user-select: none;
     display: inline-block;
@@ -78,6 +72,7 @@ button {
     font-weight: 400;
     padding: 6px 0 6px 0;
 }
+
 /*--------------------------------------------*/
 #header {
     position: fixed;
@@ -132,8 +127,34 @@ button {
 #header .user {
     position: absolute;
     top: 0;
-    right: 305px;
+    right: 0;
 }
+
+#header .user ul {
+    display: inline;
+    /*top: 0;*/
+    left: 0;
+}
+#header .user li  {
+    width: 135px;
+    height: 45px;
+    text-align: right;
+    vertical-align: middle;
+}
+
+#header .user li ul {
+    display: block;
+    position: absolute;
+    top: 49px;
+    left: 0;
+    line-height: 25px;
+}
+
+/*#header .user li:hover ul {*/
+    /*display: block;*/
+/*}*/
+
+
 
 #header .user .user-avatar {
     display: table-cell;
@@ -145,28 +166,39 @@ button {
     border-radius: 50%;
 }
 
+/*#header .user .menu {*/
+    /*display: inline;*/
+    /*top: 49px;*/
+    /*left: 0;*/
+    /*height: 40px;*/
+/*}*/
+
+
 #header form {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 135px;
     height: 49px;
     line-height: 49px;
-    width: 285px;
-    background-color: #272727;
-    background-color: rgba(37, 37, 37, 0.95);
+
+    /*width: 285px;*/
+    /*background-color: #272727;*/
+    /*background-color: rgba(37, 37, 37, 0.95);*/
 }
 
 #header form .search {
-    width: 230px;
+    width: 145px;
     height: 30px;
     line-height: 30px;
-    margin: 0 5px;
+    /*margin: 0 5px;*/
     padding: 0;
     border: none;
     outline: 0;
     color: #fff;
-    background-color: #272727;
-    background-color: rgba(37, 37, 37, 0.95);
+    /*border-radius: 4px 4px 4px 4px;*/
+    /*background-color: #DCDCDC;*/
+    /*background-color: #272727;*/
+    background-color: rgba(220, 220, 220, 0.95);
 }
 
 #header form button {
@@ -176,7 +208,8 @@ button {
     border: none;
     border-radius: 0;
     outline: 0;
-    background-color: #272727;
+    background-color: #DCDCDC;
+    /*background-color: #272727;*/
 }
 
 #header form button img {
