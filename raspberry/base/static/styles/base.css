@@ -283,6 +283,7 @@ button {
 /*-----------------------------------------*/
 #main {
     width: 960px;
+    min-height: 700px;
     margin: 75px auto 50px;
     /*margin: 240px auto 50px;*/
 }
