@@ -14,6 +14,18 @@ body{
 .messages ul{
 	padding: 30px;
 }
+.bind_tip{
+	width: 480px;
+	height: 240px;
+	text-align: center;
+	background: #fff;
+}
+.bind_tip p{
+	font-size: 20px;
+	font-weight: 700;
+	padding-top: 100px;
+	color: #888;
+}
 .shop_binded{
 	width: 480px;
 	height: 240px;
