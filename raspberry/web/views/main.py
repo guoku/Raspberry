@@ -28,7 +28,7 @@ def index(request):
 @require_http_methods(['GET'])
 def selection(request, template='main/selection.html'):
     
-    _list = Tag.find_tag_entity(tag_hash='794092df')
+    # _list = Tag.find_tag_entity(tag_hash='794092df')
     _user = get_request_user(request.user.id)
     _user_context = get_request_user_context(_user)
     _old_category_list = Old_Category.find()[0:12]
@@ -40,7 +40,8 @@ def selection(request, template='main/selection.html'):
 
     _hdl = NoteSelection.objects.filter(post_time__lt = datetime.now())
     if _category_id != None:
-        _hdl = _hdl.filter(root_category_id=int(_category_id))
+        _category_id = int(_category_id)
+        _hdl = _hdl.filter(root_category_id=_category_id)
     _hdl.order_by('-post_time')
     
     _paginator = Paginator(_page_num, 30, _hdl.count())
@@ -74,7 +75,6 @@ def selection(request, template='main/selection.html'):
                 'main_nav_deliver' : 'selection',
                 'page_num' : _page_num,
                 'curr_category_id' : _category_id,
-
                 'user_context' : _user_context,
                 'category_list' : _old_category_list,
                 'selection_list' : _selection_list,
