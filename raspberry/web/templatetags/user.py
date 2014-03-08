@@ -20,12 +20,3 @@ def show_avater(value, size=64):
     }
 
 register.inclusion_tag("user/partial/avatar.html")(show_avater)
-
-
-def show_auth_user(user_id):
-    _user_context = User(user_id).read()
-    log.info(_user_context)
-    return {
-        'user_context':_user_context,
-    }
-register.inclusion_tag("user/partial/auth.html")(show_auth_user)

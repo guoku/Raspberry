@@ -1,4 +1,4 @@
-bdy {
+body {
     color: #999;
     background-color: #fff;
     font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -103,16 +103,6 @@ button {
     top: 9px;
 }
 
-#header ul {
-    position: absolute;
-    top: 0;
-    left: 127px;
-    height: 49px;
-    line-height: 49px;
-    margin: 0;
-    padding: 0;
-}
-
 #header li {
     float: left;
     margin-right: 25px;
@@ -124,37 +114,84 @@ button {
     color: #fff;
 }
 
-#header .user {
+#header .nav-bar {
+    /*float: left;*/
     position: absolute;
     top: 0;
-    right: 0;
+    left: 127px;
+    height: 49px;
+    line-height: 49px;
+    margin: 0;
+    padding: 0;
 }
 
-#header .user ul {
-    display: inline;
+#header .user {
+    /*position: absolute;*/
     /*top: 0;*/
-    left: 0;
-}
-#header .user li  {
-    width: 135px;
-    height: 45px;
-    text-align: right;
-    vertical-align: middle;
+    float: right!important;
+    /*width: 135px;*/
+    margin: 0;
+    padding: 0;
+    /*top: 0;*/
+    /*right: 0;*/
 }
 
-#header .user li ul {
+#header .user li {
+    padding: 0;
+    margin: 0;
+}
+#header .user li span {
     display: block;
-    position: absolute;
-    top: 49px;
-    left: 0;
-    line-height: 25px;
+    /*text-align: center;*/
+    line-height: 49px;
 }
+#header .user li a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    line-height: 49px;
+    /*padding: 0;*/
+    /*margin: 0;*/
+    padding: 0 6px;
+    /*width: 30px;*/
+}
+#header .user li a:hover {
 
-/*#header .user li:hover ul {*/
-    /*display: block;*/
-/*}*/
+}
+#header .user .menu {
+    margin: 0;
+    padding: 0;
 
+    /*overflow: hidden;*/
+    border: 1px solid rgba(0, 0, 0, 0.15);
 
+}
+#header .user .menu li {
+    /*text-align: right;*/
+    /*vertical-align: middle;*/
+    /*height: 45px;*/
+    /*line-height: 24px;*/
+    /*width: 135px;*/
+    padding: 0;
+    margin: 0;
+}
+#header .user .menu li a {
+    display: block;
+    background-color: #FFFFFF;
+    height: 45px;
+    width: 135px;
+    text-decoration: none;
+}
+#header .user .menu li a:hover {
+    background-color: #000000;
+}
+#header .user li ul {
+    display: none;
+    position: absolute;
+}
+#header .user li:hover ul {
+    display: block;
+}
 
 #header .user .user-avatar {
     display: table-cell;
@@ -165,14 +202,6 @@ button {
 #header .user img {
     border-radius: 50%;
 }
-
-/*#header .user .menu {*/
-    /*display: inline;*/
-    /*top: 49px;*/
-    /*left: 0;*/
-    /*height: 40px;*/
-/*}*/
-
 
 #header form {
     position: absolute;

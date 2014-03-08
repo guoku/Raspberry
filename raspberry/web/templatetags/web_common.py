@@ -34,7 +34,6 @@ def format_time(value):
 
 register.filter(format_time)
 
-
 def display_web_paginator(paginator):
     return {
         "paginator" : paginator
