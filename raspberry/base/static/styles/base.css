@@ -159,28 +159,28 @@ button {
 
 }
 #header .user .menu {
+    position: absolute;
     margin: 0;
     padding: 0;
-
+    /*height: 135px;*/
+    right: 0;
     /*overflow: hidden;*/
-    border: 1px solid rgba(0, 0, 0, 0.15);
-
+    /*border: 1px solid rgba(0, 0, 0, 0.15);*/
 }
 #header .user .menu li {
-    /*text-align: right;*/
-    /*vertical-align: middle;*/
-    /*height: 45px;*/
-    /*line-height: 24px;*/
-    /*width: 135px;*/
+    float: none;
     padding: 0;
     margin: 0;
 }
 #header .user .menu li a {
     display: block;
     background-color: #FFFFFF;
+    text-align: right;
     height: 45px;
     width: 135px;
+    line-height: 45px;
     text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.15);
 }
 #header .user .menu li a:hover {
     background-color: #000000;
@@ -195,8 +195,11 @@ button {
 
 #header .user .user-avatar {
     display: table-cell;
+    position: relative;
     height: 49px;
+    line-height: 0;
     vertical-align: middle;
+    padding: 0;
 }
 
 #header .user img {
@@ -640,7 +643,7 @@ button {
     /*background-color: #eeeeee;*/
     display: table-cell;
     /*max-width: 100%;*/
-    padding: 2px;
+    /*padding: 2px;*/
     width: 296px;
     height: 270px;
     text-align: center;

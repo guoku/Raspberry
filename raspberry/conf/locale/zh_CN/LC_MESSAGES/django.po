@@ -96,6 +96,9 @@ msgstr "更新"
 msgid "update profile"
 msgstr "更新资料"
 
+msgid "my guoku"
+msgstr "我的果库"
+
 
 # error message
 msgid "email is not signed up."
