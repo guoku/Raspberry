@@ -48,9 +48,9 @@ def search(request, template='search/search.html'):
     elif _group == 't':
         _paginator = Paginator(_page, 24, len(_tag_list), { 'q' : _query })
         for _tag_context in _tag_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
-            _entity_id_list = Tag.find_tag_entity(_tag_context['tag_hash'])
-            _tag_context['entity_count'] = len(_entity_id_list)
-            _tag_context['entity_list'] = [Entity(x).read() for x in _entity_id_list[:4]]
+            _tag_entity_id_list = Tag.find_tag_entity(_tag_context['tag_hash'])
+            _tag_context['entity_count'] = len(_tag_entity_id_list)
+            _tag_context['entity_list'] = [Entity(x).read() for x in _tag_entity_id_list[:4]]
     else:
         _paginator = Paginator(_page, 24, len(_entity_id_list), { 'q' : _query })
         for _e_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
