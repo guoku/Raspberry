@@ -16,8 +16,8 @@ from base.user import User
 from base.item import Item
 from base.tag import Tag 
 from base.category import Category
-from base import fetcher
 from util import *
+from utils.extractor.taobao import TaobaoExtractor 
 
 from django.utils.log import getLogger
 
@@ -38,7 +38,6 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
     
     _tag_list = Tag.entity_tag_stat(_entity_id)
-
     for _note_id in _note_id_list:
         _note = Note(_note_id)
         _note_context = _note.read()
@@ -69,7 +68,6 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             if len(_guess_entity_context) == 4:
                 break
     
-
     return render_to_response(
         template,
         {
@@ -99,7 +97,7 @@ def _parse_taobao_id_from_url(url):
 
 
 def _load_taobao_item_info(taobao_id):
-    taobao_item_info = fetcher.fetch_item(taobao_id)
+    taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
     thumb_images = []
 
     for _img_url in taobao_item_info["imgs"]:

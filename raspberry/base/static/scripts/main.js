@@ -1,6 +1,28 @@
 /**
  * Created by cuiwei on 13-12-26.
  */
+function initTag(){
+    var array = $(".with-tag");
+    for (var i=0; i<array.length; i++) {
+        var str = array.eq(i).html(array.eq(i).html().replace(/\<br[!>]*\>/g, "\n")).text();
+        if (str == undefined)
+            continue;
+
+        var ereg = /[#＃][0-9a-zA-Z\u4e00-\u9fff\u3040-\u30FF\u30A0-\u30FF]+/g;
+        var cut = str.match(ereg);
+        if (cut == null){
+            array.eq(i).html(str.replace(/\n/g, "<br>"));
+            continue;
+        }
+            
+        for (var j in cut){
+            str = str.replace(cut[j], "<a class='tag_display' rel='nofollow' href='/tag/"+encodeURI(cut[j].replace(/[#＃]/,""))+"' >"+cut[j]+"</a>&nbsp;");
+        }
+
+        array.eq(i).html(str.replace(/\n/g, "<br>"));
+    }
+}
+
 ;(function ($, document, window) {
     $.fn.TagAC = function (){
         var pos, tag, cursor, length, timeout,
@@ -52,7 +74,7 @@
                 dom.find("p").mouseover(function(){
                     dom.find("p").removeClass("hover");
                     $(this).addClass("hover");
-                }).mousedown(function(){
+                }).click(function(){
                     var text = $(this).text().replace("# ", "");
                     var front = obj.val().slice(0, start);
                     var back = obj.val().slice(cursor);
@@ -242,7 +264,6 @@
                 e.preventDefault();
             });
         },
-
         showEntityTitle: function ($noteItem) {
             // 为精选添加 鼠标悬浮显示标题
 
@@ -259,6 +280,27 @@
             $('.common-note').each(function () {
                 self.showEntityTitle($(this));
             });
+        },
+
+        loadData: function(counter, object) {
+            var url = window.location.href;
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {'p': counter },
+                success: function(data) {
+//                    return data;
+                    result =  $.parseJSON(data);
+                    var status = parseInt(result.status);
+                    if (status == 1) {
+                        var $html = $(result.data);
+                        $html.each(function () {
+                            util.showEntityTitle($(this));
+                        });
+                        $html.appendTo(object);
+                    }
+                }
+            });
         }
     };
 
@@ -270,35 +312,88 @@
 
             if ($selection[0]) {
                 var counter = 1;
-                var top = 3000;
+//                var top = 3000;
 
                 $(window).scroll(function () {
+                    if($(window).scrollTop()>100){
+                        if($(".click_to_top").css("display") == "none"){
+                            clickToTop.caculateRight();
+                            $(".click_to_top").fadeIn();
+                        }
+                    }else{
+                        if($(".click_to_top").css("display") == "block")
+                        $(".click_to_top").fadeOut();
+                    }
                     var $this = $(this);
-
-                    if ($this.scrollTop() > top) {
+                    if (($(window).height() + $(window).scrollTop()) >= $(document).height()) {
+                            
+//                    if ($this.scrollTop() > top) {
                         counter++;
-                        top += 2300;
-                        var url = '/selected/?p=' + counter;
-
-                        $.get(url, function (result) {
-                            result = $.parseJSON(result);
-                            var status = parseInt(result.status);
-
-                            if (status === 1) {
-                                var $html = $(result.data);
-                                $html.each(function () {
-                                    util.showEntityTitle($(this));
-                                });
-                                $html.appendTo($selection);
-                            } else if (status === 0) {
-                                // 没有数据可以加载了
-                            }
-                        });
+                        util.loadData(counter, $selection);
+//                        top += 2300;
+//                        var url = '/selected/?p=' + counter;
+//                        var result = util.loadData(counter);
+//
+//                        var status = parseInt(result.status);
+//                        if (status == 1) {
+//                            var $html = $(result.data);
+//                            $html.each(function(){
+//                                util.showEntityTitle($(this));
+//                            });
+//                            $html.appendTo($selection);
+//                        }
+//                        var url = window.location.href;
+////                        console.log(url);
+//                        $.ajax({
+//                            url: url,
+//                            type: "GET",
+//                            data: {'p': counter},
+//                            success: function(data) {
+//                                result = $.parseJSON(data);
+//                                var status = parseInt(result.status);
+//                                if (status == 1) {
+//                                    var $html = $(result.data);
+//                                    $html.each(function() {
+//                                        util.showEntityTitle($(this));
+//                                    });
+//                                    $html.appendTo($selection);
+//                                }
+//                            }
+//                        });
+//                        $.get(url, function (result) {
+//                            result = $.parseJSON(result);
+//                            var status = parseInt(result.status);
+//
+//                            if (status === 1) {
+//                                var $html = $(result.data);
+//                                $html.each(function () {
+//                                    util.showEntityTitle($(this));
+//                                });
+//                                $html.appendTo($selection);
+//                            } else if (status === 0) {
+//                                // 没有数据可以加载了
+//                            }
+//                        });
                     }
                 });
             }
         }
     };
+
+    var category = {
+        loadCategory: function () {
+            var $category = $('.category');
+            if ($category[0]) {
+                var counter = 1;
+                var top = 3000;
+
+                $(window).scroll(function () {
+                    var $this = $(this);
+//                    console.log($this);
+                });
+            }
+        }
+    }
 
     var detail = {
         updateNote: function ($noteItem) {
@@ -311,6 +406,8 @@
                 var textarea = $textarea[0];
                 var $noteContent = $noteItem.find('.note-content');
                 var originNoteText;
+
+                $textarea.TagAC();
 
                 $noteItem.find('.update-note').on('click', function () {
                     originNoteText = textarea.value;
@@ -434,6 +531,7 @@
             // 点击 为点评添加评论时候 的事件处理
 
 
+            $(".note-comment input.text").TagAC();
             var self = this;
             var $noteDetail = $noteItem.find('.note-detail');
 
@@ -459,6 +557,7 @@
                                 self.noteComment($html);
                                 $html.appendTo($noteDetail);
                                 $html.slideToggle('fast');
+                                initTag();
                             } else if (status === 0) {
                                 // error
                             }
@@ -494,67 +593,7 @@
         },
 
         addNote: function () {
-            // 写点评
-            var pos, tag, cursor, length, timeout,
-                start = -1,
-                ereg = /^[0-9a-zA-Z\u4e00-\u9fff\u3040-\u30FF\u30A0-\u30FF]*$/,
-                dom = $('<div class="tag-auto-complete"><span>选择 # 标记或直接输入</span></div>');
-            function init(){
-                tag = "";
-                cursor = -1;
-                length = 0;
-                dom.css("margin", "0");
-                clearTimeout(timeout);
-    
-                $(".tag-auto-complete, .text_area").hide();
-            }
-            function getRes(obj, word, callback){
-                var word = word || "";
-                var callback = callback || function(){};
-    
-                var url = "/tag/suggest/";
-                if (word) {
-                    if (!ereg.test(word)){
-                        init();
-                        return false;
-                    }
-    
-                    url = url + "?prefix=" + word;
-                    dom.find("span").text();
-                }
-                $.post(url, {}, function(xhr){
-                    dom.find("p").remove();
-    
-                    if (xhr == "[]"){
-                        dom.find("span").text("轻敲空格完成输入");
-                    }
-                    else {
-                        dom.find("span").text("选择 # 标记或直接输入");
-                        var arr = eval(xhr);
-                        for(var i in arr){
-                            dom.append("<p># " + arr[i] + "</p>");
-                        }
-                        dom.find("p:first").addClass("hover");
-                    }
-    
-                    callback();
-    
-                    dom.css("margin-left", pos.left-5).css("margin-top", pos.top+25);
-                    dom.show();
-                    dom.find("p").mouseover(function(){
-                        dom.find("p").removeClass("hover");
-                        $(this).addClass("hover");
-                    }).mousedown(function(){
-                        var text = $(this).text().replace("# ", "");
-                        var front = obj.val().slice(0, start);
-                        var back = obj.val().slice(cursor);
-                        obj.val(front + text + " " + back);
-    
-                        init();
-                    });
-                });
-            }
-
+            
             var self = this;
             var $addNote = $('.add-note');
             var $notes = $addNote.parent().find('.notes');
@@ -568,37 +607,8 @@
                     $form.addClass('active');
                 }
             });
-            $textarea.on('keyup', function () {
-                var obj = $(this);
-                var e = e||window.event;
-                var code = e.which;
-                cursor = e.target.selectionEnd;
-    
-                if (code == 51 && e.shiftKey){
-                    init();
-                    start = e.target.selectionEnd;
-                    length = obj.val().length;
-    
-                    var div_text = $('<div class="text_area"></div>');
-                    obj.after(div_text);
-                    div_text.html(obj.val().slice(0,start).replace(/\n/g, "<br>").replace(/\s/g, "&nbsp;") + "<span class='pos'>&nbsp;</span>");
-    
-                    pos = div_text.find(".pos").position();
-    
-                    getRes(obj, tag, function(){
-                        if (obj.parent().find(".tag-auto-complete").get(0) == undefined)
-                            obj.after(dom);
-                    })
-                }
-                else if (start >= 0 && length != obj.val().length && !(code > 36 && code < 41) ){
-                    clearTimeout(timeout);
-                    length = obj.val().length;
-                    tag = obj.val().slice(start, cursor);
-    
-                    timeout = setTimeout( function(){getRes(obj, tag);}, 300);
                 
-                }
-            });
+            $textarea.TagAC();
 
             $form.find('.cancel').on('click', function () {
                 $form.removeClass('active');
@@ -724,15 +734,35 @@
         }
     };
 
+    var clickToTop = {
+        caculateRight:function(){
+            if($("#selection").size()>0){
+                var right = $("#selection").offset().left+$("#selection").width();
+                $(".click_to_top").css("left",right+10);
+            }
+        },
+        bindClick:function(){
+            $(".click_to_top").click(function(){
+                $("body").animate({
+                    scrollTop:0,
+                },500);
+            });
+        }
+    };
 
     (function init() {
         util.like();
         util.noteHover();
 
+        clickToTop.caculateRight();
+        clickToTop.bindClick();
+
         selection.loadSelections();
+        category.loadCategory();
 
         detail.detailImageHover();
         detail.addNote();
+        initTag();
         detail.noteItem();
         detail.poke();
 

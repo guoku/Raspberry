@@ -1,0 +1,27 @@
+#tags {
+    margin: 0 15px;
+}
+
+#tags .nav {
+    border: 1px solid #eee;
+    background-color: #fbfbfb;
+    height: 40px;
+}
+
+#tags .nav ul {
+    display: inline-block;
+    margin: 0;
+    padding: 0 25px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+#tags .nav li {
+    height: 38px;
+    line-height: 38px;
+}
+
+#tags .tags {
+    margin: 30px -30px 0 0;
+    font-size: 0;
+}

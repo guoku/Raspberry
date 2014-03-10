@@ -430,7 +430,7 @@ def user_like(request, user_id):
         )
         return SuccessJsonResponse(_rslt)
     
-@check_sign
+#@check_sign
 def search_user(request):
     _start_at = datetime.datetime.now()
     if request.method == "GET":

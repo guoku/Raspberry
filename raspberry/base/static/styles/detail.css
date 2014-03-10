@@ -5,10 +5,15 @@
 }
 
 #detail .breadcrumb {
-
+    font-size: 16px;
+    color: #898989;
 }
 
 #detail .breadcrumb .home {
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    /*background-color: #080808;*/
     background-image: url("/static/v3/images/home.png");
 }
 
@@ -16,14 +21,11 @@
     /*margin: 35px 0;*/
     padding: 0;
     list-style: none;
-    font-size: 16px;
 }
 
 #detail .breadcrumb li {
-    display: inline;
+    display: inline-block;
     margin: 0 5px 0 5px;
-    /*float: left;*/
-    color: #898989;
 }
 
 #detail .breadcrumb a {
@@ -475,6 +477,12 @@
     margin-top: 10px;
 }
 
+a.tag_display {
+    color:#0084B4 !important;
+}
+a.tag_display:hover {
+    text-decoration:underline;
+}
 
 /*---------------------------------------------------------------------------------------------------------------------*/
 #detail .recommend {

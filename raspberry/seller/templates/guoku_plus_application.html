@@ -6,7 +6,8 @@
 {% block content %}
     <div class="span10">
         <form action="{% url 'seller_apply_guoku_plus' %}" method="post">
-            {{ form.as_table }}
+            {% csrf_token %}
+		{{ form.as_table }}
             <input type="submit" value="提交"/>
         </form>
     </div>

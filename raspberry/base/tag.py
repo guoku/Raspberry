@@ -63,6 +63,7 @@ class Tag(object):
         
     @classmethod
     def cal_tag_hash(cls, tag_hash_string):
+        _hash = None
         while True:
             _time_stamp = str(int(time.time()))
             _message = tag_hash_string.encode("utf8") + _time_stamp
@@ -71,8 +72,17 @@ class Tag(object):
                 TagModel.objects.get(tag_hash = _hash)
             except:
                 break
-        return _hash 
-    
+        return _hash
+
+    @classmethod
+    def tag_name(cls, tag_hash):
+        try:
+            _tag = TagModel.objects.get(tag_hash=tag_hash)
+            return _tag.tag
+        except TagModel.DoesNotExist, e:
+            log.error("Error: %s" % e)
+        return None
+
     @classmethod
     def add_entity_tag(cls, entity_id, user_id, tag):
         try:
@@ -145,8 +155,7 @@ class Tag(object):
         _user_id = int(user_id)
         _tag_id_mapping = {}
         _user_tags = []
-        
-        
+
         for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text', 'tag_id', 'tag_hash').annotate(entity_count=Count('entity')).order_by('-entity_count'):
             _user_tags.append({
                 'tag_id' : _data['tag_id'],
@@ -218,6 +227,10 @@ class Tag(object):
     def get_user_tag_entity_count(cls, user_id, tag):
         return EntityTagModel.objects.filter(user = user_id, tag_text = tag).count()
         
+    @classmethod
+    def find_tag_entity(cls, tag_hash):
+        return map(lambda x: x, EntityTagModel.objects.filter(tag_hash = tag_hash, entity__weight__gt=0).order_by('-created_time').values_list('entity', flat=True).distinct())
+        
     
     @classmethod
     def find_user_tag(cls, user_id = None, tag = None):
@@ -267,3 +280,27 @@ class Tag(object):
         if _tag_prefix_index == None:
             _tag_prefix_index = cls.__reset_tag_prefix_index_to_cache()
         return _tag_prefix_index 
+
+
+    @classmethod
+    def __load_user_latest_tag_list(cls, user_id):
+        _cache_key = 'user_latest_tag_list_%s'%user_id 
+        _list = cache.get(_cache_key)
+        return _list
+    
+    @classmethod
+    def __reset_user_latest_tag_list(cls, user_id):
+        _cache_key = 'user_latest_tag_list_%s'%user_id
+        _list = []
+        for _tag_obj in EntityTagModel.objects.filter(user=user_id).order_by("-created_time")[0:10]:
+            if not _tag_obj.tag_text in _list:
+                _list.append(_tag_obj.tag_text)
+        return _list
+    
+    
+    @classmethod
+    def read_user_latest_tag_list(cls, user_id):
+        _user_latest_tag_list = cls.__load_user_latest_tag_list(user_id)
+        if _user_latest_tag_list == None:
+            _user_latest_tag_list = cls.__reset_user_latest_tag_list(user_id)
+        return _user_latest_tag_list 

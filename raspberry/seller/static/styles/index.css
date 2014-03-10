@@ -1,10 +1,89 @@
+body{
+	background: #eaeaea;
+}
 .message-box {
     position : relative;
-    margin : 0 auto;
-    background : white;
-    border-radius : 3px;
-    width : 310px;
-    padding : 20px 20px 20px 20px;
-    box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+    width: 480px;    
+    margin : 100px auto;
+}
+.messages{
+	width: 480px;
+	height: 240px;
+	background: #fff;
+}
+.messages ul{
+	padding: 30px;
+}
+.bind_tip{
+	width: 480px;
+	height: 240px;
+	text-align: center;
+	background: #fff;
+}
+.bind_tip p{
+	font-size: 20px;
+	font-weight: 700;
+	padding-top: 100px;
+	color: #888;
+}
+.shop_binded{
+	width: 480px;
+	height: 240px;
+	text-align: center;
+	background: #fff;
+}
+.shop_binded p{
+	font-size: 20px;
+	font-weight: 700;
+	padding-top: 100px;
+	color: #888;
+}
+.shop_binded a{
+	padding-left: 20px;
+}
+.verify_form{
+	width: 480px;
+	height: 240px;
+	background: #fff;
+}
+.verify_form p{
+	padding: 30px 30px 0px 30px;
+	font-weight: 700;
+	color: #888;
+}
+.verify_form form{
+	padding:0px  30px;
+}
+.verify_form input[type="text"]{
+	width: 400px;
+	height: 20px;
+	padding: 10px;
+	background: #eaeaea;
+	border: 1px solid #ddd;
+	outline: none;
+}
+.verify_tip{
+	width: 200px;
+	float: left;
+	margin-top: 40px;
+	font-size: 13px;
+	line-height: 20px;
+	font-color: #888;
+}
+.verify_form input[type="submit"]{
+	width: 170px;
+	height: 40px;
+	line-height: 20px;
+	padding: 10px;
+	background: #333;
+	color: #ccc;
+	border: none;
+	margin-top:40px;
+	font-weight: 700;
+	float: right;
+}
+.verify_form input[type="submit"]:hover{
+	background: #000;
+	color:white;
 }
 

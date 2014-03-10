@@ -45,7 +45,7 @@ msgid "Category"
 msgstr "分类"
 
 msgid "likes"
-msgstr "喜欢"
+msgstr "喜爱"
 
 msgid "posts"
 msgstr "添加"
@@ -95,6 +95,9 @@ msgstr "更新"
 
 msgid "update profile"
 msgstr "更新资料"
+
+msgid "my guoku"
+msgstr "我的果库"
 
 
 # error message

@@ -1,5 +1,5 @@
 {% load i18n staticfiles %}
-{% load user %}
+{% load account %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
@@ -36,19 +36,22 @@
             <a href="{{ web_selection_url }}" class="logo"><img src="{% static 'images/logo.png' %}"></a>
         </div>
 
-        <ul class="nav">
+        <ul class="nav-bar">
             <li {% if web_selection_url in request.path %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
             <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
         </ul>
 
-        <div class="user">
+
+        <ul class="user">
             {% if request.user.is_authenticated  %}
                 {% show_auth_user request.user.id %}
-{#                <a href="{% url 'web_user_index' request.user.id %}" class="user-avatar">#}
-{#                    <img src="{{ user_context.avatar_small }}" width="30" height="30">#}
-{#                </a>#}
+            {% else %}
+                <li><a href="{% url 'web_login' %}">{% trans 'sign in' %}</a></li>
+                <li><span>&#124;</span></li>
+                <li><a href="{% url 'web_register' %}">{% trans 'sign up' %}</a></li>
             {% endif %}
-        </div>
+        </ul>
+
 
         {% block search %}
             <form action="{% url 'web_search' %}" method="GET">
@@ -59,7 +62,8 @@
     </div>
 </div>
 
-{% if not user.is_authenticated %}
+{#{% url 'web_selection' as web_selection_url %}#}
+{% if not user.is_authenticated and web_selection_url in request.path %}
 {% block welcome %}
     <div id="welcome">
         <div class="intro">
@@ -106,7 +110,7 @@
         </div>
     </div>
 </div>
-
+{% include 'common/click_to_top.html' %}
 {% include 'common/login.html' %}
 {% include 'common/register.html' %}
 

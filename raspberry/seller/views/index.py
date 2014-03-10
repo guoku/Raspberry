@@ -11,7 +11,7 @@ from base.taobao_shop import TaobaoShop
 import re
 from web import web_utils
 from utils.authority import seller_only
-from utils.extractor.taobao import TaobaoExtractor
+from utils.extractor.taobao import TaobaoExtractor 
 from urlparse import urlparse
 
 @require_GET
@@ -67,7 +67,7 @@ def bind_taobao_shop(request):
                 return HttpResponseRedirect(reverse('bind_taobao_shop'))
             else:
                 message.info(request, "错误的商品地址，请输入淘宝商品地址")
-                return HttpResponseRedirect(reverse('bind_taobao_shop'))
+                return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
         else:
-            return HttpResponseRedirect(reverse('bind_taobao_shop'))
+            return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
 

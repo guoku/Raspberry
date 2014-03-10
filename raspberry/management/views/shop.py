@@ -1,6 +1,7 @@
 #coding=utf-8
 
 from django.contrib import messages
+
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.serializers.json import DjangoJSONEncoder
@@ -9,12 +10,13 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
 
-from base.taobao_shop import TaobaoShop
+from base.taobao_shop import TaobaoShop, GuokuPlusApp, GuokuPlusActivity
 from base.item import Item
 from base.entity import Entity
+from management.forms.shop import GuokuPlusActivityForm
 from utils.authority import staff_only 
 from utils.paginator import Paginator
-from utils.extractor.taobao import TaobaoExtractor
+from utils.extractor.taobao import TaobaoExtractor 
 
 NUM_EVERY_PAGE = 100
 ALL_GIFTS = [u"果库福利", u"应用市场活动", u"微博微信活动"]
@@ -170,11 +172,11 @@ def edit_shop(request):
 @require_GET
 @login_required
 @staff_only
-def guokuplus_applications_list(request):
+def guokuplus_application_list(request):
     _p = int(request.GET.get("p", "1"))
     _para = {}
     _num_every_page = 50
-    _results, _total = TaobaoShop.find_guoku_plus_applications(offset = (_p - 1) * 50, count = _num_every_page)
+    _results, _total = GuokuPlusApp.find(offset = (_p - 1) * 50, count = _num_every_page)
     _paginator = Paginator(_p, _num_every_page, _total, _para)
     return render_to_response(
         "shop/application_list.html",
@@ -183,8 +185,80 @@ def guokuplus_applications_list(request):
             "paginator" : _paginator,
         },
         context_instance = RequestContext(request))
-                                
+
+
+@require_GET
 @login_required
 @staff_only
-def guokuplus_application_update(request):
+def guokuplus_application_detail(request):
+    app_id = request.GET.get('app_id', None)
+    app = GuokuPlusApp(app_id)
+    app_context = app.read()
+    return render_to_response(
+        "shop/application_detail.html",
+        {
+            "app_context" : app_context,
+            "approve_form" : GuokuPlusActivityForm({"app_id" : app_id})
+        },
+        context_instance = RequestContext(request)
+    )
+    
+
+@require_POST
+@login_required
+@staff_only
+def add_guokuplus_application_editor_comment(request):
+    app_id = request.POST.get('app_id', None)
+    comment = request.POST.get("content", None)
+    guoku_plus_app = GuokuPlusApp(app_id)
+    guoku_plus_app.add_editor_comment(comment)
+    return HttpResponseRedirect(reverse('management_guokuplus_application_detail') + "?app_id=" + app_id)
+
+
+@require_POST
+@login_required
+@staff_only
+def approve_guokuplus_application(request):
+    form = GuokuPlusActivityForm(request.POST)
+    if form.is_valid():
+        guoku_plus_app = GuokuPlusApp(form.cleaned_data['app_id'])
+        guoku_plus_app.approve(form.cleaned_data['start_time'])
+        return HttpResponseRedirect(reverse('management_guokuplus_application_detail') + "?app_id=" + form.cleaned_data['app_id'])
+    else:
+        return HttpResponse(form.errors)
+
+
+@require_GET
+@login_required
+@staff_only
+def shop_verification_list(request):
+    _num_every_page = 30
+    _p = int(request.GET.get("p", "1"))
+    _para = {}
+    _results, _total = TaobaoShop.read_shop_verification_list((_p - 1) * _num_every_page, _num_every_page)
+    _paginator = Paginator(_p, _num_every_page, _total, _para)
+    return render_to_response(
+        'shop/shop_verification_list.html',
+        {
+            'results' : _results,
+            'paginator' : _paginator,
+        },
+        context_instance = RequestContext(request)
+    )
+
+@require_POST
+@login_required
+@staff_only
+def approve_shop_verification(request):
+    shop_nick = request.POST.get("shop_nick", None)
+    TaobaoShop.approve_shop_verification(shop_nick)
+    return HttpResponseRedirect(reverse("management_shop_verification_list"))
+
+
+@require_GET
+@login_required
+@staff_only
+def guoku_plus_activity_list(request):
+    
     pass
+

@@ -90,7 +90,7 @@ BASE_DIR = os.getcwd()
 # Additional locations of static files
 STATICFILES_DIRS = (
     # ('common', os.path.join(BASE_DIR, 'static')),
-    ('common', os.path.join(os.path.dirname(__file__), 'static')),
+    #('common', os.path.join(os.path.dirname(__file__), 'static')),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -126,18 +126,20 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.messages',
-    'debug_toolbar',
+    'django.contrib.formtools',
     'djcelery',
     'base',
     'management',
     'mobile',
     'seller',
+    'stats',
     'web',
-    # 'redis_admin',
+    'edm',
+    # 'lotto',
+    'gunicorn',
 )
 
 APP_HOST = "http://test.guoku.com"
