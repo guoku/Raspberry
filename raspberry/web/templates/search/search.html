@@ -15,7 +15,9 @@
             <a href="{% url 'web_search' %}?q={{ query }}&g=u" {% if group == 'u' %}class="active"{% endif %}>
                 用户<strong>({{user_result_count}})</strong>
             </a>
-            <a href="{% url 'web_search' %}?q={{ query }}&g=t" {% if group == 't' %}class="active"{% endif %}>标签</a>
+            <a href="{% url 'web_search' %}?q={{ query }}&g=t" {% if group == 't' %}class="active"{% endif %}>
+                标签<strong>({{tag_result_count}})</strong>
+            </a>
         </div>
         
         {% if group == 'e' %}

@@ -602,7 +602,7 @@ class User(object):
             _stat_info['following_count'] = UserFollowModel.objects.filter(follower_id=self.user_id).count()
             _stat_info['fan_count'] = UserFollowModel.objects.filter(followee_id=self.user_id).count()
             _stat_info['like_count'] = EntityLikeModel.objects.filter(user_id=self.user_id).count()
-            _stat_info['latest_like_entity_id_list'] = map(lambda x: x.entity_id, EntityLikeModel.objects.filter(user_id=self.user_id)[0:20])
+            _stat_info['latest_like_entity_id_list'] = map(lambda x: x.entity_id, EntityLikeModel.objects.filter(user_id=self.user_id).order_by('-created_time')[0:20])
             _stat_info['tag_count'] = EntityTagModel.objects.filter(user_id=self.user_id).values('tag').annotate(entity_count=Count('entity')).count()
             _stat_info['entity_note_count'] = NoteModel.objects.filter(creator_id=self.user_id).count()
             _stat_info['entity_note_poke_count'] = NotePokeModel.objects.filter(note__creator_id=self.user_id).count()
@@ -668,12 +668,11 @@ class User(object):
                 _stat_info['fan_count'] = 0
             self.__reset_user_stat_info_to_cache(_stat_info)
     
-    def update_user_like_count(self, delta):
+    def update_user_like_stat_info(self):
         _stat_info = self.__load_user_stat_info_from_cache()
         if _stat_info != None:
-            _stat_info['like_count'] += delta
-            if _stat_info['like_count'] < 0:
-                _stat_info['like_count'] = 0
+            _stat_info['like_count'] = EntityLikeModel.objects.filter(user_id=self.user_id).count()
+            _stat_info['latest_like_entity_id_list'] = map(lambda x: x.entity_id, EntityLikeModel.objects.filter(user_id=self.user_id).order_by('-created_time')[0:20])
             self.__reset_user_stat_info_to_cache(_stat_info)
     
     def update_user_entity_note_count(self, delta):

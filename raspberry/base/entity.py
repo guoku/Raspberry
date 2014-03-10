@@ -605,7 +605,7 @@ class Entity(object):
                 user_id = _user_id
             )
             self.update_like_count()
-            User(_user_id).update_user_like_count(delta = 1)
+            User(_user_id).update_user_like_stat_info()
             cache.delete("gk_e_like_u2elt_%s"%user_id)
 
 #########################   REMOVE LIKE MESSAGE AT FIRST ##########################
@@ -633,7 +633,7 @@ class Entity(object):
                 user_id = _user_id
             )
             _obj.delete()
-            User(_user_id).update_user_like_count(delta = -1)
+            User(_user_id).update_user_like_stat_info()
             cache.delete("gk_e_like_u2elt_%s"%user_id)
             
 #            _basic_info = self.__read_basic_info()

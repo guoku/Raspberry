@@ -228,8 +228,21 @@ class Tag(object):
         return EntityTagModel.objects.filter(user = user_id, tag_text = tag).count()
         
     @classmethod
+    def search(cls, query_string):
+        _query_set = TagModel.search.query(query_string)
+        _tag_id_list = map(lambda x: int(x._sphinx['id']), _query_set)
+        _tag_list = []
+        for _tag_obj in TagModel.objects.filter(id__in=_tag_id_list):
+            _tag_list.append({
+                'tag' : _tag_obj.tag,
+                'tag_id' : _tag_obj.id,
+                'tag_hash' : _tag_obj.tag_hash
+            })
+        return _tag_list 
+    
+    @classmethod
     def find_tag_entity(cls, tag_hash):
-        return map(lambda x: x, EntityTagModel.objects.filter(tag_hash = tag_hash, entity__weight__gt=0).order_by('-created_time').values_list('entity', flat=True).distinct())
+        return map(lambda x: x, EntityTagModel.objects.filter(tag_hash=tag_hash, entity__weight__gt=0).order_by('-created_time').values_list('entity', flat=True).distinct())
         
     
     @classmethod

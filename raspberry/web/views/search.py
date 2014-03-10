@@ -27,10 +27,13 @@ def search(request, template='search/search.html'):
     _tag_list = []
     
     _entity_id_list = Entity.search(
-        query_string = _query,
+        query_string=_query,
     )
     _user_id_list = User.search(
-        query_string = _query,
+        query_string=_query,
+    )
+    _tag_list = Tag.search(
+        query_string=_query
     )
     
     
@@ -39,16 +42,15 @@ def search(request, template='search/search.html'):
         for _u_id in _user_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]: 
             try:
                 _user_context = User(_u_id).read()
-                _user_context['latest_like_entities'] = []
-                if _user_context.has_key('latest_like_entity_id_list'):
-                    for _e_id in _user_context['latest_like_entity_id_list'][0:6]:
-                        try:
-                            _user_context['latest_like_entities'].append(Entity(_e_id).read())
-                        except Exception, e:
-                            pass
                 _user_list.append(_user_context)
             except Exception, e:
                 pass
+    elif _group == 't':
+        _paginator = Paginator(_page, 24, len(_tag_list), { 'q' : _query })
+        for _tag_context in _tag_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
+            _entity_id_list = Tag.find_tag_entity(_tag_context['tag_hash'])
+            _tag_context['entity_count'] = len(_entity_id_list)
+            _tag_context['entity_list'] = [Entity(x).read() for x in _entity_id_list[:4]]
     else:
         _paginator = Paginator(_page, 24, len(_entity_id_list), { 'q' : _query })
         for _e_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
@@ -70,7 +72,8 @@ def search(request, template='search/search.html'):
             'entity_result_count' : len(_entity_id_list),
             'user_list' : _user_list,
             'user_result_count' : len(_user_id_list),
-            'tag_list' : None,
+            'tag_list' : _tag_list,
+            'tag_result_count' : len(_tag_list),
             'paginator' : _paginator
         },
         context_instance=RequestContext(request)
