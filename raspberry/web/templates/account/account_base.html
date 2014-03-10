@@ -17,7 +17,7 @@
                 {% block form %}{% endblock %}
             </div>
         
-            {% block third_party_login %}
+           <!-- {% block third_party_login %}
             <div class="third-party">
                 <div>
                     <h2>第三方帐号登录</h2>
@@ -25,10 +25,10 @@
                     <a href="{% url 'web_login_by_taobao' %}">淘宝</a>
                 </div>
             </div>
-            {% endblock %}
+            {% endblock %}-->
         </div>
         
         <script src="{% static 'scripts/jquery.min.js' %}"></script>
-{#        <script src="{% static 'scripts/account.js' %}"></script>#}
+        <script src="{% static 'scripts/login.js' %}"></script>
     </body>
 </html>
