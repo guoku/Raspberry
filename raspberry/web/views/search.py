@@ -4,17 +4,14 @@
 # from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-# from django.template import loader
-# import json
 
-from util import *
-from utils.paginator import Paginator
 from base.user import User
-# from base.category import Old_Category
 from base.entity import Entity
-# from base.note import Note
 from base.models import NoteSelection
 from base.tag import Tag
+from util import *
+from utils.paginator import Paginator
+import datetime
 
 
 def search(request, template='search/search.html'):
@@ -28,7 +25,7 @@ def search(request, template='search/search.html'):
     _entity_list = []
     _user_list = []
     _tag_list = []
-
+    
     _entity_id_list = Entity.search(
         query_string = _query,
     )
@@ -37,14 +34,19 @@ def search(request, template='search/search.html'):
     )
     
     
-    if _group == 'e':
+    if _group == 'u':
+        _paginator = Paginator(_page, 40, len(_user_id_list), { 'q' : _query })
+        for _u_id in _user_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]: 
+            _user_context = User(_u_id).read()
+            _user_list.append(_user_context)
+    else:
         _paginator = Paginator(_page, 40, len(_entity_id_list), { 'q' : _query })
         for _e_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]: 
             _entity_context = Entity(_e_id).read()
             _entity_context['is_user_already_like'] = user_already_like_entity(request.user.id, _e_id)
             _entity_list.append(_entity_context)
 
-
+    
     return render_to_response(
         template,
         {
@@ -53,7 +55,8 @@ def search(request, template='search/search.html'):
             'group' : _group,
             'entity_list' : _entity_list,
             'entity_result_count' : len(_entity_id_list),
-            'user_list' : None,
+            'user_list' : _user_list,
+            'user_result_count' : len(_user_id_list),
             'tag_list' : None,
             'paginator' : _paginator
         },
