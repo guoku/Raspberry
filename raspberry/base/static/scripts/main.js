@@ -210,7 +210,8 @@ function initTag(){
 
             var flag = 0;
             var $body = $('body');
-            $body.on('click', removeLogin);
+            $login.show();
+           $body.on('click', removeLogin);
             function removeLogin() {
                 if (flag === 1) {
                     $accountForm.hide();
@@ -219,9 +220,7 @@ function initTag(){
                 }
                 flag = 1;
             }
-
-            $login.show();
-
+            
             $login.find('.to-reg').on('click', function (e) {
                 e.preventDefault();
                 $login.hide();
@@ -239,7 +238,6 @@ function initTag(){
             // 喜爱 like entity
 
             var self = this;
-
             $('.like').on('click', function (e) {
                 if (!self.isUserLogined()) {
                     self.popLoginBox();
