@@ -33,9 +33,7 @@ def search(request, template='search/search.html'):
         query_string = _query,
     )
     _user_id_list = User.search(
-        query_string = _query_string,
-        offset = _offset,
-        count = _count
+        query_string = _query,
     )
     
     
