@@ -103,6 +103,7 @@ class Tag(object):
                 user_id = user_id,
                 tag_id = _tag_obj.id,
                 tag_text = _tag_obj.tag,
+                tag_hash = _tag_obj.tag_hash,
                 count = 0,
                 last_tagged_time = datetime.datetime.now()
             )
