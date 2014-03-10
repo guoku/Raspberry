@@ -743,7 +743,7 @@ function initTag(){
         },
         bindClick:function(){
             $(".click_to_top").click(function(){
-                $("body").animate({
+                $("document").animate({
                     scrollTop:0,
                 },500);
             });
