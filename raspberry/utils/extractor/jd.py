@@ -64,8 +64,8 @@ class JDExtractor:
         brand = ""
         if len(brandtag)>0:
             brand = brandtag[0].string
-            brand = brand.replace("旗舰店","")
-            brand = brand.replace("官方","")
+            brand = brand.replace(u"旗舰店","")
+            brand = brand.replace(u"官方","")
         result = {
             "desc" : title,
             "price" : price,

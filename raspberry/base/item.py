@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.cache import cache
 from models import Item as ItemDocument
 from models import TaobaoItem as TaobaoItemDocument
+from models import JDItem as JDItemDocument
 from utils.lib import roll
 import datetime
 import pymongo
@@ -136,6 +137,7 @@ class Item(object):
         _item_list = []
         for _doc in _hdl[offset : offset + count]:
             if full_info:
+                
                 _item_list.append({
                     'item_id' : str(_doc.id),
                     'taobao_id' : _doc.taobao_id,
@@ -165,3 +167,87 @@ class Item(object):
         #_url = "http://10.0.1.109/mobile/v3/item/%s/visit/" % item_id + "?type=mobile"
         return _url
 
+
+class JDItem(Item):
+    
+    def __ensure_item_obj(self):
+        if not hasattr(self, 'item_obj'):
+            self.item_obj = JDItemDocument.objects.filter(id = self.item_id).first()
+
+
+    @classmethod
+    def get_item_by_jd_id(cls, jd_id):
+        _jd_item_obj = JDItemDocument.objects.filter(jd_id = jd_id).first()
+        if _jd_item_obj != None:
+            _inst = cls(str(_jd_item_obj.id))
+            _inst.item_obj = _jd_item_obj
+            return _inst 
+        return None
+
+    @classmethod
+    def create_jd_item(cls,entity_id, images, jd_id, cid, title, shop_nick, price, soldout, weight=0):
+
+        _jd_id = jd_id.strip()
+        _title = title.strip()
+        _shop_nick = shop_nick.strip()
+
+        _item_obj = JDItemDocument(
+            entity_id = entity_id,
+            images = images,
+            source = 'jd',
+            jd_id = _jd_id,
+            cid = cid,
+            title = _title,
+            shop_nick = _shop_nick,
+            price = price,
+            soldout = soldout,
+            weight = weight,
+            created_time = datetime.datetime.now(),
+            updated_time = datetime.datetime.now()
+        )
+
+        _item_obj.save()
+        _inst = cls(_item_obj.id)
+        _inst.item_obj = _item_obj
+        return _inst
+    
+    
+    def read(self):
+        self.__ensure_item_obj()
+        if self.item_obj.source == 'jd':
+            _context = self.__load_jd_item()
+        return _context
+    
+    def __load_jd_item(self):
+        _context = {}
+        _context["item_id"] = str(self.item_obj.id)
+        _context["entity_id"] = self.item_obj.entity_id
+        _context["source"] = self.item_obj.source
+        _context["jd_id"] = self.item_obj.jd_id
+        _context["cid"] = self.item_obj.cid
+        _context["title"] = self.item_obj.title
+        _context["shop_nick"] = self.item_obj.shop_nick
+        _context["price"] = float(self.item_obj.price)
+        _context["weight"] = self.item_obj.weight
+        _context["soldout"] = self.item_obj.soldout
+        _context['buy_link'] = Item.generate_taobao_item_url(str(self.item_obj.jd_id))
+        _context["volume"] = 0 
+        return _context
+    
+    @classmethod
+    def find(cls, entity_id = None, offset = 0, count = 30, full_info = False):
+        _hdl = JDItemDocument.objects.all()
+        if entity_id != None:
+            _entity_id = int(entity_id)
+            _hdl = _hdl.filter(entity_id = _entity_id)
+        _item_list = []
+        for _doc in _hdl.order_by('-weight', '-created_time')[offset : offset + count]:
+            if full_info:
+                _item_list.append({
+                    'item_id' : str(_doc.id),
+                    'jd_id' : _doc.taobao_id,
+                    'entity_id' : _doc.entity_id,
+                })
+            else:
+                _item_list.append(str(_doc.id))
+        return _item_list

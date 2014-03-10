@@ -51,7 +51,27 @@ class TaobaoItem(Item):
             'ustation',
         ],
     }
-    
+   
+class JDItem(Item):
+    jd_id = StringField(required = True, unique = True)
+    jd_category = ListField(required = False)
+    cid = IntField(required = True) 
+    title = StringField(required = True)
+    shop_nick = StringField(required = True)
+    price = DecimalField(required = True)
+    soldout = BooleanField(required = True)
+
+    meta = {
+        'db_alias' : 'guoku-db',
+        'indexes' : [
+            'jd_id',
+            'jd_category',
+            'shop_nick',
+            'price',
+            'soldout',
+        ],
+    }
+
 class Selection(Document):
     selector_id = IntField(required = True) 
     selected_time = DateTimeField(required = True)

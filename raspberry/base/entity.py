@@ -13,6 +13,7 @@ import time
 from category import Category 
 from image import Image
 from item import Item
+from item import JDItem
 from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
 from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
@@ -102,7 +103,81 @@ class Entity(object):
             weight = _weight,
         )
         return _taobao_item.item_id
-    
+
+    def __insert_jd_item(self, jd_item_info, images):
+        _weight = jd_item_info['weight'] if jd_item_info.has_key('weight') else 0
+        _jd_item = JDItem.create_jd_item(
+            entity_id = self.entity_id,
+            images = images,
+            jd_id = jd_item_info['jd_id'],
+            cid = jd_item_info['cid'],
+            title = jd_item_info['title'],
+            shop_nick = jd_item_info['shop_nick'],
+            price = jd_item_info['price'],
+            soldout = jd_item_info['soldout'],
+            weight = _weight,
+        )
+        return _jd_item.item_id
+
+
+    @classmethod
+    def create_by_jd_item(cls, creator_id, category_id, chief_image_url,
+                          jd_item_info, brand="", title="", intro="", 
+                          detail_image_urls=[], weight = 0, rank_score = 0):
+        _item = JDItem.get_item_by_jd_id(jd_item_info['jd_id'])
+        if _item == None:
+            _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
+            if _chief_image_id == None:
+                _chief_image_obj = Image.create('jd_' + jd_item_info['jd_id'], chief_image_url)
+                _chief_image_id = _chief_image_obj.image_id
+            
+            _detail_image_ids = []
+            for _image_url in detail_image_urls:
+                _image_id = Image.get_image_id_by_origin_url(_image_url)
+                if _image_id == None:
+                    _image_obj = Image.create('jd_' + jd_item_info['jd_id'], _image_url)
+                    _image_id = _image_obj.image_id
+                _detail_image_ids.append(_image_id)
+
+        _entity_hash = cls.cal_entity_hash(jd_item_info['jd_id'] + jd_item_info['title'] + \
+                jd_item_info['shop_nick'])
+
+        try:
+            _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = jd_item_info['cid'])
+            _old_category_id = _obj.guoku_category_id
+
+        except:
+            _old_category_id = 12
+
+        _entity_obj = EntityModel.objects.create(
+            entity_hash = _entity_hash,
+            creator_id = creator_id,
+            category_id = _old_category_id,
+            neo_category_id = category_id,
+            brand = brand,
+            title = title,
+            intro = intro,
+            price = jd_item_info['price'],
+            chief_image = _chief_image_id,
+            detail_images = "#".join(_detail_image_ids),
+            weight = weight,
+            rank_score = rank_score
+        )
+        
+        try:
+            _item_images = _detail_image_ids
+            _item_images.append(_chief_image_id)
+
+            _inst = cls(_entity_obj.id)
+            _inst.entity_obj = _entity_obj
+            _jd_item_id = _inst.__insert_jd_item(jd_item_info, _item_images)
+
+            return _inst
+        except Exception, e:
+            _entity_obj.delete()
+            raise Entity.FailToCreateEntity(str(e))
+
+            
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, chief_image_url, 
                               taobao_item_info, brand="", title="", intro="", detail_image_urls=[], 
