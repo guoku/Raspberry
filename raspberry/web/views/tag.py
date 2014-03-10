@@ -21,10 +21,7 @@ def tag_suggest(request):
     else:
         _rslt = []
         _user_latest_tag_list = Tag.read_user_latest_tag_list(request.user.id)
-        if _user_latest_tag_list == None or len(_user_latest_tag_list) == 0:
-            _tag_prefix_index = Tag.read_tag_prefix_index()
-            _rslt = _tag_prefix_index[0:5] 
-        else:
+        if _user_latest_tag_list != None or len(_user_latest_tag_list) > 0:
             _rslt = _user_latest_tag_list[0:5]
     
     return JSONResponse(data=_rslt)
