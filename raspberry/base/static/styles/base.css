@@ -189,7 +189,7 @@ button {
 }
 #header .user .menu li a {
     display: block;
-    background-color: #f8f8f8;
+    background-color: #FFFFFF;
     text-align: right;
     height: 45px;
     width: 135px;
@@ -201,7 +201,7 @@ button {
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 #header .user .menu li a:hover {
-    background-color: #000000;
+    background-color: #f8f8f8;
 }
 #header .user li ul {
     display: none;
@@ -230,10 +230,6 @@ button {
     right: 135px;
     height: 49px;
     line-height: 49px;
-
-    /*width: 285px;*/
-    /*background-color: #272727;*/
-    /*background-color: rgba(37, 37, 37, 0.95);*/
 }
 
 #header form .search {
@@ -721,6 +717,7 @@ button {
     left: 15px;
     bottom: 15px;
     line-height: 30px;
+    /*font-weight: 100;*/
 }
 
 .common-note .creator {
@@ -728,7 +725,8 @@ button {
     right: 15px;
     bottom: 15px;
     color: #777;
-    font-size: 15px;
+    font-size: 14px;
+    /*font-weight: 100;*/
 }
 
 .common-note .creator img {
