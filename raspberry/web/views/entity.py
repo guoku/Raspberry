@@ -36,6 +36,15 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     _common_note_list = []
     _is_user_already_note = False
     _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
+    
+    _is_soldout = True
+    _taobao_id = None
+    for _item_id in Item.find(entity_id=_entity_id):
+        _item_context = Item(_item_id).read()
+        _taobao_id = _item_context['taobao_id']
+        if not _item_context['soldout']:
+            _is_soldout = False
+            break
 
     _tag_list = Tag.entity_tag_stat(_entity_id)
     for _note_id in _note_id_list:
@@ -80,6 +89,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'liker_list' : _liker_list,
             'tag_list' : _tag_list,
             'guess_entity_context' : _guess_entity_context,
+            'taobao_id' : _taobao_id,
+            'is_soldout' : _is_soldout
         },
         context_instance=RequestContext(request)
     )
