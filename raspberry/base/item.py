@@ -92,7 +92,9 @@ class Item(object):
         self.__ensure_item_obj()
         if self.item_obj.source == 'taobao':
             _context = self.__load_taobao_item()
-        return _context
+            return _context
+        else:
+            return None #jd item
     
     @classmethod
     def find_ustation(cls):
@@ -190,7 +192,6 @@ class JDItem(Item):
         _jd_id = jd_id.strip()
         _title = title.strip()
         _shop_nick = shop_nick.strip()
-
         _item_obj = JDItemDocument(
             entity_id = entity_id,
             images = images,
@@ -205,7 +206,7 @@ class JDItem(Item):
             created_time = datetime.datetime.now(),
             updated_time = datetime.datetime.now()
         )
-
+        
         _item_obj.save()
         _inst = cls(_item_obj.id)
         _inst.item_obj = _item_obj

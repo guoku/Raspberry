@@ -23,6 +23,7 @@ from utils.authority import staff_only
 from utils.paginator import Paginator
 from utils.extractor.taobao import TaobaoExtractor 
 from utils.extractor.jd import JDExtractor
+import traceback
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -229,7 +230,7 @@ def create_entity_by_jd_item(request):
             brand = _brand,
             title = _title,
             intro = _intro,
-            detail_image_urls = _detail_image_urls,
+            detail_image_urls = _detail_image_urls
         )
 
         _note = request.POST.get("note", None)
@@ -602,20 +603,30 @@ def entity_list(request):
                 _entity_context['commission_type'] = 'unknown' 
                 if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
                     _item_context = Item(_entity_context['item_id_list'][0]).read()
-                    _entity_context['buy_link'] = _item_context['buy_link'] 
-                    _entity_context['taobao_title'] = _item_context['title'] 
-                    _entity_context['taobao_id'] = _item_context['taobao_id'] 
-                    _entity_context['taobao_shop_nick'] = _item_context['shop_nick'] 
-                    
-                    if _item_context.has_key('shop_nick'):
-                        _shop_context = TaobaoShop(_item_context['shop_nick']).read()
-                        if _shop_context != None:
-                            if _shop_context['extended_info']['commission'] == True:
-                                _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
-                                if _shop_context['extended_info']['orientational']:
-                                    _entity_context['commission_type'] = 'orientational'
-                                else:
-                                    _entity_context['commission_type'] = 'general'
+                    if _item_context == None:
+                        #jd items
+                        _item_context = JDItem(_entity_context['item_id_list'][0]).read()
+                        _entity_context['buy_link'] = _item_context['buy_link']
+                        _entity_context['taobao_title'] = _item_context['title']
+                        _entity_context['taobao_id'] = _item_context['jd_id']
+                        _entity_context['_taobao_shop_nick'] = _item_context['shop_nick']
+                        _entity_context['commission_rate'] = 4 #默认设为4
+                        _entity_context['commission_type'] = 'general'
+                    else:
+                        _entity_context['buy_link'] = _item_context['buy_link'] 
+                        _entity_context['taobao_title'] = _item_context['title'] 
+                        _entity_context['taobao_id'] = _item_context['taobao_id'] 
+                        _entity_context['taobao_shop_nick'] = _item_context['shop_nick'] 
+                        
+                        if _item_context.has_key('shop_nick'):
+                            _shop_context = TaobaoShop(_item_context['shop_nick']).read()
+                            if _shop_context != None:
+                                if _shop_context['extended_info']['commission'] == True:
+                                    _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                                    if _shop_context['extended_info']['orientational']:
+                                        _entity_context['commission_type'] = 'orientational'
+                                    else:
+                                        _entity_context['commission_type'] = 'general'
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
@@ -629,7 +640,9 @@ def entity_list(request):
                             break
                 _entity_context_list.append(_entity_context)
             except Exception, e:
-                pass
+                exstr = traceback.format_exc()
+                print exstr
+                raise(Exception(e))
         
         return render_to_response( 
             'entity/list.html', 

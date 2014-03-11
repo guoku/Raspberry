@@ -32,7 +32,7 @@ class Item(Document):
     }
 
 class TaobaoItem(Item):
-    taobao_id = StringField(required = True, unique = True)
+    taobao_id = StringField( unique = True)
     cid = IntField(required = True) 
     title = StringField(required = True)
     shop_nick = StringField(required = True)
@@ -53,7 +53,7 @@ class TaobaoItem(Item):
     }
    
 class JDItem(Item):
-    jd_id = StringField(required = True, unique = True)
+    jd_id = StringField(unique = True)
     jd_category = ListField(required = False)
     cid = IntField(required = True) 
     title = StringField(required = True)

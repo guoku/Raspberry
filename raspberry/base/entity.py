@@ -106,6 +106,7 @@ class Entity(object):
 
     def __insert_jd_item(self, jd_item_info, images):
         _weight = jd_item_info['weight'] if jd_item_info.has_key('weight') else 0
+        print self.entity_id , 'entity_id'
         _jd_item = JDItem.create_jd_item(
             entity_id = self.entity_id,
             images = images,
@@ -125,6 +126,7 @@ class Entity(object):
                           jd_item_info, brand="", title="", intro="", 
                           detail_image_urls=[], weight = 0, rank_score = 0):
         _item = JDItem.get_item_by_jd_id(jd_item_info['jd_id'])
+        print _item , 'is none?'
         if _item == None:
             _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
             if _chief_image_id == None:
@@ -139,43 +141,43 @@ class Entity(object):
                     _image_id = _image_obj.image_id
                 _detail_image_ids.append(_image_id)
 
-        _entity_hash = cls.cal_entity_hash(jd_item_info['jd_id'] + jd_item_info['title'] + \
+            _entity_hash = cls.cal_entity_hash(jd_item_info['jd_id'] + jd_item_info['title'] + \
                 jd_item_info['shop_nick'])
 
-        try:
-            _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = jd_item_info['cid'])
-            _old_category_id = _obj.guoku_category_id
+            try:
+                _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = jd_item_info['cid'])
+                _old_category_id = _obj.guoku_category_id
 
-        except:
-            _old_category_id = 12
+            except:
+                _old_category_id = 12
 
-        _entity_obj = EntityModel.objects.create(
-            entity_hash = _entity_hash,
-            creator_id = creator_id,
-            category_id = _old_category_id,
-            neo_category_id = category_id,
-            brand = brand,
-            title = title,
-            intro = intro,
-            price = jd_item_info['price'],
-            chief_image = _chief_image_id,
-            detail_images = "#".join(_detail_image_ids),
-            weight = weight,
-            rank_score = rank_score
-        )
-        
-        try:
-            _item_images = _detail_image_ids
-            _item_images.append(_chief_image_id)
+            _entity_obj = EntityModel.objects.create(
+                entity_hash = _entity_hash,
+                creator_id = creator_id,
+                category_id = _old_category_id,
+                neo_category_id = category_id,
+                brand = brand,
+                title = title,
+                intro = intro,
+                price = jd_item_info['price'],
+                chief_image = _chief_image_id,
+                detail_images = "#".join(_detail_image_ids),
+                weight = weight,
+                rank_score = rank_score
+            )
+            
+            try:
+                _item_images = _detail_image_ids
+                _item_images.append(_chief_image_id)
 
-            _inst = cls(_entity_obj.id)
-            _inst.entity_obj = _entity_obj
-            _jd_item_id = _inst.__insert_jd_item(jd_item_info, _item_images)
+                _inst = cls(_entity_obj.id)
+                _inst.entity_obj = _entity_obj
+                _jd_item_id = _inst.__insert_jd_item(jd_item_info, _item_images)
 
-            return _inst
-        except Exception, e:
-            _entity_obj.delete()
-            raise Entity.FailToCreateEntity(str(e))
+                return _inst
+            except Exception, e:
+                _entity_obj.delete()
+                raise Entity.FailToCreateEntity(str(e))
 
             
     @classmethod
