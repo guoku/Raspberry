@@ -56,7 +56,8 @@
         {% block search %}
             <form action="{% url 'web_search' %}" method="GET">
                 <input type="text" placeholder="搜你想要的" name="q" class="search">
-                <button type="submit"></button>
+                <input class="search-submit" type="submit" value="">
+{#                <button type="submit"></button>#}
             </form>
         {% endblock %}
     </div>

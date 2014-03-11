@@ -75,18 +75,12 @@
             <form method="POST" action="{% url 'web_change_password' %}" class="psw">
                 {% csrf_token %}
                 <h3>更改密码</h3>
-
+                {% for field in password_form %}
                 <div>
-                    {{ password_form.old_password }}
+                    <label for="{{ field.id_for_label }}" >{{ field.label }}</label>
+                    {{ field }}
                 </div>
-
-                <div>
-                    {{ password_form.new_password }}
-                </div>
-
-                <div>
-                    {{ password_form.confirm_password }}
-                </div>
+                {% endfor %}
                 <input type="submit" value="修改密码" class="guoku-button">
             </form>
         </div>
