@@ -1,10 +1,11 @@
+{% load entity %}
 <div class="common-tag">
     <h4>#{{ tag_context.tag }}</h4>
 
     <div class="entities">
         {% for entity_context in tag_context.entity_list %}
             <a href="{% url 'web_detail' entity_context.entity_hash %}" class="entity-img">
-                <img src="{{ entity_context.chief_image.url }}">
+                <img src="{{ entity_context.chief_image.url|resize:"128" }}">
             </a>
         {% endfor %}
     </div>
