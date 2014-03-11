@@ -16,5 +16,5 @@ urlpatterns = patterns(
     url(r'^setting/$', 'setting', name='web_setting'),
     url(r'^setting/update_profile/$', 'update_profile', name='web_update_profile'),
     url(r'^setting/change_password/$', 'change_password', name='web_change_password'),
-    url(r'^setting/update_avatar/$', 'update_avatar', name='web_update_avatar')
+    url(r'^setting/update/avatar/$', 'update_avatar', name='web_update_avatar')
 )
