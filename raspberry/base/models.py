@@ -286,13 +286,16 @@ class Seller_Info(models.Model):
 
 class Guoku_Plus(models.Model):
     entity = models.ForeignKey(Entity)
-    item_id = models.CharField(max_length = 32,db_index = True)
+    item_id = models.CharField(max_length = 32, db_index = True)
     taobao_id = models.CharField(max_length = 32, db_index = True)
     sale_price = models.FloatField()
     total_volume = models.IntegerField()
     sales_volume = models.IntegerField()
     start_time = models.DateTimeField()
+    seller_remarks = models.CharField(null = True, max_length = 100)
+    editor_remarks = models.CharField(null = True, max_length = 100)
     created_time = models.DateTimeField()
+    updated_time = models.DateTimeField()
     status = models.CharField(max_length = 32, db_index = True)
 
 class Guoku_Plus_Token(models.Model):

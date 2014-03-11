@@ -68,7 +68,7 @@ def apply_guoku_plus(request, user_context, shop_inst):
                 sale_price = form.cleaned_data['sale_price']
                 remarks = form.cleaned_data['remarks']
                 shop_inst.create_guoku_plus_application(taobao_item_id, item_context['entity_id'], quantity, sale_price, remarks)
-                return HttpResponseRedirect(reverse("seller_guoku_plus_applications_list"))
+                return HttpResponseRedirect(reverse("seller_guoku_plus_list"))
             else:
                 return HttpResponseForbidden()
         return render_to_response("guoku_plus_application.html",
@@ -90,9 +90,9 @@ def apply_guoku_plus(request, user_context, shop_inst):
 @require_GET
 @login_required
 @seller_only
-def guoku_plus_applications_list(request, user_context, shop_inst):
+def guokuplus_list(request, user_context, shop_inst):
     items = shop_inst.read_guoku_plus_application_list()
-    return render_to_response("guoku_plus_application_list.html",
+    return render_to_response("guoku_plus_list.html",
                     {'items' : items},
                     context_instance = RequestContext(request))
 

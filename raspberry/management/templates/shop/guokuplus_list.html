@@ -2,7 +2,7 @@
 {% load management %}
 
 {% block content %}
-    {% display_shop_navigator "guoku_plus_applications" %}
+    {% display_shop_navigator "guoku_plus" %}
     <div class="span2">
     </div>
     <div class="span9">
@@ -32,7 +32,7 @@
                 <td>{{ app.quantity }}</td>
                 <td>{{ app.remarks }}</td>
                 <td>{{ app.status }}</td>
-                <td><a href="{% url 'management_guokuplus_application_detail' %}?app_id={{app.id}}">编辑</a></td>
+                <td><a href="{% url 'management_guokuplus_detail' %}?app_id={{app.id}}">编辑</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

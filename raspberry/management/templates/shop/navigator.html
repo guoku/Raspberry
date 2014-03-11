@@ -3,14 +3,11 @@
         <li {% if current_tab == "shops" %} class="active" {% endif %}>
             <a href="{% url 'management_shop_list' %}">店铺列表</a>
         </li>
-        <li {% if current_tab == "guoku_plus_applications"%} class="active" {% endif %}>
-            <a href="{% url 'management_guokuplus_application_list' %}">果库+申请</a>
+        <li {% if current_tab == "guoku_plus"%} class="active" {% endif %}>
+            <a href="{% url 'management_guokuplus_list' %}">果库+</a>
         </li>
         <li {% if current_tab == "shop_verification"%} class="active" {% endif %}>
             <a href="{% url 'management_shop_verification_list' %}">店铺认证申请</a>
-        </li>
-        <li {% if current_tab == "guoku_plus_activity"%} class="active" {% endif %}>
-            <a href="{% url 'management_guokuplus_activity_list' %}">果库+活动</a>
         </li>
     </ul>
 </div>

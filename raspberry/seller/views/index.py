@@ -6,8 +6,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+
+from base.entity import Entity
+from base.taobao_shop import TaobaoShop
 from base.user import User
 from base.taobao_shop import TaobaoShop
+
+from forms import ShopVerificationForm
 import re
 from web import web_utils
 from utils.authority import seller_only
@@ -18,7 +23,20 @@ from urlparse import urlparse
 @login_required
 @seller_only
 def index(request, user_context, shop_inst):
-    return HttpResponseRedirect(reverse('seller_commodities'))
+    verification_form = ShopVerificationForm()
+    shop_context = shop_inst.read()
+    shop_verification = shop_inst.read_shop_verification()
+    return render_to_response(
+        "index.html",
+        { 
+            "user_context" : user_context,
+            "shop_context" : shop_context,
+            "verification_form" : verification_form,
+            "shop_verification" : shop_verification
+        },
+        context_instance=RequestContext(request)
+    )
+    #return HttpResponseRedirect(reverse('seller_commodities'))
 
 @login_required
 def bind_taobao_shop(request):

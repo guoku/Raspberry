@@ -1,0 +1,30 @@
+{% extends "seller_base.html" %}
+{% load seller %}
+
+{% block title %}
+    果库卖家
+{% endblock %}
+
+{% block content %}
+    <div class="span2">
+    
+    </div>
+    <div class="span9">
+        {% display_shop_verification user_context verification_form shop_verification%}
+        <a name="guoku_plus_application">果库价申请</a>
+        <div class="span9">
+        <form action="{% url 'seller_apply_guoku_plus' %}" method="post">
+            {% csrf_token %}
+		    {{ application_form.as_table }}
+            <input type="submit" value="提交"/>
+        <form>
+        </div>
+
+        
+        <div class="span9">
+             
+        </div>
+
+
+    </div>
+{% endblock %}

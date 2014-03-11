@@ -8,17 +8,16 @@ from base.stream_models import TaobaoShopInfo
 from base.stream_models import TaobaoShopExtendedInfo
 from base.stream_models import CrawlerInfo
 from base.stream_models import TaobaoShopVerificationInfo
-from base.stream_models import GuokuPlusApplication
-from base.stream_models import GuokuPlusApplicationComment
 from base.stream_models import ShopScore
 from base.entity import Entity
 from base.item import Item
+from base.user import User
 import datetime
 import urllib
 import pymongo
    
 STATUS_WAITING = 'waiting'
-STATUS_ACCEPTED = 'accepted'
+STATUS_APPROVED = 'approved'
 STATUS_REJECTED = 'rejected'
 
 class TaobaoShop(object):
@@ -89,6 +88,19 @@ class TaobaoShop(object):
         if _doc.shop_info.shop_score:
             _context['shop_score'] = _doc.shop_info.shop_score._data
         
+        try:
+            _seller_info_obj = SellerInfoModel.objects.get(shop_nick = self.nick)
+            _context['user_id'] = _seller_info_obj.user_id
+            _context['shop_type'] = _seller_info_obj.shop_type
+            _context['shop_company_name'] = _seller_info_obj.company_name
+            _context['shop_qq_account'] = _seller_info_obj.qq_account
+            _context['shop_email'] = _seller_info_obj.email
+            _context['shop_mobile'] = _seller_info_obj.shop_type
+            _context['shop_main_products'] = _seller_info_obj.main_products
+            _context['shop_intro'] = _seller_info_obj.intro
+            _context['shop_verified'] = _seller_info_obj.verified
+        except:
+            pass
         return _context
 
     def update(self, priority = None, cycle = None, shop_type = None,
@@ -116,45 +128,57 @@ class TaobaoShop(object):
                 shop.extended_info.single_tail = single_tail
             shop.save()
 
+    def update_seller_info(self,
+                           shop_type = None,
+                           company_name = None,
+                           qq_account = None,
+                           email = None,
+                           mobile = None,
+                           main_products = None,
+                           intro = None,
+                           verified = None):
+        _seller = SellerInfoModel.objects.get(user_id = self.user_id)
+        if shop_type:
+            _seller.shop_type = shop_type
+        if company_name:
+            _seller.company_name = company_name
+        if qq_account:
+            _seller.qq_account = qq_account
+        if email:
+            _seller.email = email
+        if mobile:
+            _seller.mobile = mobile
+        if main_products:
+            _seller.main_products
+        if intro:
+            _seller.intro = intro
+        if verified:
+            _seller.verified = verified
+        _seller.save()
+        self.__reset_basic_info_to_cache()
+
     def create_verification_info(self, user_id, shop_type, company_name, qq_account, email, mobile, main_products, intro):
         if TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).count() > 0:
             return False
         info = TaobaoShopVerificationInfo(
-            user_id = user_id,
             shop_nick = self.nick,
-            shop_type = shop_type,
-            company_name = company_name,
-            email = email,
-            qq_account = qq_account,
-            mobile = mobile,
-            main_products = main_products,
-            intro = intro,
             status = STATUS_WAITING,
             created_time = datetime.datetime.now()
-            )
+        )
         info.save()
+        self.update_seller_info(
+            shop_type = shop_type,
+            company_name = company_name,
+            qq_account = qq_account,
+            email = email,
+            mobile = mobile,
+            main_products = main_products,
+            intro = intro
+        )
         return True
 
-    def create_guoku_plus_application(self, taobao_item_id, entity_id, quantity, sale_price, remarks):
-        item = GuokuPlusApplication(
-            shop_nick = self.nick,
-            taobao_item_id = taobao_item_id,
-            entity_id = entity_id,
-            quantity = quantity,
-            sale_price = sale_price,
-            status = STATUS_WAITING,
-            remarks = remarks,
-            editor_comments = [],
-            seller_comments = [],
-            has_new_editor_comment = False,
-            has_new_seller_comment = False,
-            created_time = datetime.datetime.now(),
-            updated_time = datetime.datetime.now()
-        )
-        item.save()
-   
-    def read_guoku_plus_application_list(self, offset = 0, count = 100):
-        return GuokuPlusApp.find(shop_nick = self.nick, offset = offset, count = count) 
+    def read_guoku_plus_list(self, offset = 0, count = 100):
+        return GuokuPlusActivity.find(shop_nick = self.nick, offset = offset, count = count) 
 
     def item_exist(self, taobao_item_id):
         item = Item.get_item_by_taobao_id(taobao_item_id)
@@ -182,122 +206,109 @@ class TaobaoShop(object):
             results.append(item._data)
         return results, _count
 
-    @classmethod
-    def approve_shop_verification(cls, shop_nick):
+    def handle_shop_verification(self, action):
         _record = TaobaoShopVerificationInfo.objects.filter(shop_nick = shop_nick).first()
-        if _record:
-            SellerInfoModel.objects.create(
-                    
-            )
-        return
+        if not _record:
+            return
+        if action == "approve":
+            self.update_seller_info(verified = True)
+            _record.status = STATUS_APPROVED
+            _record.save()
+        elif action == "reject":
+            self.update_seller_info(verified = False)
+            _record.status = STATUS_REJECTED
+            _record.save()
 
+################################################
 
-class GuokuPlusApp(object):
-    def __init__(self, app_id):
-        self.app_id = app_id
+ACTIVITY_WAITING = "waiting"
+ACTIVITY_APPROVED = "approved"
+ACTIVITY_REJECTED = "rejected"
+ACTIVITY_ONGOING = "ongoing"
+ACIIVITY_FINISHED = "finished"
+ACIIVITY_ABORTED = "aborted"
 
-    @classmethod
-    def find(cls, shop_nick = None, status = None, offset = 0, count = 100):
-        _hdl = GuokuPlusApplication.objects
-        if shop_nick:
-            _hdl = _hdl.filter(shop_nick = shop_nick)
-        if status:
-            _hdl = _hdl.filter(status = status)
-        _hdl = _hdl.order_by("-updated_time")
-        _count = _hdl.count()
-        _results = _hdl.skip(offset).limit(count)
-        results = []
-        for app in _results:
-            results.append(GuokuPlusApp.normalize_guoku_plus_application_data(app))
-        return results, _count
-
-    def read(self):
-        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
-        if app:
-            return GuokuPlusApp.normalize_guoku_plus_application_data(app)
-        else:
-            return None
-
-    @staticmethod
-    def normalize_guoku_plus_application_data(application):
-        result = {}
-        result.update(application._data)
-        entity = Entity(application.entity_id)
-        result['entity_context'] = entity.read()
-        item = Item.get_item_by_taobao_id(result['taobao_item_id'])
-        if item:
-            result['item_context'] = item.read()
-        result['editor_comments'] = []
-        result['seller_comments'] = []
-        for comment in application.editor_comments:
-            result['editor_comments'].append(comment._data)
-        for comment in application.seller_comments:
-            result['seller_comments'].append(comment._data)
-        return result
-
-    def approve(self, start_time):
-        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
-        if app:
-            app_context = self.read()
-            GuokuPlusActivity.create(
-                entity_id = app_context['entity_context']['entity_id'],
-                item_id = app_context['item_context']['item_id'],
-                taobao_id = app_context['taobao_item_id'],
-                sale_price = app_context['sale_price'],
-                total_volume = app_context['quantity'],
-                start_time = start_time
-            )
-            app.status = STATUS_ACCEPTED
-            app.save()
-        
-    def add_editor_comment(self, comment):
-        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
-        if app:
-            _comment = GuokuPlusApplicationComment(content = comment, created_time = datetime.datetime.now())
-            app.update(push__editor_comments = _comment)
-            app.has_new_editor_comment = True
-            app.save()
-
-    def add_seller_comment(self, comment):
-        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
-        if app:
-            _comment = GuokuPlusApplicationComment(content = comment, created_time = datetime.datetime.now())
-            app.update(push__editor_comments = _comment)
-            app.has_new_seller_comment = True
-            app.save()
-
-    def mark_editor_comment_as_read(self):
-        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
-        if app:
-            app.has_new_editor_comment = False
-            app.save()
-    
-    def mark_seller_comment_as_read(self):
-        app = GuokuPlusApplication.objects.filter(id = self.app_id).first()
-        if app:
-            app.has_new_seller_comment = False
-            app.save()
-
-GUOKU_PLUS_NORMAL = "normal"
-GUOKU_PLUS_STOPPED = "stopped"
-GUOKU_PLUS_FINISHED = "finished"
 class GuokuPlusActivity(object):
     def __init__(self, activity_id):
         self.activity_id = activity_id
+        self.__ensure_activity_obj()
+
+    def __ensure_entity_obj(self):
+        if not hasattr(self, 'activity_obj'):
+            self.activity_obj = GuokuPlusModel.objects.get(pk = self.activity_id)
+
+    def __get_context(self):
+        context = {}
+        entity = Entity(self.activity_obj.entity_id)
+        item = Item(self.activity_obj.item_id)
+        context['activity_id'] = self.activity_obj.id
+        context['entity_context'] = entity.read()
+        context['item_context'] = item.read()
+        context['taobao_id'] = self.activity_obj.taobao_id
+        context['sale_price'] = self.activity_obj.sale_price
+        context['total_volume'] = self.activity_obj.total_volume
+        context['sales_volume'] = self.activity_obj.sales_volume
+        context['start_time'] = self.activity_obj.start_time
+        context['seller_remarks'] = self.activity_obj.seller_remarks
+        context['editor_remarks'] = self.activity_obj.editor_remarks
+        context['created_time'] = self.activity_obj.created_time
+        context['updated_time'] = self.activity_obj.updated_time
+        context['status'] = self.activity_obj.status
+        return context
 
     @classmethod
-    def create(cls, entity_id, item_id, taobao_id, sale_price, total_volume, start_time):
+    def create(cls, taobao_id, sale_price, total_volume, seller_remarks):
+        item_inst = Item.get_item_by_taobao_id(taobao_id)
+        item_context = item_inst.read()
+        time_now = datetime.datetime.now()
+
         GuokuPlusModel.objects.create(
-            entity_id = entity_id,
-            item_id = item_id,
+            entity_id = item_context['entity_id'],
+            item_id = item_context['item_id'],
             taobao_id = taobao_id,
             sale_price = sale_price,
             total_volume = total_volume,
             sales_volume = 0,
-            start_time = start_time,
-            status = GUOKU_PLUS_NORMAL,
-            created_time = datetime.datetime.now())   
-        pass
+            seller_remarks = seller_remarks,
+            status = ACTIVITY_WAITING,
+            created_time = time_now,
+            update_time = time_now)   
+
+    @classmethod
+    def find(cls, shop_nick = None, status = None, offset = 0, count = 100):
+        _hdl = GuokuPlusModel.objects.all()
+        if shop_nick:
+            _hdl = _hdl.filter(shop_nick = shop_nick)
+        if status:
+            _hdl = _hdl.filter(status = status)
+        total = _hdl.count()
+        _hdl = _hdl[offset : offset + count]
+        results = []
+        for item in _hdl:
+            results.append(GuokuPlusActivity(_hdl.id).read())
+        return results, total
+
+    def approve(self, start_time, editor_remarks = None):
+        self.activity_obj.application_status = APPLICATION_APPROVED
+        self.activity_obj.status = ACTIVITY_APPROVED
+        self.activity_obj.start_time = start_time
+        self.activity_obj.editor_remarks = editor_remarks
+        self.activity_obj.save()
+
+    def reject(self, editor_remarks = None):
+        self.activity_obj.status = ACTIVITY_REJECTED
+        self.activity_obj.editor_remarks = editor_remarks
+        self.activity_obj.save()
+    
+    def update(self, sale_price = None, total_volume = None):
+        if sale_price:
+            self.activity_obj.sale_price = sale_price
+        if total_volume:
+            self.activity_obj.total_volume = total_volume
+        self.activity_obj.save()
+
+    def read(self):
+        return self.__get_context()
 
     def create_token(self, user_id):
         GuokuPlusTokenModel.objects.create(
@@ -315,24 +326,17 @@ class GuokuPlusActivity(object):
             return False
         if token_obj.used:
             return False
-        try:
-            activity = GuokuPlusModel.objects.get(id = token.guoku_plus_activity_id)
-        except:
+        if self.activity_obj.activity_status != ACTIVITY_ONGOING:
             return False
-        if activity.status != GUOKU_PLUS_NORMAL:
-            return False
-        activity.sales_volume = activity.sales_volume + 1
-        if activity.sales_volume >= activity.total_volume:
-            activity.status = GUOKU_PLUS_FINISHED
-        activity.save()
+        self.activity_obj.sales_volume = self.activity_obj.sales_volume + 1
+        if self.activity_obj.sales_volume >= self.activity_obj.total_volume:
+            self.activity_obj.activity_status = ACTIVITY_FINISHED
+        self.activity_obj.save()
         token_obj.used = True
         token_obj.used_time = datetime.datetime.now()
         token_obj.save()
         return True
         
-    def update(self):
-        pass
-
     @classmethod
     def get_activity_by_token(cls, token):
         try:
@@ -341,6 +345,3 @@ class GuokuPlusActivity(object):
             return None
         return cls(token_obj.guoku_plus_activity_id)
         
-    def read(self):
-        pass
-

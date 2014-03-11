@@ -1,5 +1,50 @@
 {% extends "management_base.html" %}
-
+{% load management %}
 {% block content %}
     {% display_shop_navigator "shop_verification" %}
+    <div class="span2">
+    </div>
+    <div class="span9">
+        <table class="table table-stdiped table-bordered table-condensed">
+            <thead>
+                <th>店铺</th>
+                <th>类型</th>
+                <th>公司名</th>
+                <th>邮箱</th>
+                <th>QQ</th>
+                <th>手机</th>
+                <th>主营</th>
+                <th>介绍</th>
+                <th>状态</th>
+                <th>日期</th>
+                <th>操作</th>
+            </thead>
+            <tbody>
+                {% for item in results %}
+                <tr>
+                    <td>{{ item.shop_nick }}</td>
+                    <td>{{ item.shop_type }}</td>
+                    <td>{{ item.company_name }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.qq_account }}</td>
+                    <td>{{ item.mobile }}</td>
+                    <td>{{ item.main_products }}</td>
+                    <td>{{ item.intro }}</td>
+                    <td>{{ item.status }}</td>
+                    <td>{{ item.created_time }}</td>
+                    <td>
+                        <form action="{% url 'management_handle_shop_verification' %}" method="POST">
+                            <input type="hidden" name="shop_nick" value="{{item.shop_nick}}">
+                            <select name="action">
+                                <option value="approve">通过</option>
+                                <option value="reject">拒绝</option>
+                            </select>
+                            <input type="submit" value="提交"/>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
