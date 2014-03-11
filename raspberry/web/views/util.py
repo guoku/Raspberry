@@ -20,3 +20,10 @@ def user_already_like_entity(user_id, entity_id):
         return False
 
     return Entity(entity_id).like_already(user_id)
+
+
+def user_entity(user_id, eid):
+    entity = Entity(eid).read()
+    entity['is_user_already_like'] = Entity(eid).like_already(user_id)
+    return entity
+
