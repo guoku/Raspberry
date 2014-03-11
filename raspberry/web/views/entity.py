@@ -17,7 +17,6 @@ from base.user import User
 from base.item import Item
 from base.tag import Tag 
 from base.category import Category
-from util import *
 from utils.extractor.taobao import TaobaoExtractor 
 
 from django.utils.log import getLogger
@@ -26,17 +25,19 @@ log = getLogger('django')
 
 
 def entity_detail(request, entity_hash, template='main/detail.html'):
-    _user = get_request_user(request.user.id)
-    _user_context = get_request_user_context(_user)
+    if request.user.is_authenticated():
+        _request_user_context = User(request.user.id).read() 
+        _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
+    else:
+        _request_user_context = None
+        _request_user_like_entity_set = [] 
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
     _liker_list = Entity(_entity_id).liker_list(offset=0, count=20)
-    _note_id_list = Note.find(entity_id=_entity_id)
-    _selection_note = None
-    _common_note_list = []
-    _is_user_already_note = False
-    _is_user_already_like = user_already_like_entity(request.user.id, _entity_id)
+    _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
+    _tag_list = Tag.entity_tag_stat(_entity_id)
+    
     
     _is_soldout = True
     _taobao_id = None
@@ -46,29 +47,30 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         if not _item_context['soldout']:
             _is_soldout = False
             break
-
-    _tag_list = Tag.entity_tag_stat(_entity_id)
-    for _note_id in _note_id_list:
+    
+    _is_user_already_note = False
+    if _request_user_context != None:
+        _request_user_note_id_list = Note.find(entity_id=_entity_id, creator_set=[_request_user_context['user_id']])
+        if len(_request_user_note_id_list) > 0:
+            _is_user_already_note = True
+    _selection_note = None
+    _common_note_list = []
+    for _note_id in Note.find(entity_id=_entity_id, reverse=True):
         _note = Note(_note_id)
         _note_context = _note.read()
         if _note_context['weight'] >= 0:
             _creator_context = User(_note_context['creator_id']).read()
-    
-            if _creator_context['user_id'] == request.user.id:
-                _is_user_already_note = True
-    
-            # 判断是否是精选
             if _note_context['is_selected']:
                 _selection_note = {
                     'note_context' : _note_context,
                     'creator_context' : _creator_context,
-                    'user_context' : _user_context
+                    'user_context' : _request_user_context
                 }
             else:
                 _common_note_list.append({
                     'note_context' : _note_context,
                     'creator_context' : _creator_context,
-                    'user_context' : _user_context
+                    'user_context' : _request_user_context
                 })
 
     _guess_entity_context = []
@@ -81,7 +83,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     return render_to_response(
         template,
         {
-            'user_context' : _user_context,
+            'user_context' : _request_user_context,
             'entity_context' : _entity_context,
             'is_user_already_note' : _is_user_already_note,
             'is_user_already_like' : _is_user_already_like,
