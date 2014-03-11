@@ -18,11 +18,10 @@
     </div>
 
     <div class="avatars">
-        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
-        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
-        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
-        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
-        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
-        <a href=""><img src="{{ user_context.avatar_small }}" width="69" height="69"></a>
+        {% for entity_context in user_context.latest_like_entities %}
+            <a href="">
+                <img src="{{ entity_context.chief_image.url }}" width="69" height="69">
+            </a>
+        {% endfor %}
     </div>
 </div>

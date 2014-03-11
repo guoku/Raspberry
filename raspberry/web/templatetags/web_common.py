@@ -6,6 +6,7 @@ from django.utils.log import getLogger
 from datetime import datetime
 import time
 
+from base.entity import Entity
 
 register = template.Library()
 
@@ -16,9 +17,7 @@ def format_time(value):
 
     before_time = time.mktime(value.timetuple())
     now = time.mktime(datetime.now().timetuple())
-    # log.info("time %s" % before_time)
     time_interval = now - before_time
-    # time_interval = (datetime.utcnow() - value).total_seconds()
 
     if time_interval < 60:
         return "%d 秒前" % (time_interval)
@@ -70,6 +69,13 @@ register.inclusion_tag("common/tag.html")(display_common_tag)
 
 
 def display_common_user(user_context):
+    user_context['latest_like_entities'] = []
+    if user_context.has_key('latest_like_entity_id_list'):
+        for _e_id in user_context['latest_like_entity_id_list'][0:6]:
+            try:
+                user_context['latest_like_entities'].append(Entity(_e_id).read())
+            except Exception, e:
+                pass
     return {
         'user_context' : user_context,
     }
