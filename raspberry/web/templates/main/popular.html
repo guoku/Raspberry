@@ -26,8 +26,11 @@
                     </a>
 
                     <div class="detail">
-                        <a href="{% url 'web_like_entity' popular.entity_context.entity_id %}"
-                           class="like{% if popular.is_user_already_like %} liked{% endif %}">
+                        {% if popular.is_user_already_like %}
+                            <a href="{% url 'web_like_entity' popular.entity_context.entity_id '0' %}" class="like liked">
+                        {% else %}
+                            <a href="{% url 'web_like_entity' popular.entity_context.entity_id '1' %}" class="like">
+                        {% endif %}
                             <span class="icon"></span>喜爱
                             <span class="count">{{ popular.entity_context.like_count }}</span>
                         </a>/

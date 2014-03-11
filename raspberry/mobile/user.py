@@ -6,7 +6,8 @@ from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
 from mobile.models import Session_Key
-from tasks import FollowUserTask, UnfollowUserTask, MobileLogTask
+from share.tasks import FollowUserTask, UnfollowUserTask
+from tasks import MobileLogTask
 from utils.lib import get_client_ip
 import datetime
 import time    

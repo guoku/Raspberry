@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from urlparse import urlparse
 from django.template import loader
+from share.tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 import json
 import re
 import HTMLParser
@@ -230,17 +231,16 @@ def create_entity(request):
 
 
 @login_required
-def like_entity(request, entity_id):
+def like_entity(request, entity_id, target_status):
     if request.method == 'POST':
-        _user_id = request.user.id
-        _entity = Entity(int(entity_id))
-
-        if _entity.like_already(_user_id):
-            _entity.unlike(_user_id)
-            return HttpResponse('0')
-        else:
-            _entity.like(_user_id)
+        _request_user_id = request.user.id
+        if target_status == '1':
+            LikeEntityTask.delay(entity_id, _request_user_id)
             return HttpResponse('1')
+        else:
+            UnlikeEntityTask.delay(entity_id, _request_user_id)
+            return HttpResponse('0')
+
 
 
 def get_notes(request, entity_id, template='entity/entity_note_list.html'):
