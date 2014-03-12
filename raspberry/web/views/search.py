@@ -9,14 +9,17 @@ from base.user import User
 from base.entity import Entity
 from base.models import NoteSelection
 from base.tag import Tag
-from util import *
 from utils.paginator import Paginator
 import datetime
 
 
 def search(request, template='search/search.html'):
-    _user = get_request_user(request.user.id)
-    _user_context = get_request_user_context(_user)
+    if request.user.is_authenticated():
+        _request_user_context = User(request.user.id).read() 
+        _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
+    else:
+        _request_user_context = None
+        _request_user_like_entity_set = [] 
 
     _query = request.GET.get('q', None)
     _group = request.GET.get('g', 'e')  # e->entity, u->user, t->tag
@@ -56,7 +59,7 @@ def search(request, template='search/search.html'):
         for _e_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
             try:
                 _entity_context = Entity(_e_id).read()
-                _entity_context['is_user_already_like'] = user_already_like_entity(request.user.id, _e_id)
+                _entity_context['is_user_already_like'] = True if _e_id in _request_user_like_entity_set else False
                 _entity_list.append(_entity_context)
             except Exception, e:
                 pass
@@ -65,7 +68,7 @@ def search(request, template='search/search.html'):
     return render_to_response(
         template,
         {
-            'user_context' : _user_context,
+            'user_context' : _request_user_context,
             'query' : _query,
             'group' : _group,
             'entity_list' : _entity_list,

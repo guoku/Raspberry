@@ -586,7 +586,7 @@ class Entity(object):
 
     def update_like_count(self):
         self.__ensure_entity_obj()
-        _like_count = EntityLikeModel.objects.filter(entity_id = self.entity_id).count()
+        _like_count = EntityLikeModel.objects.filter(entity_id=self.entity_id).count()
         self.entity_obj.like_count = _like_count
         self.entity_obj.save()
         
@@ -621,8 +621,8 @@ class Entity(object):
 #                    _message.save()
 
             return True
-        except:
-            pass
+        except Exception, e:
+            print e
         return False
          
     def unlike(self, user_id):
@@ -633,6 +633,7 @@ class Entity(object):
                 user_id = _user_id
             )
             _obj.delete()
+            self.update_like_count()
             User(_user_id).update_user_like_stat_info()
             cache.delete("gk_e_like_u2elt_%s"%user_id)
             

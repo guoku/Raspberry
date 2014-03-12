@@ -10,11 +10,20 @@
 
 {% block content %}
     <div id="setting">
+        {% if msg_code != None %}
+            <div class="information">
+                {% if msg_code == '0' %}
+                    未上传图片
+                {% elif msg_code == '1' %}
+                    图片太大
+                {% endif %}
+            </div>
+        {% endif %}
+
         <h2>帐号设置</h2>
 
 {#        <div class="guoku-block">#}
             {% display_avatar_update user_context %}
-
             <form method="POST" action="{% url 'web_update_profile' %}" class="base-info" id="set-base-info">
                 {% csrf_token %}
                 <h3>个人资料</h3>
