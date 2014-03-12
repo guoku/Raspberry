@@ -128,20 +128,13 @@ def user_tags(request, user_id, template=TEMPLATE):
         _request_user_context = None
         _relation = None 
 
-    _p = int(request.GET.get('p', 1))
+    _page_num = int(request.GET.get('p', '1'))
     _tag_stat_list = Tag.user_tag_stat(user_id)
-    _count_in_one_page = 20
     _total_count = len(_tag_stat_list)
-    _paginator = None
-
-    if _total_count > _count_in_one_page:
-        _paginator = Paginator(_p, _count_in_one_page, _total_count)
-        _offset = _paginator.offset
-        _tag_stat_list = _tag_stat_list[_offset: _offset + _count_in_one_page]
+    _paginator = Paginator(_page_num, 20, len(_tag_stat_list))
 
     _tag_list = []
-
-    for _tag_stat in _tag_stat_list:
+    for _tag_stat in _tag_stat_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         _tag_id = _tag_stat['tag_id']
         _tag = _tag_stat['tag']
         _entity_id_list = Tag.find_user_tag_entity(user_id, _tag)
@@ -159,10 +152,9 @@ def user_tags(request, user_id, template=TEMPLATE):
         template,
         {
             'content_tab' : 'tag',
-            'user_context' : _user_context,
+            'request_user_context' : _request_user_context,
             'query_user_context' : _query_user_context,
-            'is_user_self' : _is_user_self,
-            'is_user_already_follow' : _is_user_already_follow,
+            'relation' : _relation,
             'tag_list' : _tag_list,
             'paginator' : _paginator
         },
@@ -171,50 +163,34 @@ def user_tags(request, user_id, template=TEMPLATE):
 
 
 def user_followings(request, user_id, template=TEMPLATE):
-    _user = get_request_user(request.user.id)
-    _user_context = get_request_user_context(_user)
+    _query_user = User(user_id)
+    _query_user_context = _query_user.read() 
+    if request.user.is_authenticated():
+        _request_user_context = User(request.user.id).read() 
+        _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
+    else:
+        _request_user_context = None
+        _relation = None 
 
-    _query_user_id = int(user_id)
-    _query_user = User(_query_user_id)
-    _query_user_context = _query_user.read()
 
-    _is_user_self = (request.user.id == _query_user_id)
-    _is_user_already_follow = None
-
-    if _user is not None:
-        _is_user_already_follow = _user.is_following(_query_user_id)
-
-    _p = request.GET.get('p', 1)
-
+    _page_num = request.GET.get('p', 1)
     _following_id_list = _query_user.read_following_user_id_list()
     _total_count = len(_following_id_list)
-    _count_in_one_page = 20
-    _paginator = None
 
-    if _total_count > _count_in_one_page:
-        _paginator = Paginator(_p, _count_in_one_page, _total_count)
-        _offset = _paginator.offset
-        _following_id_list = _following_id_list[_offset: _offset + _count_in_one_page]
-
+    _paginator = Paginator(_page_num, 20, len(_following_id_list))
     _following_list = []
-
-    for _id in _following_id_list:
-        _f_user_context = User(_id).read()
-        _f_user_context['is_user_already_follow'] = False
-
-        if _user is not None:
-            _f_user_context['is_user_already_follow'] = _user.is_following(_id)
-
+    for _u_id in _following_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
+        _f_user_context = User(_u_id).read()
+        _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
         _following_list.append(_f_user_context)
 
     return render_to_response(
         template,
         {
             'content_tab' : 'following',
-            'user_context' : _user_context,
+            'request_user_context' : _request_user_context,
             'query_user_context' : _query_user_context,
-            'is_user_self' : _is_user_self,
-            'is_user_already_follow' : _is_user_already_follow,
+            'relation' : _relation,
             'user_list' : _following_list,
             'paginator' : _paginator
         },
@@ -223,49 +199,30 @@ def user_followings(request, user_id, template=TEMPLATE):
 
 
 def user_fans(request, user_id, template=TEMPLATE):
-    _user = get_request_user(request.user.id)
-    _user_context = get_request_user_context(_user)
+    _query_user = User(user_id)
+    _query_user_context = _query_user.read() 
+    if request.user.is_authenticated():
+        _request_user_context = User(request.user.id).read() 
+        _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
+    else:
+        _request_user_context = None
+        _relation = None 
 
-    _query_user_id = int(user_id)
-    _query_user = User(_query_user_id)
-    _query_user_context = _query_user.read()
-
-    _is_user_self = (request.user.id == _query_user_id)
-    _is_user_already_follow = None
-
-    if _user is not None:
-        _is_user_already_follow = _user.is_following(_query_user_id)
-
-    _p = request.GET.get('p', 1)
-
+    _page_num = request.GET.get('p', 1)
     _fans_id_list = _query_user.read_fan_user_id_list()
-    _total_count = len(_fans_id_list)
-    _count_in_one_page = 20
-    _paginator = None
-
-    if _total_count > _count_in_one_page:
-        _paginator = Paginator(_p, _count_in_one_page, _total_count)
-        _offset = _paginator.offset
-        _fans_id_list = _fans_id_list[_offset: _offset + _count_in_one_page]
+    _paginator = Paginator(_page_num, 20, len(_fans_id_list))
 
     _fans_list = []
-
-    for _id in _fans_id_list:
-        _f_user_context = User(_id).read()
-        _f_user_context['is_user_already_follow'] = False
-
-        if _user is not None:
-            _f_user_context['is_user_already_follow'] = _user.is_following(_id)
-
+    for _u_id in _fans_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
+        _f_user_context = User(_u_id).read()
+        _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
         _fans_list.append(_f_user_context)
 
     return render_to_response(
         template,
         {
             'content_tab' : 'fan',
-            'user_context' : _user_context,
-            'is_user_self' : _is_user_self,
-            'is_user_already_follow' : _is_user_already_follow,
+            'request_user_context' : _request_user_context,
             'query_user_context' : _query_user_context,
             'user_list' : _fans_list,
             'paginator' : _paginator
