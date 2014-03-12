@@ -47,7 +47,7 @@ def read_popular_entity_from_cache(scale = 'daily', json = False):
     _cache_key = 'entity_popularity_' + scale
     _context = cache.get(_cache_key)
     if _context == None:
-        return None
+        return None 
     else:  
         if json:
             _context['updated_time'] = time.mktime(datetime.datetime.now().timetuple())

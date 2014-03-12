@@ -319,7 +319,6 @@ def update_profile(request):
     form = SettingAccountForm(request.POST)
     _user = User(request.user.id)
     if form.is_valid():
-        print form.cleaned_data
         _user.set_profile(
             nickname = form.cleaned_data['nickname'],
             location = form.cleaned_data['location'],
@@ -333,12 +332,14 @@ def update_profile(request):
 @require_GET
 @login_required
 def setting(request, template = 'account/setting.html'):
+    _msg_code = request.GET.get('msg', None)
     _user_context = User(request.user.id).read()
     profile_form = SettingAccountForm(initial = _user_context)
     password_form = ChangePasswordForm(request.user)
     return render_to_response(
         template,
         {
+            'msg_code' : _msg_code,
             'user_context' : _user_context,
             'profile_form': profile_form,
             'password_form': password_form,
@@ -347,34 +348,23 @@ def setting(request, template = 'account/setting.html'):
     )
 
 @login_required
-def upload_avatar(request):
-    pass
-
-@login_required
 def update_avatar(request):
     if request.method == 'POST':
         _avatar_img = request.FILES.get('avatar_img', None)
-        _ret = {
-            'status': 1
-        }
-
         if _avatar_img is None:
-            _ret = {
-                'status': 0,
-                'msg': '未上传图片'
-            }
+            return HttpResponseRedirect(reverse('web_setting') + '?msg=0') 
 
         elif len(_avatar_img) / (1024 ** 2) > 2:
-            _ret = {
-                'status': 0,
-                'msg': '图片太大'
-            }
+            return HttpResponseRedirect(reverse('web_setting') + '?msg=1') 
 
         else:
             if hasattr(_avatar_img, 'chunks'):
                 _image_data = ''.join(chunk for chunk in _avatar_img.chunks())
             else:
                 _image_data = _avatar_img.read()
-
-        return HttpResponse(json.dumps(_ret))
+        
+        _user = User(request.user.id)
+        _user.upload_avatar(_image_data)
+        
+        return HttpResponseRedirect(reverse('web_setting')) 
 

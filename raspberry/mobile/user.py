@@ -6,7 +6,8 @@ from lib.user import MobileUser
 from lib.http import SuccessJsonResponse, ErrorJsonResponse
 from lib.sign import check_sign
 from mobile.models import Session_Key
-from tasks import FollowUserTask, UnfollowUserTask, MobileLogTask
+from share.tasks import FollowUserTask, UnfollowUserTask
+from tasks import MobileLogTask
 from utils.lib import get_client_ip
 import datetime
 import time    
@@ -434,7 +435,7 @@ def user_like(request, user_id):
         )
         return SuccessJsonResponse(_rslt)
     
-#@check_sign
+@check_sign
 def search_user(request):
     _start_at = datetime.datetime.now()
     if request.method == "GET":
