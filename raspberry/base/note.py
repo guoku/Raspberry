@@ -61,7 +61,7 @@ class Note(object):
         return _hdl.count() 
     
     @classmethod
-    def find(cls, timestamp=None, entity_id=None, user_id=None, category_id=None, creator_set=None, offset=None, count=None, sort_by=None, selection=0, status=0):
+    def find(cls, timestamp=None, entity_id=None, user_id=None, category_id=None, creator_set=None, offset=None, count=None, sort_by=None, reverse=False, selection=0, status=0):
         _hdl = NoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
@@ -88,7 +88,10 @@ class Note(object):
         elif sort_by == 'selection_post_time':
             _hdl = _hdl.order_by('-post_time')
         else:
-            _hdl = _hdl.order_by('-created_time')
+            if reverse:
+                _hdl = _hdl.order_by('created_time')
+            else:
+                _hdl = _hdl.order_by('-created_time')
             
 
 
@@ -378,9 +381,18 @@ class Note(object):
         return False
 
     def poke_already(self, user_id):
-        if NotePokeModel.objects.filter(note_id = self.note_id, user_id = user_id).count() > 0:
+        if NotePokeModel.objects.filter(note_id=self.note_id, user_id=user_id).count() > 0:
             return True
         return False
+    
+    @staticmethod
+    def poke_set_of_user(user_id):
+        _user_id = int(user_id)
+        _set = set()
+        for _obj in NotePokeModel.objects.filter(user_id=_user_id):
+            _set.add(_obj.note_id)
+        return _set
+        
 
     @classmethod
     def comment_count(cls, entity_id = None, note_id = None):

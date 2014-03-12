@@ -1,5 +1,5 @@
 {% load i18n staticfiles %}
-{% load user %}
+{% load account %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
@@ -36,21 +36,27 @@
             <a href="{{ web_selection_url }}" class="logo"><img src="{% static 'images/logo.png' %}"></a>
         </div>
 
-        <ul class="nav">
+        <ul class="nav-bar">
             <li {% if web_selection_url in request.path %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
             <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
         </ul>
 
-        {% if request.user.is_authenticated  %}
-        <div class="user">
-            {% show_auth_user request.user.id %}
-        </div>
-        {% endif %}
+
+        <ul class="user">
+            {% if request.user.is_authenticated  %}
+                {% show_auth_user request.user.id %}
+            {% else %}
+                <li><a href="{% url 'web_login' %}">{% trans 'sign in' %}</a></li>
+                <li><span>&#124;</span></li>
+                <li><a href="{% url 'web_register' %}">{% trans 'sign up' %}</a></li>
+            {% endif %}
+        </ul>
+
 
         {% block search %}
             <form action="{% url 'web_search' %}" method="GET">
                 <input type="text" placeholder="搜你想要的" name="q" class="search">
-                <button type="submit"><img src="{% static 'images/search_icon.png' %}"></button>
+                <button type="submit"></button>
             </form>
         {% endblock %}
     </div>

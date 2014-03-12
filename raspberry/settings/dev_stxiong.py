@@ -72,7 +72,7 @@ MANGO_PORT = 27017
 JUMP_TO_TAOBAO = True 
 
 IMAGE_LOCAL = True 
-IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
+IMAGE_SERVER  = 'http://10.0.1.109/image/local/'
 ALLOWED_HOSTS = ['*']
 #IMAGE_LOCAL = False 
 #IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
@@ -94,7 +94,7 @@ APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 MEDIA_URL = ''
 STATIC_ROOT = ''
-STATIC_URL = '/static/'
+STATIC_URL = '/static/v3/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 BASE_DIR = os.getcwd()
 
@@ -107,20 +107,24 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-DEBUG_TOOLBAR_PANELS = [
+DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.versions.VersionsPanel',
     'debug_toolbar.panels.timer.TimerPanel',
     'debug_toolbar.panels.settings.SettingsPanel',
     'debug_toolbar.panels.headers.HeadersPanel',
     'debug_toolbar.panels.request.RequestPanel',
     'debug_toolbar.panels.sql.SQLPanel',
-    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
     'debug_toolbar.panels.templates.TemplatesPanel',
     'debug_toolbar.panels.cache.CachePanel',
     'debug_toolbar.panels.signals.SignalsPanel',
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
-]
+)
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
+
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -154,3 +158,9 @@ INSTALLED_APPS = (
     # 'redis_admin',
 )
 
+ips = ['127.0.0.1']
+theRange = range(0, 255, 1)
+for ip in theRange:
+    ip = '10.0.1.%d' % ip
+    ips.append(ip)
+INTERNAL_IPS = tuple(ips)

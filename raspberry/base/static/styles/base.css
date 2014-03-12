@@ -1,4 +1,4 @@
-bdy {
+body {
     color: #999;
     background-color: #fff;
     font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -33,6 +33,7 @@ button {
     outline: none;
 }
 
+/*------------ button --------------*/
 .btn {
     -moz-user-select: none;
     display: inline-block;
@@ -72,8 +73,9 @@ button {
     font-weight: 400;
     padding: 6px 0 6px 0;
 }
+/*---------------------------------*/
 
-/*--------------------------------------------*/
+/*---------------- header --------------------*/
 #header {
     position: fixed;
     top: 0;
@@ -103,16 +105,6 @@ button {
     top: 9px;
 }
 
-#header ul {
-    position: absolute;
-    top: 0;
-    left: 127px;
-    height: 49px;
-    line-height: 49px;
-    margin: 0;
-    padding: 0;
-}
-
 #header li {
     float: left;
     margin-right: 25px;
@@ -124,55 +116,109 @@ button {
     color: #fff;
 }
 
-#header .user {
+#header .nav-bar {
+    /*float: left;*/
     position: absolute;
     top: 0;
-    right: 0;
+    left: 127px;
+    height: 49px;
+    line-height: 49px;
+    margin: 0;
+    padding: 0;
 }
 
-#header .user ul {
-    display: inline;
+#header .user {
+    /*position: absolute;*/
     /*top: 0;*/
-    left: 0;
-}
-#header .user li  {
-    width: 135px;
-    height: 45px;
-    text-align: right;
-    vertical-align: middle;
+    float: right!important;
+    /*width: 135px;*/
+    margin: 0;
+    padding: 0;
+    /*top: 0;*/
+    /*right: 0;*/
 }
 
-#header .user li ul {
+#header .user li {
+    padding: 0;
+    margin: 0;
+}
+#header .user li span {
     display: block;
-    position: absolute;
-    top: 49px;
-    left: 0;
-    line-height: 25px;
+    /*text-align: center;*/
+    line-height: 49px;
 }
+#header .user li a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    line-height: 49px;
+    /*padding: 0;*/
+    /*margin: 0;*/
+    padding: 0 6px;
+    /*width: 30px;*/
+}
+#header .user li a:hover {
 
-/*#header .user li:hover ul {*/
-    /*display: block;*/
-/*}*/
+}
+#header .user .menu {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    /*height: 135px;*/
+    right: 0;
+    /*overflow: hidden;*/
+    /*border: 1px solid rgba(0, 0, 0, 0.15);*/
+}
+#header .user .menu li {
+    float: none;
+    padding: 0;
+    margin: 0;
+}
+#header .user .menu .icon-guoku {
 
+}
+#header .user .menu .icon-setting {
 
+}
+#header .user .menu .icon-signout {
+
+}
+#header .user .menu li a {
+    display: block;
+    background-color: #FFFFFF;
+    text-align: right;
+    height: 45px;
+    width: 135px;
+    line-height: 45px;
+    text-decoration: none;
+    /*border: 1px solid rgba(0, 0, 0, 0.15);*/
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    border-left: 1px solid rgba(0, 0, 0, 0.15);
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+#header .user .menu li a:hover {
+    background-color: #000000;
+}
+#header .user li ul {
+    display: none;
+    position: absolute;
+}
+#header .user li:hover ul {
+    display: block;
+}
 
 #header .user .user-avatar {
     display: table-cell;
+    position: relative;
     height: 49px;
+    line-height: 0;
     vertical-align: middle;
+    /*padding: 0;*/
 }
 
 #header .user img {
     border-radius: 50%;
 }
-
-/*#header .user .menu {*/
-    /*display: inline;*/
-    /*top: 49px;*/
-    /*left: 0;*/
-    /*height: 40px;*/
-/*}*/
-
 
 #header form {
     position: absolute;
@@ -196,26 +242,28 @@ button {
     outline: 0;
     color: #fff;
     /*border-radius: 4px 4px 4px 4px;*/
-    /*background-color: #DCDCDC;*/
-    /*background-color: #272727;*/
     background-color: rgba(220, 220, 220, 0.95);
 }
 
 #header form button {
-    height: 49px;
-    vertical-align: top;
-    padding: 8px 6px;
+    /*margin-top: 11px;*/
+    width: 26px;
+    height: 30px;
+
+    vertical-align: middle;
+    padding: 0;
     border: none;
     border-radius: 0;
     outline: 0;
-    background-color: #DCDCDC;
+    background-image: url("/static/v3/images/search_icon.png");
+    /*background-color: #DCDCDC;*/
     /*background-color: #272727;*/
 }
 
-#header form button img {
-    width: 26px;
-    height: 28px;
-}
+/*#header form button img {*/
+    /*width: 26px;*/
+    /*height: 28px;*/
+/*}*/
 
 /* welcome----------------- */
 #welcome {
@@ -317,8 +365,14 @@ button {
     width: 535px;
     height: 605px;
     border-radius: 5px;
+    
 }
-
+.border_hack{
+    z-index: 100000;
+    top:100px;
+    background: #fff;
+    border: 10px solid #ddd;
+}
 .account-form .form_container {
     width: 515px;
     height: auto;
@@ -390,7 +444,7 @@ button {
 .login .tip {
     /*margin-bottom: 55px;*/
     display: block;
-    width: 515px;
+    width: 535px;
     height: 125px;
     background-color: #fbfbfb;
     margin-bottom: 55px;
@@ -465,6 +519,12 @@ button {
 
 .register .to-login a {
     color: #427ec0;
+}
+
+.account-form input:focus
+{
+    border-color: #ade0b3;
+    background-color: #f8f8f8;
 }
 
 /**entity like-------------------------------------*/
@@ -622,7 +682,7 @@ button {
     /*background-color: #eeeeee;*/
     display: table-cell;
     /*max-width: 100%;*/
-    padding: 2px;
+    /*padding: 2px;*/
     width: 296px;
     height: 270px;
     text-align: center;
@@ -703,8 +763,10 @@ button {
 }
 
 .common-tag .entity-img img {
-    width: 100%;
-    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    /*height: auto;*/
+    /*width: auto;*/
 }
 
 .common-tag .more {
@@ -784,7 +846,7 @@ button {
     position: fixed;
     background: #eeeeee;
     bottom: 55px;
-    right: 10px;
+    left: 10px;
     z-index: 1000000;
     display: none;
 }

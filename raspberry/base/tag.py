@@ -72,8 +72,17 @@ class Tag(object):
                 TagModel.objects.get(tag_hash = _hash)
             except:
                 break
-        return _hash 
-    
+        return _hash
+
+    @classmethod
+    def tag_name(cls, tag_hash):
+        try:
+            _tag = TagModel.objects.get(tag_hash=tag_hash)
+            return _tag.tag
+        except TagModel.DoesNotExist, e:
+            log.error("Error: %s" % e)
+        return None
+
     @classmethod
     def add_entity_tag(cls, entity_id, user_id, tag):
         try:
@@ -94,6 +103,7 @@ class Tag(object):
                 user_id = user_id,
                 tag_id = _tag_obj.id,
                 tag_text = _tag_obj.tag,
+                tag_hash = _tag_obj.tag_hash,
                 count = 0,
                 last_tagged_time = datetime.datetime.now()
             )
@@ -146,8 +156,7 @@ class Tag(object):
         _user_id = int(user_id)
         _tag_id_mapping = {}
         _user_tags = []
-        
-        
+
         for _data in EntityTagModel.objects.filter(user_id=_user_id).values('tag_text', 'tag_id', 'tag_hash').annotate(entity_count=Count('entity')).order_by('-entity_count'):
             _user_tags.append({
                 'tag_id' : _data['tag_id'],
@@ -220,8 +229,21 @@ class Tag(object):
         return EntityTagModel.objects.filter(user = user_id, tag_text = tag).count()
         
     @classmethod
+    def search(cls, query_string):
+        _query_set = TagModel.search.query(query_string)
+        _tag_id_list = map(lambda x: int(x._sphinx['id']), _query_set)
+        _tag_list = []
+        for _tag_obj in TagModel.objects.filter(id__in=_tag_id_list):
+            _tag_list.append({
+                'tag' : _tag_obj.tag,
+                'tag_id' : _tag_obj.id,
+                'tag_hash' : _tag_obj.tag_hash
+            })
+        return _tag_list 
+    
+    @classmethod
     def find_tag_entity(cls, tag_hash):
-        return map(lambda x: x, EntityTagModel.objects.filter(tag_hash = tag_hash, entity__weight__gt=0).order_by('-created_time').values_list('entity', flat=True).distinct())
+        return map(lambda x: x, EntityTagModel.objects.filter(tag_hash=tag_hash, entity__weight__gt=0).order_by('-created_time').values_list('entity', flat=True).distinct())
         
     
     @classmethod

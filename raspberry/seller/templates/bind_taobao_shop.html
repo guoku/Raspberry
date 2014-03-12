@@ -26,8 +26,8 @@
         {% else %}
         {# {{ user_context.taobao_nick }}   #}
             {% if not user_context.taobao_nick%}
-                    <div>
-                        请先绑定淘宝帐号 
+                    <div class="bind_tip">
+                        <p>请先绑定淘宝帐号</p> 
                     </div>
                 <a href="{% url 'web_setting' %}" target="_blank">绑定</a>
             {% else %}

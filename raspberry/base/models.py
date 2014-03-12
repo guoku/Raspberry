@@ -200,6 +200,12 @@ class Tag(models.Model):
     creator = models.ForeignKey(User)
     created_time = models.DateTimeField(auto_now_add = True, db_index=True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
+    
+    search = SphinxSearch( 
+        index = 'tags',
+        mode = 'SPH_MATCH_ALL',
+        rankmode = 'SPH_RANK_NONE',
+    )
 
     class Meta:
         ordering = ['-created_time']

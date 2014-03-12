@@ -210,7 +210,8 @@ function initTag(){
 
             var flag = 0;
             var $body = $('body');
-            $body.on('click', removeLogin);
+            $login.show();
+           $body.on('click', removeLogin);
             function removeLogin() {
                 if (flag === 1) {
                     $accountForm.hide();
@@ -219,9 +220,7 @@ function initTag(){
                 }
                 flag = 1;
             }
-
-            $login.show();
-
+            
             $login.find('.to-reg').on('click', function (e) {
                 e.preventDefault();
                 $login.hide();
@@ -239,7 +238,6 @@ function initTag(){
             // 喜爱 like entity
 
             var self = this;
-
             $('.like').on('click', function (e) {
                 if (!self.isUserLogined()) {
                     self.popLoginBox();
@@ -654,7 +652,8 @@ function initTag(){
                     var $poke = $(this);
                     var $counter = $poke.find('small');
                     var note_id = $poke.attr('data-note');
-                    var url = '/note/' + note_id + '/poke/';
+                    var target_status = $poke.attr('data-target-status');
+                    var url = '/note/' + note_id + '/poke/' + target_status + '/';
 
                     $.post(url, function (data) {
                         var count = parseInt($counter.text()) || 0;
@@ -736,8 +735,10 @@ function initTag(){
 
     var clickToTop = {
         caculateRight:function(){
-            var right = $("#selection").offset().left+$("#selection").width();
-            $(".click_to_top").css("left",right+10);
+            if($("#selection").size()>0){
+                var right = $("#selection").offset().left+$("#selection").width();
+                $(".click_to_top").css("left",right+10);
+            }
         },
         bindClick:function(){
             $(".click_to_top").click(function(){

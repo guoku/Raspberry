@@ -16,7 +16,8 @@ from note import *
 from report import *
 from user import *
 from base.item import Item
-from tasks import MarkFootprint, MobileLogTask
+from share.tasks import MarkFootprint
+from tasks import MobileLogTask
 from utils.lib import get_client_ip
 from utils.taobao import * 
 from utils.taobaoapi.utils import taobaoke_mobile_item_convert 
