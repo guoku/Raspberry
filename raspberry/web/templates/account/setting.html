@@ -4,14 +4,15 @@
 
 {% block title %}{% trans "settings" %}{% endblock %}
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">
+{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">#}
 {% endblock %}
 
 {% block content %}
     <div id="setting">
         <h2>帐号设置</h2>
 
-        <div class="guoku-block">
+{#        <div class="guoku-block">#}
             {% display_avatar_update user_context %}
 
             <form method="POST" action="{% url 'web_update_profile' %}" class="base-info" id="set-base-info">
@@ -84,7 +85,7 @@
                 <input type="submit" value="修改密码" class="guoku-button">
             </form>
         </div>
-    </div>
+{#    </div>#}
 {% endblock %}
 
 {% block script %}

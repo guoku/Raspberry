@@ -76,9 +76,10 @@ CELERY_DISABLE_RATE_LIMITS = True
 
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
 MEDIA_URL = '/uploads/'
-# STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static')
+# STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/v3/')
 STATIC_ROOT = '/tmp/static/'
-STATIC_URL = 'http://static.guoku.com/static/v3/'
+# STATIC_URL = 'http://static.guoku.com/static/v3/'
+STATIC_URL = '/static/v3/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
@@ -116,7 +117,6 @@ INSTALLED_APPS = (
     'stats',
     'web',
     'edm',
-    # 'lotto',
     'gunicorn',
 )
 

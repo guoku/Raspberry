@@ -240,6 +240,10 @@ button {
     background-color: rgba(220, 220, 220, 0.95);
     /*background-color: #FFFFFF;*/
 }
+#header form input:focus {
+    border-color: #ade0b3;
+    background-color: #f8f8f8;
+}
 
 #header .search-submit {
     /*margin-top: 11px;*/
