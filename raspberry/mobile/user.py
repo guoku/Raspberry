@@ -387,7 +387,7 @@ def user_tag_entity(request, user_id, tag):
         return SuccessJsonResponse(_rslt)
 
 
-@check_sign
+#@check_sign
 def user_like(request, user_id):
     _start_at = datetime.datetime.now()
     if request.method == "GET":
@@ -409,9 +409,13 @@ def user_like(request, user_id):
             _list.append(MobileEntity(_item[0]).read(_request_user_id))
             _entity_id_list.append(_item[0])
             _last_like_time = _item[1]
-
+        
+        if _last_like_time == None:
+            _timestamp = 0.0 
+        else:
+            _timestamp = time.mktime(_last_like_time.timetuple())
         _rslt = {
-            'timestamp' : time.mktime(_last_like_time.timetuple()),
+            'timestamp' : _timestamp, 
             'entity_list' : _list
         }
 
