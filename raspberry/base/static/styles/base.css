@@ -904,3 +904,22 @@ a.tag:hover {text-decoration:underline;}
 	width:530px;
 	word-wrap:break-word;
 }
+
+/*分页*/
+.pages{
+    height: 50px;
+}
+.page_s{
+    padding:5px 10px;
+    height: 30px;
+    line-height: 30px;
+    border:1px solid #ddd;
+    margin-left:10px;
+    float: right;
+    cursor: pointer;
+}
+.page_s:hover{
+    background: #427dbf;
+    color: #fff;
+    font-weight: 700;
+}

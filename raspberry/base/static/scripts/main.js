@@ -240,13 +240,20 @@ function initTag(){
             // 喜爱 like entity
 
             var self = this;
-            $('.like').on('click', function (e) {
+            $('.like').live('click', function (e) {
                 if (!self.isUserLogined()) {
                     self.popLoginBox();
                 } else {
                     var $like = $(this);
                     var $counter = $like.find('.count');
-                    $.post($like[0].href, function (data) {
+                    var url = $(this).attr("href");
+                    if(url[url.length-2] == 1)
+                    	var like_status = 0;
+                    else
+                    	var like_status = 1;
+                   	var s = url.replace(/\/[01]\//,"/"+like_status+"/");
+                   	$(this).attr("href",s);
+                    $.post(url, function (data) {
                         var count = parseInt($counter.text());
                         var result = parseInt(data);
 
@@ -399,7 +406,6 @@ function initTag(){
     var detail = {
         updateNote: function ($noteItem) {
             // 用于修改点评，为修改点评按钮添加事件处理等
-
             var $form = $noteItem.find('.update-note-form');
 
             if ($form[0]) {
@@ -411,6 +417,10 @@ function initTag(){
                 $textarea.TagAC();
 
                 $noteItem.find('.update-note').on('click', function () {
+                	if($form.css("display")=="block"){
+                		$form.find(".cancel").click();
+                		return ;
+                	}
                     originNoteText = textarea.value;
                     $noteContent.hide();
                     $form.show();
@@ -655,8 +665,7 @@ function initTag(){
                     var $poke = $(this);
                     var $counter = $poke.find('small');
                     var note_id = $poke.attr('data-note');
-                    var target_status = $poke.attr('data-target-status');
-                    var url = '/note/' + note_id + '/poke/' + target_status + '/';
+                    var url = '/note/' + note_id + '/poke/';
 
                     $.post(url, function (data) {
                         var count = parseInt($counter.text()) || 0;
