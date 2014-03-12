@@ -51,7 +51,6 @@ button {
     background-color: #FFFFFF;
     border-color: #cccccc;
     color: #333333;
-    /*font-size: 18px;*/
 }
 
 .btn-primary {
@@ -197,7 +196,7 @@ button {
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 #header .user .menu li a:hover {
-    background-color: #000000;
+    background-color: #f8f8f8;
 }
 #header .user li ul {
     display: none;
@@ -226,38 +225,33 @@ button {
     right: 135px;
     height: 49px;
     line-height: 49px;
-
-    /*width: 285px;*/
-    /*background-color: #272727;*/
-    /*background-color: rgba(37, 37, 37, 0.95);*/
 }
 
-#header form .search {
+#header .search {
     width: 145px;
     height: 30px;
-    line-height: 30px;
-    /*margin: 0 5px;*/
-    padding: 0;
+    /*line-height: 30px;*/
+    margin: 9px 0;
+    /*padding: 10px 0;*/
     border: none;
     outline: 0;
     color: #fff;
-    /*border-radius: 4px 4px 4px 4px;*/
+    border-radius: 4px 4px 4px 4px;
     background-color: rgba(220, 220, 220, 0.95);
+    /*background-color: #FFFFFF;*/
 }
 
-#header form button {
+#header .search-submit {
     /*margin-top: 11px;*/
-    width: 26px;
+    /*position: absolute;*/
+    /*display: inline-block;*/
+    width: 30px;
     height: 30px;
-
     vertical-align: middle;
+    margin: 10px 0 9px -32px;
     padding: 0;
     border: none;
-    border-radius: 0;
-    outline: 0;
-    background-image: url("/static/v3/images/search_icon.png");
-    /*background-color: #DCDCDC;*/
-    /*background-color: #272727;*/
+    background: url("/static/v3/images/search_icon.png") no-repeat transparent;
 }
 
 /*#header form button img {*/
@@ -408,7 +402,8 @@ button {
     height: 30px;
     line-height: 30px;
     font-size: 16px;
-    background-color: #fbfbfb;
+    background-color: #FFFFFF;
+    /*background-color: #fbfbfb;*/
     border: 1px solid #eee;
     outline: none;
 }
@@ -720,6 +715,7 @@ button {
     left: 15px;
     bottom: 15px;
     line-height: 30px;
+    /*font-weight: 100;*/
 }
 
 .common-note .creator {
@@ -727,7 +723,13 @@ button {
     right: 15px;
     bottom: 15px;
     color: #777;
-    font-size: 15px;
+    font-size: 14px;
+    /*font-weight: 100;*/
+}
+.common-note .creator .nickname {
+    font-size: 14px;
+    line-height: 32px;
+    text-decoration: none;
 }
 
 .common-note .creator img {

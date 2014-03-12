@@ -28,8 +28,8 @@
                         </div>
                     </form>
                 {% endif %}
-
-                <a href="javascript:;" class="poke" data-note="{{ note_context.note_id }}"><span></span>
+                
+                <a href="javascript:;" class="poke{%if poke_button_target_status == '0'%} poked{%endif%}" data-note="{{ note_context.note_id }}" data-target-status="{{ poke_button_target_status }}"><span></span>
                     {% if note_context.poke_count > 0 %}
                         <small>{{ note_context.poke_count }}</small>
                     {% endif %}

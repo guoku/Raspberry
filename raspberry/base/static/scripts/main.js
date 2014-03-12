@@ -655,7 +655,8 @@ function initTag(){
                     var $poke = $(this);
                     var $counter = $poke.find('small');
                     var note_id = $poke.attr('data-note');
-                    var url = '/note/' + note_id + '/poke/';
+                    var target_status = $poke.attr('data-target-status');
+                    var url = '/note/' + note_id + '/poke/' + target_status + '/';
 
                     $.post(url, function (data) {
                         var count = parseInt($counter.text()) || 0;
