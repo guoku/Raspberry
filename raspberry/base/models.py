@@ -294,6 +294,7 @@ class Guoku_Plus(models.Model):
     entity = models.ForeignKey(Entity)
     item_id = models.CharField(max_length = 32, db_index = True)
     taobao_id = models.CharField(max_length = 32, db_index = True)
+    shop_nick = models.CharField(max_length = 50, db_index = True)
     sale_price = models.FloatField()
     total_volume = models.IntegerField()
     sales_volume = models.IntegerField()

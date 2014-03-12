@@ -21,14 +21,7 @@ from management.tasks import CreateTaobaoShopTask, MergeEntityTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 from utils.extractor.taobao import TaobaoExtractor 
-
-def _parse_taobao_id_from_url(url):
-    params = url.split("?")[1]
-    for param in params.split("&"):
-        tokens = param.split("=")
-        if len(tokens) >= 2 and (tokens[0] == "id" or tokens[0] == "item_id"):
-            return tokens[1]
-    return None
+from utils.taobao import parse_taobao_id_from_url
 
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
@@ -103,7 +96,7 @@ def new_entity(request):
         _cand_url = request.POST.get("url", None)
         _hostname = urlparse(_cand_url).hostname
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) != None: 
-            _taobao_id = _parse_taobao_id_from_url(_cand_url)
+            _taobao_id = parse_taobao_id_from_url(_cand_url)
 
             _item = Item.get_item_by_taobao_id(_taobao_id)
             if _item == None:
@@ -664,7 +657,7 @@ def read_taobao_item_state(request):
     _taobao_url = request.GET.get("url", None)
     _item = None
     if _taobao_url is not None:
-        _taobao_id = _parse_taobao_id_from_url(_taobao_url)
+        _taobao_id = parse_taobao_id_from_url(_taobao_url)
         _item = Item.get_item_by_taobao_id(_taobao_id)
 
     _result = {}
