@@ -613,8 +613,15 @@ class User(object):
         return _stat_info
     
     
-    def entity_like_count(self, category_id):
-        return EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id).count()
+    def entity_like_count(self, category_id=None, neo_category_id=None):
+        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id)
+        if category_id != None:
+            _hdl = _hdl.filter(entity__category__pid = category_id)
+        
+        if neo_category_id != None:
+            _hdl = _hdl.filter(entity__neo_category_id = neo_category_id)
+        
+        return _hdl.count() 
         
     def find_like_entity(self, category_id = None, neo_category_id = None, timestamp = None, offset = None, count = 30, sort_by = None, reverse = False, with_timestamp = False):
         
