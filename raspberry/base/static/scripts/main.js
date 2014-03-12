@@ -775,3 +775,13 @@ function initTag(){
     })();
 
 })(jQuery, document, window);
+$(function(){
+	$(".account-form input[name='password'],.account-form input[name='email']").on("keyup",function(){
+		if($(".account-form input[name='password']").val()!="" && $.trim($(".account-form input[name='email']").val())!=""){
+			$(".account-form input[type='submit']").removeAttr("disabled").removeClass("submit_disabled").addClass("submit");
+		}else{
+			$(".account-form input[type='submit']").attr("disabled",true).removeClass("submit").addClass("submit_disabled");
+		}
+	});
+});
+	
