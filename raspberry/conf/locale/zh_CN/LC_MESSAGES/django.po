@@ -100,6 +100,13 @@ msgid "my guoku"
 msgstr "我的果库"
 
 
+# password message
+msgid "old password"
+msgstr "当前密码"
+
+msgid "new password"
+msgstr "新密码"
+
 # error message
 msgid "email is not signed up."
 msgstr "邮箱没有被注册"

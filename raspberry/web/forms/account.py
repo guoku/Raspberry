@@ -122,7 +122,9 @@ class SettingAccountForm(SignUpAccountBioFrom):
                                label=_('nickname'), help_text=_(''), required=False)
 
 class ChangePasswordForm(forms.Form):
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('old password')}), label=_('old password'), help_text=_(''))
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input',
+                                    'placeholder': _('old password')}),
+                                   label=_('old password'), help_text=_(''))
     new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('new password')}), label=_('new password'), help_text=_(''), min_length = 8, max_length = 20)
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('confirm password')}), label=_('confirm password'), help_text=_(''), min_length = 8, max_length = 20)
 
