@@ -137,10 +137,10 @@
 #detail .add-note form.active div {
     display: block;
     position: relative;
-    height: 28px;
-    margin-top: 10px;
 }
-
+.add-note-div{
+    margin-top:50px;
+}
 #detail .add-note form .cancel {
     position: absolute;
     right: 60px;

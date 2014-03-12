@@ -61,7 +61,7 @@
                         <img src="{{ user_context.avatar_small }}" width="50" height="50">
                         <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">
                             <textarea name="note_text" placeholder="写点评 ＃贴标签"></textarea>
-                            <div>
+                            <div class="add-note-div">
                                 <button type="button" class="cancel">取消</button>
                                 <button type="submit" class="submit">点评</button>
                             </div>

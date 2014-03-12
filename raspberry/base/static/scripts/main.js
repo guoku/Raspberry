@@ -71,7 +71,7 @@ function initTag(){
 
                 callback();
 
-                dom.css("margin-left", pos.left-5).css("margin-top", pos.top+25);
+                dom.css("margin-left", pos.left-5).css("margin-top", pos.top+15);
                 dom.show();
                 dom.find("p").mouseover(function(){
                     dom.find("p").removeClass("hover");
@@ -325,6 +325,8 @@ function initTag(){
                         $(".click_to_top").fadeOut();
                     }
                     var $this = $(this);
+                    
+                    //这里临时不采用自动加载，换成分页
                     if (($(window).height() + $(window).scrollTop()) >= $(document).height()) {
                             
 //                    if ($this.scrollTop() > top) {
