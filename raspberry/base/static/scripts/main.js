@@ -246,7 +246,6 @@ function initTag(){
                 } else {
                     var $like = $(this);
                     var $counter = $like.find('.count');
-
                     $.post($like[0].href, function (data) {
                         var count = parseInt($counter.text());
                         var result = parseInt(data);

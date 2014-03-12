@@ -61,7 +61,7 @@ class Note(object):
         return _hdl.count() 
     
     @classmethod
-    def find(cls, timestamp=None, entity_id=None, user_id=None, category_id=None, creator_set=None, offset=None, count=None, sort_by=None, selection=0, status=0):
+    def find(cls, timestamp=None, entity_id=None, user_id=None, category_id=None, creator_set=None, offset=None, count=None, sort_by=None, reverse=False, selection=0, status=0):
         _hdl = NoteModel.objects.all()
         if entity_id != None:
             _hdl = _hdl.filter(entity_id = entity_id)
@@ -88,7 +88,10 @@ class Note(object):
         elif sort_by == 'selection_post_time':
             _hdl = _hdl.order_by('-post_time')
         else:
-            _hdl = _hdl.order_by('-created_time')
+            if reverse:
+                _hdl = _hdl.order_by('created_time')
+            else:
+                _hdl = _hdl.order_by('-created_time')
             
 
 

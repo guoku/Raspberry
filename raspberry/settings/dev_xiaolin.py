@@ -70,7 +70,7 @@ ALLOWED_HOSTS = ['*']
 #CELERY_REDIS_HOST = "localhost"
 #CELERY_REDIS_PORT = 6379
 
-BROKER_HOST = "localhost"
+BROKER_HOST = "10.0.1.109"
 BROKER_PORT = 5672
 BROKER_USER = "guest"
 BROKER_PASSWORD = "guest"
@@ -83,7 +83,7 @@ APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 MEDIA_URL = ''
 STATIC_ROOT = ''
-STATIC_URL = '/static/'
+STATIC_URL = '/static/v3/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 BASE_DIR = os.getcwd()
 
@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'base',
     'management',
     'mobile',
+    'share',
     'seller',
     'stats',
     'web',

@@ -6,13 +6,6 @@ urlpatterns = patterns(
     url(r'^$', 'index', name='web_index'),
     url('^selected/$', 'selection', name='web_selection'),
     url('^popular/$', 'popular', name='web_popular'),
-    url('^discover/$', 'discover', name='web_discover'),
-    url('^discover/product/$', 'discover_more', name='web_discover_more'),
-
-    url(r'^shop/(?P<shop_id>\w+)/$', 'shop', name='web_shop'),
-    url(r'^message/$', 'message', name='web_message'),
-    url(r'^activity/$', 'activity', name='web_activity'),
-
     url(r'^c/', include('web.urls.category')),
     url(r'^t/', include('web.urls.tag')),
 )
