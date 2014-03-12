@@ -12,7 +12,8 @@ def display_note_item(note):
     return {
         'note_context' : note['note_context'],
         'creator_context' : note['creator_context'],
-        'user_context' : note['user_context']
+        'user_context' : note['user_context'],
+        'poke_button_target_status' : note['poke_button_target_status']
     }
 
 register.inclusion_tag("entity/entity_note.html")(display_note_item)

@@ -381,9 +381,18 @@ class Note(object):
         return False
 
     def poke_already(self, user_id):
-        if NotePokeModel.objects.filter(note_id = self.note_id, user_id = user_id).count() > 0:
+        if NotePokeModel.objects.filter(note_id=self.note_id, user_id=user_id).count() > 0:
             return True
         return False
+    
+    @staticmethod
+    def poke_set_of_user(user_id):
+        _user_id = int(user_id)
+        _set = set()
+        for _obj in NotePokeModel.objects.filter(user_id=_user_id):
+            _set.add(_obj.note_id)
+        return _set
+        
 
     @classmethod
     def comment_count(cls, entity_id = None, note_id = None):

@@ -28,9 +28,11 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     if request.user.is_authenticated():
         _request_user_context = User(request.user.id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
+        _request_user_poke_note_set = Note.poke_set_of_user(request.user.id)
     else:
         _request_user_context = None
-        _request_user_like_entity_set = [] 
+        _request_user_like_entity_set = []
+        _request_user_poke_note_set = []
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
@@ -60,17 +62,20 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         _note_context = _note.read()
         if _note_context['weight'] >= 0:
             _creator_context = User(_note_context['creator_id']).read()
+            _poke_button_target_status = '0' if _note_id in _request_user_poke_note_set else '1' 
             if _note_context['is_selected']:
                 _selection_note = {
                     'note_context' : _note_context,
                     'creator_context' : _creator_context,
-                    'user_context' : _request_user_context
+                    'user_context' : _request_user_context,
+                    'poke_button_target_status' : _poke_button_target_status,
                 }
             else:
                 _common_note_list.append({
                     'note_context' : _note_context,
                     'creator_context' : _creator_context,
-                    'user_context' : _request_user_context
+                    'user_context' : _request_user_context,
+                    'poke_button_target_status' : _poke_button_target_status,
                 })
 
     _guess_entity_context = []
