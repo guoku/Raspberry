@@ -6,7 +6,7 @@
 #setting .avatar {
     width: 120px;
     height: 120px;
-    margin: auto;
+    margin: 75px auto 30px auto;
 }
 #setting .avatar img {
     max-width: 100%;
@@ -15,7 +15,19 @@
 }
 
 #setting .update-avatar a {
-    float: left;
-    margin-right: 25px;
+    display: block;
+    /*margin-right: 25px;*/
     padding: 5px 5px 12px;
+    margin: auto;
+    color: #427ec0;
+    text-align: center;
 }
+
+/*#setting .update-avatar .file {*/
+    /*position: absolute;*/
+    /*top: 32px;*/
+    /*left: 135px;*/
+    /*width: 84px;*/
+    /*filter: alpha(opacity:0);*/
+    /*opacity: 0;*/
+/*}*/

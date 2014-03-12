@@ -3,9 +3,10 @@
     {% csrf_token %}
     <div class="avatar"><img src="{{ user_context.avatar_large }}"></div>
 
-    <a href="javascript:;">点击选择图片</a><span></span>
-    <input type="file" name="avatar_img" class="file">
-
+{#    <div class="upload-btn">#}
+        <a href="javascript:;">点击选择图片</a><span></span>
+{#        <input type="file" name="avatar_img" class="file">#}
+{#    </div>#}
     <p>支持 JPG、GIF、PNG 格式，不超过 2MB。</p>
     <input type="submit" value="更新头像" class="guoku-button">
 </form>

@@ -1,7 +1,7 @@
 # import os.path
 from defaults import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 
@@ -116,7 +116,8 @@ INSTALLED_APPS = (
     'seller',
     'stats',
     'web',
-    'edm',
+    'share',
+    # 'edm',
     'gunicorn',
 )
 
