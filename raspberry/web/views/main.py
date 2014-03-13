@@ -102,6 +102,10 @@ def selection(request, template='main/selection.html'):
         return JSONResponse(data=_ret)
 
 def wap_selection(request, template='wap/selection.html'):
+    _agent = 'iphone'
+    if 'Android' in request.META['HTTP_USER_AGENT']:
+        _agent = 'android'
+    
     _hdl = NoteSelection.objects.filter(post_time__lt = datetime.now())
     _hdl.order_by('-post_time')
     _selection_list = []
@@ -121,6 +125,7 @@ def wap_selection(request, template='wap/selection.html'):
     return render_to_response(
         template,
         {
+            'agent' : _agent,
             'selection_list' : _selection_list,
         },
         context_instance=RequestContext(request)

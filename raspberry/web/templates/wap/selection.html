@@ -1,3 +1,4 @@
+{% load i18n staticfiles %}
 {% load entity %}
 <!DOCTYPE html>
 <html>
@@ -74,7 +75,7 @@
 
 	<body>
         <div class="header" id='header'>
-            <img src="{{ STATIC_URL }}images/guoku_icon_mobile.png" class="logo" />
+            <img src="{% static 'images/guoku_icon_mobile.png' %}" class="logo"/>
             {% if agent == "iphone" %}
                 {% if isappinstalled == '1' %}
                     <a class="green" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">用果库iPhone版查看详情</a>
