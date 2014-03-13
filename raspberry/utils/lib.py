@@ -1,5 +1,6 @@
 # coding=utf8
 import random 
+import string
 
 def roll(tot, num):
     if tot > num * 10:
@@ -23,3 +24,12 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+def get_random_string(length, case_sensitive = False):
+    s = ""
+    charset = string.ascii_lowercase + string.digits
+    if case_sensitive:
+        charset = string.letters + string.digits
+    for i in range(length):
+        s += random.choice(charset)
+    return s

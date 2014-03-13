@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 
 from base.user import User
+from utils.lib import get_random_string
 import random
 import string
 def signup(email, password, nickname, **kwargs):
@@ -24,12 +25,6 @@ def get_login_redirect_url(request):
 def get_redirect_url(request):
     next_url = request.REQUEST.get("next", None)
     return next_url
-
-def get_random_string(length):
-    s = ""
-    for i in range(length):
-        s += random.choice(string.letters + string.digits)
-    return s
 
 def generate_random_storage_key(prefix):
     return prefix + "_" + get_random_string(10)

@@ -12,6 +12,7 @@ from base.stream_models import ShopScore
 from base.entity import Entity
 from base.item import Item
 from base.user import User
+from utils.lib import get_random_string
 import datetime
 import urllib
 import pymongo
@@ -315,13 +316,20 @@ class GuokuPlusActivity(object):
         return self.__get_context()
 
     def create_token(self, user_id):
-        GuokuPlusTokenModel.objects.create(
-            user_id = user_id,
-            guoku_plus_activity_id = self.activity_id,
-            token = "xxxx",
-            used = False,
-            created_time = datetime.datetime.now()
-        )
+        try_times = 10
+        while try_times > 0:
+            try:
+                GuokuPlusTokenModel.objects.create(
+                    user_id = user_id,
+                    guoku_plus_activity_id = self.activity_id,
+                    token = get_random_string(7),
+                    used = False,
+                    created_time = datetime.datetime.now()
+                )
+                return True
+            except:
+                try_times -= 1
+        return False
     
     def use_token(self, token):
         try:
