@@ -596,7 +596,7 @@ button {
     text-align: center;
     border: 1px solid #eee;
     font-weight: bold;
-    color: #999;
+    color: #898989;
     background: #fff;
     border: 1px solid #ddd;
     margin: 0px 5px;
@@ -605,12 +605,13 @@ button {
 }
 
 .pagination a:hover {
-    background-color: #427dbf;
-    color: #fff;
+    background-color: #f6f6f6;
+    
 }
 
 .pagination .active {
-    background-color: #f6f6f6;
+    background-color: #427dbf;
+    color: #fff;
 }
 
 .pagination a .previous,
