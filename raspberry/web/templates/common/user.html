@@ -9,9 +9,9 @@
         <span class="follows"><strong>{{ user_context.following_count }}</strong>关注</span>
     </div>
     <div class="follow">
-        {% if user_context.relation == 1 or user_context.relation == 0 %}
+        {% if user_context.relation == 1 or user_context.relation == 3 %}
             <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user">取消关注</a>
-        {% elif user_context.relation == 3 or user_context.relation == 2 %}
+        {% elif user_context.relation == 0 or user_context.relation == 2 %}
             <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user">关注</a>
         {% endif %}
     </div>
