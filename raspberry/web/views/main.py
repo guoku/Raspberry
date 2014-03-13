@@ -101,6 +101,34 @@ def selection(request, template='main/selection.html'):
             }
         return JSONResponse(data=_ret)
 
+def wap_selection(request, template='wap/selection.html'):
+    _hdl = NoteSelection.objects.filter(post_time__lt = datetime.now())
+    _hdl.order_by('-post_time')
+    _selection_list = []
+    for _note_selection in _hdl[0 : 30]:
+        _selection_note_id = _note_selection['note_id']
+        _entity_id = _note_selection['entity_id']
+        _entity_context = Entity(_entity_id).read()
+        _note_context = Note(_selection_note_id).read()
+        _creator_context = User(_note_context['creator_id']).read()
+        
+        _selection_list.append({
+            'entity_context': _entity_context,
+            'note_context': _note_context,
+            'creator_context': _creator_context,
+        })
+        
+    return render_to_response(
+        template,
+        {
+            'selection_list' : _selection_list,
+        },
+        context_instance=RequestContext(request)
+    )
+
+
+
+
 @require_http_methods(['GET'])
 def popular(request, template='main/popular.html'):
     if request.user.is_authenticated():
