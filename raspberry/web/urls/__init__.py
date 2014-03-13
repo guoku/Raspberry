@@ -5,6 +5,7 @@ urlpatterns = patterns(
     'web.views.main',
     url(r'^$', 'index', name='web_index'),
     url('^selected/$', 'selection', name='web_selection'),
+    url('^m/selection/$', 'wap_selection', name='wap_selection'),
     url('^popular/$', 'popular', name='web_popular'),
     url(r'^c/', include('web.urls.category')),
     url(r'^t/', include('web.urls.tag')),

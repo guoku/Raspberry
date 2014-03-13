@@ -95,7 +95,7 @@
                 <h3>{{ entity_context.like_count }}人喜爱</h3>
                 <div>
                     {% for liker, date in liker_list %}
-                    <a href="{% url 'web_user_likes' liker %}">
+                    <a href="{% url 'web_user_likes' liker %}" target="_blank">
 {#                        <img src="{{ liker }}" height="25" width="25">#}
                         {% show_avater liker 25 %}
                     </a>
@@ -112,7 +112,7 @@
                 <h3>该商品的标签</h3>
                 <div>
                     {% for tag in tag_list %}
-                        <a href="{% url "web_tags" tag.tag_hash %}">＃{{ tag.tag }}</a>
+                        <a href="{% url "web_tags" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -134,7 +134,9 @@
             <h2>相似推荐</h2>
             <div>
                 {% for entity_context in guess_entity_context %}
-                    <a href="{% url 'web_detail' entity_context.entity_hash %}"><img src="{{ entity_context.chief_image.url|resize:'240' }}" alt=""></a>
+                    <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank">
+                        <img src="{{ entity_context.chief_image.url|resize:'240' }}" alt="">
+                    </a>
                 {% endfor %}
             </div>
         </div>

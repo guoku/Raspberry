@@ -65,6 +65,18 @@ button {
     vertical-align: middle;
 }
 
+.btn-update {
+    background: #427ec0;
+    border: 1px #357ebd;
+    /*border-color: #357ebd;*/
+    width: 115px;
+    height: 30px;
+    margin: 5px;
+    /*padding: 5px;*/
+    font-size: 14px;
+    color: #FFFFFF;
+}
+
 .btn-link {
     background-color: rgba(0,0,0,0);
     color: #428bca;
@@ -73,6 +85,26 @@ button {
     padding: 6px 0 6px 0;
 }
 /*---------------------------------*/
+
+/*------------ message ---------------*/
+.message {
+    border-radius: 4px;
+    background: #fffed2;
+    /*height: 40px;*/
+    width: 315px;
+    padding: 15px;
+    margin: 30px auto;
+    font-size: 14px;
+    text-align: center;
+}
+
+/*------------------------------------*/
+
+.control-group {
+    width: 345px;
+    margin: 0 auto 15px auto;
+    /*margin-bottom: 15px;*/
+}
 
 /*---------------- header --------------------*/
 #header {
@@ -239,6 +271,10 @@ button {
     border-radius: 4px 4px 4px 4px;
     background-color: rgba(220, 220, 220, 0.95);
     /*background-color: #FFFFFF;*/
+}
+#header form input:focus {
+    border-color: #ade0b3;
+    background-color: #f8f8f8;
 }
 
 #header .search-submit {
@@ -439,10 +475,7 @@ button {
 .login .tip {
     /*margin-bottom: 55px;*/
     display: block;
-<<<<<<< HEAD
-=======
     width: 535px;
->>>>>>> ff3d6d814767c8fa9c336831ceb160e80f74591e
     height: 125px;
     background-color: #fbfbfb;
     margin-bottom: 55px;
@@ -904,3 +937,25 @@ a.tag:hover {text-decoration:underline;}
 	width:530px;
 	word-wrap:break-word;
 }
+<<<<<<< HEAD
+
+/*分页*/
+.pages{
+    height: 50px;
+}
+.page_s{
+    padding:5px 10px;
+    height: 30px;
+    line-height: 30px;
+    border:1px solid #ddd;
+    margin-left:10px;
+    float: right;
+    cursor: pointer;
+}
+.page_s:hover{
+    background: #427dbf;
+    color: #fff;
+    font-weight: 700;
+}
+=======
+>>>>>>> 4cca782676b082abc66e347ad39a31429d7bee9a

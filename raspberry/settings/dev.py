@@ -4,12 +4,16 @@ from defaults import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+
+#mongodb setting
 from mongoengine import register_connection
 register_connection('guoku-db', 'guoku', username='qinzhoukan', password='qinzhoukan1@#',host='10.0.2.200',
         max_pool_size=200, auto_start_request=False, safe=True)
 register_connection('log-db', 'guoku_log', host='10.0.2.200',
         max_pool_size=200, auto_start_request=False, safe=True)
 
+MANGO_HOST = '10.0.2.200'
+MANGO_PORT = 27017
 
 DATABASES = {
     'default': {
@@ -18,7 +22,6 @@ DATABASES = {
         'USER': 'qinzhoukan',
         'PASSWORD': 'qinzhoukan1@#',
         'HOST': '10.0.2.90',
-
         'PORT': '',
         'OPTIONS': {
             'use_unicode':'utf-8',
@@ -28,15 +31,15 @@ DATABASES = {
 }
 
 CACHES = {
-   'default': {
-       'BACKEND': 'redis_cache.RedisCache',
-       'LOCATION': '10.0.2.49:6379',
-       'TIMEOUT:': 864000,
-       'OPTIONS': {
-           'DB': 1,
-           'PARSER_CLASS': 'redis.connection.HiredisParser'
-       },
-   },
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': '10.0.2.49:6379',
+        'TIMEOUT:': 864000,
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        },
+    },
 }
 
 # session
@@ -45,76 +48,48 @@ SESSION_REDIS_HOST = '10.0.2.49'
 SESSION_REDIS_PORT = 6379
 SESSION_REDIS_DB = 2
 SESSION_COOKIE_AGE = 1209600
+MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14
 
-
-MOGILEFS_DOMAIN = 'staging'
-MOGILEFS_TRACKERS = ['10.0.1.23:7001']
+MOGILEFS_DOMAIN = 'prod'
+MOGILEFS_TRACKERS = ['10.0.2.50:7001']
 
 SPHINX_API_VERSION = 0x116
-SPHINX_SERVER = 'localhost'
-SPHINX_port = 3312
-
-
-#mongo db
-MANGO_HOST = '10.0.2.200'
-MANGO_PORT = 27017
-
+SPHINX_SERVER = '10.0.2.50'
+SPHINX_PORT = 9312
 
 JUMP_TO_TAOBAO = True
 
-IMAGE_LOCAL = True
-IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
-APP_HOST = "http://10.0.1.109:8001"
-# ALLOWED_HOSTS = ['*']
-#IMAGE_LOCAL = False
-#IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
+IMAGE_LOCAL = DEBUG
+IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
+APP_HOST = 'http://www.guoku.com'
 
-TIME_ZONE = 'Asia/Shanghai'
-LANGUAGE_CODE = 'zh-cn'
-SITE_ID = 1
-USE_I18N = False
-
-#CELERY_RESULT_BACKEND = "redis"
-#CELERY_REDIS_HOST = "localhost"
-#CELERY_REDIS_PORT = 6379
-
-BROKER_HOST = "localhost"
-BROKER_PORT = 5672
-BROKER_USER = "guest"
-BROKER_PASSWORD = "guest"
-BROKER_VHOST = "/"
+CELERY_RESULT_BACKEND = "redis://10.0.2.100:6379/0"
+BROKER_TRANSPORT = "librabbitmq"
+BROKER_HOST = "10.0.2.100"
+BROKER_USER = "raspberry"
+BROKER_PASSWORD = "raspberry1@#"
+BROKER_VHOST = "raspberry"
 BROKER_POOL_LIMIT = 10
+CELERY_ACKS_LATE = True
+CELERYD_PREFETCH_MULTIPLIER = 1
+CELERY_DISABLE_RATE_LIMITS = True
 
-GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
-APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
-
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
-MEDIA_URL = ''
-STATIC_ROOT = ''
-STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
+MEDIA_URL = '/uploads/'
+# STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/v3/')
+STATIC_ROOT = '/tmp/static/'
+# STATIC_URL = 'http://static.guoku.com/static/v3/'
+STATIC_URL = '/static/v3/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
-
-MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+
 )
 
 
-DEBUG_TOOLBAR_PANELS = [
-    'debug_toolbar.panels.versions.VersionsPanel',
-    'debug_toolbar.panels.timer.TimerPanel',
-    'debug_toolbar.panels.settings.SettingsPanel',
-    'debug_toolbar.panels.headers.HeadersPanel',
-    'debug_toolbar.panels.request.RequestPanel',
-    'debug_toolbar.panels.sql.SQLPanel',
-    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-    'debug_toolbar.panels.templates.TemplatesPanel',
-    'debug_toolbar.panels.cache.CachePanel',
-    'debug_toolbar.panels.signals.SignalsPanel',
-    'debug_toolbar.panels.logging.LoggingPanel',
-    'debug_toolbar.panels.redirects.RedirectsPanel',
-]
+
+# List of callables that know how to import templates from various sources.
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -122,7 +97,6 @@ MIDDLEWARE_CLASSES = (
 #    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'raspberry.urls'
@@ -131,24 +105,30 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.messages',
-    'debug_toolbar',
+    'django.contrib.formtools',
     'djcelery',
     'base',
     'management',
     'mobile',
     'seller',
+    'stats',
     'web',
+    'edm',
+    'gunicorn',
 )
 
-
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.SHA1PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-)
+#GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
+GUOKU_APNS_KEY = '/data/www/raspberry/apns_key/'
+APNS_SERVER = {'HOST': 'http://10.0.2.46:7077/'}
 
 
-INTERNAL_IPS = ('127.0.0.1',)
+SCP_HOST = '10.0.2.46'
+SCP_USER = 'jiaxin'
+SCP_KEY = os.path.join(os.path.dirname(__file__), 'scp_key/')
+SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'
+
+ALLOWED_HOSTS = ['*']
+
