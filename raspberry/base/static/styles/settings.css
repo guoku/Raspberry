@@ -1,0 +1,88 @@
+/*#settings .guoku-block {*/
+    /*padding: 35px 0 50px 250px;*/
+/*}*/
+
+#setting .row {
+    /*margin: auto;*/
+    text-align: center;
+}
+#setting .avatar {
+    width: 120px;
+    height: 120px;
+    margin: 75px auto 30px auto;
+}
+#setting .avatar img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+}
+
+#setting .update-avatar a {
+    display: block;
+    /*margin-right: 25px;*/
+    padding: 5px;
+    /*margin: auto;*/
+    /*margin: 5px;*/
+    color: #427ec0;
+    text-align: center;
+}
+#setting .update-avatar p {
+    margin: 10px 0;
+    padding: 5px;
+    text-align: center;
+}
+
+#setting .base-info {
+    margin: 60px 0;
+}
+
+#setting .base-info h3 {
+    /*text-align: center;*/
+    font-size: 18px;
+    font-weight: 100;
+    width: 345px;
+    margin: 15px auto;
+    /*padding: 0 15px;*/
+}
+
+#setting label {
+    display: inline-block;
+    width: 130px;
+}
+#setting select {
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+
+#setting .text-input {
+    width: 200px;
+    height: 30px;
+    /*border-radius: 4px;*/
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+}
+#setting .textarea-input {
+    width: 200px;
+    height: 71px;
+    resize: none;
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+}
+
+#setting .password {
+     margin-top: 40px;
+}
+#setting .password h3 {
+    font-size: 18px;
+    font-weight: 100;
+    width: 345px;
+    margin: 15px auto;
+}
+
+#setting input:focus {
+    border-color: #ade0b3;
+}
+#setting textarea:focus {
+    border-color: #ade0b3;
+}
