@@ -31,7 +31,7 @@ def decorate_taobao_url(url, ttid=None, sid=None, outer_code=None, sche=None):
     return url
 
 def is_taobao_url(url):
-    hostname = urlparse(item_url).hostname
+    hostname = urlparse(url).hostname
     if re.search(r"\b(tmall|taobao)\.(com|hk)$", hostname) != None:
         return True
     return False

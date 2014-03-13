@@ -261,7 +261,7 @@ class GuokuPlusActivity(object):
         item_inst = Item.get_item_by_taobao_id(taobao_id)
         item_context = item_inst.read()
         time_now = datetime.datetime.now()
-
+        start_time = time_now + datetime.timedelta(100000) #set start time as 100000 days later
         GuokuPlusModel.objects.create(
             entity_id = item_context['entity_id'],
             item_id = item_context['item_id'],
@@ -271,8 +271,9 @@ class GuokuPlusActivity(object):
             sales_volume = 0,
             seller_remarks = seller_remarks,
             status = ACTIVITY_WAITING,
+            start_time = start_time,
             created_time = time_now,
-            update_time = time_now)   
+            updated_time = time_now)   
 
     @classmethod
     def find(cls, shop_nick = None, status = None, offset = 0, count = 100):

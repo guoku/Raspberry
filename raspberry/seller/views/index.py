@@ -34,6 +34,7 @@ def index(request, user_context, shop_inst):
         { 
             "user_context" : user_context,
             "shop_context" : shop_context,
+            "application_form" : application_form,
             "verification_form" : verification_form,
             "shop_verification" : shop_verification,
             "guokuplus_list" : guokuplus_list
@@ -109,12 +110,12 @@ def apply_guoku_plus(request, user_context, shop_inst):
             return HttpResponse(str(e))
         except InvalidUrl, e:
             return HttpResponse(str(e))
-        total_ = form.cleaned_data["quantity"]
+        total_volume = form.cleaned_data["total_volume"]
         sale_price = form.cleaned_data['sale_price']
-        seller_remarks = form.cleaned_data['remarks']
+        seller_remarks = form.cleaned_data['seller_remarks']
         if item_context['price'] < sale_price:
             return HttpResponse("sale price must less that original price")
-        GuokuPlusActivity.create(taobao_item_id, total_volume, sale_price, seller_remarks)
+        GuokuPlusActivity.create(item_context['taobao_id'], total_volume, sale_price, seller_remarks)
         return HttpResponseRedirect(reverse("seller_index"))
     return HttpResponse("error")
 
