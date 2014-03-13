@@ -1,6 +1,13 @@
 /*#settings .guoku-block {*/
     /*padding: 35px 0 50px 250px;*/
 /*}*/
+#setting h2 {
+    font-size: 16px;
+    color: #444444;
+}
+#setting hr {
+    color: #eeeeee;
+}
 
 #setting .row {
     /*margin: auto;*/
