@@ -20,33 +20,38 @@
 {#            </div>#}
 {#        {% endif %}#}
 
-        <h2>帐号设置</h2>
+        <h2>{% trans "account settings" %}</h2>
 
 {#        <div class="guoku-block">#}
             {% display_avatar_update user_context %}
             <form method="POST" action="{% url 'web_update_profile' %}" class="base-info" id="set-base-info">
                 {% csrf_token %}
                 <h3>个人资料</h3>
-                <div>
+                <div class="message">
+                    邮件地址未验证，发送验证邮箱.
+                </div>
+                <div class="control-group">
                     <label for="{{ profile_form.nickname.id_for_label }}">{{ profile_form.nickname.label }}</label>
                     {{ profile_form.nickname }}
                 </div>
 
-                <div>
+                <div class="control-group">
                     <label for="{{ profile_form.email.id_for_label }}">{{ profile_form.email.label }}</label>
                     {{ profile_form.email }}
                 </div>
 
-                <div>
+                <div class="control-group">
                     <label for="{{ profile_form.bio.id_for_label }}">{{ profile_form.bio.label }}</label>
                     {{ profile_form.bio }}
                 </div>
+
                 <div style="display: none;"> 
                     <p id="default_location_value">{{ profile_form.location.value }}</p>
                     <p id="default_city_value">{{ profile_form.city.value }}</p>
                 </div>
-                <div class="address">
-                    <span class="label">{{ profile_form.location.label }}</span>
+
+                <div class="control-group">
+                    <label>{{ profile_form.location.label }}</label>
                     {{ profile_form.location }}
                     {{ profile_form.city }}
                 </div>
@@ -58,10 +63,11 @@
                     {% endfor %}
                 </div>
 
-                <div>
+                <div class="control-group">
                     <label for="{{ profile_form.website.id_for_label }}">{{ profile_form.website.label }}</label>
                     {{ profile_form.website }}
                 </div>
+
                 <input type="submit" value="{% trans "update profile" %}" class="guoku-button">
             </form>
             
@@ -82,11 +88,11 @@
                 {% endif %}
             </div>
 
-            <form method="POST" action="{% url 'web_change_password' %}" class="psw">
+            <form method="POST" action="{% url 'web_change_password' %}" class="password">
                 {% csrf_token %}
                 <h3>更改密码</h3>
                 {% for field in password_form %}
-                <div>
+                <div class="control-group">
                     <label for="{{ field.id_for_label }}" >{{ field.label }}</label>
                     {{ field }}
                 </div>

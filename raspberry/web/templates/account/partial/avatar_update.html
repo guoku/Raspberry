@@ -1,3 +1,4 @@
+{% load i18n %}
 <form class="update-avatar clearfix" enctype="multipart/form-data"
       action="{% url 'web.views.account.update_avatar' %}" method="POST">
     {% csrf_token %}
@@ -8,5 +9,7 @@
 {#        <input type="file" name="avatar_img" class="file">#}
 {#    </div>#}
     <p>支持 JPG、GIF、PNG 格式，不超过 2MB。</p>
-    <input type="submit" value="更新头像" class="guoku-button">
+    <div class="row">
+        <input type="submit" value="{% trans "upload again" %}" class="btn btn-update">
+    </div>
 </form>
