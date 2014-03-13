@@ -10,7 +10,11 @@
 >
 
     <td width="90">
+        {% if entity_context.taobao_id %}
         <a href="http://item.taobao.com/item.htm?id={{ entity_context.taobao_id }}" target="_blank">
+        {% else %}
+        <a href="http://item.jd.com/{{ entity_context.jd_id }}.html" target="_blank">
+        {% endif %}
             <img class="img-polaroid" src="{{ entity_context.chief_image.url }}" style="max-height:80px;max-width:80px;">
         </a>
     </td>
@@ -27,9 +31,16 @@
     <td width="80"><p class="text-info">{{ entity_context.item_id_list|count }}</p></td>
     <td width="80">
         <div class="btn-group">
-            <a class="btn" href="{% url 'management_edit_entity' entity_context.entity_id %}" target="_blank">编</a>
-            {% if entity_context.weight == -1 %}
-                <a class="btn recycle" href="{% url 'management_recycle_entity' entity_context.entity_id %}">剔</a>
+            {%if entity_context.taobao_id %}
+                <a class="btn" href="{% url 'management_edit_entity' entity_context.entity_id %}" target="_blank">编</a>
+                {% if entity_context.weight == -1 %}
+                    <a class="btn recycle" href="{% url 'management_recycle_entity' entity_context.entity_id %}">剔</a>
+                {% endif %}
+            {% else %}
+                <a class="btn" href="{% url 'management_edit_entity' entity_context.entity_id %}?source=jd" target="_blank">编</a>
+                {% if entity_context.weight == -1 %}
+                    <a class="btn recycle" href="{% url 'management_recycle_entity' entity_context.entity_id %}?source=jd">剔</a>
+                {% endif %}
             {% endif %}
         </div>
     </td>

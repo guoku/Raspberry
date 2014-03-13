@@ -298,6 +298,9 @@ def create_entity_by_taobao_item(request):
 def edit_entity(request, entity_id):
     if request.method == 'GET':
         _code = request.GET.get("code", None)
+        _source = request.GET.get("source","taobao")
+        if _source == "jd":
+            return edit_jd_entity(request, entity_id)
         if _code == "1":
             _message = "淘宝商品已被创建至本entity" 
         else:
@@ -607,9 +610,9 @@ def entity_list(request):
                         #jd items
                         _item_context = JDItem(_entity_context['item_id_list'][0]).read()
                         _entity_context['buy_link'] = _item_context['buy_link']
-                        _entity_context['taobao_title'] = _item_context['title']
-                        _entity_context['taobao_id'] = _item_context['jd_id']
-                        _entity_context['_taobao_shop_nick'] = _item_context['shop_nick']
+                        _entity_context['jd_title'] = _item_context['title']
+                        _entity_context['jd_id'] = _item_context['jd_id']
+                        _entity_context['_jd_shop_nick'] = _item_context['shop_nick']
                         _entity_context['commission_rate'] = 4 #默认设为4
                         _entity_context['commission_type'] = 'general'
                     else:
