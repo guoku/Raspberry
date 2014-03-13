@@ -45,6 +45,8 @@ def search(request, template='search/search.html'):
         for _u_id in _user_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]: 
             try:
                 _user_context = User(_u_id).read()
+                if _request_user_context != None:
+                    _user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
                 _user_list.append(_user_context)
             except Exception, e:
                 pass
