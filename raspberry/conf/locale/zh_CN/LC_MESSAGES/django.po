@@ -114,6 +114,9 @@ msgstr "当前密码"
 msgid "new password"
 msgstr "新密码"
 
+msgid "confirm password"
+msgstr "确认密码"
+
 # error message
 msgid "email is not signed up."
 msgstr "邮箱没有被注册"
