@@ -215,7 +215,7 @@ function initTag(){
             $login.show();
            $body.on('click', removeLogin);
             function removeLogin() {
-                if (flag === 0) {
+                if (flag === 1) {
                     $accountForm.hide();
                     $body.off('click', removeLogin);
                     $accountForm.off('click', formClick);
@@ -224,15 +224,17 @@ function initTag(){
             }
             
             $login.find('.to-reg').on('click', function (e) {
-                e.preventDefault();
+                
                 $login.hide();
                 $reg.show();
+                e.preventDefault();
             });
 
             $reg.find('.to-login').on('click', function (e) {
-                e.preventDefault();
+                
                 $reg.hide();
                 $login.show();
+                e.preventDefault();
             });
         },
 
@@ -669,9 +671,11 @@ function initTag(){
                     if($this.attr("data-target-status") == 1){
                     	$this.attr("data-target-status",0);
                     	$poke.addClass('poked');
+                        url+="1/";
                     }else{
                     	$poke.removeClass('poked');
                     	$this.attr("data-target-status",1);
+                        url+="0/";
                     }
                     $.post(url, function (data) {
                         var count = parseInt($counter.text()) || 0;
