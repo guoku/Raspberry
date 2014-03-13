@@ -480,10 +480,11 @@ button {
     background-color: #fbfbfb;
     margin-bottom: 55px;
     text-align: center;
+    /*vertical-align: bottom;*/
 }
 
 .login .tip img {
-    margin: 35px 0px 10px 0px;
+    margin-top: 35px;
 }
 
 .login .remember {
@@ -595,21 +596,17 @@ button {
     float: left;
     height: 35px;
     line-height: 35px;
-    padding: 0px 15px;
+    width: 40px;
     text-align: center;
     border: 1px solid #eee;
     font-weight: bold;
     color: #999;
     background: #fff;
-    border: 1px solid #ddd;
-    margin: 0px 5px;
-    cursor: pointer;
     text-decoration: none;
 }
 
 .pagination a:hover {
-    background-color: #427dbf;
-    color: #fff;
+    background-color: #f6f6f6;
 }
 
 .pagination .active {
@@ -624,11 +621,11 @@ button {
 }
 
 .pagination a .previous {
-    background: url(../images/pre.png) no-repeat center;
+    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -157px -3px;
 }
 
 .pagination a .next {
-    background: url(../images/next.png) no-repeat center;
+    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -170px -3px;
 }
 
 
@@ -878,7 +875,7 @@ button {
 }
 
 /*
-**  click to top style 
+**  click to top style
 **   @author xiaolin
 */
 .click_to_top{
@@ -908,57 +905,8 @@ button {
 /* tag */
 a.tag {color:#0084B4 !important;}
 a.tag:hover {text-decoration:underline;}
-.tag-auto-complete {
-	position:relative;
-	background:white;
-	border:1px solid #DEDEDE;
-	font-size:13px;
-	z-index:999;
-	top:0;
-	left:0;
-	min-width:152px;
-}
-.tag-auto-complete span {
-	color:#BBBBBB;
-	line-height:24px;
-	padding:0 10px;
-}
-.tag-auto-complete p {
-	color:#666666;
-	line-height:24px;
-	padding:0 10px;
-	margin:0;
-	cursor:pointer;
-}
-.tag-auto-complete p.hover {
-	background:#F1F1F1;
-}
-.text_area {
-	visibility:hidden;
-	border-color:#DEDEDE;
-	position:absolute;
-	width:530px;
-	word-wrap:break-word;
-}
-<<<<<<< HEAD
-
-/*分页*/
-.pages{
-    height: 50px;
-}
-.page_s{
-    padding:5px 10px;
-    height: 30px;
-    line-height: 30px;
-    border:1px solid #ddd;
-    margin-left:10px;
-    float: right;
-    cursor: pointer;
-}
-.page_s:hover{
-    background: #427dbf;
-    color: #fff;
-    font-weight: 700;
-}
-=======
->>>>>>> 4cca782676b082abc66e347ad39a31429d7bee9a
+.tag-auto-complete {position:absolute;background:#fff;border:1px solid #DEDEDE;font-size:13px;z-index:999;top:0;left:0;min-width:152px}
+.tag-auto-complete span {color:#BBBBBB;line-height:24px;padding:0 10px;}
+.tag-auto-complete p {color:#666666;line-height:24px;padding:0 10px;margin:0;cursor:pointer;}
+.tag-auto-complete p.hover {background:#F1F1F1;}
+.text_area {visibility:hidden;border-color:#DEDEDE;position:absolute;width:530px;word-wrap:break-word;}

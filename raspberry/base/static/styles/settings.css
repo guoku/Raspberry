@@ -4,10 +4,12 @@
 #setting h2 {
     font-size: 16px;
     color: #444444;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eeeeee;
 }
-#setting hr {
-    color: #eeeeee;
-}
+/*#setting hr {*/
+    /*color: #eeeeee;*/
+/*}*/
 
 #setting .row {
     /*margin: auto;*/
@@ -63,20 +65,22 @@
 }
 
 #setting .text-input {
-    width: 200px;
+    width: 180px;
     height: 30px;
     color: #999999;
     /*border-radius: 4px;*/
     border: 1px solid #eeeeee;
     border-radius: 4px;
+    padding: 0 10px;
 }
 #setting .textarea-input {
-    width: 200px;
-    height: 71px;
+    width: 180px;
+    height: 51px;
     color: #999999;
     resize: none;
     border: 1px solid #eeeeee;
     border-radius: 4px;
+    padding: 10px;
 }
 
 #setting .password {
@@ -91,7 +95,9 @@
 
 #setting input:focus {
     border-color: #ade0b3;
+    background-color: #f8f8f8;
 }
 #setting textarea:focus {
     border-color: #ade0b3;
+    background-color: #f8f8f8;
 }

@@ -31,7 +31,7 @@
 
 #popular ul li {
     display: inline-block;
-    vertical-align: top;
+    /*vertical-align: top;*/
     margin: 0 30px 30px 0;
     font-size: 14px;
     border: 1px solid #eee;
@@ -40,7 +40,7 @@
 #popular .entity-img {
     display: table-cell;
     width: 215px;
-    height: 215px;
+    height: 216px;
     text-align: center;
     vertical-align: middle;
     border-bottom: 1px solid #eee;
@@ -49,6 +49,7 @@
 #popular .entity-img img {
     max-width: 215px;
     max-height: 215px;
+    margin: auto;
 }
 
 #popular .entities li .detail {
