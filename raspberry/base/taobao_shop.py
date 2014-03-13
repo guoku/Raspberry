@@ -229,13 +229,13 @@ ACIIVITY_FINISHED = "finished"
 ACIIVITY_ABORTED = "aborted"
 
 class GuokuPlusActivity(object):
+    def __ensure_activity_obj(self):
+        if not hasattr(self, 'activity_obj'):
+            self.activity_obj = GuokuPlusModel.objects.get(pk = self.activity_id)
+    
     def __init__(self, activity_id):
         self.activity_id = activity_id
         self.__ensure_activity_obj()
-
-    def __ensure_entity_obj(self):
-        if not hasattr(self, 'activity_obj'):
-            self.activity_obj = GuokuPlusModel.objects.get(pk = self.activity_id)
 
     def __get_context(self):
         context = {}
@@ -257,7 +257,7 @@ class GuokuPlusActivity(object):
         return context
 
     @classmethod
-    def create(cls, taobao_id, sale_price, total_volume, seller_remarks):
+    def create(cls, taobao_id, sale_price, total_volume, seller_remarks, shop_nick):
         item_inst = Item.get_item_by_taobao_id(taobao_id)
         item_context = item_inst.read()
         time_now = datetime.datetime.now()
@@ -270,6 +270,7 @@ class GuokuPlusActivity(object):
             total_volume = total_volume,
             sales_volume = 0,
             seller_remarks = seller_remarks,
+            shop_nick = shop_nick,
             status = ACTIVITY_WAITING,
             start_time = start_time,
             created_time = time_now,
@@ -286,7 +287,9 @@ class GuokuPlusActivity(object):
         _hdl = _hdl[offset : offset + count]
         results = []
         for item in _hdl:
-            results.append(GuokuPlusActivity(_hdl.id).read())
+            print item
+            results.append(GuokuPlusActivity(item.id).read())
+        print results
         return results, total
 
     def approve(self, start_time, editor_remarks = None):

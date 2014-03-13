@@ -28,7 +28,8 @@ def index(request, user_context, shop_inst):
     shop_context = shop_inst.read()
     shop_verification = shop_inst.read_shop_verification()
     application_form = GuokuPlusApplicationForm()
-    guokuplus_list = GuokuPlusActivity.find(shop_nick = user_context['shop_nick'])
+    guokuplus_list, total = GuokuPlusActivity.find(shop_nick = user_context['shop_nick'])
+    print guokuplus_list, total
     return render_to_response(
         "index.html",
         { 
@@ -115,7 +116,7 @@ def apply_guoku_plus(request, user_context, shop_inst):
         seller_remarks = form.cleaned_data['seller_remarks']
         if item_context['price'] < sale_price:
             return HttpResponse("sale price must less that original price")
-        GuokuPlusActivity.create(item_context['taobao_id'], total_volume, sale_price, seller_remarks)
+        GuokuPlusActivity.create(item_context['taobao_id'], total_volume, sale_price, seller_remarks, item_context['shop_nick'])
         return HttpResponseRedirect(reverse("seller_index"))
     return HttpResponse("error")
 
