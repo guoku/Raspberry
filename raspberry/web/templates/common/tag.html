@@ -4,10 +4,12 @@
 
     <div class="entities">
         {% for entity_context in tag_context.entity_list %}
-            <a href="{% url 'web_detail' entity_context.entity_hash %}" class="entity-img">
+            <a href="{% url 'web_tags' tag_context.tag_hash %}" class="entity-img" target="_blank">
                 <img src="{{ entity_context.chief_image.url|resize:"128" }}">
             </a>
         {% endfor %}
     </div>
-    <a href="" class="more"><span>{{ tag_context.entity_count }}</span>件商品</a>
+    <a href="{% url 'web_tags' tag_context.tag_hash %}" class="more" target="_blank">
+        <span>{{ tag_context.entity_count }}</span>件商品
+    </a>
 </div>

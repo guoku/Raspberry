@@ -546,7 +546,7 @@ class User(object):
             _basic_info['gender'] = _profile.gender 
             _basic_info['location'] = _profile.location
             _basic_info['city'] = _profile.city
-            _basic_info['bio'] = _profile.bio
+            _basic_info['bio'] = '' if _profile.bio == None else _profile.bio 
             _basic_info['is_censor'] = False
             
             self.__ensure_avatar_obj()

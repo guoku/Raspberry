@@ -19,9 +19,13 @@
             </div>
             {% if relation == 4 %}
                 <a class="setting" href="{% url 'web_setting' %}"><span>{% trans "settings" %}</span></a>
-            {% elif relation == 1 or relation == 0 %}
+            {% elif relation == 3 %}
+                <a href="{% url 'web_follow' query_user_context.user_id 0 %}" class="follow-user is-fan">取消关注</a>
+            {% elif relation == 1 %}
                 <a href="{% url 'web_follow' query_user_context.user_id 0 %}" class="follow-user">取消关注</a>
-            {% elif relation == 2 or relation == 3 %}
+            {% elif relation == 2 %}
+                <a href="{% url 'web_follow' query_user_context.user_id 1 %}" class="follow-user is-fan">关注</a>
+            {% elif relation == 0 %}
                 <a href="{% url 'web_follow' query_user_context.user_id 1 %}" class="follow-user">关注</a>
             {% endif %}
         </div>
