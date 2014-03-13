@@ -3,6 +3,7 @@ from utils.extractor.taobao import TaobaoExtractor
 from base.item import Item
 from base.entity import Entity
 from base.category import Category
+import HTMLParser
 class NotTaobaoUrl(Exception):
     def __init__(self):
         self.__message = "url is not a taobao url"
@@ -31,14 +32,16 @@ def get_guoku_plus_item_context(taobao_url, shop_nick, user_id):
     item_inst = Item.get_item_by_taobao_id(taobao_id)
     if not item_inst:
         taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
-        _category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
+        print taobao_item_info
+        _category_id = Category.get_category_by_taobao_cid(taobao_item_info['cid'])
         _chief_image = None
         _detail_image_urls = []
         imgs_len = len(taobao_item_info['imgs'])
-        if imgs_len:
+        if imgs_len > 0:
             _chief_image = taobao_item_info['imgs'][0]
-            for i in range(1, len):
-                _detail_image_urls.append( taobao_item_info['imgs'][i])
+            for i in range(1, imgs_len):
+                _detail_image_urls.append(taobao_item_info['imgs'][i])
+        _title = HTMLParser.HTMLParser().unescape(taobao_item_info['desc'])
         Entity.create_by_taobao_item(
             creator_id = user_id,
             category_id = _category_id,
@@ -46,13 +49,13 @@ def get_guoku_plus_item_context(taobao_url, shop_nick, user_id):
             taobao_item_info = {
                 'taobao_id' : taobao_id,
                 'cid' : taobao_item_info['cid'],
-                'title' : taobao_item_info['title'],
+                'title' : _title,
                 'shop_nick' : unicode(taobao_item_info['nick'], 'utf-8'),
                 'price' : taobao_item_info['price'],
                 'soldout' : False,
             },
             brand = "",
-            title = taobao_item_info['title'],
+            title = _title,
             detail_image_urls = _detail_image_urls
         )
         item_inst = Item.get_item_by_taobao_id(taobao_id)
