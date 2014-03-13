@@ -158,6 +158,14 @@ button {
     padding: 0;
 }
 
+#header .icon-menu, .icon-guoku, .icon-setting, .icon-signout {
+    position: absolute;
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    width: 22px;
+    height: 22px;
+    margin: 12px;
+}
+
 #header .user {
     /*position: absolute;*/
     /*top: 0;*/
@@ -183,21 +191,21 @@ button {
     text-decoration: none;
     text-align: center;
     line-height: 49px;
-    /*padding: 0;*/
-    /*margin: 0;*/
-    padding: 0 6px;
-    /*width: 30px;*/
+    padding: 0 30px;
 }
-#header .user li a:hover {
 
+#header .user li .icon-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 12px 0;
+    background-position: -32px -40px;
 }
 #header .user .menu {
     position: absolute;
     margin: 0;
     padding: 0;
-    /*height: 135px;*/
     right: 0;
-    /*overflow: hidden;*/
     border-left: 1px solid rgba(0, 0, 0, 0.15);
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -206,25 +214,31 @@ button {
     padding: 0;
     margin: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    height: 45px;
+    width: 135px;
 }
-#header .user .menu .icon-guoku {
+/*.icon-guoku, .icon-setting, .icon-setting   {*/
+    /*position: relative;*/
+    /*background: url("/static/v3/images/toolkit.png") no-repeat;*/
+/*}*/
 
+
+#header .user .menu .icon-guoku {
+    background-position: -64px -40px;
 }
 #header .user .menu .icon-setting {
-
+    background-position: -96px -40px;
 }
 #header .user .menu .icon-signout {
-
+    background-position: -128px -40px;
 }
 #header .user .menu li a {
     display: block;
     background-color: #FFFFFF;
     text-align: right;
-    height: 45px;
-    width: 135px;
     line-height: 45px;
     text-decoration: none;
-
+    padding-right: 30px;
 }
 #header .user .menu li a:hover {
     background-color: #f8f8f8;
@@ -278,9 +292,6 @@ button {
 }
 
 #header .search-submit {
-    /*margin-top: 11px;*/
-    /*position: absolute;*/
-    /*display: inline-block;*/
     width: 30px;
     height: 30px;
     vertical-align: middle;
@@ -288,13 +299,8 @@ button {
     padding: 0;
     border: none;
     /*background: url("/static/v3/images/search_icon.png") no-repeat transparent;*/
-    background: url("/static/v3/images/toolkit.png") no-repeat scroll 0 -38px transparent;
+    background: url("/static/v3/images/toolkit.png") no-repeat 0 -38px transparent;
 }
-
-/*#header form button img {*/
-    /*width: 26px;*/
-    /*height: 28px;*/
-/*}*/
 
 /* welcome----------------- */
 #welcome {
