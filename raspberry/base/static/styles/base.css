@@ -475,19 +475,15 @@ button {
 .login .tip {
     /*margin-bottom: 55px;*/
     display: block;
-<<<<<<< HEAD
-=======
     width: 535px;
->>>>>>> ff3d6d814767c8fa9c336831ceb160e80f74591e
     height: 125px;
     background-color: #fbfbfb;
     margin-bottom: 55px;
     text-align: center;
-    /*vertical-align: bottom;*/
 }
 
 .login .tip img {
-    margin-top: 35px;
+    margin: 35px 0px 10px 0px;
 }
 
 .login .remember {
@@ -599,17 +595,21 @@ button {
     float: left;
     height: 35px;
     line-height: 35px;
-    width: 40px;
+    padding: 0px 15px;
     text-align: center;
     border: 1px solid #eee;
     font-weight: bold;
     color: #999;
     background: #fff;
+    border: 1px solid #ddd;
+    margin: 0px 5px;
+    cursor: pointer;
     text-decoration: none;
 }
 
 .pagination a:hover {
-    background-color: #f6f6f6;
+    background-color: #427dbf;
+    color: #fff;
 }
 
 .pagination .active {
@@ -624,11 +624,11 @@ button {
 }
 
 .pagination a .previous {
-    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -157px -3px;
+    background: url(../images/pre.png) no-repeat center;
 }
 
 .pagination a .next {
-    background: url(/static/v3/images/guoku_icon.png) no-repeat scroll -170px -3px;
+    background: url(../images/next.png) no-repeat center;
 }
 
 
@@ -940,6 +940,7 @@ a.tag:hover {text-decoration:underline;}
 	width:530px;
 	word-wrap:break-word;
 }
+<<<<<<< HEAD
 
 /*分页*/
 .pages{
@@ -959,3 +960,5 @@ a.tag:hover {text-decoration:underline;}
     color: #fff;
     font-weight: 700;
 }
+=======
+>>>>>>> 4cca782676b082abc66e347ad39a31429d7bee9a

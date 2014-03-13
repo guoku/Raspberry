@@ -7,11 +7,6 @@
     position: absolute;
 }
 
-#account .container img {
-    float: left;
-    margin: 20px 60px 0 0;
-}
-
 #account .container h2 {
     display: inline;
     font-size: 18px;

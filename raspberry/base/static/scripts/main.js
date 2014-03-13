@@ -215,7 +215,7 @@ function initTag(){
             $login.show();
            $body.on('click', removeLogin);
             function removeLogin() {
-                if (flag === 1) {
+                if (flag === 0) {
                     $accountForm.hide();
                     $body.off('click', removeLogin);
                     $accountForm.off('click', formClick);
@@ -666,7 +666,13 @@ function initTag(){
                     var $counter = $poke.find('small');
                     var note_id = $poke.attr('data-note');
                     var url = '/note/' + note_id + '/poke/';
-
+                    if($this.attr("data-target-status") == 1){
+                    	$this.attr("data-target-status",0);
+                    	$poke.addClass('poked');
+                    }else{
+                    	$poke.removeClass('poked');
+                    	$this.attr("data-target-status",1);
+                    }
                     $.post(url, function (data) {
                         var count = parseInt($counter.text()) || 0;
                         var result = parseInt(data);
