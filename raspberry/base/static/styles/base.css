@@ -604,7 +604,7 @@ button {
     text-decoration: none;
 }
 
-.pagination a:hover {
+.pagination a:hover:not(.active) {
     background-color: #f6f6f6;
     
 }
@@ -622,10 +622,12 @@ button {
 }
 
 .pagination a .previous {
+    margin-bottom: -1px ;
     background: url(../images/pre.png) no-repeat center;
 }
 
 .pagination a .next {
+    margin-bottom: -1px ;
     background: url(../images/next.png) no-repeat center;
 }
 
