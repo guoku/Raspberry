@@ -19,6 +19,7 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     'web.views.entity',
     url(r'^detail/(?P<entity_hash>\w+)/$', 'entity_detail', name='web_detail'),
+    url(r'^m/detail/(?P<entity_hash>\w+)/$', 'wap_entity_detail', name='wap_detail'),
     url(r'^entity/', include('web.urls.entity')),
     url(r'^note/', include('web.urls.note')),
 )
