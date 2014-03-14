@@ -25,16 +25,16 @@
     color: #4db07a;
 }
 
-#account form .text-input {
-    width: 270px;
-    height: 30px;
-    line-height: 30px;
-    margin-top: 15px;
-    padding: 10px 5px;
-    background: #fbfbfb;
-    border: 1px solid #eee;
-    outline: none;
-}
+/*#account form .text-input {*/
+    /*width: 270px;*/
+    /*height: 30px;*/
+    /*line-height: 30px;*/
+    /*margin-top: 15px;*/
+    /*padding: 10px 5px;*/
+    /*background: #fbfbfb;*/
+    /*border: 1px solid #eee;*/
+    /*outline: none;*/
+/*}*/
 
 #account form .submit-row {
     width: 282px;
@@ -80,111 +80,111 @@
 }
 
 /*----------------*/
-#setting .guoku-block {
-    padding: 35px 0 50px 250px;
-}
+/*#setting .guoku-block {*/
+    /*padding: 35px 0 50px 250px;*/
+/*}*/
 
-#setting h2 {
-    margin: 0 0 5px;
-    font-size: 16px;
-}
+/*#setting h2 {*/
+    /*margin: 0 0 5px;*/
+    /*font-size: 16px;*/
+/*}*/
 
-#setting h3 {
-    font-size: 16px;
-    font-weight: normal;
-    color: #333;
-}
+/*#setting h3 {*/
+    /*font-size: 16px;*/
+    /*font-weight: normal;*/
+    /*color: #333;*/
+/*}*/
 
-#setting textarea {
-    resize: none;
-}
+/*#setting textarea {*/
+    /*resize: none;*/
+/*}*/
 
-#setting .text-input {
-    width: 190px;
-    padding: 7px 4px;
-}
+/*#setting .text-input {*/
+    /*width: 190px;*/
+    /*padding: 7px 4px;*/
+/*}*/
 
-#setting label, #setting .label {
-    display: inline-block;
-    width: 130px;
-}
+/*#setting label, #setting .label {*/
+    /*display: inline-block;*/
+    /*width: 130px;*/
+/*}*/
 
-#setting .gender label {
-    width: 50px;
-}
+/*#setting .gender label {*/
+    /*width: 50px;*/
+/*}*/
 
-#setting form.update-avatar {
-    position: relative;
-    margin-bottom: 40px;
-}
+/*#setting form.update-avatar {*/
+    /*position: relative;*/
+    /*margin-bottom: 40px;*/
+/*}*/
 
-#setting form.update-avatar .avatar {
-    float: left;
-    margin-right: 25px;
-    padding: 5px 5px 12px;
-}
+/*#setting form.update-avatar .avatar {*/
+    /*float: left;*/
+    /*margin-right: 25px;*/
+    /*padding: 5px 5px 12px;*/
+/*}*/
 
-#setting form.update-avatar a {
-    display: inline-block;
-    margin-top: 33px;
-    color: #4db07a;
-}
+/*#setting form.update-avatar a {*/
+    /*display: inline-block;*/
+    /*margin-top: 33px;*/
+    /*color: #4db07a;*/
+/*}*/
 
-#setting form.update-avatar .file {
-    position: absolute;
-    top: 32px;
-    left: 135px;
-    width: 84px;
-    filter: alpha(opacity:0);
-    opacity: 0;
-}
+/*#setting form.update-avatar .file {*/
+    /*position: absolute;*/
+    /*top: 32px;*/
+    /*left: 135px;*/
+    /*width: 84px;*/
+    /*filter: alpha(opacity:0);*/
+    /*opacity: 0;*/
+/*}*/
 
-#setting form.update-avatar p {
-    margin: 5px 0 20px;
-    font-size: 12px;
-}
+/*#setting form.update-avatar p {*/
+    /*margin: 5px 0 20px;*/
+    /*font-size: 12px;*/
+/*}*/
 
-#setting form.base-info {
-    margin-bottom: 40px;
-}
+/*#setting form.base-info {*/
+    /*margin-bottom: 40px;*/
+/*}*/
 
-#setting form.base-info div {
-    margin-bottom: 15px;
-}
+/*#setting form.base-info div {*/
+    /*margin-bottom: 15px;*/
+/*}*/
 
-#setting form.base-info .guoku-button,
-#setting form.psw .guoku-button {
-    margin-left: 134px;
-}
+/*#setting form.base-info .guoku-button,*/
+/*#setting form.psw .guoku-button {*/
+    /*margin-left: 134px;*/
+/*}*/
 
-#setting .bind {
-    margin-bottom: 15px;
-}
+/*#setting .bind {*/
+    /*margin-bottom: 15px;*/
+/*}*/
 
-#setting .bind a {
-    color: #4db07a;
-}
+/*#setting .bind a {*/
+    /*color: #4db07a;*/
+/*}*/
 
-#setting form.psw {
-    margin-top: 40px;
-}
+/*#setting form.psw {*/
+    /*margin-top: 40px;*/
+/*}*/
 
-#setting form.psw div {
-    margin-bottom: 15px;
-}
+/*#setting form.psw div {*/
+    /*margin-bottom: 15px;*/
+/*}*/
 
-#setting form.base-info p,
-#setting form.psw p {
-    width: 333px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    border: 1px solid #dedede;
-    background: #ffc;
-    color: #999;
-}
+/*#setting form.base-info p,*/
+/*#setting form.psw p {*/
+    /*width: 333px;*/
+    /*height: 40px;*/
+    /*line-height: 40px;*/
+    /*text-align: center;*/
+    /*border: 1px solid #dedede;*/
+    /*background: #ffc;*/
+    /*color: #999;*/
+/*}*/
 
-#setting form.base-info p.success,
-#setting form.psw p.success {
-    background-color: #dff0d8;
-}
+/*#setting form.base-info p.success,*/
+/*#setting form.psw p.success {*/
+    /*background-color: #dff0d8;*/
+/*}*/
