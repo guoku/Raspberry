@@ -25,7 +25,10 @@
     max-height: 100%;
     border-radius: 50%;
 }
-
+#setting .update-avatar {
+    position: relative;
+    /*margin-bottom: 40px;*/
+}
 #setting .update-avatar a {
     display: block;
     /*margin-right: 25px;*/
@@ -34,6 +37,15 @@
     /*margin: 5px;*/
     color: #427ec0;
     text-align: center;
+}
+#setting .update-avatar .upload-click {
+    position: absolute;
+    top: 230px;
+    left: 438px;
+    width: 84px;
+    margin: auto;
+    filter: alpha(opacity:0);
+    opacity: 0;
 }
 #setting .update-avatar p {
     margin: 10px 0;
