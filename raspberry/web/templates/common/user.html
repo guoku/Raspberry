@@ -23,11 +23,11 @@
             <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user blue-f"><span class="img_follow"></span><b>关注</b></a>
         {% endif %}
     </div>
-    <div class="entities">
+    <div class="like-entities">
         {% for entity_context in user_context.latest_like_entities %}
-            <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank" >
+            <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank" class="like-entity">
                 <img src="{{ entity_context.chief_image.url|resize:'64' }}">
-            </a>>
+            </a>
         {% endfor %}
     </div>
 {#    <div class="avatars">#}
