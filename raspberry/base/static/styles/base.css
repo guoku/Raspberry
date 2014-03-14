@@ -924,6 +924,12 @@ button {
     margin: 0px auto;
     background: url("../images/500.png");
 }
+.c999{
+    color: #999;
+}
+.fs12{
+    font-size: 12px;
+}
 .c333{
     color: #333;
 }
