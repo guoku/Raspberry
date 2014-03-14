@@ -105,11 +105,13 @@ def wap_selection(request, template='wap/selection.html'):
     _agent = 'iphone'
     if 'Android' in request.META['HTTP_USER_AGENT']:
         _agent = 'android'
-    
+   
+    _page_num = int(request.GET.get('p', 1))
     _hdl = NoteSelection.objects.filter(post_time__lt = datetime.now())
-    _hdl.order_by('-post_time')
+    _paginator = Paginator(_page_num, 30, _hdl.count())
+    _hdl = _hdl.order_by('-post_time')
     _selection_list = []
-    for _note_selection in _hdl[0 : 30]:
+    for _note_selection in _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         _selection_note_id = _note_selection['note_id']
         _entity_id = _note_selection['entity_id']
         _entity_context = Entity(_entity_id).read()
@@ -127,6 +129,7 @@ def wap_selection(request, template='wap/selection.html'):
         {
             'agent' : _agent,
             'selection_list' : _selection_list,
+            'next_page_num' : _page_num + 1,
         },
         context_instance=RequestContext(request)
     )
