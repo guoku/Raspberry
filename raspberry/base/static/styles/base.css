@@ -571,11 +571,13 @@ button {
     width: 20px;
     height: 17px;
     margin-right: 5px;
-    background: url(/static/v3/images/icon_like.png) no-repeat;
+    background: url(/static/v3/images/toolkit.png) no-repeat;
+    background-position: -1px -86px;
 }
 
 .liked .icon {
-    background: url(/static/v3/images/icon_liked.png) no-repeat;
+    background: url(/static/v3/images/toolkit.png) no-repeat;
+    background-position: -38px -86px;
 }
 
 .like .count {
