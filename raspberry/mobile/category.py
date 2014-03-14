@@ -26,7 +26,7 @@ def category_stat(request, category_id):
             'entity_note_count' : MobileNote.count(category_id = category_id),
         }
         if _request_user_id != None:
-            _rslt['like_count'] = MobileUser(_request_user_id).entity_like_count(category_id = category_id)
+            _rslt['like_count'] = MobileUser(_request_user_id).entity_like_count(neo_category_id=category_id)
         else:
             _rslt['like_count'] = 0 
             

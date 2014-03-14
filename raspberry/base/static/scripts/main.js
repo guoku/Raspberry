@@ -33,7 +33,9 @@ function initTag(){
             tag = "";
             cursor = -1;
             length = 0;
+            $("textarea[name='note_text']").css("height","20px");
             dom.css("margin", "0");
+
             clearTimeout(timeout);
 
             $(".tag-auto-complete, .text_area").hide();
@@ -69,7 +71,7 @@ function initTag(){
 
                 callback();
 
-                dom.css("margin-left", pos.left-5).css("margin-top", pos.top+25);
+                dom.css("margin-left", pos.left-5).css("margin-top", pos.top+15);
                 dom.show();
                 dom.find("p").mouseover(function(){
                     dom.find("p").removeClass("hover");
@@ -213,7 +215,7 @@ function initTag(){
             $login.show();
            $body.on('click', removeLogin);
             function removeLogin() {
-                if (flag === 1) {
+                if (flag === 0) {
                     $accountForm.hide();
                     $body.off('click', removeLogin);
                     $accountForm.off('click', formClick);
@@ -238,14 +240,20 @@ function initTag(){
             // 喜爱 like entity
 
             var self = this;
-            $('.like').on('click', function (e) {
+            $('.like').live('click', function (e) {
                 if (!self.isUserLogined()) {
                     self.popLoginBox();
                 } else {
                     var $like = $(this);
                     var $counter = $like.find('.count');
-
-                    $.post($like[0].href, function (data) {
+                    var url = $(this).attr("href");
+                    if(url[url.length-2] == 1)
+                    	var like_status = 0;
+                    else
+                    	var like_status = 1;
+                   	var s = url.replace(/\/[01]\//,"/"+like_status+"/");
+                   	$(this).attr("href",s);
+                    $.post(url, function (data) {
                         var count = parseInt($counter.text());
                         var result = parseInt(data);
 
@@ -323,6 +331,8 @@ function initTag(){
                         $(".click_to_top").fadeOut();
                     }
                     var $this = $(this);
+                    
+                    //这里临时不采用自动加载，换成分页
                     if (($(window).height() + $(window).scrollTop()) >= $(document).height()) {
                             
 //                    if ($this.scrollTop() > top) {
@@ -396,7 +406,6 @@ function initTag(){
     var detail = {
         updateNote: function ($noteItem) {
             // 用于修改点评，为修改点评按钮添加事件处理等
-
             var $form = $noteItem.find('.update-note-form');
 
             if ($form[0]) {
@@ -408,6 +417,10 @@ function initTag(){
                 $textarea.TagAC();
 
                 $noteItem.find('.update-note').on('click', function () {
+                	if($form.css("display")=="block"){
+                		$form.find(".cancel").click();
+                		return ;
+                	}
                     originNoteText = textarea.value;
                     $noteContent.hide();
                     $form.show();
@@ -652,9 +665,14 @@ function initTag(){
                     var $poke = $(this);
                     var $counter = $poke.find('small');
                     var note_id = $poke.attr('data-note');
-                    var target_status = $poke.attr('data-target-status');
-                    var url = '/note/' + note_id + '/poke/' + target_status + '/';
-
+                    var url = '/note/' + note_id + '/poke/';
+                    if($this.attr("data-target-status") == 1){
+                    	$this.attr("data-target-status",0);
+                    	$poke.addClass('poked');
+                    }else{
+                    	$poke.removeClass('poked');
+                    	$this.attr("data-target-status",1);
+                    }
                     $.post(url, function (data) {
                         var count = parseInt($counter.text()) || 0;
                         var result = parseInt(data);
@@ -772,3 +790,13 @@ function initTag(){
     })();
 
 })(jQuery, document, window);
+$(function(){
+	$(".account-form input[name='password'],.account-form input[name='email']").on("keyup",function(){
+		if($(".account-form input[name='password']").val()!="" && $.trim($(".account-form input[name='email']").val())!=""){
+			$(".account-form input[type='submit']").removeAttr("disabled").removeClass("submit_disabled").addClass("submit");
+		}else{
+			$(".account-form input[type='submit']").attr("disabled",true).removeClass("submit").addClass("submit_disabled");
+		}
+	});
+});
+	

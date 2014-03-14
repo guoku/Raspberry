@@ -8,12 +8,11 @@
         <span><strong>{{ user_context.fan_count }}</strong>粉丝</span>
         <span class="follows"><strong>{{ user_context.following_count }}</strong>关注</span>
     </div>
-
     <div class="follow">
-        {% if user_context.is_user_already_follow %}
-            <a href="{% url 'web_follow' user_context.user_id %}" class="follow-user" data-user="{{ user_context.user_id }}">取消关注</a>
-        {% else %}
-            <a href="{% url 'web_follow' user_context.user_id %}" class="follow-user" data-user="{{ user_context.user_id }}">关注</a>
+        {% if user_context.relation == 1 or user_context.relation == 3 %}
+            <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user">取消关注</a>
+        {% elif user_context.relation == 0 or user_context.relation == 2 %}
+            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user">关注</a>
         {% endif %}
     </div>
 

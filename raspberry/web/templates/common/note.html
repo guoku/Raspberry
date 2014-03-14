@@ -34,7 +34,7 @@
                class="avatar"><img src="{{ note.creator_context.avatar_small }}" width="30"
                                    height="30"></a>
             <a href="{% url 'web_user_index' note.creator_context.user_id %}"
-               class="nickname">{{ note.creator_context.nickname|truncatechars:10 }}</a>
+               class="nickname">{{ note.creator_context.nickname|truncatechars:5 }}</a>
         </div>
     </div>
 </div>

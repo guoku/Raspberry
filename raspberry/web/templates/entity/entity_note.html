@@ -19,6 +19,7 @@
                     <form class="clearfix update-note-form"
                           action="{% url 'web.views.entity.update_note' note_context.entity_id note_context.note_id %}"
                           method="POST" style="display: none">
+                	{% csrf_token %}
                         <textarea name="note_text">{{ note_context.content }}</textarea>
 
                         <div>
