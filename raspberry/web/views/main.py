@@ -148,9 +148,11 @@ def popular(request, template='main/popular.html'):
     
     _group = request.GET.get('group', 'daily')
     _popular_list = []
+    _popular_updated_time = datetime.now() 
    
     _popular_entities = popularity.read_popular_entity_from_cache(scale=_group)
     if _popular_entities != None:
+        _popular_updated_time = _popular_entities['updated_time']
         for row in _popular_entities['data'][0:60]:
             try:
                 _entity_id = row[0]
@@ -170,7 +172,7 @@ def popular(request, template='main/popular.html'):
         {
             'group' : _group,
             'user_context' : _request_user_context,
-            'recent_time' : '10小时前',
+            'popular_updated_time' : _popular_updated_time, 
             'popular_list' : _popular_list
         },
         context_instance=RequestContext(request)
