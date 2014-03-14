@@ -14,7 +14,6 @@ def seller_only(func = None):
     def seller_only_decorator(request, *args, **kwargs):
         user_inst = User(request.user.id)
         user_context = user_inst.read()
-        print user_context
         shop_nick = user_context.get("shop_nick", None)
         if shop_nick:
             shop_inst = TaobaoShop(shop_nick)

@@ -50,26 +50,26 @@ def bind_taobao_shop(request):
     user_inst = User(user_id)
     request_user_context = user_inst.read()
     if request.method == "GET":
-        if request_user_context.get("taobao_screen_name"):
-            if request_user_context['taobao_token_expires_in'] < time.time():
-                request_user_context['taobao_token_expired'] = True
-            else:
-                request_user_context['taobao_token_expired'] = False
+        taobao_nick = request_user_context.get("taobao_nick", None)
+        taobao_shop = None
+        if taobao_nick and TaobaoShop.nick_exist(taobao_nick):
+            taobao_shop = TaobaoShop(taobao_nick).read()
         return render_to_response(
             "bind_taobao_shop.html",
             { 
-                "user_context" : request_user_context 
+                "user_context" : request_user_context, 
+                "taobao_shop" : taobao_shop
             },
             context_instance=RequestContext(request)
         )
     elif request.method == "POST":
         if not request_user_context.get("taobao_nick"):
             messages.info(request, "尚未绑定淘宝帐号") 
-            return HttpResponseRedirect(reverse('bind_taobao_shop'))
+            return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
         item_url = request.POST.get('item_url', None)
         if not item_url:
             message.info(request, "请输入商品地址")
-            return HttpResponseRedirect(reverse('bind_taobao_shop'))
+            return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
       
         hostname = urlparse(item_url).hostname
         if re.search(r"\b(tmall|taobao)\.(com|hk)$", hostname) != None:
@@ -88,14 +88,21 @@ def bind_taobao_shop(request):
                         shop_info['seller_id'],
                         shop_info['pic']
                     ) 
-                return HttpResponseRedirect(reverse('bind_taobao_shop'))
+                return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
             else:
                 message.info(request, "错误的商品地址，请输入淘宝商品地址")
                 return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
         else:
             return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
 
-
+@require_POST
+@login_required
+def confirm_current_taobao_shop(request):
+    user_inst = User(request.user.id)
+    user_context = user_inst.read()
+    if user_context['taobao_nick']:
+        user_inst.create_seller_info(user_context['taobao_nick'])
+    return HttpResponseRedirect(reverse('seller_index'))
 @require_POST
 @login_required
 @seller_only
