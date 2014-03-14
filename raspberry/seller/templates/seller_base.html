@@ -7,7 +7,7 @@
     <title>
         {% block title %}果库{% endblock %}
     </title>
-    <link media="all" rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap.min.css' %}">
+    <link media="all" rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     {% block css %}{% endblock %}
 </head>
 <body>
@@ -22,11 +22,8 @@
             <li {% if "commodities" in request.path%}class="active" {%endif%}>
                 <a href="{%url 'seller_commodities'%}">我的商品</a>
             </li>
-            <li {% if "guokuplus/applications" in request.path %}class="active" {%endif%}>
-                <a href="{%url 'seller_guoku_plus_applications_list'%}">我的果库+申请</a>
-            </li>
-            <li {% if "guokuplus/activities/" in request.path %}class="active" {%endif%}>
-                <a href="{%url 'seller_guoku_plus_applications_list'%}">我的果库+活动</a>
+            <li {% if "guokuplus" in request.path %}class="active" {%endif%}>
+                <a href="{%url 'seller_guoku_plus_list'%}">我的果库+活动</a>
             </li>
         </ul>
     </div>
@@ -36,7 +33,7 @@
 
 {% block javascript %}
     <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
-    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 {% endblock %}
 {% block script %}{% endblock %}
 </body>

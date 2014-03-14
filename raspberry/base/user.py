@@ -569,14 +569,6 @@ class User(object):
         try:
             _seller_info_obj = SellerInfoModel.objects.get(user_id = self.user_id)
             _basic_info['shop_nick'] = _seller_info_obj.shop_nick
-            _basic_info['shop_type'] = _seller_info_obj.shop_type
-            _basic_info['shop_company_name'] = _seller_info_obj.company_name
-            _basic_info['shop_qq_account'] = _seller_info_obj.qq_account
-            _basic_info['shop_email'] = _seller_info_obj.email
-            _basic_info['shop_mobile'] = _seller_info_obj.shop_type
-            _basic_info['shop_main_products'] = _seller_info_obj.main_products
-            _basic_info['shop_intro'] = _seller_info_obj.intro
-            _basic_info['shop_verified'] = _seller_info_obj.verified
         except SellerInfoModel.DoesNotExist:
             pass
         cache.set(_cache_key, _basic_info, 864000)
@@ -611,7 +603,6 @@ class User(object):
             _stat_info = stat_info
         cache.set(_cache_key, _stat_info, 864000)
         return _stat_info
-    
     
     def entity_like_count(self, category_id=None, neo_category_id=None):
         _hdl = EntityLikeModel.objects.filter(user_id = self.user_id)

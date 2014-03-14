@@ -18,7 +18,7 @@ from base.item import Item
 from base.tag import Tag 
 from base.category import Category
 from utils.extractor.taobao import TaobaoExtractor 
-
+from utils.taobao import parse_taobao_id_from_url
 from django.utils.log import getLogger
 
 log = getLogger('django')
@@ -103,18 +103,6 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         context_instance=RequestContext(request)
     )
 
-def _parse_taobao_id_from_url(url):
-    params = url.split("?")[1]
-
-    for param in params.split("&"):
-        tokens = param.split("=")
-
-        if len(tokens) >= 2 and (tokens[0] == "id" or tokens[0] == "item_id"):
-            return tokens[1]
-
-    return None
-
-
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
     thumb_images = []
@@ -149,7 +137,7 @@ def load_entity(request, template='entity/create_entity.html'):
         _hostname = urlparse(_cand_url).hostname
 
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) is not None:
-            _taobao_id = _parse_taobao_id_from_url(_cand_url)
+            _taobao_id = parse_taobao_id_from_url(_cand_url)
             _item = Item.get_item_by_taobao_id(_taobao_id)
 
             if _item is None:
@@ -198,7 +186,7 @@ def create_entity(request):
         _hostname = urlparse(_cand_url).hostname
 
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) is not None:
-            _taobao_id = _parse_taobao_id_from_url(_cand_url)
+            _taobao_id = parse_taobao_id_from_url(_cand_url)
             _item = Item.get_item_by_taobao_id(_taobao_id)
 
             if _item is None:
