@@ -14,13 +14,13 @@
     </div>
     <div class="follow">
         {% if user_context.relation == 3 %}
-            <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user is-fan">取消关注</a>
+            <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user is-fan gray-f"><span class="img_is_fun"></span><b>取消关注</b></a>
         {% elif user_context.relation == 1 %}
-            <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user">取消关注</a>
+            <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user gray-f"><span class="img_not_fun"></span><b>取消关注</b></a>
         {% elif user_context.relation == 2 %}
-            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user is-fan">关注</a>
+            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user is-fan blue-f"><span src="" class="img_follow"></span><b>关注</b></a>
         {% elif user_context.relation == 0 %}
-            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user">关注</a>
+            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user blue-f"><span class="img_follow"></span><b>关注</b></a>
         {% endif %}
     </div>
     <div class="like-entities">

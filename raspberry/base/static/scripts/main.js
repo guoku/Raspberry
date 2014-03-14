@@ -209,13 +209,12 @@ function initTag(){
             function formClick(e) {
                 e.stopPropagation();
             }
-
-            var flag = 0;
+            var flag = 1;
             var $body = $('body');
             $login.show();
            $body.on('click', removeLogin);
             function removeLogin() {
-                if (flag === 1) {
+                if (flag == 1) {
                     $accountForm.hide();
                     $body.off('click', removeLogin);
                     $accountForm.off('click', formClick);
@@ -549,7 +548,7 @@ function initTag(){
             var $noteDetail = $noteItem.find('.note-detail');
 
             // 动态加载点评的评论
-            $noteItem.find('.add-comment').on('click', function () {
+            $noteItem.find('.add-comment').on('click', function (e) {
                 if (!util.isUserLogined()) {
                     util.popLoginBox();
                 } else {
@@ -577,6 +576,8 @@ function initTag(){
                         });
                     }
                 }
+                return false;
+                e.preventDefault();
             });
         },
 
@@ -658,7 +659,7 @@ function initTag(){
 
         poke: function () {
             // 点评 点赞
-            $('.poke').on('click', function () {
+            $('.poke').on('click', function (e) {
                 var $this = $(this);
 
                 if (!util.isUserLogined()) {
@@ -700,6 +701,8 @@ function initTag(){
                         }
                     });
                 }
+                return false;
+                e.preventDefault();
             });
         }
     };
@@ -714,9 +717,15 @@ function initTag(){
                     var result = parseInt(data);
 
                     if (result === 1) {
-                        $this.text('取消关注');
+                        if($this.hasClass(".is-fan")){
+                            $this.html('<span class="img_is_fun"></span><b>取消关注</b>');
+                        }else{
+                            $this.html('<span class="img_not_fun"></span><b>取消关注</b>');
+                        }
+                        $this.removeClass("blue-f").addClass("gray-f");
                     } else if (result === 0) {
-                        $this.html('<span></span> 关注');
+                        $this.html('<span class="img_follow"></span><b>关注</b>');
+                        $this.removeClass("gray-f").addClass("blue-f");
                     }
                 });
 
