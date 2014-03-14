@@ -880,7 +880,6 @@ button {
 
 /*
 **  click to top style
-**   @author xiaolin
 */
 .click_to_top{
     width:30px;
@@ -905,6 +904,28 @@ button {
 	width: 30px;
 	height: 30px;
 	background: url("../images/icon_back_to_top_press.png") center center no-repeat;
+}
+/*404*/
+.center{
+    width: 600px;
+    height: auto;
+    margin: 0px auto;
+    text-align: center;
+}
+.img-404{
+    width: 370px;
+    height: 370px;
+    margin: 0px auto;
+    background: url("../images/404.png");
+}
+.img-500{
+    width: 370px;
+    height: 370px;
+    margin: 0px auto;
+    background: url("../images/500.png");
+}
+.c333{
+    color: #333;
 }
 /* tag */
 a.tag {color:#0084B4 !important;}
