@@ -191,9 +191,19 @@ button {
     text-decoration: none;
     text-align: center;
     line-height: 49px;
+    padding: 0 6px;
+}
+#header .user .user-avatar {
+    display: table-cell;
+    position: relative;
+    height: 49px;
+    line-height: 0;
+    vertical-align: middle;
     padding: 0 30px;
 }
-
+#header .user img {
+    border-radius: 50%;
+}
 #header .user li .icon-menu {
     position: absolute;
     top: 0;
@@ -249,19 +259,6 @@ button {
 }
 #header .user li:hover ul {
     display: block;
-}
-
-#header .user .user-avatar {
-    display: table-cell;
-    position: relative;
-    height: 49px;
-    line-height: 0;
-    vertical-align: middle;
-    /*padding: 0;*/
-}
-
-#header .user img {
-    border-radius: 50%;
 }
 
 #header form {
