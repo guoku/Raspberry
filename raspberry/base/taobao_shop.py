@@ -138,7 +138,7 @@ class TaobaoShop(object):
                            main_products = None,
                            intro = None,
                            verified = None):
-        _seller = SellerInfoModel.objects.get(user_id = self.user_id)
+        _seller = SellerInfoModel.objects.get(shop_nick = self.nick)
         if shop_type:
             _seller.shop_type = shop_type
         if company_name:
@@ -156,7 +156,6 @@ class TaobaoShop(object):
         if verified:
             _seller.verified = verified
         _seller.save()
-        self.__reset_basic_info_to_cache()
 
     def create_verification_info(self, user_id, shop_type, company_name, qq_account, email, mobile, main_products, intro):
         if TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).count() > 0:
@@ -208,7 +207,7 @@ class TaobaoShop(object):
         return results, _count
 
     def handle_shop_verification(self, action):
-        _record = TaobaoShopVerificationInfo.objects.filter(shop_nick = shop_nick).first()
+        _record = TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).first()
         if not _record:
             return
         if action == "approve":
