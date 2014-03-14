@@ -29,7 +29,6 @@ def index(request, user_context, shop_inst):
     shop_verification = shop_inst.read_shop_verification()
     application_form = GuokuPlusApplicationForm()
     guokuplus_list, total = GuokuPlusActivity.find(shop_nick = user_context['shop_nick'])
-    print guokuplus_list, total
     return render_to_response(
         "index.html",
         { 
