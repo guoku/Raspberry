@@ -190,3 +190,23 @@
     margin-right: -15px;
     font-size: 0;
 }
+
+#user-center .user-user .like-entities {
+    width: 208px;
+    height: 128px;
+    display: table-cell;
+}
+
+#user-center .user-user .like-entities .like-entity {
+    /*display: table-cell;*/
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: 2px;
+}
+#user-center .user-user .like-entities .like-entity img {
+    max-width: 100%;
+    max-height: 100%;
+}
