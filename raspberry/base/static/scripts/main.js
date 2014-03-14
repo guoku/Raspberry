@@ -717,9 +717,15 @@ function initTag(){
                     var result = parseInt(data);
 
                     if (result === 1) {
-                        $this.text('取消关注');
+                        if($this.hasClass(".is-fan")){
+                            $this.html('<span class="img_is_fun"></span><b>取消关注</b>');
+                        }else{
+                            $this.html('<span class="img_not_fun"></span><b>取消关注</b>');
+                        }
+                        $this.removeClass("blue-f").addClass("gray-f");
                     } else if (result === 0) {
-                        $this.html('<span></span> 关注');
+                        $this.html('<span class="img_follow"></span><b>关注</b>');
+                        $this.removeClass("gray-f").addClass("blue-f");
                     }
                 });
 
