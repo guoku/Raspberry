@@ -203,7 +203,7 @@ class TaobaoShop(object):
         _results = _hdl.order_by("-created_time").skip(offset).limit(count)
         results = []
         for item in _results:
-            results.append(item._data)
+            results.append({"verification" : item._data, "shop_context" : TaobaoShop(item.shop_nick).read()})
         return results, _count
 
     def handle_shop_verification(self, action):

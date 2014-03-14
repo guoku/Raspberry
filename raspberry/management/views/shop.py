@@ -244,10 +244,3 @@ def handle_shop_verification(request):
     shop_inst.handle_shop_verification(action)
     return HttpResponseRedirect(reverse("management_shop_verification_list"))
 
-@require_GET
-@login_required
-@staff_only
-def guokuplus_activity_list(request):
-        
-    pass
-

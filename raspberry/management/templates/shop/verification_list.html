@@ -22,19 +22,19 @@
             <tbody>
                 {% for item in results %}
                 <tr>
-                    <td>{{ item.shop_nick }}</td>
-                    <td>{{ item.shop_type }}</td>
-                    <td>{{ item.company_name }}</td>
-                    <td>{{ item.email }}</td>
-                    <td>{{ item.qq_account }}</td>
-                    <td>{{ item.mobile }}</td>
-                    <td>{{ item.main_products }}</td>
-                    <td>{{ item.intro }}</td>
-                    <td>{{ item.status }}</td>
-                    <td>{{ item.created_time }}</td>
+                    <td>{{ item.shop_context.shop_nick }}</td>
+                    <td>{{ item.shop_context.shop_type }}</td>
+                    <td>{{ item.shop_context.shop_company_name }}</td>
+                    <td>{{ item.shop_context.shop_email }}</td>
+                    <td>{{ item.shop_context.shop_qq_account }}</td>
+                    <td>{{ item.shop_context.shop_mobile }}</td>
+                    <td>{{ item.shop_context.shop_main_products }}</td>
+                    <td>{{ item.shop_context.shop_intro }}</td>
+                    <td>{{ item.verification.status }}</td>
+                    <td>{{ item.verification.created_time }}</td>
                     <td>
                         <form action="{% url 'management_handle_shop_verification' %}" method="POST">
-                            <input type="hidden" name="shop_nick" value="{{item.shop_nick}}">
+                            <input type="hidden" name="shop_nick" value="{{item.shop_context.shop_nick}}">
                             <select name="action">
                                 <option value="approve">通过</option>
                                 <option value="reject">拒绝</option>
