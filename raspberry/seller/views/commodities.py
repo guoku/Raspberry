@@ -22,7 +22,8 @@ def commodities(request, user_context, shop_inst):
         item = Item(item_list[i]['item_id'])
         item_list[i]['item'] = item.read()
     verification_form = ShopVerificationForm()
-    if not user_context['shop_verified']:
+    shop_context = shop_inst.read()
+    if not shop_context['shop_verified']:
         shop_verification = shop_inst.read_shop_verification()
     else:
         shop_verification = None

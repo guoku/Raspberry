@@ -7,7 +7,7 @@
     <title>
         {% block title %}果库{% endblock %}
     </title>
-    <link media="all" rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap.min.css' %}">
+    <link media="all" rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     {% block css %}{% endblock %}
 </head>
 <body>
@@ -33,7 +33,7 @@
 
 {% block javascript %}
     <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
-    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 {% endblock %}
 {% block script %}{% endblock %}
 </body>
