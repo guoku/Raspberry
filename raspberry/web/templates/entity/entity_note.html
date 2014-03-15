@@ -2,12 +2,14 @@
 
 {% spaceless %}
     <div class="note-item">
-        <a href="{% url 'web.views.user.user_index' creator_context.user_id %}" class="avatar">
+        <a href="{% url 'web.views.user.user_index' creator_context.user_id %}" class="avatar" target="_blank">
             <img src="{{ creator_context.avatar_small }}" width="50" height="50">
         </a>
 
         <div class="note-detail">
-            <a class="nickname" href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}</a>
+            <a class="nickname" href="{% url 'web.views.user.user_index' creator_context.user_id %}" target="_blank">
+                {{ creator_context.nickname }}
+            </a>
             {% if creator_context.bio %}
                 <small class="bio">{{ creator_context.bio }}</small>
             {% endif %}

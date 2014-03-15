@@ -37,7 +37,7 @@ class SignInAccountForm(forms.Form):
         # log.info(self.cleaned_data )
         cleaned_data = self.cleaned_data
         # log.info(cleaned_data)
-        data_email = cleaned_data.get('email', None)
+        data_email = cleaned_data['email']
         user_id = User.get_user_id_by_email(data_email)
         # is_exist = User.objects.filter(email=data_email).exists()
         if user_id is None:
@@ -124,11 +124,9 @@ class SettingAccountForm(SignUpAccountBioFrom):
                              label=_('email'), help_text=_(''))
 
 class ChangePasswordForm(forms.Form):
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input',
-                                    'placeholder': _('old password')}),
-                                   label=_('old password'), help_text=_(''))
-    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('new password')}), label=_('new password'), help_text=_(''), min_length = 8, max_length = 20)
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('confirm password')}), label=_('confirm password'), help_text=_(''), min_length = 8, max_length = 20)
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('old password')}), label=_('old password'), help_text=_(''))
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('new password')}), label=_('new password'), help_text=_(''), min_length=6, max_length=20)
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('confirm password')}), label=_('confirm password'), help_text=_(''), min_length=6, max_length=20)
 
     def __init__(self, user, data=None):
         self.user = user

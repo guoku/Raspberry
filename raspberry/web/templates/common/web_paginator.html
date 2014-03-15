@@ -4,7 +4,7 @@
     <div class="pagination">
         <div class="container clearfix">
             {% if paginator.has_previous %}
-                <a href="?{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}p={{ paginator.previous_page_number }}"><span class="previous"></span><b>上一页</b></a>
+                <a href="?{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}p={{ paginator.previous_page_number }}"><span class="previous"></span><b> 上一页</b></a>
             {% endif %}
 
             {% if paginator.need_left_abbr %}
@@ -34,7 +34,7 @@
             {% endif %}
 
             {% if paginator.has_next %}
-                <a href="?p={{ paginator.next_page_number }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}"><b>下一页</b><span  class="next"></span></a>
+                <a href="?p={{ paginator.next_page_number }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}"><b>下一页 </b><span  class="next"></span></a>
             {% endif %}
         </div>
     </div>

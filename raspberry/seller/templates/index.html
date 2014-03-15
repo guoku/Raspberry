@@ -6,7 +6,157 @@
 {% endblock %}
 
 {% block content %}
-    <div class="span2">
+        <div class="row">
+            <div class="col-md-3">
+                <ul class="nav nav-list affix" style="background:#f6f6f6;width:150px;">
+                    <li class="">
+                        <a href="#overview"> <i class="icon-chevron-right"></i> <i class="fa fa-bookmark-o"></i>
+                            介绍
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#overview">
+                            <i class="icon-chevron-right"></i>
+                            <i class="fa fa-plus-square"></i>
+                            申请
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#overview">
+                            <i class="icon-chevron-right"></i>
+                            <i class="fa fa-list-alt"></i>
+                            管理
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#transitions">
+                            <i class="icon-chevron-right"></i>
+                            <i class="fa fa-tachometer"></i>
+                            统计
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#modals">
+                            <i class="icon-chevron-right"></i>
+                            <i class="fa fa-cog"></i>
+                            加V申请
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#modals">
+                            <i class="icon-chevron-right"></i>
+                            <i class="fa fa-money"></i>
+                            优惠码提交
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <div class="bs-docs-section">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">介绍</div>
+                      <div class="panel-body">
+                        {% include 'partial/shop_verification.html' %}
+                        
+                        <!--<img data-src="holder.js/140x140" class="img-rounded" alt="140x140" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAACMCAYAAACuwEE+AAAFD0lEQVR4Xu3Y2ytsYRyH8d84n8rxxjkuCEVJDhF/Oy6Qcs6FiBtyapBjTrP7vTUTew/b155Xe6ZnrrZ891r1rE9r1pJIJpMp40OBLxZIAOaLpZiFAoABglQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxoDBgFQAMFIuxnkN5unpyTY2Nqy4uNgGBgastLQ06xVNJpP28PBgLS0t4fdXV1e2trZm/v8bGxttaGjIioqKPtXwk+f6n1nmNZj7+3s7ODiww8NDm5yctMrKyj9av7y82Pz8vPX29lpzc7M9Pj6Gn/3fbW1ttr6+buXl5TY6OvrpdfrJcwEmYgEHMTs7axMTE1nBbG5u2snJSbgDOZL9/X07Pj4Oe/+kAY2Njdnt7a1VVFRYbW1t+N3p6amVlZVZXV1d+DmX56qpqYlYJd6h8/oO41men59tbm4uKxiH4mD84nR0dISvpO3t7QCrq6srU3VhYSH8/vX11XZ2dmx6etru7u5seXnZRkZGMmByea7W1tZ4VzXikQsWTPrO0d/fbzc3N1ZVVWV+kZaWlgIOv9ukP47I7yr++5WVFfOvH///nZ2d1t3dndl9BOa754p4XaMdumDBLC4uhq+T4eHhcFdJg/A7TlNT0zswW1tbVl9fH8D4147fsfyraXx83BKJxF/BfPdc0a5qxAMXJJjd3d3wMPz7x59jLi4uwluVPwT7J5VKBSA9PT0B0dnZWXgQ9o8/51RXV38K5l/OFfG6Rjt0QYLxryB/HvGPvy7v7e2FO4Z/vTgYv6PMzMwEOP7Kvbq6Gn72j+Pp6+sLr97+0Ds1NZV55c72lfTdc5WUlES7qDEPnPdg/PnBL/JHr9Uez4H4V1J7e3u4o/hzjL8R+d9gzs/Pw93Gf+cPv/63HH/Q9Z2/fTU0NNjg4GC4Brk8V8yLGvPYeQ/G41xfX4c3obfPG2+j+UOs3038mSb9OTo6CgD82SX9Gn15eRn+nT6O/7HOYaVfq3N5rpgXNeaxCwJMzEAc+30BwCBCKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKgAYKRdjwGBAKvAL5pjypnvj9I4AAAAASUVORK5CYII=" style="width: 140px; height: 140px;">
+                        首先，你得通过果库卖家认证。然后申请》管理》优惠码提交-->
+                      </div>
+                    </div>
+                </div>
+                <div class="bs-docs-section">
+                    <div class="page-header">
+                        <h3 id="js-overview">申请『果库价』活动</h3>
+                    </div>
+                    <form class="form-inline" role="form">
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="商品淘宝链接"></div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="数量"></div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="价格"></div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox">同意协议</label>
+                        </div>
+                        <button type="submit" class="btn btn-default">提交</button>
+                    </form>
+                </div>
+                <div class="bs-docs-section">
+                    <div class="page-header">
+                        <h3 id="js-overview">果库价管理</h3>
+                    </div>
+                    <div class="bs-example bs-example-tabs">
+                        <ul id="myTab" class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#home" data-toggle="tab">所有</a>
+                            </li>
+                            <li>
+                                <a href="#profile" data-toggle="tab">已通过</a>
+                            </li>
+                            <li>
+                                <a href="#profile" data-toggle="tab">已结束</a>
+                            </li>
+                            <li>
+                                <a href="#profile" data-toggle="tab">未通过</a>
+                            </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade in active" id="home">
+                                <div class="table-responsive" style="margin-top:20px;">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 50%;">商品</th>
+                                                <th style="width: 40%;">状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="media">
+                                                        <a class="pull-left" href="#">
+                                                            <img class="media-object" alt="64x64" src="http://gw2.alicdn.com/bao/uploaded/i3/T10I1QFvFeXXXXXXXX_!!0-item_pic.jpg_480x480.jpg" style="width: 64px; height: 64px;"></a>
+                                                        <div class="media-body">
+                                                            <h5 class="media-heading">PAUL & JOE - 秘密花园系列花现腮红</h5>
+                                                            <p>50件 ￥198.00</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <h5>
+                                                        <span class="label label-primary">已通过</span>
+                                                    </h5>
+                                                    <p>结束日期：2014年3月10日</p>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default">结束</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile"></div>
+                            <div class="tab-pane fade" id="dropdown1"></div>
+                            <div class="tab-pane fade" id="dropdown2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bs-docs-section">
+                    <div class="page-header">
+                        <h3 id="js-overview">优惠码提交</h3>
+                    </div>
+                    <form class="form-inline" role="form">
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="" placeholder="请输入优惠码"></div>
+                        <button type="submit" class="btn btn-default">提交</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+            
+    <!--<div class="span2">
     
     </div>
     <div class="span9">
@@ -46,5 +196,5 @@
         </div>
 
 
-    </div>
+    </div>-->
 {% endblock %}

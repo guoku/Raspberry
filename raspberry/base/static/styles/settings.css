@@ -1,6 +1,15 @@
 /*#settings .guoku-block {*/
     /*padding: 35px 0 50px 250px;*/
 /*}*/
+#setting h2 {
+    font-size: 16px;
+    color: #444444;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eeeeee;
+}
+/*#setting hr {*/
+    /*color: #eeeeee;*/
+/*}*/
 
 #setting .row {
     /*margin: auto;*/
@@ -16,7 +25,10 @@
     max-height: 100%;
     border-radius: 50%;
 }
-
+#setting .update-avatar {
+    position: relative;
+    /*margin-bottom: 40px;*/
+}
 #setting .update-avatar a {
     display: block;
     /*margin-right: 25px;*/
@@ -25,6 +37,15 @@
     /*margin: 5px;*/
     color: #427ec0;
     text-align: center;
+}
+#setting .update-avatar .upload-click {
+    position: absolute;
+    top: 230px;
+    left: 438px;
+    width: 84px;
+    margin: auto;
+    filter: alpha(opacity:0);
+    opacity: 0;
 }
 #setting .update-avatar p {
     margin: 10px 0;
@@ -47,7 +68,7 @@
 
 #setting label {
     display: inline-block;
-    width: 130px;
+    width: 110px;
 }
 #setting select {
     border: 1px solid #eeeeee;
@@ -56,18 +77,22 @@
 }
 
 #setting .text-input {
-    width: 200px;
+    width: 180px;
     height: 30px;
+    color: #999999;
     /*border-radius: 4px;*/
     border: 1px solid #eeeeee;
     border-radius: 4px;
+    padding: 0 10px;
 }
 #setting .textarea-input {
-    width: 200px;
-    height: 71px;
+    width: 180px;
+    height: 51px;
+    color: #999999;
     resize: none;
     border: 1px solid #eeeeee;
     border-radius: 4px;
+    padding: 10px;
 }
 
 #setting .password {
@@ -82,7 +107,9 @@
 
 #setting input:focus {
     border-color: #ade0b3;
+    background-color: #f8f8f8;
 }
 #setting textarea:focus {
     border-color: #ade0b3;
+    background-color: #f8f8f8;
 }

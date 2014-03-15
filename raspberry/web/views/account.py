@@ -311,8 +311,13 @@ def logout(request):
     next_url = request.META.get('HTTP_REFERER', reverse('web_selection'))
     return HttpResponseRedirect(next_url)
 
-def forget_passwd(request):
-    return
+def forget_passwd(request, template='account/forget_password.html'):
+    return render_to_response(
+        template,
+        {
+        },
+        context_instance = RequestContext(request),
+    )
 
 @require_POST
 @login_required

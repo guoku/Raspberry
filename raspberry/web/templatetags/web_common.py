@@ -79,6 +79,4 @@ def display_common_user(user_context):
     return {
         'user_context' : user_context,
     }
-
-
 register.inclusion_tag("common/user.html")(display_common_user)

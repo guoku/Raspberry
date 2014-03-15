@@ -209,13 +209,12 @@ function initTag(){
             function formClick(e) {
                 e.stopPropagation();
             }
-
-            var flag = 0;
+            var flag = 1;
             var $body = $('body');
             $login.show();
            $body.on('click', removeLogin);
             function removeLogin() {
-                if (flag === 0) {
+                if (flag == 1) {
                     $accountForm.hide();
                     $body.off('click', removeLogin);
                     $accountForm.off('click', formClick);
@@ -224,15 +223,17 @@ function initTag(){
             }
             
             $login.find('.to-reg').on('click', function (e) {
-                e.preventDefault();
+                
                 $login.hide();
                 $reg.show();
+                e.preventDefault();
             });
 
             $reg.find('.to-login').on('click', function (e) {
-                e.preventDefault();
+                
                 $reg.hide();
                 $login.show();
+                e.preventDefault();
             });
         },
 
@@ -547,7 +548,7 @@ function initTag(){
             var $noteDetail = $noteItem.find('.note-detail');
 
             // 动态加载点评的评论
-            $noteItem.find('.add-comment').on('click', function () {
+            $noteItem.find('.add-comment').on('click', function (e) {
                 if (!util.isUserLogined()) {
                     util.popLoginBox();
                 } else {
@@ -575,6 +576,8 @@ function initTag(){
                         });
                     }
                 }
+                return false;
+                e.preventDefault();
             });
         },
 
@@ -656,7 +659,7 @@ function initTag(){
 
         poke: function () {
             // 点评 点赞
-            $('.poke').on('click', function () {
+            $('.poke').on('click', function (e) {
                 var $this = $(this);
 
                 if (!util.isUserLogined()) {
@@ -669,9 +672,11 @@ function initTag(){
                     if($this.attr("data-target-status") == 1){
                     	$this.attr("data-target-status",0);
                     	$poke.addClass('poked');
+                        url+="1/";
                     }else{
                     	$poke.removeClass('poked');
                     	$this.attr("data-target-status",1);
+                        url+="0/";
                     }
                     $.post(url, function (data) {
                         var count = parseInt($counter.text()) || 0;
@@ -696,6 +701,8 @@ function initTag(){
                         }
                     });
                 }
+                return false;
+                e.preventDefault();
             });
         }
     };
@@ -710,9 +717,15 @@ function initTag(){
                     var result = parseInt(data);
 
                     if (result === 1) {
-                        $this.text('取消关注');
+                        if($this.hasClass(".is-fan")){
+                            $this.html('<span class="img_is_fun"></span><b>取消关注</b>');
+                        }else{
+                            $this.html('<span class="img_not_fun"></span><b>取消关注</b>');
+                        }
+                        $this.removeClass("blue-f").addClass("gray-f");
                     } else if (result === 0) {
-                        $this.html('<span></span> 关注');
+                        $this.html('<span class="img_follow"></span><b>关注</b>');
+                        $this.removeClass("gray-f").addClass("blue-f");
                     }
                 });
 
@@ -798,5 +811,12 @@ $(function(){
 			$(".account-form input[type='submit']").attr("disabled",true).removeClass("submit").addClass("submit_disabled");
 		}
 	});
+
+    $(".forget_input").on("keyup",function(){
+        if($.trim($(this).val()).length>0)
+        $(".row input[type='submit']").removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
+        else
+        $(".row input[type='submit']").removeClass("btn-update").addClass("btn-disabled").attr("disabled","true");
+    });
 });
 	

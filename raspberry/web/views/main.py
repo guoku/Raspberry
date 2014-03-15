@@ -101,6 +101,42 @@ def selection(request, template='main/selection.html'):
             }
         return JSONResponse(data=_ret)
 
+def wap_selection(request, template='wap/selection.html'):
+    _agent = 'iphone'
+    if 'Android' in request.META['HTTP_USER_AGENT']:
+        _agent = 'android'
+   
+    _page_num = int(request.GET.get('p', 1))
+    _hdl = NoteSelection.objects.filter(post_time__lt = datetime.now())
+    _paginator = Paginator(_page_num, 30, _hdl.count())
+    _hdl = _hdl.order_by('-post_time')
+    _selection_list = []
+    for _note_selection in _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
+        _selection_note_id = _note_selection['note_id']
+        _entity_id = _note_selection['entity_id']
+        _entity_context = Entity(_entity_id).read()
+        _note_context = Note(_selection_note_id).read()
+        _creator_context = User(_note_context['creator_id']).read()
+        
+        _selection_list.append({
+            'entity_context': _entity_context,
+            'note_context': _note_context,
+            'creator_context': _creator_context,
+        })
+        
+    return render_to_response(
+        template,
+        {
+            'agent' : _agent,
+            'selection_list' : _selection_list,
+            'next_page_num' : _page_num + 1,
+        },
+        context_instance=RequestContext(request)
+    )
+
+
+
+
 @require_http_methods(['GET'])
 def popular(request, template='main/popular.html'):
     if request.user.is_authenticated():
@@ -112,9 +148,11 @@ def popular(request, template='main/popular.html'):
     
     _group = request.GET.get('group', 'daily')
     _popular_list = []
+    _popular_updated_time = datetime.now() 
    
     _popular_entities = popularity.read_popular_entity_from_cache(scale=_group)
     if _popular_entities != None:
+        _popular_updated_time = _popular_entities['updated_time']
         for row in _popular_entities['data'][0:60]:
             try:
                 _entity_id = row[0]
@@ -134,7 +172,7 @@ def popular(request, template='main/popular.html'):
         {
             'group' : _group,
             'user_context' : _request_user_context,
-            'recent_time' : '10小时前',
+            'popular_updated_time' : _popular_updated_time, 
             'popular_list' : _popular_list
         },
         context_instance=RequestContext(request)

@@ -87,3 +87,7 @@ body{
 	color:white;
 }
 
+.verify_shop input{
+	border:1px solid #eee;
+	outline: none;
+}

@@ -76,7 +76,13 @@ button {
     font-size: 14px;
     color: #FFFFFF;
 }
-
+.btn-disabled{
+    background: #eee;
+    border: 1px #357ebd;
+    padding: 0px 20px;
+    font-size: 14px;
+    color: #999;
+}
 .btn-link {
     background-color: rgba(0,0,0,0);
     color: #428bca;
@@ -158,6 +164,14 @@ button {
     padding: 0;
 }
 
+#header .icon-menu, .icon-guoku, .icon-setting, .icon-signout {
+    position: absolute;
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    width: 22px;
+    height: 22px;
+    margin: 12px;
+}
+
 #header .user {
     /*position: absolute;*/
     /*top: 0;*/
@@ -183,49 +197,64 @@ button {
     text-decoration: none;
     text-align: center;
     line-height: 49px;
-    /*padding: 0;*/
-    /*margin: 0;*/
     padding: 0 6px;
-    /*width: 30px;*/
 }
-#header .user li a:hover {
-
+#header .user .user-avatar {
+    display: table-cell;
+    position: relative;
+    height: 49px;
+    line-height: 0;
+    vertical-align: middle;
+    padding: 0 30px;
+}
+#header .user img {
+    border-radius: 50%;
+}
+#header .user li .icon-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 12px 0;
+    background-position: -32px -40px;
 }
 #header .user .menu {
     position: absolute;
     margin: 0;
     padding: 0;
-    /*height: 135px;*/
     right: 0;
-    /*overflow: hidden;*/
-    /*border: 1px solid rgba(0, 0, 0, 0.15);*/
+    border-left: 1px solid rgba(0, 0, 0, 0.15);
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 #header .user .menu li {
     float: none;
     padding: 0;
     margin: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    height: 45px;
+    width: 135px;
 }
-#header .user .menu .icon-guoku {
+/*.icon-guoku, .icon-setting, .icon-setting   {*/
+    /*position: relative;*/
+    /*background: url("/static/v3/images/toolkit.png") no-repeat;*/
+/*}*/
 
+
+#header .user .menu .icon-guoku {
+    background-position: -64px -40px;
 }
 #header .user .menu .icon-setting {
-
+    background-position: -96px -40px;
 }
 #header .user .menu .icon-signout {
-
+    background-position: -128px -40px;
 }
 #header .user .menu li a {
     display: block;
     background-color: #FFFFFF;
     text-align: right;
-    height: 45px;
-    width: 135px;
     line-height: 45px;
     text-decoration: none;
-    /*border: 1px solid rgba(0, 0, 0, 0.15);*/
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-    border-left: 1px solid rgba(0, 0, 0, 0.15);
-    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    padding-right: 30px;
 }
 #header .user .menu li a:hover {
     background-color: #f8f8f8;
@@ -236,19 +265,6 @@ button {
 }
 #header .user li:hover ul {
     display: block;
-}
-
-#header .user .user-avatar {
-    display: table-cell;
-    position: relative;
-    height: 49px;
-    line-height: 0;
-    vertical-align: middle;
-    /*padding: 0;*/
-}
-
-#header .user img {
-    border-radius: 50%;
 }
 
 #header form {
@@ -265,11 +281,13 @@ button {
     /*line-height: 30px;*/
     margin: 9px 0;
     /*padding: 10px 0;*/
+    padding: 0 5px;
     border: none;
     outline: 0;
-    color: #fff;
+    /*color: #eee;*/
     border-radius: 4px 4px 4px 4px;
-    background-color: rgba(220, 220, 220, 0.95);
+    background: #fbfbfb;
+    /*background-color: rgba(220, 220, 220, 0.95);*/
     /*background-color: #FFFFFF;*/
 }
 #header form input:focus {
@@ -278,22 +296,15 @@ button {
 }
 
 #header .search-submit {
-    /*margin-top: 11px;*/
-    /*position: absolute;*/
-    /*display: inline-block;*/
     width: 30px;
     height: 30px;
     vertical-align: middle;
     margin: 10px 0 9px -32px;
     padding: 0;
     border: none;
-    background: url("/static/v3/images/search_icon.png") no-repeat transparent;
+    /*background: url("/static/v3/images/search_icon.png") no-repeat transparent;*/
+    background: url("/static/v3/images/toolkit.png") no-repeat 0 -38px transparent;
 }
-
-/*#header form button img {*/
-    /*width: 26px;*/
-    /*height: 28px;*/
-/*}*/
 
 /* welcome----------------- */
 #welcome {
@@ -430,7 +441,7 @@ button {
     /*background-color: #fbfbfb;*/
 /*}*/
 
-.account-form .text {
+.account-form .text-input {
     display: block;
     width: 243px;
     margin: 0 auto 15px;
@@ -480,10 +491,11 @@ button {
     background-color: #fbfbfb;
     margin-bottom: 55px;
     text-align: center;
+    /*vertical-align: bottom;*/
 }
 
 .login .tip img {
-    margin: 35px 0px 10px 0px;
+    margin-top: 35px;
 }
 
 .login .remember {
@@ -517,19 +529,16 @@ button {
     margin-top: 70px;
     color: #427ec0;
 }
-
 .register .tip {
     display: block;
-    width: 515px;
-    height: 125px;
+    width: 535px;
     background-color: #fbfbfb;
-    /*margin-bottom: 55px;*/
+    margin-bottom: 55px;
     text-align: center;
-    margin-bottom: 65px;
 }
 
 .register .tip img {
-    margin-top: 30px;
+    margin: 35px 0px 10px 0px;
 }
 
 .register .agreement {
@@ -569,11 +578,13 @@ button {
     width: 20px;
     height: 17px;
     margin-right: 5px;
-    background: url(/static/v3/images/icon_like.png) no-repeat;
+    background: url(/static/v3/images/toolkit.png) no-repeat;
+    background-position: -1px -86px;
 }
 
 .liked .icon {
-    background: url(/static/v3/images/icon_liked.png) no-repeat;
+    background: url(/static/v3/images/toolkit.png) no-repeat;
+    background-position: -38px -86px;
 }
 
 .like .count {
@@ -596,24 +607,22 @@ button {
     height: 35px;
     line-height: 35px;
     padding: 0px 15px;
+    margin: 0px 5px;
     text-align: center;
     border: 1px solid #eee;
     font-weight: bold;
-    color: #999;
+    color: #898989;
     background: #fff;
-    border: 1px solid #ddd;
-    margin: 0px 5px;
-    cursor: pointer;
     text-decoration: none;
 }
 
-.pagination a:hover {
-    background-color: #427dbf;
-    color: #fff;
+.pagination a:hover:not(.active) {
+    background-color: #f6f6f6;
 }
 
 .pagination .active {
-    background-color: #f6f6f6;
+    background-color: #427dbf;
+    color: #fff;
 }
 
 .pagination a .previous,
@@ -624,10 +633,12 @@ button {
 }
 
 .pagination a .previous {
+    margin-bottom: -1px ;
     background: url(../images/pre.png) no-repeat center;
 }
 
 .pagination a .next {
+    margin-bottom: -1px ;
     background: url(../images/next.png) no-repeat center;
 }
 
@@ -866,10 +877,9 @@ button {
     height: 28px;
     line-height: 28px;
     width: 80px;
+    padding: 2px 15px 2px 10px;
     border: 1px solid #eee;
     border-radius: 4px;
-    color: #fff;
-    background-color: #427ec0;
     text-decoration: none;
 }
 
@@ -878,8 +888,7 @@ button {
 }
 
 /*
-**  click to top style 
-**   @author xiaolin
+**  click to top style
 */
 .click_to_top{
     width:30px;
@@ -905,60 +914,73 @@ button {
 	height: 30px;
 	background: url("../images/icon_back_to_top_press.png") center center no-repeat;
 }
+/*404*/
+.center{
+    width: 600px;
+    height: auto;
+    margin: 0px auto;
+    text-align: center;
+}
+.img-404{
+    width: 370px;
+    height: 370px;
+    margin: 0px auto;
+    background: url("../images/404.png");
+}
+.img-500{
+    width: 370px;
+    height: 370px;
+    margin: 0px auto;
+    background: url("../images/500.png");
+}
+.c999{
+    color: #999;
+}
+.fs12{
+    font-size: 12px;
+}
+.c333{
+    color: #333;
+}
+/*forget password*/
+.forget_tip{
+    font-size: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #ddd;
+}
+.forget_input{
+    width: 300px;
+    height: 25px;
+    line-height: 25px;
+    padding: 5px 10px;
+    border: 1px solid #eee;
+    outline: none;
+}
+.forget_input:hover,.forget_input:focus{
+    border:1px solid #ddd;
+}
+.password input[type='submit']{
+    height: 40px;
+    font-weight: 700;
+    border-radius: 2px;
+    margin:30px 0px 0px 94px;
+}
+.forget_input_tip{
+    padding-left:40px; 
+}
+.forget_email_tip{
+    padding-right: 40px;
+}
 /* tag */
 a.tag {color:#0084B4 !important;}
 a.tag:hover {text-decoration:underline;}
-.tag-auto-complete {
-	position:relative;
-	background:white;
-	border:1px solid #DEDEDE;
-	font-size:13px;
-	z-index:999;
-	top:0;
-	left:0;
-	min-width:152px;
-}
-.tag-auto-complete span {
-	color:#BBBBBB;
-	line-height:24px;
-	padding:0 10px;
-}
-.tag-auto-complete p {
-	color:#666666;
-	line-height:24px;
-	padding:0 10px;
-	margin:0;
-	cursor:pointer;
-}
-.tag-auto-complete p.hover {
-	background:#F1F1F1;
-}
-.text_area {
-	visibility:hidden;
-	border-color:#DEDEDE;
-	position:absolute;
-	width:530px;
-	word-wrap:break-word;
-}
-<<<<<<< HEAD
+.tag-auto-complete {position:absolute;background:#fff;border:1px solid #DEDEDE;font-size:13px;z-index:999;top:0;left:0;min-width:152px}
+.tag-auto-complete span {color:#BBBBBB;line-height:24px;padding:0 10px;}
+.tag-auto-complete p {color:#666666;line-height:24px;padding:0 10px;margin:0;cursor:pointer;}
+.tag-auto-complete p.hover {background:#F1F1F1;}
+.text_area {visibility:hidden;border-color:#DEDEDE;position:absolute;width:530px;word-wrap:break-word;}
+/*seller style*/
+.verify_form{}
 
-/*分页*/
-.pages{
-    height: 50px;
-}
-.page_s{
-    padding:5px 10px;
-    height: 30px;
-    line-height: 30px;
-    border:1px solid #ddd;
-    margin-left:10px;
-    float: right;
-    cursor: pointer;
-}
-.page_s:hover{
-    background: #427dbf;
-    color: #fff;
-    font-weight: 700;
-}
-=======
->>>>>>> 4cca782676b082abc66e347ad39a31429d7bee9a

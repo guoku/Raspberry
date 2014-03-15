@@ -103,6 +103,57 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         context_instance=RequestContext(request)
     )
 
+def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
+    _entity_id = Entity.get_entity_id_by_hash(entity_hash)
+    _entity_context = Entity(_entity_id).read()
+    
+    _is_soldout = True
+    _taobao_id = None
+    for _item_id in Item.find(entity_id=_entity_id):
+        _item_context = Item(_item_id).read()
+        _taobao_id = _item_context['taobao_id']
+        if not _item_context['soldout']:
+            _is_soldout = False
+            break
+    
+    _note_list = []
+    for _note_id in Note.find(entity_id=_entity_id, reverse=True):
+        _note = Note(_note_id)
+        _note_context = _note.read()
+        if _note_context['weight'] >= 0:
+            _creator_context = User(_note_context['creator_id']).read()
+            _note_list.append({
+                'note_context' : _note_context,
+                'creator_context' : _creator_context,
+            })
+    
+    _liker_list = []
+    for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
+        _liker_list.append(User(_liker[0]).read())
+
+    return render_to_response(
+        template,
+        {
+            'entity_context' : _entity_context,
+            'note_list' : _note_list,
+            'liker_list' : _liker_list,
+        },
+        context_instance=RequestContext(request)
+    )
+
+
+def _parse_taobao_id_from_url(url):
+    params = url.split("?")[1]
+
+    for param in params.split("&"):
+        tokens = param.split("=")
+
+        if len(tokens) >= 2 and (tokens[0] == "id" or tokens[0] == "item_id"):
+            return tokens[1]
+
+    return None
+
+
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
     thumb_images = []

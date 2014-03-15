@@ -1,14 +1,52 @@
 <div class="span10">
 {% if not shop_context.shop_verified %}
-    {% if shop_verification%}
+   {% if shop_verification%}
     您已提交认证申请，状态为{{ shop_verification.status }}
     {% else %}
-        <form action="{% url 'seller_verify' %}" method="POST">
-            {{ verification_form.as_table }}
-            <input type="submit" value="submit"/>
+        <form action="{% url 'seller_verify' %}" method="POST" class="verify_shop_form">
+            <!--{{ verification_form.as_table }}-->
+            <div class="form-inline">
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_cn">
+                        <b>公司名称:</b>{{ verification_form.company_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_qq">
+                        <b>qq号码:</b>{{ verification_form.company_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_qq">
+                        <b>邮箱地址:</b>{{ verification_form.company_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_qq">
+                        <b>手机号码:</b>{{ verification_form.company_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_qq">
+                        <b>主要产品:</b>{{ verification_form.company_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_qq">
+                        <b>产品介绍:</b>{{ verification_form.company_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_qq">
+                        <input type="submit" value="提交信息" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+            
         </form>
     {% endif %}
 {% else %}
    欢迎您, {{ shop_context.shop_nick }} 您已经完成认证
 {% endif %}
 </div>
+

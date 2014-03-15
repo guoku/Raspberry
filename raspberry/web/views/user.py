@@ -89,20 +89,23 @@ def user_notes(request, user_id, template=TEMPLATE):
     _note_id_list = Note.find(creator_set=[user_id], offset=_paginator.offset, count=_paginator.count_in_one_page)
     _note_list = []
     for _n_id in _note_id_list:
-        _note_context = Note(_n_id).read()
-        _entity_id = _note_context['entity_id']
-        _creator_context = User(user_id).read()
-        _entity_context = Entity(_entity_id).read()
-        _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
-
-        _note_list.append(
-            {
-                'entity_context' : _entity_context,
-                'note_context' : _note_context,
-                'creator_context' : _creator_context,
-                'is_user_already_like' : _is_user_already_like
-            }
-        )
+        try:
+            _note_context = Note(_n_id).read()
+            _entity_id = _note_context['entity_id']
+            _creator_context = User(user_id).read()
+            _entity_context = Entity(_entity_id).read()
+            _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
+    
+            _note_list.append(
+                {
+                    'entity_context' : _entity_context,
+                    'note_context' : _note_context,
+                    'creator_context' : _creator_context,
+                    'is_user_already_like' : _is_user_already_like
+                }
+            )
+        except Exception, e:
+            pass
 
     return render_to_response(
         template,
@@ -136,6 +139,7 @@ def user_tags(request, user_id, template=TEMPLATE):
     _tag_list = []
     for _tag_stat in _tag_stat_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         _tag_id = _tag_stat['tag_id']
+        _tag_hash = _tag_stat['tag_hash']
         _tag = _tag_stat['tag']
         _entity_id_list = Tag.find_user_tag_entity(user_id, _tag)
         _entity_count = len(_entity_id_list)
@@ -144,6 +148,7 @@ def user_tags(request, user_id, template=TEMPLATE):
         _tag_list.append({
             'tag' : _tag,
             'tag_id' : _tag_id,
+            'tag_hash' : _tag_hash,
             'entity_list' : _entity_list,
             'entity_count' : _entity_count
         })
@@ -181,7 +186,8 @@ def user_followings(request, user_id, template=TEMPLATE):
     _following_list = []
     for _u_id in _following_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         _f_user_context = User(_u_id).read()
-        _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
+        if _request_user_context != None:
+            _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
         _following_list.append(_f_user_context)
 
     return render_to_response(
