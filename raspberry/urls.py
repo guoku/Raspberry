@@ -4,6 +4,10 @@ from django.conf.urls import url, include, patterns
 from django.contrib import admin
 admin.autodiscover()
 
+handler500 = 'web.views.page_error'
+handler404 = 'web.views.webpage_not_found'
+handler403 = 'django.views.defaults.permission_denied'
+
 urlpatterns = patterns('',
     (r'^management/', include('management.urls')),
     (r'^seller/', include('seller.urls')),
@@ -15,6 +19,13 @@ urlpatterns = patterns('',
 #    (r'^3.0/activity/$', 'lotto.views.guoku_generation_3_activity'),
 )
 
+urlpatterns += patterns(
+    '',
+    url(r'^403/$', 'django.views.defaults.permission_denied'),
+    url(r'^404/$', 'django.views.defaults.page_not_found'),
+    url(r'^500/$', 'django.views.defaults.server_error'),
+)
+
 if settings.IMAGE_LOCAL:
     urlpatterns += patterns('',
         (r'^image/local/avatar/(?P<size>\w+)/(?P<key>\w+)$', 'base.views.local_avatar_image'),
@@ -23,17 +34,18 @@ if settings.IMAGE_LOCAL:
         (r'^image/local/category/(?P<key1>\w+)/(?P<key2>\w+)$', 'base.views.local_category_image'),
     )
 
-#if settings.DEBUG:
- #   import debug_toolbar
- #   urlpatterns += patterns('',
- #       url(r'^__debug__/', include(debug_toolbar.urls)),
- #   )
 
- #   urlpatterns += patterns('',
- #       (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
- #   )
+if settings.DEBUG:
+   import debug_toolbar
+   urlpatterns += patterns('',
+       url(r'^__debug__/', include(debug_toolbar.urls)),
+   )
 
- #   urlpatterns += patterns('',
- #       url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
- #           {'document_root': settings.MEDIA_URL}),
- #   )
+   urlpatterns += patterns('',
+       (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+   )
+
+   urlpatterns += patterns('',
+       url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
+           {'document_root': settings.MEDIA_URL}),
+   )
