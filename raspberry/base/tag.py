@@ -75,7 +75,7 @@ class Tag(object):
         return _hash
 
     @classmethod
-    def tag_name(cls, tag_hash):
+    def get_tag_text_from_hash(cls, tag_hash):
         try:
             _tag = TagModel.objects.get(tag_hash=tag_hash)
             return _tag.tag
