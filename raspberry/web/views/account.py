@@ -21,6 +21,7 @@ import re
 from base.taobao_shop import TaobaoShop
 from base.user import User
 from urlparse import urlparse
+from share.tasks import RetrievePasswordTask 
 from web.forms.account import SignInAccountForm, SignUpAccountFrom, SettingAccountForm, ChangePasswordForm
 from django.utils.log import getLogger
 
@@ -312,12 +313,20 @@ def logout(request):
     return HttpResponseRedirect(next_url)
 
 def forget_passwd(request, template='account/forget_password.html'):
-    return render_to_response(
-        template,
-        {
-        },
-        context_instance = RequestContext(request),
-    )
+
+    if request.method == 'GET':
+        return render_to_response(
+            template,
+            {
+            },
+            context_instance = RequestContext(request),
+        )
+    else:
+        _email = request.POST.get('email', None)
+        _user_id = User.get_user_id_by_email(_email)
+        RetrievePasswordTask.delay(_user_id)
+        return HttpResponse('1')
+        
 
 @require_POST
 @login_required

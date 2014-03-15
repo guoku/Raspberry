@@ -10,6 +10,14 @@
 </head>
 
 <body>
+    <div id="header">
+        <div class="header-container">
+            <div class="title">
+                <h1 style="display: none"><a href="{{ web_selection_url }}">{% trans "guoku" %}</a></h1>
+                <a href="{{ web_selection_url }}" class="logo"><img src="{% static 'images/logo.png' %}"></a>
+            </div>
+        </div>
+    </div>
     <div id="wrapper">
         <div id="main">
             <div class="center">
@@ -22,7 +30,7 @@
                 <p class="c999">子曰：“道不行，乘桴浮于海。从我者，其由与？”</p>
                 <p>-- 《论语·公冶长》</p>
                 <br><br>
-                <p class="c333">返回 <a href="/">首页</a>，或报告问题到 hi@guoku.com</p>
+                <p class="c333">返回 <a href="{{ web_selection_url }}">首页</a>，或报告问题到 hi@guoku.com</p>
             </div>
         </div> 
     </div>
