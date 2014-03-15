@@ -89,20 +89,23 @@ def user_notes(request, user_id, template=TEMPLATE):
     _note_id_list = Note.find(creator_set=[user_id], offset=_paginator.offset, count=_paginator.count_in_one_page)
     _note_list = []
     for _n_id in _note_id_list:
-        _note_context = Note(_n_id).read()
-        _entity_id = _note_context['entity_id']
-        _creator_context = User(user_id).read()
-        _entity_context = Entity(_entity_id).read()
-        _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
-
-        _note_list.append(
-            {
-                'entity_context' : _entity_context,
-                'note_context' : _note_context,
-                'creator_context' : _creator_context,
-                'is_user_already_like' : _is_user_already_like
-            }
-        )
+        try:
+            _note_context = Note(_n_id).read()
+            _entity_id = _note_context['entity_id']
+            _creator_context = User(user_id).read()
+            _entity_context = Entity(_entity_id).read()
+            _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
+    
+            _note_list.append(
+                {
+                    'entity_context' : _entity_context,
+                    'note_context' : _note_context,
+                    'creator_context' : _creator_context,
+                    'is_user_already_like' : _is_user_already_like
+                }
+            )
+        except Exception, e:
+            pass
 
     return render_to_response(
         template,
