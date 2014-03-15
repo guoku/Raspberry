@@ -18,7 +18,7 @@ from base.item import Item
 from base.tag import Tag 
 from base.category import Category
 from utils.extractor.taobao import TaobaoExtractor 
-
+from utils.taobao import parse_taobao_id_from_url
 from django.utils.log import getLogger
 
 log = getLogger('django')
@@ -188,7 +188,7 @@ def load_entity(request, template='entity/create_entity.html'):
         _hostname = urlparse(_cand_url).hostname
 
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) is not None:
-            _taobao_id = _parse_taobao_id_from_url(_cand_url)
+            _taobao_id = parse_taobao_id_from_url(_cand_url)
             _item = Item.get_item_by_taobao_id(_taobao_id)
 
             if _item is None:
@@ -237,7 +237,7 @@ def create_entity(request):
         _hostname = urlparse(_cand_url).hostname
 
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) is not None:
-            _taobao_id = _parse_taobao_id_from_url(_cand_url)
+            _taobao_id = parse_taobao_id_from_url(_cand_url)
             _item = Item.get_item_by_taobao_id(_taobao_id)
 
             if _item is None:

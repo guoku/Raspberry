@@ -22,7 +22,8 @@ def commodities(request, user_context, shop_inst):
         item = Item(item_list[i]['item_id'])
         item_list[i]['item'] = item.read()
     verification_form = ShopVerificationForm()
-    if not user_context['shop_verified']:
+    shop_context = shop_inst.read()
+    if not shop_context['shop_verified']:
         shop_verification = shop_inst.read_shop_verification()
     else:
         shop_verification = None
@@ -53,46 +54,12 @@ def verify(request, user_context, shop_inst):
             )
         return HttpResponseRedirect(reverse('seller_commodities'))
 
-@require_http_methods(["GET", "POST"])
-@login_required
-@seller_only
-def apply_guoku_plus(request, user_context, shop_inst):
-    if request.method == "POST":
-        form = GuokuPlusApplicationForm(request.POST)
-        if form.is_valid():
-            taobao_item_id = form.cleaned_data["taobao_item_id"]
-            item_inst = Item.get_item_by_taobao_id(taobao_item_id)
-            item_context = item_inst.read()
-            if shop_inst.item_exist(taobao_item_id):
-                quantity = form.cleaned_data["quantity"]
-                sale_price = form.cleaned_data['sale_price']
-                remarks = form.cleaned_data['remarks']
-                shop_inst.create_guoku_plus_application(taobao_item_id, item_context['entity_id'], quantity, sale_price, remarks)
-                return HttpResponseRedirect(reverse("seller_guoku_plus_applications_list"))
-            else:
-                return HttpResponseForbidden()
-        return render_to_response("guoku_plus_application.html",
-                                  { "form" : form },
-                                  context_instance = RequestContext(request))
-    elif request.method == "GET":
-        taobao_item_id = request.GET.get('taobao_id', None)
-        if shop_inst.item_exist(taobao_item_id):
-            item = Item.get_item_by_taobao_id(taobao_item_id)
-            item_context = item.read()
-            form = GuokuPlusApplicationForm({"taobao_item_id" : taobao_item_id, 'original_price': item_context['price']})
-            return render_to_response("guoku_plus_application.html",
-                                      {"form" : form,
-                                       "taobao_item": item_context},
-                                      context_instance = RequestContext(request)) 
-        else:
-            return HttpResponseForbidden()
-
 @require_GET
 @login_required
 @seller_only
-def guoku_plus_applications_list(request, user_context, shop_inst):
+def guokuplus_list(request, user_context, shop_inst):
     items = shop_inst.read_guoku_plus_application_list()
-    return render_to_response("guoku_plus_application_list.html",
+    return render_to_response("guoku_plus_list.html",
                     {'items' : items},
                     context_instance = RequestContext(request))
 

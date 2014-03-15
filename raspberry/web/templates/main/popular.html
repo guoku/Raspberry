@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n staticfiles %}
 {% load entity %}
+{% load web_common %}
 
 {% block title %}热门{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">{% endblock %}
@@ -13,7 +14,7 @@
                 <a href="{% url 'web_popular' %}?group=weekly" {% if group == 'weekly' %}class="active"{% endif %}>7 天</a>
             </div>
 
-            <span class="recent">最近更新：{{ recent_time }}</span>
+            <span class="recent">最近更新：{{ popular_updated_time|format_time }}</span>
         </div>
 
         <ul class="entities">

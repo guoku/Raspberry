@@ -182,7 +182,13 @@ def auth_by_sina(request):
                     return HttpResponseRedirect(reverse("web_third_party_register") + "?source=sina&token=" + token)
             elif source == "bind":
                 try:
-                    _user_inst = User(request.user.id)
+                    if not _user_inst:
+                        _user_inst = User(request.user.id)
+                    else:
+                        _user_context = _user_inst.read()
+                        if _user_context['user_id'] != request.user.id:
+                            return HttpResponse("this sina account has been binded by another user")
+                            
                     _user_inst.bind_sina(
                         sina_id = _sina_data['sina_id'],
                         screen_name = _sina_data['screen_name'],
@@ -262,13 +268,17 @@ def auth_by_taobao(request):
                 try:
                     if not _user_inst:
                         _user_inst = User(request.user.id)
-                        #Todo: handle errors
-			_user_inst.bind_taobao(
-                            taobao_id = _taobao_data['taobao_id'],
-                            screen_name = _taobao_data['screen_name'],
-                            taobao_token = _taobao_data['access_token'],
-                            expires_in = _taobao_data['expires_in']
-                        )
+                    else:
+                        _user_context = _user_inst.read()
+                        if _user_context['user_id'] != request.user.id:
+                            return HttpResponse("this taobao accout has been binded by another user")
+                    #Todo: handle errors
+                    _user_inst.bind_taobao(
+                        taobao_id = _taobao_data['taobao_id'],
+                        screen_name = _taobao_data['screen_name'],
+                        taobao_token = _taobao_data['access_token'],
+                        expires_in = _taobao_data['expires_in']
+                    )
                 except e:
                     print e
                 return HttpResponseRedirect(next_url)
@@ -301,8 +311,13 @@ def logout(request):
     next_url = request.META.get('HTTP_REFERER', reverse('web_selection'))
     return HttpResponseRedirect(next_url)
 
-def forget_passwd(request):
-    return
+def forget_passwd(request, template='account/forget_password.html'):
+    return render_to_response(
+        template,
+        {
+        },
+        context_instance = RequestContext(request),
+    )
 
 @require_POST
 @login_required

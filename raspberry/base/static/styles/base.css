@@ -76,7 +76,13 @@ button {
     font-size: 14px;
     color: #FFFFFF;
 }
-
+.btn-disabled{
+    background: #eee;
+    border: 1px #357ebd;
+    padding: 0px 20px;
+    font-size: 14px;
+    color: #999;
+}
 .btn-link {
     background-color: rgba(0,0,0,0);
     color: #428bca;
@@ -275,6 +281,7 @@ button {
     /*line-height: 30px;*/
     margin: 9px 0;
     /*padding: 10px 0;*/
+    padding: 0 5px;
     border: none;
     outline: 0;
     /*color: #eee;*/
@@ -434,7 +441,7 @@ button {
     /*background-color: #fbfbfb;*/
 /*}*/
 
-.account-form .text {
+.account-form .text-input {
     display: block;
     width: 243px;
     margin: 0 auto 15px;
@@ -571,11 +578,13 @@ button {
     width: 20px;
     height: 17px;
     margin-right: 5px;
-    background: url(/static/v3/images/icon_like.png) no-repeat;
+    background: url(/static/v3/images/toolkit.png) no-repeat;
+    background-position: -1px -86px;
 }
 
 .liked .icon {
-    background: url(/static/v3/images/icon_liked.png) no-repeat;
+    background: url(/static/v3/images/toolkit.png) no-repeat;
+    background-position: -38px -86px;
 }
 
 .like .count {
@@ -880,7 +889,6 @@ button {
 
 /*
 **  click to top style
-**   @author xiaolin
 */
 .click_to_top{
     width:30px;
@@ -905,6 +913,65 @@ button {
 	width: 30px;
 	height: 30px;
 	background: url("../images/icon_back_to_top_press.png") center center no-repeat;
+}
+/*404*/
+.center{
+    width: 600px;
+    height: auto;
+    margin: 0px auto;
+    text-align: center;
+}
+.img-404{
+    width: 370px;
+    height: 370px;
+    margin: 0px auto;
+    background: url("../images/404.png");
+}
+.img-500{
+    width: 370px;
+    height: 370px;
+    margin: 0px auto;
+    background: url("../images/500.png");
+}
+.c999{
+    color: #999;
+}
+.fs12{
+    font-size: 12px;
+}
+.c333{
+    color: #333;
+}
+/*forget password*/
+.forget_tip{
+    font-size: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #ddd;
+}
+.forget_input{
+    width: 300px;
+    height: 25px;
+    line-height: 25px;
+    padding: 5px 10px;
+    border: 1px solid #eee;
+    outline: none;
+}
+.forget_input:hover,.forget_input:focus{
+    border:1px solid #ddd;
+}
+.password input[type='submit']{
+    height: 40px;
+    font-weight: 700;
+    border-radius: 2px;
+    margin:30px 0px 0px 94px;
+}
+.forget_input_tip{
+    padding-left:40px; 
+}
+.forget_email_tip{
+    padding-right: 40px;
 }
 /* tag */
 a.tag {color:#0084B4 !important;}
