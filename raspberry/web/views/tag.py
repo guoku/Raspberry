@@ -32,7 +32,7 @@ def tags(request, tag_hash, template="tag/tags.html"):
     _eids = Tag.find_tag_entity(tag_hash)
     _page = request.GET.get('p', 1)
     entities = map(lambda x: Entity(x).read(), _eids)
-
+    
     return render_to_response(template,
         {
             "hash": tag_hash,
@@ -41,3 +41,8 @@ def tags(request, tag_hash, template="tag/tags.html"):
         context_instance = RequestContext(request)
     )
 
+
+def user_tag_entity(request, user_id, tag_hash, template="tag/tags.html"):
+    if request.method == "GET":
+        _entity_id_list = Tag.find_user_tag_entity(user_id, tag)
+        entities = map(lambda x: Entity(x).read(), _eids)
