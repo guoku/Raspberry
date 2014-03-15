@@ -811,5 +811,12 @@ $(function(){
 			$(".account-form input[type='submit']").attr("disabled",true).removeClass("submit").addClass("submit_disabled");
 		}
 	});
+
+    $(".forget_input").on("keyup",function(){
+        if($.trim($(this).val()).length>0)
+        $(".row input[type='submit']").removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
+        else
+        $(".row input[type='submit']").removeClass("btn-update").addClass("btn-disabled").attr("disabled","true");
+    });
 });
 	
