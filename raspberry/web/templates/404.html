@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width">
     <title>404 - 果库</title>
     <link rel="icon" type="image/ico" href="http://static.guoku.com/static/images/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../../base/static/styles/base.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
 </head>
 
 <body>
@@ -28,7 +28,7 @@
                 <p class="c999">子曰：有朋自远方来，不亦乐乎？</p>
                 <p class="c999">-- 《论语·学而》</p>
                 <br><br>
-                <p class="c333">返回 <a href="/">首页</a>，或报告问题到 hi@guoku.com</p>
+                <p class="c333">返回 <a href="{{ web_selection_url }}">首页</a>，或报告问题到 hi@guoku.com</p>
             </div>
         </div> 
     </div>
