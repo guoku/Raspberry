@@ -281,6 +281,7 @@ button {
     /*line-height: 30px;*/
     margin: 9px 0;
     /*padding: 10px 0;*/
+    padding: 0 5px;
     border: none;
     outline: 0;
     /*color: #eee;*/
@@ -440,7 +441,7 @@ button {
     /*background-color: #fbfbfb;*/
 /*}*/
 
-.account-form .text {
+.account-form .text-input {
     display: block;
     width: 243px;
     margin: 0 auto 15px;
@@ -577,11 +578,13 @@ button {
     width: 20px;
     height: 17px;
     margin-right: 5px;
-    background: url(/static/v3/images/icon_like.png) no-repeat;
+    background: url(/static/v3/images/toolkit.png) no-repeat;
+    background-position: -1px -86px;
 }
 
 .liked .icon {
-    background: url(/static/v3/images/icon_liked.png) no-repeat;
+    background: url(/static/v3/images/toolkit.png) no-repeat;
+    background-position: -38px -86px;
 }
 
 .like .count {

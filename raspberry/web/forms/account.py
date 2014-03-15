@@ -37,7 +37,7 @@ class SignInAccountForm(forms.Form):
         # log.info(self.cleaned_data )
         cleaned_data = self.cleaned_data
         # log.info(cleaned_data)
-        data_email = cleaned_data.get('email', None)
+        data_email = cleaned_data['email']
         user_id = User.get_user_id_by_email(data_email)
         # is_exist = User.objects.filter(email=data_email).exists()
         if user_id is None:
