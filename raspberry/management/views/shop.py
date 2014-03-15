@@ -191,14 +191,16 @@ def guokuplus_list(request):
 @login_required
 @staff_only
 def guokuplus_detail(request):
-    app_id = request.GET.get('app_id', None)
+    app_id = int(request.GET.get('app_id', None))
     app = GuokuPlusActivity(app_id)
     app_context = app.read()
+    approve_form =  GuokuPlusActivityForm({"app_id" : app_id,
+    "editor_remarks" : app_context['editor_remarks']})
     return render_to_response(
         "shop/guokuplus_detail.html",
         {
             "app_context" : app_context,
-            "approve_form" : GuokuPlusActivityForm({"app_id" : app_id})
+            "approve_form" : approve_form
         },
         context_instance = RequestContext(request)
     )
@@ -206,11 +208,13 @@ def guokuplus_detail(request):
 @require_POST
 @login_required
 @staff_only
-def approve_guokuplus(request):
+def handle_guokuplus(request):
     form = GuokuPlusActivityForm(request.POST)
     if form.is_valid():
-        guoku_plus_app = GuokuPlusApp(form.cleaned_data['app_id'])
-        guoku_plus_app.approve(form.cleaned_data['start_time'])
+        guoku_plus = GuokuPlusActivity(form.cleaned_data['app_id'])
+        action = form.cleaned_data['action']
+        editor_remarks = form.cleaned_data['editor_remarks']
+        guoku_plus.handle(action, editor_remarks, form.cleaned_data['start_time'])
         return HttpResponseRedirect(reverse('management_guokuplus_detail') + "?app_id=" + form.cleaned_data['app_id'])
     else:
         return HttpResponse(form.errors)

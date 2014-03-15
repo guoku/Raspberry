@@ -18,6 +18,7 @@ class GuokuPlusApplicationForm(forms.Form):
                                   error_messages = {'invalid' : u'优惠价不能小于0'})
     seller_remarks = forms.CharField(max_length = 500)
     agree_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs={"checked" : "checked"}))
+
 class ShopVerificationForm(forms.Form):
     shop_type = forms.ChoiceField(widget = forms.RadioSelect(), choices = SHOP_TYPE_CHOICES )
     company_name = forms.CharField(max_length = 100)

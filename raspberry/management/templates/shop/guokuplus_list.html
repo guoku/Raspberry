@@ -14,7 +14,8 @@
                 <th>原价</th>
                 <th>优惠价</th>
                 <th>数量</th>
-                <th>备注</th>
+                <th>卖家备注</th>
+                <th>编辑备注</th>
                 <th>状态</th>
                 <th>编辑</th>
             </thead>
@@ -29,10 +30,11 @@
                 </td>
                 <td>{{ app.item_context.price }}</td>
                 <td>{{ app.sale_price }}</td>
-                <td>{{ app.quantity }}</td>
-                <td>{{ app.remarks }}</td>
+                <td>{{ app.total_volume }}</td>
+                <td>{{ app.seller_remarks }}</td>
+                <td>{{ app.editor_remarks }}</td>
                 <td>{{ app.status }}</td>
-                <td><a href="{% url 'management_guokuplus_detail' %}?app_id={{app.id}}">编辑</a></td>
+                <td><a href="{% url 'management_guokuplus_detail' %}?app_id={{app.activity_id}}">编辑</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
