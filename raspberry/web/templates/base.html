@@ -29,15 +29,15 @@
 <body>
 <div id="header">
     <div class="header-container">
-        {% url 'web_selection' as web_selection_url %}
+        {% url 'web_selection' as web_selection %}
         {% url 'web_popular' as web_popular_url %}
         <div class="title">
-            <h1 style="display: none"><a href="{{ web_selection_url }}">{% trans "guoku" %}</a></h1>
-            <a href="{{ web_selection_url }}" class="logo"><img src="{% static 'images/logo.png' %}"></a>
+            <h1 style="display: none"><a href="{% url 'web_selection' %}">{% trans "guoku" %}</a></h1>
+            <a href="{% url 'web_selection' %}" class="logo"><img src="{% static 'images/logo.png' %}"></a>
         </div>
 
         <ul class="nav-bar">
-            <li {% if web_selection_url in request.path %}class="active"{% endif %}><a href="{{ web_selection_url }}">精选</a></li>
+            <li {% if web_selection in request.path %}class="active"{% endif %}><a href="{% url 'web_selection' %}">精选</a></li>
             <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
         </ul>
 
@@ -62,8 +62,8 @@
     </div>
 </div>
 
-{#{% url 'web_selection' as web_selection_url %}#}
-{% if not user.is_authenticated and web_selection_url in request.path %}
+{#{% url 'web_selection' as web_selection %}#}
+{% if not user.is_authenticated and web_selection in request.path %}
 {% block welcome %}
     <div id="welcome">
         <div class="intro">
