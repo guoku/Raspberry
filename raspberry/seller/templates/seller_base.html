@@ -15,12 +15,40 @@
     body{
         padding-top: 100px;
     }
+    .cln{
+        clear: both;
+    }
     .verify_shop_form .form-group{
         width: 40%;
         margin: 8px 20px;
     }
-    .verify_shop b{
+    .verify_shop b,.application_input b{
         line-height: 30px;
+    }
+    .application_url,.application_count{
+        margin:0px 5px;
+        float: left;
+    }
+    .application_url input{
+        width: 490px;
+    }
+    .application_count input{
+        width: 95px;
+    }
+    .application_remarks textarea{
+        width: 700px;
+        height: 150px;
+        resize: none;
+    }
+    .application_remarks{
+        margin:0px 5px;
+    }
+    .application_submit{
+        margin:20px 0px 0px 5px;
+    }
+    .submit_opt{
+        float: left;
+        margin: 0px 20px 0px 5px;
     }
 </style>
 <body>
@@ -46,22 +74,6 @@
 </div>
 
 <div id="main" class="container">
-
-   <!--<div class="navbar navbar-default navbar-static-top span10">
-      <div class="navbar-inner">
-        <a class="navbar-brand" href="/"><h2>果库卖家</h2></a>
-      </div>
-    </div>
-    <div class="span10">
-        <ul class="nav nav-tabs">
-            <li {% if "commodities" in request.path%}class="active" {%endif%}>
-                <a href="{%url 'seller_commodities'%}">我的商品</a>
-            </li>
-            <li {% if "guokuplus" in request.path %}class="active" {%endif%}>
-                <a href="{%url 'seller_guoku_plus_list'%}">我的果库+活动</a>
-            </li>
-        </ul>
-    </div>-->
     {% block content %}{% endblock %}
 </div>
 <div id="footer">{% block footer %}{% endblock %}</div>

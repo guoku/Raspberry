@@ -11,12 +11,12 @@ SHOP_TYPE_CHOICES = (
         (AMATEUR,  _('amateur')),
     )
 class GuokuPlusApplicationForm(forms.Form):
-    taobao_url = forms.URLField()
-    total_volume = forms.IntegerField(min_value = 1, 
+    taobao_url = forms.URLField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    total_volume = forms.IntegerField(widget=forms.TextInput(attrs={'class':'form-control'}),min_value = 1, 
                                   error_messages = {'invalid' : u'数量最少为1'})
-    sale_price = forms.FloatField(min_value = 0,
+    sale_price = forms.FloatField(widget=forms.TextInput(attrs={'class':'form-control'}),min_value = 0,
                                   error_messages = {'invalid' : u'优惠价不能小于0'})
-    seller_remarks = forms.CharField(max_length = 500)
+    seller_remarks = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}), max_length = 500)
     agree_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs={"checked" : "checked"}))
 
 class ShopVerificationForm(forms.Form):
