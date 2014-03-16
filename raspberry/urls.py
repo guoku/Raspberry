@@ -22,8 +22,8 @@ urlpatterns = patterns('',
 urlpatterns += patterns(
     '',
     url(r'^403/$', 'django.views.defaults.permission_denied'),
-    url(r'^404/$', 'django.views.defaults.page_not_found'),
-    url(r'^500/$', 'django.views.defaults.server_error'),
+    url(r'^404/$', 'web.views.webpage_not_found'),
+    url(r'^500/$', 'web.views.page_error'),
 )
 
 if settings.IMAGE_LOCAL:
