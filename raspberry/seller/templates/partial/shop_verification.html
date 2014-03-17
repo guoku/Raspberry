@@ -4,7 +4,13 @@
     您已提交认证申请，状态为{{ shop_verification.status }}
     {% else %}
         <div class="verify_shop_pre">
-            <b>您还没有提交果库公司认证！</b><button class="btn btn-primary">立刻认证！</button>
+            <p><b>您的店铺还没申请认证！</b><button class="btn btn-primary">立刻认证！</button></p>
+            <p><b>Tips: 为什么要认证店铺?</b></p>
+            <p>通过果库店铺认证后
+               <li>您的果库价活动申请会得到优先处理</li>
+               <li>用户会更放心购买</li>
+               <li>以后有更多推广活动时会优先通知</li>
+            </p>
         </div>
         <form action="{% url 'seller_verify' %}" method="POST" class="verify_shop_form">
             <!--{{ verification_form.as_table }}-->
@@ -37,12 +43,12 @@
                 </div>
                 <div class="form-group">
                     <div class="verify_shop verify_shop_pro">
-                        <b>主要产品:</b>{{ verification_form.company_name }}
+                        <b>主营产品类别:</b>{{ verification_form.company_name }}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="verify_shop verify_shop_intro">
-                        <b>产品介绍:</b>{{ verification_form.company_name }}
+                        <b>店铺介绍:</b>{{ verification_form.company_name }}
                     </div>
                 </div>
                 <div class="form-group">

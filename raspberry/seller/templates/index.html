@@ -100,27 +100,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="media">
-                                                        <a class="pull-left" href="#">
-                                                            <img class="media-object" alt="64x64" src="http://gw2.alicdn.com/bao/uploaded/i3/T10I1QFvFeXXXXXXXX_!!0-item_pic.jpg_480x480.jpg" style="width: 64px; height: 64px;"></a>
-                                                        <div class="media-body">
-                                                            <h5 class="media-heading">PAUL & JOE - 秘密花园系列花现腮红</h5>
-                                                            <p>50件 ￥198.00</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <h5>
-                                                        <span class="label label-primary">已通过</span>
-                                                    </h5>
-                                                    <p>结束日期：2014年3月10日</p>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-default">结束</button>
-                                                </td>
-                                            </tr>
                                             {% for item in guokuplus_list %}
                                                 <tr>
                                                     <td>
@@ -129,7 +108,8 @@
                                                                 <img class="media-object" alt="64x64" src="{{ item.entity_context.chief_image.url }}" style="width: 64px; height: 64px;"></a>
                                                             <div class="media-body">
                                                                 <h5 class="media-heading">{{ item.item_context.title }}</h5>
-                                                                <p>{{ item.total_volumn }} ￥{{ item.sale_price }}</p>
+                                                                <p> 原价{{ item.item_context.price }}  优惠价 {{ item.sale_price }}</p>
+                                                                <p> 共 {{ item.total_volume }} 件， 已售出 {{ item.sales_volume }} 件 </p>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -137,6 +117,7 @@
                                                         <h5>
                                                             <span class="label label-primary">{{ item.status }}</span>
                                                         </h5>
+                                                        <p>开始日期：{{ item.start_time }}</p>
                                                         <p>结束日期：{{ item.updated_time }}</p>
                                                     </td>
                                                     <td>
