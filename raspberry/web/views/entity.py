@@ -172,7 +172,7 @@ def _load_taobao_item_info(taobao_id):
 @login_required
 def load_item_info(request):
     if request.method == 'POST':
-        _cand_url = request.POST.get("url", None)
+        _cand_url = request.POST.get("cand_url", None)
         _hostname = urlparse(_cand_url).hostname
 
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) is not None:
