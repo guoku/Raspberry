@@ -103,8 +103,16 @@
             $(".verify_shop_pre").hide();
             $(".verify_shop_form").fadeIn();
         });
-        $(".verify_shop_submit button").on("click",function(){
+        $(".apply_cancel").on("click",function(){
             $(".verify_shop_pre").fadeIn();
+            $(".verify_shop_form").hide();
+        });
+        $(".verify_success_opt button").on("click",function(){
+            $(".verify_success_opt").hide();
+            $(".verify_shop_form").fadeIn();
+        });
+        $(".edit_cancel").on("click",function(){
+            $(".verify_success_opt").fadeIn();
             $(".verify_shop_form").hide();
         });
     });

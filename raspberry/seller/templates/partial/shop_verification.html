@@ -1,13 +1,60 @@
 <div class="span10">
 {% if not shop_context.shop_verified %}
    {% if shop_verification%}
-    <div> 您已提交认证申请，状态为
+    <div class="verify_success_opt"> 您已提交认证申请，状态为
        {% if shop_verification.status == "waiting" %}
             等待审核    <button class="btn btn-primary">修改申请信息</button>
        {% elif shop_verification.status == "rejected" %}
             未通过审核  <button class="btn btn-primary">重新申请</button>
        {% endif %}
     </div>
+    <form action="{% url 'seller_verify' %}" method="POST" class="verify_shop_form">
+            <!--{{ verification_form.as_table }}-->
+            <div class="form-inline">
+                <div class="verify_shop_type">
+                    <b>公司类型:</b>
+                    {% for choice in verification_form.shop_type %}
+                        {{ choice }}
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_cn">
+                        <b>公司名称:</b>{{ verification_form.company_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_qq">
+                        <b>qq号码:</b>{{ verification_form.qq_account }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_email">
+                        <b>邮箱地址:</b>{{ verification_form.email }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_phone">
+                        <b>手机号码:</b>{{ verification_form.mobile }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_pro">
+                        <b>主营产品类别:</b>{{ verification_form.main_products }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_intro">
+                        <b>店铺介绍:</b>{{ verification_form.intro }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="verify_shop verify_shop_submit">
+                        <input type="submit" value="提交信息" class="btn btn-primary" />
+                        <button type="button" class="btn btn-default edit_cancel">稍候再说...</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     {% else %}
         <div class="verify_shop_pre">
             <p><b>您的店铺还没申请认证！</b><button class="btn btn-primary">立刻认证！</button></p>
@@ -60,7 +107,7 @@
                 <div class="form-group">
                     <div class="verify_shop verify_shop_submit">
                         <input type="submit" value="提交信息" class="btn btn-primary" />
-                        <button type="button" class="btn btn-default">稍候再说...</button>
+                        <button type="button" class="btn btn-default apply_cancel">稍候再说...</button>
                     </div>
                 </div>
             </div>
