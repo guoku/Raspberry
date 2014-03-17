@@ -25,16 +25,9 @@
     </div>
     <div class="like-entities">
         {% for entity_context in user_context.latest_like_entities %}
-            <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank" class="like-entity">
+            <a href="{% url 'web_user_index' user_context.user_id %}" class="like-entity" target="_blank">
                 <img src="{{ entity_context.chief_image.url|resize:'64' }}">
             </a>
         {% endfor %}
     </div>
-{#    <div class="avatars">#}
-{#        {% for entity_context in user_context.latest_like_entities %}#}
-{#            <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank" >#}
-{#                <img src="{{ entity_context.chief_image.url }}" width="69" height="69">#}
-{#            </a>#}
-{#        {% endfor %}#}
-{#    </div>#}
 </div>

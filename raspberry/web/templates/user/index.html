@@ -110,7 +110,7 @@
             {% if tag_list|length > 0 %}
                 <div class="user-tag">
                     {% for tag_context in tag_list %}
-                        {% display_common_tag tag_context %}
+                        {% display_common_tag tag_context query_user_context.user_id %}
                     {% endfor %}
                 </div>
             {% endif %}
