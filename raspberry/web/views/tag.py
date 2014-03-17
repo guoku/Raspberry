@@ -27,17 +27,19 @@ def tag_suggest(request):
     return JSONResponse(data=_rslt)
 
         
-def tags(request, tag_hash, template="tag/tags.html"):
+def tags(request, tag_hash, template="tag/tag_detail.html"):
 
+    _tag_text = Tag.get_tag_text_from_hash(tag_hash)
     _eids = Tag.find_tag_entity(tag_hash)
     _page = request.GET.get('p', 1)
     entities = map(lambda x: Entity(x).read(), _eids)
-
+    
     return render_to_response(template,
         {
-            "hash": tag_hash,
+            "tag": _tag_text,
             "entities": entities,
         },
         context_instance = RequestContext(request)
     )
+
 

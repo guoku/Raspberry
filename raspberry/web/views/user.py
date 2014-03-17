@@ -249,3 +249,18 @@ def follow(request, user_id, target_status):
         else:
             _user.follow(_followee_id)
             return HttpResponse('1')
+
+def user_tag_entity(request, user_id, tag_hash, template="tag/tag_detail.html"):
+    _user_context = User(user_id).read()
+    _tag_text = Tag.get_tag_text_from_hash(tag_hash)
+    _entity_id_list = Tag.find_user_tag_entity(user_id, _tag_text)
+    _entities = map(lambda x: Entity(x).read(), _entity_id_list)
+    
+    return render_to_response(template,
+        {
+            'tag': _tag_text,
+            'entities': _entities,
+            'user_context' : _user_context,
+        },
+        context_instance = RequestContext(request)
+    )

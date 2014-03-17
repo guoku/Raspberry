@@ -223,57 +223,15 @@ def load_entity(request, template='entity/create_entity.html'):
 
 
 @login_required
-def create_entity(request):
-    if request.method == 'POST':
-        _user_id = request.user.id
+def create_entity(request, template='entity/create_entity_from_user.html'):
+    if request.method == 'GET':
+        return render_to_response(
+            template,
+            {
+            },
+            context_instance = RequestContext(request)
+        )
 
-        # 只需要获取允许用户更改的数据
-        _cand_url = request.POST.get('url', None)
-        _brand = request.POST.get("brand", None)
-        _title = request.POST.get("title", None)
-        _chief_image_url = request.POST.get("chief_image_url", None)
-        _note = request.POST.get("note_text", "")
-
-        _hostname = urlparse(_cand_url).hostname
-
-        if re.search(r"\b(tmall|taobao)\.com$", _hostname) is not None:
-            _taobao_id = parse_taobao_id_from_url(_cand_url)
-            _item = Item.get_item_by_taobao_id(_taobao_id)
-
-            if _item is None:
-                _taobao_item_info = _load_taobao_item_info(_taobao_id)
-
-                _category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
-                _detail_image_urls = _taobao_item_info["thumb_images"]
-
-                if _chief_image_url in _detail_image_urls:
-                    _detail_image_urls.remove(_chief_image_url)
-                else:
-                    # 确保 url 正确合法
-                    _chief_image_url = _detail_image_urls[0]
-                    _detail_image_urls.pop(0)
-
-                _entity = Entity.create_by_taobao_item(
-                    creator_id = _user_id,
-                    category_id = _category_id,
-                    chief_image_url = _chief_image_url,
-                    taobao_item_info = {
-                        'taobao_id': _taobao_id,
-                        'cid': _taobao_item_info['cid'],
-                        'title': _taobao_item_info['title'],
-                        'shop_nick': unicode(_taobao_item_info['shop_nick'], 'utf-8'),  # 非unicode
-                        'price': _taobao_item_info['price'],
-                        'soldout': False,
-                    },
-                    brand = _brand,
-                    title = _title,
-                    detail_image_urls = _detail_image_urls,
-                )
-
-                _entity.add_note(creator_id=_user_id, note_text=_note)
-                _entity_hash = _entity.read()['entity_hash']
-
-                return HttpResponseRedirect(reverse('web_detail', kwargs = { "entity_hash" : _entity_hash }))
 
 
 @login_required
