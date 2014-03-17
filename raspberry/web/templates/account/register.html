@@ -3,6 +3,7 @@
 
 {% block title %}{% trans 'sign up' %}{% endblock %}
 {% block form %}
+    <div class="account-form">
     <form action="" method="POST" id="register">
         {% csrf_token %}
         {% if third_party_data%}
@@ -52,6 +53,7 @@
             </div>
         </div>
     </form>
+    </div>
 {% endblock %}
 
 {% block third_party_login %}
