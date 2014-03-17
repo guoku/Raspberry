@@ -214,8 +214,15 @@ def load_item_info(request):
 
 
 @login_required
-def create_entity(request):
-    if request.method == 'POST':
+def create_entity(request, template='entity/new_entity_from_user.html'):
+    if request.method == 'GET':
+        return render_to_response(
+            template,
+            {
+            },
+            context_instance = RequestContext(request)
+        )
+    else: 
         _taobao_id = request.POST.get("taobao_id", None)
         _cid = request.POST.get("cid", None)
         _taobao_shop_nick = request.POST.get("taobao_shop_nick", None)
