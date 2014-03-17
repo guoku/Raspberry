@@ -17,6 +17,7 @@ from base.user import User
 from base.item import Item
 from base.tag import Tag 
 from base.category import Category
+from share.tasks import CreateTaobaoShopTask
 from utils.extractor.taobao import TaobaoExtractor 
 from utils.taobao import parse_taobao_id_from_url
 from django.utils.log import getLogger
@@ -169,21 +170,8 @@ def _load_taobao_item_info(taobao_id):
 
 
 @login_required
-def load_entity(request, template='entity/create_entity.html'):
-    _user = User(request.user.id)
-    _user_context = _user.read()
-
-    if request.method == 'GET':
-        return render_to_response(
-            template,
-            {
-                'is_post' : False,
-                'user_context' : _user_context
-            },
-            context_instance = RequestContext(request)
-        )
-
-    else:
+def load_item_info(request):
+    if request.method == 'POST':
         _cand_url = request.POST.get("url", None)
         _hostname = urlparse(_cand_url).hostname
 
@@ -195,42 +183,82 @@ def load_entity(request, template='entity/create_entity.html'):
                 _taobao_item_info = _load_taobao_item_info(_taobao_id)
                 _chief_image_url = _taobao_item_info["thumb_images"][0]
                 _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
-
-                return render_to_response(
-                    template,
-                    {
-                        'is_post' : True,
-                        'user_context' : _user_context,
-
-                        'cand_url' : _cand_url,
-                        'taobao_id': _taobao_id,
-                        'cid': _taobao_item_info['cid'],
-                        'taobao_title': _taobao_item_info['title'],
-                        'shop_nick': _taobao_item_info['shop_nick'],
-                        'price': _taobao_item_info['price'],
-                        'chief_image_url' : _chief_image_url,
-                        'thumb_images': _taobao_item_info["thumb_images"],
-                        'selected_category_id': _selected_category_id,
-                        'category_list': Category.find(),
-                    },
-                    context_instance=RequestContext(request)
-                )
-
+                _data = {
+                    'user_context' : User(request.user.id).read(), 
+                    'cand_url' : _cand_url,
+                    'taobao_id': _taobao_id,
+                    'cid': _taobao_item_info['cid'],
+                    'taobao_title': _taobao_item_info['title'],
+                    'shop_nick': _taobao_item_info['shop_nick'],
+                    'price': _taobao_item_info['price'],
+                    'chief_image_url' : _chief_image_url,
+                    'thumb_images': _taobao_item_info["thumb_images"],
+                    'selected_category_id': _selected_category_id,
+                }
+                _rslt = {
+                    'status' : 'SUCCESS',
+                    'data' : _data
+                }
             elif _item.get_entity_id() == -1:
-                return HttpResponse('已经入库')
+                _rslt = {
+                    'status' : 'OTHER'
+                }
             else:
-                return HttpResponse('已经添加')
+                _rslt = {
+                    'status' : 'EXIST',
+                    'data' : {
+                        'entity_id' : _item.get_entity_id() 
+                    }
+                }
+            return HttpResponse(json.dumps(_rslt))
 
 
 @login_required
-def create_entity(request, template='entity/create_entity_from_user.html'):
-    if request.method == 'GET':
-        return render_to_response(
-            template,
-            {
+def create_entity(request):
+    if request.method == 'POST':
+        _taobao_id = request.POST.get("taobao_id", None)
+        _cid = request.POST.get("cid", None)
+        _taobao_shop_nick = request.POST.get("taobao_shop_nick", None)
+        _taobao_shop_link = request.POST.get("taobao_shop_link", None)
+        _taobao_title = request.POST.get("taobao_title", None)
+        _taobao_price = request.POST.get("taobao_price", None)
+        _chief_image_url = request.POST.get("chief_image_url", None)
+        _brand = request.POST.get("brand", None)
+        _title = request.POST.get("title", None)
+        _intro = ""
+        _category_id = int(request.POST.get("category_id", None))
+        _detail_image_urls = request.POST.getlist("image_url")
+        
+        if _chief_image_url in _detail_image_urls:
+            _detail_image_urls.remove(_chief_image_url)
+        
+        _entity = Entity.create_by_taobao_item(
+            creator_id = request.user.id,
+            category_id = _category_id,
+            chief_image_url = _chief_image_url,
+            taobao_item_info = {
+                'taobao_id' : _taobao_id,
+                'cid' : _cid,
+                'title' : _taobao_title,
+                'shop_nick' : _taobao_shop_nick,
+                'price' : _taobao_price,
+                'soldout' : False,
             },
-            context_instance = RequestContext(request)
+            brand = _brand,
+            title = _title,
+            intro = _intro,
+            detail_image_urls = _detail_image_urls,
         )
+
+        _note = request.POST.get("note", None)
+        _user_id = request.POST.get("user_id", None)
+        
+        if _note != None and len(_note) > 0:
+            _add_note_and_select_delay(_entity, _user_id, _note)
+
+        CreateTaobaoShopTask.delay(_taobao_shop_nick, _taobao_shop_link)
+
+        return HttpResponseRedirect(reverse('web_detail', kwargs = { "entity_id" : _entity.entity_id }))
 
 
 
