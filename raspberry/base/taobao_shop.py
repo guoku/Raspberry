@@ -157,14 +157,12 @@ class TaobaoShop(object):
             _seller.verified = verified
         _seller.save()
 
-    def create_verification_info(self, user_id, shop_type, company_name, qq_account, email, mobile, main_products, intro):
-        if TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).count() > 0:
+    def update_verification_info(self, shop_type, company_name, qq_account, email, mobile, main_products, intro):
+        info = TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).first()
+        if not info:
             return False
-        info = TaobaoShopVerificationInfo(
-            shop_nick = self.nick,
-            status = STATUS_WAITING,
-            created_time = datetime.datetime.now()
-        )
+        info.status = STATUS_WAITING
+        info.updated_time = datetime.datetime.now()
         info.save()
         self.update_seller_info(
             shop_type = shop_type,
@@ -177,6 +175,27 @@ class TaobaoShop(object):
         )
         return True
 
+    def create_verification_info(self,  shop_type, company_name, qq_account, email, mobile, main_products, intro):
+        if TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).count() > 0:
+            return False
+        time_now = datetime.datetime.now()
+        info = TaobaoShopVerificationInfo(
+            shop_nick = self.nick,
+            status = STATUS_WAITING,
+            created_time = time_now,
+            updated_time = time_now
+        )
+        info.save()
+        self.update_seller_info(
+            shop_type = shop_type,
+            company_name = company_name,
+            qq_account = qq_account,
+            email = email,
+            mobile = mobile,
+            main_products = main_products,
+            intro = intro
+        )
+        return True
     def read_guoku_plus_list(self, offset = 0, count = 100):
         return GuokuPlusActivity.find(shop_nick = self.nick, offset = offset, count = count) 
 

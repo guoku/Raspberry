@@ -161,6 +161,8 @@ class TaobaoShopVerificationInfo(DynamicDocument):
     shop_nick = StringField()
     status = StringField()
     created_time = DateTimeField()
+    updated_time = DateTimeField()
+    editor_remarks = StringField()
     meta = {
         'db_alias' : 'guoku-db',
         'indexes' : ['shop_nick']

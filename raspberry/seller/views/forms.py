@@ -23,8 +23,8 @@ class ShopVerificationForm(forms.Form):
     shop_type = forms.ChoiceField(widget = forms.RadioSelect(), choices = SHOP_TYPE_CHOICES )
     company_name = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 100)
     qq_account = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50)
-    email = forms.EmailField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50)
+    email = forms.EmailField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50, required = False)
     mobile = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50)
-    main_products = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50)
-    intro = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50)
+    main_products = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50, required = False)
+    intro = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50, required = False)
     
