@@ -17,7 +17,8 @@ from base.item import Item
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
-from management.tasks import CreateTaobaoShopTask, MergeEntityTask
+from management.tasks import MergeEntityTask
+from share.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 from utils.extractor.taobao import TaobaoExtractor 

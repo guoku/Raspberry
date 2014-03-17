@@ -12,5 +12,5 @@ urlpatterns = patterns(
     url('^(?P<user_id>\w+)/fans/$', 'user_fans', name='web_user_fans'),
 
     url('^(?P<user_id>\w+)/follow/(?P<target_status>\d+)/$', 'follow', name='web_follow'),
-    url('^(?P<user_id>\w+)/tag/(?P<tag_hash>\w+)/$', 'user_tag_entity', name='web_user_tag_entity'),
+    url('^(?P<user_id>\w+)/t/(?P<tag_hash>\w+)/$', 'user_tag_entity', name='web_user_tag_entity'),
 )

@@ -13,6 +13,7 @@ class MobileLog(Log):
     device = StringField(required = False)
     duid = StringField(required = False)
     os = StringField(required = False)
+    channel = StringField(required = False)
     prev = EmbeddedDocumentField(MobileLogPrev, required = False) 
 
 def _gen_prev(prev_str):
@@ -56,14 +57,14 @@ def _gen_prev(prev_str):
         _prev_doc.appendix = _appendix
     return _prev_doc
 
-def log(duration, view, version, ip, log_time, request_user_id = None, device = None, duid = None, os = None, prev_str = None, appendix = None):
+def log(duration, view, version, ip, log_time, request_user_id=None, device=None, duid=None, os=None, channel=None, prev_str=None, appendix=None):
     _doc = MobileLog(
-        entry = 'mobile',
-        duration = duration,
-        ip = ip,
-        view = view.upper(),
-        version = version,
-        log_time = log_time, 
+        entry='mobile',
+        duration=duration,
+        ip=ip,
+        view=view.upper(),
+        version=version,
+        log_time=log_time, 
     )
     if request_user_id == None:
         _doc.user_id = -1
@@ -75,6 +76,8 @@ def log(duration, view, version, ip, log_time, request_user_id = None, device = 
         _doc.duid = duid
     if os != None:
         _doc.os = os
+    if channel != None:
+        _doc.channel = channel 
     if _doc.view in ['ENTITY', 'CATEGORY_ENTITY'] and prev_str != None:
         _doc.prev = _gen_prev(prev_str)
     if appendix != None:

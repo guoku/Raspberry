@@ -4,12 +4,24 @@
 
     <div class="entities">
         {% for entity_context in tag_context.entity_list %}
-            <a href="{% url 'web_tags' tag_context.tag_hash %}" class="entity-img" target="_blank">
-                <img src="{{ entity_context.chief_image.url|resize:"128" }}">
-            </a>
+            {% if user_id == None %}
+                <a href="{% url 'web_tags' tag_context.tag_hash %}" class="entity-img" target="_blank">
+                    <img src="{{ entity_context.chief_image.url|resize:"128" }}">
+                </a>
+            {% else %}
+                <a href="{% url 'web_user_tag_entity' user_id tag_context.tag_hash %}" class="entity-img" target="_blank" >
+                    <img src="{{ entity_context.chief_image.url|resize:"128" }}">
+                </a>
+            {% endif %}
         {% endfor %}
     </div>
-    <a href="{% url 'web_tags' tag_context.tag_hash %}" class="more" target="_blank">
-        <span>{{ tag_context.entity_count }}</span>件商品
-    </a>
+    {% if user_id == None %}
+        <a href="{% url 'web_tags' tag_context.tag_hash %}" class="more" target="_blank" >
+            <span>{{ tag_context.entity_count }}</span>件商品
+        </a>
+    {% else %}
+        <a href="{% url 'web_user_tag_entity' user_id tag_context.tag_hash %}" class="more" target="_blank" >
+            <span>{{ tag_context.entity_count }}</span>件商品
+        </a>
+    {% endif %}
 </div>

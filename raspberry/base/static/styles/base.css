@@ -241,13 +241,13 @@ button {
 
 
 #header .user .menu .icon-guoku {
-    background-position: -64px -40px;
+    background-position: -120px -82px;
 }
 #header .user .menu .icon-setting {
-    background-position: -96px -40px;
+    background-position: -152px -82px;
 }
 #header .user .menu .icon-signout {
-    background-position: -128px -40px;
+    background-position: -184px -82px;
 }
 #header .user .menu li a {
     display: block;
@@ -304,7 +304,7 @@ button {
     padding: 0;
     border: none;
     /*background: url("/static/v3/images/search_icon.png") no-repeat transparent;*/
-    background: url("/static/v3/images/toolkit.png") no-repeat 0 -38px transparent;
+    background: url("/static/v3/images/toolkit.png") no-repeat -56px -80px transparent;
 }
 
 /* welcome----------------- */
@@ -495,6 +495,26 @@ button {
     /*vertical-align: bottom;*/
 }
 
+.weibo, .taobao {
+    display: block;
+    float: left;
+    background: url('/static/v3/images/toolkit.png') no-repeat;
+    width: 30px;
+    height: 30px;
+    /*padding: 75px 0;*/
+    /*padding: 30px;*/
+    /*margin-right: 30px;*/
+    /*margin: auto;*/
+}
+.weibo {
+    background-position: -56px -42px;
+    margin-left: 155px;
+    margin-right: 30px;
+}
+.taobao {
+    background-position: -98px -42px;
+}
+
 .login .tip img {
     margin-top: 35px;
 }
@@ -517,13 +537,14 @@ button {
 }
 
 .login .third-party {
-    width: 255px;
+    /*width: 255px;*/
+    height: 30px;
     margin: 20px auto 0;
 }
 
-.login .third-party .weibo {
-    margin-right: 30px;
-}
+/*.login .third-party .weibo {*/
+
+/*}*/
 
 .login .to-reg {
     text-align: center;
@@ -580,12 +601,12 @@ button {
     height: 17px;
     margin-right: 5px;
     background: url(/static/v3/images/toolkit.png) no-repeat;
-    background-position: -1px -86px;
+    background-position: -58px -129px;
 }
 
 .liked .icon {
     background: url(/static/v3/images/toolkit.png) no-repeat;
-    background-position: -38px -86px;
+    background-position: -95px -129px;
 }
 
 .like .count {
@@ -908,30 +929,31 @@ button {
 	width: 30px;
 	height: 30px;
 	cursor: pointer;
-	background: url("../images/icon_back_to_top.png") center center no-repeat;
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    background-position: -125px -214px;
 }
 .click_em:hover{
 	width: 30px;
 	height: 30px;
-	background: url("../images/icon_back_to_top_press.png") center center no-repeat;
+    background-position: -157px -214px;
 }
 /*404*/
 .center{
     width: 600px;
     height: auto;
-    margin: 0px auto;
+    margin: 0 auto;
     text-align: center;
 }
 .img-404{
     width: 370px;
     height: 370px;
-    margin: 0px auto;
+    margin: 0 auto;
     background: url("../images/404.png");
 }
 .img-500{
     width: 370px;
     height: 370px;
-    margin: 0px auto;
+    margin: 0 auto;
     background: url("../images/500.png");
 }
 .c999{
@@ -966,7 +988,7 @@ button {
     height: 40px;
     font-weight: 700;
     border-radius: 2px;
-    margin:30px 0px 0px 94px;
+    margin:30px 0 0 94px;
 }
 .forget_input_tip{
     padding-left:40px; 

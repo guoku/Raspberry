@@ -11,9 +11,9 @@
 
         <div class="entity">
             <div class="guoku-block container">
-                <form action="{% url 'web_load_entity' %}" method="POST" class="load-entity">
+                <form action="{% url 'web_load_item_info' %}" method="POST" class="load-entity">
                     <p>选择货真价实，有用、有趣、有价值的好商品 </p>
-                    <input type="text" class="text-input" name="url" placeholder="粘贴商品链接到这里" value="{{ cand_url }}">
+                    <input type="text" class="text-input" name="cand_url" placeholder="粘贴商品链接到这里" value="{{ cand_url }}">
                     <input type="submit" value="载入" class="guoku-button">
                 </form>
 

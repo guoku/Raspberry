@@ -10,7 +10,7 @@ FORMS = [
 urlpatterns = patterns(
     'web.views.account',
     url(r'^forget/passwd/$', 'forget_passwd', name='web_forget_passwd'),
-    url(r'^register/$', RegisterWizard.as_view(FORMS), name='web_register'),
+    # url(r'^register/$', RegisterWizard.as_view(FORMS), name='web_register'),
     url(r'^thirdparty/register/$', ThirdPartyRegisterWizard.as_view(FORMS), name='web_third_party_register'),
 
     url(r'^setting/$', 'setting', name='web_setting'),
