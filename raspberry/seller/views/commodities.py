@@ -42,7 +42,6 @@ def verify(request, user_context, shop_inst):
     shop_context = shop_inst.read()
     form = ShopVerificationForm(request.POST)
     if form.is_valid():
-        print form.cleaned_data
         verification = shop_inst.read_shop_verification()
         if not verification:
             shop_inst.create_verification_info(

@@ -96,7 +96,7 @@ class TaobaoShop(object):
             _context['shop_company_name'] = _seller_info_obj.company_name
             _context['shop_qq_account'] = _seller_info_obj.qq_account
             _context['shop_email'] = _seller_info_obj.email
-            _context['shop_mobile'] = _seller_info_obj.shop_type
+            _context['shop_mobile'] = _seller_info_obj.mobile
             _context['shop_main_products'] = _seller_info_obj.main_products
             _context['shop_intro'] = _seller_info_obj.intro
             _context['shop_verified'] = _seller_info_obj.verified
@@ -150,7 +150,7 @@ class TaobaoShop(object):
         if mobile:
             _seller.mobile = mobile
         if main_products:
-            _seller.main_products
+            _seller.main_products = main_products
         if intro:
             _seller.intro = intro
         if verified:
