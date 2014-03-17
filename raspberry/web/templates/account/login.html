@@ -8,13 +8,20 @@
             <div class="tip">
                 <img src="/static/v3/images/signin.png"  alt="欢迎回来">
             </div>
+            {% if forms.errors %}
+            <div class="error-message">
+                {% for field in forms %}
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
             <form action="{% url "web_login" %}" method="POST">
                 {% csrf_token %}
                 {% for field in forms %}
                     {{ field }}
                 {% endfor %}
-{#                <input type="text" name="email" placeholder="邮箱" class="text">#}
-{#                <input type="password" name="password" placeholder="密码" class="text">#}
                 <div class="remember">
                     <label><input type="checkbox" name="remember_me">记住我</label>
                     <a href="">忘记密码?</a>
