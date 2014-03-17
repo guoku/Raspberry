@@ -38,9 +38,9 @@
 }
 
 #popular .entity-img {
-    display: table-cell;
+    display: block;
     width: 215px;
-    height: 216px;
+    height: 215px;
     text-align: center;
     vertical-align: middle;
     border-bottom: 1px solid #eee;
