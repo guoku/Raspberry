@@ -132,4 +132,7 @@ SCP_KEY = os.path.join(os.path.dirname(__file__), 'scp_key/')
 SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'
 
 ALLOWED_HOSTS = ['*']
+APP_HOST = "http://test.guoku.com"
+SINA_BACK_URL = APP_HOST + '/sina/auth'
+TAOBAO_BACK_URL = APP_HOST + "/taobao/auth"
 
