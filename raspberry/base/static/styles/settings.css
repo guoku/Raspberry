@@ -113,3 +113,13 @@
     border-color: #ade0b3;
     background-color: #f8f8f8;
 }
+
+#setting .sns-name {
+    display: inline-block;
+    width: 110px;
+    padding-right: 30px;
+}
+
+#setting .active {
+    color: #427EC0;
+}

@@ -70,18 +70,29 @@
         
         <div class="control-group">
             <label>新浪微博</label>
+
             {% if user_context.sina_screen_name %}
-                {{ user_context.sina_screen_name }}
+            <span class="sns-name">
+                @{{ user_context.sina_screen_name }}
+            </span>
+            <a href="{%url 'web_unbind_sina'%}?next={%url "web_setting" %}">取消绑定</a>
             {% else %}
-            <a href="{%url 'web_bind_sina'%}?next={%url "web_setting" %}">绑定新浪微博</a>
+            <span></span>
+            <a class="active" href="{%url 'web_bind_sina'%}?next={%url "web_setting" %}">绑定新浪微博</a>
             {% endif %}
+
         </div>
         <div class="control-group">
             <label>淘宝网</label>
             {% if user_context.taobao_nick %}
+            <span class="sns-name">
                 {{ user_context.taobao_nick }}
+                <a href="{%url 'web_unbind_taobao' %}?next={%url "web_setting"%}">取消绑定</a>
+            </span>
             {% else %}
-            <a href="{%url 'web_bind_taobao' %}?next={%url "web_setting"%}">绑定淘宝网</a>
+            <span class="sns-name">
+            </span>
+            <a class="active" href="{%url 'web_bind_taobao' %}?next={%url "web_setting"%}">绑定淘宝网</a>
             {% endif %}
         </div>
 
