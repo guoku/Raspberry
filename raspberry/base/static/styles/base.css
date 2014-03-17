@@ -404,7 +404,7 @@ button {
     position: fixed;
     left: 50%;
     margin-left: -267px;
-    width: 535px;
+    width: 515px;
     height: 605px;
     border-radius: 5px;
     
@@ -487,8 +487,8 @@ button {
 .login .tip {
     /*margin-bottom: 55px;*/
     display: block;
-    width: 535px;
-    height: 125px;
+    /*width: 515px;*/
+    /*height: 125px;*/
     background-color: #fbfbfb;
     margin-bottom: 55px;
     text-align: center;
