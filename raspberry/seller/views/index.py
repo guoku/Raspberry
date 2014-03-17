@@ -145,3 +145,8 @@ def verify_guoku_plus_token(request, user_context, shop_inst):
     if token:
         result = GuokuPlusActivity.use_token(token)
         return HttpResponse(result)
+
+@require_GET
+def faq(request):
+    return render_to_response("faq.html")
+
