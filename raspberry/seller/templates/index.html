@@ -120,13 +120,25 @@
                                             </tr>
                                             {% for item in guokuplus_list %}
                                                 <tr>
-                                                    <td>{{ item.item_context.title }}</td>
-                                                    <td><a href="http://item.taobao.com/item.htm?id={{ item.taobao_item_id }}">{{ item.taobao_item_id }}</a></td>
-                                                    <td>{{ item.item_context.price }}</td>
-                                                    <td>{{ item.sale_price }} </td>
-                                                    <td>{{ item.status }} </td>
-                                                    <td>{{ item.updated_time }} </td>
-                                                    <td>详情</td>
+                                                    <td>
+                                                        <div class="media">
+                                                            <a class="pull-left" href="http://item.taobao.com/item.htm?id={{ item.item_context.taobao_id }}">
+                                                                <img class="media-object" alt="64x64" src="{{ item.entity_context.chief_image.url }}" style="width: 64px; height: 64px;"></a>
+                                                            <div class="media-body">
+                                                                <h5 class="media-heading">{{ item.item_context.title }}</h5>
+                                                                <p>{{ item.total_volumn }} ￥{{ item.sale_price }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <h5>
+                                                            <span class="label label-primary">{{ item.status }}</span>
+                                                        </h5>
+                                                        <p>结束日期：{{ item.updated_time }}</p>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-default">结束</button>
+                                                    </td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
