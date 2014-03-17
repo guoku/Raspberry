@@ -495,6 +495,26 @@ button {
     /*vertical-align: bottom;*/
 }
 
+.weibo, .taobao {
+    display: block;
+    float: left;
+    background: url('/static/v3/images/toolkit.png') no-repeat;
+    width: 30px;
+    height: 30px;
+    /*padding: 75px 0;*/
+    /*padding: 30px;*/
+    /*margin-right: 30px;*/
+    /*margin: auto;*/
+}
+.weibo {
+    background-position: -56px -42px;
+    margin-left: 155px;
+    margin-right: 30px;
+}
+.taobao {
+    background-position: -98px -42px;
+}
+
 .login .tip img {
     margin-top: 35px;
 }
@@ -517,13 +537,14 @@ button {
 }
 
 .login .third-party {
-    width: 255px;
+    /*width: 255px;*/
+    height: 30px;
     margin: 20px auto 0;
 }
 
-.login .third-party .weibo {
-    margin-right: 30px;
-}
+/*.login .third-party .weibo {*/
+
+/*}*/
 
 .login .to-reg {
     text-align: center;
@@ -920,7 +941,7 @@ button {
 .center{
     width: 600px;
     height: auto;
-    margin: 0px auto;
+    margin: 0 auto;
     text-align: center;
 }
 .img-404{
@@ -967,7 +988,7 @@ button {
     height: 40px;
     font-weight: 700;
     border-radius: 2px;
-    margin:30px 0px 0px 94px;
+    margin:30px 0 0 94px;
 }
 .forget_input_tip{
     padding-left:40px; 

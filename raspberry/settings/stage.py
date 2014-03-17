@@ -1,4 +1,4 @@
-# import os.path
+# import os.path# import os.path
 from defaults import *
 
 DEBUG = True
@@ -61,7 +61,7 @@ JUMP_TO_TAOBAO = True
 
 IMAGE_LOCAL = DEBUG
 IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
-APP_HOST = 'http://www.guoku.com'
+# APP_HOST = 'http://www.guoku.com'
 
 CELERY_RESULT_BACKEND = "redis://10.0.2.100:6379/0"
 BROKER_TRANSPORT = "librabbitmq"
@@ -76,8 +76,10 @@ CELERY_DISABLE_RATE_LIMITS = True
 
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
 MEDIA_URL = '/uploads/'
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static')
-STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/v3/')
+STATIC_ROOT = '/tmp/static/'
+STATIC_URL = 'http://static.guoku.com/static/v3/'
+# STATIC_URL = '/static/v3/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
@@ -114,7 +116,8 @@ INSTALLED_APPS = (
     'seller',
     'stats',
     'web',
-    'lotto',
+    'share',
+    # 'edm',
     'gunicorn',
 )
 
@@ -129,6 +132,8 @@ SCP_KEY = os.path.join(os.path.dirname(__file__), 'scp_key/')
 SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'
 
 ALLOWED_HOSTS = ['*']
+
+
 
 APP_HOST = "http://test.guoku.com"
 SINA_APP_KEY = '2830558576'
