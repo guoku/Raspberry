@@ -2,9 +2,9 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.forms.widgets import HiddenInput, TextInput
-COMPANY = u'C'
-PERSONAL = u'P'
-AMATEUR = u'A'
+COMPANY = 'Company'
+PERSONAL = 'Individual'
+AMATEUR = 'Parttime'
 SHOP_TYPE_CHOICES = (
         (COMPANY, _('公司')),
         (PERSONAL,  _('个体')),
@@ -27,4 +27,4 @@ class ShopVerificationForm(forms.Form):
     mobile = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50)
     main_products = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50, required = False)
     intro = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50, required = False)
-    
+

@@ -299,7 +299,7 @@ class Guoku_Plus(models.Model):
     total_volume = models.IntegerField()
     sales_volume = models.IntegerField()
     start_time = models.DateTimeField()
-    #end_time = models.DateTimeField(null = True)
+    end_time = models.DateTimeField(null = True)
     seller_remarks = models.CharField(null = True, max_length = 100)
     editor_remarks = models.CharField(null = True, max_length = 100)
     created_time = models.DateTimeField()

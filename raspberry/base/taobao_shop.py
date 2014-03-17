@@ -269,6 +269,7 @@ class GuokuPlusActivity(object):
         context['total_volume'] = self.activity_obj.total_volume
         context['sales_volume'] = self.activity_obj.sales_volume
         context['start_time'] = self.activity_obj.start_time
+        context['end_time'] = self.activity_obj.end_time
         context['seller_remarks'] = self.activity_obj.seller_remarks
         context['editor_remarks'] = self.activity_obj.editor_remarks
         context['created_time'] = self.activity_obj.created_time

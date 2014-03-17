@@ -16,6 +16,7 @@ from forms import ShopVerificationForm, GuokuPlusApplicationForm
 import re
 from web import web_utils
 from utils.authority import seller_only
+from utils.taobao import  is_taobao_url, parse_taobao_id_from_url
 from utils.extractor.taobao import TaobaoExtractor 
 from urlparse import urlparse
 from seller.views.seller_utils import get_guoku_plus_item_context, NotTaobaoUrl, NotSellerOwnProduct,InvalidUrl 
@@ -82,9 +83,8 @@ def bind_taobao_shop(request):
             message.info(request, "请输入商品地址")
             return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
       
-        hostname = urlparse(item_url).hostname
-        if re.search(r"\b(tmall|taobao)\.(com|hk)$", hostname) != None:
-            taobao_id = web_utils.parse_taobao_id_from_url(item_url)
+        if is_taobao_url(item_url):
+            taobao_id = parse_taobao_id_from_url(item_url)
             taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
             nick = taobao_item_info['nick']
             if request_user_context.get('taobao_nick') == nick:
@@ -114,6 +114,7 @@ def confirm_current_taobao_shop(request):
     if user_context['taobao_nick']:
         user_inst.create_seller_info(user_context['taobao_nick'])
     return HttpResponseRedirect(reverse('seller_index'))
+
 @require_POST
 @login_required
 @seller_only
