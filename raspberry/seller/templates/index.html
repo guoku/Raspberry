@@ -10,40 +10,26 @@
             <div class="col-md-3">
                 <ul class="nav nav-list affix" style="background:#f6f6f6;width:150px;">
                     <li class="">
-                        <a href="#overview"> <i class="icon-chevron-right"></i> <i class="fa fa-bookmark-o"></i>
+                        <a href="#js-intro"> <i class="icon-chevron-right"></i> <i class="fa fa-bookmark-o"></i>
                             介绍
                         </a>
                     </li>
                     <li class="">
-                        <a href="#overview">
+                        <a href="#js-apply">
                             <i class="icon-chevron-right"></i>
                             <i class="fa fa-plus-square"></i>
                             申请
                         </a>
                     </li>
                     <li class="">
-                        <a href="#overview">
+                        <a href="#js-manage">
                             <i class="icon-chevron-right"></i>
                             <i class="fa fa-list-alt"></i>
                             管理
                         </a>
                     </li>
                     <li>
-                        <a href="#transitions">
-                            <i class="icon-chevron-right"></i>
-                            <i class="fa fa-tachometer"></i>
-                            统计
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#modals">
-                            <i class="icon-chevron-right"></i>
-                            <i class="fa fa-cog"></i>
-                            加V申请
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#modals">
+                        <a href="#js-modals">
                             <i class="icon-chevron-right"></i>
                             <i class="fa fa-money"></i>
                             优惠码提交
@@ -54,7 +40,7 @@
             <div class="col-md-9">
                 <div class="bs-docs-section">
                     <div class="panel panel-default">
-                      <div class="panel-heading">介绍</div>
+                      <div class="panel-heading" id="js-intro">介绍</div>
                       <div class="panel-body">
                         {% include 'partial/shop_verification.html' %}
                       </div>
@@ -62,7 +48,7 @@
                 </div>
                 <div class="bs-docs-section">
                     <div class="page-header">
-                        <h3 id="js-overview">申请『果库价』活动</h3>
+                        <h3 id="js-apply">申请『果库价』活动</h3>
                     </div>
                     <div class="panel panel-default">
                         {% include 'guoku_plus_application.html' %}
@@ -71,7 +57,7 @@
                 </div>
                 <div class="bs-docs-section">
                     <div class="page-header">
-                        <h3 id="js-overview">果库价管理</h3>
+                        <h3 id="js-manage">果库价管理</h3>
                     </div>
                     <div class="bs-example bs-example-tabs">
                         <ul id="myTab" class="nav nav-tabs">
@@ -137,7 +123,7 @@
                 </div>
                 <div class="bs-docs-section">
                     <div class="page-header">
-                        <h3 id="js-overview">优惠码提交</h3>
+                        <h3 id="js-modals">优惠码提交</h3>
                     </div>
                     <form class="form-inline" role="form">
                         <div class="form-group">
