@@ -3,9 +3,18 @@
    {% if shop_verification%}
     您已提交认证申请，状态为{{ shop_verification.status }}
     {% else %}
+        <div class="verify_shop_pre">
+            <b>您还没有提交果库公司认证！</b><button class="btn btn-primary">立刻认证！</button>
+        </div>
         <form action="{% url 'seller_verify' %}" method="POST" class="verify_shop_form">
             <!--{{ verification_form.as_table }}-->
             <div class="form-inline">
+                <div class="verify_shop_type">
+                    <b>公司类型:</b>
+                    {% for choice in verification_form.shop_type %}
+                        {{ choice }}
+                    {% endfor %}
+                </div>
                 <div class="form-group">
                     <div class="verify_shop verify_shop_cn">
                         <b>公司名称:</b>{{ verification_form.company_name }}
@@ -17,32 +26,32 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="verify_shop verify_shop_qq">
+                    <div class="verify_shop verify_shop_email">
                         <b>邮箱地址:</b>{{ verification_form.company_name }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="verify_shop verify_shop_qq">
+                    <div class="verify_shop verify_shop_phone">
                         <b>手机号码:</b>{{ verification_form.company_name }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="verify_shop verify_shop_qq">
+                    <div class="verify_shop verify_shop_pro">
                         <b>主要产品:</b>{{ verification_form.company_name }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="verify_shop verify_shop_qq">
+                    <div class="verify_shop verify_shop_intro">
                         <b>产品介绍:</b>{{ verification_form.company_name }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="verify_shop verify_shop_qq">
+                    <div class="verify_shop verify_shop_submit">
                         <input type="submit" value="提交信息" class="btn btn-primary" />
+                        <button type="button" class="btn btn-default">稍候再说...</button>
                     </div>
                 </div>
             </div>
-            
         </form>
     {% endif %}
 {% else %}

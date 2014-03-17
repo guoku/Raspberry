@@ -18,6 +18,9 @@
     .cln{
         clear: both;
     }
+    .verify_shop_form{
+        display: none;
+    }
     .verify_shop_form .form-group{
         width: 40%;
         margin: 8px 20px;
@@ -53,6 +56,16 @@
     .application_plus_form{
         padding: 20px 15px;
     }
+    .verify_shop_type{
+        padding:0px 20px;
+    }
+    .verify_shop_pre{
+        padding: 0px 20px;
+    }
+    .verify_shop_pre button{
+        margin-left: 40px;
+        font-weight: 700;
+    }
 </style>
 <body>
 <div id="header" class="navbar navbar-inverse navbar-fixed-top">
@@ -84,6 +97,18 @@
 {% block javascript %}
     <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
     <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+    $(function(){
+        $(".verify_shop_pre button").on("click",function(){
+            $(".verify_shop_pre").hide();
+            $(".verify_shop_form").fadeIn();
+        });
+        $(".verify_shop_submit button").on("click",function(){
+            $(".verify_shop_pre").fadeIn();
+            $(".verify_shop_form").hide();
+        });
+    });
+    </script>
 {% endblock %}
 {% block script %}{% endblock %}
 </body>

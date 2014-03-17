@@ -6,9 +6,9 @@ COMPANY = u'C'
 PERSONAL = u'P'
 AMATEUR = u'A'
 SHOP_TYPE_CHOICES = (
-        (COMPANY, _('company')),
-        (PERSONAL,  _('personal')),
-        (AMATEUR,  _('amateur')),
+        (COMPANY, _('公司')),
+        (PERSONAL,  _('个体')),
+        (AMATEUR,  _('业余')),
     )
 class GuokuPlusApplicationForm(forms.Form):
     taobao_url = forms.URLField(widget=forms.TextInput(attrs={'class':'form-control'}))
