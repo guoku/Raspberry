@@ -13,8 +13,6 @@
                 {% for field in forms %}
                     {{ field }}
                 {% endfor %}
-{#                <input type="text" name="email" placeholder="邮箱" class="text">#}
-{#                <input type="password" name="password" placeholder="密码" class="text">#}
                 <div class="remember">
                     <label><input type="checkbox" name="remember_me">记住我</label>
                     <a href="{% url 'web_forget_passwd' %}">忘记密码?</a>
@@ -23,50 +21,10 @@
             </form>
 
             <div class="third-party">
-{#                <span class="weibo"><a href="#"></a></span>#}
-{#                <span class="taobao"><a href="#"></a></span>#}
                 <a href="{% url 'web_login_by_sina' %}" class="weibo"></a>
                 <a href="{% url 'web_login_by_taobao' %}" class="taobao"></a>
             </div>
             <div class="to-reg"><a href="{% url 'web_register' %}">注册帐号 >></a></div>
         </div>
     </div>
-{#   <form action="{% url 'web_login' %}" method="POST" id="login">#}
-{#        {% csrf_token %}#}
-{##}
-{#        <h2>登录</h2> | 没有帐号？<a href="{% url 'web_register' %}">请注册</a>#}
-{##}
-{#        {% if next != None %}#}
-{#            <input type="hidden" name="next" value="{{ next }}">#}
-{#        {% endif %}#}
-{##}
-{#        {% for field in forms %}#}
-{#            <div>#}
-{#                {{ field }}#}
-{#                {% if field.errors %}#}
-{#                    <span class="error-info">#}
-{#                    {% for error in field.errors %}#}
-{#                        {{ error|escape }}#}
-{#                    {% endfor %}#}
-{#                    </span>#}
-{#                {% endif %}#}
-{#            </div>#}
-{#        {% endfor %}#}
-{#        <div>#}
-{#            <input type="text" name="email" class="text-input" placeholder="邮箱" id="email" {% if email %}value="{{ email }}" {% endif %}>#}
-{#            {% if error.email != None %}<span class="error-info">{{ error.email }}</span>{% endif %}#}
-{#        </div>#}
-{##}
-{#        <div>#}
-{#            <input type="password" name="psw" class="text-input" placeholder="密码" id="psw">#}
-{#            {% if error.psw != None %}<span class="error-info">{{ error.psw }}</span>{% endif %}#}
-{#        </div>#}
-{##}
-{#        <div class="submit-row">#}
-{#            <label><input type="checkbox" name="remember_me" id="remember-me">{% trans "remember me" %}</label>#}
-{#            <small><a href="">忘了密码?</a></small>#}
-{#            <input type="submit" value={% trans "sign in" %} class="guoku-button">#}
-{#            <input type="submit" value={% trans "sign in" %} class="guoku-button">#}
-{#        </div>#}
-{#    </form>#}
 {% endblock %}
