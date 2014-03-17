@@ -52,7 +52,8 @@ def verify(request, user_context, shop_inst):
                 main_products = form.cleaned_data['main_products'],
                 intro = form.cleaned_data['intro']
             )
-        return HttpResponseRedirect(reverse('seller_index'))
+            return HttpResponseRedirect(reverse('seller_index'))
+        return HttpResponse(form.errors)
 
 @require_GET
 @login_required

@@ -24,7 +24,13 @@ from seller.views.seller_utils import get_guoku_plus_item_context, NotTaobaoUrl,
 @login_required
 @seller_only
 def index(request, user_context, shop_inst):
-    verification_form = ShopVerificationForm()
+    shop_context = shop_inst.read()
+    shop_verification = shop_inst.read_shop_verification()
+    verification_form_data = {}
+    if shop_verification:
+        verification_form_data.update(shop_verification)
+    verification_form_data.update(shop_context)
+    verification_form = ShopVerificationForm(verification_form_data)
     shop_context = shop_inst.read()
     shop_verification = shop_inst.read_shop_verification()
     application_form = GuokuPlusApplicationForm()
