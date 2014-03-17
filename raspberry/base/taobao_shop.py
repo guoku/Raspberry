@@ -203,7 +203,7 @@ class TaobaoShop(object):
         _results = _hdl.order_by("-created_time").skip(offset).limit(count)
         results = []
         for item in _results:
-            results.append(item._data)
+            results.append({"verification" : item._data, "shop_context" : TaobaoShop(item.shop_nick).read()})
         return results, _count
 
     def handle_shop_verification(self, action):
@@ -244,6 +244,7 @@ class GuokuPlusActivity(object):
         context['activity_id'] = self.activity_obj.id
         context['entity_context'] = entity.read()
         context['item_context'] = item.read()
+        context['shop_nick'] = self.activity_obj.shop_nick
         context['taobao_id'] = self.activity_obj.taobao_id
         context['sale_price'] = self.activity_obj.sale_price
         context['total_volume'] = self.activity_obj.total_volume
@@ -292,11 +293,15 @@ class GuokuPlusActivity(object):
         print results
         return results, total
 
-    def approve(self, start_time, editor_remarks = None):
-        self.activity_obj.application_status = APPLICATION_APPROVED
-        self.activity_obj.status = ACTIVITY_APPROVED
-        self.activity_obj.start_time = start_time
-        self.activity_obj.editor_remarks = editor_remarks
+    def handle(self, action, editor_remarks = None, start_time = None):
+        if action == "approve":
+            self.activity_obj.status = ACTIVITY_APPROVED
+        elif action == "reject":
+            self.activity_obj.status = ACTIVITY_REJECTED
+        if start_time != None:
+            self.activity_obj.start_time = start_time
+        if editor_remarks != None:
+            self.activity_obj.editor_remarks = editor_remarks
         self.activity_obj.save()
 
     def reject(self, editor_remarks = None):

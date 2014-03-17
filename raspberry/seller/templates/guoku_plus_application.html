@@ -5,10 +5,30 @@
 
 {% block content %}
     <div class="span10">
-        <form action="{% url 'seller_apply_guoku_plus' %}" method="post">
+        <form action="{% url 'seller_apply_guoku_plus' %}" class="application_plus_form" method="post">
             {% csrf_token %}
-		{{ form.as_table }}
-            <input type="submit" value="提交"/>
+			<div class="application_url application_input">
+				<b>商品链接:</b>{{ application_form.taobao_url }}
+			</div>
+			<div class="application_count application_input">
+				<b>优惠数量/件:</b>{{ application_form.total_volume }}
+			</div>
+			<div class="application_count application_input">
+				<b>优惠价格/元:</b>{{ application_form.sale_price }}
+			</div>
+			<div class="cln">
+			<div class="application_remarks application_input">
+				<b>附加信息:</b>{{ application_form.seller_remarks }}
+			</div>
+			<div class="application_submit application_input">
+				<div class="submit_opt">
+					<input type="submit" value="提交" class="btn btn-primary" />
+				</div>
+				<div class="submit_opt">
+					<b>{{ application_form.agree_tos }}同意协议</b>
+				</div>
+            </div>
+            <div class="cln"></div>
         </form>
     </div>
 {% endblock %}

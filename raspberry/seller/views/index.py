@@ -29,7 +29,6 @@ def index(request, user_context, shop_inst):
     shop_verification = shop_inst.read_shop_verification()
     application_form = GuokuPlusApplicationForm()
     guokuplus_list, total = GuokuPlusActivity.find(shop_nick = user_context['shop_nick'])
-    print guokuplus_list, total
     return render_to_response(
         "index.html",
         { 
@@ -130,4 +129,7 @@ def apply_guoku_plus(request, user_context, shop_inst):
 @require_POST
 @seller_only
 def verify_guoku_plus_token(request, user_context, shop_inst):
-    pass
+    token = request.POST.get("token", None)
+    if token:
+        result = GuokuPlusActivity.use_token(token)
+        return HttpResponse(result)
