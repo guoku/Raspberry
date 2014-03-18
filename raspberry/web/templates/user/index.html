@@ -74,14 +74,6 @@
                     {% endfor %}
                 </ul>
 
-                <ul class="prices">
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}">按价格</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=1" class="price">0-99</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=2" class="price">100-499</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=3" class="price">500-999</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=4" class="price">1000+</a></li>
-                </ul>
-
                 {% if entity_list|length > 0 %}
                     <div class="likes">
                         {% for entity_context in entity_list %}
