@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import widgets
+# from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -69,7 +69,6 @@ class SignUpAccountFrom(forms.Form):
         'email_exist': _("email is signed up."),
         'nickname_exist': _("nickname is signed up."),
         'not_agree_tos': _("you must agree terms of service.")
-        # 'password_mismatch': _("The two password fields didn't match."),
     }
 
     email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'text-input', 'placeholder': _('email')}),

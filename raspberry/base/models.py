@@ -210,7 +210,7 @@ class Tag(models.Model):
         mode = 'SPH_MATCH_ALL',
         rankmode = 'SPH_RANK_NONE',
     )
-    
+
     def get_absolute_url(self):
 
         return "/t/%s" % self.tag_hash
