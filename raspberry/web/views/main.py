@@ -128,6 +128,11 @@ def selection(request, template='main/selection.html'):
         return JSONResponse(data=_ret)
 
 def wap_selection(request, template='wap/selection.html'):
+    _start_at = datetime.now()
+    if request.user.is_authenticated():
+        _request_user_id = request.user.id
+    else:
+        _request_user_id = None 
     _agent = 'iphone'
     if 'Android' in request.META['HTTP_USER_AGENT']:
         _agent = 'android'
@@ -137,6 +142,7 @@ def wap_selection(request, template='wap/selection.html'):
     _paginator = Paginator(_page_num, 30, _hdl.count())
     _hdl = _hdl.order_by('-post_time')
     _selection_list = []
+    _entity_id_list = []
     for _note_selection in _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         _selection_note_id = _note_selection['note_id']
         _entity_id = _note_selection['entity_id']
@@ -149,6 +155,21 @@ def wap_selection(request, template='wap/selection.html'):
             'note_context': _note_context,
             'creator_context': _creator_context,
         })
+        _entity_id_list.append(_entity_id)
+    
+    _duration = datetime.now() - _start_at
+    WebLogTask.delay(
+        entry='wap',
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='SELECTION', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'result_entities' : _entity_id_list,
+        },
+    )
         
     return render_to_response(
         template,
@@ -165,15 +186,19 @@ def wap_selection(request, template='wap/selection.html'):
 
 @require_http_methods(['GET'])
 def popular(request, template='main/popular.html'):
+    _start_at = datetime.now()
     if request.user.is_authenticated():
+        _request_user_id = request.user.id
         _request_user_context = User(request.user.id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
     else:
+        _request_user_id = None 
         _request_user_context = None
         _request_user_like_entity_set = [] 
     
     _group = request.GET.get('group', 'daily')
     _popular_list = []
+    _entity_id_list = []
     _popular_updated_time = datetime.now() 
    
     _popular_entities = popularity.read_popular_entity_from_cache(scale=_group)
@@ -190,8 +215,25 @@ def popular(request, template='main/popular.html'):
                     'is_user_already_like' : _is_user_already_like,
                     'entity_context' : _entity_context,
                 })
+                _entity_id_list.append(_entity_id)
             except Exception, e:
                 pass
+    
+    if _group== 'weekly':
+        _log_appendix = { 'scale' : 'WEEK' }
+    else:
+        _log_appendix = { 'scale' : 'DAY' }
+    _log_appendix['result_entities'] = _entity_id_list
+    _duration = datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='POPULAR', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.now(),
+        request_user_id=_request_user_id,
+        appendix=_log_appendix 
+    )
 
     return render_to_response(
         template,

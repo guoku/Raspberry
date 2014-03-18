@@ -23,6 +23,7 @@ class WebLogTask(Task):
         _prev_str = request.get('prev', None)
         
         web_logger.log(
+            entry=entry,
             duration=duration,
             ip=ip,
             log_time=log_time,
