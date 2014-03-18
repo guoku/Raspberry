@@ -1,3 +1,6 @@
+@import "./base.css";
+@import "./normalize.min.css";
+
 #category {
     margin: 0 15px;
 }

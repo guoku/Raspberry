@@ -9,9 +9,11 @@
     <meta content="{% block description %}果库，最实用的网络购物指南，每日优选与发现最有趣、有用、有价值的网购商品。帮助降低发现的成本，努力提升消费的质量。{% endblock %}" name="description">
 
     <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
-    {% block css %}{% endblock %}
+
+    {% block css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+    {% endblock %}
 
     <!-- Google Analytics -->
     <script>
