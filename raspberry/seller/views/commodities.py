@@ -27,7 +27,6 @@ def commodities(request, user_context, shop_inst):
         shop_verification = shop_inst.read_shop_verification()
     else:
         shop_verification = None
-    print verification_form.as_table()
     return render_to_response("commodities.html",
                               {"item_list": item_list,
                                "user_context": user_context,
