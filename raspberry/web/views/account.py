@@ -400,7 +400,8 @@ def reset_password(request, template='account/reset_password.html'):
             if _result['status'] == 'available': 
                 return render_to_response(
                     template, 
-                    { 
+                    {
+                        'status' : _result['status'], 
                         'token' : _token,
                         'user_context' : User(_result['user_id']).read() 
                     },
@@ -410,7 +411,7 @@ def reset_password(request, template='account/reset_password.html'):
                 return render_to_response(
                     template,
                     { 
-                        'token_invalid' : True
+                        'status' : _result['status'] 
                     },
                     context_instance=RequestContext(request)
                 )
@@ -421,13 +422,14 @@ def reset_password(request, template='account/reset_password.html'):
         if _result['status'] == 'available': 
             _user = User(_result['user_id'])
             _user.reset_account(password=_password)
+            User.confirm_one_time_token(_token)
             return HttpResponseRedirect(reverse('web_selection'))
         
         else:
             return render_to_response(
                 template,
                 { 
-                    'token_invalid' : True
+                    'status' : _result['status'] 
                 },
                 context_instance=RequestContext(request)
             )

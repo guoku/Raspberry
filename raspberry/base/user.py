@@ -935,6 +935,15 @@ class User(object):
             'status' : 'available',
             'user_id' : _record.user_id 
         }
+    
+    @staticmethod
+    def confirm_one_time_token(token):
+        try:
+            _record = OneTimeTokenModel.objects.get(token=token)
+            _record.is_used = True
+            _record.save()
+        except:
+            pass
 
     @staticmethod
     def get_user_id_by_email(email):
