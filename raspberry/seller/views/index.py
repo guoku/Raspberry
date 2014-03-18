@@ -1,5 +1,6 @@
 #coding=utf-8
 
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -76,23 +77,25 @@ def bind_taobao_shop(request):
         )
     elif request.method == "POST":
         if not request_user_context.get("taobao_nick"):
-            messages.info(request, "尚未绑定淘宝帐号") 
+            messages.info(request, u"尚未绑定淘宝帐号") 
             return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
         item_url = request.POST.get('item_url', None)
         if not item_url:
-            message.info(request, "请输入商品地址")
+            message.info(request, u"请输入商品地址")
             return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
       
         if is_taobao_url(item_url):
             taobao_id = parse_taobao_id_from_url(item_url)
             taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
-            nick = taobao_item_info['nick']
-            if request_user_context.get('taobao_nick') == nick:
+            nick = taobao_item_info['nick'].decode("utf-8")
+            user_taobao_nick = request_user_context.get('taobao_nick')
+            if user_taobao_nick == nick:
+                print "in here", user_taobao_nick, nick
                 user_inst.create_seller_info(nick)
                 if not TaobaoShop.nick_exist(nick):
                     shop_info = TaobaoExtractor.fetch_shop(taobao_item_info['shop_link'])
                     TaobaoShop.create(
-                        nick,
+                        shop_info['nick'],
                         shop_info['shop_id'],
                         shop_info['title'],
                         shop_info['type'],
@@ -101,7 +104,7 @@ def bind_taobao_shop(request):
                     ) 
                 return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
             else:
-                message.info(request, "错误的商品地址，请输入淘宝商品地址")
+                messages.info(request, u"错误的商品地址，请输入淘宝商品地址")
                 return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
         else:
             return HttpResponseRedirect(reverse('seller_bind_taobao_shop'))
