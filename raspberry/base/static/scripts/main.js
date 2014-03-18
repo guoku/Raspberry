@@ -294,6 +294,7 @@ function initTag(){
             $.ajax({
                 url: url,
                 type: "GET",
+                async: false,
                 data: {'p': counter },
                 success: function(data) {
 //                    return data;
