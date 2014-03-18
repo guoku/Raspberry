@@ -308,9 +308,7 @@ class GuokuPlusActivity(object):
         _hdl = _hdl[offset : offset + count]
         results = []
         for item in _hdl:
-            print item
             results.append(GuokuPlusActivity(item.id).read())
-        print results
         return results, total
 
     def handle(self, action, editor_remarks = None, start_time = None):

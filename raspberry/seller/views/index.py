@@ -30,13 +30,13 @@ def index(request, user_context, shop_inst):
     shop_verification = shop_inst.read_shop_verification()
     verification_form = ShopVerificationForm(
         {
-            "shop_type" : shop_context['shop_type'],
-            "qq_account" : shop_context['shop_qq_account'],
-            "email" : shop_context['shop_email'],
-            "company_name" : shop_context['shop_company_name'],
-            "mobile" : shop_context['shop_mobile'],
-            "main_products" : shop_context['shop_main_products'],
-            "intro" : shop_context['shop_intro']
+            "shop_type" : shop_context.get('shop_type', None),
+            "qq_account" : shop_context.get('shop_qq_account', None),
+            "email" : shop_context.get('shop_email', None),
+            "company_name" : shop_context.get('shop_company_name', None),
+            "mobile" : shop_context.get('shop_mobile', None),
+            "main_products" : shop_context.get('shop_main_products', None),
+            "intro" : shop_context.get('shop_intro', None)
         }
     )
     shop_context = shop_inst.read()
@@ -90,7 +90,6 @@ def bind_taobao_shop(request):
             nick = taobao_item_info['nick'].decode("utf-8")
             user_taobao_nick = request_user_context.get('taobao_nick')
             if user_taobao_nick == nick:
-                print "in here", user_taobao_nick, nick
                 user_inst.create_seller_info(nick)
                 if not TaobaoShop.nick_exist(nick):
                     shop_info = TaobaoExtractor.fetch_shop(taobao_item_info['shop_link'])
@@ -137,8 +136,8 @@ def apply_guoku_plus(request, user_context, shop_inst):
         sale_price = form.cleaned_data['sale_price']
         seller_remarks = form.cleaned_data['seller_remarks']
         if item_context['price'] < sale_price:
-            return HttpResponse("sale price must less that original price")
-        GuokuPlusActivity.create(item_context['taobao_id'], total_volume, sale_price, seller_remarks, item_context['shop_nick'])
+            return HttpResponse(u"优惠价不能大于原价")
+        GuokuPlusActivity.create(item_context['taobao_id'], sale_price, total_volume, seller_remarks, item_context['shop_nick'])
         return HttpResponseRedirect(reverse("seller_index"))
     return HttpResponse("error")
 
