@@ -274,7 +274,7 @@ function initTag(){
         showEntityTitle: function ($noteItem) {
             // 为精选添加 鼠标悬浮显示标题
 
-            var $entityTitle = $noteItem.find('.entity .title');
+            var $entityTitle = $noteItem.find('.title');
             $noteItem.hover(function () {
                 $entityTitle.slideDown('fast');
             }, function () {
@@ -285,6 +285,13 @@ function initTag(){
         noteHover: function () {
             var self = this;
             $('.common-note').each(function () {
+                self.showEntityTitle($(this));
+            });
+        },
+
+        popularHover: function () {
+            var self = this;
+            $('.popular-entity').each(function (){
                 self.showEntityTitle($(this));
             });
         },
@@ -340,50 +347,6 @@ function initTag(){
 //                    if ($this.scrollTop() > top) {
                         counter++;
                         util.loadData(counter, $selection);
-//                        top += 2300;
-//                        var url = '/selected/?p=' + counter;
-//                        var result = util.loadData(counter);
-//
-//                        var status = parseInt(result.status);
-//                        if (status == 1) {
-//                            var $html = $(result.data);
-//                            $html.each(function(){
-//                                util.showEntityTitle($(this));
-//                            });
-//                            $html.appendTo($selection);
-//                        }
-//                        var url = window.location.href;
-////                        console.log(url);
-//                        $.ajax({
-//                            url: url,
-//                            type: "GET",
-//                            data: {'p': counter},
-//                            success: function(data) {
-//                                result = $.parseJSON(data);
-//                                var status = parseInt(result.status);
-//                                if (status == 1) {
-//                                    var $html = $(result.data);
-//                                    $html.each(function() {
-//                                        util.showEntityTitle($(this));
-//                                    });
-//                                    $html.appendTo($selection);
-//                                }
-//                            }
-//                        });
-//                        $.get(url, function (result) {
-//                            result = $.parseJSON(result);
-//                            var status = parseInt(result.status);
-//
-//                            if (status === 1) {
-//                                var $html = $(result.data);
-//                                $html.each(function () {
-//                                    util.showEntityTitle($(this));
-//                                });
-//                                $html.appendTo($selection);
-//                            } else if (status === 0) {
-//                                // 没有数据可以加载了
-//                            }
-//                        });
                     }
                 });
             }
@@ -784,6 +747,7 @@ function initTag(){
     (function init() {
         util.like();
         util.noteHover();
+        util.popularHover();
 
         clickToTop.caculateRight();
         clickToTop.bindClick();
