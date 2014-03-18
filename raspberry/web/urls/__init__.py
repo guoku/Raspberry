@@ -50,6 +50,7 @@ urlpatterns += patterns(
     url(r'^taobao/bind/$', 'bind_taobao', name="web_bind_taobao"),
     url(r'^taobao/unbind/$', 'unbind_taobao', name="web_unbind_taobao"),
     url(r'^taobao/auth/$', 'auth_by_taobao', name="web_auth_by_taobao"),
+    url(r'^reset_password/$', 'reset_password', name='web_reset_password'),
 
     url(r'^account/', include('web.urls.account')),
     url(r'^u/', include('web.urls.user')),

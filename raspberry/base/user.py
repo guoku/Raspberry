@@ -900,7 +900,7 @@ class User(object):
     def __create_one_time_token(self, token_type):
         _token = md5(self.user_obj.email + unicode(str(self.user_obj.id)) + unicode(self.user_obj.username) + unicode(datetime.datetime.now())).hexdigest()
         try:
-            _record = OneTimeTokenModel.objects.get(user = self.user_id, token_type = token_type)
+            _record = OneTimeTokenModel.objects.get(user=self.user_id, token_type=token_type)
             _record.created_time = datetime.datetime.now() 
             _record.token = _token
             _record.is_used = False
@@ -912,6 +912,29 @@ class User(object):
                 token_type = token_type
             )
         return _token
+    
+    @staticmethod
+    def check_one_time_token(token, token_type, expiration_hours=24):
+        try:
+            _record = OneTimeTokenModel.objects.get(token=token, token_type=token_type)
+        except OneTimeTokenModel.DoesNotExist:
+            return {
+                'status' : 'illegal' 
+            }
+        if _record.is_used:
+            return {
+                'status' : 'used' 
+            }
+        _now = datetime.datetime.now()
+        _created_time = _record.created_time
+        if _now - _created_time > datetime.timedelta(hours=expiration_hours):
+            return {
+                'status' : 'expired' 
+            }
+        return {
+            'status' : 'available',
+            'user_id' : _record.user_id 
+        }
 
     @staticmethod
     def get_user_id_by_email(email):
