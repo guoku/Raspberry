@@ -13,8 +13,9 @@ ACTION_CHOICES = (
 class GuokuPlusActivityForm(forms.Form):
     app_id = forms.CharField(max_length = 32, widget = forms.HiddenInput())
     action = forms.ChoiceField(widget = forms.Select(), choices = ACTION_CHOICES)
-    editor_remarks = forms.CharField(max_length = 120)
-    start_time = forms.DateField(widget = forms.DateInput(attrs={'id' : 'dateinput', 'readonly' : 'readonly'}), required=False)
+    editor_remarks = forms.CharField(max_length = 120, required = False)
+    start_time = forms.DateField(widget = forms.DateInput(attrs={'id' : 'startdateinput', 'readonly' : 'readonly'}), required=False)
+    end_time = forms.DateField(widget = forms.DateInput(attrs={'id' : 'enddateinput', 'readonly' : 'readonly'}), required=False)
 
     def clean_start_time(self):
         if self.cleaned_data.get('start_time') == None:

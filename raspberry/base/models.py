@@ -308,7 +308,7 @@ class Guoku_Plus(models.Model):
 
 class Guoku_Plus_Token(models.Model):
     user = models.ForeignKey(User)
-    guoku_plus_activity_id = models.ForeignKey(Guoku_Plus)
+    guoku_plus_activity = models.ForeignKey(Guoku_Plus)
     token = models.CharField(max_length = 50, unique = True, db_index = True)
     used = models.BooleanField()
     created_time = models.DateTimeField()

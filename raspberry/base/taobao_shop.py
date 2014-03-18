@@ -1,7 +1,7 @@
 # coding=utf8
 from django.conf import settings
 from base.models import Guoku_Plus as GuokuPlusModel
-from base.models import Guoku_Plus as GuokuPlusTokenModel
+from base.models import Guoku_Plus_Token as GuokuPlusTokenModel
 from base.models import Seller_Info as SellerInfoModel
 from base.stream_models import TaobaoShop as TaobaoShopModel
 from base.stream_models import TaobaoShopInfo
@@ -311,15 +311,26 @@ class GuokuPlusActivity(object):
             results.append(GuokuPlusActivity(item.id).read())
         return results, total
 
-    def handle(self, action, editor_remarks = None, start_time = None):
+    @classmethod
+    def find_by_taobao_id(cls, taobao_id):
+        results = GuokuPlusModel.objects.filter(taobao_id = taobao_id)
+        if results.count() > 0:
+            return GuokuPlusActivity(results[0].id).read()
+        return None
+
+    def handle(self, action, editor_remarks = None, start_time = None, end_time = None):
         if action == "approve":
             self.activity_obj.status = ACTIVITY_APPROVED
         elif action == "reject":
             self.activity_obj.status = ACTIVITY_REJECTED
-        if start_time != None:
-            self.activity_obj.start_time = start_time
-        if editor_remarks != None:
+        if editor_remarks:
             self.activity_obj.editor_remarks = editor_remarks
+        if start_time:
+            self.activity_obj.start_time = start_time
+    
+        if end_time:
+            self.activity_obj.end_time = end_time
+
         self.activity_obj.save()
 
     def reject(self, editor_remarks = None):
@@ -337,21 +348,37 @@ class GuokuPlusActivity(object):
     def read(self):
         return self.__get_context()
 
-    def create_token(self, user_id):
+
+    def __get_token_context(self, token):
+        context = {}
+        context['user_id'] = token.user_id
+        context['guoku_plus_activity_id'] = token.guoku_plus_activity_id
+        context['token'] = token.token
+        context['used'] = token.used
+        context['created_time'] = token.created_time
+        context['used_time'] = token.used_time
+        return context
+
+    def get_token(self, user_id):
+        result = GuokuPlusTokenModel.objects.filter(guoku_plus_activity_id = self.activity_id, user_id = user_id)
+        if result.count() > 0:
+            token = result[0]
+            return self.__get_token_context(token)
         try_times = 10
         while try_times > 0:
             try:
-                GuokuPlusTokenModel.objects.create(
+                token = GuokuPlusTokenModel.objects.create(
                     user_id = user_id,
                     guoku_plus_activity_id = self.activity_id,
                     token = get_random_string(7),
                     used = False,
                     created_time = datetime.datetime.now()
                 )
-                return True
-            except:
+                return self.__get_token_context(token) 
+            except Exception, e:
+                print e
                 try_times -= 1
-        return False
+        return None
     
     def use_token(self, token):
         try:

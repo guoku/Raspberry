@@ -108,7 +108,7 @@
                                                             <a class="pull-left" href="http://item.taobao.com/item.htm?id={{ item.item_context.taobao_id }}">
                                                                 <img class="media-object" alt="64x64" src="{{ item.entity_context.chief_image.url }}" style="width: 64px; height: 64px;"></a>
                                                             <div class="media-body">
-                                                                <h5 class="media-heading">{{ item.item_context.title }}</h5>
+                                                                <h5 class="media-heading"><a href="{% url 'web_detail' item.entity_context.entity_hash %}">{{ item.item_context.title }}</a></h5>
                                                                 <p> 原价{{ item.item_context.price }}  优惠价 {{ item.sale_price }}</p>
                                                                 <p> 共 {{ item.total_volume }} 件， 已售出 {{ item.sales_volume }} 件 </p>
                                                             </div>

@@ -1,8 +1,10 @@
 # coding=utf-8
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.views.decorators.http import require_http_methods
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
+from django.views.decorators.http import require_GET, require_POST
 from django.template import RequestContext
 from django.template import loader
 from django.utils.log import getLogger
@@ -16,6 +18,7 @@ from base.note import Note
 from base.entity import Entity
 from base.tag import Tag 
 from base.user import User
+from base.taobao_shop import GuokuPlusActivity
 from base.category import Old_Category
 import base.popularity as popularity
 
@@ -177,4 +180,13 @@ def popular(request, template='main/popular.html'):
         },
         context_instance=RequestContext(request)
     )
+
+@require_POST
+@login_required
+def get_guokuplus_token(request):
+    activity_id = request.POST.get("activity_id", None)
+    guokuplus = GuokuPlusActivity(activity_id)
+    print activity_id, request.user.id
+    token_context = guokuplus.get_token(request.user.id)
+    return HttpResponse(token_context['token'])
 

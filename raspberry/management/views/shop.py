@@ -214,7 +214,11 @@ def handle_guokuplus(request):
         guoku_plus = GuokuPlusActivity(form.cleaned_data['app_id'])
         action = form.cleaned_data['action']
         editor_remarks = form.cleaned_data['editor_remarks']
-        guoku_plus.handle(action, editor_remarks, form.cleaned_data['start_time'])
+        start_time = form.cleaned_data['start_time']
+        end_time = form.cleaned_data['end_time']
+        if start_time and not end_time:
+            end_time = start_time + datetime.timedelta(7)
+        guoku_plus.handle(action, editor_remarks, start_time, end_time)
         return HttpResponseRedirect(reverse('management_guokuplus_detail') + "?app_id=" + form.cleaned_data['app_id'])
     else:
         return HttpResponse(form.errors)

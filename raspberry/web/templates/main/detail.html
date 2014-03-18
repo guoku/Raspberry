@@ -128,6 +128,15 @@
                     <a href="">iPhone</a> / <a href="">iPhone</a> / <a href="">iPhone</a>
                 </div>
             </div>
+            {% if enable_guoku_plus %}
+                <div>
+                    <h3>获取果库价优惠码</h3>
+                    <form action="{%url 'web_get_guokuplus_token' %}" method="POST">
+                        <input type="hidden" name="activity_id" value="{{activity_id}}"/>
+                        <input type="submit" value="获取"/>
+                    </form>
+                </div>
+            {% endif %}
         </div>
 
         <div class="recommend">
