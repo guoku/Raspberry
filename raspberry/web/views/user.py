@@ -345,16 +345,44 @@ def follow(request, user_id, target_status):
             return HttpResponse('1')
 
 def user_tag_entity(request, user_id, tag_hash, template="tag/tag_detail.html"):
+    _start_at = datetime.datetime.now()
+    _request_user_id = request.user.id if request.user.is_authenticated() else None 
     _user_context = User(user_id).read()
     _tag_text = Tag.get_tag_text_from_hash(tag_hash)
+    
+    _page_num = request.GET.get('p', 1)
+    
     _entity_id_list = Tag.find_user_tag_entity(user_id, _tag_text)
-    _entities = map(lambda x: Entity(x).read(), _entity_id_list)
+    _paginator = Paginator(_page_num, 24, len(_entity_id_list))
+    
+    _entities = [] 
+    for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
+        try:
+            _entities.append(Entity(_entity_id).read())
+        except Exception, e:
+            pass
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='USER_TAG', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'tag' : _tag_text, 
+            'user_id' : int(user_id), 
+            'result_entities' : _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
+        },
+    )
     
     return render_to_response(template,
         {
             'tag': _tag_text,
             'entities': _entities,
             'user_context' : _user_context,
+            'paginator' : _paginator
         },
         context_instance = RequestContext(request)
     )
