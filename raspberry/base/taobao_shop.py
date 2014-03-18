@@ -244,8 +244,8 @@ ACTIVITY_WAITING = "waiting"
 ACTIVITY_APPROVED = "approved"
 ACTIVITY_REJECTED = "rejected"
 ACTIVITY_ONGOING = "ongoing"
-ACIIVITY_FINISHED = "finished"
-ACIIVITY_ABORTED = "aborted"
+ACTIVITY_FINISHED = "finished"
+ACTIVITY_ABORTED = "aborted"
 
 class GuokuPlusActivity(object):
     def __ensure_activity_obj(self):
@@ -380,16 +380,16 @@ class GuokuPlusActivity(object):
                 try_times -= 1
         return None
     
-    def use_token(self, token):
+    def use_token(self, token, quantity = 1):
         try:
             token_obj = GuokuPlusTokenModel.objects.get(token = token) 
         except:
             return False
         if token_obj.used:
             return False
-        if self.activity_obj.activity_status != ACTIVITY_ONGOING:
-            return False
-        self.activity_obj.sales_volume = self.activity_obj.sales_volume + 1
+        #if self.activity_obj.status != ACTIVITY_ONGOING:
+        #    return False
+        self.activity_obj.sales_volume = self.activity_obj.sales_volume + quantity
         if self.activity_obj.sales_volume >= self.activity_obj.total_volume:
             self.activity_obj.activity_status = ACTIVITY_FINISHED
         self.activity_obj.save()
