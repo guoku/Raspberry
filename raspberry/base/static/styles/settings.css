@@ -1,6 +1,10 @@
 /*#settings .guoku-block {*/
     /*padding: 35px 0 50px 250px;*/
 /*}*/
+
+@import "./base.css";
+@import "./normalize.min.css";
+
 #setting h2 {
     font-size: 16px;
     color: #444444;
@@ -112,4 +116,14 @@
 #setting textarea:focus {
     border-color: #ade0b3;
     background-color: #f8f8f8;
+}
+
+#setting .sns-name {
+    display: inline-block;
+    width: 110px;
+    padding-right: 30px;
+}
+
+#setting .active {
+    color: #427EC0;
 }

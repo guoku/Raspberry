@@ -35,15 +35,16 @@ def commodities(request, user_context, shop_inst):
                                "shop_verification" : shop_verification},
                               context_instance=RequestContext(request))
 
-@require_http_methods(["GET", "POST"])
+@require_POST
 @login_required
 @seller_only
 def verify(request, user_context, shop_inst):
-    if request.method == "POST":
-        form = ShopVerificationForm(request.POST)
-        if form.is_valid():
+    shop_context = shop_inst.read()
+    form = ShopVerificationForm(request.POST)
+    if form.is_valid():
+        verification = shop_inst.read_shop_verification()
+        if not verification:
             shop_inst.create_verification_info(
-                user_id = request.user.id,
                 shop_type = form.cleaned_data['shop_type'],
                 company_name = form.cleaned_data['company_name'],
                 email = form.cleaned_data['email'],
@@ -52,7 +53,18 @@ def verify(request, user_context, shop_inst):
                 main_products = form.cleaned_data['main_products'],
                 intro = form.cleaned_data['intro']
             )
-        return HttpResponseRedirect(reverse('seller_commodities'))
+        else:
+            shop_inst.update_verification_info(
+                shop_type = form.cleaned_data['shop_type'],
+                company_name = form.cleaned_data['company_name'],
+                email = form.cleaned_data['email'],
+                mobile = form.cleaned_data['mobile'],
+                qq_account = form.cleaned_data['qq_account'],
+                main_products = form.cleaned_data['main_products'],
+                intro = form.cleaned_data['intro']
+            )     
+        return HttpResponseRedirect(reverse('seller_index'))
+    return HttpResponse(form.errors)
 
 @require_GET
 @login_required

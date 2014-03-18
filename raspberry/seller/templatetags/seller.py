@@ -2,9 +2,9 @@
 from django import template
 register = template.Library()
 
-def display_shop_verification(user_context, verification_form, shop_verification):
+def display_shop_verification(shop_context, verification_form, shop_verification):
     return {
-        "user_context" : user_context,
+        "shop_context" : shop_context,
         "verification_form" : verification_form,
         "shop_verification" : shop_verification
     }

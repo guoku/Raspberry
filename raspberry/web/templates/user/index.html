@@ -3,10 +3,13 @@
 {% load web_common %}
 
 {% block title %}
-    {{ query_user_context.nickname|default:'我' }}的果库
+    {{ query_user_context.nickname|default:'我的果库' }}
     {% block subtitle %}{% endblock %}
 {% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">
+{% endblock %}
+
 {% block content %}
     <div id="user-center">
         <div class="base">

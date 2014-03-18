@@ -1,3 +1,6 @@
+@import "./base.css";
+@import "./normalize.min.css";
+
 #popular .time {
     position: relative;
     margin: 40px 0;

@@ -9,7 +9,7 @@ urlpatterns = patterns(
     url(r'^edit/$', 'edit_shop', name = 'management_edit_shop'),
     url(r'^guokuplus/list/$', 'guokuplus_list', name = 'management_guokuplus_list'),
     url(r'^guokuplus/detail/$', 'guokuplus_detail', name = 'management_guokuplus_detail'),
-    url(r'^guokuplus/approve/$', 'approve_guokuplus', name = 'management_approve_guokuplus'),
+    url(r'^guokuplus/handle/$', 'handle_guokuplus', name = 'management_handle_guokuplus'),
     url(r'^verification/list/$', 'shop_verification_list', name = 'management_shop_verification_list'),
     url(r'^verification/handle/$', 'handle_shop_verification', name = 'management_handle_shop_verification'),
 )

@@ -1,3 +1,6 @@
+@import "./base.css";
+@import "./normalize.min.css";
+
 #user-center {
     margin: 25px 15px 0;
 }

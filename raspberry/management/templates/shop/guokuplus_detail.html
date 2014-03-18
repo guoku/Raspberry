@@ -41,9 +41,9 @@
 
     </div>
     <div class="span10">
-        <form action="{% url 'management_approve_guokuplus' %}" method="POST">
+        <form action="{% url 'management_handle_guokuplus' %}" method="POST">
             {{ approve_form.as_table }}
-            <input type="submit" value="审核通过"/>
+            <input type="submit" value="提交"/>
         </form>
     </div>
 {% endblock %}

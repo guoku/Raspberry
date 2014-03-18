@@ -96,7 +96,7 @@ class TaobaoShop(object):
             _context['shop_company_name'] = _seller_info_obj.company_name
             _context['shop_qq_account'] = _seller_info_obj.qq_account
             _context['shop_email'] = _seller_info_obj.email
-            _context['shop_mobile'] = _seller_info_obj.shop_type
+            _context['shop_mobile'] = _seller_info_obj.mobile
             _context['shop_main_products'] = _seller_info_obj.main_products
             _context['shop_intro'] = _seller_info_obj.intro
             _context['shop_verified'] = _seller_info_obj.verified
@@ -150,21 +150,19 @@ class TaobaoShop(object):
         if mobile:
             _seller.mobile = mobile
         if main_products:
-            _seller.main_products
+            _seller.main_products = main_products
         if intro:
             _seller.intro = intro
         if verified:
             _seller.verified = verified
         _seller.save()
 
-    def create_verification_info(self, user_id, shop_type, company_name, qq_account, email, mobile, main_products, intro):
-        if TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).count() > 0:
+    def update_verification_info(self, shop_type, company_name, qq_account, email, mobile, main_products, intro):
+        info = TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).first()
+        if not info:
             return False
-        info = TaobaoShopVerificationInfo(
-            shop_nick = self.nick,
-            status = STATUS_WAITING,
-            created_time = datetime.datetime.now()
-        )
+        info.status = STATUS_WAITING
+        info.updated_time = datetime.datetime.now()
         info.save()
         self.update_seller_info(
             shop_type = shop_type,
@@ -177,6 +175,27 @@ class TaobaoShop(object):
         )
         return True
 
+    def create_verification_info(self,  shop_type, company_name, qq_account, email, mobile, main_products, intro):
+        if TaobaoShopVerificationInfo.objects.filter(shop_nick = self.nick).count() > 0:
+            return False
+        time_now = datetime.datetime.now()
+        info = TaobaoShopVerificationInfo(
+            shop_nick = self.nick,
+            status = STATUS_WAITING,
+            created_time = time_now,
+            updated_time = time_now
+        )
+        info.save()
+        self.update_seller_info(
+            shop_type = shop_type,
+            company_name = company_name,
+            qq_account = qq_account,
+            email = email,
+            mobile = mobile,
+            main_products = main_products,
+            intro = intro
+        )
+        return True
     def read_guoku_plus_list(self, offset = 0, count = 100):
         return GuokuPlusActivity.find(shop_nick = self.nick, offset = offset, count = count) 
 
@@ -203,7 +222,7 @@ class TaobaoShop(object):
         _results = _hdl.order_by("-created_time").skip(offset).limit(count)
         results = []
         for item in _results:
-            results.append(item._data)
+            results.append({"verification" : item._data, "shop_context" : TaobaoShop(item.shop_nick).read()})
         return results, _count
 
     def handle_shop_verification(self, action):
@@ -244,11 +263,13 @@ class GuokuPlusActivity(object):
         context['activity_id'] = self.activity_obj.id
         context['entity_context'] = entity.read()
         context['item_context'] = item.read()
+        context['shop_nick'] = self.activity_obj.shop_nick
         context['taobao_id'] = self.activity_obj.taobao_id
         context['sale_price'] = self.activity_obj.sale_price
         context['total_volume'] = self.activity_obj.total_volume
         context['sales_volume'] = self.activity_obj.sales_volume
         context['start_time'] = self.activity_obj.start_time
+        context['end_time'] = self.activity_obj.end_time
         context['seller_remarks'] = self.activity_obj.seller_remarks
         context['editor_remarks'] = self.activity_obj.editor_remarks
         context['created_time'] = self.activity_obj.created_time
@@ -292,11 +313,15 @@ class GuokuPlusActivity(object):
         print results
         return results, total
 
-    def approve(self, start_time, editor_remarks = None):
-        self.activity_obj.application_status = APPLICATION_APPROVED
-        self.activity_obj.status = ACTIVITY_APPROVED
-        self.activity_obj.start_time = start_time
-        self.activity_obj.editor_remarks = editor_remarks
+    def handle(self, action, editor_remarks = None, start_time = None):
+        if action == "approve":
+            self.activity_obj.status = ACTIVITY_APPROVED
+        elif action == "reject":
+            self.activity_obj.status = ACTIVITY_REJECTED
+        if start_time != None:
+            self.activity_obj.start_time = start_time
+        if editor_remarks != None:
+            self.activity_obj.editor_remarks = editor_remarks
         self.activity_obj.save()
 
     def reject(self, editor_remarks = None):

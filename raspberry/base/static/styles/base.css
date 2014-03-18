@@ -404,7 +404,7 @@ button {
     position: fixed;
     left: 50%;
     margin-left: -267px;
-    width: 535px;
+    width: 515px;
     height: 605px;
     border-radius: 5px;
     
@@ -487,12 +487,25 @@ button {
 .login .tip {
     /*margin-bottom: 55px;*/
     display: block;
-    width: 535px;
-    height: 125px;
+    /*width: 515px;*/
+    /*height: 125px;*/
     background-color: #fbfbfb;
     margin-bottom: 55px;
     text-align: center;
     /*vertical-align: bottom;*/
+}
+
+.login .error-message {
+    position: fixed;
+    top: 140px;
+    width: 515px;
+    height: 35px;
+    background: url("/static/v3/images/error_message.png");
+    text-align: center;
+    font-size: 14px;
+    line-height: 35px;
+    /*vertical-align: middle;*/
+    /*margin: auto;*/
 }
 
 .weibo, .taobao {
@@ -1004,3 +1017,6 @@ a.tag:hover {text-decoration:underline;}
 .tag-auto-complete p {color:#666666;line-height:24px;padding:0 10px;margin:0;cursor:pointer;}
 .tag-auto-complete p.hover {background:#F1F1F1;}
 .text_area {visibility:hidden;border-color:#DEDEDE;position:absolute;width:530px;word-wrap:break-word;}
+/*seller style*/
+.verify_form{}
+
