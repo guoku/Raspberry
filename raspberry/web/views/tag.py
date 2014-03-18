@@ -1,5 +1,6 @@
 # coding=utf-8
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -30,7 +31,7 @@ def tag_suggest(request):
     return JSONResponse(data=_rslt)
 
         
-def tags(request, tag_hash, template="tag/tag_detail.html"):
+def tag_detail(request, tag_hash, template="tag/tag_detail.html"):
     _start_at = datetime.datetime.now()
     _request_user_id = request.user.id if request.user.is_authenticated() else None 
     
@@ -70,3 +71,6 @@ def tags(request, tag_hash, template="tag/tag_detail.html"):
     )
 
 
+def tag_origin(request, tag):
+    _tag_hash = Tag.get_tag_hash_from_text(tag) 
+    return HttpResponsePermanentRedirect(reverse('web_tag_detail', kwargs = { "tag_hash" : _tag_hash }))

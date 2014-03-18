@@ -112,7 +112,7 @@
                 <h3>该商品的标签</h3>
                 <div>
                     {% for tag in tag_list %}
-                        <a href="{% url "web_tags" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>
+                        <a href="{% url "web_tag_detail" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>
                     {% endfor %}
                 </div>
             </div>

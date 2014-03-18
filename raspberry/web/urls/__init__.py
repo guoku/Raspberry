@@ -22,6 +22,7 @@ urlpatterns = patterns(
 urlpatterns += patterns(
     'web.views.tag',
     url(r'^tag/suggest/$', 'tag_suggest', name='web_tag_suggest'),
+    url(r'^tag/(?P<tag>\w+)/$', 'tag_origin', name='web_tag_origin'),
 )
 
 urlpatterns += patterns(

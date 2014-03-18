@@ -5,7 +5,7 @@
     <div class="entities">
         {% for entity_context in tag_context.entity_list %}
             {% if user_id == None %}
-                <a href="{% url 'web_tags' tag_context.tag_hash %}" class="entity-img" target="_blank">
+                <a href="{% url 'web_tag_detail' tag_context.tag_hash %}" class="entity-img" target="_blank">
                     <img src="{{ entity_context.chief_image.url|resize:"128" }}">
                 </a>
             {% else %}
@@ -16,7 +16,7 @@
         {% endfor %}
     </div>
     {% if user_id == None %}
-        <a href="{% url 'web_tags' tag_context.tag_hash %}" class="more" target="_blank" >
+        <a href="{% url 'web_tag_detail' tag_context.tag_hash %}" class="more" target="_blank" >
             <span>{{ tag_context.entity_count }}</span>件商品
         </a>
     {% else %}
