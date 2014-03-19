@@ -1,4 +1,3 @@
-
 #add-entity {
 
 }
@@ -16,7 +15,9 @@
 }
 
 #add-entity .entity .container {
-    padding: 30px 0 30px 75px;
+    padding: 30px;
+    margin-top:10px;
+    border: 1px solid #ddd;
     min-height: 300px;
 }
 
@@ -26,15 +27,31 @@
 
 #add-entity .load-entity .text-input {
     width: 435px;
+    height: 25px;
     margin-right: 10px;
-    padding: 6px 4px;
+    padding: 5px 10px;
     vertical-align: bottom;
     font-size: 12px;
     color: #999;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+#add-entity .load-entity .text-input:hover,#add-entity .load-entity .text-input:focus{
+    border: 1px solid #aaa;
+}
+
+#add-entity .load-entity input[type='submit']{
+    padding: 9px 20px;
+    background: #427ec0;
+    border: 1px solid #216db0;
+    color: white;
+    border-radius: 4px;
 }
 
 #add-entity .entity-detail {
     margin-top: 30px;
+    display: none;
 }
 
 #add-entity .entity-detail .brand {
@@ -48,10 +65,14 @@
 
 #add-entity .entity-detail .text-input {
     display: block;
-    margin-top: 10px;
-    padding: 6px 4px;
+    height: 25px;
+    margin-right: 10px;
+    padding: 5px 10px;
+    vertical-align: bottom;
     font-size: 12px;
     color: #999;
+    border: 1px solid #ddd;
+    outline: none;
 }
 
 #add-entity .entity-detail .brand .text-input {
@@ -171,6 +192,7 @@
 #add-entity .aside div {
     margin-top: 15px;
 }
+
 
 
 

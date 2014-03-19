@@ -777,7 +777,28 @@ $(function(){
 		}
 	});
 
-    $(".forget_input").on("keyup",function(){
+    $(".load-entity input[type='submit']").on("click",function(){
+        var entity_url = $("input[name='cand_url']").val();
+        var request_url = $(".load-entity").attr("sd");
+        $.ajax({
+            type:"post",
+            url:request_url,
+            data:{cand_url:entity_url},
+            dataType:"json",
+            success:function(data){
+                console.log(data);
+                $(".entity-detail").slideDown();
+                $(".detail_title").text(data.data.taobao_title);
+                $(".detail_title_input").val(data.data.taobao_title);
+                $(".detail_taobao_brand").val(data.data.shop_nick);
+                $(".detail_chief_url img").attr("src",data.data.chief_image_url);
+            },
+            error:function(msg){
+                console.log(msg);
+            }
+        });
+    });
+    $(".forget_input").on("keyup change click",function(){
         if($.trim($(this).val()).length>0)
         $(".row input[type='submit']").removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
         else

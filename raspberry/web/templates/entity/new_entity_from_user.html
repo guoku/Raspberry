@@ -3,6 +3,7 @@
 
 {% block title %}添加商品 － 果库{% endblock %}
 {% block css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'styles/entity.css' %}">{% endblock %}
 
 {% block content %}
@@ -11,39 +12,36 @@
 
         <div class="entity">
             <div class="guoku-block container">
-                <form action="{% url 'web_load_item_info' %}" method="POST" class="load-entity">
+                <div sd="{% url 'web_load_item_info' %}"  class="load-entity">
                     <p>选择货真价实，有用、有趣、有价值的好商品 </p>
                     <input type="text" class="text-input" name="cand_url" placeholder="粘贴商品链接到这里" value="{{ cand_url }}">
                     <input type="submit" value="载入" class="guoku-button">
-                </form>
-
-                {% if is_post %}
-                    <div class="entity-detail">
-                        <div>
-                            <div class="brand">
-                                <span>品牌</span>
-                                <input type="text" class="text-input" placeholder="如果有">
-                            </div>
-                            <div class="title">
-                                <span>商品名称</span>
-                                <input type="text" class="text-input" value="{{ taobao_title }}">
-                            </div>
+                </div>
+				<div class="entity-detail">
+                    <div>
+                        <div class="brand">
+                            <p>品牌</p>
+                            <input type="text" class="text-input detail_taobao_brand" placeholder="如果有">
                         </div>
-
-                        <h3>{{ taobao_title }}</h3>
-                        <div class="img-container">
-                            <img src="{{ chief_image_url }}">
-                        </div>
-                        <div class="detail-img">
-                            {% for url in thumb_images %}
-                                <div>
-                                    <img src="{{ url }}">
-                                </div>
-                            {% endfor %}
+                        <div class="title">
+                            <p>商品名称</p>
+                            <input type="text" class="text-input detail_title_input">
                         </div>
                     </div>
-                {% endif %}
-            </div>
+
+                    <h3 class="detail_title"></h3>
+                    <div class="img-container detail_chief_url">
+                        <img />
+                    </div>
+                    <div class="detail-img">
+                        {% for url in thumb_images %}
+                            <div>
+                                <img src="{{ url }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+       	    </div>
 
             {% if is_post %}
                 <div class="add-note">
