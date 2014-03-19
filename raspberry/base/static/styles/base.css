@@ -171,19 +171,22 @@ button {
 #header .nav-bar .add-entity {
     /*display: inline-block;*/
     float: right;
-    background: url("/static/v3/images/toolkit.png") no-repeat;
+    /*background: url("/static/v3/images/toolkit.png") no-repeat;*/
     background-position: -220px -82px;
     padding: 0;
-    width: 22px;
-    height: 22px;
-    margin-top: 12px;
+    /*width: 22px;*/
+    /*height: 22px;*/
+    /*margin-top: 12px;*/
     margin-right: 25px;
 }
 
 #header .nav-bar .add-entity a {
+    display: block;
     background: url("/static/v3/images/toolkit.png") no-repeat;
     background-position: -220px -82px;
-    /*margin-top: 12px;*/
+    width: 22px;
+    height: 22px;
+    margin-top: 12px;
     /*width: 22px;*/
     /*height: 22px;*/
 }
