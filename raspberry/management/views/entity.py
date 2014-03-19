@@ -398,7 +398,7 @@ def entity_list(request):
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
         for _entity_id in _entity_id_list:
-            try:
+            # try:
                 _entity = Entity(_entity_id)
                 _entity_context = _entity.read()
                 _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
@@ -432,8 +432,8 @@ def entity_list(request):
                             _entity_context['is_selected'] = True
                             break
                 _entity_context_list.append(_entity_context)
-            except Exception, e:
-                pass
+            # except Exception, e:
+            #     pass
         
         return render_to_response( 
             'entity/list.html', 

@@ -191,7 +191,7 @@ function initTag(){
             init();
         });
     };
-    
+
     var util = {
         isUserLogined: function () {
             // 通过前端简单检测用户是否登录，该方法是不可靠的，后端仍需要检测限制
@@ -239,7 +239,6 @@ function initTag(){
 
         like: function () {
             // 喜爱 like entity
-
             var self = this;
             $('.like').live('click', function (e) {
                 if (!self.isUserLogined()) {
@@ -315,6 +314,37 @@ function initTag(){
                         $html.appendTo(object);
                     }
                 }
+            });
+        },
+
+        shareWeibo: function() {
+//            var self = this;
+
+            $('.share a').live('click', function(e){
+//                console.log(this);
+                e.preventDefault();
+
+                var url = location.href;
+//                console.log(url);
+                var pic = $('.entity-img img').attr("src");
+                var content = $('.selection-note .note-item .note-detail p').html();
+                console.log(content);
+                var param = {
+                    url:url,
+                    type:'3',
+                    count:'0',
+                    appkey:'1459383851',
+                    title:content,
+                    pic:pic,
+                    ralateUid:'2179686555',
+                    rnd:new Date().valueOf()
+                };
+                var temp = [];
+                for( var p in param ){
+                    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+                }
+                var link = "http://service.weibo.com/share/share.php?" + temp.join('&');
+                window.open(link);
             });
         }
     };
@@ -748,6 +778,7 @@ function initTag(){
         util.like();
         util.noteHover();
         util.popularHover();
+        util.shareWeibo();
 
         clickToTop.caculateRight();
         clickToTop.bindClick();
