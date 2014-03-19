@@ -23,6 +23,12 @@ urlpatterns = patterns(
 urlpatterns += patterns(
     'web.views.tag',
     url(r'^tag/suggest/$', 'tag_suggest', name='web_tag_suggest'),
+    url(r'^tag/(?P<tag>\w+)/$', 'tag_origin', name='web_tag_origin'),
+)
+
+urlpatterns += patterns(
+    'web.views.other',
+    url(r'^download/ios/$', 'download_ios', name='web_download_ios'),
 )
 
 urlpatterns += patterns(
@@ -46,6 +52,7 @@ urlpatterns += patterns(
     url(r'^taobao/bind/$', 'bind_taobao', name="web_bind_taobao"),
     url(r'^taobao/unbind/$', 'unbind_taobao', name="web_unbind_taobao"),
     url(r'^taobao/auth/$', 'auth_by_taobao', name="web_auth_by_taobao"),
+    url(r'^reset_password/$', 'reset_password', name='web_reset_password'),
 
     url(r'^account/', include('web.urls.account')),
     url(r'^u/', include('web.urls.user')),

@@ -6,13 +6,16 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.utils.log import getLogger
 
-from utils.paginator import Paginator
 from base.user import User
 from base.category import Old_Category
 from base.entity import Entity
 from base.note import Note
 from base.models import NoteSelection
 from base.tag import Tag
+from utils.lib import get_client_ip
+from utils.paginator import Paginator
+from web.tasks import WebLogTask
+import datetime 
 
 
 TEMPLATE = 'user/index.html'
@@ -23,16 +26,19 @@ def user_index(request, user_id):
 
 
 def user_likes(request, user_id, template=TEMPLATE):
+    _start_at = datetime.datetime.now()
     _category_id = request.GET.get('c', None)
     _page_num = int(request.GET.get('p', '1'))
     _price = request.GET.get('price', None)
     _query_user = User(user_id)
     _query_user_context = _query_user.read() 
     if request.user.is_authenticated():
-        _request_user_context = User(request.user.id).read() 
+        _request_user_id = request.user.id
+        _request_user_context = User(_request_user_id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
     else:
+        _request_user_id = None
         _request_user_context = None
         _request_user_like_entity_set = []
         _relation = None 
@@ -53,6 +59,20 @@ def user_likes(request, user_id, template=TEMPLATE):
             _entity_list.append(_entity_context)
         except Exception, e:
             pass
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='USER_LIKE', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'user_id' : int(user_id),
+            'result_entities' : _entity_id_list,
+        },
+    )
 
     return render_to_response(
         template,
@@ -72,13 +92,16 @@ def user_likes(request, user_id, template=TEMPLATE):
 
 
 def user_notes(request, user_id, template=TEMPLATE):
+    _start_at = datetime.datetime.now()
     _query_user = User(user_id)
     _query_user_context = _query_user.read() 
     if request.user.is_authenticated():
-        _request_user_context = User(request.user.id).read() 
+        _request_user_id = request.user.id
+        _request_user_context = User(_request_user_id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
     else:
+        _request_user_id = None 
         _request_user_context = None
         _request_user_like_entity_set = []
         _relation = None 
@@ -106,6 +129,20 @@ def user_notes(request, user_id, template=TEMPLATE):
             )
         except Exception, e:
             pass
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='USER_NOTE', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'user_id' : int(user_id),
+            'result_notes' : _note_id_list,
+        },
+    )
 
     return render_to_response(
         template,
@@ -122,12 +159,15 @@ def user_notes(request, user_id, template=TEMPLATE):
 
 
 def user_tags(request, user_id, template=TEMPLATE):
+    _start_at = datetime.datetime.now()
     _query_user = User(user_id)
     _query_user_context = _query_user.read() 
     if request.user.is_authenticated():
-        _request_user_context = User(request.user.id).read() 
+        _request_user_id = request.user.id 
+        _request_user_context = User(_request_user_id).read() 
         _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
     else:
+        _request_user_id = None 
         _request_user_context = None
         _relation = None 
 
@@ -137,21 +177,40 @@ def user_tags(request, user_id, template=TEMPLATE):
     _paginator = Paginator(_page_num, 20, len(_tag_stat_list))
 
     _tag_list = []
+    _log_tags = []
     for _tag_stat in _tag_stat_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
-        _tag_id = _tag_stat['tag_id']
-        _tag_hash = _tag_stat['tag_hash']
-        _tag = _tag_stat['tag']
-        _entity_id_list = Tag.find_user_tag_entity(user_id, _tag)
-        _entity_count = len(_entity_id_list)
-        _entity_list = [Entity(x).read() for x in _entity_id_list[:4]]
-
-        _tag_list.append({
-            'tag' : _tag,
-            'tag_id' : _tag_id,
-            'tag_hash' : _tag_hash,
-            'entity_list' : _entity_list,
-            'entity_count' : _entity_count
-        })
+        try:
+            _tag_id = _tag_stat['tag_id']
+            _tag_hash = _tag_stat['tag_hash']
+            _tag = _tag_stat['tag']
+            _entity_id_list = Tag.find_user_tag_entity(user_id, _tag)
+            _entity_count = len(_entity_id_list)
+            _entity_list = [Entity(x).read() for x in _entity_id_list[:4]]
+    
+            _tag_list.append({
+                'tag' : _tag,
+                'tag_id' : _tag_id,
+                'tag_hash' : _tag_hash,
+                'entity_list' : _entity_list,
+                'entity_count' : _entity_count
+            })
+            _log_tags.append(_tag)
+        except Exception, e:
+            pass
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='USER_TAGS', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'user_id' : int(user_id),
+            'result_tags' : _log_tags 
+        },
+    )
 
     return render_to_response(
         template,
@@ -168,12 +227,15 @@ def user_tags(request, user_id, template=TEMPLATE):
 
 
 def user_followings(request, user_id, template=TEMPLATE):
+    _start_at = datetime.datetime.now()
     _query_user = User(user_id)
     _query_user_context = _query_user.read() 
     if request.user.is_authenticated():
-        _request_user_context = User(request.user.id).read() 
+        _request_user_id = request.user.id 
+        _request_user_context = User(_request_user_id).read() 
         _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
     else:
+        _request_user_id = None 
         _request_user_context = None
         _relation = None 
 
@@ -185,10 +247,26 @@ def user_followings(request, user_id, template=TEMPLATE):
     _paginator = Paginator(_page_num, 20, len(_following_id_list))
     _following_list = []
     for _u_id in _following_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
-        _f_user_context = User(_u_id).read()
-        if _request_user_context != None:
-            _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
-        _following_list.append(_f_user_context)
+        try:
+            _f_user_context = User(_u_id).read()
+            if _request_user_context != None:
+                _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
+            _following_list.append(_f_user_context)
+        except Exception, e:
+            pass
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='USER_FOLLOWINGS', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'user_id' : int(user_id),
+        },
+    )
 
     return render_to_response(
         template,
@@ -205,12 +283,15 @@ def user_followings(request, user_id, template=TEMPLATE):
 
 
 def user_fans(request, user_id, template=TEMPLATE):
+    _start_at = datetime.datetime.now()
     _query_user = User(user_id)
     _query_user_context = _query_user.read() 
     if request.user.is_authenticated():
-        _request_user_context = User(request.user.id).read() 
+        _request_user_id = request.user.id 
+        _request_user_context = User(_request_user_id).read() 
         _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
     else:
+        _request_user_id = None 
         _request_user_context = None
         _relation = None 
 
@@ -223,6 +304,19 @@ def user_fans(request, user_id, template=TEMPLATE):
         _f_user_context = User(_u_id).read()
         _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
         _fans_list.append(_f_user_context)
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='USER_FANS', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'user_id' : int(user_id),
+        },
+    )
 
     return render_to_response(
         template,
@@ -251,16 +345,44 @@ def follow(request, user_id, target_status):
             return HttpResponse('1')
 
 def user_tag_entity(request, user_id, tag_hash, template="tag/tag_detail.html"):
+    _start_at = datetime.datetime.now()
+    _request_user_id = request.user.id if request.user.is_authenticated() else None 
     _user_context = User(user_id).read()
     _tag_text = Tag.get_tag_text_from_hash(tag_hash)
+    
+    _page_num = request.GET.get('p', 1)
+    
     _entity_id_list = Tag.find_user_tag_entity(user_id, _tag_text)
-    _entities = map(lambda x: Entity(x).read(), _entity_id_list)
+    _paginator = Paginator(_page_num, 24, len(_entity_id_list))
+    
+    _entities = [] 
+    for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
+        try:
+            _entities.append(Entity(_entity_id).read())
+        except Exception, e:
+            pass
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='USER_TAG', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'tag' : _tag_text, 
+            'user_id' : int(user_id), 
+            'result_entities' : _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
+        },
+    )
     
     return render_to_response(template,
         {
             'tag': _tag_text,
             'entities': _entities,
             'user_context' : _user_context,
+            'paginator' : _paginator
         },
         context_instance = RequestContext(request)
     )

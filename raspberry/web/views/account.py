@@ -334,7 +334,7 @@ def change_password(request):
     form = ChangePasswordForm(request.user, request.POST)
     _user = User(request.user.id)
     if form.is_valid():
-        _user.reset_account(password = form.cleaned_data['new_password'])
+        _user.reset_account(password=form.cleaned_data['new_password'])
     return HttpResponseRedirect(reverse("web_setting"))
 
 @require_POST
@@ -391,4 +391,46 @@ def update_avatar(request):
         _user.upload_avatar(_image_data)
         
         return HttpResponseRedirect(reverse('web_setting')) 
+
+def reset_password(request, template='account/reset_password.html'):
+    if request.method == "GET":
+        _token = request.GET.get("token", None)
+        if _token:
+            _result = User.check_one_time_token(_token, "reset_password")
+            if _result['status'] == 'available': 
+                return render_to_response(
+                    template, 
+                    {
+                        'status' : _result['status'], 
+                        'token' : _token,
+                        'user_context' : User(_result['user_id']).read() 
+                    },
+                    context_instance = RequestContext(request)
+                )
+            else:
+                return render_to_response(
+                    template,
+                    { 
+                        'status' : _result['status'] 
+                    },
+                    context_instance=RequestContext(request)
+                )
+    elif request.method == "POST":
+        _token = request.POST.get("token", None)
+        _password = request.POST.get("password", None)
+        _result = User.check_one_time_token(_token, "reset_password")
+        if _result['status'] == 'available': 
+            _user = User(_result['user_id'])
+            _user.reset_account(password=_password)
+            User.confirm_one_time_token(_token)
+            return HttpResponseRedirect(reverse('web_selection'))
+        
+        else:
+            return render_to_response(
+                template,
+                { 
+                    'status' : _result['status'] 
+                },
+                context_instance=RequestContext(request)
+            )
 

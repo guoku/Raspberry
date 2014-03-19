@@ -3,10 +3,13 @@
 {% load web_common %}
 
 {% block title %}
-    {{ query_user_context.nickname|default:'我' }}的果库
+    {{ query_user_context.nickname|default:'我的果库' }}
     {% block subtitle %}{% endblock %}
 {% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">
+{% endblock %}
+
 {% block content %}
     <div id="user-center">
         <div class="base">
@@ -69,14 +72,6 @@
                         </li>
                         {% if category_list|length > forloop.counter %}&sdot;{% endif %}
                     {% endfor %}
-                </ul>
-
-                <ul class="prices">
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}">按价格</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=1" class="price">0-99</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=2" class="price">100-499</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=3" class="price">500-999</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=4" class="price">1000+</a></li>
                 </ul>
 
                 {% if entity_list|length > 0 %}

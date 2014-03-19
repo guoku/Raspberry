@@ -6,9 +6,10 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.views.decorators.http import require_GET, require_POST
 from django.template import RequestContext
-from urlparse import urlparse
+from django.utils.log import getLogger
 from django.template import loader
-from share.tasks import DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
+from urlparse import urlparse
+import datetime 
 import json
 import re
 import HTMLParser
@@ -21,19 +22,24 @@ from base.tag import Tag
 from base.category import Category
 from base.taobao_shop import GuokuPlusActivity
 from share.tasks import CreateTaobaoShopTask
+from share.tasks import CreateTaobaoShopTask, DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
+from web.tasks import WebLogTask
 from utils.extractor.taobao import TaobaoExtractor 
 from utils.taobao import parse_taobao_id_from_url
-from django.utils.log import getLogger
+from utils.lib import get_client_ip
 
 log = getLogger('django')
 
 
 def entity_detail(request, entity_hash, template='main/detail.html'):
+    _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
+        _request_user_id = request.user.id
         _request_user_context = User(request.user.id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _request_user_poke_note_set = Note.poke_set_of_user(request.user.id)
     else:
+        _request_user_id = None 
         _request_user_context = None
         _request_user_like_entity_set = []
         _request_user_poke_note_set = []
@@ -87,11 +93,30 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                 })
 
     _guess_entity_context = []
+    _guess_entity_id_list = []
     for _guess_entity_id in Entity.roll(category_id=_entity_context['category_id'], count=5):
-        if _guess_entity_id != _entity_id: 
-            _guess_entity_context.append(Entity(_guess_entity_id).read())
-            if len(_guess_entity_context) == 4:
-                break
+        try:
+            if _guess_entity_id != _entity_id: 
+                _guess_entity_context.append(Entity(_guess_entity_id).read())
+                _guess_entity_id_list.append(_entity_id)
+                if len(_guess_entity_context) == 4:
+                    break
+        except Exception, e:
+            pass
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='ENTITY', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'entity_id' : int(_entity_id),
+            'guess_entities' : _guess_entity_id_list,
+        },
+    )
     
     return render_to_response(
         template,
@@ -114,6 +139,13 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     )
 
 def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
+    _start_at = datetime.datetime.now()
+    if request.user.is_authenticated():
+        _request_user_id = request.user.id
+    else:
+        _request_user_id = None 
+    
+    
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
     
@@ -140,6 +172,20 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
     _liker_list = []
     for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
         _liker_list.append(User(_liker[0]).read())
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds,
+        entry='wap',
+        page='ENTITY', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'entity_id' : int(_entity_id),
+        },
+    )
 
     return render_to_response(
         template,

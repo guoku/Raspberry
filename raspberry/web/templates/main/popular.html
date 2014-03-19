@@ -4,7 +4,10 @@
 {% load web_common %}
 
 {% block title %}热门{% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">
+{% endblock %}
+
 {% block content %}
     <div id="popular">
         <div class="time">
@@ -19,7 +22,16 @@
 
         <ul class="entities">
             {% for popular in popular_list %}
-                <li>
+                <li class="popular-entity">
+                    <div class="title">
+                        <h2>
+                            {% if popular.entity_context.brand|length != 0 %}
+                                {{ popular.entity_context.brand }}
+                                -{% endif %}
+                            {{ popular.entity_context.title }}
+                        </h2>
+                        <span class="price">&#65509;{{ popular.entity_context.price }}</span>
+                    </div>
                     <a href="{% url 'web_detail' popular.entity_context.entity_hash %}" class="entity-img">
                         <img alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
                     </a>
@@ -32,8 +44,7 @@
                         {% endif %}
                             <span class="icon"></span>喜爱
                             <span class="count">{{ popular.entity_context.like_count }}</span>
-                        </a>/
-                        <span class="hot">热度</span>
+                        </a>
                     </div>
                 </li>
             {% endfor %}

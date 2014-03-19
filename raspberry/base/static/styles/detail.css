@@ -1,3 +1,6 @@
+@import "./base.css";
+@import "./normalize.min.css";
+
 #detail .main {
     float: left;
     width: 630px;

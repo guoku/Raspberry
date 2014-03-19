@@ -1,3 +1,6 @@
+@import "./base.css";
+@import "./normalize.min.css";
+
 #selection {
     margin-right: -15px;
     padding: 15px;
