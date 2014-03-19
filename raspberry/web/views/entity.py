@@ -58,8 +58,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         _item_context = Item(_item_id).read()
         _taobao_id = _item_context['taobao_id']
         _guokuplus = GuokuPlusActivity.find_by_taobao_id(_taobao_id)
-        if _guokuplus:
-            _activity_id = _guokuplus['activity_id'] 
+        if _guokuplus.is_active():
+            _activity_id = _guokuplus.read()['activity_id'] 
         if not _item_context['soldout']:
             _is_soldout = False
             break

@@ -253,8 +253,8 @@ def popular(request, template='main/popular.html'):
 @login_required
 def get_guokuplus_token(request):
     activity_id = request.POST.get("activity_id", None)
-    guokuplus = GuokuPlusActivity(activity_id)
-    print activity_id, request.user.id
-    token_context = guokuplus.get_token(request.user.id)
-    return HttpResponse(token_context['token'])
-
+    if activity_id:
+        guokuplus = GuokuPlusActivity(int(activity_id))
+        token_context = guokuplus.get_token(request.user.id)
+        return HttpResponse(token_context['token'])
+    return HttpResponse("error")
