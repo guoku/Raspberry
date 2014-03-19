@@ -777,11 +777,94 @@ $(function(){
 		}
 	});
 
-    $(".forget_input").on("keyup",function(){
-        if($.trim($(this).val()).length>0)
-        $(".row input[type='submit']").removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
-        else
-        $(".row input[type='submit']").removeClass("btn-update").addClass("btn-disabled").attr("disabled","true");
+    $(".load-entity input[type='submit']").on("click",function(){
+        var entity_url = $("input[name='cand_url']").val();
+        var request_url = $(".load-entity").attr("sd");
+        $.ajax({
+            type:"post",
+            url:request_url,
+            data:{cand_url:entity_url},
+            dataType:"json",
+            success:function(data){
+                console.log(data);
+                $(".entity-detail").slideDown();
+                $(".detail_title").text(data.data.taobao_title);
+                $(".detail_title_input").val(data.data.taobao_title);
+                $(".detail_taobao_brand").val(data.data.shop_nick);
+                $(".detail_chief_url img").attr("src",data.data.chief_image_url);
+                for(var i=0;i<data.data.thumb_images.length;i++){
+                    $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                    $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'/>').appendTo($(".detail form"));
+                }
+
+                $('<input type="hidden" name="url" value='+data.data.cand_url+'/><input type="hidden" value='+data.data.taobao_titie+' /><input type="hidden" name="chief_image_url" value='+data.data.chief_image_url+'/><input type="hidden" name="brand"/><input name="user_id" type="hidden" value='+data.data.user_context.user_id+'/>').appendTo($(".detail form"));
+            },
+            error:function(msg){
+                console.log(msg);
+            }
+        });
     });
+    $(".detail form").on("submit",function(){
+        var brand = $(".detail_taobao_brand").val();
+        if(brand.length>0){
+            $('<input name="brand" value='+brand+' />').appendTo($(".detail form"));
+            return true;
+        }else{
+            return false;
+        }
+    });
+    $("#forget_sendmail").on("click",function(){
+        var email = $(".forget_input").val();
+        var request_url = $(".password").attr("sd");
+        $.ajax({
+            type:"post",
+            url:request_url,
+            data:{email:email},
+            success:function(data){
+                console.log(data);
+                switch(data){
+                    case "success":
+                        send_status(false);
+                        var s = 60;
+                        $("#forget_sendmail").html("发送成功！<i>60</i>秒后可重新发送！");
+                        var t = setInterval(function(){
+                            console.log(s);
+                            s -=1;
+                            if(s>=0)
+                                $("#forget_sendmail").html("发送成功！<i>"+s+"</i>秒后可重新发送！");
+                            else{
+                                $("#forget_sendmail").html("发送邮件！");
+                                send_status(true);
+                                clearInterval(t);
+                            }
+                        },1000);
+                    break;
+                    case "not_exist":
+                        $(".forget_input_tip").html('该邮箱尚未注册，<a href="">点此注册</a>').show();
+                    break;
+                    case "failed":
+                        $(".forget_input_tip").html('发送失败,请尝试重新发送！').show();
+                    break;
+                    default:
+                        $(".forget_input_tip").html('发送失败,请尝试重新发送！').show();
+                    break;
+                }
+            }
+        });
+    });
+    $(".forget_input").on("keyup change click",function(){
+        if($.trim($(this).val()).length>0)
+        send_status(true);
+        else
+        send_status(false);
+    });
+
+    function send_status(flag){
+        if(flag){
+            $("#forget_sendmail").removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
+        }else{
+            $("#forget_sendmail").removeClass("btn-update").addClass("btn-disabled").attr("disabled","true");
+        }
+    }
 });
 	

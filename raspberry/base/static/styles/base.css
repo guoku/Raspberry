@@ -725,7 +725,7 @@ button {
 }
 
 .common-entity .entity-img img {
-    max-width: 210px;
+    max-width: 208px;
     max-height: 210px;
 }
 
@@ -1006,6 +1006,12 @@ button {
     color: #333;
 }
 /*forget password*/
+#forget_sendmail{
+    height: 40px;
+    font-weight: 700;
+    border-radius: 2px;
+    margin:30px 0 0 94px;
+}
 .forget_tip{
     font-size: 20px;
     padding-bottom: 10px;
@@ -1031,6 +1037,7 @@ button {
     margin:30px 0 0 94px;
 }
 .forget_input_tip{
+    display: none;
     padding-left:40px; 
 }
 .forget_email_tip{
