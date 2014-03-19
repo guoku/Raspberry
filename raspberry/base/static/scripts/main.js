@@ -793,13 +793,25 @@ $(function(){
                 $(".detail_taobao_brand").val(data.data.shop_nick);
                 $(".detail_chief_url img").attr("src",data.data.chief_image_url);
                 for(var i=0;i<data.data.thumb_images.length;i++){
-                    $(".detail_thumb_images").append('<img src='+data.data.thumb_images[i]+'_50x50.jpg'+' />');
+                    $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                    $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'/>').appendTo($(".detail form"));
                 }
+
+                $('<input type="hidden" name="url" value='+data.data.cand_url+'/><input type="hidden" value='+data.data.taobao_titie+' /><input type="hidden" name="chief_image_url" value='+data.data.chief_image_url+'/><input type="hidden" name="brand"/><input name="user_id" type="hidden" value='+data.data.user_context.user_id+'/>').appendTo($(".detail form"));
             },
             error:function(msg){
                 console.log(msg);
             }
         });
+    });
+    $(".detail form").on("submit",function(){
+        var brand = $(".detail_taobao_brand").val();
+        if(brand.length>0){
+            $('<input name="brand" value='+brand+' />').appendTo($(".detail form"));
+            return true;
+        }else{
+            return false;
+        }
     });
     $("#forget_sendmail").on("click",function(){
         var email = $(".forget_input").val();

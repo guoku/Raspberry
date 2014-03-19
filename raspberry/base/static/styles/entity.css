@@ -103,20 +103,15 @@
     margin-top: 20px;
     padding-bottom: 30px;
 }
-
-#add-entity .detail-img div {
+#add-entity .detail-img div{
     display: inline-block;
-    width: 30px;
-    height: 30px;
-    padding: 3px;
-    border: 1px solid #dedede;
-    border-radius: 2px;
-    cursor: pointer;
 }
-
 #add-entity .detail-img div img {
-    width: 100%;
-    height: 100%;
+    width: 50px;
+    height: 50px;
+    margin: 5px 5px 5px 0px;
+    padding:3px;
+    border: 1px solid #ddd; 
 }
 
 #add-entity .add-note {
@@ -150,12 +145,18 @@
 }
 
 #add-entity .add-note textarea {
-    width: 532px;
-    height: 100px;
-    margin: 15px 0 10px;
+    width: 520px;
+    margin: 5px 0 10px;
     padding: 2px;
     resize: none;
     color: #666;
+    border: 1px solid #ddd;
+    padding:10px 5px ;
+    outline: none;
+}
+
+#add-entity .add-note textarea:hover,#add-entity .add-note textarea:focus{
+    border: 1px solid #ccc;
 }
 
 #add-entity .add-note form div {
@@ -178,6 +179,14 @@
     margin-bottom: 5px;
 }
 
+#add-entity .add-note input[type='submit']{
+    padding: 9px 20px;
+    background: #427ec0;
+    border: 1px solid #216db0;
+    color: white;
+    border-radius: 4px;
+}
+
 #add-entity .aside {
     float: right;
     width: 255px;
@@ -192,17 +201,3 @@
 #add-entity .aside div {
     margin-top: 15px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
