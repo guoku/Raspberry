@@ -161,7 +161,7 @@ class Item(object):
     
     @staticmethod
     def generate_taobao_item_url(taobao_id):
-        _url = "http://www.guoku.com/visit_item?item_id=%s" % taobao_id + "&type=mobile"
-        #_url = "http://10.0.1.109/mobile/v3/item/%s/visit/" % item_id + "?type=mobile"
+        #_url = settings.APP_HOST + "/visit_item?item_id=%s" % taobao_id + "&type=mobile"
+        _url = settings.APP_HOST + "/mobile/v3/item/%s/visit/" % item_id + "?type=mobile"
         return _url
 

@@ -107,8 +107,8 @@ button {
 /*------------------------------------*/
 
 .control-group {
-    width: 345px;
-    margin: 0 auto 15px auto;
+    width: 445px;
+    margin: 0 200px 15px auto;
     /*margin-bottom: 15px;*/
 }
 
@@ -143,6 +143,19 @@ button {
     top: 9px;
 }
 
+
+#header .nav-bar {
+    /*float: left;*/
+    position: absolute;
+    top: 0;
+    left: 127px;
+    height: 49px;
+    width: 500px;
+    line-height: 49px;
+    margin: 0;
+    padding: 0;
+}
+
 #header li {
     float: left;
     margin-right: 25px;
@@ -154,16 +167,27 @@ button {
     color: #fff;
 }
 
-#header .nav-bar {
-    /*float: left;*/
-    position: absolute;
-    top: 0;
-    left: 127px;
-    height: 49px;
-    line-height: 49px;
-    margin: 0;
+
+#header .nav-bar .add-entity {
+    /*display: inline-block;*/
+    float: right;
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    background-position: -220px -82px;
     padding: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 12px;
+    margin-right: 25px;
 }
+
+#header .nav-bar .add-entity a {
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    background-position: -220px -82px;
+    /*margin-top: 12px;*/
+    /*width: 22px;*/
+    /*height: 22px;*/
+}
+
 
 #header .icon-menu, .icon-guoku, .icon-setting, .icon-signout {
     position: absolute;
@@ -698,7 +722,7 @@ button {
 }
 
 .common-entity .entity-img img {
-    max-width: 210px;
+    max-width: 208px;
     max-height: 210px;
 }
 
@@ -979,6 +1003,12 @@ button {
     color: #333;
 }
 /*forget password*/
+#forget_sendmail{
+    height: 40px;
+    font-weight: 700;
+    border-radius: 2px;
+    margin:30px 0 0 94px;
+}
 .forget_tip{
     font-size: 20px;
     padding-bottom: 10px;
@@ -1004,6 +1034,7 @@ button {
     margin:30px 0 0 94px;
 }
 .forget_input_tip{
+    display: none;
     padding-left:40px; 
 }
 .forget_email_tip{
