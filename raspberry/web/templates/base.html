@@ -51,6 +51,7 @@
         <ul class="nav-bar">
             <li {% if web_selection in request.path %}class="active"{% endif %}><a href="{% url 'web_selection' %}">精选</a></li>
             <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
+            <li><a class="add-entity" href=""></a></li>
         </ul>
 
 
@@ -63,7 +64,6 @@
                 <li><a href="{% url 'web_register' %}">{% trans 'sign up' %}</a></li>
             {% endif %}
         </ul>
-
 
         {% block search %}
             <form action="{% url 'web_search' %}" method="GET">

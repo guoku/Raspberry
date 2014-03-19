@@ -165,6 +165,15 @@ button {
     padding: 0;
 }
 
+#header .nav-bar .add-entity {
+    display: inline-block;
+    float: right;
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    background-position: -220px -82px;
+    width: 22px;
+    height: 22px;
+}
+
 #header .icon-menu, .icon-guoku, .icon-setting, .icon-signout {
     position: absolute;
     background: url("/static/v3/images/toolkit.png") no-repeat;
