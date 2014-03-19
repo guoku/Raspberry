@@ -33,40 +33,33 @@
                     <div class="img-container detail_chief_url">
                         <img />
                     </div>
-                    <div class="detail-img">
-                        {% for url in thumb_images %}
-                            <div>
-                                <img src="{{ url }}">
-                            </div>
-                        {% endfor %}
+                    <div class="detail-img detail_thumb_images">
+                        
                     </div>
                 </div>
        	    </div>
+            <div class="add-note">
+                <h3>点评</h3>
 
-            {% if is_post %}
-                <div class="add-note">
-                    <h3>点评</h3>
+                <div class="guoku-block note-container">
+                    <a href="" class="avatar"><img src="{{ user_context.avatar_small }}" width="50" height="50"></a>
 
-                    <div class="guoku-block note-container">
-                        <a href="" class="avatar"><img src="{{ user_context.avatar_small }}" width="50" height="50"></a>
+                    <div class="detail">
+                        <span class="nickname">{{ user_context.nickname }}</span>
 
-                        <div class="detail">
-                            <span class="nickname">{{ user_context.nickname }}</span>
+                        <form action="" method="POST">
+                            <input type="hidden" name="url" value="{{ cand_url }}" id="entity-url">
+                            <input type="hidden" name="brand" id="entity-brand">
+                            <input type="hidden" name="title" value="{{ taobao_title }}" id="entity-title">
+                            <input type="hidden" name="chief_image_url" value="{{ chief_image_url }}" id="entity-img-url">
 
-                            <form action="{% url 'web_create_entity' %}" method="POST">
-                                <input type="hidden" name="url" value="{{ cand_url }}" id="entity-url">
-                                <input type="hidden" name="brand" id="entity-brand">
-                                <input type="hidden" name="title" value="{{ taobao_title }}" id="entity-title">
-                                <input type="hidden" name="chief_image_url" value="{{ chief_image_url }}" id="entity-img-url">
-
-                                <textarea class="text-input" name="note_text"></textarea>
-                                <div>来说说你的评价吧？欢迎真实、有用、有趣的商品点评。</div>
-                                <input type="submit" value="发表" class="guoku-button">
-                            </form>
-                        </div>
+                            <textarea class="text-input" name="note_text"></textarea>
+                            <div>来说说你的评价吧？欢迎真实、有用、有趣的商品点评。</div>
+                            <input type="submit" value="发表" class="guoku-button">
+                        </form>
                     </div>
                 </div>
-            {% endif %}
+            </div>
         </div>
 
         <div class="aside guoku-block">
