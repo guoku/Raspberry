@@ -3,6 +3,28 @@
 {% block content %}
     {% display_shop_navigator "shop_verification" %}
     <div class="span2">
+        <div class="sub-nav">
+            <ul class="nav nav-pills">
+                <p>
+                <li {%if not status_filter %} class="active" {% endif %}>
+                    <a href="{%url 'management_shop_verification_list' %}">全部</a>
+                </li>
+                </p>
+                <p>
+                <li {%if status_filter == "waiting" %} class="active" {% endif %}>
+                    <a href="{%url 'management_shop_verification_list' %}?status=waiting">等待审核</a>
+                </li>
+                </p>
+                <li {%if status_filter == "approved" %} class="active" {% endif %}>
+                    <a href="{%url 'management_shop_verification_list' %}?status=approved">已通过</a>
+                </li>
+                <p>
+                <li {%if status_filter == "rejected" %} class="active" {% endif %}>
+                    <a href="{%url 'management_shop_verification_list' %}?status=rejected">已拒绝</a>
+                </li>
+                </p>
+            </ul>
+        </div>
     </div>
     <div class="span9">
         <table class="table table-stdiped table-bordered table-condensed">
@@ -46,5 +68,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if paginator %}
+            {% display_paginator paginator %}
+        {% endif %}
     </div>
 {% endblock %}

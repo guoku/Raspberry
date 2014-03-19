@@ -216,10 +216,12 @@ class TaobaoShop(object):
             return None
 
     @classmethod
-    def read_shop_verification_list(cls, offset, count):
+    def read_shop_verification_list(cls, status = None, offset = 0, count = 50):
         _hdl = TaobaoShopVerificationInfo.objects
+        if status:
+            _hdl = _hdl.filter(status = status)
         _count = _hdl.count()
-        _results = _hdl.order_by("-created_time").skip(offset).limit(count)
+        _results = _hdl.order_by("-updated_time").skip(offset).limit(count)
         results = []
         for item in _results:
             results.append({"verification" : item._data, "shop_context" : TaobaoShop(item.shop_nick).read()})
@@ -321,7 +323,12 @@ class GuokuPlusActivity(object):
         if shop_nick:
             _hdl = _hdl.filter(shop_nick = shop_nick)
         if status:
-            _hdl = _hdl.filter(status = status)
+            if status == ACTIVITY_ONGOING:
+                _hdl = _hdl.filter(status = ACTIVITY_APPROVED)
+                time_now = datetime.datetime.now()
+                _hdl = _hdl.filter(start_time__lte = time_now).filter(end_time__gt = time_now)
+            else:
+                _hdl = _hdl.filter(status = status)
         total = _hdl.count()
         _hdl = _hdl[offset : offset + count]
         results = []
