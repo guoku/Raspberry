@@ -328,7 +328,7 @@ function initTag(){
 //                console.log(url);
                 var pic = $('.entity-img img').attr("src");
                 var content = $('.selection-note .note-item .note-detail p').html();
-                console.log(content);
+//                console.log(content);
                 var param = {
                     url:url,
                     type:'3',
