@@ -9,6 +9,7 @@ register = template.Library()
 log = getLogger('django')
 
 def display_note_item(note):
+    log.info(note)
     return {
         'note_context' : note['note_context'],
         'creator_context' : note['creator_context'],

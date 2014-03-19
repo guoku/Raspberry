@@ -43,7 +43,9 @@
                 </a>
 
                 <span class="create-time">{{ note_context.created_time|format_time }}</span>
-                <span class="selection-icon"></span>
+                {% if note_context.is_selected %}
+                    <span class="selection-icon"></span>
+                {% endif %}
                 {% if user_context.user_id == creator_context.user_id %}
                     <a href="javascript:;" class="update-note">修改</a>
                     <span class="my-note">你的点评</span>
