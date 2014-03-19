@@ -51,7 +51,7 @@
         <ul class="nav-bar">
             <li {% if web_selection in request.path %}class="active"{% endif %}><a href="{% url 'web_selection' %}">精选</a></li>
             <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
-            <li><a class="add-entity" href=""></a></li>
+            <li class="add-entity"><a  href="#"></a></li>
         </ul>
 
 

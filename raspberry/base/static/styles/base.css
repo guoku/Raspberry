@@ -143,6 +143,19 @@ button {
     top: 9px;
 }
 
+
+#header .nav-bar {
+    /*float: left;*/
+    position: absolute;
+    top: 0;
+    left: 127px;
+    height: 49px;
+    width: 500px;
+    line-height: 49px;
+    margin: 0;
+    padding: 0;
+}
+
 #header li {
     float: left;
     margin-right: 25px;
@@ -154,25 +167,27 @@ button {
     color: #fff;
 }
 
-#header .nav-bar {
-    /*float: left;*/
-    position: absolute;
-    top: 0;
-    left: 127px;
-    height: 49px;
-    line-height: 49px;
-    margin: 0;
-    padding: 0;
-}
 
 #header .nav-bar .add-entity {
-    display: inline-block;
+    /*display: inline-block;*/
     float: right;
     background: url("/static/v3/images/toolkit.png") no-repeat;
     background-position: -220px -82px;
+    padding: 0;
     width: 22px;
     height: 22px;
+    margin-top: 12px;
+    margin-right: 25px;
 }
+
+#header .nav-bar .add-entity a {
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    background-position: -220px -82px;
+    /*margin-top: 12px;*/
+    /*width: 22px;*/
+    /*height: 22px;*/
+}
+
 
 #header .icon-menu, .icon-guoku, .icon-setting, .icon-signout {
     position: absolute;
