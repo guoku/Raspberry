@@ -409,6 +409,7 @@ def visit_item(request, item_id):
                 appendix = {
                     'site' : 'taobao',
                     'taobao_id' : _item_context['taobao_id'],
+                    'item_id' : item_id, 
                     'entity_id' : _entity_id,
                     'tbk' : True,
                 }

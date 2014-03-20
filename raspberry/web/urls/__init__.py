@@ -36,6 +36,7 @@ urlpatterns += patterns(
     url(r'^m/detail/(?P<entity_hash>\w+)/$', 'wap_entity_detail', name='wap_detail'),
     url(r'^entity/', include('web.urls.entity')),
     url(r'^note/', include('web.urls.note')),
+    url(r'^item/(?P<item_id>\w+)/visit/log/$', 'log_visit_item', name='web_log_visit_item'),
 )
 
 urlpatterns += patterns(
