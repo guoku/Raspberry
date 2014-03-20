@@ -135,8 +135,12 @@ class Entity(models.Model):
         rankmode = 'SPH_RANK_NONE',
     )
 
+    def get_absolute_url(self):
+        return "/detail/%s" % self.entity_hash
+
     class Meta:
         ordering = ['-created_time']
+
 
  
 class Entity_Like(models.Model):
@@ -206,6 +210,10 @@ class Tag(models.Model):
         mode = 'SPH_MATCH_ALL',
         rankmode = 'SPH_RANK_NONE',
     )
+
+    def get_absolute_url(self):
+
+        return "/t/%s" % self.tag_hash
 
     class Meta:
         ordering = ['-created_time']

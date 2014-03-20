@@ -948,7 +948,7 @@ class User(object):
     @staticmethod
     def get_user_id_by_email(email):
         try:
-            _user_obj = AuthUser.objects.get(email = email)
+            _user_obj = AuthUser.objects.get(email=email)
             return _user_obj.id
         except Exception: 
             pass

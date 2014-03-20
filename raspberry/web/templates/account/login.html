@@ -9,13 +9,16 @@
                 <img src="/static/v3/images/signin.png"  alt="欢迎回来">
             </div>
             {% if forms.errors %}
+                {% spaceless %}
             <div class="error-message">
-                {% for field in forms %}
-                    {% for error in field.errors %}
-                        {{ error }}
-                    {% endfor %}
-                {% endfor %}
+                邮箱或密码错误
+{#                {% for field in forms %}#}
+{#                    {% for error in field.errors %}#}
+{#                        {{ error }}#}
+{#                    {% endfor %}#}
+{#                {% endfor %}#}
             </div>
+                {% endspaceless %}
             {% endif %}
             <form action="{% url "web_login" %}" method="POST">
                 {% csrf_token %}
