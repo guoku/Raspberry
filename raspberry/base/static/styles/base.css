@@ -190,6 +190,9 @@ button {
     /*width: 22px;*/
     /*height: 22px;*/
 }
+#header .nav-bar .add-entity a:hover {
+    background-position: -247px -82px;
+}
 
 
 #header .icon-menu, .icon-guoku, .icon-setting, .icon-signout {
