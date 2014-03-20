@@ -33,7 +33,10 @@
 #main .row .image {width:480px;height:360px;}
 #main .row .image img {margin:45px 0 0 45px}
 #main .row .text {margin:0 0 0 0;height:380px;width:480px;padding-left:65px;width:415px;}
-#main .row .text.left {padding-left:75px;width:405px;}
+#main .row .image.left {padding-left:75px;width:405px;float: left;}
+#main .row .text.right {padding-left:75px;width:405px;float: right;}
+#main .row .image.right {padding-left:75px;width:405px;float: left;}
+#main .row .text.left {padding-left:75px;width:405px;float: right;}
 #main .row .text h3 {font-size:26px;color:#666666;margin:130px 0 10px;}
 #main .row .text p {font-size:18px;color:#B8B8B8;}
 #main .row .split {height:1px;width:960px;background:url("/static/v3/images/download/line.png") no-repeat;}
