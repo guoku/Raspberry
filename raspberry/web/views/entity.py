@@ -441,6 +441,7 @@ def log_visit_item(request, item_id):
                 'entity_id' : _entity_id, 
             },
         )
+        return HttpResponse('1')
 
 
 
