@@ -158,6 +158,8 @@ INSTALLED_APPS = (
     # 'redis_admin',
 )
 
+ENABLE_GUOKU_PLUS = True
+
 ips = ['127.0.0.1']
 theRange = range(0, 255, 1)
 for ip in theRange:
