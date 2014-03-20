@@ -133,6 +133,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'liker_list' : _liker_list,
             'tag_list' : _tag_list,
             'guess_entity_context' : _guess_entity_context,
+            'item_id' : _item_context['item_id'],
             'taobao_id' : _taobao_id,
             'activity_id' : _activity_id,
             'is_soldout' : _is_soldout,
@@ -196,6 +197,7 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
             'entity_context' : _entity_context,
             'note_list' : _note_list,
             'liker_list' : _liker_list,
+            'buy_link' : _item_context['buy_link'],
         },
         context_instance=RequestContext(request)
     )
@@ -425,4 +427,31 @@ def delete_note(request, entity_id, note_id):
     if request.method == 'POST':
         # 暂时不需要该功能 以前版本没有
         pass
+
+def log_visit_item(request, item_id):
+    if request.user.is_authenticated():
+        _request_user_id = request.user.id
+    else:
+        _request_user_id = None 
+    if request.method == 'POST':
+        _entry = request.POST.get("entry", "web")
+        _item_id = request.POST.get("item_id", None) 
+        _item_context = Item(item_id).read()
+        _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
+        WebLogTask.delay(
+            duration=0,
+            entry='web',
+            page='CLICK', 
+            request=request.REQUEST, 
+            ip=get_client_ip(request), 
+            log_time=datetime.datetime.now(),
+            request_user_id=_request_user_id,
+            appendix={
+                'site' : 'taobao',
+                'taobao_id' : _item_context['taobao_id'],
+                'item_id' : item_id, 
+                'entity_id' : _entity_id, 
+            },
+        )
+        return HttpResponse('1')
 

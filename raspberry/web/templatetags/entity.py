@@ -26,6 +26,7 @@ register.filter('trans_category', trans_category)
 def resize_image(value, size=640):
     u = re.search("(alicdn|taobaocdn|taobao)\.com", value)
     if u:
+        value = value.replace('_310x310.jpg', '')
         return "%s_%sx%s.jpg" % (value, size, size)
     else:
         return value
