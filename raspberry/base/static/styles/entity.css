@@ -32,7 +32,7 @@
     padding: 5px 10px;
     vertical-align: bottom;
     font-size: 12px;
-    color: #999;
+    color: #333;
     border: 1px solid #ddd;
     outline: none;
 }
@@ -73,6 +73,7 @@
     color: #999;
     border: 1px solid #ddd;
     outline: none;
+    color: #333;
 }
 
 #add-entity .entity-detail .brand .text-input {
@@ -119,11 +120,19 @@
     border:1px solid #ccc;
 }
 #add-entity .add-note {
-    padding: 30px 10px;
+    padding: 0px 10px;
     background: #f9f9f9;
     display: none;
 }
-
+.detail form span{
+    width: 9px;
+    height: 16px;
+    display: block;
+    background: url("../images/arrows.png");
+    position: relative;
+    top:-125px;
+    left: 2px;
+}
 #add-entity .add-note h3 {
     margin: 0 0 5px;
     font-size: 14px;
@@ -137,7 +146,12 @@
 
 #add-entity .add-note .avatar {
     float: left;
+}
+
+#add-entity .add-note .avatar img{
+    float: left;
     margin-right: 10px;
+    border-radius: 25px;
 }
 
 #add-entity .add-note .detail {
@@ -151,19 +165,19 @@
 }
 
 #add-entity .add-note textarea {
-    width: 500px;
+    width: 495px;
     min-height: 100px;
-    margin: 1px 0 10px;
+    margin: 1px 0 10px 10px;
     padding: 2px;
     resize: none;
     color: #666;
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
     padding:10px 5px ;
     outline: none;
 }
 
 #add-entity .add-note textarea:hover,#add-entity .add-note textarea:focus{
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
 }
 
 #add-entity .add-note form div {
