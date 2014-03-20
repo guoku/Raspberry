@@ -191,7 +191,7 @@ function initTag(){
             init();
         });
     };
-    
+
     var util = {
         isUserLogined: function () {
             // 通过前端简单检测用户是否登录，该方法是不可靠的，后端仍需要检测限制
@@ -239,7 +239,6 @@ function initTag(){
 
         like: function () {
             // 喜爱 like entity
-
             var self = this;
             $('.like').live('click', function (e) {
                 if (!self.isUserLogined()) {
@@ -315,6 +314,37 @@ function initTag(){
                         $html.appendTo(object);
                     }
                 }
+            });
+        },
+
+        shareWeibo: function() {
+//            var self = this;
+
+            $('.share a').live('click', function(e){
+//                console.log(this);
+                e.preventDefault();
+
+                var url = location.href;
+//                console.log(url);
+                var pic = $('.entity-img img').attr("src");
+                var content = $('.selection-note .note-item .note-detail p').html();
+//                console.log(content);
+                var param = {
+                    url:url,
+                    type:'3',
+                    count:'0',
+                    appkey:'1459383851',
+                    title:content,
+                    pic:pic,
+                    ralateUid:'2179686555',
+                    rnd:new Date().valueOf()
+                };
+                var temp = [];
+                for( var p in param ){
+                    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+                }
+                var link = "http://service.weibo.com/share/share.php?" + temp.join('&');
+                window.open(link);
             });
         }
     };
@@ -748,6 +778,7 @@ function initTag(){
         util.like();
         util.noteHover();
         util.popularHover();
+        util.shareWeibo();
 
         clickToTop.caculateRight();
         clickToTop.bindClick();
@@ -769,6 +800,7 @@ function initTag(){
 
 })(jQuery, document, window);
 $(function(){
+
 	$(".account-form input[name='password'],.account-form input[name='email']").on("keyup",function(){
 		if($(".account-form input[name='password']").val()!="" && $.trim($(".account-form input[name='email']").val())!=""){
 			$(".account-form input[type='submit']").removeAttr("disabled").removeClass("submit_disabled").addClass("submit");
@@ -788,12 +820,17 @@ $(function(){
             success:function(data){
                 console.log(data);
                 $(".entity-detail").slideDown();
+                $(".add-note").show();
                 $(".detail_title").text(data.data.taobao_title);
                 $(".detail_title_input").val(data.data.taobao_title);
-                $(".detail_taobao_brand").val(data.data.shop_nick);
                 $(".detail_chief_url img").attr("src",data.data.chief_image_url);
+                $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
                 for(var i=0;i<data.data.thumb_images.length;i++){
-                    $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                    if(i==0){
+                        $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                    }else{
+                        $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                    }
                     $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'/>').appendTo($(".detail form"));
                 }
 
@@ -803,6 +840,13 @@ $(function(){
                 console.log(msg);
             }
         });
+    });
+    $("#add-entity .detail-img div img").live("click",function(){
+        $(".current_img").removeClass("current_img");
+        $(this).addClass("current_img");
+        var img_url = $(this).attr("src");
+        var big_url = img_url.replace('50x50','300x300');
+        $(".detail_chief_url img").attr("src",big_url);
     });
     $(".detail form").on("submit",function(){
         var brand = $(".detail_taobao_brand").val();
@@ -826,14 +870,14 @@ $(function(){
                     case "success":
                         send_status(false);
                         var s = 60;
-                        $("#forget_sendmail").html("发送成功！<i>60</i>秒后可重新发送！");
+                        $("#forget_sendmail").html("发送成功！<i>60</i>秒后可重新发送！").attr("send-status",1);
                         var t = setInterval(function(){
                             console.log(s);
                             s -=1;
                             if(s>=0)
                                 $("#forget_sendmail").html("发送成功！<i>"+s+"</i>秒后可重新发送！");
                             else{
-                                $("#forget_sendmail").html("发送邮件！");
+                                $("#forget_sendmail").html("发送邮件！").attr("send-status",0);
                                 send_status(true);
                                 clearInterval(t);
                             }
@@ -853,6 +897,9 @@ $(function(){
         });
     });
     $(".forget_input").on("keyup change click",function(){
+        if($("#forget_sendmail").attr("send-status") == 1){
+            return false;
+        }
         if($.trim($(this).val()).length>0)
         send_status(true);
         else

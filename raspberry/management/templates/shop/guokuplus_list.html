@@ -4,6 +4,25 @@
 {% block content %}
     {% display_shop_navigator "guoku_plus" %}
     <div class="span2">
+        <div class="sub-nav">
+            <ul class="nav nav-pills">
+                <li {%if not status_filter %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}">全部</a>
+                </li>
+                <li {%if status_filter == "waiting" %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}?status=waiting">等待审核</a>
+                </li>
+                <li {%if status_filter == "approved" %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}?status=approved">已通过</a>
+                </li>
+                <li {%if  status_filter == "ongoing" %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}?status=ongoing">进行中</a>
+                </li>
+                <li {%if status_filter == "rejected" %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}?status=rejected">已拒绝</a>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="span9">
         <table class="table table-stdiped table-bordered table-condensed">
@@ -23,10 +42,12 @@
             
                 {% for app in applications %}
                 <tr>
-                <td>{{ app.shop_nick }}</td>
-                <td>{{ app.item_context.title }}</td>
+                <td><a href="{%url 'management_shop_detail'%}?nick={{ app.shop_nick }}">{{ app.shop_nick }}</a></td>
+                <td><a href="{%url 'web_detail' app.entity_context.entity_hash%}">{{ app.item_context.title }}</a></td>
                 <td>
-                    <img width="80" src="{{ app.entity_context.chief_image.url }}"/>
+                    <a href="http://item.taobao.com/item.htm?id={{app.item_context.taobao_id}}">
+                        <img width="80" src="{{ app.entity_context.chief_image.url }}"/>
+                    </a>
                 </td>
                 <td>{{ app.item_context.price }}</td>
                 <td>{{ app.sale_price }}</td>
@@ -39,6 +60,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if paginator %}
+            {% display_paginator paginator %}
+        {% endif %}
     </div>
 {% endblock %}
 

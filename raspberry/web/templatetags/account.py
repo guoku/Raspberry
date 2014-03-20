@@ -15,7 +15,6 @@ register.inclusion_tag("account/partial/avatar_update.html")(display_avatar_upda
 
 def show_auth_user(user_id):
     _user_context = User(user_id).read()
-    log.info(_user_context)
     return {
         'user_context':_user_context,
     }
