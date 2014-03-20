@@ -1,8 +1,9 @@
-{% load entity %}
+{% load entity user %}
 
 <div class="common-user">
     <a class="avatar" href="{% url 'web_user_index' user_context.user_id %}" target="_blank">
-        <img src="{{ user_context.avatar_small }}" width="80" height="80">
+{#        <img src="{{ user_context.avatar_large }}" width="80" height="80">#}
+        {% show_avater user_context.user_id 80 %}
     </a>
     <a href="{% url 'web_user_index' user_context.user_id %}" class="nickname" target="_blank">
         {{ user_context.nickname|truncatechars:10 }}

@@ -4,7 +4,7 @@ from urlparse import urlparse
 
 def get_taobao_url(taobao_id, is_mobile = False, app_key = None):
     if is_mobile:
-        url = "http://a.m.tmall.com/i%s.htm" % taobao_id
+        url = "http://a.m.taobao.com/i%s.htm" % taobao_id
     else:
         url = "http://item.taobao.com/item.htm?id=%s" % taobao_id
         if app_key:

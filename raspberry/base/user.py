@@ -968,6 +968,7 @@ class User(object):
             }
         )
         _mail = Mail(u"重设果库帐号密码", _message)
+        print self.user_obj.email
         _mail.send(
             address = self.user_obj.email
         )

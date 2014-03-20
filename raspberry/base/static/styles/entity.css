@@ -106,16 +106,22 @@
 #add-entity .detail-img div{
     display: inline-block;
 }
+
 #add-entity .detail-img div img {
     width: 50px;
     height: 50px;
     margin: 5px 5px 5px 0px;
     padding:3px;
-    border: 1px solid #ddd; 
+    border: 1px solid #eee; 
+    cursor: pointer;
 }
-
+#add-entity .detail-img .current_img{
+    border:1px solid #ccc;
+}
 #add-entity .add-note {
-    margin-top: 40px;
+    padding: 30px 10px;
+    background: #f9f9f9;
+    display: none;
 }
 
 #add-entity .add-note h3 {
@@ -145,8 +151,9 @@
 }
 
 #add-entity .add-note textarea {
-    width: 520px;
-    margin: 5px 0 10px;
+    width: 500px;
+    min-height: 100px;
+    margin: 1px 0 10px;
     padding: 2px;
     resize: none;
     color: #666;
