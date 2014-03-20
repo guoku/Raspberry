@@ -769,6 +769,7 @@ function initTag(){
 
 })(jQuery, document, window);
 $(function(){
+
 	$(".account-form input[name='password'],.account-form input[name='email']").on("keyup",function(){
 		if($(".account-form input[name='password']").val()!="" && $.trim($(".account-form input[name='email']").val())!=""){
 			$(".account-form input[type='submit']").removeAttr("disabled").removeClass("submit_disabled").addClass("submit");
@@ -788,12 +789,18 @@ $(function(){
             success:function(data){
                 console.log(data);
                 $(".entity-detail").slideDown();
+                $(".add-note").show();
                 $(".detail_title").text(data.data.taobao_title);
                 $(".detail_title_input").val(data.data.taobao_title);
                 $(".detail_taobao_brand").val(data.data.shop_nick);
                 $(".detail_chief_url img").attr("src",data.data.chief_image_url);
+                $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
                 for(var i=0;i<data.data.thumb_images.length;i++){
-                    $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                    if(i==0){
+                        $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                    }else{
+                        $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                    }
                     $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'/>').appendTo($(".detail form"));
                 }
 
@@ -803,6 +810,13 @@ $(function(){
                 console.log(msg);
             }
         });
+    });
+    $("#add-entity .detail-img div img").live("click",function(){
+        $(".current_img").removeClass("current_img");
+        $(this).addClass("current_img");
+        var img_url = $(this).attr("src");
+        var big_url = img_url.replace('50x50','300x300');
+        $(".detail_chief_url img").attr("src",big_url);
     });
     $(".detail form").on("submit",function(){
         var brand = $(".detail_taobao_brand").val();
