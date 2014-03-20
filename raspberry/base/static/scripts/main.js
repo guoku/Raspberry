@@ -204,15 +204,14 @@ function initTag(){
             var $accountForm = $('.account-form');
             var $login = $('.account-form.login');
             var $reg =  $('.account-form.register');
-
-            $accountForm.on('click', formClick);
+            $accountForm.live('click', formClick);
             function formClick(e) {
                 e.stopPropagation();
             }
             var flag = 1;
             var $body = $('body');
             $login.show();
-           $body.on('click', removeLogin);
+            $body.on('click', removeLogin);
             function removeLogin() {
                 if (flag == 1) {
                     $accountForm.hide();
@@ -306,7 +305,7 @@ function initTag(){
 //                    return data;
                     result =  $.parseJSON(data);
                     var status = parseInt(result.status);
-                    if (status == 1) {
+                    if (status === 1) {
                         var $html = $(result.data);
                         $html.each(function () {
                             util.showEntityTitle($(this));
@@ -462,17 +461,24 @@ function initTag(){
             });
 
             function reply($commentItem) {
-                $commentItem.find('.reply').on('click', function () {
-                    var $commentContent = $commentItem.find('.comment-content');
-                    var $nickname = $commentItem.find('.nickname');
+                $commentItem.find('.reply').live('click', function (e) {
+//                    e.preventDefault();
+                    if (!util.isUserLogined()) {
+                        util.popLoginBox();
+                    } else {
 
-                    $commentText.val('回复 ' + $nickname.text() + ': ');
-                    $commentText.focus();
-                    replyToUser = $commentContent.attr('data-creator');
-                    replyToComment = $commentContent.attr('data-comment');
+                        var $commentContent = $commentItem.find('.comment-content');
+                        var $nickname = $commentItem.find('.nickname');
+
+                        $commentText.val('回复 ' + $nickname.text() + ': ');
+                        $commentText.focus();
+                        replyToUser = $commentContent.attr('data-creator');
+                        replyToComment = $commentContent.attr('data-comment');
+                    }
+                    return false;
                 });
 
-                $commentItem.find('.close').on('click', function (e) {
+                $commentItem.find('.close').live('click', function (e) {
                     $.post(this.href, function (data) {
                         if (parseInt(data) === 1) {
                             $commentItem.remove();
@@ -542,36 +548,63 @@ function initTag(){
             var $noteDetail = $noteItem.find('.note-detail');
 
             // 动态加载点评的评论
-            $noteItem.find('.add-comment').on('click', function (e) {
-                if (!util.isUserLogined()) {
-                    util.popLoginBox();
+            $noteItem.find('.add-comment').live('click', function (e) {
+//                e.preventDefault();
+                var $noteComment = $noteItem.find('.note-comment');
+                if ($noteComment[0]) {
+                    $noteComment.slideToggle('fast');
                 } else {
-                    var $noteComment = $noteItem.find('.note-comment');
-
-                    if ($noteComment[0]) {
-                        $noteComment.slideToggle('fast');
-                    } else {
-                        var url = '/note/' + $(this).attr('data-note') + '/comment/';
-
-                        $.get(url, function (result) {
-                            result = $.parseJSON(result);
-                            var status = parseInt(result.status);
-
-                            if (status === 1) {
-                                var $html = $(result.data);
-
-                                self.noteComment($html);
-                                $html.appendTo($noteDetail);
-                                $html.slideToggle('fast');
-                                initTag();
-                            } else if (status === 0) {
-                                // error
+                    var url = '/note/' + $(this).attr('data-note') + '/comment/';
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        async: false,
+                        success: function(data){
+                            result =  $.parseJSON(data);
+                            var $html = $(result.data);
+                            self.noteComment($html);
+                            $html.appendTo($noteDetail);
+                            $html.slideToggle('fast');
+                            initTag();
+                        },
+                        error: function(ajaxContext) {
+                            if (!util.isUserLogined()) {
+                                util.popLoginBox();
                             }
-                        });
-                    }
+//                            alert(ajaxContext.responseText);
+                        }
+                    });
+                    return false;
                 }
-                return false;
-                e.preventDefault();
+//                if (!util.isUserLogined()) {
+//                    util.popLoginBox();
+//                } else {
+//                    var $noteComment = $noteItem.find('.note-comment');
+//
+//                    if ($noteComment[0]) {
+//                        $noteComment.slideToggle('fast');
+//                    } else {
+//                        var url = '/note/' + $(this).attr('data-note') + '/comment/';
+//
+//                        $.get(url, function (result) {
+//                            result = $.parseJSON(result);
+//                            var status = parseInt(result.status);
+//
+//                            if (status === 1) {
+//                                var $html = $(result.data);
+//
+//                                self.noteComment($html);
+//                                $html.appendTo($noteDetail);
+//                                $html.slideToggle('fast');
+//                                initTag();
+//                            } else if (status === 0) {
+//                                // error
+//                            }
+//                        });
+//                    }
+//                }
+//                return false;
+//                e.preventDefault();
             });
         },
 
