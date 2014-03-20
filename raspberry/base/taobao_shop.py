@@ -348,6 +348,9 @@ class GuokuPlusActivity(object):
             self.activity_obj.status = ACTIVITY_APPROVED
         elif action == "reject":
             self.activity_obj.status = ACTIVITY_REJECTED
+        elif action == "close":
+            self.close()
+            return
         if editor_remarks:
             self.activity_obj.editor_remarks = editor_remarks
         if start_time:
@@ -417,6 +420,7 @@ class GuokuPlusActivity(object):
         if self.activity_obj.sales_volume >= self.activity_obj.total_volume:
             self.close()
         token_obj.used = True
+        token_obj.quantity = quantity
         token_obj.used_time = datetime.datetime.now()
         token_obj.save()
         return TOKEN_SUCCESS

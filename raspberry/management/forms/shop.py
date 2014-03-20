@@ -6,9 +6,11 @@ from datetime import date
 
 APPROVE = u"approve"
 REJECT = u"reject"
+CLOSE = u"close"
 ACTION_CHOICES = (
     (APPROVE, _('approve')),
     (REJECT, _('reject')),
+    (CLOSE, _('close')),
     )
 class GuokuPlusActivityForm(forms.Form):
     app_id = forms.CharField(max_length = 32, widget = forms.HiddenInput())

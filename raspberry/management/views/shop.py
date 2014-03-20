@@ -259,6 +259,7 @@ def shop_verification_list(request):
 @staff_only
 def handle_shop_verification(request):
     shop_nick = request.POST.get("shop_nick", None)
+    editor_remarks = request.POST.get("editor_remarks", None)
     action = request.POST.get("action", None)
     shop_inst = TaobaoShop(shop_nick)
     shop_inst.handle_shop_verification(action)

@@ -322,3 +322,4 @@ class Guoku_Plus_Token(models.Model):
     used = models.BooleanField()
     created_time = models.DateTimeField()
     used_time = models.DateTimeField(null = True)
+    quantity = models.IntegerField(null = True)

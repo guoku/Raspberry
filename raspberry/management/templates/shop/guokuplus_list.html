@@ -42,10 +42,12 @@
             
                 {% for app in applications %}
                 <tr>
-                <td>{{ app.shop_nick }}</td>
-                <td>{{ app.item_context.title }}</td>
+                <td><a href="{%url 'management_shop_detail'%}?nick={{ app.shop_nick }}">{{ app.shop_nick }}</a></td>
+                <td><a href="{%url 'web_detail' app.entity_context.entity_hash%}">{{ app.item_context.title }}</a></td>
                 <td>
-                    <img width="80" src="{{ app.entity_context.chief_image.url }}"/>
+                    <a href="http://item.taobao.com/item.htm?id={{app.item_context.taobao_id}}">
+                        <img width="80" src="{{ app.entity_context.chief_image.url }}"/>
+                    </a>
                 </td>
                 <td>{{ app.item_context.price }}</td>
                 <td>{{ app.sale_price }}</td>
@@ -58,6 +60,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if paginator %}
+            {% display_paginator paginator %}
+        {% endif %}
     </div>
 {% endblock %}
 
