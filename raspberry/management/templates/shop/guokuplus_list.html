@@ -4,6 +4,25 @@
 {% block content %}
     {% display_shop_navigator "guoku_plus" %}
     <div class="span2">
+        <div class="sub-nav">
+            <ul class="nav nav-pills">
+                <li {%if not status_filter %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}">全部</a>
+                </li>
+                <li {%if status_filter == "waiting" %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}?status=waiting">等待审核</a>
+                </li>
+                <li {%if status_filter == "approved" %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}?status=approved">已通过</a>
+                </li>
+                <li {%if  status_filter == "ongoing" %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}?status=ongoing">进行中</a>
+                </li>
+                <li {%if status_filter == "rejected" %}class="active"{% endif %} >
+                    <a href="{%url 'management_guokuplus_list' %}?status=rejected">已拒绝</a>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="span9">
         <table class="table table-stdiped table-bordered table-condensed">
