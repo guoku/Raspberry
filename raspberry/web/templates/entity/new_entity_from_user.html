@@ -42,10 +42,10 @@
                 <div class="guoku-block note-container">
                     <a class="avatar"><img width="50" height="50" class="user_avatar"></a>
 
-                    <div class="detail">
+                    <div class="">
                         <span class="nickname"></span>
 
-                        <form action="" method="POST">
+                        <form action="{% url 'web_new_entity'%}" method="POST">
                             <textarea class="text-input" name="note_text" placeholder="来说说你的评价吧？欢迎真实、有用、有趣的商品点评。"></textarea>
                             <span></span>
                             <input type="submit" value="发表" class="guoku-button">

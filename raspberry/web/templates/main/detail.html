@@ -60,7 +60,7 @@
             {# 判断有没有点评过 #}
             {% if user.is_authenticated  %}
                 {% if not is_user_already_note %}
-                    <div class="add-note">
+                    <div class="add-note add-note-submit">
                         <img src="{{ user_context.avatar_small }}" width="50" height="50">
                         <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">
                             <textarea name="note_text" placeholder="写点评 ＃贴标签"></textarea>
