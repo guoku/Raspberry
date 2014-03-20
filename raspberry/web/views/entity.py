@@ -63,26 +63,29 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             _is_user_already_note = True
     _selection_note = None
     _common_note_list = []
-    for _note_id in Note.find(entity_id=_entity_id, reverse=True):
-        _note = Note(_note_id)
-        _note_context = _note.read()
-        if _note_context['weight'] >= 0:
-            _creator_context = User(_note_context['creator_id']).read()
-            _poke_button_target_status = '0' if _note_id in _request_user_poke_note_set else '1' 
-            if _note_context['is_selected']:
-                _selection_note = {
-                    'note_context' : _note_context,
-                    'creator_context' : _creator_context,
-                    'user_context' : _request_user_context,
-                    'poke_button_target_status' : _poke_button_target_status,
-                }
-            else:
-                _common_note_list.append({
-                    'note_context' : _note_context,
-                    'creator_context' : _creator_context,
-                    'user_context' : _request_user_context,
-                    'poke_button_target_status' : _poke_button_target_status,
-                })
+    for _note_id in Note.find(entity_id=_entity_id, sort_by='poke'):
+        try:
+            _note = Note(_note_id)
+            _note_context = _note.read()
+            if _note_context['weight'] >= 0:
+                _creator_context = User(_note_context['creator_id']).read()
+                _poke_button_target_status = '0' if _note_id in _request_user_poke_note_set else '1' 
+                if _note_context['is_selected']:
+                    _selection_note = {
+                        'note_context' : _note_context,
+                        'creator_context' : _creator_context,
+                        'user_context' : _request_user_context,
+                        'poke_button_target_status' : _poke_button_target_status,
+                    }
+                else:
+                    _common_note_list.append({
+                        'note_context' : _note_context,
+                        'creator_context' : _creator_context,
+                        'user_context' : _request_user_context,
+                        'poke_button_target_status' : _poke_button_target_status,
+                    })
+        except Exception, e:
+            pass
 
     _guess_entity_context = []
     _guess_entity_id_list = []
@@ -330,9 +333,9 @@ def like_entity(request, entity_id, target_status):
 def get_notes(request, entity_id, template='entity/entity_note_list.html'):
     if request.method == 'GET':
         _user_context = User(request.user.id).read()
-        _note_id_list = Note.find(entity_id=entity_id)
+        _note_id_list = Note.find(entity_id=entity_id, sort_by='poke')
         _note_list = []
-
+        
         for _note_id in _note_id_list:
             _note = Note(_note_id)
             _note_context = _note.read()
