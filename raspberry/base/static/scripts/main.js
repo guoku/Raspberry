@@ -827,14 +827,14 @@ $(function(){
                 $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
                 for(var i=0;i<data.data.thumb_images.length;i++){
                     if(i==0){
-                        $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                        $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');
                     }else{
-                        $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+' /></div>');
+                        $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');
                     }
-                    $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'/>').appendTo($(".detail form"));
+                    $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'>').appendTo($(".detail form"));
                 }
 
-                $('<input type="hidden" name="url" value='+data.data.cand_url+'/><input type="hidden" value='+data.data.taobao_titie+' /><input type="hidden" name="chief_image_url" value='+data.data.chief_image_url+'/><input type="hidden" name="brand"/><input name="user_id" type="hidden" value='+data.data.user_context.user_id+'/>').appendTo($(".detail form"));
+                $('<input type="hidden" name="taobao_id" value='+data.data.taobao_id+'><input type="hidden" name="shop_nick" value='+data.data.shop_nick+'><input type="hidden" name="url" value='+data.data.cand_url+'><input type="hidden" name="taobao_title" value='+data.data.taobao_titie+'><input type="hidden" name="price" value='+data.data.price+'><input type="hidden" name="chief_image_url" value='+data.data.chief_image_url+'><input type="hidden" name="cid" value='+data.data.cid+'><input type="hidden" name="selected_categary_id" value='+data.data.selected_categary_id+'><input type="hidden" name="brand"><input name="user_id" type="hidden" value='+data.data.user_context.user_id+'>').appendTo($(".detail form"));
             },
             error:function(msg){
                 console.log(msg);
