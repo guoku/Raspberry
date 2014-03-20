@@ -175,14 +175,18 @@ def edit_shop(request):
 def guokuplus_list(request):
     _p = int(request.GET.get("p", "1"))
     _para = {}
+    _status = request.GET.get("status", None)
+    if _status:
+        _para['status'] = _status
     _num_every_page = 50
-    _results, _total = GuokuPlusActivity.find(offset = (_p - 1) * 50, count = _num_every_page)
+    _results, _total = GuokuPlusActivity.find(status = _status, offset = (_p - 1) * 50, count = _num_every_page)
     _paginator = Paginator(_p, _num_every_page, _total, _para)
     return render_to_response(
         "shop/guokuplus_list.html",
         {
             "applications" : _results,
             "paginator" : _paginator,
+            "status_filter" :_status,
         },
         context_instance = RequestContext(request))
 
@@ -214,7 +218,11 @@ def handle_guokuplus(request):
         guoku_plus = GuokuPlusActivity(form.cleaned_data['app_id'])
         action = form.cleaned_data['action']
         editor_remarks = form.cleaned_data['editor_remarks']
-        guoku_plus.handle(action, editor_remarks, form.cleaned_data['start_time'])
+        start_time = form.cleaned_data['start_time']
+        end_time = form.cleaned_data['end_time']
+        if start_time and not end_time:
+            end_time = start_time + datetime.timedelta(7)
+        guoku_plus.handle(action, editor_remarks, start_time, end_time)
         return HttpResponseRedirect(reverse('management_guokuplus_detail') + "?app_id=" + form.cleaned_data['app_id'])
     else:
         return HttpResponse(form.errors)
@@ -225,13 +233,21 @@ def handle_guokuplus(request):
 @staff_only
 def shop_verification_list(request):
     _num_every_page = 30
-    _p = int(request.GET.get("p", "1"))
     _para = {}
-    _results, _total = TaobaoShop.read_shop_verification_list((_p - 1) * _num_every_page, _num_every_page)
+    _p = int(request.GET.get("p", "1"))
+    _status = request.GET.get("status", None)
+    if _status:
+        _para['status'] = _status
+    _results, _total = TaobaoShop.read_shop_verification_list(
+        status = _status,
+        offset = (_p - 1) * _num_every_page,
+        count = _num_every_page
+    )
     _paginator = Paginator(_p, _num_every_page, _total, _para)
     return render_to_response(
         'shop/verification_list.html',
         {
+            'status_filter' : _status,
             'results' : _results,
             'paginator' : _paginator,
         },
@@ -243,6 +259,7 @@ def shop_verification_list(request):
 @staff_only
 def handle_shop_verification(request):
     shop_nick = request.POST.get("shop_nick", None)
+    editor_remarks = request.POST.get("editor_remarks", None)
     action = request.POST.get("action", None)
     shop_inst = TaobaoShop(shop_nick)
     shop_inst.handle_shop_verification(action)

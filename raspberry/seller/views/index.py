@@ -153,3 +153,14 @@ def verify_guoku_plus_token(request, user_context, shop_inst):
 def faq(request):
     return render_to_response("faq.html")
 
+
+@require_POST
+@login_required
+def verify_token(request):
+    token = request.POST.get("token", None)
+    quantity = int(request.POST.get("quantity", 1))
+    if token and quantity >= 1:
+        guokuplus = GuokuPlusActivity.get_activity_by_token(token)
+        status = guokuplus.use_token(token, quantity)
+        return HttpResponse(status)
+    return HttpResponse("error")
