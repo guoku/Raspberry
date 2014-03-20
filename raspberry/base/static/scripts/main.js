@@ -851,11 +851,9 @@ $(function(){
     $(".detail form").on("submit",function(){
         var brand = $(".detail_taobao_brand").val();
         if(brand.length>0){
-            $('<input name="brand" value='+brand+' />').appendTo($(".detail form"));
-            return true;
-        }else{
-            return false;
+            $('<input name="brand" value='+brand+'>').appendTo($(".detail form"));
         }
+        return true;
     });
     $("#forget_sendmail").on("click",function(){
         var email = $(".forget_input").val();
