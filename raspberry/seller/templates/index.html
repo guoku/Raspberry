@@ -39,23 +39,9 @@
             </div>
             <div class="col-md-9">
                 <div class="bs-docs-section">
-                    <div class="panel panel-default">
-                      <div class="panel-heading" id="js-intro">介绍</div>
-                      <div class="panel-body">
-                        {% include 'partial/shop_verification.html' %}
-                      </div>
-                    </div>
+                    {% include 'partial/shop_verification.html' %}
                 </div>
-                <div class="bs-docs-section">
-                    <div class="page-header">
-                        <h3 id="js-overview">申请『果库价』活动</h3>
-                        <p>什么是<a href="{% url 'seller_faq' %}">果库价</a>?</h3>
-                    </div>
-                    <div class="panel panel-default">
-                        {% include 'guoku_plus_application.html' %}
-                    </div>
-                    
-                </div>
+                {% include 'guoku_plus_application.html' %}
                 <div class="bs-docs-section">
                     <div class="page-header">
                         <h3 id="js-manage">果库价管理</h3>
