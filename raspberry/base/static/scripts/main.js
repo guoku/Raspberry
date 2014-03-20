@@ -792,7 +792,6 @@ $(function(){
                 $(".add-note").show();
                 $(".detail_title").text(data.data.taobao_title);
                 $(".detail_title_input").val(data.data.taobao_title);
-                $(".detail_taobao_brand").val(data.data.shop_nick);
                 $(".detail_chief_url img").attr("src",data.data.chief_image_url);
                 $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
                 for(var i=0;i<data.data.thumb_images.length;i++){
@@ -840,14 +839,14 @@ $(function(){
                     case "success":
                         send_status(false);
                         var s = 60;
-                        $("#forget_sendmail").html("发送成功！<i>60</i>秒后可重新发送！");
+                        $("#forget_sendmail").html("发送成功！<i>60</i>秒后可重新发送！").attr("send-status",1);
                         var t = setInterval(function(){
                             console.log(s);
                             s -=1;
                             if(s>=0)
                                 $("#forget_sendmail").html("发送成功！<i>"+s+"</i>秒后可重新发送！");
                             else{
-                                $("#forget_sendmail").html("发送邮件！");
+                                $("#forget_sendmail").html("发送邮件！").attr("send-status",0);
                                 send_status(true);
                                 clearInterval(t);
                             }
@@ -867,6 +866,9 @@ $(function(){
         });
     });
     $(".forget_input").on("keyup change click",function(){
+        if($("#forget_sendmail").attr("send-status") == 1){
+            return false;
+        }
         if($.trim($(this).val()).length>0)
         send_status(true);
         else
