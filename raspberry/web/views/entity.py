@@ -1,8 +1,10 @@
 # coding=utf-8
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
+from django.views.decorators.http import require_GET, require_POST
 from django.template import RequestContext
 from django.utils.log import getLogger
 from django.template import loader
@@ -18,6 +20,8 @@ from base.user import User
 from base.item import Item
 from base.tag import Tag 
 from base.category import Category
+from base.taobao_shop import GuokuPlusActivity
+from share.tasks import CreateTaobaoShopTask
 from share.tasks import CreateTaobaoShopTask, DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 from web.tasks import WebLogTask
 from utils.extractor.taobao import TaobaoExtractor 
@@ -49,9 +53,13 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     
     _is_soldout = True
     _taobao_id = None
+    _activity_id = None
     for _item_id in Item.find(entity_id=_entity_id):
         _item_context = Item(_item_id).read()
         _taobao_id = _item_context['taobao_id']
+        _guokuplus = GuokuPlusActivity.find_by_taobao_id(_taobao_id)
+        if _guokuplus.is_active():
+            _activity_id = _guokuplus.read()['activity_id'] 
         if not _item_context['soldout']:
             _is_soldout = False
             break
@@ -127,7 +135,9 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'guess_entity_context' : _guess_entity_context,
             'item_id' : _item_context['item_id'],
             'taobao_id' : _taobao_id,
-            'is_soldout' : _is_soldout
+            'activity_id' : _activity_id,
+            'is_soldout' : _is_soldout,
+            "enable_guoku_plus" : settings.ENABLE_GUOKU_PLUS
         },
         context_instance=RequestContext(request)
     )
@@ -444,6 +454,4 @@ def log_visit_item(request, item_id):
             },
         )
         return HttpResponse('1')
-
-
 

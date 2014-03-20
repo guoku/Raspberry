@@ -1,7 +1,7 @@
 # coding=utf8
 from django.conf import settings
 from base.models import Guoku_Plus as GuokuPlusModel
-from base.models import Guoku_Plus as GuokuPlusTokenModel
+from base.models import Guoku_Plus_Token as GuokuPlusTokenModel
 from base.models import Seller_Info as SellerInfoModel
 from base.stream_models import TaobaoShop as TaobaoShopModel
 from base.stream_models import TaobaoShopInfo
@@ -216,10 +216,12 @@ class TaobaoShop(object):
             return None
 
     @classmethod
-    def read_shop_verification_list(cls, offset, count):
+    def read_shop_verification_list(cls, status = None, offset = 0, count = 50):
         _hdl = TaobaoShopVerificationInfo.objects
+        if status:
+            _hdl = _hdl.filter(status = status)
         _count = _hdl.count()
-        _results = _hdl.order_by("-created_time").skip(offset).limit(count)
+        _results = _hdl.order_by("-updated_time").skip(offset).limit(count)
         results = []
         for item in _results:
             results.append({"verification" : item._data, "shop_context" : TaobaoShop(item.shop_nick).read()})
@@ -244,9 +246,13 @@ ACTIVITY_WAITING = "waiting"
 ACTIVITY_APPROVED = "approved"
 ACTIVITY_REJECTED = "rejected"
 ACTIVITY_ONGOING = "ongoing"
-ACIIVITY_FINISHED = "finished"
-ACIIVITY_ABORTED = "aborted"
+ACTIVITY_FINISHED = "finished"
+ACTIVITY_ABORTED = "aborted"
 
+TOKEN_ACTIVITY_NOT_ACTIVE = "activity_not_active"
+TOKEN_NOT_EXISTED = "token_not_existed"
+TOKEN_HAS_BEEN_USED = "token_has_been_used"
+TOKEN_SUCCESS = "success"
 class GuokuPlusActivity(object):
     def __ensure_activity_obj(self):
         if not hasattr(self, 'activity_obj'):
@@ -277,6 +283,20 @@ class GuokuPlusActivity(object):
         context['status'] = self.activity_obj.status
         return context
 
+    def is_active(self):
+        if self.activity_obj.status == ACTIVITY_APPROVED:
+            time_now = datetime.datetime.now()
+            if time_now >= self.activity_obj.start_time and time_now <= self.activity_obj.end_time:
+                return True
+        return False
+
+    def close(self):
+        if self.activity_obj.status != ACTIVITY_FINISHED:
+            self.activity_obj.status = ACTIVITY_FINISHED
+            if self.activity_obj.end_time > datetime.datetime.now():
+                self.activity_obj.end_time = datetime.datetime.now()
+            self.activity_obj.save()
+
     @classmethod
     def create(cls, taobao_id, sale_price, total_volume, seller_remarks, shop_nick):
         item_inst = Item.get_item_by_taobao_id(taobao_id)
@@ -303,7 +323,12 @@ class GuokuPlusActivity(object):
         if shop_nick:
             _hdl = _hdl.filter(shop_nick = shop_nick)
         if status:
-            _hdl = _hdl.filter(status = status)
+            if status == ACTIVITY_ONGOING:
+                _hdl = _hdl.filter(status = ACTIVITY_APPROVED)
+                time_now = datetime.datetime.now()
+                _hdl = _hdl.filter(start_time__lte = time_now).filter(end_time__gt = time_now)
+            else:
+                _hdl = _hdl.filter(status = status)
         total = _hdl.count()
         _hdl = _hdl[offset : offset + count]
         results = []
@@ -311,15 +336,28 @@ class GuokuPlusActivity(object):
             results.append(GuokuPlusActivity(item.id).read())
         return results, total
 
-    def handle(self, action, editor_remarks = None, start_time = None):
+    @classmethod
+    def find_by_taobao_id(cls, taobao_id):
+        results = GuokuPlusModel.objects.filter(taobao_id = taobao_id)
+        if results.count() > 0:
+            return GuokuPlusActivity(results[0].id)
+        return None
+
+    def handle(self, action, editor_remarks = None, start_time = None, end_time = None):
         if action == "approve":
             self.activity_obj.status = ACTIVITY_APPROVED
         elif action == "reject":
             self.activity_obj.status = ACTIVITY_REJECTED
-        if start_time != None:
-            self.activity_obj.start_time = start_time
-        if editor_remarks != None:
+        elif action == "close":
+            self.close()
+            return
+        if editor_remarks:
             self.activity_obj.editor_remarks = editor_remarks
+        if start_time:
+            self.activity_obj.start_time = start_time
+        if end_time:
+            self.activity_obj.end_time = end_time
+
         self.activity_obj.save()
 
     def reject(self, editor_remarks = None):
@@ -337,39 +375,55 @@ class GuokuPlusActivity(object):
     def read(self):
         return self.__get_context()
 
-    def create_token(self, user_id):
+
+    def __get_token_context(self, token):
+        context = {}
+        context['user_id'] = token.user_id
+        context['guoku_plus_activity_id'] = token.guoku_plus_activity_id
+        context['token'] = token.token
+        context['used'] = token.used
+        context['created_time'] = token.created_time
+        context['used_time'] = token.used_time
+        return context
+
+    def get_token(self, user_id):
+        result = GuokuPlusTokenModel.objects.filter(guoku_plus_activity_id = self.activity_id, user_id = user_id)
+        if result.count() > 0:
+            token = result[0]
+            return self.__get_token_context(token)
         try_times = 10
         while try_times > 0:
             try:
-                GuokuPlusTokenModel.objects.create(
+                token = GuokuPlusTokenModel.objects.create(
                     user_id = user_id,
                     guoku_plus_activity_id = self.activity_id,
                     token = get_random_string(7),
                     used = False,
                     created_time = datetime.datetime.now()
                 )
-                return True
-            except:
+                return self.__get_token_context(token) 
+            except Exception, e:
                 try_times -= 1
-        return False
+        return None
     
-    def use_token(self, token):
+    def use_token(self, token, quantity = 1):
+        if not self.is_active():
+            return TOKEN_ACTIVITY_NOT_ACTIVE
         try:
             token_obj = GuokuPlusTokenModel.objects.get(token = token) 
         except:
-            return False
+            return TOKEN_NOT_EXISTED
         if token_obj.used:
-            return False
-        if self.activity_obj.activity_status != ACTIVITY_ONGOING:
-            return False
-        self.activity_obj.sales_volume = self.activity_obj.sales_volume + 1
-        if self.activity_obj.sales_volume >= self.activity_obj.total_volume:
-            self.activity_obj.activity_status = ACTIVITY_FINISHED
+            return TOKEN_HAS_BEEN_USED
+        self.activity_obj.sales_volume = self.activity_obj.sales_volume + quantity
         self.activity_obj.save()
+        if self.activity_obj.sales_volume >= self.activity_obj.total_volume:
+            self.close()
         token_obj.used = True
+        token_obj.quantity = quantity
         token_obj.used_time = datetime.datetime.now()
         token_obj.save()
-        return True
+        return TOKEN_SUCCESS
         
     @classmethod
     def get_activity_by_token(cls, token):
