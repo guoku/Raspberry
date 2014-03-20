@@ -28,7 +28,7 @@
                             {% if popular.entity_context.brand|length != 0 %}
                                 {{ popular.entity_context.brand }}
                                 -{% endif %}
-                            {{ popular.entity_context.title }}
+                            {{ popular.entity_context.title|truncatechars:10 }}
                         </h2>
                         <span class="price">&#65509;{{ popular.entity_context.price }}</span>
                     </div>
