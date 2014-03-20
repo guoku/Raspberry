@@ -570,6 +570,14 @@ function initTag(){
                         error: function(ajaxContext) {
                             if (!util.isUserLogined()) {
                                 util.popLoginBox();
+                            } else {
+//                                console.log(ajaxContext['responseText']);
+                                result =  $.parseJSON(ajaxContext['responseText']);
+                                var $html = $(result.data);
+                                self.noteComment($html);
+                                $html.appendTo($noteDetail);
+                                $html.slideToggle('fast');
+                                initTag();
                             }
 //                            alert(ajaxContext.responseText);
                         }
