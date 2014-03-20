@@ -125,6 +125,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'liker_list' : _liker_list,
             'tag_list' : _tag_list,
             'guess_entity_context' : _guess_entity_context,
+            'item_id' : _item_context['item_id'],
             'taobao_id' : _taobao_id,
             'is_soldout' : _is_soldout
         },
@@ -186,6 +187,7 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
             'entity_context' : _entity_context,
             'note_list' : _note_list,
             'liker_list' : _liker_list,
+            'buy_link' : _item_context['buy_link'],
         },
         context_instance=RequestContext(request)
     )

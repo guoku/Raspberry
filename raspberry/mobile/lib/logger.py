@@ -57,9 +57,9 @@ def _gen_prev(prev_str):
         _prev_doc.appendix = _appendix
     return _prev_doc
 
-def log(duration, view, version, ip, log_time, request_user_id=None, device=None, duid=None, os=None, channel=None, prev_str=None, appendix=None):
+def log(entry, duration, view, version, ip, log_time, request_user_id=None, device=None, duid=None, os=None, channel=None, prev_str=None, appendix=None):
     _doc = MobileLog(
-        entry='mobile',
+        entry=entry,
         duration=duration,
         ip=ip,
         view=view.upper(),

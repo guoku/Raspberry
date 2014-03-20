@@ -26,7 +26,7 @@
         </div>
         <div class="main">
             <div class="entity">
-                <a class="entity-img" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao">
+                <a class="entity-img" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
                     <img src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
                 </a>
                 <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</h2>
@@ -76,7 +76,7 @@
 
         <div class="aside">
             <div class="entity-info">
-                <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao">
+                <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
                     详情<span>&#65509;{{ entity_context.price }}</span>
                 </a>
 {#                <div class="shop">来自于<a href="">url需替换</a></div>#}
@@ -145,6 +145,13 @@
 
 {% block script %}
     <script type="text/javascript">
+        function logClick(item_id) {
+            var url = '/item/' + item_id + '/visit/log/';
+            var data = {
+                entry: 'web' 
+            };
+            $.post(url, data);
+        };
         (function(win,doc){
             var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
             if (!win.alimamatk_show) {
