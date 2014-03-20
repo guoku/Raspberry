@@ -229,13 +229,20 @@ def handle_guokuplus(request):
 @staff_only
 def shop_verification_list(request):
     _num_every_page = 30
-    _p = int(request.GET.get("p", "1"))
     _para = {}
-    _results, _total = TaobaoShop.read_shop_verification_list((_p - 1) * _num_every_page, _num_every_page)
+    _p = int(request.GET.get("p", "1"))
+    _status = request.GET.get("status", None)
+    if _status:
+        _para['status'] = _status
+    _results, _total = TaobaoShop.read_shop_verification_list(
+        status = _status,
+        offset = (_p - 1) * _num_every_page,
+        count = _num_every_page)
     _paginator = Paginator(_p, _num_every_page, _total, _para)
     return render_to_response(
         'shop/verification_list.html',
         {
+            'status_filter' : _status,
             'results' : _results,
             'paginator' : _paginator,
         },
