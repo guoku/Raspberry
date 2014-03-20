@@ -230,6 +230,9 @@ button {
     line-height: 49px;
     padding: 0 6px;
 }
+#header .user li a:hover {
+    color: #fff;
+}
 #header .user .user-avatar {
     display: table-cell;
     position: relative;
