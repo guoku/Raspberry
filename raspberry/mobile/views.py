@@ -382,16 +382,57 @@ def unread_count(request):
         })
         
 def visit_item(request, item_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
         _ttid = request.GET.get("ttid", None)
         _sid = request.GET.get("sid", None)
+        _entry = request.GET.get("entry", "mobile")
         _outer_code = request.GET.get("outer_code", None)
         _sche = request.GET.get("sche", None)
         _item_context = Item(item_id).read()
         _taobaoke_info = taobaoke_mobile_item_convert(_item_context['taobao_id'])
+        _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
+        _duration = datetime.datetime.now() - _start_at
+        
        	if _taobaoke_info and _taobaoke_info.has_key('click_url'):
+            MobileLogTask.delay(
+                entry=_entry,
+                duration = _duration.seconds * 1000000 + _duration.microseconds, 
+                view = 'CLICK', 
+                request = request.REQUEST, 
+                ip = get_client_ip(request), 
+                log_time = datetime.datetime.now(),
+                request_user_id = _request_user_id,
+                appendix = {
+                    'site' : 'taobao',
+                    'taobao_id' : _item_context['taobao_id'],
+                    'item_id' : item_id, 
+                    'entity_id' : _entity_id,
+                    'tbk' : True,
+                }
+            )
             return HttpResponseRedirect(decorate_taobao_url(_taobaoke_info['click_url'], _ttid, _sid, _outer_code, _sche))
         
+        MobileLogTask.delay(
+            entry=_entry,
+            duration=_duration.seconds * 1000000 + _duration.microseconds, 
+            view='CLICK', 
+            request=request.REQUEST, 
+            ip=get_client_ip(request), 
+            log_time=datetime.datetime.now(),
+            request_user_id=_request_user_id,
+            appendix={
+                'site': 'taobao',
+                'taobao_id': _item_context['taobao_id'],
+                'entity_id': _entity_id,
+                'tbk': False,
+            }
+        )
         return HttpResponseRedirect(decorate_taobao_url(get_taobao_url(_item_context['taobao_id'], True), _ttid, _sid, _outer_code, _sche))
             
 

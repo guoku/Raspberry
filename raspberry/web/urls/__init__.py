@@ -15,6 +15,7 @@ urlpatterns = patterns(
     url('^selected/$', 'selection', name='web_selection'),
     url('^m/selection/$', 'wap_selection', name='wap_selection'),
     url('^popular/$', 'popular', name='web_popular'),
+    url('^guokuplus/token/$', 'get_guokuplus_token', name='web_get_guokuplus_token'),
     url(r'^c/', include('web.urls.category')),
     url(r'^t/', include('web.urls.tag')),
 )
@@ -36,6 +37,7 @@ urlpatterns += patterns(
     url(r'^m/detail/(?P<entity_hash>\w+)/$', 'wap_entity_detail', name='wap_detail'),
     url(r'^entity/', include('web.urls.entity')),
     url(r'^note/', include('web.urls.note')),
+    url(r'^item/(?P<item_id>\w+)/visit/log/$', 'log_visit_item', name='web_log_visit_item'),
 )
 
 urlpatterns += patterns(

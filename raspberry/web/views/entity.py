@@ -1,8 +1,10 @@
 # coding=utf-8
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
+from django.views.decorators.http import require_GET, require_POST
 from django.template import RequestContext
 from django.utils.log import getLogger
 from django.template import loader
@@ -18,6 +20,8 @@ from base.user import User
 from base.item import Item
 from base.tag import Tag 
 from base.category import Category
+from base.taobao_shop import GuokuPlusActivity
+from share.tasks import CreateTaobaoShopTask
 from share.tasks import CreateTaobaoShopTask, DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 from web.tasks import WebLogTask
 from utils.extractor.taobao import TaobaoExtractor 
@@ -49,12 +53,19 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     
     _is_soldout = True
     _taobao_id = None
+    _activity_id = None
     for _item_id in Item.find(entity_id=_entity_id):
         _item_context = Item(_item_id).read()
         _taobao_id = _item_context['taobao_id']
         if not _item_context['soldout']:
             _is_soldout = False
             break
+    try:
+        _guokuplus = GuokuPlusActivity.find_by_taobao_id(_taobao_id)
+        if _guokuplus != None and _guokuplus.is_active():
+            _activity_id = _guokuplus.read()['activity_id']
+    except Exception, e:
+        pass
     
     _is_user_already_note = False
     if _request_user_context != None:
@@ -125,8 +136,11 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'liker_list' : _liker_list,
             'tag_list' : _tag_list,
             'guess_entity_context' : _guess_entity_context,
+            'item_id' : _item_context['item_id'],
             'taobao_id' : _taobao_id,
-            'is_soldout' : _is_soldout
+            'activity_id' : _activity_id,
+            'is_soldout' : _is_soldout,
+            "enable_guoku_plus" : settings.ENABLE_GUOKU_PLUS
         },
         context_instance=RequestContext(request)
     )
@@ -186,6 +200,7 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
             'entity_context' : _entity_context,
             'note_list' : _note_list,
             'liker_list' : _liker_list,
+            'buy_link' : _item_context['buy_link'],
         },
         context_instance=RequestContext(request)
     )
@@ -238,6 +253,7 @@ def load_item_info(request):
                     'cid': _taobao_item_info['cid'],
                     'taobao_title': _taobao_item_info['title'],
                     'shop_nick': _taobao_item_info['shop_nick'],
+                    'shop_link': _taobao_item_info['shop_link'],
                     'price': _taobao_item_info['price'],
                     'chief_image_url' : _chief_image_url,
                     'thumb_images': _taobao_item_info["thumb_images"],
@@ -270,19 +286,20 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
             },
             context_instance = RequestContext(request)
         )
-    else: 
+    else:
+        print request.POST
         _taobao_id = request.POST.get("taobao_id", None)
         _cid = request.POST.get("cid", None)
-        _taobao_shop_nick = request.POST.get("taobao_shop_nick", None)
-        _taobao_shop_link = request.POST.get("taobao_shop_link", None)
+        _taobao_shop_nick = request.POST.get("shop_nick", None)
+        _taobao_shop_link = request.POST.get("shop_link", None)
         _taobao_title = request.POST.get("taobao_title", None)
-        _taobao_price = request.POST.get("taobao_price", None)
+        _taobao_price = float(request.POST.get("price", "0.0"))
         _chief_image_url = request.POST.get("chief_image_url", None)
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
         _intro = ""
-        _category_id = int(request.POST.get("category_id", None))
-        _detail_image_urls = request.POST.getlist("image_url")
+        _category_id = int(request.POST.get("selected_category_id", None))
+        _detail_image_urls = request.POST.getlist("thumb_images")
         
         if _chief_image_url in _detail_image_urls:
             _detail_image_urls.remove(_chief_image_url)
@@ -310,10 +327,13 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
         
         if _note != None and len(_note) > 0:
             _add_note_and_select_delay(_entity, _user_id, _note)
+        
+        try:
+            CreateTaobaoShopTask.delay(_taobao_shop_nick, _taobao_shop_link)
+        except Exception, e:
+            pass
 
-        CreateTaobaoShopTask.delay(_taobao_shop_nick, _taobao_shop_link)
-
-        return HttpResponseRedirect(reverse('web_detail', kwargs = { "entity_id" : _entity.entity_id }))
+        return HttpResponseRedirect(reverse('web_detail', kwargs = { "entity_hash" : _entity.get_entity_hash() }))
 
 
 
@@ -415,3 +435,31 @@ def delete_note(request, entity_id, note_id):
     if request.method == 'POST':
         # 暂时不需要该功能 以前版本没有
         pass
+
+def log_visit_item(request, item_id):
+    if request.user.is_authenticated():
+        _request_user_id = request.user.id
+    else:
+        _request_user_id = None 
+    if request.method == 'POST':
+        _entry = request.POST.get("entry", "web")
+        _item_id = request.POST.get("item_id", None) 
+        _item_context = Item(item_id).read()
+        _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
+        WebLogTask.delay(
+            duration=0,
+            entry='web',
+            page='CLICK', 
+            request=request.REQUEST, 
+            ip=get_client_ip(request), 
+            log_time=datetime.datetime.now(),
+            request_user_id=_request_user_id,
+            appendix={
+                'site' : 'taobao',
+                'taobao_id' : _item_context['taobao_id'],
+                'item_id' : item_id, 
+                'entity_id' : _entity_id, 
+            },
+        )
+        return HttpResponse('1')
+
