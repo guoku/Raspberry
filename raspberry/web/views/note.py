@@ -24,7 +24,6 @@ def poke_note(request, note_id, target_status):
             return HttpResponse('0')
 
 
-@login_required
 def get_comments(request, note_id, template='note/note_comment_list.html'):
     _user_context = User(request.user.id)
     _note = Note(note_id)
