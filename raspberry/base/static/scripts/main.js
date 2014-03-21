@@ -923,7 +923,7 @@ $(function(){
                         },1000);
                     break;
                     case "not_exist":
-                        $(".forget_input_tip").html('该邮箱尚未注册，<a href="">点此注册</a>').show();
+                        $(".forget_input_tip").html('该邮箱尚未注册，<a href="/register/">点此注册</a>').show();
                     break;
                     case "failed":
                         $(".forget_input_tip").html('发送失败,请尝试重新发送！').show();

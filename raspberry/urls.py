@@ -16,7 +16,6 @@ urlpatterns = patterns('',
     (r'^stats/', include('stats.urls')),
 #    (r'^lotto/', include('lotto.urls')),
     (r'', include('web.urls')),
-#    (r'^3.0/activity/$', 'lotto.views.guoku_generation_3_activity'),
 )
 
 urlpatterns += patterns(
@@ -24,6 +23,7 @@ urlpatterns += patterns(
     url(r'^403/$', 'django.views.defaults.permission_denied'),
     url(r'^404/$', 'web.views.webpage_not_found'),
     url(r'^500/$', 'web.views.page_error'),
+    (r'^visit_item/$', 'mobile.views.old_visit_item'),
 )
 
 if settings.IMAGE_LOCAL:

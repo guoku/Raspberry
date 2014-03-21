@@ -35,11 +35,13 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
         _request_user_id = request.user.id
+        _is_staff = request.user.is_staff
         _request_user_context = User(request.user.id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _request_user_poke_note_set = Note.poke_set_of_user(request.user.id)
     else:
         _request_user_id = None 
+        _is_staff = False 
         _request_user_context = None
         _request_user_like_entity_set = []
         _request_user_poke_note_set = []
@@ -127,6 +129,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     return render_to_response(
         template,
         {
+            'is_staff' : _is_staff,
             'user_context' : _request_user_context,
             'entity_context' : _entity_context,
             'is_user_already_note' : _is_user_already_note,
@@ -279,10 +282,6 @@ def load_item_info(request):
 
 @login_required
 def create_entity(request, template='entity/new_entity_from_user.html'):
-    if request.is_ajax():
-        print 'yes'
-    else:
-        print 'no'
     if request.method == 'GET':
         return render_to_response(
             template,
@@ -291,7 +290,6 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
             context_instance = RequestContext(request)
         )
     else:
-        print request.POST
         _taobao_id = request.POST.get("taobao_id", None)
         _cid = request.POST.get("cid", None)
         _taobao_shop_nick = request.POST.get("shop_nick", None)
@@ -301,6 +299,9 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
         _chief_image_url = request.POST.get("chief_image_url", None)
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
+        _note_text = request.POST.get("note_text", None)
+        _user_id = request.POST.get("user_id", None)
+        
         _intro = ""
         _category_id = int(request.POST.get("selected_category_id", None))
         _detail_image_urls = request.POST.getlist("thumb_images")
@@ -326,11 +327,7 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
             detail_image_urls = _detail_image_urls,
         )
 
-        _note = request.POST.get("note", None)
-        _user_id = request.POST.get("user_id", None)
-        
-        if _note != None and len(_note) > 0:
-            _add_note_and_select_delay(_entity, _user_id, _note)
+        _note = _entity.add_note(creator_id=_user_id, note_text=_note_text)
         
         try:
             CreateTaobaoShopTask.delay(_taobao_shop_nick, _taobao_shop_link)
