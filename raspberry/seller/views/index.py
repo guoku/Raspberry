@@ -140,7 +140,7 @@ def apply_guoku_plus(request, user_context, shop_inst):
             return HttpResponse(u"优惠价不能大于原价")
         GuokuPlusActivity.create(item_context['taobao_id'], sale_price, total_volume, seller_remarks, item_context['shop_nick'])
         return HttpResponseRedirect(reverse("seller_index"))
-    return HttpResponse("error")
+    return HttpResponse(form.errors)
 
 @require_POST
 @seller_only

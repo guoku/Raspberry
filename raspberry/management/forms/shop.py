@@ -19,9 +19,9 @@ class GuokuPlusActivityForm(forms.Form):
     start_time = forms.DateField(widget = forms.DateInput(attrs={'id' : 'startdateinput', 'readonly' : 'readonly'}), required=False)
     end_time = forms.DateField(widget = forms.DateInput(attrs={'id' : 'enddateinput', 'readonly' : 'readonly'}), required=False)
 
-    def clean_start_time(self):
-        if self.cleaned_data.get('start_time') == None:
-            return None
-        if self.cleaned_data['start_time'] <= date.today():
-            raise forms.ValidationError("时间必须大于" + str(date.today()))
-        return self.cleaned_data['start_time']
+#    def clean_start_time(self):
+#        if self.cleaned_data.get('start_time') == None:
+#            return None
+#        if self.cleaned_data['start_time'] <= date.today():
+#            raise forms.ValidationError("时间必须大于" + str(date.today()))
+#        return self.cleaned_data['start_time']
