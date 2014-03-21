@@ -454,7 +454,7 @@ def old_visit_item(request):
         _sche = request.GET.get("sche", None)
         
         _taobao_id = request.GET.get("item_id", None)
-        _item = Item().get_item_by_taobao_id(_taobao_id)
+        _item = Item.get_item_by_taobao_id(_taobao_id)
         _item_context = _item.read()
         
         _taobaoke_info = taobaoke_mobile_item_convert(_item_context['taobao_id'])
@@ -473,7 +473,7 @@ def old_visit_item(request):
                 appendix = {
                     'site' : 'taobao',
                     'taobao_id' : _item_context['taobao_id'],
-                    'item_id' : item_id, 
+                    'item_id' : _item_context['item_id'], 
                     'entity_id' : _entity_id,
                     'tbk' : True,
                 }
@@ -491,6 +491,7 @@ def old_visit_item(request):
             appendix={
                 'site': 'taobao',
                 'taobao_id': _item_context['taobao_id'],
+                'item_id' : _item_context['item_id'], 
                 'entity_id': _entity_id,
                 'tbk': False,
             }
