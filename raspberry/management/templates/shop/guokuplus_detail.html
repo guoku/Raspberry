@@ -66,8 +66,26 @@
 {% block scripts %}
     <script>
         $(document).ready(function() {
-        $('#startdateinput').datepicker();
-        $('#enddateinput').datepicker();
+        $('#startdateinput').datepicker({
+            onSelect:function(){
+                $('#enddateinput').datepicker("setDate","+7");
+            }   
+        });
+        $('#enddateinput').datepicker({ defaultDate: +7 });
+
+        $("#id_action").on("change",function(){
+            switch($(this).val()){
+                case "reject":
+                    $("label[for='startdateinput'],label[for='enddateinput'],#startdateinput,#enddateinput").hide();
+                break;
+                case "close":
+                    $("label[for='startdateinput'],label[for='enddateinput'],#startdateinput,#enddateinput").hide();
+                break;
+                case "approve":
+                    $("label[for='startdateinput'],label[for='enddateinput'],#startdateinput,#enddateinput").show();
+                break;
+            }
+        });
         });
     </script>
 {% endblock %}
