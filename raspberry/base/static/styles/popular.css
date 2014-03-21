@@ -60,7 +60,7 @@
 }
 
 #popular .entities li .title {
-    display: block;
+    display: none;
     position: absolute;
     height: 35px;
     width: 195px;
