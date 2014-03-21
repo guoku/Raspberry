@@ -14,9 +14,8 @@
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                             <h4 class="modal-title" id="GKJModalLabel">活动申请</h4>
                                         </div>
+                                        <form action="/seller/guokuplus/apply/" class="application_plus_form" method="post">
                                         <div class="modal-body">
-                                            <form action="/seller/guokuplus/apply/" class="application_plus_form" method="post">
-
                                                 <div class="application_url application_input"> <b>商品链接:</b>
                                                     {{ application_form.taobao_url }}</div>
                                                 <div class="application_count application_input"> <b>优惠数量/件:</b>
@@ -24,7 +23,7 @@
                                                 <div class="application_count application_input">
                                                     <b>优惠价格/元:</b>
                                                     {{ application_form.sale_price }}</div>
-                                                <div class="cln">
+                                                <div>
                                                     <div class="application_remarks application_input">
                                                         <b>附加信息:</b>
                                                        	{{ application_form.seller_remarks }}
@@ -32,15 +31,15 @@
                                                     <div class="cln"></div>
 
                                                 </div>
-                                            </form>
                                         </div>
                                         <div class="modal-footer">
 
                                             <b>{{ application_form.agree_tos }}同意协议</b>
 
                                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                            <button type="button" class="btn btn-primary">提交</button>
+                                            <input type="submit" value="提交" class="btn btn-primary">
                                         </div>
+                                        </form>
                                     </div>
                                     <!-- /.modal-content --> </div>
                                 <!-- /.modal-dialog --> </div>

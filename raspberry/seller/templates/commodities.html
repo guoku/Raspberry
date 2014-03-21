@@ -13,14 +13,51 @@
             <th>价格</th>
             <th>操作</th>
         {% for item in item_list %}
-            <tr>
-                <td><a href="http://item.taobao.com/item.htm?id={{item.item.taobao_id}}"><img src="{{item.entity.chief_image.url}}" width="80"/></a></td>
+            <tr class="commlist">
+                <td><a class="taobao_url" href="http://item.taobao.com/item.htm?id={{item.item.taobao_id}}"><img src="{{item.entity.chief_image.url}}" width="80"/></a></td>
                 <td><a href="{%url 'web_detail' item.entity.entity_hash%}">{{ item.item.title }}</a></td>
                 <td>{{ item.item.price }}</td>
-                <td><a href="{% url 'seller_apply_guoku_plus'%}?taobao_id={{ item.item.taobao_id }}">申请果库+</a></td>
+                <td><button class="btn btn-primary guokuplus_apply" data-toggle="modal" data-target="#Comm_GKJModal">申请果库+</button></td>
             </tr>
         {% endfor %}
         </table>
-    </div>
+        <div class="modal fade" id="Comm_GKJModal" tabindex="-1" role="dialog" aria-labelledby="GKJModalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h4 class="modal-title" id="GKJModalLabel">活动申请</h4>
+                                        </div>
+                                        <form action="/seller/guokuplus/apply/" class="application_plus_form" method="post">
+                                        <div class="modal-body">
+                                           
+                                                <input type="hidden" name="taobao_url">
+                                                <div class="application_count application_input"> <b>优惠数量/件:</b>
+                                                    <input class="form-control" id="id_total_volume" name="total_volume" type="text"></div>
+                                                <div class="application_count application_input">
+                                                    <b>优惠价格/元:</b>
+                                                    <input class="form-control" id="id_sale_price" name="sale_price" type="text"></div>
+                                                <div>
+                                                    <div class="application_remarks application_input">
+                                                        <b>附加信息:</b>
+                                                        <textarea class="form-control" cols="40" id="id_seller_remarks" name="seller_remarks" rows="10"></textarea>
+                                                    </div>
+                                                    <div class="cln"></div>
+
+                                                </div>
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <b>{{ application_form.agree_tos }}同意协议</b>
+
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <input type="submit" value="提交" class="btn btn-primary">
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 {% endblock %}
 

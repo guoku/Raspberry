@@ -65,7 +65,16 @@
     <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script type="text/javascript">
     $(function(){
-        
+        $(".guokuplus_apply").on("click",function(e){
+            var url = $(this).parents(".commlist").find(".taobao_url").attr("href");
+            $(".application_plus_form input[name='taobao_url']").val(url);
+            if($(".application_plus_form input[name='taobao_url']").val().length<=0){
+                e.preventDefault();
+            }
+        });
+        $("#Comm_GKJModal").on("hidden",function(e){
+            $(".application_plus_form")[0].reset();
+        });
     });
     </script>
 {% endblock %}

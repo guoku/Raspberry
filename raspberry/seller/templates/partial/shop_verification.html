@@ -142,6 +142,9 @@
         </div>
     {% endif %}
 {% else %}
-   欢迎您, {{ shop_context.shop_nick }} 您已经完成认证
+<div class="alert alert-warning fade in">
+                    欢迎您, {{ shop_context.shop_nick }} 您已经完成认证
+                </div>
+   
 {% endif %}
 
