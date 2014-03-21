@@ -287,7 +287,6 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
             context_instance = RequestContext(request)
         )
     else:
-        print request.POST
         _taobao_id = request.POST.get("taobao_id", None)
         _cid = request.POST.get("cid", None)
         _taobao_shop_nick = request.POST.get("shop_nick", None)

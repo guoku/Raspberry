@@ -166,5 +166,6 @@ class Item(object):
     
     @staticmethod
     def generate_old_buy_link(taobao_id):
-        _url = settings.APP_HOST + "/visit_item?item_id=%s" % taobao_id + "&type=mobile"
+        _url = settings.APP_HOST + "/visit_item?item_id=%s"%taobao_id + "&type=mobile"
+        return _url
 

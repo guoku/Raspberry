@@ -281,7 +281,7 @@ def auth_by_taobao(request):
                         expires_in = _taobao_data['expires_in']
                     )
                 except e:
-                    print e
+                    pass
                 return HttpResponseRedirect(next_url)
             else:
                 pass
