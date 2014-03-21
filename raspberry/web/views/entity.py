@@ -279,10 +279,6 @@ def load_item_info(request):
 
 @login_required
 def create_entity(request, template='entity/new_entity_from_user.html'):
-    if request.is_ajax():
-        print 'yes'
-    else:
-        print 'no'
     if request.method == 'GET':
         return render_to_response(
             template,
@@ -301,6 +297,9 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
         _chief_image_url = request.POST.get("chief_image_url", None)
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
+        _note_text = request.POST.get("note_text", None)
+        _user_id = request.POST.get("user_id", None)
+        
         _intro = ""
         _category_id = int(request.POST.get("selected_category_id", None))
         _detail_image_urls = request.POST.getlist("thumb_images")
@@ -326,11 +325,7 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
             detail_image_urls = _detail_image_urls,
         )
 
-        _note = request.POST.get("note", None)
-        _user_id = request.POST.get("user_id", None)
-        
-        if _note != None and len(_note) > 0:
-            _add_note_and_select_delay(_entity, _user_id, _note)
+        _note = _entity.add_note(creator_id=_user_id, note_text=_note_text)
         
         try:
             CreateTaobaoShopTask.delay(_taobao_shop_nick, _taobao_shop_link)
