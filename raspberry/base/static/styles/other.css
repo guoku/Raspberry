@@ -1,0 +1,42 @@
+/* 
+ * 400/500 页面使用 other.css
+ */
+@import "../base/guoku.css";
+
+#main .center {width:352px;margin:0 auto;}
+#main .center .img-404 {height:220px;width:352px;background:url("/static/v3/images/guoku_404_500_ie6_icon.png") no-repeat;}
+#main .center .img-500 {height:220px;width:352px;background:url("/static/v3/images/guoku_404_500_ie6_icon.png") no-repeat 0 -234px;}
+#main .center h3 {font-size:18px;text-align:center;margin:30px 0;font-weight:700;}
+#main .center p {font-size:14px;text-align:center;}
+#main .center p.c999 {color:#999;margin-bottom:5px;}
+#main .center p.fs12 {font-size:12px;}
+#main .center p.c666 {color:#666;}
+#main .center p.c333 {margin:30px 0;}
+#main .center p.c333 a {color:#333;}
+#main .center p.small {width:120px;margin:0 auto;}
+
+#main .center.ie6 {width:452px;margin:0 auto;margin-top:170px;}
+#main .center .img-ie6 {height:100px;width:100px;background:url("/static/v3/images/guoku_404_500_ie6_icon.png") no-repeat -40px -478px;display:inline-block;*display:inline;*zoom:1;margin-top:-50px;float:left;}
+#main .center .img-firefox {height:45px;width:45px;background:url("/static/v3/images/guoku_404_500_ie6_icon.png") no-repeat -142px -508px;display:block;margin:0 15px 20px;}
+#main .center .img-safari {height:45px;width:45px;background:url("/static/v3/images/guoku_404_500_ie6_icon.png") no-repeat -190px -508px;display:block;margin:0 15px 20px;}
+#main .center .img-chrome {height:45px;width:45px;background:url("/static/v3/images/guoku_404_500_ie6_icon.png") no-repeat -237px -508px;display:block;margin:0 15px 20px;}
+#main .center .img-ie {height:25px;width:25px;background:url("/static/v3/images/guoku_404_500_ie6_icon.png") no-repeat -293px -518px;display:inline-block;*display:inline;*zoom:1;margin:-5px 0 0 0;float:right;}
+#main .center ul {display:inline-block;*display:inline;*zoom:1;margin:60px 0 90px 90px;}
+#main .center li {display:inline-block;*display:inline;*zoom:1;margin-right:30px;}
+
+#main .row {position:relative;}
+#main .row .download_btn {display:block;z-index:999;position:absolute;width:173px;height:20px;font-size:18px;line-height:20px;background:url("/static/v3/images/download/2.png") no-repeat -7px -3px transparent;color:#fff;padding:19px 0;text-align:center;margin-left:10px;}
+#main .row .download_btn:hover {background-position:-6px -65px;text-decoration:none;margin-left:10px;}
+#main .row .download_iphone {left:42px;bottom:80px;}
+#main .row .download_ipad {left:240px;bottom:80px;}
+
+#main .row .image {width:480px;height:360px;}
+#main .row .image img {margin:45px 0 0 45px}
+#main .row .text {margin:0 0 0 0;height:380px;width:480px;padding-left:65px;width:415px;}
+#main .row .image.left {padding-left:75px;width:405px;float: left;}
+#main .row .text.right {padding-left:75px;width:405px;float: right;}
+#main .row .image.right {padding-left:75px;width:405px;float: left;}
+#main .row .text.left {padding-left:75px;width:405px;float: right;}
+#main .row .text h3 {font-size:26px;color:#666666;margin:130px 0 10px;}
+#main .row .text p {font-size:18px;color:#B8B8B8;}
+#main .row .split {height:1px;width:960px;background:url("/static/v3/images/download/line.png") no-repeat;}

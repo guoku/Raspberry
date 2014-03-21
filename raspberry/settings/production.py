@@ -76,9 +76,10 @@ CELERY_DISABLE_RATE_LIMITS = True
 
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
 MEDIA_URL = '/uploads/'
-# STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static')
+# STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/v3/')
 STATIC_ROOT = '/tmp/static/'
 STATIC_URL = 'http://static.guoku.com/static/v3/'
+# STATIC_URL = '/static/v3/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
@@ -115,8 +116,8 @@ INSTALLED_APPS = (
     'seller',
     'stats',
     'web',
-    'edm',
-    # 'lotto',
+    'share',
+    # 'edm',
     'gunicorn',
 )
 
@@ -131,4 +132,7 @@ SCP_KEY = os.path.join(os.path.dirname(__file__), 'scp_key/')
 SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'
 
 ALLOWED_HOSTS = ['*']
+# APP_HOST = "http://test.guoku.com"
+SINA_BACK_URL = APP_HOST + '/sina/auth'
+TAOBAO_BACK_URL = APP_HOST + "/taobao/auth"
 

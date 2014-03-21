@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends "seller_base.html" %}
 {% load i18n staticfiles %}
 {% block title %}
-    <title> 绑定淘宝店铺 </title>
+    绑定淘宝店铺
 {% endblock %}
 {% block css %}
         <link media="all" rel="stylesheet" type="text/css" href="{% static 'styles/index.css' %}">
@@ -21,7 +21,7 @@
         <div class="with_border mt60">
         {% if user_context.shop_nick%}
             <div class="shop_binded">
-                <p>你已经绑定了店铺<a href="{% url 'seller_commodities'%}">管理</a></p>
+                <p>你已经绑定了店铺<a href="{% url 'seller_index'%}">进入管理</a></p>
             </div>
         {% else %}
         {# {{ user_context.taobao_nick }}   #}
@@ -30,9 +30,14 @@
                         <p>请先绑定淘宝帐号</p> 
                     </div>
                 <a href="{% url 'web_setting' %}" target="_blank">绑定</a>
+            {% elif taobao_shop %}
+                <p>您现在绑定的淘宝帐号 {{ taobao_shop.shop_nick }} 对应的店铺 {{ taobao_shop.title }} 已经被果库收录，请按下面的按钮确认，如果要更换其他店铺，请先在<a href="{% url 'web_setting' %}">设置</a>中取消绑定当前淘宝帐号，再绑定新的淘宝帐号</p>
+                <form action="{% url  'seller_confirm_current_taobao_shop' %}" method="POST">
+                    <input type="submit" value="确认"/>
+                </form>
             {% else %}
                 <div class="verify_form">
-                    <p>请输入你店铺某一件商品的地址</p>
+                    <p>果库还没有收录您的淘宝店铺，请输入您店铺某一件商品的地址，我们收录并为您绑定店铺</p>
                     <form action="{%url 'seller_bind_taobao_shop' %}" method="post">{% csrf_token %}
                         <input type="text" name="item_url"/>
                         <div class="verify_submit">

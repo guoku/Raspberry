@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
 
-from base.taobao_shop import TaobaoShop, GuokuPlusApp, GuokuPlusActivity
+from base.taobao_shop import TaobaoShop, GuokuPlusActivity
 from base.item import Item
 from base.entity import Entity
 from management.forms.shop import GuokuPlusActivityForm
@@ -172,17 +172,21 @@ def edit_shop(request):
 @require_GET
 @login_required
 @staff_only
-def guokuplus_application_list(request):
+def guokuplus_list(request):
     _p = int(request.GET.get("p", "1"))
     _para = {}
+    _status = request.GET.get("status", None)
+    if _status:
+        _para['status'] = _status
     _num_every_page = 50
-    _results, _total = GuokuPlusApp.find(offset = (_p - 1) * 50, count = _num_every_page)
+    _results, _total = GuokuPlusActivity.find(status = _status, offset = (_p - 1) * 50, count = _num_every_page)
     _paginator = Paginator(_p, _num_every_page, _total, _para)
     return render_to_response(
-        "shop/application_list.html",
+        "shop/guokuplus_list.html",
         {
             "applications" : _results,
             "paginator" : _paginator,
+            "status_filter" :_status,
         },
         context_instance = RequestContext(request))
 
@@ -190,40 +194,36 @@ def guokuplus_application_list(request):
 @require_GET
 @login_required
 @staff_only
-def guokuplus_application_detail(request):
-    app_id = request.GET.get('app_id', None)
-    app = GuokuPlusApp(app_id)
+def guokuplus_detail(request):
+    app_id = int(request.GET.get('app_id', None))
+    app = GuokuPlusActivity(app_id)
     app_context = app.read()
+    approve_form =  GuokuPlusActivityForm({"app_id" : app_id,
+    "editor_remarks" : app_context['editor_remarks']})
     return render_to_response(
-        "shop/application_detail.html",
+        "shop/guokuplus_detail.html",
         {
             "app_context" : app_context,
-            "approve_form" : GuokuPlusActivityForm({"app_id" : app_id})
+            "approve_form" : approve_form
         },
         context_instance = RequestContext(request)
     )
-    
 
 @require_POST
 @login_required
 @staff_only
-def add_guokuplus_application_editor_comment(request):
-    app_id = request.POST.get('app_id', None)
-    comment = request.POST.get("content", None)
-    guoku_plus_app = GuokuPlusApp(app_id)
-    guoku_plus_app.add_editor_comment(comment)
-    return HttpResponseRedirect(reverse('management_guokuplus_application_detail') + "?app_id=" + app_id)
-
-
-@require_POST
-@login_required
-@staff_only
-def approve_guokuplus_application(request):
+def handle_guokuplus(request):
     form = GuokuPlusActivityForm(request.POST)
     if form.is_valid():
-        guoku_plus_app = GuokuPlusApp(form.cleaned_data['app_id'])
-        guoku_plus_app.approve(form.cleaned_data['start_time'])
-        return HttpResponseRedirect(reverse('management_guokuplus_application_detail') + "?app_id=" + form.cleaned_data['app_id'])
+        guoku_plus = GuokuPlusActivity(form.cleaned_data['app_id'])
+        action = form.cleaned_data['action']
+        editor_remarks = form.cleaned_data['editor_remarks']
+        start_time = form.cleaned_data['start_time']
+        end_time = form.cleaned_data['end_time']
+        if start_time and not end_time:
+            end_time = start_time + datetime.timedelta(7)
+        guoku_plus.handle(action, editor_remarks, start_time, end_time)
+        return HttpResponseRedirect(reverse('management_guokuplus_detail') + "?app_id=" + form.cleaned_data['app_id'])
     else:
         return HttpResponse(form.errors)
 
@@ -233,13 +233,21 @@ def approve_guokuplus_application(request):
 @staff_only
 def shop_verification_list(request):
     _num_every_page = 30
-    _p = int(request.GET.get("p", "1"))
     _para = {}
-    _results, _total = TaobaoShop.read_shop_verification_list((_p - 1) * _num_every_page, _num_every_page)
+    _p = int(request.GET.get("p", "1"))
+    _status = request.GET.get("status", None)
+    if _status:
+        _para['status'] = _status
+    _results, _total = TaobaoShop.read_shop_verification_list(
+        status = _status,
+        offset = (_p - 1) * _num_every_page,
+        count = _num_every_page
+    )
     _paginator = Paginator(_p, _num_every_page, _total, _para)
     return render_to_response(
-        'shop/shop_verification_list.html',
+        'shop/verification_list.html',
         {
+            'status_filter' : _status,
             'results' : _results,
             'paginator' : _paginator,
         },
@@ -249,16 +257,11 @@ def shop_verification_list(request):
 @require_POST
 @login_required
 @staff_only
-def approve_shop_verification(request):
+def handle_shop_verification(request):
     shop_nick = request.POST.get("shop_nick", None)
-    TaobaoShop.approve_shop_verification(shop_nick)
+    editor_remarks = request.POST.get("editor_remarks", None)
+    action = request.POST.get("action", None)
+    shop_inst = TaobaoShop(shop_nick)
+    shop_inst.handle_shop_verification(action)
     return HttpResponseRedirect(reverse("management_shop_verification_list"))
-
-
-@require_GET
-@login_required
-@staff_only
-def guoku_plus_activity_list(request):
-    
-    pass
 

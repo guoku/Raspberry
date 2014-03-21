@@ -4,18 +4,18 @@
             <img src="/static/v3/images/signin.png"  alt="欢迎回来">
         </div>
         <form action="{% url "web_login" %}" method="POST">
-            <input type="text" name="email" placeholder="邮箱" class="text">
-            <input type="password" name="password" placeholder="密码" class="text">
+            <input type="text" name="email" placeholder="邮箱" class="text-input">
+            <input type="password" name="password" placeholder="密码" class="text-input">
             <div class="remember">
                 <label><input type="checkbox" name="remember_me">记住我</label>
                 <a href="">忘记密码?</a>
             </div>
-            <input type="submit" value="登录" class="submit">
+            <input type="submit" value="登录" class="submit_disabled" disabled="true">
         </form>
 
         <div class="third-party">
-            <a href="" class="weibo">新浪微博</a>
-            <a href="" class="taobao">淘宝网</a>
+            <a href="" class="weibo"></a>
+            <a href="" class="taobao"></a>
         </div>
         <div class="to-reg"><a href="">注册帐号 >></a></div>
     </div>

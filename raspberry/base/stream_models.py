@@ -178,42 +178,12 @@ class TaobaoShop(Document):
     }
 
 class TaobaoShopVerificationInfo(DynamicDocument):
-    user_id = IntField(required = True)
     shop_nick = StringField()
-    shop_type = StringField()
-    company_name = StringField()
-    qq_account = StringField()
-    email = StringField()
-    mobile = StringField()
-    main_products = StringField()
-    intro = StringField()
     status = StringField()
     created_time = DateTimeField()
+    updated_time = DateTimeField()
+    editor_remarks = StringField()
     meta = {
         'db_alias' : 'guoku-db',
         'indexes' : ['shop_nick']
-    }
-
-class GuokuPlusApplicationComment(EmbeddedDocument):
-    content = StringField()
-    created_time = DateTimeField()
-
-class GuokuPlusApplication(DynamicDocument):
-    shop_nick = StringField(required = True)
-    taobao_item_id = StringField(required = True)
-    entity_id = IntField()
-    quantity = IntField()
-    sale_price = FloatField()
-    status = StringField()
-    remarks = StringField()
-    editor_comments = ListField(EmbeddedDocumentField(GuokuPlusApplicationComment))
-    seller_comments = ListField(EmbeddedDocumentField(GuokuPlusApplicationComment))
-    has_new_editor_comment = BooleanField()
-    has_new_seller_comment = BooleanField()
-    created_time = DateTimeField()
-    updated_time = DateTimeField()
-    meta = {
-        'db_alias' : 'guoku-db',
-        'collection' : 'guoku_plus_application',
-        'indexes' : [ 'shop_nick', 'taobao_item_id', 'updated_time'],
     }

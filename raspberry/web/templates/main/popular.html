@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n staticfiles %}
 {% load entity %}
+{% load web_common %}
 
 {% block title %}热门{% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">
+{% endblock %}
+
 {% block content %}
     <div id="popular">
         <div class="time">
@@ -13,12 +17,21 @@
                 <a href="{% url 'web_popular' %}?group=weekly" {% if group == 'weekly' %}class="active"{% endif %}>7 天</a>
             </div>
 
-            <span class="recent">最近更新：{{ recent_time }}</span>
+            <span class="recent">最近更新：{{ popular_updated_time|format_time }}</span>
         </div>
 
         <ul class="entities">
             {% for popular in popular_list %}
-                <li>
+                <li class="popular-entity">
+                    <div class="title">
+                        <h2>
+                            {% if popular.entity_context.brand|length != 0 %}
+                                {{ popular.entity_context.brand }}
+                                -{% endif %}
+                            {{ popular.entity_context.title|truncatechars:10 }}
+                        </h2>
+                        <span class="price">&#65509;{{ popular.entity_context.price }}</span>
+                    </div>
                     <a href="{% url 'web_detail' popular.entity_context.entity_hash %}" class="entity-img">
                         <img alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
                     </a>
@@ -31,8 +44,7 @@
                         {% endif %}
                             <span class="icon"></span>喜爱
                             <span class="count">{{ popular.entity_context.like_count }}</span>
-                        </a>/
-                        <span class="hot">热度</span>
+                        </a>
                     </div>
                 </li>
             {% endfor %}

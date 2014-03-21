@@ -18,10 +18,12 @@ from base.item import JDItem
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
-from management.tasks import CreateTaobaoShopTask, MergeEntityTask
+from management.tasks import MergeEntityTask
+from share.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 from utils.extractor.taobao import TaobaoExtractor 
+<<<<<<< HEAD
 from utils.extractor.jd import JDExtractor
 import traceback
 
@@ -32,6 +34,9 @@ def _parse_taobao_id_from_url(url):
         if len(tokens) >= 2 and (tokens[0] == "id" or tokens[0] == "item_id"):
             return tokens[1]
     return None
+=======
+from utils.taobao import parse_taobao_id_from_url
+>>>>>>> db14b2cc11ae3e47e9628510bcc231bec41c056f
 
 def _parse_jd_id_from_url(url):
     itemids = re.findall(r'\d+', url)
@@ -125,7 +130,7 @@ def new_entity(request):
         if re.search(r"\b(jd|360buy)\.com$", _hostname) != None:
             return new_jd_item(request)
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) != None: 
-            _taobao_id = _parse_taobao_id_from_url(_cand_url)
+            _taobao_id = parse_taobao_id_from_url(_cand_url)
 
             _item = Item.get_item_by_taobao_id(_taobao_id)
             if _item == None:
@@ -598,7 +603,7 @@ def entity_list(request):
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
         for _entity_id in _entity_id_list:
-            try:
+            # try:
                 _entity = Entity(_entity_id)
                 _entity_context = _entity.read()
                 _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
@@ -642,10 +647,10 @@ def entity_list(request):
                             _entity_context['is_selected'] = True
                             break
                 _entity_context_list.append(_entity_context)
-            except Exception, e:
-                exstr = traceback.format_exc()
-                print exstr
-                raise(Exception(e))
+                except Exception, e:
+                    exstr = traceback.format_exc()
+                    print exstr
+                    raise(Exception(e))
         
         return render_to_response( 
             'entity/list.html', 
@@ -870,7 +875,7 @@ def read_taobao_item_state(request):
     _taobao_url = request.GET.get("url", None)
     _item = None
     if _taobao_url is not None:
-        _taobao_id = _parse_taobao_id_from_url(_taobao_url)
+        _taobao_id = parse_taobao_id_from_url(_taobao_url)
         _item = Item.get_item_by_taobao_id(_taobao_id)
 
     _result = {}

@@ -1,0 +1,112 @@
+{% extends "seller_base.html" %}
+{% load seller %}
+
+{% block title %}
+    果库卖家
+{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-md-3">
+                <div class="affix">
+                <h4 style="margin-top:0px;width:250px;"><img data-src="holder.js/140x140" class="img-circle" alt="140x140" src="{{user_context.avatar_large}}" style="width: 80px; height: 80px;"> {{user_context.nickname}}</h4>
+                <hr>
+                <ul class="nav nav-list" style="background:#f6f6f6;width:250px;margin-top:20px;">
+                    <li class="">
+                        <a href="{%url 'seller_index'%}" style="font-size:16px;color:black;">
+                            首页
+                        </a>
+                    </li>                    
+                    <li class="">
+                        <a href="#" style="font-size:16px;color:black;">
+                            演示
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="{%url 'seller_faq'%}" style="font-size:16px;color:black;">
+                            FAQ
+                        </a>
+                    </li>
+                </ul>
+                <a href='{%url 'web_logout'%}'<button type="button" class="btn btn-danger" style="margin-top:20px;">登出</button></a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="bs-docs-section">
+                    {% include 'partial/shop_verification.html' %}
+                </div>
+                {% include 'guoku_plus_application.html' %}
+                <div class="bs-docs-section">
+                    <div class="page-header">
+                        <h3 id="js-overview">活动管理</h3>
+                    </div>
+                    <div class="bs-example bs-example-tabs">
+                        <ul id="myTab" class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#home" data-toggle="tab">所有</a>
+                            </li>
+                            <li class="">
+                                <a href="#profile" data-toggle="tab">审核中</a>
+                            </li>
+                            <li>
+                                <a href="#profile" data-toggle="tab">已通过</a>
+                            </li>
+                            <li>
+                                <a href="#profile" data-toggle="tab">进行中</a>
+                            </li>
+                            <li>
+                                <a href="#profile" data-toggle="tab">已结束</a>
+                            </li>
+                            <li>
+                                <a href="#profile" data-toggle="tab">未通过</a>
+                            </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade active in" id="home">
+                                <div class="table-responsive" style="margin-top:20px;">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 45%;">商品</th>
+                                                <th style="width: 30%;">状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in guokuplus_list %}
+                                            <tr>
+                                                <td>
+                                                    <div class="media">
+                                                        <a class="pull-left" href="http://item.taobao.com/item.htm?id={{item.item_context.taobao_id}}">
+                                                            <img class="media-object" alt="64x64" src="{{item.entity_context.chief_image.url}}" style="width: 64px; height: 64px;"></a>
+                                                        <div class="media-body">
+                                                            <h5 class="media-heading"><a href="{% url 'web_detail' item.entity_context.entity_hash %}">{{ item.item_context.title }}</a></h5>
+                                                            <p> <span style="color:#427ec0;font-size: 16px;font-family: Georgia;">￥{{ item.sale_price}} </span> | <span class="badge">{{ item.sales_volume}}件</span></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <h5>
+                                                        <span class="label label-success">{{ item.status }}</span>
+                                                    </h5>
+                                                    <p>开始日期：{{ item.start_time | date:'Y-m-d H:i' }}</p>
+                                                </td>
+                                                <td>
+                           
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane fade" id="profile"></div>
+                            <div class="tab-pane fade" id="profile"></div>
+                            <div class="tab-pane fade" id="profile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

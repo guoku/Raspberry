@@ -2,12 +2,14 @@
 
 {% spaceless %}
     <div class="note-item">
-        <a href="{% url 'web.views.user.user_index' creator_context.user_id %}" class="avatar">
+        <a href="{% url 'web.views.user.user_index' creator_context.user_id %}" class="avatar" target="_blank">
             <img src="{{ creator_context.avatar_small }}" width="50" height="50">
         </a>
 
         <div class="note-detail">
-            <a class="nickname" href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}</a>
+            <a class="nickname" href="{% url 'web.views.user.user_index' creator_context.user_id %}" target="_blank">
+                {{ creator_context.nickname }}
+            </a>
             {% if creator_context.bio %}
                 <small class="bio">{{ creator_context.bio }}</small>
             {% endif %}
@@ -19,6 +21,7 @@
                     <form class="clearfix update-note-form"
                           action="{% url 'web.views.entity.update_note' note_context.entity_id note_context.note_id %}"
                           method="POST" style="display: none">
+                	{% csrf_token %}
                         <textarea name="note_text">{{ note_context.content }}</textarea>
 
                         <div>
@@ -27,8 +30,8 @@
                         </div>
                     </form>
                 {% endif %}
-
-                <a href="javascript:;" class="poke" data-note="{{ note_context.note_id }}"><span></span>
+                
+                <a href="javascript:;" class="poke{%if poke_button_target_status == '0'%} poked{%endif%}" data-note="{{ note_context.note_id }}" data-target-status="{{ poke_button_target_status }}"><span></span>
                     {% if note_context.poke_count > 0 %}
                         <small>{{ note_context.poke_count }}</small>
                     {% endif %}
@@ -40,7 +43,9 @@
                 </a>
 
                 <span class="create-time">{{ note_context.created_time|format_time }}</span>
-
+                {% if note_context.is_selected %}
+                    <span class="selection-icon"></span>
+                {% endif %}
                 {% if user_context.user_id == creator_context.user_id %}
                     <a href="javascript:;" class="update-note">修改</a>
                     <span class="my-note">你的点评</span>

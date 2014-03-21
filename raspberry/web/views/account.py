@@ -21,6 +21,7 @@ import re
 from base.taobao_shop import TaobaoShop
 from base.user import User
 from urlparse import urlparse
+from share.tasks import RetrievePasswordTask 
 from web.forms.account import SignInAccountForm, SignUpAccountFrom, SettingAccountForm, ChangePasswordForm
 from django.utils.log import getLogger
 
@@ -182,7 +183,13 @@ def auth_by_sina(request):
                     return HttpResponseRedirect(reverse("web_third_party_register") + "?source=sina&token=" + token)
             elif source == "bind":
                 try:
-                    _user_inst = User(request.user.id)
+                    if not _user_inst:
+                        _user_inst = User(request.user.id)
+                    else:
+                        _user_context = _user_inst.read()
+                        if _user_context['user_id'] != request.user.id:
+                            return HttpResponse("this sina account has been binded by another user")
+                            
                     _user_inst.bind_sina(
                         sina_id = _sina_data['sina_id'],
                         screen_name = _sina_data['screen_name'],
@@ -262,13 +269,17 @@ def auth_by_taobao(request):
                 try:
                     if not _user_inst:
                         _user_inst = User(request.user.id)
-                        #Todo: handle errors
-			_user_inst.bind_taobao(
-                            taobao_id = _taobao_data['taobao_id'],
-                            screen_name = _taobao_data['screen_name'],
-                            taobao_token = _taobao_data['access_token'],
-                            expires_in = _taobao_data['expires_in']
-                        )
+                    else:
+                        _user_context = _user_inst.read()
+                        if _user_context['user_id'] != request.user.id:
+                            return HttpResponse("this taobao accout has been binded by another user")
+                    #Todo: handle errors
+                    _user_inst.bind_taobao(
+                        taobao_id = _taobao_data['taobao_id'],
+                        screen_name = _taobao_data['screen_name'],
+                        taobao_token = _taobao_data['access_token'],
+                        expires_in = _taobao_data['expires_in']
+                    )
                 except e:
                     print e
                 return HttpResponseRedirect(next_url)
@@ -301,8 +312,28 @@ def logout(request):
     next_url = request.META.get('HTTP_REFERER', reverse('web_selection'))
     return HttpResponseRedirect(next_url)
 
-def forget_passwd(request):
-    return
+def forget_passwd(request, template='account/forget_password.html'):
+
+    if request.method == 'GET':
+        return render_to_response(
+            template,
+            {
+            },
+            context_instance = RequestContext(request),
+        )
+    else:
+        try:
+            _email = request.POST.get('email', None)
+            _user_id = User.get_user_id_by_email(_email)
+            if _user_id == None:
+                return HttpResponse('not_exist')
+            else:
+                RetrievePasswordTask.delay(_user_id)
+                return HttpResponse('success')
+        except Exception, e:
+            return HttpResponse('failed')
+  
+        
 
 @require_POST
 @login_required
@@ -310,7 +341,7 @@ def change_password(request):
     form = ChangePasswordForm(request.user, request.POST)
     _user = User(request.user.id)
     if form.is_valid():
-        _user.reset_account(password = form.cleaned_data['new_password'])
+        _user.reset_account(password=form.cleaned_data['new_password'])
     return HttpResponseRedirect(reverse("web_setting"))
 
 @require_POST
@@ -367,4 +398,46 @@ def update_avatar(request):
         _user.upload_avatar(_image_data)
         
         return HttpResponseRedirect(reverse('web_setting')) 
+
+def reset_password(request, template='account/reset_password.html'):
+    if request.method == "GET":
+        _token = request.GET.get("token", None)
+        if _token:
+            _result = User.check_one_time_token(_token, "reset_password")
+            if _result['status'] == 'available': 
+                return render_to_response(
+                    template, 
+                    {
+                        'status' : _result['status'], 
+                        'token' : _token,
+                        'user_context' : User(_result['user_id']).read() 
+                    },
+                    context_instance = RequestContext(request)
+                )
+            else:
+                return render_to_response(
+                    template,
+                    { 
+                        'status' : _result['status'] 
+                    },
+                    context_instance=RequestContext(request)
+                )
+    elif request.method == "POST":
+        _token = request.POST.get("token", None)
+        _password = request.POST.get("password", None)
+        _result = User.check_one_time_token(_token, "reset_password")
+        if _result['status'] == 'available': 
+            _user = User(_result['user_id'])
+            _user.reset_account(password=_password)
+            User.confirm_one_time_token(_token)
+            return HttpResponseRedirect(reverse('web_selection'))
+        
+        else:
+            return render_to_response(
+                template,
+                { 
+                    'status' : _result['status'] 
+                },
+                context_instance=RequestContext(request)
+            )
 

@@ -7,36 +7,76 @@
     <title>
         {% block title %}果库{% endblock %}
     </title>
-    <link media="all" rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap.min.css' %}">
-    {% block css %}{% endblock %}
+    <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    {% block css %}
+
+    {% endblock %}
 </head>
+<style type="text/css">
+    body{
+        padding-top: 100px;
+    }
+    .cln{
+        clear: both;
+    }
+    .verify_shop b,.application_input b{
+        line-height: 30px;
+    }
+    .application_url,.application_count{
+        margin:0px 5px;
+    }
+    .application_remarks{
+        margin:0px 5px;
+    }
+</style>
 <body>
+<div id="header" class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{%url 'seller_index' %}">果库卖家</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="{%url 'seller_index'%}">主页</a>
+                    </li>
+                    <li>
+                        <a href="{%url 'seller_commodities'%}">我的商品</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</div>
+
 <div id="main" class="container">
-   <div class="navbar navbar-default navbar-static-top span10">
-      <div class="navbar-inner">
-        <a class="navbar-brand" href="/"><h2>果库卖家</h2></a>
-      </div>
-    </div>
-    <div class="span10">
-        <ul class="nav nav-tabs">
-            <li {% if "commodities" in request.path%}class="active" {%endif%}>
-                <a href="{%url 'seller_commodities'%}">我的商品</a>
-            </li>
-            <li {% if "guokuplus/applications" in request.path %}class="active" {%endif%}>
-                <a href="{%url 'seller_guoku_plus_applications_list'%}">我的果库+申请</a>
-            </li>
-            <li {% if "guokuplus/activities/" in request.path %}class="active" {%endif%}>
-                <a href="{%url 'seller_guoku_plus_applications_list'%}">我的果库+活动</a>
-            </li>
-        </ul>
-    </div>
     {% block content %}{% endblock %}
 </div>
 <div id="footer">{% block footer %}{% endblock %}</div>
 
 {% block javascript %}
     <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
-    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+    $(function(){
+        $(".guokuplus_apply").on("click",function(e){
+            var url = $(this).parents(".commlist").find(".taobao_url").attr("href");
+            $(".application_plus_form input[name='taobao_url']").val(url);
+            if($(".application_plus_form input[name='taobao_url']").val().length<=0){
+                e.preventDefault();
+            }
+        });
+        $("#Comm_GKJModal").on("hidden",function(e){
+            $(".application_plus_form")[0].reset();
+        });
+    });
+    </script>
 {% endblock %}
 {% block script %}{% endblock %}
 </body>

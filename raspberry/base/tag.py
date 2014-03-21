@@ -75,7 +75,16 @@ class Tag(object):
         return _hash
 
     @classmethod
-    def tag_name(cls, tag_hash):
+    def get_tag_hash_from_text(cls, tag_text):
+        try:
+            _tag = TagModel.objects.get(tag=tag_text)
+            return _tag.tag_hash
+        except TagModel.DoesNotExist, e:
+            log.error("Error: %s" % e)
+        return None
+
+    @classmethod
+    def get_tag_text_from_hash(cls, tag_hash):
         try:
             _tag = TagModel.objects.get(tag_hash=tag_hash)
             return _tag.tag

@@ -1,24 +1,26 @@
 {% extends "base.html" %}
 {% load i18n staticfiles %}
-{% load tags web_common %}
+{% load web_common %}
 
-{% block title %}{{ hash|trans_tag }}{% endblock %}
+{% block title %}{{ tag }}{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/tags.css' %}">{% endblock %}
 {% block content %}
     <div id="tags">
         <div class="nav">
             <ul>
-                <li>#{{ hash|trans_tag }}</li>
+                <li>#{{ tag }}</li>
             </ul>
         </div>
 
         <div class="tags">
             {% spaceless %}
                 {% for entity in entities %}
-{#                    {{ entity.title }}#}
                     {% display_common_entity entity %}
                 {% endfor %}
             {% endspaceless %}
         </div>
+        {% if paginator %}
+            {% display_web_paginator paginator %}
+        {% endif %}
     </div>
 {% endblock %}

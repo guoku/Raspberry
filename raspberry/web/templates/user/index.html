@@ -3,10 +3,13 @@
 {% load web_common %}
 
 {% block title %}
-    {{ query_user_context.nickname|default:'我' }}的果库
+    {{ query_user_context.nickname|default:'我的果库' }}
     {% block subtitle %}{% endblock %}
 {% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">
+{% endblock %}
+
 {% block content %}
     <div id="user-center">
         <div class="base">
@@ -17,26 +20,26 @@
                 <span class="bio">{{ query_user_context.bio }}</span>
                 <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
             </div>
-            {% if is_user_self %}
+            {% if relation == 4 %}
                 <a class="setting" href="{% url 'web_setting' %}"><span>{% trans "settings" %}</span></a>
-            {% elif is_user_already_follow %}
-                <a href="{% url 'web_follow' query_user_context.user_id %}" class="follow-user">取消关注</a>
-            {% else %}
-                <a href="{% url 'web_follow' query_user_context.user_id %}" class="follow-user">关注</a>
+            {% elif relation == 3 %}
+                <a href="{% url 'web_follow' query_user_context.user_id 0 %}" class="follow-user is-fan gray-f"><span class="img_is_fun"></span><b>取消关注</b></a>
+            {% elif relation == 1 %}
+                <a href="{% url 'web_follow' query_user_context.user_id 0 %}" class="follow-user gray-f"><span class="img_not_fun"></span><b>取消关注</b></a>
+            {% elif relation == 2 %}
+                <a href="{% url 'web_follow' query_user_context.user_id 1 %}" class="follow-user is-fan blue-f"><span src="" class="img_follow"></span><b>关注</b></a>
+            {% elif relation == 0 %}
+                <a href="{% url 'web_follow' query_user_context.user_id 1 %}" class="follow-user blue-f"><span class="img_follow"></span><b>关注</b></a>
             {% endif %}
         </div>
 
         <div class="nav">
             {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
-{#            {% url 'web_user_posts' query_user_context.user_id as web_user_posts_url %}#}
             {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
             {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}
             <a href="{{ web_user_likes_url }}" {% if web_user_likes_url in request.path %}class="active"{% endif %}>{% trans 'likes' %}
                 <strong>({{ query_user_context.like_count }})</strong>
             </a>
-{#            <a href="{{ web_user_posts_url }}" {% if web_user_posts_url in request.path %}class="active"{% endif %}>{% trans 'posts' %}#}
-{#                <strong>()</strong>#}
-{#            </a>#}
             <a href="{{ web_user_notes_url }}" {% if web_user_notes_url in request.path %}class="active"{% endif %}>{% trans 'notes' %}
                 <strong>({{ query_user_context.entity_note_count }})</strong>
             </a>
@@ -71,14 +74,6 @@
                     {% endfor %}
                 </ul>
 
-                <ul class="prices">
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}">按价格</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=1" class="price">0-99</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=2" class="price">100-499</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=3" class="price">500-999</a></li>
-                    <li><a href="{{ web_user_likes_url }}?c={{ category_id }}&price=4" class="price">1000+</a></li>
-                </ul>
-
                 {% if entity_list|length > 0 %}
                     <div class="likes">
                         {% for entity_context in entity_list %}
@@ -110,7 +105,7 @@
             {% if tag_list|length > 0 %}
                 <div class="user-tag">
                     {% for tag_context in tag_list %}
-                        {% display_common_tag tag_context %}
+                        {% display_common_tag tag_context query_user_context.user_id %}
                     {% endfor %}
                 </div>
             {% endif %}

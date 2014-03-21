@@ -59,9 +59,10 @@ def display_common_note(note):
 register.inclusion_tag("common/note.html")(display_common_note)
 
 
-def display_common_tag(tag_context):
+def display_common_tag(tag_context, user_id=None):
     return {
-        'tag_context' : tag_context
+        'tag_context' : tag_context,
+        'user_id' : user_id
     }
 
 
@@ -79,6 +80,4 @@ def display_common_user(user_context):
     return {
         'user_context' : user_context,
     }
-
-
 register.inclusion_tag("common/user.html")(display_common_user)

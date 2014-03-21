@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}添加商品 － 果库{% endblock %}
+{% block css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/entity.css' %}">{% endblock %}
+
+{% block content %}
+    <div id="add-entity">
+        <h2>添加商品入库</h2>
+
+        <div class="entity">
+            <div class="guoku-block container">
+                <div sd="{% url 'web_load_item_info' %}"  class="load-entity">
+                    <p>选择货真价实，有用、有趣、有价值的好商品 </p>
+                    <input type="text" class="text-input" name="cand_url" placeholder="粘贴商品链接到这里" value="{{ cand_url }}">
+                    <input type="submit" value="载入" class="guoku-button">
+                </div>
+		<div class="entity-detail">
+                    <div>
+                        <div class="brand">
+                            <p>品牌</p>
+                            <input type="text" class="text-input detail_taobao_brand" placeholder="如果有">
+                        </div>
+                        <div class="title">
+                            <p>商品名称</p>
+                            <input type="text" class="text-input detail_title_input">
+                        </div>
+                    </div>
+
+                    <h3 class="detail_title"></h3>
+                    <div class="img-container detail_chief_url">
+                        <img />
+                    </div>
+                    <div class="detail-img detail_thumb_images">
+                        
+                    </div>
+                </div>
+       	    </div>
+            <div class="add-note">
+                <div class="guoku-block note-container">
+                    <a class="avatar"><img width="50" height="50" class="user_avatar"></a>
+
+                    <div class="detail">
+                        <span class="nickname"></span>
+
+                        <form action="" method="POST">
+                            <textarea class="text-input" name="note_text" placeholder="来说说你的评价吧？欢迎真实、有用、有趣的商品点评。"></textarea>
+                            <input type="submit" value="发表" class="guoku-button">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="aside guoku-block">
+            <div>
+                <h3>果库全是好商品</h3>
+                <p>如果，一件商品，<br>
+                    你愿意让家人使用或与朋友分享，也许这就应该是件不错的东西。</p>
+            </div>
+            <div>
+                <h3>创建人信息</h3>
+                <p>作为第一个把商品推荐到果库的人，你将被永久记录在商品页。</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -26,7 +26,7 @@
         </div>
         <div class="main">
             <div class="entity">
-                <a class="entity-img" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao">
+                <a class="entity-img" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
                     <img src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
                 </a>
                 <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</h2>
@@ -64,7 +64,7 @@
                         <img src="{{ user_context.avatar_small }}" width="50" height="50">
                         <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">
                             <textarea name="note_text" placeholder="写点评 ＃贴标签"></textarea>
-                            <div>
+                            <div class="add-note-div">
                                 <button type="button" class="cancel">取消</button>
                                 <button type="submit" class="submit">点评</button>
                             </div>
@@ -76,7 +76,7 @@
 
         <div class="aside">
             <div class="entity-info">
-                <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao">
+                <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
                     详情<span>&#65509;{{ entity_context.price }}</span>
                 </a>
 {#                <div class="shop">来自于<a href="">url需替换</a></div>#}
@@ -95,7 +95,7 @@
                 <h3>{{ entity_context.like_count }}人喜爱</h3>
                 <div>
                     {% for liker, date in liker_list %}
-                    <a href="{% url 'web_user_likes' liker %}">
+                    <a href="{% url 'web_user_likes' liker %}" target="_blank">
 {#                        <img src="{{ liker }}" height="25" width="25">#}
                         {% show_avater liker 25 %}
                     </a>
@@ -112,7 +112,7 @@
                 <h3>该商品的标签</h3>
                 <div>
                     {% for tag in tag_list %}
-                        <a href="{% url "web_tags" tag.tag_hash %}">＃{{ tag.tag }}</a>
+                        <a href="{% url "web_tag_detail" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -128,13 +128,24 @@
                     <a href="">iPhone</a> / <a href="">iPhone</a> / <a href="">iPhone</a>
                 </div>
             </div>
+            {% if enable_guoku_plus and activity_id%}
+                <div>
+                    <h3>获取果库价优惠码</h3>
+                    <form action="{%url 'web_get_guokuplus_token' %}" method="POST">
+                        <input type="hidden" name="activity_id" value="{{activity_id}}"/>
+                        <input type="submit" value="获取"/>
+                    </form>
+                </div>
+            {% endif %}
         </div>
 
         <div class="recommend">
             <h2>相似推荐</h2>
             <div>
                 {% for entity_context in guess_entity_context %}
-                    <a href="{% url 'web_detail' entity_context.entity_hash %}"><img src="{{ entity_context.chief_image.url|resize:'240' }}" alt=""></a>
+                    <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank">
+                        <img src="{{ entity_context.chief_image.url|resize:'240' }}" alt="">
+                    </a>
                 {% endfor %}
             </div>
         </div>
@@ -143,6 +154,13 @@
 
 {% block script %}
     <script type="text/javascript">
+        function logClick(item_id) {
+            var url = '/item/' + item_id + '/visit/log/';
+            var data = {
+                entry: 'web' 
+            };
+            $.post(url, data);
+        };
         (function(win,doc){
             var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
             if (!win.alimamatk_show) {

@@ -1,0 +1,129 @@
+/*#settings .guoku-block {*/
+    /*padding: 35px 0 50px 250px;*/
+/*}*/
+
+@import "./base.css";
+@import "./normalize.min.css";
+
+#setting h2 {
+    font-size: 16px;
+    color: #444444;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eeeeee;
+}
+/*#setting hr {*/
+    /*color: #eeeeee;*/
+/*}*/
+
+#setting .row {
+    /*margin: auto;*/
+    text-align: center;
+}
+#setting .avatar {
+    width: 120px;
+    height: 120px;
+    margin: 75px auto 30px auto;
+}
+#setting .avatar img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+}
+#setting .update-avatar {
+    position: relative;
+    /*margin-bottom: 40px;*/
+}
+#setting .update-avatar a {
+    display: block;
+    /*margin-right: 25px;*/
+    padding: 5px;
+    /*margin: auto;*/
+    /*margin: 5px;*/
+    color: #427ec0;
+    text-align: center;
+}
+#setting .update-avatar .upload-click {
+    position: absolute;
+    top: 230px;
+    left: 438px;
+    width: 84px;
+    margin: auto;
+    filter: alpha(opacity:0);
+    opacity: 0;
+}
+#setting .update-avatar p {
+    margin: 10px 0;
+    padding: 5px;
+    text-align: center;
+}
+
+#setting .base-info {
+    margin: 60px 0;
+}
+
+#setting .base-info h3 {
+    /*text-align: center;*/
+    font-size: 18px;
+    font-weight: 100;
+    width: 345px;
+    margin: 15px auto;
+    /*padding: 0 15px;*/
+}
+
+#setting label {
+    display: inline-block;
+    width: 110px;
+}
+#setting select {
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+
+#setting .text-input {
+    width: 180px;
+    height: 30px;
+    color: #999999;
+    /*border-radius: 4px;*/
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+    padding: 0 10px;
+}
+#setting .textarea-input {
+    width: 180px;
+    height: 51px;
+    color: #999999;
+    resize: none;
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+#setting .password {
+     margin-top: 40px;
+}
+#setting .password h3 {
+    font-size: 18px;
+    font-weight: 100;
+    width: 345px;
+    margin: 15px auto;
+}
+
+#setting input:focus {
+    border-color: #ade0b3;
+    background-color: #f8f8f8;
+}
+#setting textarea:focus {
+    border-color: #ade0b3;
+    background-color: #f8f8f8;
+}
+
+#setting .sns-name {
+    display: inline-block;
+    width: 110px;
+    padding-right: 30px;
+}
+
+#setting .active {
+    color: #427EC0;
+}

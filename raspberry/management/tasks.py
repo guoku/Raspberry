@@ -61,24 +61,6 @@ class ArrangeSelectionTask(Task):
         )
         print "selection arranged...%s secs cost" % str(datetime.datetime.now() - _t_start)
 
-class CreateTaobaoShopTask(Task):
-    ignore_result = True
-    time_limit = 30
-    max_retries = MAX_RETRIES
-    default_retry_delay = RETRY_DELAY
-    queue = "main"
-    
-    def run(self, nick, shop_link):
-        if not TaobaoShop.nick_exist(nick):
-            _shop_info = TaobaoExtractor.fetch_shop(shop_link)
-            _shop = TaobaoShop.create(
-                nick = nick,
-                shop_id = _shop_info['shop_id'],
-                title = _shop_info['title'],
-                shop_type  = _shop_info['type'],
-                seller_id = _shop_info['seller_id'],
-                pic_path = _shop_info['pic']
-            )
 
 class MergeEntityTask(Task):
     ignore_result = True

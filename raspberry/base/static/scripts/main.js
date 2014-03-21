@@ -33,7 +33,9 @@ function initTag(){
             tag = "";
             cursor = -1;
             length = 0;
+            $("textarea[name='note_text']").css("height","20px");
             dom.css("margin", "0");
+
             clearTimeout(timeout);
 
             $(".tag-auto-complete, .text_area").hide();
@@ -69,7 +71,7 @@ function initTag(){
 
                 callback();
 
-                dom.css("margin-left", pos.left-5).css("margin-top", pos.top+25);
+                dom.css("margin-left", pos.left-5).css("margin-top", pos.top+15);
                 dom.show();
                 dom.find("p").mouseover(function(){
                     dom.find("p").removeClass("hover");
@@ -189,7 +191,7 @@ function initTag(){
             init();
         });
     };
-    
+
     var util = {
         isUserLogined: function () {
             // 通过前端简单检测用户是否登录，该方法是不可靠的，后端仍需要检测限制
@@ -207,13 +209,12 @@ function initTag(){
             function formClick(e) {
                 e.stopPropagation();
             }
-
-            var flag = 0;
+            var flag = 1;
             var $body = $('body');
             $login.show();
            $body.on('click', removeLogin);
             function removeLogin() {
-                if (flag === 1) {
+                if (flag == 1) {
                     $accountForm.hide();
                     $body.off('click', removeLogin);
                     $accountForm.off('click', formClick);
@@ -222,30 +223,37 @@ function initTag(){
             }
             
             $login.find('.to-reg').on('click', function (e) {
-                e.preventDefault();
+                
                 $login.hide();
                 $reg.show();
+                e.preventDefault();
             });
 
             $reg.find('.to-login').on('click', function (e) {
-                e.preventDefault();
+                
                 $reg.hide();
                 $login.show();
+                e.preventDefault();
             });
         },
 
         like: function () {
             // 喜爱 like entity
-
             var self = this;
-            $('.like').on('click', function (e) {
+            $('.like').live('click', function (e) {
                 if (!self.isUserLogined()) {
                     self.popLoginBox();
                 } else {
                     var $like = $(this);
                     var $counter = $like.find('.count');
-
-                    $.post($like[0].href, function (data) {
+                    var url = $(this).attr("href");
+                    if(url[url.length-2] == 1)
+                    	var like_status = 0;
+                    else
+                    	var like_status = 1;
+                   	var s = url.replace(/\/[01]\//,"/"+like_status+"/");
+                   	$(this).attr("href",s);
+                    $.post(url, function (data) {
                         var count = parseInt($counter.text());
                         var result = parseInt(data);
 
@@ -265,7 +273,7 @@ function initTag(){
         showEntityTitle: function ($noteItem) {
             // 为精选添加 鼠标悬浮显示标题
 
-            var $entityTitle = $noteItem.find('.entity .title');
+            var $entityTitle = $noteItem.find('.title');
             $noteItem.hover(function () {
                 $entityTitle.slideDown('fast');
             }, function () {
@@ -280,11 +288,19 @@ function initTag(){
             });
         },
 
+        popularHover: function () {
+            var self = this;
+            $('.popular-entity').each(function (){
+                self.showEntityTitle($(this));
+            });
+        },
+
         loadData: function(counter, object) {
             var url = window.location.href;
             $.ajax({
                 url: url,
                 type: "GET",
+                async: false,
                 data: {'p': counter },
                 success: function(data) {
 //                    return data;
@@ -298,6 +314,37 @@ function initTag(){
                         $html.appendTo(object);
                     }
                 }
+            });
+        },
+
+        shareWeibo: function() {
+//            var self = this;
+
+            $('.share a').live('click', function(e){
+//                console.log(this);
+                e.preventDefault();
+
+                var url = location.href;
+//                console.log(url);
+                var pic = $('.entity-img img').attr("src");
+                var content = $('.selection-note .note-item .note-detail p').html();
+//                console.log(content);
+                var param = {
+                    url:url,
+                    type:'3',
+                    count:'0',
+                    appkey:'1459383851',
+                    title:content,
+                    pic:pic,
+                    ralateUid:'2179686555',
+                    rnd:new Date().valueOf()
+                };
+                var temp = [];
+                for( var p in param ){
+                    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+                }
+                var link = "http://service.weibo.com/share/share.php?" + temp.join('&');
+                window.open(link);
             });
         }
     };
@@ -323,55 +370,13 @@ function initTag(){
                         $(".click_to_top").fadeOut();
                     }
                     var $this = $(this);
+                    
+                    //这里临时不采用自动加载，换成分页
                     if (($(window).height() + $(window).scrollTop()) >= $(document).height()) {
                             
 //                    if ($this.scrollTop() > top) {
                         counter++;
                         util.loadData(counter, $selection);
-//                        top += 2300;
-//                        var url = '/selected/?p=' + counter;
-//                        var result = util.loadData(counter);
-//
-//                        var status = parseInt(result.status);
-//                        if (status == 1) {
-//                            var $html = $(result.data);
-//                            $html.each(function(){
-//                                util.showEntityTitle($(this));
-//                            });
-//                            $html.appendTo($selection);
-//                        }
-//                        var url = window.location.href;
-////                        console.log(url);
-//                        $.ajax({
-//                            url: url,
-//                            type: "GET",
-//                            data: {'p': counter},
-//                            success: function(data) {
-//                                result = $.parseJSON(data);
-//                                var status = parseInt(result.status);
-//                                if (status == 1) {
-//                                    var $html = $(result.data);
-//                                    $html.each(function() {
-//                                        util.showEntityTitle($(this));
-//                                    });
-//                                    $html.appendTo($selection);
-//                                }
-//                            }
-//                        });
-//                        $.get(url, function (result) {
-//                            result = $.parseJSON(result);
-//                            var status = parseInt(result.status);
-//
-//                            if (status === 1) {
-//                                var $html = $(result.data);
-//                                $html.each(function () {
-//                                    util.showEntityTitle($(this));
-//                                });
-//                                $html.appendTo($selection);
-//                            } else if (status === 0) {
-//                                // 没有数据可以加载了
-//                            }
-//                        });
                     }
                 });
             }
@@ -396,7 +401,6 @@ function initTag(){
     var detail = {
         updateNote: function ($noteItem) {
             // 用于修改点评，为修改点评按钮添加事件处理等
-
             var $form = $noteItem.find('.update-note-form');
 
             if ($form[0]) {
@@ -408,6 +412,10 @@ function initTag(){
                 $textarea.TagAC();
 
                 $noteItem.find('.update-note').on('click', function () {
+                	if($form.css("display")=="block"){
+                		$form.find(".cancel").click();
+                		return ;
+                	}
                     originNoteText = textarea.value;
                     $noteContent.hide();
                     $form.show();
@@ -534,7 +542,7 @@ function initTag(){
             var $noteDetail = $noteItem.find('.note-detail');
 
             // 动态加载点评的评论
-            $noteItem.find('.add-comment').on('click', function () {
+            $noteItem.find('.add-comment').on('click', function (e) {
                 if (!util.isUserLogined()) {
                     util.popLoginBox();
                 } else {
@@ -562,6 +570,8 @@ function initTag(){
                         });
                     }
                 }
+                return false;
+                e.preventDefault();
             });
         },
 
@@ -643,7 +653,7 @@ function initTag(){
 
         poke: function () {
             // 点评 点赞
-            $('.poke').on('click', function () {
+            $('.poke').on('click', function (e) {
                 var $this = $(this);
 
                 if (!util.isUserLogined()) {
@@ -653,7 +663,15 @@ function initTag(){
                     var $counter = $poke.find('small');
                     var note_id = $poke.attr('data-note');
                     var url = '/note/' + note_id + '/poke/';
-
+                    if($this.attr("data-target-status") == 1){
+                    	$this.attr("data-target-status",0);
+                    	$poke.addClass('poked');
+                        url+="1/";
+                    }else{
+                    	$poke.removeClass('poked');
+                    	$this.attr("data-target-status",1);
+                        url+="0/";
+                    }
                     $.post(url, function (data) {
                         var count = parseInt($counter.text()) || 0;
                         var result = parseInt(data);
@@ -677,6 +695,8 @@ function initTag(){
                         }
                     });
                 }
+                return false;
+                e.preventDefault();
             });
         }
     };
@@ -691,9 +711,15 @@ function initTag(){
                     var result = parseInt(data);
 
                     if (result === 1) {
-                        $this.text('取消关注');
+                        if($this.hasClass(".is-fan")){
+                            $this.html('<span class="img_is_fun"></span><b>取消关注</b>');
+                        }else{
+                            $this.html('<span class="img_not_fun"></span><b>取消关注</b>');
+                        }
+                        $this.removeClass("blue-f").addClass("gray-f");
                     } else if (result === 0) {
-                        $this.html('<span></span> 关注');
+                        $this.html('<span class="img_follow"></span><b>关注</b>');
+                        $this.removeClass("gray-f").addClass("blue-f");
                     }
                 });
 
@@ -751,6 +777,8 @@ function initTag(){
     (function init() {
         util.like();
         util.noteHover();
+        util.popularHover();
+        util.shareWeibo();
 
         clickToTop.caculateRight();
         clickToTop.bindClick();
@@ -771,3 +799,119 @@ function initTag(){
     })();
 
 })(jQuery, document, window);
+$(function(){
+
+	$(".account-form input[name='password'],.account-form input[name='email']").on("keyup",function(){
+		if($(".account-form input[name='password']").val()!="" && $.trim($(".account-form input[name='email']").val())!=""){
+			$(".account-form input[type='submit']").removeAttr("disabled").removeClass("submit_disabled").addClass("submit");
+		}else{
+			$(".account-form input[type='submit']").attr("disabled",true).removeClass("submit").addClass("submit_disabled");
+		}
+	});
+
+    $(".load-entity input[type='submit']").on("click",function(){
+        var entity_url = $("input[name='cand_url']").val();
+        var request_url = $(".load-entity").attr("sd");
+        $.ajax({
+            type:"post",
+            url:request_url,
+            data:{cand_url:entity_url},
+            dataType:"json",
+            success:function(data){
+                console.log(data);
+                $(".entity-detail").slideDown();
+                $(".add-note").show();
+                $(".detail_title").text(data.data.taobao_title);
+                $(".detail_title_input").val(data.data.taobao_title);
+                $(".detail_chief_url img").attr("src",data.data.chief_image_url);
+                $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
+                for(var i=0;i<data.data.thumb_images.length;i++){
+                    if(i==0){
+                        $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');
+                    }else{
+                        $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');
+                    }
+                    $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'>').appendTo($(".detail form"));
+                }
+
+                $('<input type="hidden" name="taobao_id" value='+data.data.taobao_id+'><input type="hidden" name="shop_nick" value='+data.data.shop_nick+'><input type="hidden" name="url" value='+data.data.cand_url+'><input type="hidden" name="taobao_title" value='+data.data.taobao_titie+'><input type="hidden" name="price" value='+data.data.price+'><input type="hidden" name="chief_image_url" value='+data.data.chief_image_url+'><input type="hidden" name="cid" value='+data.data.cid+'><input type="hidden" name="selected_category_id" value='+data.data.selected_category_id+'><input type="hidden" name="brand"><input name="user_id" type="hidden" value='+data.data.user_context.user_id+'>').appendTo($(".detail form"));
+            },
+            error:function(msg){
+                console.log(msg);
+            }
+        });
+    });
+    $("#add-entity .detail-img div img").live("click",function(){
+        $(".current_img").removeClass("current_img");
+        $(this).addClass("current_img");
+        var img_url = $(this).attr("src");
+        var big_url = img_url.replace('50x50','300x300');
+        $(".detail_chief_url img").attr("src",big_url);
+    });
+    $(".detail form").on("submit",function(){
+        var brand = $(".detail_taobao_brand").val();
+        if(brand.length>0){
+            $('<input name="brand" value='+brand+' />').appendTo($(".detail form"));
+            return true;
+        }else{
+            return false;
+        }
+    });
+    $("#forget_sendmail").on("click",function(){
+        var email = $(".forget_input").val();
+        var request_url = $(".password").attr("sd");
+        $.ajax({
+            type:"post",
+            url:request_url,
+            data:{email:email},
+            success:function(data){
+                console.log(data);
+                switch(data){
+                    case "success":
+                        send_status(false);
+                        var s = 60;
+                        $("#forget_sendmail").html("发送成功！<i>60</i>秒后可重新发送！").attr("send-status",1);
+                        var t = setInterval(function(){
+                            console.log(s);
+                            s -=1;
+                            if(s>=0)
+                                $("#forget_sendmail").html("发送成功！<i>"+s+"</i>秒后可重新发送！");
+                            else{
+                                $("#forget_sendmail").html("发送邮件！").attr("send-status",0);
+                                send_status(true);
+                                clearInterval(t);
+                            }
+                        },1000);
+                    break;
+                    case "not_exist":
+                        $(".forget_input_tip").html('该邮箱尚未注册，<a href="">点此注册</a>').show();
+                    break;
+                    case "failed":
+                        $(".forget_input_tip").html('发送失败,请尝试重新发送！').show();
+                    break;
+                    default:
+                        $(".forget_input_tip").html('发送失败,请尝试重新发送！').show();
+                    break;
+                }
+            }
+        });
+    });
+    $(".forget_input").on("keyup change click",function(){
+        if($("#forget_sendmail").attr("send-status") == 1){
+            return false;
+        }
+        if($.trim($(this).val()).length>0)
+        send_status(true);
+        else
+        send_status(false);
+    });
+
+    function send_status(flag){
+        if(flag){
+            $("#forget_sendmail").removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
+        }else{
+            $("#forget_sendmail").removeClass("btn-update").addClass("btn-disabled").attr("disabled","true");
+        }
+    }
+});
+	

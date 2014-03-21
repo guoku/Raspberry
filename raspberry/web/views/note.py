@@ -9,23 +9,21 @@ import json
 
 from base.note import Note
 from base.user import User
+from share.tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask
 
 
 @login_required
-def poke_note(request, note_id):
+def poke_note(request, note_id, target_status):
     if request.method == 'POST':
-        _user_id = request.user.id
-        _note = Note(note_id)
-
-        if _note.poke_already(_user_id):
-            _note.depoke(note_id)
-            return HttpResponse('0')
-        else:
-            _note.poke(note_id)
+        _request_user_id = request.user.id 
+        if target_status == '1':
+            PokeEntityNoteTask.delay(note_id, _request_user_id)
             return HttpResponse('1')
+        else:
+            DepokeEntityNoteTask.delay(note_id, _request_user_id)
+            return HttpResponse('0')
 
 
-@login_required
 def get_comments(request, note_id, template='note/note_comment_list.html'):
     _user_context = User(request.user.id)
     _note = Note(note_id)

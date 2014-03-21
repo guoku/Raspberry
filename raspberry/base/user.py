@@ -546,7 +546,7 @@ class User(object):
             _basic_info['gender'] = _profile.gender 
             _basic_info['location'] = _profile.location
             _basic_info['city'] = _profile.city
-            _basic_info['bio'] = _profile.bio
+            _basic_info['bio'] = '' if _profile.bio == None else _profile.bio 
             _basic_info['is_censor'] = False
             
             self.__ensure_avatar_obj()
@@ -569,14 +569,6 @@ class User(object):
         try:
             _seller_info_obj = SellerInfoModel.objects.get(user_id = self.user_id)
             _basic_info['shop_nick'] = _seller_info_obj.shop_nick
-            _basic_info['shop_type'] = _seller_info_obj.shop_type
-            _basic_info['shop_company_name'] = _seller_info_obj.company_name
-            _basic_info['shop_qq_account'] = _seller_info_obj.qq_account
-            _basic_info['shop_email'] = _seller_info_obj.email
-            _basic_info['shop_mobile'] = _seller_info_obj.shop_type
-            _basic_info['shop_main_products'] = _seller_info_obj.main_products
-            _basic_info['shop_intro'] = _seller_info_obj.intro
-            _basic_info['shop_verified'] = _seller_info_obj.verified
         except SellerInfoModel.DoesNotExist:
             pass
         cache.set(_cache_key, _basic_info, 864000)
@@ -612,9 +604,15 @@ class User(object):
         cache.set(_cache_key, _stat_info, 864000)
         return _stat_info
     
-    
-    def entity_like_count(self, category_id):
-        return EntityLikeModel.objects.filter(user_id = self.user_id, entity__neo_category_id = category_id).count()
+    def entity_like_count(self, category_id=None, neo_category_id=None):
+        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id)
+        if category_id != None:
+            _hdl = _hdl.filter(entity__category__pid = category_id)
+        
+        if neo_category_id != None:
+            _hdl = _hdl.filter(entity__neo_category_id = neo_category_id)
+        
+        return _hdl.count() 
         
     def find_like_entity(self, category_id = None, neo_category_id = None, timestamp = None, offset = None, count = 30, sort_by = None, reverse = False, with_timestamp = False):
         
@@ -902,7 +900,7 @@ class User(object):
     def __create_one_time_token(self, token_type):
         _token = md5(self.user_obj.email + unicode(str(self.user_obj.id)) + unicode(self.user_obj.username) + unicode(datetime.datetime.now())).hexdigest()
         try:
-            _record = OneTimeTokenModel.objects.get(user = self.user_id, token_type = token_type)
+            _record = OneTimeTokenModel.objects.get(user=self.user_id, token_type=token_type)
             _record.created_time = datetime.datetime.now() 
             _record.token = _token
             _record.is_used = False
@@ -914,11 +912,43 @@ class User(object):
                 token_type = token_type
             )
         return _token
+    
+    @staticmethod
+    def check_one_time_token(token, token_type, expiration_hours=24):
+        try:
+            _record = OneTimeTokenModel.objects.get(token=token, token_type=token_type)
+        except OneTimeTokenModel.DoesNotExist:
+            return {
+                'status' : 'illegal' 
+            }
+        if _record.is_used:
+            return {
+                'status' : 'used' 
+            }
+        _now = datetime.datetime.now()
+        _created_time = _record.created_time
+        if _now - _created_time > datetime.timedelta(hours=expiration_hours):
+            return {
+                'status' : 'expired' 
+            }
+        return {
+            'status' : 'available',
+            'user_id' : _record.user_id 
+        }
+    
+    @staticmethod
+    def confirm_one_time_token(token):
+        try:
+            _record = OneTimeTokenModel.objects.get(token=token)
+            _record.is_used = True
+            _record.save()
+        except:
+            pass
 
     @staticmethod
     def get_user_id_by_email(email):
         try:
-            _user_obj = AuthUser.objects.get(email = email)
+            _user_obj = AuthUser.objects.get(email=email)
             return _user_obj.id
         except Exception: 
             pass
@@ -938,6 +968,7 @@ class User(object):
             }
         )
         _mail = Mail(u"重设果库帐号密码", _message)
+        print self.user_obj.email
         _mail.send(
             address = self.user_obj.email
         )

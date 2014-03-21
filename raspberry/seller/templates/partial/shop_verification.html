@@ -1,16 +1,150 @@
-{% if user_context.shop_nick %}
-    <div class="span10">
-    {% if not user_context.shop_verified %}
-        {% if shop_verification%}
-        您已提交认证申请，状态为{{ shop_verification.status }}
-        {% else %}
-            <form action="{% url 'seller_verify' %}" method="POST">
-                {{ verification_form.as_table }}
-                <input type="submit" value="submit"/>
-            </form>
-        {% endif %}
+{% if not shop_context.shop_verified %}
+   {% if shop_verification%}
+     <div class="alert alert-warning fade in">
+                    <h4>您已提交认证申请，状态为</h4>
+                    {% if shop_verification.status == "waiting" %}
+                        等待审核    <button class="btn btn-primary" data-toggle="modal" data-target="#ShopVerifyModal">修改申请信息</button>
+                   {% elif shop_verification.status == "rejected" %}
+                        未通过审核  <button class="btn btn-primary">重新申请</button>
+                   {% endif %}
+                </div>
+    <div class="modal fade" id="ShopVerifyModal" tabindex="-1" role="dialog" aria-labelledby="ShopVerifyModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="ShopVerifyModalLabel">活动申请</h4>
+                    </div>
+                    <form action="{% url 'seller_verify' %}" method="POST" class="verify_shop_form">
+                    <div class="modal-body">
+                            <!--{{ verification_form.as_table }}-->
+                            <div class="form-inline">
+                                <div class="verify_shop_type">
+                                    <b>公司类型:</b>
+                                    {% for choice in verification_form.shop_type %}
+                                        {{ choice }}
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_cn">
+                                        <b>公司名称:</b>{{ verification_form.company_name }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_qq">
+                                        <b>qq号码:</b>{{ verification_form.qq_account }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_email">
+                                        <b>邮箱地址:</b>{{ verification_form.email }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_phone">
+                                        <b>手机号码:</b>{{ verification_form.mobile }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_pro">
+                                        <b>主营产品类别:</b>{{ verification_form.main_products }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_intro">
+                                        <b>店铺介绍:</b>{{ verification_form.intro }}
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <b><input checked="checked" id="id_agree_tos" name="agree_tos" type="checkbox">同意协议</b>
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal">稍候再说...</button>
+                        <input type="submit" class="btn btn-primary" value="提交信息">
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     {% else %}
-       欢迎您, {{ user_context.shop_nick }}
+        <div class="verify_shop_pre">
+            <div class="alert alert-warning fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4>你还没有认证！</h4>
+                    <p>
+                        [果库卖家认证]是对你真实身份的确认。
+                        <br>完成认证后，我们会优先处理你的活动请求。</p>
+                    <p>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ShopVerifyModal">立即认证</button>
+                        <button type="button" class="btn btn-default">稍后</button>
+                    </p>
+                </div>
+        </div>
+        <div class="modal fade" id="ShopVerifyModal" tabindex="-1" role="dialog" aria-labelledby="ShopVerifyModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="ShopVerifyModalLabel">活动申请</h4>
+                    </div>
+                    <form action="{% url 'seller_verify' %}" method="POST" class="verify_shop_form">
+                    <div class="modal-body">
+                            <!--{{ verification_form.as_table }}-->
+                            <div class="form-inline">
+                                <div class="verify_shop_type">
+                                    <b>公司类型:</b>
+                                    {% for choice in verification_form.shop_type %}
+                                        {{ choice }}
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_cn">
+                                        <b>公司名称:</b>{{ verification_form.company_name }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_qq">
+                                        <b>qq号码:</b>{{ verification_form.qq_account }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_email">
+                                        <b>邮箱地址:</b>{{ verification_form.email }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_phone">
+                                        <b>手机号码:</b>{{ verification_form.mobile }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_pro">
+                                        <b>主营产品类别:</b>{{ verification_form.main_products }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="verify_shop verify_shop_intro">
+                                        <b>店铺介绍:</b>{{ verification_form.intro }}
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <b><input checked="checked" id="id_agree_tos" name="agree_tos" type="checkbox">同意协议</b>
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal">稍候再说...</button>
+                        <input type="submit" class="btn btn-primary" value="提交信息">
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     {% endif %}
-    </div>
+{% else %}
+<div class="alert alert-warning fade in">
+                    欢迎您, {{ shop_context.shop_nick }} 您已经完成认证
+                </div>
+   
 {% endif %}
+

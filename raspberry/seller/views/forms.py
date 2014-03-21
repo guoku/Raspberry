@@ -1,27 +1,30 @@
 #coding=utf-8
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from django.forms.widgets import HiddenInput, TextInput
+COMPANY = 'Company'
+PERSONAL = 'Individual'
+AMATEUR = 'Parttime'
+SHOP_TYPE_CHOICES = (
+        (COMPANY, _('公司')),
+        (PERSONAL,  _('个体')),
+        (AMATEUR,  _('业余')),
+    )
 class GuokuPlusApplicationForm(forms.Form):
-    taobao_item_id = forms.CharField(max_length = 20, widget = HiddenInput())
-    quantity = forms.IntegerField(min_value = 1, 
+    taobao_url = forms.URLField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    total_volume = forms.IntegerField(widget=forms.TextInput(attrs={'class':'form-control'}),min_value = 1, 
                                   error_messages = {'invalid' : u'数量最少为1'})
-    original_price = forms.FloatField(min_value = 0, widget = TextInput(attrs={'readonly' :"readonly"}),
-                                      error_messages = {'invalid' : u'价格不能小于0' })
-    sale_price = forms.FloatField(min_value = 0,
+    sale_price = forms.FloatField(widget=forms.TextInput(attrs={'class':'form-control'}),min_value = 0,
                                   error_messages = {'invalid' : u'优惠价不能小于0'})
-    remarks = forms.CharField(max_length = 500)
-    def clean_sale_price(self):
-        data = self.cleaned_data['sale_price']
-        if data > self.cleaned_data['original_price']:
-            raise forms.ValidationError(u'优惠价不能大于原价')
-        return data
+    seller_remarks = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}), max_length = 500, required=False)
+    agree_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs={"checked" : "checked"}))
 
 class ShopVerificationForm(forms.Form):
-    shop_type = forms.ChoiceField(widget = forms.RadioSelect(), choices = [u'公司',u'个体', u'业余'] )
-    company_name = forms.CharField(max_length = 100)
-    qq_account = forms.CharField(max_length = 50)
-    email = forms.EmailField(max_length = 50)
-    mobile = forms.CharField(max_length = 50)
-    main_products = forms.CharField(max_length = 50)
-    intro = forms.CharField(max_length = 50)
-    
+    shop_type = forms.ChoiceField(widget = forms.RadioSelect(), choices = SHOP_TYPE_CHOICES )
+    company_name = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 100, required=False)
+    qq_account = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50)
+    email = forms.EmailField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50, required = False)
+    mobile = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50)
+    main_products = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50, required = False)
+    intro = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control'}),max_length = 50, required = False)
+

@@ -1,3 +1,6 @@
+@import "./base.css";
+@import "./normalize.min.css";
+
 #detail .main {
     float: left;
     width: 630px;
@@ -14,7 +17,9 @@
     height: 14px;
     width: 14px;
     /*background-color: #080808;*/
-    background-image: url("/static/v3/images/home.png");
+    /*background-image: url("/static/v3/images/home.png");*/
+    background: url("/static/v3/images/toolkit.png");
+    background-position: -58px -168px;
 }
 
 #detail .breadcrumb ul {
@@ -137,10 +142,10 @@
 #detail .add-note form.active div {
     display: block;
     position: relative;
-    height: 28px;
-    margin-top: 10px;
 }
-
+.add-note-div{
+    margin-top:50px;
+}
 #detail .add-note form .cancel {
     position: absolute;
     right: 60px;
@@ -234,6 +239,18 @@
     font-size: 12px;
 }
 
+.note-item .selection-icon {
+    display: inline-block;
+    position: absolute;
+    right: 105px;
+    /*float: right;*/
+    width: 19px;
+    height: 19px;
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    background-position: -196px -168px;
+    margin: 4px 0 0;
+}
+
 .note-item .poke {
     display: inline-block;
     padding-right: 15px;
@@ -246,11 +263,14 @@
     width: 19px;
     height: 19px;
     margin-right: 5px;
-    background: url(/static/v3/images/icon_poke.png);
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    background-position: -90px -168px;
+    /*background: url(/static/v3/images/icon_poke.png);*/
 }
 
 .note-item .poked span {
-    background: url(/static/v3/images/icon_poked.png);
+    /*background: url(/static/v3/images/icon_poked.png);*/
+    background-position: -125px -168px
 }
 
 .note-item .add-comment {
@@ -264,7 +284,9 @@
     width: 19px;
     height: 19px;
     margin-right: 5px;
-    background: url(/static/v3/images/icon_comment.png);
+    background: url("/static/v3/images/toolkit.png") no-repeat;
+    background-position: -160px -168px;
+    /*background: url(/static/v3/images/icon_comment.png);*/
 }
 
 .note-item .update-note {
@@ -273,17 +295,17 @@
 }
 
 .note-item .my-note {
-    position: absolute;
-    right: 130px;
+    float: right;
     bottom: 0;
     font-size: 12px;
+    margin-top: 5px;
+    margin-right: 30px;
     background-color: #fffdca;
 }
 
 .note-item .create-time {
-    position: absolute;
-    right: 0;
-    bottom: 0;
+    margin-top: 5px;
+    float: right;
 }
 
 .note-item .note-comment {

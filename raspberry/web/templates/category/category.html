@@ -14,11 +14,13 @@
 
         <div class="category">
             {% spaceless %}
-                {% for entity in entities %}
-{#                    {{ entity.title }}#}
+                {% for entity in entity_list %}
                     {% display_common_entity entity %}
                 {% endfor %}
             {% endspaceless %}
         </div>
+        {% if paginator %}
+            {% display_web_paginator paginator %}
+        {% endif %}
     </div>
 {% endblock %}

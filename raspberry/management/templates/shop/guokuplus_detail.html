@@ -1,0 +1,73 @@
+{% extends "management_base.html" %}
+{% load management %}
+
+{% block content %}
+    {% display_shop_navigator "guoku_plus" %}
+    <div class="span3">
+        <table class="table table-stdiped table-bordered table-condensed">
+            <tr>
+                <td>店铺</td>
+                <td><a href="{%url 'management_shop_detail'%}?nick={{app_context.shop_nick}}">{{app_context.shop_nick}}</a></td>
+            </tr>
+            <tr>
+                <td>名称</td>
+                <td>{{app_context.item_context.title}}</td>
+            </tr>
+            <tr>
+                <td>图片</td>
+                <td><img width="180" src="{{app_context.entity_context.chief_image.url}}"/></td>
+            </tr>
+            <tr>
+                <td>原价</td>
+                <td>{{app_context.item_context.price}}</td>
+            </tr>
+            <tr>
+                <td>优惠价</td>
+                <td>{{app_context.sale_price}}</td>
+            </tr>
+            <tr>
+                <td>数量</td>
+                <td>{{app_context.total_volume}}</td>
+            </tr>
+            <tr>
+                <td>卖家备注</td>
+                <td>{{app_context.seller_remarks}}</td>
+            </tr>
+            <tr>
+                <td>编辑备注</td>
+                <td>{{app_context.editor_remarks}}</td>
+            </tr>
+            <tr>
+                <td>状态</td>
+                <td>{{app_context.status}}</td>
+            </tr>
+            <tr>
+                <td>开始时间</td>
+                <td>{{app_context.start_time | date:'Y-m-d H:i'}}</td>
+            </tr>
+            <tr>
+                <td>结束时间</td>
+                <td>
+                {% if app_context.end_time %}
+                {{app_context.end_time | date:'Y-m-d H:i'}}
+                {% endif %}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="span10">
+        <form action="{% url 'management_handle_guokuplus' %}" method="POST">
+            {{ approve_form.as_table }}
+            <input type="submit" value="提交"/>
+        </form>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+        $('#startdateinput').datepicker();
+        $('#enddateinput').datepicker();
+        });
+    </script>
+{% endblock %}

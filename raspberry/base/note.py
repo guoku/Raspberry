@@ -92,8 +92,7 @@ class Note(object):
                 _hdl = _hdl.order_by('created_time')
             else:
                 _hdl = _hdl.order_by('-created_time')
-            
-
+        
 
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
@@ -330,32 +329,36 @@ class Note(object):
     def poke(self, user_id):
         try:
             _user_id = int(user_id)
-            NotePokeModel.objects.create(
-                note_id = self.note_id,
-                user_id = _user_id
-            )
-            
-            _context = self.__load_note_context_from_cache()
-            if _context != None:
-                if _user_id not in _context['poker_id_list']:
-                    _context['poker_id_list'].append(_user_id)
-                    _context['poke_count'] = len(_context['poker_id_list'])
-                    _context = self.__reset_note_context_to_cache(_context)
-            User(user_id).update_user_entity_note_poke_count(delta = 1)
-           
-            self.__ensure_note_obj()
-            if self.note_obj.creator_id != _user_id:
-                CreateNotePokeMessageTask.delay(
-                    user_id = self.note_obj.creator_id,
-                    user_unread_message_count = User(self.note_obj.creator_id).get_unread_message_count(),
+            if NotePokeModel.objects.filter(note_id=self.note_id, user_id=_user_id).count() == 0: 
+                NotePokeModel.objects.create(
                     note_id = self.note_id,
-                    poker_id = _user_id,
-                    poker_nickname = User(_user_id).get_nickname()
+                    user_id = _user_id
                 )
-
-            return True
+                
+                self.__ensure_note_obj()
+                self.note_obj.poke_count = NotePokeModel.objects.filter(note_id=self.note_id).count()
+                self.note_obj.save()
+                
+                _context = self.__load_note_context_from_cache()
+                if _context != None:
+                    if _user_id not in _context['poker_id_list']:
+                        _context['poker_id_list'].append(_user_id)
+                        _context['poke_count'] = len(_context['poker_id_list'])
+                        _context = self.__reset_note_context_to_cache(_context)
+                User(user_id).update_user_entity_note_poke_count(delta = 1)
+               
+                self.__ensure_note_obj()
+                if self.note_obj.creator_id != _user_id:
+                    CreateNotePokeMessageTask.delay(
+                        user_id = self.note_obj.creator_id,
+                        user_unread_message_count = User(self.note_obj.creator_id).get_unread_message_count(),
+                        note_id = self.note_id,
+                        poker_id = _user_id,
+                        poker_nickname = User(_user_id).get_nickname()
+                    )
+                return True
         except Exception, e:
-            print e
+            pass
         return False
 
     def depoke(self, user_id):
@@ -366,6 +369,11 @@ class Note(object):
                 user_id = user_id
             )
             _obj.delete()
+            
+            self.__ensure_note_obj()
+            self.note_obj.poke_count = NotePokeModel.objects.filter(note_id=self.note_id).count()
+            self.note_obj.save()
+            
             User(user_id).update_user_entity_note_poke_count(delta = -1)
             
             _context = self.__load_note_context_from_cache()
@@ -381,9 +389,18 @@ class Note(object):
         return False
 
     def poke_already(self, user_id):
-        if NotePokeModel.objects.filter(note_id = self.note_id, user_id = user_id).count() > 0:
+        if NotePokeModel.objects.filter(note_id=self.note_id, user_id=user_id).count() > 0:
             return True
         return False
+    
+    @staticmethod
+    def poke_set_of_user(user_id):
+        _user_id = int(user_id)
+        _set = set()
+        for _obj in NotePokeModel.objects.filter(user_id=_user_id):
+            _set.add(_obj.note_id)
+        return _set
+        
 
     @classmethod
     def comment_count(cls, entity_id = None, note_id = None):

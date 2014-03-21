@@ -1,0 +1,75 @@
+{% extends "management_base.html" %}
+{% load management %}
+{% block content %}
+    {% display_shop_navigator "shop_verification" %}
+    <div class="span2">
+        <div class="sub-nav">
+            <ul class="nav nav-pills">
+                <p>
+                <li {%if not status_filter %} class="active" {% endif %}>
+                    <a href="{%url 'management_shop_verification_list' %}">全部</a>
+                </li>
+                </p>
+                <p>
+                <li {%if status_filter == "waiting" %} class="active" {% endif %}>
+                    <a href="{%url 'management_shop_verification_list' %}?status=waiting">等待审核</a>
+                </li>
+                </p>
+                <li {%if status_filter == "approved" %} class="active" {% endif %}>
+                    <a href="{%url 'management_shop_verification_list' %}?status=approved">已通过</a>
+                </li>
+                <p>
+                <li {%if status_filter == "rejected" %} class="active" {% endif %}>
+                    <a href="{%url 'management_shop_verification_list' %}?status=rejected">已拒绝</a>
+                </li>
+                </p>
+            </ul>
+        </div>
+    </div>
+    <div class="span9">
+        <table class="table table-stdiped table-bordered table-condensed">
+            <thead>
+                <th>店铺</th>
+                <th>类型</th>
+                <th>公司名</th>
+                <th>邮箱</th>
+                <th>QQ</th>
+                <th>手机</th>
+                <th>主营</th>
+                <th>介绍</th>
+                <th>状态</th>
+                <th>日期</th>
+                <th>操作</th>
+            </thead>
+            <tbody>
+                {% for item in results %}
+                <tr>
+                    <td><a href="{%url 'management_shop_detail'%}?nick={{ item.shop_context.shop_nick }}">{{ item.shop_context.shop_nick }}</a></td>
+                    <td>{{ item.shop_context.shop_type }}</td>
+                    <td>{{ item.shop_context.shop_company_name }}</td>
+                    <td>{{ item.shop_context.shop_email }}</td>
+                    <td>{{ item.shop_context.shop_qq_account }}</td>
+                    <td>{{ item.shop_context.shop_mobile }}</td>
+                    <td>{{ item.shop_context.shop_main_products }}</td>
+                    <td>{{ item.shop_context.shop_intro }}</td>
+                    <td>{{ item.verification.status }}</td>
+                    <td>{{ item.verification.created_time }}</td>
+                    <td>
+                        <form action="{% url 'management_handle_shop_verification' %}" method="POST">
+                            <input type="hidden" name="shop_nick" value="{{item.shop_context.shop_nick}}">
+                            <select name="action">
+                                <option value="approve">通过</option>
+                                <option value="reject">拒绝</option>
+                            </select>
+                            <input type="submit" value="提交"/>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if paginator %}
+            {% display_paginator paginator %}
+        {% endif %}
+    </div>
+{% endblock %}
