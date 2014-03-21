@@ -808,7 +808,7 @@ function initTag(){
         },
         bindClick:function(){
             $(".click_to_top").click(function(){
-                $("body").animate({
+                $("body,html").animate({
                     scrollTop:0,
                 },500);
             });
