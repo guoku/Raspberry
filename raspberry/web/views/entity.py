@@ -279,6 +279,10 @@ def load_item_info(request):
 
 @login_required
 def create_entity(request, template='entity/new_entity_from_user.html'):
+    if request.is_ajax():
+        print 'yes'
+    else:
+        print 'no'
     if request.method == 'GET':
         return render_to_response(
             template,

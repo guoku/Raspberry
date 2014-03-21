@@ -603,7 +603,7 @@ function initTag(){
         addNote: function () {
             
             var self = this;
-            var $addNote = $('.add-note');
+            var $addNote = $('.add-note-submit');
             var $notes = $addNote.parent().find('.notes');
             var $form = $addNote.find('form');
             var $textarea = $addNote.find('textarea');
