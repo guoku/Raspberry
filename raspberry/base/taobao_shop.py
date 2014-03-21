@@ -381,6 +381,7 @@ class GuokuPlusActivity(object):
         context['user_id'] = token.user_id
         context['guoku_plus_activity_id'] = token.guoku_plus_activity_id
         context['token'] = token.token
+        context['quantity'] = token.quantity
         context['used'] = token.used
         context['created_time'] = token.created_time
         context['used_time'] = token.used_time
@@ -434,7 +435,7 @@ class GuokuPlusActivity(object):
             _hdl = _hdl.filter(used = used)
         results = []
         for item in _hdl:
-            results.append(__get_token_context(item))
+            results.append(self.__get_token_context(item))
         return results
 
     @classmethod

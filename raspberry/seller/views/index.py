@@ -159,7 +159,8 @@ def faq(request):
 @login_required
 def verify_token(request):
     token = request.POST.get("token", None)
-    quantity = int(request.POST.get("quantity", 1))
+    quantity = int(request.POST.get("quantity", "1"))
+    print token, quantity
     if token and quantity >= 1:
         guokuplus = GuokuPlusActivity.get_activity_by_token(token)
         status = guokuplus.use_token(token, quantity)
