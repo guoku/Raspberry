@@ -561,10 +561,6 @@ button {
     background-position: -98px -42px;
 }
 
-.login .tip img {
-    margin-top: 35px;
-}
-
 .login .remember {
     position: relative;
     width: 255px;
@@ -599,13 +595,12 @@ button {
 }
 .register .tip {
     display: block;
-    width: 535px;
     background-color: #fbfbfb;
     margin-bottom: 55px;
     text-align: center;
 }
 
-.register .tip img {
+.register .tip img,.login .tip img {
     margin: 35px 0px 10px 0px;
 }
 
