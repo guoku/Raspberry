@@ -875,7 +875,7 @@ $(function(){
                     $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'>').appendTo($(".detail form"));
                 }
 
-                $('<input type="hidden" name="shop_link" value='+data.data.shop_link+'><input type="hidden" name="taobao_id" value='+data.data.taobao_id+'><input type="hidden" name="shop_nick" value='+data.data.shop_nick+'><input type="hidden" name="url" value='+data.data.cand_url+'><input type="hidden" name="taobao_title" value='+data.data.taobao_titie+'><input type="hidden" name="price" value='+data.data.price+'><input type="hidden" name="chief_image_url" value='+data.data.chief_image_url+'><input type="hidden" name="cid" value='+data.data.cid+'><input type="hidden" name="selected_category_id" value='+data.data.selected_category_id+'><input type="hidden" name="brand"><input name="user_id" type="hidden" value='+data.data.user_context.user_id+'>').appendTo($(".detail form"));
+                $('<input type="hidden" name="shop_link" value="'+data.data.shop_link+'"><input type="hidden" name="taobao_id" value="'+data.data.taobao_id+'"><input type="hidden" name="shop_nick" value="'+data.data.shop_nick+'"><input type="hidden" name="url" value="'+data.data.cand_url+'"><input type="hidden" name="price" value="'+data.data.price+'"><input type="hidden" name="chief_image_url" value="'+data.data.chief_image_url+'"><input type="hidden" name="cid" value="'+data.data.cid+'"><input type="hidden" name="title" value="'+data.data.taobao_title+'"><input type="hidden" name="selected_category_id" value="'+data.data.selected_category_id+'"><input name="user_id" type="hidden" value="'+data.data.user_context.user_id+'">').appendTo($(".detail form"));
             },
             error:function(msg){
                 console.log(msg);
@@ -891,9 +891,9 @@ $(function(){
     });
     $(".detail form").on("submit",function(){
         var brand = $(".detail_taobao_brand").val();
-        if(brand.length>0){
-            $('<input name="brand" value='+brand+'>').appendTo($(".detail form"));
-        }
+        var taobao_title = $(".detail_title_input").val();
+        $('<input type="hidden" name="brand" value="'+brand+'">').appendTo($(".detail form"));
+        $('<input type="hidden" name="title" value="'+taobao_title+'">').appendTo($(".detail form"));
         return true;
     });
     $("#forget_sendmail").on("click",function(){
