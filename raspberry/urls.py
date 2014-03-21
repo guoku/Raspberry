@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     (r'^stats/', include('stats.urls')),
 #    (r'^lotto/', include('lotto.urls')),
     (r'', include('web.urls')),
-#    (r'^3.0/activity/$', 'lotto.views.guoku_generation_3_activity'),
+    (r'^visit_item/$', 'mobile.views.old_visit_item', 'mobile_visit_item_old_api'),
 )
 
 urlpatterns += patterns(
