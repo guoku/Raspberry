@@ -204,15 +204,15 @@ function initTag(){
             var $accountForm = $('.account-form');
             var $login = $('.account-form.login');
             var $reg =  $('.account-form.register');
-
             $accountForm.on('click', formClick);
             function formClick(e) {
                 e.stopPropagation();
+                e.preventDefault();
             }
             var flag = 1;
             var $body = $('body');
             $login.show();
-           $body.on('click', removeLogin);
+            $body.on('click', removeLogin);
             function removeLogin() {
                 if (flag == 1) {
                     $accountForm.hide();
@@ -306,7 +306,7 @@ function initTag(){
 //                    return data;
                     result =  $.parseJSON(data);
                     var status = parseInt(result.status);
-                    if (status == 1) {
+                    if (status === 1) {
                         var $html = $(result.data);
                         $html.each(function () {
                             util.showEntityTitle($(this));
@@ -462,17 +462,24 @@ function initTag(){
             });
 
             function reply($commentItem) {
-                $commentItem.find('.reply').on('click', function () {
-                    var $commentContent = $commentItem.find('.comment-content');
-                    var $nickname = $commentItem.find('.nickname');
+                $commentItem.find('.reply').live('click', function (e) {
+//                    e.preventDefault();
+                    if (!util.isUserLogined()) {
+                        util.popLoginBox();
+                    } else {
 
-                    $commentText.val('回复 ' + $nickname.text() + ': ');
-                    $commentText.focus();
-                    replyToUser = $commentContent.attr('data-creator');
-                    replyToComment = $commentContent.attr('data-comment');
+                        var $commentContent = $commentItem.find('.comment-content');
+                        var $nickname = $commentItem.find('.nickname');
+
+                        $commentText.val('回复 ' + $nickname.text() + ': ');
+                        $commentText.focus();
+                        replyToUser = $commentContent.attr('data-creator');
+                        replyToComment = $commentContent.attr('data-comment');
+                    }
+                    return false;
                 });
 
-                $commentItem.find('.close').on('click', function (e) {
+                $commentItem.find('.close').live('click', function (e) {
                     $.post(this.href, function (data) {
                         if (parseInt(data) === 1) {
                             $commentItem.remove();
@@ -542,36 +549,71 @@ function initTag(){
             var $noteDetail = $noteItem.find('.note-detail');
 
             // 动态加载点评的评论
-            $noteItem.find('.add-comment').on('click', function (e) {
-                if (!util.isUserLogined()) {
-                    util.popLoginBox();
+            $noteItem.find('.add-comment').live('click', function (e) {
+//                e.preventDefault();
+                var $noteComment = $noteItem.find('.note-comment');
+                if ($noteComment[0]) {
+                    $noteComment.slideToggle('fast');
                 } else {
-                    var $noteComment = $noteItem.find('.note-comment');
-
-                    if ($noteComment[0]) {
-                        $noteComment.slideToggle('fast');
-                    } else {
-                        var url = '/note/' + $(this).attr('data-note') + '/comment/';
-
-                        $.get(url, function (result) {
-                            result = $.parseJSON(result);
-                            var status = parseInt(result.status);
-
-                            if (status === 1) {
+                    var url = '/note/' + $(this).attr('data-note') + '/comment/';
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        async: false,
+                        success: function(data){
+                            result =  $.parseJSON(data);
+                            var $html = $(result.data);
+                            self.noteComment($html);
+                            $html.appendTo($noteDetail);
+                            $html.slideToggle('fast');
+                            initTag();
+                        },
+                        error: function(ajaxContext) {
+                            if (!util.isUserLogined()) {
+                                util.popLoginBox();
+                            } else {
+//                                console.log(ajaxContext['responseText']);
+                                result =  $.parseJSON(ajaxContext['responseText']);
                                 var $html = $(result.data);
-
                                 self.noteComment($html);
                                 $html.appendTo($noteDetail);
                                 $html.slideToggle('fast');
                                 initTag();
-                            } else if (status === 0) {
-                                // error
                             }
-                        });
-                    }
+//                            alert(ajaxContext.responseText);
+                        }
+                    });
+                    return false;
                 }
-                return false;
-                e.preventDefault();
+//                if (!util.isUserLogined()) {
+//                    util.popLoginBox();
+//                } else {
+//                    var $noteComment = $noteItem.find('.note-comment');
+//
+//                    if ($noteComment[0]) {
+//                        $noteComment.slideToggle('fast');
+//                    } else {
+//                        var url = '/note/' + $(this).attr('data-note') + '/comment/';
+//
+//                        $.get(url, function (result) {
+//                            result = $.parseJSON(result);
+//                            var status = parseInt(result.status);
+//
+//                            if (status === 1) {
+//                                var $html = $(result.data);
+//
+//                                self.noteComment($html);
+//                                $html.appendTo($noteDetail);
+//                                $html.slideToggle('fast');
+//                                initTag();
+//                            } else if (status === 0) {
+//                                // error
+//                            }
+//                        });
+//                    }
+//                }
+//                return false;
+//                e.preventDefault();
             });
         },
 
@@ -834,7 +876,7 @@ $(function(){
                     $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'>').appendTo($(".detail form"));
                 }
 
-                $('<input type="hidden" name="taobao_id" value='+data.data.taobao_id+'><input type="hidden" name="shop_nick" value='+data.data.shop_nick+'><input type="hidden" name="url" value='+data.data.cand_url+'><input type="hidden" name="taobao_title" value='+data.data.taobao_titie+'><input type="hidden" name="price" value='+data.data.price+'><input type="hidden" name="chief_image_url" value='+data.data.chief_image_url+'><input type="hidden" name="cid" value='+data.data.cid+'><input type="hidden" name="selected_category_id" value='+data.data.selected_category_id+'><input type="hidden" name="brand"><input name="user_id" type="hidden" value='+data.data.user_context.user_id+'>').appendTo($(".detail form"));
+                $('<input type="hidden" name="shop_link" value='+data.data.shop_link+'><input type="hidden" name="taobao_id" value='+data.data.taobao_id+'><input type="hidden" name="shop_nick" value='+data.data.shop_nick+'><input type="hidden" name="url" value='+data.data.cand_url+'><input type="hidden" name="taobao_title" value='+data.data.taobao_titie+'><input type="hidden" name="price" value='+data.data.price+'><input type="hidden" name="chief_image_url" value='+data.data.chief_image_url+'><input type="hidden" name="cid" value='+data.data.cid+'><input type="hidden" name="selected_category_id" value='+data.data.selected_category_id+'><input type="hidden" name="brand"><input name="user_id" type="hidden" value='+data.data.user_context.user_id+'>').appendTo($(".detail form"));
             },
             error:function(msg){
                 console.log(msg);
