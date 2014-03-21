@@ -20,7 +20,9 @@ def commodities(request, user_context, shop_inst):
     item_list = Item.find_taobao_item(shop_nick = user_context['shop_nick'], full_info = True) 
     for i in range(len(item_list)):
         item = Item(item_list[i]['item_id'])
-        item_list[i]['item'] = item.read()
+        item_context = item.read()
+        item_list[i]['item'] = item_context
+        item_list[i]['entity'] = Entity(item_context['entity_id']).read()
     verification_form = ShopVerificationForm()
     shop_context = shop_inst.read()
     if not shop_context['shop_verified']:

@@ -5,16 +5,17 @@
 {% endblock %}
 
 {% block content %}
-    {% display_shop_verification user_context verification_form shop_verification%}
     <div class="span10">
-        <h5>已在果库的商品</h5>
+        <h4>您的店铺中已被果库收录的商品</h4>
         <table class="table table-bordered table-striped">
+            <th>图片</th>
             <th>名称</th>
             <th>价格</th>
             <th>操作</th>
         {% for item in item_list %}
             <tr>
-                <td><a href="{{ item.item.buy_link}}">{{ item.item.title }}</a></td>
+                <td><a href="http://item.taobao.com/item.htm?id={{item.item.taobao_id}}"><img src="{{item.entity.chief_image.url}}" width="80"/></a></td>
+                <td><a href="{%url 'web_detail' item.entity.entity_hash%}">{{ item.item.title }}</a></td>
                 <td>{{ item.item.price }}</td>
                 <td><a href="{% url 'seller_apply_guoku_plus'%}?taobao_id={{ item.item.taobao_id }}">申请果库+</a></td>
             </tr>
