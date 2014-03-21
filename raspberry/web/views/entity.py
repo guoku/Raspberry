@@ -35,11 +35,13 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
         _request_user_id = request.user.id
+        _is_staff = request.user.is_staff
         _request_user_context = User(request.user.id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _request_user_poke_note_set = Note.poke_set_of_user(request.user.id)
     else:
         _request_user_id = None 
+        _is_staff = False 
         _request_user_context = None
         _request_user_like_entity_set = []
         _request_user_poke_note_set = []
@@ -127,6 +129,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     return render_to_response(
         template,
         {
+            'is_staff' : _is_staff,
             'user_context' : _request_user_context,
             'entity_context' : _entity_context,
             'is_user_already_note' : _is_user_already_note,

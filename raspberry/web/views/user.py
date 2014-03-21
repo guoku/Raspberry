@@ -34,11 +34,13 @@ def user_likes(request, user_id, template=TEMPLATE):
     _query_user_context = _query_user.read() 
     if request.user.is_authenticated():
         _request_user_id = request.user.id
+        _is_staff = request.user.is_staff
         _request_user_context = User(_request_user_id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
     else:
         _request_user_id = None
+        _is_staff = False 
         _request_user_context = None
         _request_user_like_entity_set = []
         _relation = None 
@@ -77,6 +79,7 @@ def user_likes(request, user_id, template=TEMPLATE):
     return render_to_response(
         template,
         {
+            'is_staff' : _is_staff,
             'content_tab' : 'like',
             'request_user_context' : _request_user_context,
             'query_user_context' : _query_user_context,

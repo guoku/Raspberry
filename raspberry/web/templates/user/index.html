@@ -20,6 +20,9 @@
                 <span class="bio">{{ query_user_context.bio }}</span>
                 <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
             </div>
+            {% if is_staff %}
+                <a href="{% url 'management_edit_user' query_user_context.user_id %}" target=_blank>编</a>
+            {% endif %}
             {% if relation == 4 %}
                 <a class="setting" href="{% url 'web_setting' %}"><span>{% trans "settings" %}</span></a>
             {% elif relation == 3 %}

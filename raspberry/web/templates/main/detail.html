@@ -41,7 +41,7 @@
                 </a>
                 {% if selection_note != None %}
                     <div class="selection-note">
-                        {% display_note_item selection_note %}
+                        {% display_note_item selection_note is_staff %}
                     </div>
                 {% endif %}
             </div>
@@ -52,7 +52,7 @@
 
             <div class="notes">
                 {% for note in common_note_list %}
-                    {% display_note_item note %}
+                    {% display_note_item note is_staff %}
                     {% if common_note_list|length > forloop.counter %}<div class="sep"></div>{% endif  %}
                 {% endfor %}
             </div>
@@ -104,20 +104,27 @@
             </div>
 
             <p class="category">
-                <a href="{% url 'web_category' entity_context.category_id  %}">[{{ entity_context.category_id|trans_category }}]</a>
+                <a href="{% url 'web_category' entity_context.category_id  %}">{{ entity_context.category_id|trans_category }}</a>
             </p>
 
             {% if tag_list|length > 0 %}
-            <div class="tag">
-                <h3>该商品的标签</h3>
-                <div>
-                    {% for tag in tag_list %}
-                        <a href="{% url "web_tag_detail" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>
-                    {% endfor %}
+                <div class="tag">
+                    <h3>该商品的标签</h3>
+                    <div>
+                        {% for tag in tag_list %}
+                            <a href="{% url "web_tag_detail" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
             {% endif %}
-
+            
+            
+            {% if is_staff %}
+                <div class="tag">
+                    <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target=_blank>编辑商品</a>
+                </div>
+            {% endif %}
+            
             <div class="share">
                 <a href="">分享到微博</a>
             </div>

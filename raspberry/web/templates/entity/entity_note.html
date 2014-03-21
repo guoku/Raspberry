@@ -50,6 +50,9 @@
                     <a href="javascript:;" class="update-note">修改</a>
                     <span class="my-note">你的点评</span>
                 {% endif %}
+                {% if is_staff %}
+                    <span class="my-note"><a href="{% url 'management_edit_note' note_context.note_id %}" target=_blank>编</a></span>
+                {% endif %}
             </div>
         </div>
     </div>
