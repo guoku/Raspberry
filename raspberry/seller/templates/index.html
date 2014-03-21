@@ -81,7 +81,7 @@
                                                             <img class="media-object" alt="64x64" src="{{item.entity_context.chief_image.url}}" style="width: 64px; height: 64px;"></a>
                                                         <div class="media-body">
                                                             <h5 class="media-heading"><a href="{% url 'web_detail' item.entity_context.entity_hash %}">{{ item.item_context.title }}</a></h5>
-                                                            <p> <span style="color:#427ec0;font-size: 16px;font-family: Georgia;">￥{{ item.sale_price}} </span> | <span class="badge">{{ item.sales_volume}}件</span></p>
+                                                            <p> <span style="color:#427ec0;font-size: 16px;font-family: Georgia;">￥{{ item.sale_price}} </span> | <span class="badge">共{{ item.total_volume}}件</span> | <span class="badge">已售{{ item.sales_volume}}件</span></p>
                                                         </div>
                                                     </div>
                                                 </td>
