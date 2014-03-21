@@ -1,12 +1,13 @@
 {% if not shop_context.shop_verified %}
    {% if shop_verification%}
-    <div class="verify_success_opt"> 您已提交认证申请，状态为
-       {% if shop_verification.status == "waiting" %}
-            等待审核    <button class="btn btn-primary" data-toggle="modal" data-target="#ShopVerifyModal">修改申请信息</button>
-       {% elif shop_verification.status == "rejected" %}
-            未通过审核  <button class="btn btn-primary">重新申请</button>
-       {% endif %}
-    </div>
+     <div class="alert alert-warning fade in">
+                    <h4>您已提交认证申请，状态为</h4>
+                    {% if shop_verification.status == "waiting" %}
+                        等待审核    <button class="btn btn-primary" data-toggle="modal" data-target="#ShopVerifyModal">修改申请信息</button>
+                   {% elif shop_verification.status == "rejected" %}
+                        未通过审核  <button class="btn btn-primary">重新申请</button>
+                   {% endif %}
+                </div>
     <div class="modal fade" id="ShopVerifyModal" tabindex="-1" role="dialog" aria-labelledby="ShopVerifyModalLabel" aria-hidden="true" style="display: none;">
             <div class="modal-dialog">
                 <div class="modal-content">
