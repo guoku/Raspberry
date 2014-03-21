@@ -271,10 +271,12 @@ def load_item_info(request):
                     'status' : 'OTHER'
                 }
             else:
+                _entity_id = _item.get_entity_id()
+                _entity_context = Entity(_entity_id).read()
                 _rslt = {
                     'status' : 'EXIST',
                     'data' : {
-                        'entity_id' : _item.get_entity_id() 
+                        'entity_hash' : _entity_context['entity_hash']
                     }
                 }
             return HttpResponse(json.dumps(_rslt))
