@@ -204,9 +204,10 @@ function initTag(){
             var $accountForm = $('.account-form');
             var $login = $('.account-form.login');
             var $reg =  $('.account-form.register');
-            $accountForm.live('click', formClick);
+            $accountForm.on('click', formClick);
             function formClick(e) {
                 e.stopPropagation();
+                e.preventDefault();
             }
             var flag = 1;
             var $body = $('body');
