@@ -142,7 +142,7 @@ INSTALLED_APPS = (
     # 'lotto',
     'gunicorn',
 )
-
+ENABLE_GUOKU_PLUS = True
 APP_HOST = "http://test2.guoku.com"
 SINA_APP_KEY = '2830558576'
 SINA_APP_SECRET = 'a4861c4ea9facd833eb5d828794a2fb2'
