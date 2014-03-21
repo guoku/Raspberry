@@ -207,7 +207,6 @@ function initTag(){
             $accountForm.on('click', formClick);
             function formClick(e) {
                 e.stopPropagation();
-                e.preventDefault();
             }
             var flag = 1;
             var $body = $('body');
