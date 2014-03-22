@@ -475,7 +475,7 @@ function initTag(){
                         var $commentContent = $commentItem.find('.comment-content');
                         var $nickname = $commentItem.find('.nickname');
 
-                        $commentText.val('回复 ' + $nickname.text() + ': ');
+                        $commentText.val('回复 ' + $.trim($nickname.text()) + ': ');
                         $commentText.focus();
                         replyToUser = $commentContent.attr('data-creator');
                         replyToComment = $commentContent.attr('data-comment');
