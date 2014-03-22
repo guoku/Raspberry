@@ -63,7 +63,8 @@
     display: none;
     position: absolute;
     height: 35px;
-    padding: 30px 15px;
+    width: 195px;
+    padding: 30px 10px;
     border-bottom: 1px solid #eee;
     /*background-color: #fbfbfb;*/
     background-color: rgba(251, 251, 251, .95);

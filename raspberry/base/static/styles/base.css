@@ -438,9 +438,8 @@ button {
     left: 50%;
     margin-left: -267px;
     width: 515px;
-    height: 605px;
+    /*height: 500px;*/
     border-radius: 5px;
-    
 }
 .border_hack{
     z-index: 100000;
@@ -564,7 +563,7 @@ button {
 .login .remember {
     position: relative;
     width: 255px;
-    margin: 15px auto 40px;
+    margin: 15px auto 25px;
 }
 
 .login .remember input {
@@ -590,7 +589,9 @@ button {
 
 .login .to-reg {
     text-align: center;
-    margin-top: 70px;
+    margin: 30px 0;
+    /*margin-top: 30px;*/
+    /*margin-bottom: 20px;*/
     color: #427ec0;
 }
 .register .tip {
@@ -601,13 +602,13 @@ button {
 }
 
 .register .tip img,.login .tip img {
-    margin: 35px 0px 10px 0px;
+    margin: 11px 0 0 0;
 }
 
 .register .agreement {
     display: block;
     width: 255px;
-    margin: 15px auto 40px;
+    margin: 15px auto 25px;
 }
 
 .register .agreement input {
@@ -615,7 +616,8 @@ button {
 }
 
 .register .to-login {
-    margin-top: 30px;
+    /*margin-top: 30px;*/
+    margin: 30px 0;
     text-align: center;
 }
 
