@@ -1,5 +1,6 @@
 {% load common %}
 {% load user %} 
+{% load entity %}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -95,7 +96,7 @@
             <div class="with-border">
                 <div class="item">
                     <div class="image">
-                        <a href="{{ buy_link }}&entry=wap"><img src="{{ entity_context.image_url }}" /></a>
+                        <a href="{{ buy_link }}&entry=wap"><img src="{{ entity_context.chief_image.url|resize:'310' }}" /></a>
                     </div>
                     <div>
                         <div class="like_info">{{ entity_context.like_count }}人喜爱</div>
