@@ -115,7 +115,7 @@
 #detail .add-note form {
     display: inline-block;
     width: 484px;
-    padding: 15px;
+    padding: 0px 15px 15px;
     border: 1px solid #eee;
     border-radius: 4px;
     background-color: #fff;
@@ -145,17 +145,17 @@
     display: block;
     position: relative;
 }
-.add-note form span{
+.add-note form .arr{
     width: 9px;
     height: 16px;
-    display: block;
-    background: url("../images/arrows.png");
+    display: inline-block;
+    background: url("../images/arrows.png") no-repeat;
     position: relative;
-    top:-25px;
+    top:15px;
     left: -23px;
 }
 .add-note form .focus{
-    background: url("../images/arrows_press.png");
+    background: url("../images/arrows_press.png") no-repeat;
 }
 .add-note-div{
     margin-top:50px;
