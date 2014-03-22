@@ -130,7 +130,9 @@
     border: none;
     outline: 0;
 }
-
+#detail .add-note form:hover {
+    border: 1px solid #ddd;
+}
 #detail .add-note form.active textarea {
     height: 90px;
 }
@@ -142,6 +144,18 @@
 #detail .add-note form.active div {
     display: block;
     position: relative;
+}
+.add-note form span{
+    width: 9px;
+    height: 16px;
+    display: block;
+    background: url("../images/arrows.png");
+    position: relative;
+    top:-25px;
+    left: -23px;
+}
+.add-note form .focus{
+    background: url("../images/arrows_press.png");
 }
 .add-note-div{
     margin-top:50px;
