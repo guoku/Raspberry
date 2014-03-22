@@ -20,10 +20,9 @@
                 {% if user_context.user_id == creator_context.user_id %}
                     <form class="clearfix update-note-form"
                           action="{% url 'web.views.entity.update_note' note_context.entity_id note_context.note_id %}"
-                          method="POST" style="display: none">
+                          method="POST">
                 	{% csrf_token %}
                         <textarea name="note_text">{{ note_context.content }}</textarea>
-
                         <div>
                             <button type="button" class="cancel">取消</button>
                             <button type="submit" class="update">修改</button>

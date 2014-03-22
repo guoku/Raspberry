@@ -124,12 +124,14 @@
     </div>
 </div>
 {% include 'common/click_to_top.html' %}
-{% include 'common/login.html' %}
-{% include 'common/register.html' %}
-
+{% if not request.user.is_authenticated  %}
+    {% include 'common/login.html' %}
+    {% include 'common/register.html' %}
+    <script src="{% static 'scripts/login.js' %}"></script>
+{% endif %}
     <script src="{% static 'scripts/jquery.min.js' %}"></script>
     <script src="{% static 'scripts/main.js' %}"></script>
-    <script src="{% static 'scripts/login.js' %}"></script>
+
 {% block script %}
 
 {% endblock %}
