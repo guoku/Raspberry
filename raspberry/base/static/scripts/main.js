@@ -850,7 +850,20 @@ $(function(){
 			$(".account-form input[type='submit']").attr("disabled",true).removeClass("submit").addClass("submit_disabled");
 		}
 	});
-
+    $("textarea[name='note_text']").on({
+        mouseover:function(){
+            $(this).next().addClass("focus");
+        },
+        mouseleave:function(){
+            $(this).next().removeClass("focus");
+        },
+        focus:function(){
+            $(this).next().addClass("focus");
+        },
+        blur:function(){
+            $(this).next().removeClass("focus");
+        }
+    });
     $(".load-entity input[type='submit']").on("click",function(){
         var entity_url = $("input[name='cand_url']").val();
         var request_url = $(".load-entity").attr("sd");
@@ -865,12 +878,14 @@ $(function(){
                     $(".entity_already_exist a").attr("href","/detail/"+data.data.entity_hash);
                     $(".entity_already_exist").show();
                 }else{
+                    $(".entity_already_exist").hide();
                     $(".entity-detail").slideDown();
                     $(".add-note").show();
                     $(".detail_title").text(data.data.taobao_title);
                     $(".detail_title_input").val(data.data.taobao_title);
                     $(".detail_chief_url img").attr("src",data.data.chief_image_url);
                     $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
+                    $(".detail_thumb_images").html("");
                     for(var i=0;i<data.data.thumb_images.length;i++){
                         if(i==0){
                             $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');
