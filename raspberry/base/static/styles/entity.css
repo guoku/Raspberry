@@ -165,14 +165,13 @@
 }
 
 #add-entity .add-note textarea {
-    width: 495px;
+    width: 485px;
     min-height: 100px;
     margin: 1px 0 10px 10px;
     padding: 2px;
     resize: none;
-    color: #666;
     border: 1px solid #eee;
-    padding:10px 5px ;
+    padding:10px;
     outline: none;
 }
 
