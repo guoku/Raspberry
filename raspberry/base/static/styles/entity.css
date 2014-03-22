@@ -124,17 +124,17 @@
     background: #f9f9f9;
     display: none;
 }
-.detail form span{
+.detail form .arr{
     width: 9px;
     height: 16px;
     display: block;
-    background: url("../images/arrows.png");
+    background: url("../images/arrows.png") no-repeat;
     position: relative;
     top:-125px;
     left: 2px;
 }
 .detail form .focus{
-    background: url("../images/arrows_press.png");
+    background: url("../images/arrows_press.png") no-repeat;
 }
 #add-entity .add-note h3 {
     margin: 0 0 5px;
