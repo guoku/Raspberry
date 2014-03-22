@@ -17,16 +17,16 @@
 			html, body, div, ul, li, a, p, span, header, footer, input, textarea, h1, h2 {margin: 0;padding: 0;-webkit-tap-highlight-color: rgba(255,255,255,0);-webkit-appearance: none;}
 			article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {display: block;}
 			html, body {height: 100%;-webkit-text-size-adjust: none;text-size-adjust: none;}
-			body {font: normal 14px sans-serif;background-color: #FAF9F6;color: #666666;}
+			body {font: normal 14px sans-serif;background-color: #FAF9F6;color: #444444;}
             a {text-decoration:none;}
 			.dn {/*display: none;*/}
             .clear {clear:both;}
-            .green {background:#4DB07A;color:#ffffff;padding:5px;border-radius:2px;}
+            .blue {background:#427ec0;color:#ffffff;padding:5px;border-radius:2px;}
             div.with-border {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);background-color:#FFFFFF;border-radius:2px;margin:15px 5px 0 5px;}
 
-			.header {padding:5px;background-color: #ffffff;border-bottom:1px solid #CCCCCC;box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);height:32px;}
-			.header .logo {float:left;height:32px;}
-			.header a.green {float:right;font-size:14px;line-height:14px;margin:5px 0 3px;}
+			.header {padding:5px;background-color: #343434;border-bottom:1px solid #CCCCCC;box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);height:32px;}
+			.header .logo {float:left;height:32px;margin-right: 10px;}
+			.header a.blue {float:right;font-size:14px;line-height:14px;margin:5px 0 3px;}
             .header a.pc_link {float:right;font-size:14px;line-height:24px;margin:5px 10px 3px 0;color:#999999;}
 
             .main {position:relative;width:100%;overflow:hidden;padding-bottom:10px;}
@@ -35,15 +35,17 @@
             .item .image {width:299px;min-height:200px;text-align:center;position:relative;}
             .item .image img {max-width:299px;max-height:299px;z-index:9;}
             .item p {margin:5px 0;}
-            .price {position:absolute;z-index:99;right:0;bottom:20px;padding:2px 10px;font-size:15px;font-family:Georgia;}
+            .price {font-size:15px;font-family:Georgia;background: #427ec0;padding: 5px 10px;}
             .small-avatar {width:315px;overflow:hidden;margin:10px 0 0;font-size:0;}
-            .small-avatar img {height:25px;width:25px;margin-right:8px;}
+            .small-avatar img {height:25px;width:25px;margin-right:8px;border-radius: 15px;}
+            .like_info{float: left;}
+            .more_info{float: right;}
 
             .note {border-top:1px solid #F3F3F3;padding:10px 5px 4px;margin-bottom:1px;}
             .note .avatar {float:left;height:25px;width:25px;margin-right:8px;}
-            .note .avatar img {height:25px;width:25px;}
+            .note img {height:35px;width:35px;border-radius: 20px;}
             .note .username {font-weight:700;}
-            .note .text {line-height:1.35em;margin-left:33px;}
+            .note .text {line-height:1.35em;margin-left:43px;margin-top:-35px;}
 
             .downloads img {float:left;margin:5px 8px 0 5px;}
             .downloads p {margin:11px 0 8px;font-size:18px;display:inline-block;line-height:18px;}
@@ -71,19 +73,20 @@
 
 	<body>
         <div class="header" id='header'>
-            <img src="{{ STATIC_URL }}images/guoku_icon_mobile.png" class="logo" />
+            <img src="{{ STATIC_URL }}images/wap_text.png" class="logo" />
+            <img src="{{ STATIC_URL }}images/wap_logo.png" class="logo" />
             {% if agent == "iphone" %}
                 {% if isappinstalled == '1' %}
-                    <a class="green" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">用果库iPhone版查看详情</a>
+                    <a class="blue" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">用果库iPhone版查看详情</a>
                 {% else %}
-                    <a class="green" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">下载果库iPhone版</a>
+                    <a class="blue" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">下载果库iPhone版</a>
                 {% endif%}
             {% endif%}
             {% if agent == "android" %}
                 {% if isappinstalled == '1' %}
-                    <a class="green" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">用果库android版查看详情</a>
+                    <a class="blue" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">用果库android版查看详情</a>
                 {% else %}
-                    <a class="green" href="http://app.guoku.com/android/latest/guoku.apk">下载果库android版</a>
+                    <a class="blue" href="http://app.guoku.com/android/latest/guoku.apk">下载果库android版</a>
                 {% endif%}
             {% endif%}
             <a class="pc_link" href="javascript:void(0);" onclick="goToWeb();" >去网页版</a>
@@ -93,9 +96,12 @@
                 <div class="item">
                     <div class="image">
                         <a href="{{ buy_link }}&entry=wap"><img src="{{ entity_context.image_url }}" /></a>
-                        <a class="green price" href="{{ buy_link }}&entry=wap">详情￥{{ entity_context.price }}</a>
                     </div>
-                    <p>{{ entity_context.like_count }}人喜爱</p>
+                    <div>
+                        <div class="like_info">{{ entity_context.like_count }}人喜爱</div>
+                        <div class="more_info"><a class="blue price" href="{{ buy_link }}&entry=wap">详情￥{{ entity_context.price }}</a></div>
+                        <div class="clear"></div>
+                    </div>
                     <div class="small-avatar">
                         {% for liker_context in liker_list|top:9 %}
                             <img src="{{ liker_context.avatar_small }}" width="25" height="25">
@@ -105,19 +111,21 @@
                 {% for note in note_list %}
                     <div class="note">
                         <img src="{{ note.creator_context.avatar_small }}" width="25" height="25">
-                        <span class="username">{{ note.creator_context.nickname }}</span>
-                        <p class="text">{{note.note_context.content}}</p>
+                        
+                        <p class="text">
+                            <span class="username">{{ note.creator_context.nickname }}</span><br>{{note.note_context.content}}
+                        </p>
                         <div class="clear"></div>
                     </div>
                 {% endfor %}
             </div>
             <div class="downloads with-border">
-                <img src="{{ STATIC_URL }}images/guoku_logo_new.png" />
+                <img src="{{ STATIC_URL }}images/guoku_logo.png" width="60px" />
                 <p>现在下载，随时随地刷果库！</p>
                 <div class="container">
-                    <a class="green" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">iPhone版</a>
-                    <a href="http://itunes.apple.com/cn/app/id450507565?mt=8" class="green" >iPad版</a>
-                    <a href="http://app.guoku.com/android/latest/guoku.apk" class="green" >Android版</a>
+                    <a class="blue" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">iPhone版</a>
+                    <a href="http://itunes.apple.com/cn/app/id450507565?mt=8" class="blue" >iPad版</a>
+                    <a href="http://app.guoku.com/android/latest/guoku.apk" class="blue" >Android版</a>
                 </div>
                 <div class="clear"></div>
             </div>

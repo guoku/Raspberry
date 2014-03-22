@@ -17,16 +17,16 @@
 			html, body, div, ul, li, a, p, span, header, footer, input, textarea, h1, h2 {margin: 0;padding: 0;-webkit-tap-highlight-color: rgba(255,255,255,0);-webkit-appearance: none;}
 			article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {display: block;}
 			html, body {height: 100%;-webkit-text-size-adjust: none;text-size-adjust: none;}
-			body {font: normal 14px sans-serif;background-color: #FAF9F6;color: #666666;}
+			body {font: normal 14px sans-serif;background-color: #FAF9F6;color: #444444;}
             a {text-decoration:none;}
 			.dn {/*display: none;*/}
             .clear {clear:both;}
-            .green {background:#4DB07A;color:#ffffff;padding:5px;border-radius:2px;}
+            .blue {background:#427ec0;color:#ffffff;padding:5px;border-radius:2px;}
             div.with-border {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);background-color:#FFFFFF;border-radius:2px;margin:15px 5px 0 5px;}
 
-			.header {padding:5px;background-color: #ffffff;border-bottom:1px solid #CCCCCC;box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);height:32px;}
-			.header .logo {float:left;height:32px;}
-			.header a.green {float:right;font-size:14px;line-height:14px;margin:5px 0 3px;}
+			.header {padding:5px;background-color: #343434;border-bottom:1px solid #CCCCCC;box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);height:32px;}
+			.header .logo {float:left;height:32px;margin-right: 10px;}
+			.header a.blue {float:right;font-size:14px;line-height:14px;margin:5px 0 3px;}
             .header a.pc_link {float:right;font-size:14px;line-height:24px;margin:5px 10px 3px 0;color:#999999;}
 
             .main {position:relative;width:100%;overflow:hidden;padding-bottom:10px;}
@@ -40,11 +40,18 @@
             .small-avatar {width:315px;overflow:hidden;margin:10px 0 0;font-size:0;}
             .small-avatar img {height:25px;width:25px;margin-right:8px;}
 
-            .note {padding:0 5px 4px;}
-            .note .avatar {float:left;height:25px;width:25px;margin-right:8px;}
-            .note .avatar img {height:25px;width:25px;}
-            .note .username {font-weight:700;}
-            .note .text {line-height:1.35em;margin-left:33px;}
+            .like_count{
+            	height: 40px;
+            	line-height: 25px;
+            	float: left;
+            	padding-left: 5px;
+            	padding-top: 10px;
+            }
+            .note {padding:0 10px 4px;}
+            .note .avatar {height:40px;float: right;}
+            .note .avatar img {height:25px;width:25px;border-radius: 15px;position: relative;top:5px;}
+            .note .username {line-height: 25px;margin-left: 5px;display: inline-block;}
+            .note .text {line-height:1.35em;padding:5px;}
 
             .more {padding-top:5px;text-align:center;}
             .more a {color:#666666;}
@@ -75,19 +82,20 @@
 
 	<body>
         <div class="header" id='header'>
-            <img src="{% static 'images/guoku_icon_mobile.png' %}" class="logo"/>
+            <img src="{% static 'images/wap_text.png' %}" class="logo"/>
+            <img src="{% static 'images/wap_logo.png' %}" class="logo"/>
             {% if agent == "iphone" %}
                 {% if isappinstalled == '1' %}
-                    <a class="green" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">用果库iPhone版查看详情</a>
+                    <a class="blue" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">用果库iPhone版查看详情</a>
                 {% else %}
-                    <a class="green" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://">下载果库iPhone版</a>
+                    <a class="blue" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://">下载果库iPhone版</a>
                 {% endif%}
             {% endif%}
             {% if agent == "android" %}
                 {% if isappinstalled == '1' %}
-                    <a class="green" href="wx59118ccde8270caa://">用果库android版查看详情</a>
+                    <a class="blue" href="wx59118ccde8270caa://">用果库android版查看详情</a>
                 {% else %}
-                    <a class="green" href="http://app.guoku.com/android/latest/guoku.apk">下载果库android版</a>
+                    <a class="blue" href="http://app.guoku.com/android/latest/guoku.apk">下载果库android版</a>
                 {% endif%}
             {% endif%}
             <a class="pc_link" href="javascript:void(0)" onclick="goToWeb()">去网页版</a>
@@ -106,11 +114,16 @@
                         </div>
                     </div>
                     <div class="note">
-                        <div class="avatar">
-                            <img src="{{ selection.creator_context.avatar_small }}" width="25" height="25">
-                        </div>
-                        <span class="username">{{ selection.creator_context.nickname }}</span>
                         <p class="text">{{ selection.note_context.content }}</p>
+                        <div class="information">
+                        	<div class="like_count">
+                        		<span>1.3K 人喜爱</span>
+                        	</div>
+	                        <div class="avatar">
+	                            <img src="{{ selection.creator_context.avatar_small }}" width="25" height="25">
+	                            <span class="username">{{ selection.creator_context.nickname }}</span>
+	                        </div>
+                        </div>
                         <div class="clear"></div>
                     </div>
                 </div>
@@ -122,9 +135,9 @@
                 <img src="{{ STATIC_URL }}images/guoku_logo_new.png" />
                 <p>现在下载，随时随地刷果库！</p>
                 <div class="container">
-                    <a class="green" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://">iPhone版</a>
-                    <a href="http://itunes.apple.com/cn/app/id450507565?mt=8" class="green" >iPad版</a>
-                    <a href="http://app.guoku.com/android/latest/guoku.apk" class="green" >Android版</a>
+                    <a class="blue" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://">iPhone版</a>
+                    <a href="http://itunes.apple.com/cn/app/id450507565?mt=8" class="blue" >iPad版</a>
+                    <a href="http://app.guoku.com/android/latest/guoku.apk" class="blue" >Android版</a>
                 </div>
                 <div class="clear"></div>
             </div>
