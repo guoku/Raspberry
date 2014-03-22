@@ -202,6 +202,7 @@ function initTag(){
 
         popLoginBox: function () {
             var $accountForm = $('.account-form');
+            var $overlay = $('.overlay');
             var $login = $('.account-form.login');
             var $reg =  $('.account-form.register');
             $accountForm.on('click', formClick);
@@ -210,11 +211,15 @@ function initTag(){
             }
             var flag = 1;
             var $body = $('body');
+            $overlay.show();
             $login.show();
+            $body.addClass('overlay-open');
             $body.on('click', removeLogin);
             function removeLogin() {
                 if (flag == 1) {
+                    $overlay.hide();
                     $accountForm.hide();
+                    $body.removeClass('overlay-open');
                     $body.off('click', removeLogin);
                     $accountForm.off('click', formClick);
                 }

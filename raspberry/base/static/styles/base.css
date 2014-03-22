@@ -91,7 +91,22 @@ button {
     padding: 6px 0 6px 0;
 }
 /*---------------------------------*/
-
+/*--------- overlay ----------------*/
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: #FFFFFF;
+    opacity: 0.85;
+    width: 100%;
+}
+.overlay-open {
+    overflow: hidden;
+}
+/*--------------------------------*/
 /*------------ message ---------------*/
 .message {
     border-radius: 4px;
@@ -111,7 +126,6 @@ button {
     margin: 0 200px 15px auto;
     /*margin-bottom: 15px;*/
 }
-
 /*---------------- header --------------------*/
 #header {
     position: fixed;
@@ -454,26 +468,6 @@ button {
     margin: 10px;
     padding-bottom: 20px;
 }
-
-/*.account-form .tip {*/
-    /*display: block;*/
-    /*width: 515px;*/
-    /*height: 125px;*/
-    /*background-color: #fbfbfb;*/
-    /*margin-bottom: 55px;*/
-    /*text-align: center;*/
-    /*vertical-align: bottom;*/
-/*}*/
-
-/*.account-form .tip img{*/
-    /*display: block;*/
-    /*margin-top: 30px;*/
-    /*margin-left: 175px;*/
-    /*width: 165px;*/
-    /*height: 90px;*/
-    /*background-color: #fbfbfb;*/
-/*}*/
-
 .account-form .text-input {
     display: block;
     width: 243px;
