@@ -33,7 +33,7 @@ function initTag(){
             tag = "";
             cursor = -1;
             length = 0;
-            $("textarea[name='note_text']").css("height","20px");
+//            $("textarea[name='note_text']").css("height","20px");
             dom.css("margin", "0");
 
             clearTimeout(timeout);
