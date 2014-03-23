@@ -38,6 +38,7 @@ REGISTER_TEMPLATES = {
 }
 
 class RegisterWizard(SessionWizardView):
+    file_storage = ""
     def get_template_names(self):
         return [REGISTER_TEMPLATES[self.steps.current]]
 
@@ -67,6 +68,7 @@ class RegisterWizard(SessionWizardView):
         return _user_inst
 
     def done(self, form_list, **kwargs):
+
         self.signup(form_list)
         return HttpResponseRedirect(reverse("web_selection"))
 

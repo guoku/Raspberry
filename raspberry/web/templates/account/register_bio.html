@@ -4,29 +4,37 @@
 
 {% block title %}完善信息{% endblock %}
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div id="register-bio">
+    <div id="setting">
         <h2>{% trans "account settings" %}</h2>
 
         <div class="guoku-block">
 {#            {% display_avatar_update user_context %}#}
             
-            <form method="POST" action="" class="base-info">
+            <form method="POST" action="" class="base-info" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ wizard.management_form }}
 {#                <h3>个人资料</h3>#}
                 {{ wizard.form.errors }}
                 <div class="control-group">
-                    <label for="bio">{% trans 'bio' %}</label>
+                    <label>{{ wizard.form.avatar.label }} {{ wizard.form.avatar.help_text }}</label>
+                    {{ wizard.form.avatar }}
+                </div>
+                <div class="control-group">
+                    <label for="bio">{{ wizard.form.bio.label }}</label>
                     {#<textarea name="bio" id="bio" class="text-input" rows="4">{{ user_context.bio }}</textarea>#}
                     {{ wizard.form.bio }}
                 </div>
 
+                <div style="display: none;">
+                    <p id="default_location_value">{{ profile_form.location.value }}</p>
+                    <p id="default_city_value">{{ profile_form.city.value }}</p>
+                </div>
                 <div class="control-group">
-                    <label>所在地</label>
+                    <label>{{ wizard.form.location.label }}</label>
                     {{ wizard.form.location }}
                     {{ wizard.form.city }}
                 </div>
