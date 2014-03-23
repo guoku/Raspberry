@@ -751,7 +751,7 @@ button {
 }
 
 .common-entity .entity-img {
-    display: table-cell;
+    /*display: table-cell;*/
     width: 208px;
     height: 208px;
     text-align: center;
