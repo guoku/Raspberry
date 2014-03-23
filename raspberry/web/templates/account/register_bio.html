@@ -4,12 +4,12 @@
 
 {% block title %}完善信息 - 果库{% endblock %}
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
 {% endblock %}
 
 {% block content %}
     <div id="setting">
-        <h2>帐号设置</h2>
+        <h2>{% trans "account settings" %}</h2>
 
         <div class="guoku-block">
             {% display_avatar_update user_context %}
