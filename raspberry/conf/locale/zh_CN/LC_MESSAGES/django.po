@@ -126,3 +126,6 @@ msgstr "邮箱没有被注册"
 
 msgid "email is signed up."
 msgstr "邮箱已被注册"
+
+msgid "nickname is signed up."
+msgstr "昵称已被使用"
