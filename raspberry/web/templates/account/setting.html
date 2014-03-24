@@ -17,6 +17,7 @@
             {% csrf_token %}
             <h3>个人资料</h3>
             {% if msg_code != None %}
+            <div class="control-group">
                 <div class="message">
                     {% if msg_code == '0' %}
                         未上传图片
@@ -24,6 +25,7 @@
                         图片太大
                     {% endif %}
                 </div>
+             </div>
             {% endif %}
             <div class="control-group">
                 <label for="{{ profile_form.nickname.id_for_label }}">{{ profile_form.nickname.label }}</label>
