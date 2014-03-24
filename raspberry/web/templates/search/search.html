@@ -40,11 +40,11 @@
 
         {% elif group == 't' %}
             {% if tag_list|length > 0 %}
-                <div class="tags">
+                <ul class="tags">
                     {% for tag_context in tag_list %}
                         {% display_common_tag tag_context %}
                     {% endfor %}
-                </div>
+                </ul>
             {% endif %}
 
         {% endif %}
