@@ -292,7 +292,7 @@ button {
     height: 49px;
     line-height: 0;
     vertical-align: middle;
-    padding-right: 50px;
+    padding-right: 40px;
 }
 #header .user img {
     border-radius: 50%;
@@ -300,9 +300,9 @@ button {
 #header .user li .icon-menu {
     position: absolute;
     top: 0;
-    right: 15px;
+    right: 10px;
     margin: 12px 0;
-    background-position: -32px -40px;
+    background-position: -92px -81px;
 }
 #header .user .menu {
     position: absolute;
