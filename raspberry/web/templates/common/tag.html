@@ -1,8 +1,8 @@
 {% load entity %}
-<div class="common-tag">
+<li class="common-tag">
     <h4>#{{ tag_context.tag }}</h4>
 
-    <div class="entities">
+    <div class="tag-entities">
         {% for entity_context in tag_context.entity_list %}
             {% if user_id == None %}
                 <a href="{% url 'web_tag_detail' tag_context.tag_hash %}" class="entity-img" target="_blank">
@@ -24,4 +24,4 @@
             <span>{{ tag_context.entity_count }}</span>件商品
         </a>
     {% endif %}
-</div>
+</li>
