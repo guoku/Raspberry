@@ -33,7 +33,7 @@ function initTag(){
             tag = "";
             cursor = -1;
             length = 0;
-            $("textarea[name='note_text']").css("height","20px");
+//            $("textarea[name='note_text']").css("height","20px");
             dom.css("margin", "0");
 
             clearTimeout(timeout);
@@ -203,6 +203,7 @@ function initTag(){
 
         popLoginBox: function () {
             var $accountForm = $('.account-form');
+            var $overlay = $('.overlay');
             var $login = $('.account-form.login');
             var $reg =  $('.account-form.register');
             $accountForm.on('click', formClick);
@@ -211,11 +212,15 @@ function initTag(){
             }
             var flag = 1;
             var $body = $('body');
+            $overlay.show();
             $login.show();
+            $body.addClass('overlay-open');
             $body.on('click', removeLogin);
             function removeLogin() {
                 if (flag == 1) {
+                    $overlay.hide();
                     $accountForm.hide();
+                    $body.removeClass('overlay-open');
                     $body.off('click', removeLogin);
                     $accountForm.off('click', formClick);
                 }
@@ -471,7 +476,7 @@ function initTag(){
                         var $commentContent = $commentItem.find('.comment-content');
                         var $nickname = $commentItem.find('.nickname');
 
-                        $commentText.val('回复 ' + $nickname.text() + ': ');
+                        $commentText.val('回复 ' + $.trim($nickname.text()) + ': ');
                         $commentText.focus();
                         replyToUser = $commentContent.attr('data-creator');
                         replyToComment = $commentContent.attr('data-comment');
