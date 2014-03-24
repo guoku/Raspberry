@@ -24,7 +24,7 @@
                 <a href="{% url 'management_edit_user' query_user_context.user_id %}" target=_blank>编</a>
             {% endif %}
             {% if relation == 4 %}
-                <a class="setting" href="{% url 'web_setting' %}"><span>{% trans "settings" %}</span></a>
+                <a class="setting" href="{% url 'web_setting' %}"><span class="setting-icon"></span><span>{% trans "settings" %}</span></a>
             {% elif relation == 3 %}
                 <a href="{% url 'web_follow' query_user_context.user_id 0 %}" class="follow-user is-fan gray-f"><span class="img_is_fun"></span><b>取消关注</b></a>
             {% elif relation == 1 %}

@@ -46,6 +46,15 @@
     color: #666;
 }
 
+.setting-icon{
+    width: 20px;
+    height: 17px;
+    position: relative;
+    top:3px;
+    display: inline-block;
+    background: url("/static/v3/images/toolkit.png") -142px -270px;
+}
+
 #user-center .base .setting, #user-center .base .follow-user {
     position: absolute;
     top: 25px;
