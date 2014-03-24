@@ -831,7 +831,7 @@ function initTag(){
         clickToTop.bindClick();
 
         selection.loadSelections();
-        category.loadCategory();
+        //category.loadCategory();
 
         detail.detailImageHover();
         detail.addNote();
