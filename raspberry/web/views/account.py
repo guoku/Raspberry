@@ -12,7 +12,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 import os
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
+from django.core.files.storage import Storage 
 from web import taobao_utils
 from web import sina_utils
 from web import web_utils
@@ -39,8 +39,44 @@ REGISTER_TEMPLATES = {
     'register-bio' : 'account/register_bio.html',
 }
 
+
+class FakeFileSystemStorage(Storage):
+    def __init__(self, location=None, base_url=None):
+        pass
+    
+    def open(self, name, mode='rb'):
+        pass
+    
+    def save(self, name, content):
+        pass
+
+    def delete(self, name):
+        pass
+    
+    def exists(self, name):
+        pass
+
+    def listdir(self, path):
+        pass
+
+    def size(self, name):
+        pass
+
+    def url(self, name):
+        pass
+
+    def accessed_time(self, name):
+        pass
+
+    def created_time(self, name):
+        pass
+
+    def modified_time(self, name):
+        pass
+
+
 class RegisterWizard(SessionWizardView):
-    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'photos'))
+    file_storage = FakeFileSystemStorage()
     def get_template_names(self):
         return [REGISTER_TEMPLATES[self.steps.current]]
 
@@ -59,11 +95,11 @@ class RegisterWizard(SessionWizardView):
             signup_data['email'], 
             signup_data['password'], 
             signup_data['nickname'],
-            location = bio_data['location'],
-            city = bio_data['city'],
-            gender = bio_data['gender'],
-            bio = bio_data['bio'],
-            website = bio_data['website']
+            location=bio_data['location'],
+            city=bio_data['city'],
+            gender=bio_data['gender'],
+            bio=bio_data['bio'],
+            website=bio_data['website']
         )
         
         try:
