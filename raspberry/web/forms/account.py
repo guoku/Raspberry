@@ -107,7 +107,7 @@ class SignUpAccountFrom(forms.Form):
         return self.cleaned_data['agree_tos']
 
 class SignUpAccountBioFrom(forms.Form):
-    avatar = forms.FileField(label=_('Select a file'), help_text=_('max. 42 megabytes'), required=False)
+    avatar = forms.FileField(label=_('select a file'), help_text=_('max. 2 megabytes'), required=False)
     bio = forms.CharField(widget=forms.Textarea(attrs={'rows':'4', 'class':'textarea-input'}),
                           label=_('bio'), help_text=_(''), required = False)
     gender = forms.ChoiceField(widget = forms.RadioSelect(), choices = GENDER_CHOICES,

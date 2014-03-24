@@ -79,6 +79,12 @@ msgstr "账号设置"
 msgid "avatar"
 msgstr "头像"
 
+msgid "select a file"
+msgstr "选取一个图片"
+
+msgid "max. 2 megabytes"
+msgstr "最大 2M"
+
 msgid "username"
 msgstr "用户名"
 
