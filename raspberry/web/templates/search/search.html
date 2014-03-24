@@ -22,11 +22,11 @@
         
         {% if group == 'e' %}
             {% if entity_list|length > 0 %}
-                <div class="entities">
+                <ul class="entities">
                     {% for entity_context in entity_list %}
                         {% display_common_entity entity_context %}
                     {% endfor %}
-                </div>
+                </ul>
             {% endif %}
 
         {% elif group == 'u' %}
