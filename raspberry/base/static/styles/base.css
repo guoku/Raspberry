@@ -241,6 +241,9 @@ button {
     /*width: 22px;*/
     /*height: 22px;*/
 }
+#header .nav-bar a:hover{
+    color:#fff;
+}
 #header .nav-bar .add-entity a:hover {
     background-position: -247px -82px;
 }
@@ -277,12 +280,11 @@ button {
 #header .user li a {
     display: block;
     text-decoration: none;
-    text-align: center;
     line-height: 49px;
     padding: 0 6px;
 }
 #header .user li a:hover {
-    color: #444;
+    color: #fff;
 }
 #header .user .user-avatar {
     display: table-cell;
@@ -290,7 +292,7 @@ button {
     height: 49px;
     line-height: 0;
     vertical-align: middle;
-    padding: 0 30px;
+    padding-right: 50px;
 }
 #header .user img {
     border-radius: 50%;
@@ -298,7 +300,7 @@ button {
 #header .user li .icon-menu {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 15px;
     margin: 12px 0;
     background-position: -32px -40px;
 }
@@ -306,7 +308,7 @@ button {
     position: absolute;
     margin: 0;
     padding: 0;
-    right: 0;
+    right: 15px;
     border-left: 1px solid rgba(0, 0, 0, 0.15);
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -336,13 +338,13 @@ button {
 #header .user .menu li a {
     display: block;
     background-color: #FFFFFF;
-    text-align: right;
     line-height: 50px;
     text-decoration: none;
-    padding-right: 30px;
+    padding-left: 50px;
 }
 #header .user .menu li a:hover {
-    background-color: #f8f8f8;
+    background-color: #eee;
+    color: #666;
 }
 #header .user li ul {
     display: none;
