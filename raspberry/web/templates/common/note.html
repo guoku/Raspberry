@@ -25,7 +25,7 @@
             <a href="{% url 'web_like_entity' note.entity_context.entity_id '1' %}" class="like">
         {% endif %}
             <span class="icon"></span>
-            <span class="count">{{ note.entity_context.like_count }}</span>喜爱
+            喜爱<span class="count"> {{ note.entity_context.like_count }}</span>
         </a>
 
         <div class="creator">

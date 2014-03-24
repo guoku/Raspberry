@@ -508,6 +508,16 @@
     text-decoration: none;
 }
 
+#detail .share .weibo_icon{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    background:url("/static/v3/images/toolkit.png");
+    background-position: -55px -36px ;
+    position: relative;
+    top:5px;
+}
+
 #detail .download {
     padding: 25px 20px;
     border: 1px solid #eee;

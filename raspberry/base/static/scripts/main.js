@@ -831,7 +831,7 @@ function initTag(){
         clickToTop.bindClick();
 
         selection.loadSelections();
-        category.loadCategory();
+        //category.loadCategory();
 
         detail.detailImageHover();
         detail.addNote();
@@ -872,6 +872,7 @@ $(function(){
     $(".load-entity input[type='submit']").on("click",function(){
         var entity_url = $("input[name='cand_url']").val();
         var request_url = $(".load-entity").attr("sd");
+        var thisObj = $(this);
         $.ajax({
             type:"post",
             url:request_url,
@@ -891,6 +892,13 @@ $(function(){
                     $(".detail_chief_url img").attr("src",data.data.chief_image_url);
                     $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
                     $(".detail_thumb_images").html("");
+                    thisObj.val("重新载入");
+                    thisObj.css({
+                        background:"#bbb",
+                        border:"1px solid #ddd",
+                        color:"white",
+                        outline:"none"
+                    });
                     for(var i=0;i<data.data.thumb_images.length;i++){
                         if(i==0){
                             $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');

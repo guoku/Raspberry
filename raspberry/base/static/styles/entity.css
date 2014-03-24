@@ -47,6 +47,7 @@
     border: 1px solid #216db0;
     color: white;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 #add-entity .entity-detail {
