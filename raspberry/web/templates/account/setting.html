@@ -15,7 +15,9 @@
         {% display_avatar_update user_context %}
         <form method="POST" action="{% url 'web_update_profile' %}" class="base-info" id="set-base-info">
             {% csrf_token %}
-            <h3>个人资料</h3>
+            <div class="control-group">
+                <h3>个人资料</h3>
+            </div>
             {% if msg_code != None %}
             <div class="control-group">
                 <div class="message">
@@ -100,7 +102,9 @@
 
         <form method="POST" action="{% url 'web_change_password' %}" class="password">
             {% csrf_token %}
-            <h3>更改密码</h3>
+            <div class="control-group">
+                <h3>更改密码</h3>
+            </div>
             {% for field in password_form %}
             <div class="control-group">
                 <label for="{{ field.id_for_label }}" >{{ field.label }}</label>
