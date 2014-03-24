@@ -18,10 +18,11 @@
                 {% csrf_token %}
                 {{ wizard.management_form }}
 {#                <h3>个人资料</h3>#}
-                <div class="message">
-                    {{ wizard.form.errors }}
-                </div>
-
+                {% if wizard.form.errors %}
+                    <div class="message">
+                        {{ wizard.form.errors }}
+                    </div>
+                {% endif %}
                 <div class="avatar">
 {#                    <img src="{{ user_context.avatar_large }}">#}
                 </div>
