@@ -42,7 +42,7 @@
     display: none;
     position: absolute;
     height: 35px;
-    width: 195px;
+    width: 188px;
     padding: 30px 10px;
     border-bottom: 1px solid #eee;
     background-color: #fbfbfb;
@@ -51,7 +51,7 @@
 }
 #category .entities li .title h2 {
     display: inline-block;
-    width: 120px;
+    width: 100px;
     margin: 0;
     line-height: 1.3;
     font-size: 14px;
@@ -60,6 +60,7 @@
 }
 #category .entities li .title span {
     float: right;
+    position: relative;
     width: 65px;
     vertical-align: top;
     font-family: Georgia, serif;
