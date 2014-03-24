@@ -78,11 +78,11 @@
                 </ul>
 
                 {% if entity_list|length > 0 %}
-                    <div class="likes">
+                    <ul class="likes">
                         {% for entity_context in entity_list %}
                             {% display_common_entity entity_context %}
                         {% endfor %}
-                    </div>
+                    </ul>
                 {% endif %}
             </div>
 

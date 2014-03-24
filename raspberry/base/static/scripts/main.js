@@ -288,17 +288,17 @@ function initTag(){
 
         noteHover: function () {
             var self = this;
-            $('.common-note').each(function () {
+            $('.common-note, .popular-entity, .common-entity').each(function () {
                 self.showEntityTitle($(this));
             });
         },
 
-        popularHover: function () {
-            var self = this;
-            $('.popular-entity').each(function (){
-                self.showEntityTitle($(this));
-            });
-        },
+//        popularHover: function () {
+//            var self = this;
+//            $('.entity').each(function (){
+//                self.showEntityTitle($(this));
+//            });
+//        },
 
         loadData: function(counter, object) {
             var url = window.location.href;
@@ -388,20 +388,20 @@ function initTag(){
         }
     };
 
-    var category = {
-        loadCategory: function () {
-            var $category = $('.category');
-            if ($category[0]) {
-                var counter = 1;
-                var top = 3000;
-
-                $(window).scroll(function () {
-                    var $this = $(this);
-//                    console.log($this);
-                });
-            }
-        }
-    }
+//    var category = {
+//        loadCategory: function () {
+//            var $category = $('.category');
+//            if ($category[0]) {
+//                var counter = 1;
+//                var top = 3000;
+//
+//                $(window).scroll(function () {
+//                    var $this = $(this);
+////                    console.log($this);
+//                });
+//            }
+//        }
+//    };
 
     var detail = {
         updateNote: function ($noteItem) {
@@ -824,7 +824,7 @@ function initTag(){
     (function init() {
         util.like();
         util.noteHover();
-        util.popularHover();
+//        util.popularHover();
         util.shareWeibo();
 
         clickToTop.caculateRight();
