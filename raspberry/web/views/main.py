@@ -184,6 +184,60 @@ def wap_selection(request, template='wap/selection.html'):
         context_instance=RequestContext(request)
     )
 
+def tencent_selection(request, template='tencent/selection.html'):
+    _start_at = datetime.now()
+    if request.user.is_authenticated():
+        _request_user_id = request.user.id
+    else:
+        _request_user_id = None 
+    _agent = 'iphone'
+    if 'Android' in request.META['HTTP_USER_AGENT']:
+        _agent = 'android'
+   
+    _page_num = int(request.GET.get('p', 1))
+    _hdl = NoteSelection.objects.filter(post_time__lt = datetime.now())
+    _paginator = Paginator(_page_num, 30, _hdl.count())
+    _hdl = _hdl.order_by('-post_time')
+    _selection_list = []
+    _entity_id_list = []
+    for _note_selection in _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
+        _selection_note_id = _note_selection['note_id']
+        _entity_id = _note_selection['entity_id']
+        _entity_context = Entity(_entity_id).read()
+        _note_context = Note(_selection_note_id).read()
+        _creator_context = User(_note_context['creator_id']).read()
+        
+        _selection_list.append({
+            'entity_context': _entity_context,
+            'note_context': _note_context,
+            'creator_context': _creator_context,
+        })
+        _entity_id_list.append(_entity_id)
+    
+    _duration = datetime.now() - _start_at
+    WebLogTask.delay(
+        entry='tencent',
+        duration=_duration.seconds * 1000000 + _duration.microseconds, 
+        page='SELECTION', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'result_entities' : _entity_id_list,
+        },
+    )
+        
+    return render_to_response(
+        template,
+        {
+            'agent' : _agent,
+            'selection_list' : _selection_list,
+            'next_page_num' : _page_num + 1,
+        },
+        context_instance=RequestContext(request)
+    )
+
 
 
 
