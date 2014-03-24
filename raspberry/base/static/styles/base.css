@@ -509,7 +509,7 @@ button {
     display: inline-block;
     width: 243px;
     /*margin: 0 auto 15px;*/
-    margin: 0 10px 15px 95px;
+    margin: 0 10px 0 95px;
     padding: 10px 5px;
     height: 30px;
     line-height: 30px;
@@ -621,7 +621,7 @@ button {
 
 .login .to-reg {
     text-align: center;
-    margin: 30px 0;
+    margin: 10px auto 30px;
     /*margin-top: 30px;*/
     /*margin-bottom: 20px;*/
     color: #427ec0;
