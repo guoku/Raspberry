@@ -18,7 +18,21 @@
                 {% csrf_token %}
                 {{ wizard.management_form }}
 {#                <h3>个人资料</h3>#}
-                {{ wizard.form.errors }}
+
+                <div class="avatar">
+                    <img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+                </div>
+                {% if wizard.form.errors %}
+                <div class="control-group">
+                    <div class="message">
+                        {% for field in wizard.form  %}
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
                 <div class="control-group">
                     <label>{{ wizard.form.avatar.label }} {{ wizard.form.avatar.help_text }}</label>
                     {{ wizard.form.avatar }}
@@ -42,7 +56,8 @@
                 <div class="control-group">
                     <label>性别</label>
                     {% for radio in wizard.form.gender %}
-                        <span> {{ radio.choice_label }} {{radio.tag }}</span>
+                        <span> {{ radio.choice_label }}</span>
+                        {{radio.tag }}
                     {% endfor %}
                 </div>
 

@@ -4,8 +4,12 @@
             <img src="/static/v3/images/signin.png"  alt="欢迎回来">
         </div>
         <form action="{% url "web_login" %}" method="POST">
-            <input type="text" name="email" placeholder="邮箱" class="text-input">
-            <input type="password" name="password" placeholder="密码" class="text-input">
+            <div class="control-group">
+                <input type="text" name="email" placeholder="邮箱" class="text-input">
+            </div>
+            <div class="control-group">
+                <input type="password" name="password" placeholder="密码" class="text-input">
+            </div>
             <div class="remember">
                 <label><input type="checkbox" name="remember_me">记住我</label>
                 <a href="">忘记密码?</a>
