@@ -19,6 +19,9 @@
                 {{ wizard.management_form }}
 {#                <h3>个人资料</h3>#}
                 {{ wizard.form.errors }}
+                <div class="avatar">
+{#                    <img src="{{ user_context.avatar_large }}">#}
+                </div>
                 <div class="control-group">
                     <label>{{ wizard.form.avatar.label }} {{ wizard.form.avatar.help_text }}</label>
                     {{ wizard.form.avatar }}
