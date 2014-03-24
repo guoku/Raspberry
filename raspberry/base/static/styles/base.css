@@ -503,9 +503,10 @@ button {
     padding-bottom: 20px;
 }
 .account-form .text-input {
-    display: inline-block;
+    display: block;
     width: 243px;
-    margin: 0 10px 15px 95px;
+    margin: 0 auto 15px;
+    /*margin: 0 10px 15px 95px;*/
     padding: 10px 5px;
     height: 30px;
     line-height: 30px;
