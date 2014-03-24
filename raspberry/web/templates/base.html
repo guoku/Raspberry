@@ -60,7 +60,7 @@
             {% if request.user.is_authenticated  %}
                 {% show_auth_user request.user.id %}
             {% else %}
-                <li><a href="{% url 'web_login' %}">{% trans 'sign in' %}</a></li>
+                <li><a href="{% url 'web_login' %}?next={{request.path}}">{% trans 'sign in' %}</a></li>
                 <li><span>&#124;</span></li>
                 <li><a href="{% url 'web_register' %}">{% trans 'sign up' %}</a></li>
             {% endif %}

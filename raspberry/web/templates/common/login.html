@@ -3,7 +3,7 @@
         <div class="tip">
             <img src="/static/v3/images/signin.png"  alt="欢迎回来">
         </div>
-        <form action="{% url "web_login" %}" method="POST">
+        <form action="{% url "web_login" %}?next={{request.path}}" method="POST">
             <div class="control-group">
                 <input type="text" name="email" placeholder="邮箱" class="text-input">
             </div>
