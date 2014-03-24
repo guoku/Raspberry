@@ -37,6 +37,6 @@
 #main .row .text.right {padding-left:75px;width:405px;float: right;}
 #main .row .image.right {padding-left:75px;width:405px;float: left;}
 #main .row .text.left {padding-left:75px;width:405px;float: right;}
-#main .row .text h3 {font-size:26px;color:#666666;margin:130px 0 10px;}
+#main .row .text h3 {font-size:26px;color:#666666;margin:130px 0 10px;font-weight: 600;}
 #main .row .text p {font-size:18px;color:#B8B8B8;}
 #main .row .split {height:1px;width:960px;background:url("/static/v3/images/download/line.png") no-repeat;}
