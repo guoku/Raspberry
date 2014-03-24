@@ -41,13 +41,13 @@
             {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
             {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}
             <a href="{{ web_user_likes_url }}" {% if web_user_likes_url in request.path %}class="active"{% endif %}>{% trans 'likes' %}
-                <strong>({{ query_user_context.like_count }})</strong>
+                <strong>{{ query_user_context.like_count }}</strong>
             </a>
             <a href="{{ web_user_notes_url }}" {% if web_user_notes_url in request.path %}class="active"{% endif %}>{% trans 'notes' %}
-                <strong>({{ query_user_context.entity_note_count }})</strong>
+                <strong>{{ query_user_context.entity_note_count }}</strong>
             </a>
             <a href="{{ web_user_tags_url }}" {% if web_user_tags_url in request.path %}class="active"{% endif %}>{% trans 'tags' %}
-                <strong>({{ query_user_context.tag_count }})</strong>
+                <strong>{{ query_user_context.tag_count }}</strong>
             </a>
 
             <div class="social">

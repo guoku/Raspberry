@@ -36,7 +36,7 @@ def homepage(request):
     _log_appendix = {}
 
     _rslt = {}
-    _rslt['discover'] = popularity.read_popular_category()['data'][0:8]
+    _rslt['discover'] = popularity.read_popular_category()['data'][0:12]
     _log_appendix['discover'] = map(lambda x: x['category_id'], _rslt['discover'])
     
     _rslt['banner'] = []
