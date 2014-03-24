@@ -774,7 +774,9 @@ button {
     padding: 30px 15px;
     border-bottom: 1px solid #eee;
     background-color: #fbfbfb;
-    background-color: rgba(251, 251, 251, .95);
+    background-color: rgba(251, 251, 251);
+    opacity: 0.95;
+    filter:alpha(opacity=95);
     font-size: 16px;
 }
 
