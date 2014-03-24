@@ -751,7 +751,7 @@ button {
 }
 
 .common-entity .entity-img {
-    /*display: table-cell;*/
+    display: table-cell;
     width: 208px;
     height: 208px;
     text-align: center;
@@ -761,8 +761,10 @@ button {
 
 .common-entity .entity-img img {
     margin: auto;
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 208px;
+    max-height: 208px;
+    /*max-width: 100%;*/
+    /*max-height: 100%;*/
 }
 
 .common-entity .detail {
