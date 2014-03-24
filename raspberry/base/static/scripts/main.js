@@ -388,20 +388,19 @@ function initTag(){
         }
     };
 
-    var category = {
-        loadCategory: function () {
-            var $category = $('.category');
-            if ($category[0]) {
-                var counter = 1;
-                var top = 3000;
-
-                $(window).scroll(function () {
-                    var $this = $(this);
+ //   var category = {
+ //       loadCategory: function () {
+//            var $category = $('.category');
+//            if ($category[0]) {
+ //               var counter = 1;
+//                var top = 3000;
+//                $(window).scroll(function () {
+//                    var $this = $(this);
 //                    console.log($this);
-                });
-            }
-        }
-    }
+//                });
+//            }
+//        }
+ //   }
 
     var detail = {
         updateNote: function ($noteItem) {
@@ -831,7 +830,7 @@ function initTag(){
         clickToTop.bindClick();
 
         selection.loadSelections();
-        category.loadCategory();
+        //category.loadCategory();
 
         detail.detailImageHover();
         detail.addNote();
