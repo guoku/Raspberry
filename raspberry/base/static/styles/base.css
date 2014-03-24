@@ -90,9 +90,10 @@ button {
 }
 .btn-go{
     color: #FFF;
-    background: #4DB07A;
+    background: #427ec0;
     padding: 5px 14px;
     display: inline-block;
+    font-size: 13px;
     text-align: center;
     -webkit-border-radius: 3px;
     border-radius: 3px;
@@ -314,7 +315,7 @@ button {
     padding: 0;
     margin: 0;
     border-bottom: 1px solid #ddd;
-    height: 45px;
+    height: 50px;
     width: 135px;
 }
 /*.icon-guoku, .icon-setting, .icon-setting   {*/
@@ -336,7 +337,7 @@ button {
     display: block;
     background-color: #FFFFFF;
     text-align: right;
-    line-height: 45px;
+    line-height: 50px;
     text-decoration: none;
     padding-right: 30px;
 }
