@@ -41,7 +41,7 @@
 }
 
 #popular .entity-img {
-    display: block;
+    display: table-cell;
     width: 215px;
     height: 215px;
     text-align: center;
@@ -52,6 +52,7 @@
 #popular .entity-img img {
     max-width: 215px;
     max-height: 215px;
+    vertical-align: middle;
     margin: auto;
 }
 
