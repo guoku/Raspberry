@@ -12,13 +12,15 @@
             </ul>
         </div>
 
-        <div class="category">
+{#        <div class="category">#}
+            <ul class="entities">
             {% spaceless %}
                 {% for entity in entity_list %}
                     {% display_common_entity entity %}
                 {% endfor %}
             {% endspaceless %}
-        </div>
+            </ul>
+{#        </div>#}
         {% if paginator %}
             {% display_web_paginator paginator %}
         {% endif %}
