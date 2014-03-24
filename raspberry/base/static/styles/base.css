@@ -767,7 +767,7 @@ button {
 
 .common-entity .detail {
     position: relative;
-    margin: 15px 10px 0;
+    margin: 12px 10px 0;
 }
 
 .common-entity .detail .like {
@@ -961,8 +961,12 @@ button {
 
 .common-user .stat {
     position: relative;
-    width: 150px;
+    width: 130px;
     margin: 16px auto;
+}
+
+.common-user .stat strong{
+    margin-right: 3px;
 }
 
 .common-user .stat .follows {
