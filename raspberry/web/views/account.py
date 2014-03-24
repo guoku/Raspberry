@@ -66,17 +66,20 @@ class RegisterWizard(SessionWizardView):
             website = bio_data['website']
         )
         
-        _avatar_img = self.request.FILES['register-bio-avatar']
-        if _avatar_img is None:
-            pass
-        elif len(_avatar_img) / (1024 ** 2) > 2:
-            pass
-        else:
-            if hasattr(_avatar_img, 'chunks'):
-                _image_data = ''.join(chunk for chunk in _avatar_img.chunks())
+        try:
+            _avatar_img = self.request.FILES['register-bio-avatar']
+            if _avatar_img is None:
+                pass
+            elif len(_avatar_img) / (1024 ** 2) > 2:
+                pass
             else:
-                _image_data = _avatar_img.read()
-        _user_inst.upload_avatar(_image_data)
+                if hasattr(_avatar_img, 'chunks'):
+                    _image_data = ''.join(chunk for chunk in _avatar_img.chunks())
+                else:
+                    _image_data = _avatar_img.read()
+            _user_inst.upload_avatar(_image_data)
+        except Exception, e:
+            pass
         
         _user = _user_inst.authenticate_without_password()
         auth_login(self.request, _user)
