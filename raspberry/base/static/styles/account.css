@@ -104,6 +104,9 @@
     border-radius: 4px;
     margin-right: 15px;
 }
+#register-bio input[type="radio"] {
+    margin-right: 10px;
+}
 
 #register-bio .text-input {
     width: 180px;
