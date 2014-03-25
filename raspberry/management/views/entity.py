@@ -23,20 +23,10 @@ from share.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 from utils.extractor.taobao import TaobaoExtractor 
-<<<<<<< HEAD
 from utils.extractor.jd import JDExtractor
 import traceback
 
-def _parse_taobao_id_from_url(url):
-    params = url.split("?")[1]
-    for param in params.split("&"):
-        tokens = param.split("=")
-        if len(tokens) >= 2 and (tokens[0] == "id" or tokens[0] == "item_id"):
-            return tokens[1]
-    return None
-=======
 from utils.taobao import parse_taobao_id_from_url
->>>>>>> db14b2cc11ae3e47e9628510bcc231bec41c056f
 
 def _parse_jd_id_from_url(url):
     itemids = re.findall(r'\d+', url)
@@ -647,10 +637,6 @@ def entity_list(request):
                             _entity_context['is_selected'] = True
                             break
                 _entity_context_list.append(_entity_context)
-                except Exception, e:
-                    exstr = traceback.format_exc()
-                    print exstr
-                    raise(Exception(e))
         
         return render_to_response( 
             'entity/list.html', 
