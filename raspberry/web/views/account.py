@@ -10,7 +10,9 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
+import os
 from django.conf import settings
+from django.core.files.storage import Storage 
 from web import taobao_utils
 from web import sina_utils
 from web import web_utils
@@ -37,7 +39,44 @@ REGISTER_TEMPLATES = {
     'register-bio' : 'account/register_bio.html',
 }
 
+
+class FakeFileSystemStorage(Storage):
+    def __init__(self, location=None, base_url=None):
+        pass
+    
+    def open(self, name, mode='rb'):
+        pass
+    
+    def save(self, name, content):
+        pass
+
+    def delete(self, name):
+        pass
+    
+    def exists(self, name):
+        pass
+
+    def listdir(self, path):
+        pass
+
+    def size(self, name):
+        pass
+
+    def url(self, name):
+        pass
+
+    def accessed_time(self, name):
+        pass
+
+    def created_time(self, name):
+        pass
+
+    def modified_time(self, name):
+        pass
+
+
 class RegisterWizard(SessionWizardView):
+    file_storage = FakeFileSystemStorage()
     def get_template_names(self):
         return [REGISTER_TEMPLATES[self.steps.current]]
 
@@ -56,12 +95,28 @@ class RegisterWizard(SessionWizardView):
             signup_data['email'], 
             signup_data['password'], 
             signup_data['nickname'],
-            location = bio_data['location'],
-            city = bio_data['city'],
-            gender = bio_data['gender'],
-            bio = bio_data['bio'],
-            website = bio_data['website']
+            location=bio_data['location'],
+            city=bio_data['city'],
+            gender=bio_data['gender'],
+            bio=bio_data['bio'],
+            website=bio_data['website']
         )
+        
+        try:
+            _avatar_img = self.request.FILES['register-bio-avatar']
+            if _avatar_img is None:
+                pass
+            elif len(_avatar_img) / (1024 ** 2) > 2:
+                pass
+            else:
+                if hasattr(_avatar_img, 'chunks'):
+                    _image_data = ''.join(chunk for chunk in _avatar_img.chunks())
+                else:
+                    _image_data = _avatar_img.read()
+            _user_inst.upload_avatar(_image_data)
+        except Exception, e:
+            pass
+        
         _user = _user_inst.authenticate_without_password()
         auth_login(self.request, _user)
         return _user_inst
@@ -281,7 +336,7 @@ def auth_by_taobao(request):
                         expires_in = _taobao_data['expires_in']
                     )
                 except e:
-                    print e
+                    pass
                 return HttpResponseRedirect(next_url)
             else:
                 pass

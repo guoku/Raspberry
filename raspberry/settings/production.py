@@ -136,3 +136,4 @@ ALLOWED_HOSTS = ['*']
 SINA_BACK_URL = APP_HOST + '/sina/auth'
 TAOBAO_BACK_URL = APP_HOST + "/taobao/auth"
 
+ENABLE_GUOKU_PLUS = True

@@ -41,7 +41,7 @@
 }
 
 #popular .entity-img {
-    display: block;
+    display: table-cell;
     width: 215px;
     height: 215px;
     text-align: center;
@@ -52,20 +52,22 @@
 #popular .entity-img img {
     max-width: 215px;
     max-height: 215px;
+    vertical-align: middle;
     margin: auto;
 }
 
 #popular .entities li .detail {
-    margin: 20px 10px 15px;
+    margin: 15px;
 }
 
 #popular .entities li .title {
     display: none;
     position: absolute;
     height: 35px;
-    padding: 30px 15px;
+    width: 195px;
+    padding: 30px 10px;
     border-bottom: 1px solid #eee;
-    /*background-color: #fbfbfb;*/
+    background-color: #fbfbfb;
     background-color: rgba(251, 251, 251, .95);
     font-size: 14px;
 }

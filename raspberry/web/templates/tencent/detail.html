@@ -73,25 +73,6 @@
 	</head>
 
 	<body>
-        <div class="header" id='header'>
-            <img src="{{ STATIC_URL }}images/wap_text.png" class="logo" />
-            <img src="{{ STATIC_URL }}images/wap_logo.png" class="logo" />
-            {% if agent == "iphone" %}
-                {% if isappinstalled == '1' %}
-                    <a class="blue" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">用果库iPhone版查看详情</a>
-                {% else %}
-                    <a class="blue" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">下载果库iPhone版</a>
-                {% endif%}
-            {% endif%}
-            {% if agent == "android" %}
-                {% if isappinstalled == '1' %}
-                    <a class="blue" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">用果库android版查看详情</a>
-                {% else %}
-                    <a class="blue" href="http://app.guoku.com/android/latest/guoku.apk">下载果库android版</a>
-                {% endif%}
-            {% endif%}
-            <a class="pc_link" href="javascript:void(0);" onclick="goToWeb();" >去网页版</a>
-        </div>
         <div class="main" id="main">
             <div class="with-border">
                 <div class="item">
@@ -119,16 +100,6 @@
                         <div class="clear"></div>
                     </div>
                 {% endfor %}
-            </div>
-            <div class="downloads with-border">
-                <img src="{{ STATIC_URL }}images/guoku_logo.png" width="60px" />
-                <p>现在下载，随时随地刷果库！</p>
-                <div class="container">
-                    <a class="blue" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://detail/{{ entity_context.entity_id }}">iPhone版</a>
-                    <a href="http://itunes.apple.com/cn/app/id450507565?mt=8" class="blue" >iPad版</a>
-                    <a href="http://app.guoku.com/android/latest/guoku.apk" class="blue" >Android版</a>
-                </div>
-                <div class="clear"></div>
             </div>
         </div>
 	</body>

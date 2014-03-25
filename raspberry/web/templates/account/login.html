@@ -23,7 +23,9 @@
             <form action="{% url "web_login" %}" method="POST">
                 {% csrf_token %}
                 {% for field in forms %}
-                    {{ field }}
+                    <div class="control-group">
+                        {{ field }}
+                    </div>
                 {% endfor %}
                 <div class="remember">
                     <label><input type="checkbox" name="remember_me">记住我</label>

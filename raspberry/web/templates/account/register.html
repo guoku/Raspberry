@@ -25,7 +25,7 @@
         {{ wizard.management_form }}
         {% for field in wizard.form %}
             {% if field.name != "agree_tos" %}
-            <div>
+            <div class="control-group">
                 {{ field }}
             {% if field.errors %}
                 <span class="error-info">
@@ -48,8 +48,8 @@
                     {% endfor %}
                 </span>
             {% endif %}
-            <div>
-                <input type="submit" value="下一步" class="guoku-button">
+            <div class="control-group">
+                <button type="submit"  class="btn btn-next">{% trans 'next' %}</button>
             </div>
         </div>
     </form>

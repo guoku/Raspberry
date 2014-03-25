@@ -35,11 +35,13 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
         _request_user_id = request.user.id
+        _is_staff = request.user.is_staff
         _request_user_context = User(request.user.id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _request_user_poke_note_set = Note.poke_set_of_user(request.user.id)
     else:
         _request_user_id = None 
+        _is_staff = False 
         _request_user_context = None
         _request_user_like_entity_set = []
         _request_user_poke_note_set = []
@@ -127,6 +129,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     return render_to_response(
         template,
         {
+            'is_staff' : _is_staff,
             'user_context' : _request_user_context,
             'entity_context' : _entity_context,
             'is_user_already_note' : _is_user_already_note,
@@ -205,6 +208,67 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
         context_instance=RequestContext(request)
     )
 
+def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
+    _start_at = datetime.datetime.now()
+    if request.user.is_authenticated():
+        _request_user_id = request.user.id
+    else:
+        _request_user_id = None 
+    
+    
+    _entity_id = Entity.get_entity_id_by_hash(entity_hash)
+    _entity_context = Entity(_entity_id).read()
+    
+    _is_soldout = True
+    _taobao_id = None
+    for _item_id in Item.find(entity_id=_entity_id):
+        _item_context = Item(_item_id).read()
+        _taobao_id = _item_context['taobao_id']
+        if not _item_context['soldout']:
+            _is_soldout = False
+            break
+    
+    _note_list = []
+    for _note_id in Note.find(entity_id=_entity_id, reverse=True):
+        _note = Note(_note_id)
+        _note_context = _note.read()
+        if _note_context['weight'] >= 0:
+            _creator_context = User(_note_context['creator_id']).read()
+            _note_list.append({
+                'note_context' : _note_context,
+                'creator_context' : _creator_context,
+            })
+    
+    _liker_list = []
+    for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
+        _liker_list.append(User(_liker[0]).read())
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds,
+        entry='tencent',
+        page='ENTITY', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'entity_id' : int(_entity_id),
+        },
+    )
+
+    return render_to_response(
+        template,
+        {
+            'entity_context' : _entity_context,
+            'note_list' : _note_list,
+            'liker_list' : _liker_list,
+            'buy_link' : _item_context['buy_link'],
+        },
+        context_instance=RequestContext(request)
+    )
+
+
 
 def _parse_taobao_id_from_url(url):
     params = url.split("?")[1]
@@ -253,6 +317,7 @@ def load_item_info(request):
                     'cid': _taobao_item_info['cid'],
                     'taobao_title': _taobao_item_info['title'],
                     'shop_nick': _taobao_item_info['shop_nick'],
+                    'shop_link': _taobao_item_info['shop_link'],
                     'price': _taobao_item_info['price'],
                     'chief_image_url' : _chief_image_url,
                     'thumb_images': _taobao_item_info["thumb_images"],
@@ -267,10 +332,12 @@ def load_item_info(request):
                     'status' : 'OTHER'
                 }
             else:
+                _entity_id = _item.get_entity_id()
+                _entity_context = Entity(_entity_id).read()
                 _rslt = {
                     'status' : 'EXIST',
                     'data' : {
-                        'entity_id' : _item.get_entity_id() 
+                        'entity_hash' : _entity_context['entity_hash']
                     }
                 }
             return HttpResponse(json.dumps(_rslt))
@@ -285,19 +352,22 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
             },
             context_instance = RequestContext(request)
         )
-    else: 
+    else:
         _taobao_id = request.POST.get("taobao_id", None)
         _cid = request.POST.get("cid", None)
-        _taobao_shop_nick = request.POST.get("taobao_shop_nick", None)
-        _taobao_shop_link = request.POST.get("taobao_shop_link", None)
+        _taobao_shop_nick = request.POST.get("shop_nick", None)
+        _taobao_shop_link = request.POST.get("shop_link", None)
         _taobao_title = request.POST.get("taobao_title", None)
-        _taobao_price = request.POST.get("taobao_price", None)
+        _taobao_price = float(request.POST.get("price", "0.0"))
         _chief_image_url = request.POST.get("chief_image_url", None)
         _brand = request.POST.get("brand", None)
         _title = request.POST.get("title", None)
+        _note_text = request.POST.get("note_text", None)
+        _user_id = request.POST.get("user_id", None)
+        
         _intro = ""
-        _category_id = int(request.POST.get("category_id", None))
-        _detail_image_urls = request.POST.getlist("image_url")
+        _category_id = int(request.POST.get("selected_category_id", None))
+        _detail_image_urls = request.POST.getlist("thumb_images")
         
         if _chief_image_url in _detail_image_urls:
             _detail_image_urls.remove(_chief_image_url)
@@ -320,15 +390,14 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
             detail_image_urls = _detail_image_urls,
         )
 
-        _note = request.POST.get("note", None)
-        _user_id = request.POST.get("user_id", None)
+        _note = _entity.add_note(creator_id=_user_id, note_text=_note_text)
         
-        if _note != None and len(_note) > 0:
-            _add_note_and_select_delay(_entity, _user_id, _note)
+        try:
+            CreateTaobaoShopTask.delay(_taobao_shop_nick, _taobao_shop_link)
+        except Exception, e:
+            pass
 
-        CreateTaobaoShopTask.delay(_taobao_shop_nick, _taobao_shop_link)
-
-        return HttpResponseRedirect(reverse('web_detail', kwargs = { "entity_id" : _entity.entity_id }))
+        return HttpResponseRedirect(reverse('web_detail', kwargs = { "entity_hash" : _entity.get_entity_hash() }))
 
 
 

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Count 
 from django.template.loader import render_to_string
+from django.utils.log import getLogger
 from models import Avatar as AvatarModel 
 from models import Entity_Like as EntityLikeModel
 from models import Entity_Tag as EntityTagModel
@@ -29,6 +30,7 @@ from pymogile import Client
 from wand.image import Image
 import datetime
 
+log = getLogger('django')
 
 class User(object):
 
@@ -442,9 +444,15 @@ class User(object):
 
     @staticmethod
     def nickname_exist(nickname):
-        if UserProfileModel.objects.filter(nickname = nickname).count() > 0:
+        try:
+            UserProfileModel.objects.get(nickname = nickname)
             return True
-        return False
+        except UserProfileModel.DoesNotExist, e:
+            return False
+        # if UserProfileModel.objects.filter(nickname = nickname).count() > 0:
+        #     log.info(nickname)
+        #     return True
+        # return False
     
     def reset_account(self, username = None, password = None, email = None): 
         self.__ensure_user_obj()

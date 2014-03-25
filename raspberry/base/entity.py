@@ -304,6 +304,11 @@ class Entity(object):
             self.entity_obj.price = taobao_item_info['price']
             self.entity_obj.save()
         return _item_id 
+    
+    def get_entity_hash(self):
+        self.__ensure_entity_obj()
+        return self.entity_obj.entity_hash
+        
 
     @classmethod
     def get_entity_id_by_hash(cls, entity_hash):

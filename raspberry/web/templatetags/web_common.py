@@ -64,8 +64,6 @@ def display_common_tag(tag_context, user_id=None):
         'tag_context' : tag_context,
         'user_id' : user_id
     }
-
-
 register.inclusion_tag("common/tag.html")(display_common_tag)
 
 

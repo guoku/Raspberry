@@ -7,13 +7,15 @@ from utils.lib import get_random_string
 import random
 import string
 def signup(email, password, nickname, **kwargs):
-    _new_user = User.create(email = email, password = password)
-    _new_user.set_profile(nickname = nickname,
-                          location = kwargs.get("location"),
-                          city = kwargs.get("city"),
-                          gender = kwargs.get("gender"),
-                          bio = kwargs.get("bio"),
-                          website = kwargs.get("website"))
+    _new_user = User.create(email=email, password=password)
+    _new_user.set_profile(
+        nickname=nickname,
+        location=kwargs.get("location"),
+        city=kwargs.get("city"),
+        gender=kwargs.get("gender"),
+        bio=kwargs.get("bio"),
+        website=kwargs.get("website")
+    )
     return _new_user
 
 def get_login_redirect_url(request):

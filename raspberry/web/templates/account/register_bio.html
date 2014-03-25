@@ -2,48 +2,72 @@
 {% load i18n staticfiles %}
 {% load account %}
 
-{% block title %}完善信息 - 果库{% endblock %}
+{% block title %}完善信息{% endblock %}
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">
 {% endblock %}
 
 {% block content %}
     <div id="setting">
-        <h2>帐号设置</h2>
+        <h2>{% trans "account settings" %}</h2>
 
         <div class="guoku-block">
-            {% display_avatar_update user_context %}
+{#            {% display_avatar_update user_context %}#}
             
-            <form method="POST" action="" class="base-info">
+            <form method="POST" action="" class="base-info" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ wizard.management_form }}
-                <h3>个人资料</h3>
-                {{ wizard.form.errors }}
-                <div>
-                    <label for="bio">{% trans 'bio' %}</label>
+{#                <h3>个人资料</h3>#}
+
+                <div class="avatar">
+                    <img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+                </div>
+                {% if wizard.form.errors %}
+                <div class="control-group">
+                    <div class="message">
+                        {% for field in wizard.form  %}
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                <div class="control-group">
+                    <label>{{ wizard.form.avatar.label }} {{ wizard.form.avatar.help_text }}</label>
+                    {{ wizard.form.avatar }}
+                </div>
+                <div class="control-group">
+                    <label for="bio">{{ wizard.form.bio.label }}</label>
                     {#<textarea name="bio" id="bio" class="text-input" rows="4">{{ user_context.bio }}</textarea>#}
                     {{ wizard.form.bio }}
                 </div>
 
-                <div class="address">
-                    <span class="label">所在地</span>
+                <div style="display: none;">
+                    <p id="default_location_value">{{ profile_form.location.value }}</p>
+                    <p id="default_city_value">{{ profile_form.city.value }}</p>
+                </div>
+                <div class="control-group">
+                    <label>{{ wizard.form.location.label }}</label>
                     {{ wizard.form.location }}
                     {{ wizard.form.city }}
                 </div>
 
-                <div class="gender">
-                    <span class="label">性别</span>
+                <div class="control-group">
+                    <label>性别</label>
                     {% for radio in wizard.form.gender %}
-                        <label> {{ radio.choice_label }} {{radio.tag }}</label>
+                        <span> {{ radio.choice_label }}</span>
+                        {{radio.tag }}
                     {% endfor %}
                 </div>
 
-                <div>
+                <div class="control-group">
                     <label for="website">网址</label>
                     {{ wizard.form.website }}
                 </div>
-
-                <input type="submit" value="完成" class="guoku-button">
+                <div class="row">
+                    <input type="submit" value="完成" class="btn btn-update">
+                </div>
             </form>
         </div>
     </div>

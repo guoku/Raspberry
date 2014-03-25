@@ -6,7 +6,7 @@
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/search.css' %}">{% endblock %}
 {% block content %}
     <div id="search">
-        <h2><span>[{{ query }}]</span>的搜索结果</h2>
+        <h2><span>{{ query }}</span>的搜索结果</h2>
 
         <div class="nav">
             <a href="{% url 'web_search' %}?q={{ query }}&g=e" {% if group == 'e' %}class="active"{% endif %}>
@@ -22,11 +22,11 @@
         
         {% if group == 'e' %}
             {% if entity_list|length > 0 %}
-                <div class="entities">
+                <ul class="entities">
                     {% for entity_context in entity_list %}
                         {% display_common_entity entity_context %}
                     {% endfor %}
-                </div>
+                </ul>
             {% endif %}
 
         {% elif group == 'u' %}
@@ -40,11 +40,11 @@
 
         {% elif group == 't' %}
             {% if tag_list|length > 0 %}
-                <div class="tags">
+                <ul class="tags">
                     {% for tag_context in tag_list %}
                         {% display_common_tag tag_context %}
                     {% endfor %}
-                </div>
+                </ul>
             {% endif %}
 
         {% endif %}
