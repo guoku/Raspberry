@@ -232,6 +232,9 @@ class Entity_Tag(models.Model):
         ordering = ['-created_time']
         unique_together = ('entity', 'user', 'tag')
 
+    def get_absolute_url(self):
+        return "/t/%s" % self.tag_hash
+
     def __unicode__(self):
         return self.tag
 
