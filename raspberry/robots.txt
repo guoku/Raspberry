@@ -3,6 +3,7 @@ Crawl-delay: 30
 Disallow: /mobie/
 Disallow: /login/
 Disallow: /logout/
+Disallow: /register/
 Disallow: /present/
 Disallow: /visit_item/
 Disallow: /sina/
