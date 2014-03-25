@@ -72,8 +72,12 @@ class Neo_Category(models.Model):
     title = models.CharField(max_length = 128, db_index = True, unique = True)
     image_store_hash = models.CharField(max_length = 64, db_index = True, null = True, default = None)
     status = models.IntegerField(default = 1, db_index = True)
+
     class Meta:
         ordering = ['id']
+
+    def get_absolute_url(self):
+        return "/c/%s" % self.id
 
     def __unicode__(self):
         return self.title

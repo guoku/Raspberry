@@ -1,5 +1,5 @@
 from django.contrib.sitemaps import Sitemap
-from base.models import Entity, Entity_Tag
+from base.models import Entity, Entity_Tag, Neo_Category
 from datetime import datetime
 
 class EntitySitemap(Sitemap):
@@ -28,5 +28,15 @@ class TagSitemap(Sitemap):
 
     def location(self, obj):
         return  obj.get_absolute_url()
+
+class CategorySitemap(Sitemap):
+    changefreq = "daily"
+    priority = 0.8
+    # now = datetime.now()
+    def items(self):
+        return Neo_Category.objects.all()
+
+    def location(self, obj):
+        return obj.get_absolute_url()
 
 __author__ = 'edison7500'
