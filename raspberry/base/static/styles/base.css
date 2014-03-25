@@ -56,11 +56,12 @@ button {
     border-color: #357ebd;
     color: #FFFFFF;
     font-size: 20px;
-    width: 130px;
+    width: 124px;
     height: 28px;
-    padding: 6px 6px 6px 0;
+    padding: 6px;
     text-align: center;
     vertical-align: middle;
+    line-height: 1.3;
 }
 
 .btn-update {
