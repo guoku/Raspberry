@@ -15,19 +15,40 @@ register_connection('log-db', 'guoku_log', host='10.0.2.200',
 MANGO_HOST = '10.0.2.200'
 MANGO_PORT = 27017
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'guoku',
+#         'USER': 'qinzhoukan',
+#         'PASSWORD': 'qinzhoukan1@#',
+#         'HOST': '10.0.2.90',
+#         'PORT': '',
+#         'OPTIONS': {
+#             'use_unicode':'utf-8',
+#             'init_command':'SET storage_engine=INNODB',
+#         }
+#     },
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'guoku',
-        'USER': 'qinzhoukan',
-        'PASSWORD': 'qinzhoukan1@#',
-        'HOST': '10.0.2.90',
-        'PORT': '',
+        'ENGINE': 'django_mysqlpool.backends.mysqlpool', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+#        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'guoku',                      # Or path to database file if using sqlite3.
+        'USER': 'qinzhoukan',                      # Not used with sqlite3.
+        'PASSWORD': 'qinzhoukan1@#',                  # Not used with sqlite3.
+        'HOST': '10.0.2.90',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
         'OPTIONS': {
             'use_unicode':'utf-8',
             'init_command':'SET storage_engine=INNODB',
         }
     },
+}
+
+MYSQLPOOL_BACKEND = 'QueuePool'
+MYSQLPOOL_ARGUMENTS = {
+    'timeout': 15,
+    'use_threadlocal': False,
 }
 
 CACHES = {
