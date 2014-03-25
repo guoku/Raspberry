@@ -697,7 +697,7 @@ function initTag(){
                             }
                         } else if (result === 0) {
                             count--;
-                            $counter.text(count - 1);
+                            $counter.text(count);
                             $poke.removeClass('poked');
 
                             if (count === 0) {
