@@ -10,13 +10,13 @@
 
         <div class="nav">
             <a href="{% url 'web_search' %}?q={{ query }}&g=e" {% if group == 'e' %}class="active"{% endif %}>
-                商品<strong>{{entity_result_count}}</strong>
+                商品 <strong>({{entity_result_count}})</strong>
             </a>
             <a href="{% url 'web_search' %}?q={{ query }}&g=u" {% if group == 'u' %}class="active"{% endif %}>
-                用户<strong>{{user_result_count}}</strong>
+                用户 <strong>({{user_result_count}})</strong>
             </a>
             <a href="{% url 'web_search' %}?q={{ query }}&g=t" {% if group == 't' %}class="active"{% endif %}>
-                标签<strong>{{tag_result_count}}</strong>
+                标签 <strong>({{tag_result_count}})</strong>
             </a>
         </div>
         
