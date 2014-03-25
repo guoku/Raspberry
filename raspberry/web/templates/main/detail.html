@@ -9,6 +9,8 @@
     {{ entity_context.title }}
 {% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/detail.css' %}">{% endblock %}
+{#{% block keyword %}果库,{{ entity_context.category_id|trans_category }},{{ entity_context.title }}{% endblock %}#}
+{% block description %}果库,{{ entity_context.category_id|trans_category }},{{ entity_context.title }}{% endblock %}
 {% block content %}
 
     <div id="detail">
