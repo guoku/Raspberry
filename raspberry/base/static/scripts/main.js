@@ -293,13 +293,6 @@ function initTag(){
             });
         },
 
-//        popularHover: function () {
-//            var self = this;
-//            $('.entity').each(function (){
-//                self.showEntityTitle($(this));
-//            });
-//        },
-
         loadData: function(counter, object) {
             var url = window.location.href;
             $.ajax({
@@ -590,35 +583,6 @@ function initTag(){
                     });
                     return false;
                 }
-//                if (!util.isUserLogined()) {
-//                    util.popLoginBox();
-//                } else {
-//                    var $noteComment = $noteItem.find('.note-comment');
-//
-//                    if ($noteComment[0]) {
-//                        $noteComment.slideToggle('fast');
-//                    } else {
-//                        var url = '/note/' + $(this).attr('data-note') + '/comment/';
-//
-//                        $.get(url, function (result) {
-//                            result = $.parseJSON(result);
-//                            var status = parseInt(result.status);
-//
-//                            if (status === 1) {
-//                                var $html = $(result.data);
-//
-//                                self.noteComment($html);
-//                                $html.appendTo($noteDetail);
-//                                $html.slideToggle('fast');
-//                                initTag();
-//                            } else if (status === 0) {
-//                                // error
-//                            }
-//                        });
-//                    }
-//                }
-//                return false;
-//                e.preventDefault();
             });
         },
 
@@ -684,7 +648,7 @@ function initTag(){
                             var $html = $(result.data);
                             self.updateNote($html);
                             self.clickComment($html);
-
+                            self.poke();
                             $('<div class="sep"></div>').appendTo($notes);
                             $html.appendTo($notes);
 
@@ -700,7 +664,7 @@ function initTag(){
 
         poke: function () {
             // 点评 点赞
-            $('.poke').on('click', function (e) {
+            $('.poke').live('click', function (e) {
                 var $this = $(this);
 
                 if (!util.isUserLogined()) {
