@@ -674,11 +674,20 @@ class User(object):
                 _stat_info['fan_count'] = 0
             self.__reset_user_stat_info_to_cache(_stat_info)
     
-    def update_user_like_stat_info(self):
+    def update_user_like_stat_info_add_like_entity(self, entity_id):
+        _stat_info = self.__load_user_stat_info_from_cache()
+        if _stat_info != None:
+            _stat_info['like_count'] += 1 
+            _stat_info['latest_like_entity_id_list'] = _stat_info['latest_like_entity_id_list'].insert(0, entity_id) 
+            _stat_info['latest_like_entity_id_list'] = _stat_info['latest_like_entity_id_list'][0:20]
+            self.__reset_user_stat_info_to_cache(_stat_info)
+    
+    def update_user_like_stat_info_del_like_entity(self, entity_id):
         _stat_info = self.__load_user_stat_info_from_cache()
         if _stat_info != None:
             _stat_info['like_count'] = EntityLikeModel.objects.filter(user_id=self.user_id).count()
-            _stat_info['latest_like_entity_id_list'] = map(lambda x: x.entity_id, EntityLikeModel.objects.filter(user_id=self.user_id).order_by('-created_time')[0:20])
+            if entity_id in _stat_info['latest_like_entity_id_list']:
+                _stat_info['latest_like_entity_id_list'].remove(entity_id)
             self.__reset_user_stat_info_to_cache(_stat_info)
     
     def update_user_entity_note_count(self, delta):
