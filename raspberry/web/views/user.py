@@ -305,7 +305,8 @@ def user_fans(request, user_id, template=TEMPLATE):
     _fans_list = []
     for _u_id in _fans_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         _f_user_context = User(_u_id).read()
-        _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
+        if _request_user_context != None:
+            _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
         _fans_list.append(_f_user_context)
     
     _duration = datetime.datetime.now() - _start_at
