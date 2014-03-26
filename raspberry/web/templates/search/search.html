@@ -3,8 +3,10 @@
 {% load web_common %}
 
 {% block title %}商品搜索 － {{ query }}{% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">{% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/search.css' %}">{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/search.css' %}">
+{% endblock %}
 {% block content %}
     <div id="search">
         <h2><span>⎾{{ query }}⏌</span>的搜索结果</h2>
