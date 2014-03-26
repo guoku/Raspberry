@@ -1,7 +1,7 @@
 import MySQLdb
 import pymongo
 
-conn_gk = MySQLdb.Connection("localhost", "root", "123456", "guoku_02_11")
+conn_gk = MySQLdb.Connection("10.0.2.90", "qinzhoukan", "qinzhoukan1@#", "guoku")
 cur_gk = conn_gk.cursor()
 cur_gk.execute("SET names utf8")
 
@@ -11,7 +11,7 @@ for row in cur_gk.fetchall():
     entity_id = row[0]
     entity_list.append(entity_id)
 
-conn = pymongo.Connection(host='localhost', port=27017)
+conn = pymongo.Connection(host='10.0.2.200', port=27017)
 db = conn.guoku
 col = db.item
 

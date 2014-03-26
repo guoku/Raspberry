@@ -5,7 +5,7 @@ from django.conf.urls import url, patterns
 urlpatterns = patterns(
     'web.views.user',
     url('^(?P<user_id>\w+)/$', 'user_index', name='web_user_index'),
-    url('^(?P<user_id>\w+)/likes/$', 'user_likes', name='web_user_likes'),
+    url('^(?P<user_id>\w+)/liked/$', 'user_likes', name='web_user_likes'),
     url('^(?P<user_id>\w+)/notes/$', 'user_notes', name='web_user_notes'),
     url('^(?P<user_id>\w+)/tags/$', 'user_tags', name='web_user_tags'),
     url('^(?P<user_id>\w+)/followings/$', 'user_followings', name='web_user_followings'),

@@ -417,14 +417,17 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
 
 @login_required
 def like_entity(request, entity_id, target_status):
-    if request.method == 'POST':
-        _request_user_id = request.user.id
-        if target_status == '1':
-            LikeEntityTask.delay(entity_id, _request_user_id)
-            return HttpResponse('1')
-        else:
-            UnlikeEntityTask.delay(entity_id, _request_user_id)
-            return HttpResponse('0')
+    if request.is_ajax():
+        if request.method == 'POST':
+            _request_user_id = request.user.id
+            if target_status == '1':
+                LikeEntityTask.delay(entity_id, _request_user_id)
+                return HttpResponse('1')
+            else:
+                UnlikeEntityTask.delay(entity_id, _request_user_id)
+                return HttpResponse('0')
+    else:
+        raise Http404
 
 
 
