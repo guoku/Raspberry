@@ -879,6 +879,14 @@ $(function(){
             }
         });
     });
+    $(".detail_taobao_brand").on("input",function(){
+        var brand = $(this).val();
+        if(brand.length>0){
+            $(".detail_title span:eq(0)").text(brand+" --- ");
+        }else{
+            $(".detail_title span:eq(0)").text(brand);
+        }
+    });
     $("#add-entity .detail-img div img").live("click",function(){
         $(".current_img").removeClass("current_img");
         $(this).addClass("current_img");
