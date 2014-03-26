@@ -1,5 +1,7 @@
 #encoding=utf8
 import re
+import HTMLParser
+from utils.extractor.jd import JDExtractor
 def get_jd_url(jd_id, is_mobile = False, app_key = None):
     jd_id = str(jd_id)
     url = ""
@@ -18,3 +20,14 @@ def parse_jd_id_from_url(url):
         return ids[0]
     else:
         return None
+
+def load_jd_item_info(jd_id):
+    jd_item_info = JDExtractor.fetch_item(jd_id)
+    thumb_images = []
+    image_url = None
+    for _img_url in jd_item_info["imgs"]:
+        thumb_images.append(_img_url)
+    jd_item_info['thumb_images'] = thumb_images
+    jd_item_info['title'] = HTMLParser.HTMLParser().unescape(jd_item_info['desc'])
+    jd_item_info['shop_nick'] = jd_item_info['nick']
+    return jd_item_info

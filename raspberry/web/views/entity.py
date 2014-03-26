@@ -26,9 +26,9 @@ from share.tasks import CreateTaobaoShopTask, DeleteEntityNoteTask, LikeEntityTa
 from web.tasks import WebLogTask
 from utils.extractor.taobao import TaobaoExtractor 
 from utils.extractor.jd import JDExtractor
-from utils.taobao import parse_taobao_id_from_url
+from utils.taobao import parse_taobao_id_from_url, load_taobao_item_info
 from utils.lib import get_client_ip
-from utils.jd import parse_jd_id_from_url
+from utils.jd import parse_jd_id_from_url, load_jd_item_info
 
 log = getLogger('django')
 
@@ -352,32 +352,8 @@ def _parse_taobao_id_from_url(url):
     return None
 
 
-def _load_jd_item_info(jd_id):
-    jd_item_info = JDExtractor.fetch_item(jd_id)
-    thumb_images = []
-    image_url = None
-    for _img_url in jd_item_info["imgs"]:
-        thumb_images.append(_img_url)
-    jd_item_info['thumb_images'] = thumb_images
-    jd_item_info['title'] = HTMLParser.HTMLParser().unescape(jd_item_info['desc'])
-    jd_item_info['shop_nick'] = jd_item_info['nick']
-    return jd_item_info
 
-def _load_taobao_item_info(taobao_id):
-    taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
-    thumb_images = []
-
-    for _img_url in taobao_item_info["imgs"]:
-        thumb_images.append(_img_url)
-
-    taobao_item_info["thumb_images"] = thumb_images
-    taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
-    taobao_item_info["shop_nick"] = taobao_item_info["nick"]
-
-    return taobao_item_info
-
-def jd_info(request):
-    _cand_url = request.POST.get("url", None)
+def jd_info(request, _cand_url):
     _jd_id = parse_jd_id_from_url(_cand_url)
     _item = JDItem.get_item_by_jd_id(_jd_id)
     _rslt = {}
@@ -425,7 +401,7 @@ def load_item_info(request):
         _hostname = urlparse(_cand_url).hostname
 
         if re.search(r"\b(jd|360buy)\.com$", _hostname) != None:
-            return jd_info(request)
+            return jd_info(request, _cand_url)
 
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) is not None:
             _taobao_id = parse_taobao_id_from_url(_cand_url)

@@ -22,42 +22,11 @@ from management.tasks import MergeEntityTask
 from share.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
-from utils.extractor.taobao import TaobaoExtractor 
-from utils.extractor.jd import JDExtractor
 import traceback
+from utils.taobao import parse_taobao_id_from_url, load_taobao_item_info
+from utils.jd import load_jd_item_info, parse_jd_id_from_url
 
-from utils.taobao import parse_taobao_id_from_url
 
-def _parse_jd_id_from_url(url):
-    itemids = re.findall(r'\d+', url)
-    if len(itemids)>0:
-        return itemids[0]
-    else:
-        return None
-
-def _load_taobao_item_info(taobao_id):
-    taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
-    thumb_images = []
-    image_url = None
-    for _img_url in taobao_item_info["imgs"]:
-        thumb_images.append(_img_url)
-    taobao_item_info["thumb_images"] = thumb_images
-    taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
-    
-    taobao_item_info["shop_nick"] = taobao_item_info["nick"]
-     
-    return taobao_item_info
-
-def _load_jd_item_info(jd_id):
-    jd_item_info = JDExtractor.fetch_item(jd_id)
-    thumb_images = []
-    image_url = None
-    for _img_url in jd_item_info["imgs"]:
-        thumb_images.append(_img_url)
-    jd_item_info['thumb_images'] = thumb_images
-    jd_item_info['title'] = HTMLParser.HTMLParser().unescape(jd_item_info['desc'])
-    jd_item_info['shop_nick'] = jd_item_info['nick']
-    return jd_item_info
 
 def _get_special_names(request_user_id):
     if request_user_id in [22045, 19, 10, 79761, 66400, 195580, 252913]:
@@ -126,7 +95,7 @@ def new_entity(request):
 
             _item = Item.get_item_by_taobao_id(_taobao_id)
             if _item == None:
-                _taobao_item_info = _load_taobao_item_info(_taobao_id)
+                _taobao_item_info = load_taobao_item_info(_taobao_id)
                 _brand = ''
                 _title = ''
                 _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
@@ -161,11 +130,11 @@ def new_entity(request):
 
 def new_jd_item(request):
     _cand_url = request.POST.get("url", None)
-    _jd_id = _parse_jd_id_from_url(_cand_url)
+    _jd_id = parse_jd_id_from_url(_cand_url)
     _item = JDItem.get_item_by_jd_id(_jd_id)
 
     if _item == None:
-        _jd_item_info = _load_jd_item_info(_jd_id)
+        _jd_item_info = load_jd_item_info(_jd_id)
         
         _users = _get_special_names(request.user.id)
 
@@ -726,7 +695,7 @@ def load_taobao_item_for_entity(request, entity_id):
             
         _item = Item.get_item_by_taobao_id(_taobao_id)
         if _item == None:
-            _taobao_item_info = _load_taobao_item_info(_taobao_id)
+            _taobao_item_info = load_taobao_item_info(_taobao_id)
             return render_to_response( 
                 'entity/new_taobao_item_info.html', 
                 {
