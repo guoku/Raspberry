@@ -387,10 +387,10 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
             _detail_image_urls.remove(_chief_image_url)
         
         _entity = Entity.create_by_taobao_item(
-            creator_id = request.user.id,
-            category_id = _category_id,
-            chief_image_url = _chief_image_url,
-            taobao_item_info = {
+            creator_id=request.user.id,
+            category_id=_category_id,
+            chief_image_url=_chief_image_url,
+            taobao_item_info={
                 'taobao_id' : _taobao_id,
                 'cid' : _cid,
                 'title' : _taobao_title,
@@ -398,10 +398,11 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
                 'price' : _taobao_price,
                 'soldout' : False,
             },
-            brand = _brand,
-            title = _title,
-            intro = _intro,
-            detail_image_urls = _detail_image_urls,
+            brand=_brand,
+            title=_title,
+            intro=_intro,
+            detail_image_urls=_detail_image_urls,
+            weight=-1
         )
 
         _note = _entity.add_note(creator_id=_user_id, note_text=_note_text)
