@@ -74,7 +74,7 @@ msgstr "操作"
 
 
 msgid "account settings"
-msgstr "账号设置"
+msgstr "帐号设置"
 
 msgid "avatar"
 msgstr "头像"

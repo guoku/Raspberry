@@ -176,8 +176,14 @@
                         <label class="control-label" for="created_time">创建时间:</label>
                         <div class="controls">
                             <input class="input-xlarge" type="text" id="created_time" name="created_time" value="{{ entity_context.created_time|date_format }}" disabled/>
-                            <input type="checkbox" id="reset_created_time" name="reset_created_time"{%if entity_context.weight == -1%} checked{%endif%}/> update 
                         </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="novus_time">新品时间:</label>
+                        <div class="controls">
+                            <input class="input-xlarge" type="text" id="novus_time" name="novus_time" value="{{ entity_context.novus_time|date_format }}" disabled/>
+                        </div>
+                    </div>
                 </fieldset>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">更新</button>
