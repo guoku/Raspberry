@@ -1,6 +1,12 @@
 {% load entity %}
 <li class="common-tag">
-    <h4>#{{ tag_context.tag }}</h4>
+    {% if user_id == None %}
+        <a href="{% url 'web_tag_detail' tag_context.tag_hash %}" >
+    {% else %}
+        <a href="{% url 'web_user_tag_entity' user_id tag_context.tag_hash %}">
+    {% endif %}
+            <h4>#{{ tag_context.tag }}</h4>
+        </a> 
 
     <div class="tag-entities">
         {% for entity_context in tag_context.entity_list %}

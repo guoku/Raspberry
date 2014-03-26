@@ -9,11 +9,11 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
 from mongoengine import register_connection 
 register_connection('guoku-db', 'guoku')
 register_connection('log-db', 'guoku_log')
 
+ENABLE_GUOKU_PLUS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 

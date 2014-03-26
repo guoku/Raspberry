@@ -6,11 +6,18 @@
     {{ query_user_context.nickname|default:'我的果库' }}
     {% block subtitle %}{% endblock %}
 {% endblock %}
+{% block keyword %}果库,{{ query_user_context.nickname }}{% endblock %}
+{% block description %}果库,{{ query_user_context.nickname }},{{ query_user_context.bio }}{% endblock %}
+
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">
 {% endblock %}
 
 {% block content %}
+    {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
+    {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
+    {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}
+
     <div id="user-center">
         <div class="base">
             <img src="{{ query_user_context.avatar_large }}" alt="{{ query_user_context.nickname }}" width="120" height="120">
@@ -37,9 +44,7 @@
         </div>
 
         <div class="nav">
-            {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
-            {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
-            {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}
+
             <a href="{{ web_user_likes_url }}" {% if web_user_likes_url in request.path %}class="active"{% endif %}>{% trans 'likes' %}
                 <strong>{{ query_user_context.like_count }}</strong>
             </a>

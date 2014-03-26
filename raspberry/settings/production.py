@@ -109,6 +109,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django.contrib.formtools',
+    'django.contrib.sitemaps',
     'djcelery',
     'base',
     'management',
