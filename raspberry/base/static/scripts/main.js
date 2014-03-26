@@ -887,6 +887,11 @@ $(function(){
             $(".detail_title span:eq(0)").text(brand);
         }
     });
+    $(".detail_title_input").on("input propertychange",function(){
+        var title = $(this).val();
+        $(".detail_title span:eq(1)").text(title);
+    });
+    
     $("#add-entity .detail-img div img").live("click",function(){
         $(".current_img").removeClass("current_img");
         $(this).addClass("current_img");
