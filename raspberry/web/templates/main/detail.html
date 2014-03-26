@@ -26,7 +26,11 @@
         </div>
         <div class="main">
             <div class="entity">
+                {% if taobao_id %}
                 <a class="entity-img" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+                {% else %}
+                <a class="entity-img" href="http://item.jd.com/{{jd_id}}.html"  target=_blank >
+                {% endif %}
                     <img src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
                 </a>
                 <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</h2>
@@ -77,7 +81,11 @@
 
         <div class="aside">
             <div class="entity-info">
+                {% if taobao_id %}
                 <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+                {% else %}
+                <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >
+                {% endif %}
                     详情<span>&#65509;{{ entity_context.price }}</span>
                 </a>
 {#                <div class="shop">来自于<a href="">url需替换</a></div>#}

@@ -5,6 +5,7 @@ from models import Item as ItemDocument
 from models import TaobaoItem as TaobaoItemDocument
 from models import JDItem as JDItemDocument
 from utils.lib import roll
+from utils.jd import get_jd_url
 import datetime
 import pymongo
 import urllib
@@ -235,7 +236,7 @@ class JDItem(Item):
         _context["price"] = float(self.item_obj.price)
         _context["weight"] = self.item_obj.weight
         _context["soldout"] = self.item_obj.soldout
-        _context['buy_link'] = Item.generate_taobao_item_url(str(self.item_obj.jd_id))
+        _context['buy_link'] = get_jd_url(str(self.item_obj.jd_id))
         _context["volume"] = 0 
         return _context
     
