@@ -263,10 +263,10 @@ function initTag(){
                         var result = parseInt(data);
 
                         if (result === 1) {
-                            $counter.text(count + 1);
+                            $counter.text(" "+(count + 1));
                             $like.addClass('liked');
                         } else if (result === 0) {
-                            $counter.text(count - 1);
+                            $counter.text(" "+(count - 1));
                             $like.removeClass('liked');
                         }
                     });
@@ -818,18 +818,18 @@ $(function(){
 			$(".account-form input[type='submit']").attr("disabled",true).removeClass("submit").addClass("submit_disabled");
 		}
 	});
-    $("textarea[name='note_text']").on({
+    $(".add-note form").on({
         mouseover:function(){
-            $(this).next().addClass("focus");
+            $(this).find(".arr").addClass("focus");
         },
         mouseleave:function(){
-            $(this).next().removeClass("focus");
+            $(this).find(".arr").removeClass("focus");
         },
         focus:function(){
-            $(this).next().addClass("focus");
+            $(this).find(".arr").addClass("focus");
         },
         blur:function(){
-            $(this).next().removeClass("focus");
+            $(this).find(".arr").removeClass("focus");
         }
     });
     $(".load-entity input[type='submit']").on("click",function(){
@@ -949,7 +949,6 @@ $(function(){
         else
         send_status(false);
     });
-
     function send_status(flag){
         if(flag){
             $("#forget_sendmail").removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
