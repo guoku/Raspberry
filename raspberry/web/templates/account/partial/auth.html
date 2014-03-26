@@ -8,6 +8,9 @@
         <ul class="menu">
             <li><span class="icon-guoku"></span><a href="{% url 'web_user_index' user_context.user_id %}">{% trans "my guoku" %}</a></li>
             <li><span class="icon-setting"></span><a href="{% url 'web_setting' %}">{% trans "settings" %}</a></li>
+            {% if is_staff %}
+                <li><span class="icon-setting"></span><a href="{% url 'management_entity_list' %}">管理</a></li>
+            {% endif %}
             <li><span class="icon-signout"></span><a href="{% url 'web_logout' %}">{% trans "sign out" %}</a></li>
         </ul>
     </li>

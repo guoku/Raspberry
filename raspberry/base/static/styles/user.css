@@ -181,13 +181,13 @@
     background-color: #427ec0;
 }
 
+/*#user-center .likes {*/
+    /*font-size: 0;*/
+    /*margin-right: -30px;*/
+/*}*/
 #user-center .likes {
     font-size: 0;
-    margin-right: -30px;
-}
-#user-center .likes {
-    font-size: 0;
-    margin: 30px -30px 0 0;
+    margin: 0 -30px 0 0;
     padding: 0;
 }
 
@@ -195,7 +195,7 @@
     display: none;
     position: absolute;
     height: 35px;
-    width: 195px;
+    width: 188px;
     padding: 30px 10px;
     border-bottom: 1px solid #eee;
     background-color: #fbfbfb;

@@ -32,12 +32,12 @@
                 
                 <a href="javascript:;" class="poke{%if poke_button_target_status == '0'%} poked {% endif %}" data-note="{{ note_context.note_id }}" data-target-status="{{ poke_button_target_status }}"><span></span>
                     {% if note_context.poke_count > 0 %}
-                        <small>{{ note_context.poke_count }}</small>
+                       <small>{{ note_context.poke_count }}</small>
                     {% endif %}
                 </a>
                 <a href="javascript:;" class="add-comment" data-note="{{ note_context.note_id }}"><span></span>
                     {% if note_context.comment_count > 0 %}
-                        <small>{{ note_context.comment_count }}</small>
+                        {{ note_context.comment_count }}
                     {% endif %}
                 </a>
 
