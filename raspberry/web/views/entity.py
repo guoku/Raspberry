@@ -340,16 +340,6 @@ def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
 
 
 
-def _parse_taobao_id_from_url(url):
-    params = url.split("?")[1]
-
-    for param in params.split("&"):
-        tokens = param.split("=")
-
-        if len(tokens) >= 2 and (tokens[0] == "id" or tokens[0] == "item_id"):
-            return tokens[1]
-
-    return None
 
 
 
@@ -358,7 +348,7 @@ def jd_info(request, _cand_url):
     _item = JDItem.get_item_by_jd_id(_jd_id)
     _rslt = {}
     if _item == None:
-        _jd_item_info = _load_jd_item_info(_jd_id)
+        _jd_item_info = load_jd_item_info(_jd_id)
         _chief_image_url = _jd_item_info['thumb_images'][0]
         #TODO：进行京东类目转换
 
@@ -408,7 +398,7 @@ def load_item_info(request):
             _item = Item.get_item_by_taobao_id(_taobao_id)
 
             if _item is None:
-                _taobao_item_info = _load_taobao_item_info(_taobao_id)
+                _taobao_item_info = load_taobao_item_info(_taobao_id)
                 _chief_image_url = _taobao_item_info["thumb_images"][0]
                 _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
                 _data = {

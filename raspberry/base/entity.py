@@ -24,7 +24,7 @@ from tasks import CleanNoteMessageTask, CreateEntityNoteMessageTask, CreateNoteS
 from note import Note
 from user import User 
 from hashlib import md5
-from utils.lib import roll
+from utils.lib import roll, download_img
 
 
 class Entity(object):
@@ -126,18 +126,21 @@ class Entity(object):
                           jd_item_info, brand="", title="", intro="", 
                           detail_image_urls=[], weight = 0, rank_score = 0):
         _item = JDItem.get_item_by_jd_id(jd_item_info['jd_id'])
-        print _item , 'is none?'
         if _item == None:
             _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
             if _chief_image_id == None:
-                _chief_image_obj = Image.create('jd_' + jd_item_info['jd_id'], chief_image_url)
+                chief_image_data = download_img(chief_image_url)
+                _chief_image_obj = Image.create('jd_' + jd_item_info['jd_id'], image_data=chief_image_data)
                 _chief_image_id = _chief_image_obj.image_id
             
             _detail_image_ids = []
             for _image_url in detail_image_urls:
                 _image_id = Image.get_image_id_by_origin_url(_image_url)
                 if _image_id == None:
-                    _image_obj = Image.create('jd_' + jd_item_info['jd_id'], _image_url)
+                    _image_data = download_img(_image_url)
+                    if _image_data == None:
+                        continue
+                    _image_obj = Image.create('jd_' + jd_item_info['jd_id'], image_data=_image_data)
                     _image_id = _image_obj.image_id
                 _detail_image_ids.append(_image_id)
 
