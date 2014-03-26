@@ -602,7 +602,7 @@ class User(object):
             _stat_info['following_count'] = UserFollowModel.objects.filter(follower_id=self.user_id).count()
             _stat_info['fan_count'] = UserFollowModel.objects.filter(followee_id=self.user_id).count()
             _stat_info['like_count'] = EntityLikeModel.objects.filter(user_id=self.user_id).count()
-            _stat_info['latest_like_entity_id_list'] = map(lambda x: x.entity_id, EntityLikeModel.objects.using('user_data').filter(user_id=self.user_id).order_by('-created_time')[0:20])
+            _stat_info['latest_like_entity_id_list'] = map(lambda x: x.entity_id, EntityLikeModel.objects.using('slave').filter(user_id=self.user_id).order_by('-created_time')[0:20])
             _stat_info['tag_count'] = EntityTagModel.objects.filter(user_id=self.user_id).values('tag').annotate(entity_count=Count('entity')).count()
             _stat_info['entity_note_count'] = NoteModel.objects.filter(creator_id=self.user_id).count()
             _stat_info['entity_note_poke_count'] = NotePokeModel.objects.filter(note__creator_id=self.user_id).count()
