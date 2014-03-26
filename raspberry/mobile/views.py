@@ -169,7 +169,7 @@ def message(request):
 
 
         _rslt = []
-        for _message in NeoMessage.objects.filter(user_id = _request_user_id, created_time__lt = _timestamp).order_by('-created_time'):
+        for _message in NeoMessage.objects.filter(user_id=_request_user_id, created_time__lt=_timestamp).order_by('-created_time')[0:_count]:
             try:
                 if isinstance(_message, UserFollowMessage):
                     _context = {
