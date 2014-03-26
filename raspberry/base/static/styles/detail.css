@@ -154,6 +154,9 @@
     top:15px;
     left: -24px;
 }
+.note-operate small{
+    font-size: 14px;
+}
 .add-note form .focus{
     background: url("../images/arrows_press.png") no-repeat;
 }
