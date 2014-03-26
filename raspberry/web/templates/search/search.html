@@ -9,7 +9,7 @@
 {% endblock %}
 {% block content %}
     <div id="search">
-        <h2><span>⎾{{ query }}⏌</span>的搜索结果</h2>
+        <h2><span>「{{ query }}」</span>的搜索结果</h2>
 
         <div class="nav">
             <a href="{% url 'web_search' %}?q={{ query }}&g=e" {% if group == 'e' %}class="active"{% endif %}>

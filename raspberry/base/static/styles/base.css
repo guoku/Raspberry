@@ -366,14 +366,12 @@ button {
     top: 0;
     right: 135px;
     height: 49px;
-    line-height: 49px;
 }
 
 #header .search {
     width: 145px;
     height: 30px;
     /*line-height: 30px;*/
-    margin: 9px 0;
     /*padding: 10px 0;*/
     padding: 0 5px;
     border: none;
@@ -381,6 +379,7 @@ button {
     /*color: #eee;*/
     border-radius: 3px;
     background: #fbfbfb;
+    margin-top:10px;
     /*background-color: rgba(220, 220, 220, 0.95);*/
     /*background-color: #FFFFFF;*/
 }
