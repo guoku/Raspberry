@@ -87,7 +87,7 @@
                     </a>
                 </li>
                 <li{%if status_filter == "novus"%} class="active"{%endif%}>
-                    <a href="{% url 'management_entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=novus">
+                    <a href="{% url 'management_entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=novus&sort_by=novus_time">
                         新品({{ novus_entity_count }}) 
                     </a>
                 </li>
