@@ -1,7 +1,7 @@
 # import os.path
 from defaults import *
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 
@@ -28,6 +28,18 @@ DATABASES = {
             'init_command':'SET storage_engine=INNODB',
         }
     },
+    'slave': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'guoku',
+        'USER': 'qinzhoukan',
+        'PASSWORD': 'qinzhoukan1@#',
+        'HOST': '10.0.2.95',
+        'PORT': '',
+        'OPTIONS': {
+            'use_unicode':'utf-8',
+            'init_command':'SET storage_engine=INNODB',
+        }
+    },
 }
 
 CACHES = {
@@ -48,6 +60,7 @@ SESSION_REDIS_HOST = '10.0.2.49'
 SESSION_REDIS_PORT = 6379
 SESSION_REDIS_DB = 2
 SESSION_COOKIE_AGE = 1209600
+SESSION_COOKIE_DOMAIN = '.guoku.com'
 MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14
 
 MOGILEFS_DOMAIN = 'prod'

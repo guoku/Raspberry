@@ -3,6 +3,7 @@
 {% load entity web_common %}
 
 {% block title %}品类 － {{ category_id|trans_category }}{% endblock %}
+{% block keyword %}{{ category_id|trans_category }}{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/category.css' %}">{% endblock %}
 {% block content %}
     <div id="category">

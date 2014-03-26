@@ -28,6 +28,18 @@ DATABASES = {
             'init_command':'SET storage_engine=INNODB',
         }
     },
+    'slave': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'guoku',
+        'USER': 'qinzhoukan',
+        'PASSWORD': 'qinzhoukan1@#',
+        'HOST': '10.0.2.95',
+        'PORT': '',
+        'OPTIONS': {
+            'use_unicode':'utf-8',
+            'init_command':'SET storage_engine=INNODB',
+        }
+    },
 }
 
 CACHES = {
