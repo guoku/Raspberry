@@ -686,8 +686,8 @@ class User(object):
     def update_user_like_stat_info_del_like_entity(self, entity_id):
         _stat_info = self.__load_user_stat_info_from_cache()
         if _stat_info != None:
+            _stat_info['like_count'] -= 1 
             if entity_id in _stat_info['latest_like_entity_id_list']:
-                _stat_info['like_count'] -= 1 
                 _stat_info['latest_like_entity_id_list'].remove(entity_id)
             self.__reset_user_stat_info_to_cache(_stat_info)
     
