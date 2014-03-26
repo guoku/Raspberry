@@ -25,6 +25,7 @@ from share.tasks import CreateTaobaoShopTask
 from share.tasks import CreateTaobaoShopTask, DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 from web.tasks import WebLogTask
 from utils.extractor.taobao import TaobaoExtractor 
+from utils.extractor.jd import JDExtractor
 from utils.taobao import parse_taobao_id_from_url
 from utils.lib import get_client_ip
 from utils.jd import parse_jd_id_from_url
@@ -337,6 +338,17 @@ def _parse_taobao_id_from_url(url):
     return None
 
 
+def _load_jd_item_info(jd_id):
+    jd_item_info = JDExtractor.fetch_item(jd_id)
+    thumb_images = []
+    image_url = None
+    for _img_url in jd_item_info["imgs"]:
+        thumb_images.append(_img_url)
+    jd_item_info['thumb_images'] = thumb_images
+    jd_item_info['title'] = HTMLParser.HTMLParser().unescape(jd_item_info['desc'])
+    jd_item_info['shop_nick'] = jd_item_info['nick']
+    return jd_item_info
+
 def _load_taobao_item_info(taobao_id):
     taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
     thumb_images = []
@@ -350,12 +362,56 @@ def _load_taobao_item_info(taobao_id):
 
     return taobao_item_info
 
+def jd_info(request):
+    _cand_url = request.POST.get("url", None)
+    _jd_id = parse_jd_id_from_url(_cand_url)
+    _item = JDItem.get_item_by_jd_id(_jd_id)
+    _rslt = {}
+    if _item == None:
+        _jd_item_info = _load_jd_item_info(_jd_id)
+        _chief_image_url = _jd_item_info['thumb_images'][0]
+        #TODO：进行京东类目转换
+
+        _data = {
+            'user_context' : User(request.user.id).read(),
+            'cand_url' : _cand_url,
+            'jd_id' : _jd_id,
+            'jd_title' : _jd_item_info['title'],
+            'shop_nick' : _jd_item_info['nick'],
+            'shop_link' : _jd_item_info['shop_link'],
+            'price' : _jd_item_info['price'],
+            'chief_image_url' : _chief_image_url,
+            'thumb_images' : _jd_item_info['thumb_images']
+            }
+        _rslt = {
+            'status' : 'SUCCESS',
+            'data' : _data
+            }
+    elif _item.get_entity_id() == -1:
+        _rslt = {
+            'status' : 'OTHER'    
+            }
+
+    else:
+        _entity_id = _item.get_entity_id()
+        _entity_context = Entity(_entity_id).read()
+        _rslt = {
+                'status' : 'EXIST',
+                'data' : {
+                    'entity_hash' : _entity_context['entity_hash']
+                    }
+            }
+    return HttpResponse(json.dumps(_rslt))
+
 
 @login_required
 def load_item_info(request):
     if request.method == 'POST':
         _cand_url = request.POST.get("cand_url", None)
         _hostname = urlparse(_cand_url).hostname
+
+        if re.search(r"\b(jd|360buy)\.com$", _hostname) != None:
+            return jd_info(request)
 
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) is not None:
             _taobao_id = parse_taobao_id_from_url(_cand_url)
