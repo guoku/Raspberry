@@ -811,7 +811,6 @@ function initTag(){
 
 })(jQuery, document, window);
 $(function(){
-
 	$(".account-form input[name='password'],.account-form input[name='email']").on("keyup",function(){
 		if($(".account-form input[name='password']").val()!="" && $.trim($(".account-form input[name='email']").val())!=""){
 			$(".account-form input[type='submit']").removeAttr("disabled").removeClass("submit_disabled").addClass("submit");
@@ -851,7 +850,7 @@ $(function(){
                     $(".entity_already_exist").hide();
                     $(".entity-detail").slideDown();
                     $(".add-note").show();
-                    $(".detail_title").text(data.data.taobao_title);
+                    $(".detail_title span:eq(1)").text(data.data.taobao_title);
                     $(".detail_title_input").val(data.data.taobao_title);
                     $(".detail_chief_url img").attr("src",data.data.chief_image_url);
                     $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
@@ -879,6 +878,14 @@ $(function(){
                 console.log(msg);
             }
         });
+    });
+    $(".detail_taobao_brand").on("input propertychange",function(){
+        var brand = $(this).val();
+        if(brand.length>0){
+            $(".detail_title span:eq(0)").text(brand+" --- ");
+        }else{
+            $(".detail_title span:eq(0)").text(brand);
+        }
     });
     $("#add-entity .detail-img div img").live("click",function(){
         $(".current_img").removeClass("current_img");
