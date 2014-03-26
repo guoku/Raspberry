@@ -116,10 +116,10 @@ def feed(request):
             #MobileUser(_request_user_id).mark_footprint(social_feed = True)
         
         _note_id_list = MobileNote.find(
-            timestamp = _timestamp,
-            creator_set = _following_user_id_list,
-            offset = _offset,
-            count = _count
+            timestamp=_timestamp,
+            creator_set=_following_user_id_list,
+            offset=_offset,
+            count=_count
         )
         _log_appendix['result_notes'] = _note_id_list
 
