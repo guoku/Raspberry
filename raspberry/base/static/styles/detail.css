@@ -157,6 +157,9 @@
 .note-operate small{
     font-size: 14px;
 }
+.count_blue{
+    color: #427ec0;
+}
 .add-note form .focus{
     background: url("../images/arrows_press.png") no-repeat;
 }
