@@ -15,18 +15,18 @@
             </div> 
         </div> 
         <div>
-            <form class="well form-horizontal" action="{% url 'management_create_entity_by_taobao_item' %}" method="POST">
+            <form class="well form-horizontal" action="{% url 'management_create_entity_by_jd_item' %}" method="POST">
                 <fieldset>
                     <div class="control-group">
-                        <label class="control-label" for="taobao_id_display">淘宝id:</label>
+                        <label class="control-label" for="jd_id_display">京东id:</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="taobao_id_display" name="taobao_id_display" value="{{ taobao_id }}" disabled/>
+                            <input class="input-xxlarge" type="text" id="jd_id_display" name="jd_id_display" value="{{ jd_id }}" disabled/>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="taobao_cid">淘宝分类:</label>
+                        <label class="control-label" for="jd_category">京东分类:</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="taobao_cid" name="taobao_cid" value="{{ cid }}" disabled/>
+                            <input class="input-xxlarge" type="text" id="jd_category" name="jd_category" value="{{ category }}" disabled/>
                         </div>
                     </div>
                     <div class="control-group">
@@ -44,7 +44,7 @@
                     <div class="control-group">
                         <label class="control-label" for="taobao_title">原名称</label>
                         <div class="controls">
-                            <input class="input-xxlarge" type="text" id="taobao_title" name="taobao_title" value="{{ taobao_title }}" disabled/>
+                            <input class="input-xxlarge" type="text" id="jd_title" name="jd_title" value="{{ jd_title }}" disabled/>
                         </div>
                     </div>
                     <div class="control-group">
@@ -112,12 +112,12 @@
                         </div>
                     </div>
 
-                    <input class="input-xxlarge" type="hidden" id="taobao_id" name="taobao_id" value="{{ taobao_id }}" />
-                    <input class="input-xxlarge" type="hidden" id="cid" name="cid" value="{{ cid }}" />
-                    <input class="input-xxlarge" type="hidden" id="taobao_shop_nick" name="taobao_shop_nick" value="{{ shop_nick }}" />
-                    <input class="input-xxlarge" type="hidden" id="taobao_shop_link" name="taobao_shop_link" value="{{ shop_link }}" />
-                    <input class="input-xxlarge" type="hidden" id="taobao_title" name="taobao_title" value="{{ taobao_title }}" />
-                    <input class="input-xxlarge" type="hidden" id="taobao_price" name="taobao_price" value="{{ price }}" />
+                    <input class="input-xxlarge" type="hidden" id="jd_id" name="jd_id" value="{{ jd_id }}" />
+                    <input class="input-xxlarge" type="hidden" id="category" name="category" value="{{ category }}" />
+                    <input class="input-xxlarge" type="hidden" id="jd_shop_nick" name="jd_shop_nick" value="{{ shop_nick }}" />
+                    <input class="input-xxlarge" type="hidden" id="jd_shop_link" name="jd_shop_link" value="{{ shop_link }}" />
+                    <input class="input-xxlarge" type="hidden" id="jd_title" name="jd_title" value="{{ jd_title }}" />
+                    <input class="input-xxlarge" type="hidden" id="jd_price" name="jd_price" value="{{ price }}" />
                     {% for image_url in thumb_images %}
                         <input class="input-xxlarge" type="hidden" id="image_url" name="image_url" value="{{ image_url }}" />
                     {% endfor %}

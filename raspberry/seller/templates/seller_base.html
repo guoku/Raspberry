@@ -20,56 +20,14 @@
     .cln{
         clear: both;
     }
-    .verify_shop_form{
-        display: none;
-    }
-    .verify_shop_form .form-group{
-        width: 40%;
-        margin: 8px 20px;
-    }
     .verify_shop b,.application_input b{
         line-height: 30px;
     }
     .application_url,.application_count{
         margin:0px 5px;
-        float: left;
-    }
-    .application_url input{
-        width: 490px;
-    }
-    .application_count input{
-        width: 95px;
-    }
-    .application_remarks textarea{
-        width: 700px;
-        height: 150px;
-        resize: none;
     }
     .application_remarks{
         margin:0px 5px;
-    }
-    .application_submit{
-        margin:20px 0px 0px 5px;
-    }
-    .submit_opt{
-        float: left;
-        margin: 0px 20px 0px 5px;
-    }
-    .application_plus_form{
-        padding: 20px 15px;
-    }
-    .verify_shop_type{
-        padding:0px 20px;
-    }
-    .verify_shop_pre{
-        padding: 0px 20px;
-    }
-    .verify_shop_pre button{
-        margin-left: 40px;
-        font-weight: 700;
-    }
-    .verify_success_opt{
-        padding:0px 20px;
     }
 </style>
 <body>
@@ -82,12 +40,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">果库卖家</a>
+                <a class="navbar-brand" href="{%url 'seller_index' %}">果库卖家</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="#">主页</a>
+                    <li>
+                        <a href="{%url 'seller_index'%}">主页</a>
+                    </li>
+                    <li>
+                        <a href="{%url 'seller_commodities'%}">我的商品</a>
                     </li>
                 </ul>
             </div>
@@ -104,21 +65,15 @@
     <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script type="text/javascript">
     $(function(){
-        $(".verify_shop_pre button").on("click",function(){
-            $(".verify_shop_pre").hide();
-            $(".verify_shop_form").fadeIn();
+        $(".guokuplus_apply").on("click",function(e){
+            var url = $(this).parents(".commlist").find(".taobao_url").attr("href");
+            $(".application_plus_form input[name='taobao_url']").val(url);
+            if($(".application_plus_form input[name='taobao_url']").val().length<=0){
+                e.preventDefault();
+            }
         });
-        $(".apply_cancel").on("click",function(){
-            $(".verify_shop_pre").fadeIn();
-            $(".verify_shop_form").hide();
-        });
-        $(".verify_success_opt button").on("click",function(){
-            $(".verify_success_opt").hide();
-            $(".verify_shop_form").fadeIn();
-        });
-        $(".edit_cancel").on("click",function(){
-            $(".verify_success_opt").fadeIn();
-            $(".verify_shop_form").hide();
+        $("#Comm_GKJModal").on("hidden",function(e){
+            $(".application_plus_form")[0].reset();
         });
     });
     </script>

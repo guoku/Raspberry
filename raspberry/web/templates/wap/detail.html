@@ -96,11 +96,19 @@
             <div class="with-border">
                 <div class="item">
                     <div class="image">
+                        {%if is_jd %}
+                        <a href="{{ buy_link }}"><img src="{{ entity_context.chief_image.url|resize:'310'}}" /></a>
+                        {% else %}
                         <a href="{{ buy_link }}&entry=wap"><img src="{{ entity_context.chief_image.url|resize:'310' }}" /></a>
+                        {% endif %}
                     </div>
                     <div>
                         <div class="like_info">{{ entity_context.like_count }}人喜爱</div>
+                        {% if is_jd %}
+                        <div class="more_info"><a class="blue price" href="{{ buy_link }}">详情￥{{ entity_context.price }}</a></div>
+                        {% else %}
                         <div class="more_info"><a class="blue price" href="{{ buy_link }}&entry=wap">详情￥{{ entity_context.price }}</a></div>
+                        {% endif %}
                         <div class="clear"></div>
                     </div>
                     <div class="small-avatar">
