@@ -14,6 +14,7 @@ import json
 from base.category import Category, Old_Category
 from base.entity import Entity
 from base.item import Item
+from base.item import JDItem
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
@@ -21,21 +22,10 @@ from management.tasks import MergeEntityTask
 from share.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
-from utils.extractor.taobao import TaobaoExtractor 
-from utils.taobao import parse_taobao_id_from_url
+import traceback
+from utils.taobao import parse_taobao_id_from_url, load_taobao_item_info
+from utils.jd import load_jd_item_info, parse_jd_id_from_url
 
-def _load_taobao_item_info(taobao_id):
-    taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
-    thumb_images = []
-    image_url = None
-    for _img_url in taobao_item_info["imgs"]:
-        thumb_images.append(_img_url)
-    taobao_item_info["thumb_images"] = thumb_images
-    taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
-    
-    taobao_item_info["shop_nick"] = taobao_item_info["nick"]
-    
-    return taobao_item_info
 
 
 def _get_special_names(request_user_id):
@@ -98,12 +88,14 @@ def new_entity(request):
     else: 
         _cand_url = request.POST.get("url", None)
         _hostname = urlparse(_cand_url).hostname
+        if re.search(r"\b(jd|360buy)\.com$", _hostname) != None:
+            return new_jd_item(request)
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) != None: 
             _taobao_id = parse_taobao_id_from_url(_cand_url)
 
             _item = Item.get_item_by_taobao_id(_taobao_id)
             if _item == None:
-                _taobao_item_info = _load_taobao_item_info(_taobao_id)
+                _taobao_item_info = load_taobao_item_info(_taobao_id)
                 _brand = ''
                 _title = ''
                 _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
@@ -134,8 +126,89 @@ def new_entity(request):
                 pass
             else:
                 return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _item.get_entity_id() }) + '?code=1')
-                
-                
+
+
+def new_jd_item(request):
+    _cand_url = request.POST.get("url", None)
+    _jd_id = parse_jd_id_from_url(_cand_url)
+    _item = JDItem.get_item_by_jd_id(_jd_id)
+
+    if _item == None:
+        _jd_item_info = load_jd_item_info(_jd_id)
+        
+        _users = _get_special_names(request.user.id)
+
+        return render_to_response(
+            'entity/create_jd.html',
+            {
+                'active_division' : 'entity',
+                'jd_id' : _jd_id,
+                'category' : _jd_item_info['category'],
+                'jd_title' : _jd_item_info['title'],
+                'shop_nick' : _jd_item_info['nick'],
+                'shop_link' : _jd_item_info['shop_link'],
+                'price' : _jd_item_info['price'],
+                'thumb_images' : _jd_item_info['thumb_images'],
+                'brand' : _jd_item_info['brand'],
+                'title' : _jd_item_info['title'],
+                'users' : _users,
+                'selected_category_id' : ""
+            },
+            context_instance = RequestContext(request)
+        )
+    elif _item.get_entity_id() == -1:
+        pass
+    else:
+        return HttpResponseRedirect(reverse('management_edit_jd_entity', kwargs = {'entity_id' : _item.get_entity_id() }) + '?code=1')
+        
+@login_required
+@staff_only
+def create_entity_by_jd_item(request):
+    if request.method == "POST":
+        _jd_id = request.POST.get("jd_id", None)
+        _cid = request.POST.get("cid", None)
+        _jd_shop_nick = request.POST.get("jd_shop_nick", None)
+        _jd_shop_link = request.POST.get("jd_shop_link", None)
+        _jd_title = request.POST.get("jd_title", None)
+        _jd_price = request.POST.get("jd_price", None)
+        _chief_image_url = request.POST.get("chief_image_url", None)
+        _brand = request.POST.get("brand", None)
+        _title = request.POST.get("title", None)
+        _intro = ""
+        _category_id = int(request.POST.get("category_id", None))
+        _detail_image_urls = request.POST.getlist("image_url")
+
+        if _chief_image_url in _detail_image_urls:
+            _detail_image_urls.remove(_chief_image_url)
+
+        _entity = Entity.create_by_jd_item(
+            creator_id = request.user.id,
+            category_id = _category_id,
+            chief_image_url = _chief_image_url,
+            jd_item_info = {
+                'jd_id' : _jd_id,
+                'cid' : _category_id,
+                'title' : _jd_title,
+                'shop_nick' : _jd_shop_nick,
+                'price' : _jd_price,
+                'soldout' : False,
+            },
+            brand = _brand,
+            title = _title,
+            intro = _intro,
+            detail_image_urls = _detail_image_urls
+        )
+
+        _note = request.POST.get("note", None)
+        _user_id = request.POST.get("user_id", None)
+
+        if _note != None and len(_note) > 0:
+            _add_note_and_select_delay(_entity, _user_id, _note)
+
+        return HttpResponseRedirect(reverse('management_edit_jd_entity',
+                kwargs = { 'entity_id' : _entity.entity_id  })) 
+
+        
 @login_required
 @staff_only
 def create_entity_by_taobao_item(request):
@@ -184,11 +257,16 @@ def create_entity_by_taobao_item(request):
 
         return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _entity.entity_id }))
 
+
+
 @login_required
 @staff_only
 def edit_entity(request, entity_id):
     if request.method == 'GET':
         _code = request.GET.get("code", None)
+        _source = request.GET.get("source","taobao")
+        if _source == "jd":
+            return edit_jd_entity(request, entity_id)
         if _code == "1":
             _message = "淘宝商品已被创建至本entity" 
         else:
@@ -269,6 +347,92 @@ def edit_entity(request, entity_id):
 
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+@login_required
+@staff_only
+def edit_jd_entity(request, entity_id):
+    if request.method == "GET":
+        _code = request.GET.get("code", None)
+        if _code == "1":
+            _message = "京东商品已被创建至本entity"
+        else:
+            _message = None
+        _entity_context = Entity(entity_id).read()
+        _item_context_list = []
+        for _item_id in JDItem.find(entity_id = entity_id):
+            _item_context = JDItem(_item_id).read()
+            if (not _entity_context.has_key('title') or \
+                    _entity_context['title'] == "") and \
+                    (not _entity_context.has_key('recommend_title')):
+                        _entity_context['recommend_title'] = _item_context['title']
+            _item_context['commission_type'] = "unknown"
+            _item_context['commission_rate'] = 4 #jd的佣金是根据品类来区分的
+            _entity_context['commission_type'] = "general"
+            _item_context_list.append(_item_context)
+
+        _note_count = Note.count(entity_id = entity_id)
+        _users = _get_special_names(request.user.id)
+        _mark_list = Entity.Mark.all()
+
+        return render_to_response(
+            'entity/edit.html',
+            {
+                'active_division' : 'entity',
+                'entity_context' : _entity_context,
+                'category_list' : Category.find(),
+                'old_category_list' : Old_Category.find(),
+                'item_context_list' : _item_context_list,
+                'mark_list' : _mark_list,
+                'message' : _message,
+                'note_count' : _note_count,
+                'users' : _users
+            },
+            context_instance = RequestContext(request)
+        )
+
+    elif request.method == "POST":
+        _brand = request.POST.get("brand", None)
+        _title = request.POST.get("title", None)
+        _intro = request.POST.get("intro", None)
+        _price = request.POST.get("price", None)
+        _reset_created_time = request.POST.get("reset_created_time", "off")
+        if _reset_created_time == "on":
+            _reset_created_time = True
+        else:
+            _reset_created_time = False
+
+        _weight = int(request.POST.get("weight",'0'))
+        _mark = int(request.POST.get("mark", '0'))
+        _chief_image_id = request.POST.get("chief_image", None)
+
+        if _price:
+            _price = float(_price)
+        _category_id = request.POST.get("category_id", None)
+        if _category_id:
+            _category_id = int(_category_id)
+        _old_category_id = request.POST.get("old_category_id", None)
+        if _old_category_id:
+            _old_category_id = int(_old_category_id)
+        _entity = Entity(entity_id)
+        _entity.update(
+            category_id = _category_id,
+            old_category_id = _old_category_id,
+            brand = _brand,
+            title = _title,
+            intro = _intro,
+            price = _price,
+            chief_image_id = _chief_image_id,
+            weight = _weight,
+            mark = _mark,
+            reset_created_time = _reset_created_time
+        )
+
+        _note = request.POST.get("note", None)
+        _user_id = request.POST.get("user_id", None)
+        if _note != None and len(_note) > 0:
+            _add_note_and_select_delay(_entity, _user_id, _note)
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+            
 @login_required
 @staff_only
 def edit_entity_image(request, entity_id):
@@ -402,20 +566,30 @@ def entity_list(request):
                 _entity_context['commission_type'] = 'unknown' 
                 if _entity_context.has_key('item_id_list') and len(_entity_context['item_id_list']):
                     _item_context = Item(_entity_context['item_id_list'][0]).read()
-                    _entity_context['buy_link'] = _item_context['buy_link'] 
-                    _entity_context['taobao_title'] = _item_context['title'] 
-                    _entity_context['taobao_id'] = _item_context['taobao_id'] 
-                    _entity_context['taobao_shop_nick'] = _item_context['shop_nick'] 
-                    
-                    if _item_context.has_key('shop_nick'):
-                        _shop_context = TaobaoShop(_item_context['shop_nick']).read()
-                        if _shop_context != None:
-                            if _shop_context['extended_info']['commission'] == True:
-                                _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
-                                if _shop_context['extended_info']['orientational']:
-                                    _entity_context['commission_type'] = 'orientational'
-                                else:
-                                    _entity_context['commission_type'] = 'general'
+                    if _item_context == None:
+                        #jd items
+                        _item_context = JDItem(_entity_context['item_id_list'][0]).read()
+                        _entity_context['buy_link'] = _item_context['buy_link']
+                        _entity_context['jd_title'] = _item_context['title']
+                        _entity_context['jd_id'] = _item_context['jd_id']
+                        _entity_context['_jd_shop_nick'] = _item_context['shop_nick']
+                        _entity_context['commission_rate'] = 4 #默认设为4
+                        _entity_context['commission_type'] = 'general'
+                    else:
+                        _entity_context['buy_link'] = _item_context['buy_link'] 
+                        _entity_context['taobao_title'] = _item_context['title'] 
+                        _entity_context['taobao_id'] = _item_context['taobao_id'] 
+                        _entity_context['taobao_shop_nick'] = _item_context['shop_nick'] 
+                        
+                        if _item_context.has_key('shop_nick'):
+                            _shop_context = TaobaoShop(_item_context['shop_nick']).read()
+                            if _shop_context != None:
+                                if _shop_context['extended_info']['commission'] == True:
+                                    _entity_context['commission_rate'] = _shop_context['extended_info']['commission_rate']
+                                    if _shop_context['extended_info']['orientational']:
+                                        _entity_context['commission_type'] = 'orientational'
+                                    else:
+                                        _entity_context['commission_type'] = 'general'
                 else:
                     _entity_context['buy_link'] = ''
                     _entity_context['taobao_title'] = ''
@@ -517,7 +691,7 @@ def load_taobao_item_for_entity(request, entity_id):
             
         _item = Item.get_item_by_taobao_id(_taobao_id)
         if _item == None:
-            _taobao_item_info = _load_taobao_item_info(_taobao_id)
+            _taobao_item_info = load_taobao_item_info(_taobao_id)
             return render_to_response( 
                 'entity/new_taobao_item_info.html', 
                 {

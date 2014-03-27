@@ -30,6 +30,7 @@ def index(request, user_context, shop_inst):
     shop_verification = shop_inst.read_shop_verification()
     verification_form = ShopVerificationForm(
         {
+            "user_context" : user_context,
             "shop_type" : shop_context.get('shop_type', None),
             "qq_account" : shop_context.get('shop_qq_account', None),
             "email" : shop_context.get('shop_email', None),

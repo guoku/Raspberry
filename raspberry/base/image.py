@@ -73,8 +73,8 @@ class Image(object):
             if _image_id != None:
                 return cls(_image_id)
         elif image_data != None:
+            print 'hello'
             _store_hash = md5(image_data).hexdigest()
-            
             if save_in_origin:
                 _store_hash = md5(_store_hash + 'GUOKUIMAGESAVEINORIGINSIZE').hexdigest()
                 _image_id = Image.get_image_id_by_store_hash(_store_hash)
@@ -87,7 +87,7 @@ class Image(object):
                 if _image_id != None:
                     return cls(_image_id)
                 cls.save_square_image_data_fixed(_store_hash, image_data)
-        
+        print ("hell2")
         _image_obj = ImageModel( 
             source = source, 
             created_time = datetime.datetime.now(),

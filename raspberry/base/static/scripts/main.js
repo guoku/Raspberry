@@ -882,7 +882,7 @@ $(function(){
     $(".detail_taobao_brand").on("input propertychange",function(){
         var brand = $(this).val();
         if(brand.length>0){
-            $(".detail_title span:eq(0)").text(brand+" --- ");
+            $(".detail_title span:eq(0)").text(brand+" - ");
         }else{
             $(".detail_title span:eq(0)").text(brand);
         }

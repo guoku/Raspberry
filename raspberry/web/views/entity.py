@@ -17,7 +17,7 @@ import HTMLParser
 from base.entity import Entity
 from base.entity import Note
 from base.user import User
-from base.item import Item
+from base.item import Item, JDItem
 from base.tag import Tag 
 from base.category import Category
 from base.taobao_shop import GuokuPlusActivity
@@ -25,8 +25,10 @@ from share.tasks import CreateTaobaoShopTask
 from share.tasks import CreateTaobaoShopTask, DeleteEntityNoteTask, LikeEntityTask, UnlikeEntityTask
 from web.tasks import WebLogTask
 from utils.extractor.taobao import TaobaoExtractor 
-from utils.taobao import parse_taobao_id_from_url
+from utils.extractor.jd import JDExtractor
+from utils.taobao import parse_taobao_id_from_url, load_taobao_item_info
 from utils.lib import get_client_ip
+from utils.jd import parse_jd_id_from_url, load_jd_item_info
 
 log = getLogger('django')
 
@@ -69,19 +71,27 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     
     _is_soldout = True
     _taobao_id = None
+    _jd_id = None
     _activity_id = None
     for _item_id in Item.find(entity_id=_entity_id):
         _item_context = Item(_item_id).read()
-        _taobao_id = _item_context['taobao_id']
-        if not _item_context['soldout']:
-            _is_soldout = False
-            break
-    try:
-        _guokuplus = GuokuPlusActivity.find_by_taobao_id(_taobao_id)
-        if _guokuplus != None and _guokuplus.is_active():
-            _activity_id = _guokuplus.read()['activity_id']
-    except Exception, e:
-        pass
+        if _item_context == None:
+            _item_context = JDItem(_item_id).read()
+            _jd_id = _item_context['jd_id']
+            if not _item_context['soldout']:
+                _is_soldout = False
+        else:
+            _taobao_id = _item_context['taobao_id']
+            if not _item_context['soldout']:
+                _is_soldout = False
+                break
+    if _taobao_id != None:
+        try:
+            _guokuplus = GuokuPlusActivity.find_by_taobao_id(_taobao_id)
+            if _guokuplus != None and _guokuplus.is_active():
+                _activity_id = _guokuplus.read()['activity_id']
+        except Exception, e:
+            pass
     
     _is_user_already_note = False
     if _request_user_context != None:
@@ -139,28 +149,51 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             'guess_entities' : _guess_entity_id_list,
         },
     )
-    
-    return render_to_response(
-        template,
-        {
-            'is_staff' : _is_staff,
-            'user_context' : _request_user_context,
-            'entity_context' : _entity_context,
-            'is_user_already_note' : _is_user_already_note,
-            'is_user_already_like' : _is_user_already_like,
-            'selection_note' : _selection_note,
-            'common_note_list' : _common_note_list,
-            'liker_list' : _liker_list,
-            'tag_list' : _tag_list,
-            'guess_entity_context' : _guess_entity_context,
-            'item_id' : _item_context['item_id'],
-            'taobao_id' : _taobao_id,
-            'activity_id' : _activity_id,
-            'is_soldout' : _is_soldout,
-            "enable_guoku_plus" : settings.ENABLE_GUOKU_PLUS
-        },
-        context_instance=RequestContext(request)
-    )
+    if _taobao_id != None: 
+        return render_to_response(
+            template,
+            {
+                'is_staff' : _is_staff,
+                'user_context' : _request_user_context,
+                'entity_context' : _entity_context,
+                'is_user_already_note' : _is_user_already_note,
+                'is_user_already_like' : _is_user_already_like,
+                'selection_note' : _selection_note,
+                'common_note_list' : _common_note_list,
+                'liker_list' : _liker_list,
+                'tag_list' : _tag_list,
+                'guess_entity_context' : _guess_entity_context,
+                'item_id' : _item_context['item_id'],
+                'taobao_id' : _taobao_id,
+                'activity_id' : _activity_id,
+                'is_soldout' : _is_soldout,
+                "enable_guoku_plus" : settings.ENABLE_GUOKU_PLUS
+            },
+            context_instance=RequestContext(request)
+        )
+
+    else:
+        return render_to_response(
+            template,
+            {
+                'is_staff' : _is_staff,
+                'user_context' : _request_user_context,
+                'entity_context' : _entity_context,
+                'is_user_already_note' : _is_user_already_note,
+                'is_user_already_like' : _is_user_already_like,
+                'selection_note' : _selection_note,
+                'common_note_list' : _common_note_list,
+                'liker_list' : _liker_list,
+                'tag_list' : _tag_list,
+                'guess_entity_context' : _guess_entity_context,
+                'item_id' : _item_context['item_id'],
+                'jd_id' : _jd_id,
+                'activity_id' : _activity_id,
+                'is_soldout' : _is_soldout,
+                "enable_guoku_plus" : settings.ENABLE_GUOKU_PLUS
+            },
+            context_instance=RequestContext(request)
+        )
 
 def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
     _start_at = datetime.datetime.now()
@@ -175,9 +208,16 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
     
     _is_soldout = True
     _taobao_id = None
+    _jd_id = None
+    _is_jd = False
     for _item_id in Item.find(entity_id=_entity_id):
         _item_context = Item(_item_id).read()
-        _taobao_id = _item_context['taobao_id']
+        if _item_context == None:
+            _item_context = JDItem(_item_id).read()
+            _jd_id = _item_context['jd_id']
+            _is_jd = True
+        else:
+            _taobao_id = _item_context['taobao_id']
         if not _item_context['soldout']:
             _is_soldout = False
             break
@@ -210,7 +250,10 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
             'entity_id' : int(_entity_id),
         },
     )
-
+    if _is_jd:
+        buy_link = _item_context['buy_link']
+        jd_id = parse_jd_id_from_url(buy_link)
+        _item_context['buy_link'] = 'http://m.jd.com/product/%s.html'%jd_id
     return render_to_response(
         template,
         {
@@ -218,6 +261,7 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
             'note_list' : _note_list,
             'liker_list' : _liker_list,
             'buy_link' : _item_context['buy_link'],
+            'is_jd' : _is_jd,
         },
         context_instance=RequestContext(request)
     )
@@ -294,9 +338,16 @@ def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
     
     _is_soldout = True
     _taobao_id = None
+    _jd_id = None
+    _is_jd = False
     for _item_id in Item.find(entity_id=_entity_id):
         _item_context = Item(_item_id).read()
-        _taobao_id = _item_context['taobao_id']
+        if _item_context == None:
+            _item_context = JDItem(_item_id).read()
+            _jd_id = _item_context['jd_id']
+            _is_jd = True
+        else:
+            _taobao_id = _item_context['taobao_id']
         if not _item_context['soldout']:
             _is_soldout = False
             break
@@ -330,6 +381,10 @@ def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
         },
     )
 
+    if _is_jd:
+        buy_link = _item_context['buy_link']
+        jd_id = parse_jd_id_from_url(buy_link)
+        _item_context['buy_link'] = 'http://m.jd.com/product/%s.html'%jd_id
     return render_to_response(
         template,
         {
@@ -337,36 +392,55 @@ def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
             'note_list' : _note_list,
             'liker_list' : _liker_list,
             'buy_link' : _item_context['buy_link'],
+            'is_jd' : _is_jd,
         },
         context_instance=RequestContext(request)
     )
 
 
 
-def _parse_taobao_id_from_url(url):
-    params = url.split("?")[1]
-
-    for param in params.split("&"):
-        tokens = param.split("=")
-
-        if len(tokens) >= 2 and (tokens[0] == "id" or tokens[0] == "item_id"):
-            return tokens[1]
-
-    return None
 
 
-def _load_taobao_item_info(taobao_id):
-    taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
-    thumb_images = []
 
-    for _img_url in taobao_item_info["imgs"]:
-        thumb_images.append(_img_url)
+def jd_info(request, _cand_url):
+    _jd_id = parse_jd_id_from_url(_cand_url)
+    _item = JDItem.get_item_by_jd_id(_jd_id)
+    _rslt = {}
+    if _item == None:
+        _jd_item_info = load_jd_item_info(_jd_id)
+        _chief_image_url = _jd_item_info['thumb_images'][0]
+        #TODO：进行京东类目转换
 
-    taobao_item_info["thumb_images"] = thumb_images
-    taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
-    taobao_item_info["shop_nick"] = taobao_item_info["nick"]
+        _data = {
+            'user_context' : User(request.user.id).read(),
+            'cand_url' : _cand_url,
+            'jd_id' : _jd_id,
+            'jd_title' : _jd_item_info['title'],
+            'shop_nick' : _jd_item_info['nick'],
+            'shop_link' : _jd_item_info['shop_link'],
+            'price' : _jd_item_info['price'],
+            'chief_image_url' : _chief_image_url,
+            'thumb_images' : _jd_item_info['thumb_images']
+            }
+        _rslt = {
+            'status' : 'SUCCESS',
+            'data' : _data
+            }
+    elif _item.get_entity_id() == -1:
+        _rslt = {
+            'status' : 'OTHER'    
+            }
 
-    return taobao_item_info
+    else:
+        _entity_id = _item.get_entity_id()
+        _entity_context = Entity(_entity_id).read()
+        _rslt = {
+                'status' : 'EXIST',
+                'data' : {
+                    'entity_hash' : _entity_context['entity_hash']
+                    }
+            }
+    return HttpResponse(json.dumps(_rslt))
 
 
 @login_required
@@ -375,12 +449,15 @@ def load_item_info(request):
         _cand_url = request.POST.get("cand_url", None)
         _hostname = urlparse(_cand_url).hostname
 
+        if re.search(r"\b(jd|360buy)\.com$", _hostname) != None:
+            return jd_info(request, _cand_url)
+
         if re.search(r"\b(tmall|taobao)\.com$", _hostname) is not None:
             _taobao_id = parse_taobao_id_from_url(_cand_url)
             _item = Item.get_item_by_taobao_id(_taobao_id)
 
             if _item is None:
-                _taobao_item_info = _load_taobao_item_info(_taobao_id)
+                _taobao_item_info = load_taobao_item_info(_taobao_id)
                 _chief_image_url = _taobao_item_info["thumb_images"][0]
                 _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
                 _data = {

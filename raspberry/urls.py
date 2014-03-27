@@ -53,16 +53,16 @@ urlpatterns += patterns(
 )
 
 #if settings.DEBUG:
-#    import debug_toolbar
-#    urlpatterns += patterns('',
-#       url(r'^__debug__/', include(debug_toolbar.urls)),
-#    )
+    #import debug_toolbar
+    #urlpatterns += patterns('',
+    #    url(r'^__debug__/', include(debug_toolbar.urls)),
+    #)
 
-#   urlpatterns += patterns('',
-#      (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-#    )
+    #urlpatterns += patterns('',
+    #  (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    #)
 
-#    urlpatterns += patterns('',
-#        url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
-#            {'document_root': settings.MEDIA_URL}),
-#    )
+    #urlpatterns += patterns('',
+    #    url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
+    #        {'document_root': settings.MEDIA_URL}),
+    #)
