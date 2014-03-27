@@ -595,14 +595,13 @@ class User(object):
         _stat_info = cache.get(_cache_key)
         return _stat_info
     
-    def __reset_user_stat_info_to_cache(self, stat_info = None):
+    def __reset_user_stat_info_to_cache(self, stat_info=None):
         _cache_key = 'user_%s_stat_info'%self.user_id
         if stat_info == None:
             _stat_info = {}
             _stat_info['following_count'] = UserFollowModel.objects.filter(follower_id=self.user_id).count()
             _stat_info['fan_count'] = UserFollowModel.objects.filter(followee_id=self.user_id).count()
             _stat_info['like_count'] = EntityLikeModel.objects.filter(user_id=self.user_id).count()
-            #_stat_info['latest_like_entity_id_list'] = map(lambda x: x.entity_id, EntityLikeModel.objects.using('slave').filter(user_id=self.user_id).order_by('-created_time')[0:20])
             _stat_info['latest_like_entity_id_list'] = [] 
             _stat_info['tag_count'] = EntityTagModel.objects.filter(user_id=self.user_id).values('tag').annotate(entity_count=Count('entity')).count()
             _stat_info['entity_note_count'] = NoteModel.objects.filter(creator_id=self.user_id).count()
@@ -679,17 +678,24 @@ class User(object):
         _stat_info = self.__load_user_stat_info_from_cache()
         if _stat_info != None:
             _stat_info['like_count'] += 1 
-            _stat_info['latest_like_entity_id_list'] = _stat_info['latest_like_entity_id_list'].insert(0, entity_id) 
-            _stat_info['latest_like_entity_id_list'] = _stat_info['latest_like_entity_id_list'][0:20]
             self.__reset_user_stat_info_to_cache(_stat_info)
+            
+        _latest_like_entity_list = self.__load_latest_like_entity_list_from_cache()
+        if _latest_like_entity_list != None:
+            _latest_like_entity_list = _latest_like_entity_list.insert(0, entity_id)
+            self.__reset_latest_like_entity_list_to_cache(_latest_like_entity_list)
     
     def update_user_like_stat_info_del_like_entity(self, entity_id):
         _stat_info = self.__load_user_stat_info_from_cache()
         if _stat_info != None:
             _stat_info['like_count'] -= 1 
-            if entity_id in _stat_info['latest_like_entity_id_list']:
-                _stat_info['latest_like_entity_id_list'].remove(entity_id)
             self.__reset_user_stat_info_to_cache(_stat_info)
+        
+        _latest_like_entity_list = self.__load_latest_like_entity_list_from_cache()
+        if _latest_like_entity_list != None:
+            if entity_id in _latest_like_entity_list:
+                _latest_like_entity_list.remove(entity_id)
+                self.__reset_latest_like_entity_list_to_cache(_latest_like_entity_list)
     
     def update_user_entity_note_count(self, delta):
         _stat_info = self.__load_user_stat_info_from_cache()
@@ -719,6 +725,31 @@ class User(object):
     def read(self):
         _context = self.__read_basic_info()
         _context.update(self.__read_user_stat_info())
+        return _context
+            
+    def __load_latest_like_entity_list_from_cache(self):
+        _cache_key = 'user_%s_latest_like_entity_list'%self.user_id
+        _entity_list = cache.get(_cache_key)
+        return _entity_list
+          
+    def __reset_latest_like_entity_list_to_cache(self, entity_list=None):
+        _cache_key = 'user_%s_latest_like_entity_list'%self.user_id
+        if entity_list == None: 
+            _latest_like_entity_list = map(lambda x: x.entity_id, EntityLikeModel.objects.filter(user_id=self.user_id).order_by('-created_time')[0:20])
+        else:
+            _latest_like_entity_list = entity_list
+        cache.set(_cache_key, _latest_like_entity_list, 864000)
+        return _latest_like_entity_list
+   
+    def __read_latest_like_entity_list(self):
+        _entity_list = self.__load_latest_like_entity_list_from_cache()
+        if _entity_list == None:
+            _entity_list = self.__reset_latest_like_entity_list_to_cache()
+        return _entity_list
+
+
+    def read_latest_like_entity_list(self):
+        _context = self.__read_latest_like_entity_list()
         return _context
     
     def get_nickname(self):

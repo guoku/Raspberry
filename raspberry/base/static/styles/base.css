@@ -699,6 +699,7 @@ button {
 /*------------------------------*/
 .pagination {
     text-align: center;
+    clear:both;
 }
 
 .pagination .container {
@@ -1063,7 +1064,12 @@ button {
     height: 40px;
     font-weight: 700;
     border-radius: 3px;
-    margin:30px 0 0 94px;
+    margin:30px 0px 0px 94px;
+}
+#reset_password{
+    height: 40px;
+    font-weight: 700;
+    margin: 30px 0px 0px 110px;
 }
 .forget_tip{
     font-size: 20px;

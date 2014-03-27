@@ -689,7 +689,7 @@ function initTag(){
 
                         if (result === 1) {
                             count++;
-                            $counter.text(count);
+                            $counter.text(count).addClass("count_blue");
                             $poke.addClass('poked');
 
                             if (count === 1) {
@@ -697,7 +697,7 @@ function initTag(){
                             }
                         } else if (result === 0) {
                             count--;
-                            $counter.text(count);
+                            $counter.text(count).removeClass("count_blue");
                             $poke.removeClass('poked');
 
                             if (count === 0) {
@@ -917,7 +917,7 @@ $(function(){
                 console.log(data);
                 switch(data){
                     case "success":
-                        send_status(false);
+                        send_status(false,$("#forget_sendmail"));
                         var s = 60;
                         $("#forget_sendmail").html("发送成功！<i>60</i>秒后可重新发送！").attr("send-status",1);
                         var t = setInterval(function(){
@@ -945,20 +945,29 @@ $(function(){
             }
         });
     });
-    $(".forget_input").on("keyup change click",function(){
+    $(".regist_email").on("keyup change click input",function(){
         if($("#forget_sendmail").attr("send-status") == 1){
             return false;
         }
         if($.trim($(this).val()).length>0)
-        send_status(true);
+        send_status(true,$("#forget_sendmail"));
         else
-        send_status(false);
+        send_status(false,$("#forget_sendmail"));
     });
-    function send_status(flag){
+    $(".new_password_input").on("keyup change click input",function(){
+        if($("#reset_password").attr("send-status") == 1){
+            return false;
+        }
+        if($.trim($(this).val()).length>0)
+        send_status(true,$("#reset_password"));
+        else
+        send_status(false,$("#reset_password"));
+    });
+    function send_status(flag,elem){
         if(flag){
-            $("#forget_sendmail").removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
+            $(elem).removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
         }else{
-            $("#forget_sendmail").removeClass("btn-update").addClass("btn-disabled").attr("disabled","true");
+            $(elem).removeClass("btn-update").addClass("btn-disabled").attr("disabled","true");
         }
     }
 
