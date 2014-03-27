@@ -6,21 +6,23 @@
 
         <div class="note-comment-detail">
             <a class="nickname"
-               href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}</a>
+               href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}
+            </a>
 
             {# 判断当前用户是否是点评的创建者或评论的创建者，如果是则允许删除 #}
+
             {% if user_context.user_id == comment_context.creator_id or user_context.user_id == note_context.creator_id %}
                 <a href="{% url 'web.views.note.delete_comment' comment_context.note_id comment_context.comment_id %}"
                    class="close">&times;</a>
             {% endif %}
 
             <p class="with-tag comment-content" data-creator="{{ creator_context.user_id }}" data-comment="{{ comment_context.comment_id }}">
-                {% if comment_context.reply_to_user_id != None %}回复
-                    {{ comment_context.reply_to_user_nickname }}:
-                {% endif %}{{ comment_context.content }}
+                {% if comment_context.reply_to_user_id != None %}回复{{ comment_context.reply_to_user_nickname }}:{% endif %}{{ comment_context.content }}
             </p>
-
-            <a href="javascript:;" class="reply">回复</a>
+            <a href="#" class="reply">回复</a>
+{#            {% if user_context %}#}
+{#            <a href="javascript:;" class="reply">回复</a>#}
+{#            {% endif %}#}
         </div>
     </div>
 {% endspaceless %}

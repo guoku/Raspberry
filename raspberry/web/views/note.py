@@ -5,12 +5,13 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template import loader
-import json
+
+# import json
 
 from base.note import Note
 from base.user import User
 from share.tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeEntityNoteTask
-
+from utils.http import JSONResponse
 
 @login_required
 def poke_note(request, note_id, target_status):
@@ -25,16 +26,18 @@ def poke_note(request, note_id, target_status):
 
 
 def get_comments(request, note_id, template='note/note_comment_list.html'):
-    _user_context = User(request.user.id)
+    # _user_context = User(request.user.id)
+
+    if request.user.is_authenticated():
+        _user_context = User(request.user.id)
+    else:
+        _user_context = None
     _note = Note(note_id)
     _note_context = _note.read()
+
+
     _comment_id_list = _note_context['comment_id_list']
     _comment_list = []
-
-    _ret = {
-        'status' : '0',
-        'msg' : ''
-    }
 
     for _c_id in _comment_id_list:
         _comment_context = _note.read_comment(_c_id)
@@ -61,13 +64,14 @@ def get_comments(request, note_id, template='note/note_comment_list.html'):
         'note_context': _note_context,
     })
     _data = _t.render(_c)
-
     _ret = {
-        'status': '1',
+        # 'status': '1',
         'data': _data
     }
-
-    return HttpResponse(json.dumps(_ret))
+    if len( _note_context['comment_id_list'] ) < 1:
+        # raise Http404
+        return JSONResponse(_ret, status=404)
+    return JSONResponse(_ret)
 
 
 @login_required
@@ -120,8 +124,8 @@ def add_comment(request, note_id, template='note/note_comment.html'):
                 'status': '1',
                 'data': _data
             }
-
-        return HttpResponse(json.dumps(_ret))
+        return JSONResponse(_ret)
+        # return HttpResponse(json.dumps(_ret))
 
 
 

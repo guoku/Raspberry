@@ -3,6 +3,7 @@
 {% load entity web_common %}
 
 {% block title %}品类 － {{ category_id|trans_category }}{% endblock %}
+{% block keyword %}{{ category_id|trans_category }}{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/category.css' %}">{% endblock %}
 {% block content %}
     <div id="category">
@@ -12,13 +13,15 @@
             </ul>
         </div>
 
-        <div class="category">
+{#        <div class="category">#}
+            <ul class="entities">
             {% spaceless %}
                 {% for entity in entity_list %}
                     {% display_common_entity entity %}
                 {% endfor %}
             {% endspaceless %}
-        </div>
+            </ul>
+{#        </div>#}
         {% if paginator %}
             {% display_web_paginator paginator %}
         {% endif %}

@@ -24,7 +24,7 @@ def entity_list(request):
         if _timestamp != None:
             _timestamp = datetime.datetime.fromtimestamp(float(_timestamp)) 
         
-        _sort_by = request.GET.get('sort', 'time')
+        _sort_by = request.GET.get('sort', 'novus_time')
         _reverse = request.GET.get('reverse', '0')
         if _reverse == '0':
             _reverse = False
@@ -37,21 +37,26 @@ def entity_list(request):
             _root_old_cat_id = int(_root_old_cat_id)
         
         _entity_id_list = MobileEntity.find(
-            root_old_category_id = _root_old_cat_id,
-            timestamp = _timestamp,
-            offset = _offset,
-            count = _count,
-            sort_by = _sort_by,
-            reverse = _reverse,
-            status = 'novus' 
+            root_old_category_id=_root_old_cat_id,
+            timestamp=_timestamp,
+            offset=_offset,
+            count=_count,
+            sort_by=_sort_by,
+            reverse=_reverse,
+            status='novus' 
         )
         
         _rslt = []
         for _entity_id in _entity_id_list:
-            _entity = MobileEntity(_entity_id)
-            _rslt.append(
-                _entity.read(_request_user_id)
-            )
+            try:
+                _entity = MobileEntity(_entity_id)
+                _entity_context = _entity.read(_request_user_id)
+                _entity_context['updated_time'] = _entity_context['novus_time']
+                _rslt.append(
+                    _entity_context
+                )
+            except Exception, e:
+                pass
         
         _duration = datetime.datetime.now() - _start_at
         MobileLogTask.delay(

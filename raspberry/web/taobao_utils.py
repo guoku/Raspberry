@@ -36,7 +36,6 @@ class TaobaoClient():
         return data
 
 def _get_oauth_url(action, back_url):
-    print back_url
     param = {'client_id' : APP_KEY, 'response_type' : 'code',
              'redirect_uri' : back_url, 'view' : 'web'}
     return "%s?%s" % (action, urlencode(param))

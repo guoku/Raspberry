@@ -36,7 +36,7 @@ def homepage(request):
     _log_appendix = {}
 
     _rslt = {}
-    _rslt['discover'] = popularity.read_popular_category()['data'][0:8]
+    _rslt['discover'] = popularity.read_popular_category()['data'][0:12]
     _log_appendix['discover'] = map(lambda x: x['category_id'], _rslt['discover'])
     
     _rslt['banner'] = []
@@ -116,10 +116,10 @@ def feed(request):
             #MobileUser(_request_user_id).mark_footprint(social_feed = True)
         
         _note_id_list = MobileNote.find(
-            timestamp = _timestamp,
-            creator_set = _following_user_id_list,
-            offset = _offset,
-            count = _count
+            timestamp=_timestamp,
+            creator_set=_following_user_id_list,
+            offset=_offset,
+            count=_count
         )
         _log_appendix['result_notes'] = _note_id_list
 
@@ -169,7 +169,7 @@ def message(request):
 
 
         _rslt = []
-        for _message in NeoMessage.objects.filter(user_id = _request_user_id, created_time__lt = _timestamp).order_by('-created_time'):
+        for _message in NeoMessage.objects.filter(user_id=_request_user_id, created_time__lt=_timestamp).order_by('-created_time')[0:_count]:
             try:
                 if isinstance(_message, UserFollowMessage):
                     _context = {
@@ -429,6 +429,69 @@ def visit_item(request, item_id):
             appendix={
                 'site': 'taobao',
                 'taobao_id': _item_context['taobao_id'],
+                'entity_id': _entity_id,
+                'tbk': False,
+            }
+        )
+        return HttpResponseRedirect(decorate_taobao_url(get_taobao_url(_item_context['taobao_id'], True), _ttid, _sid, _outer_code, _sche))
+            
+
+######### Old visit item api ######
+######### Should be obsolete after all client ends shift to 3.0 ######
+
+def old_visit_item(request):
+    _start_at = datetime.datetime.now()
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _ttid = request.GET.get("ttid", None)
+        _sid = request.GET.get("sid", None)
+        _entry = request.GET.get("entry", "mobile")
+        _outer_code = request.GET.get("outer_code", None)
+        _sche = request.GET.get("sche", None)
+        
+        _taobao_id = request.GET.get("item_id", None)
+        _item = Item.get_item_by_taobao_id(_taobao_id)
+        _item_context = _item.read()
+        
+        _taobaoke_info = taobaoke_mobile_item_convert(_item_context['taobao_id'])
+        _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
+        _duration = datetime.datetime.now() - _start_at
+        
+       	if _taobaoke_info and _taobaoke_info.has_key('click_url'):
+            MobileLogTask.delay(
+                entry=_entry,
+                duration = _duration.seconds * 1000000 + _duration.microseconds, 
+                view = 'CLICK', 
+                request = request.REQUEST, 
+                ip = get_client_ip(request), 
+                log_time = datetime.datetime.now(),
+                request_user_id = _request_user_id,
+                appendix = {
+                    'site' : 'taobao',
+                    'taobao_id' : _item_context['taobao_id'],
+                    'item_id' : _item_context['item_id'], 
+                    'entity_id' : _entity_id,
+                    'tbk' : True,
+                }
+            )
+            return HttpResponseRedirect(decorate_taobao_url(_taobaoke_info['click_url'], _ttid, _sid, _outer_code, _sche))
+        
+        MobileLogTask.delay(
+            entry=_entry,
+            duration=_duration.seconds * 1000000 + _duration.microseconds, 
+            view='CLICK', 
+            request=request.REQUEST, 
+            ip=get_client_ip(request), 
+            log_time=datetime.datetime.now(),
+            request_user_id=_request_user_id,
+            appendix={
+                'site': 'taobao',
+                'taobao_id': _item_context['taobao_id'],
+                'item_id' : _item_context['item_id'], 
                 'entity_id': _entity_id,
                 'tbk': False,
             }

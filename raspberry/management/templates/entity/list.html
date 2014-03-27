@@ -87,7 +87,7 @@
                     </a>
                 </li>
                 <li{%if status_filter == "novus"%} class="active"{%endif%}>
-                    <a href="{% url 'management_entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=novus">
+                    <a href="{% url 'management_entity_list' %}?{%if category_context != None %}cid={{category_context.category_id}}&{%endif%}status=novus&sort_by=novus_time">
                         新品({{ novus_entity_count }}) 
                     </a>
                 </li>
@@ -129,6 +129,9 @@
                 </li>
                 <li {% if sort_by == "rank_score" and reverse == False %}class="active"{% endif %}>
                     <a href="javascript:;" id="rank-score-order">rank降序</a>
+                </li>
+                <li {% if sort_by == "novus_time" and reverse == False %}class="active"{% endif %}>
+                    <a href="javascript:;" id="novus-time-order">新品时间降序</a>
                 </li>
             </ul>
         </div>
@@ -194,6 +197,9 @@
             });
             sortButtons.eq(7).click(function () {
                 sort("rank_score", 0);
+            });
+            sortButtons.eq(8).click(function () {
+                sort("novus_time", 0);
             });
 
             function sort(type, order) {

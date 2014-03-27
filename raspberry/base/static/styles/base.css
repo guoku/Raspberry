@@ -1,5 +1,10 @@
+html{
+    width: 100%;
+    height: 100%;
+}
 body {
-    color: #999;
+    height: 100%;
+    color: #666;
     background-color: #fff;
     font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -12,11 +17,9 @@ a {
     text-decoration: none;
     color: inherit;
 }
-
-a:hover {
-    text-decoration: underline;
+.clear{
+    clear: both;
 }
-
 /*-----------------------------------------------------*/
 .clearfix:before, .clearfix:after {
     content: " ";
@@ -28,7 +31,7 @@ button {
     display: inline-block;
     padding: 8px 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 3px;
     color: #fff;
     outline: none;
 }
@@ -38,7 +41,7 @@ button {
     -moz-user-select: none;
     display: inline-block;
     background-image: none;
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 3px;
     font-size: 18px;
     font-weight: 400;
     padding: 6px;
@@ -58,11 +61,12 @@ button {
     border-color: #357ebd;
     color: #FFFFFF;
     font-size: 20px;
-    width: 130px;
+    width: 124px;
     height: 28px;
-    padding: 6px 6px 6px 0;
+    padding: 6px;
     text-align: center;
     vertical-align: middle;
+    line-height: 1.3;
 }
 
 .btn-update {
@@ -71,7 +75,7 @@ button {
     /*border-color: #357ebd;*/
     width: 115px;
     height: 30px;
-    margin: 5px;
+    margin: 5px 115px;
     /*padding: 5px;*/
     font-size: 14px;
     color: #FFFFFF;
@@ -90,16 +94,58 @@ button {
     font-weight: 400;
     padding: 6px 0 6px 0;
 }
+.btn-go{
+    color: #FFF;
+    background: #427ec0;
+    padding: 5px 14px;
+    display: inline-block;
+    font-size: 13px;
+    text-align: center;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: 0;
+    /*text-align: center;*/
+    vertical-align: middle;
+    line-height: 17px;
+}
+.btn-next {
+    /*float: right;*/
+    background-color: #427ec0;
+    border-color: #357ebd;
+    color: #FFFFFF;
+    font-size: 14px;
+    width: 80px;
+    height: 28px;
+    padding: 6px 6px 6px 0;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: 280px;
+}
 /*---------------------------------*/
-
+/*--------- overlay ----------------*/
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: #FFFFFF;
+    opacity: 0.85;
+    width: 100%;
+}
+.overlay-open {
+    overflow: hidden;
+}
+/*--------------------------------*/
 /*------------ message ---------------*/
 .message {
-    border-radius: 4px;
+    border-radius: 3px;
     background: #fffed2;
     /*height: 40px;*/
     width: 315px;
     padding: 15px;
-    margin: 30px auto;
+    margin: 30px 0;
     font-size: 14px;
     text-align: center;
 }
@@ -108,8 +154,20 @@ button {
 
 .control-group {
     width: 445px;
-    margin: 0 200px 15px auto;
+    margin: 0 auto 15px auto;
     /*margin-bottom: 15px;*/
+}
+
+.error-info {
+    /*margin-left: 10px;*/
+    display: inline-block;
+    position: absolute;
+    border: 1px solid #dedede;
+    padding: 5px 6px;
+    font-size: 14px;
+    color: #999;
+    height: 40px;
+    background: #ffc;
 }
 
 /*---------------- header --------------------*/
@@ -142,7 +200,6 @@ button {
     left: 0;
     top: 9px;
 }
-
 
 #header .nav-bar {
     /*float: left;*/
@@ -190,6 +247,9 @@ button {
     /*width: 22px;*/
     /*height: 22px;*/
 }
+#header .nav-bar a:hover{
+    color:#fff;
+}
 #header .nav-bar .add-entity a:hover {
     background-position: -247px -82px;
 }
@@ -226,7 +286,6 @@ button {
 #header .user li a {
     display: block;
     text-decoration: none;
-    text-align: center;
     line-height: 49px;
     padding: 0 6px;
 }
@@ -239,7 +298,7 @@ button {
     height: 49px;
     line-height: 0;
     vertical-align: middle;
-    padding: 0 30px;
+    padding-right: 40px;
 }
 #header .user img {
     border-radius: 50%;
@@ -247,15 +306,15 @@ button {
 #header .user li .icon-menu {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 10px;
     margin: 12px 0;
-    background-position: -32px -40px;
+    background-position: -92px -81px;
 }
 #header .user .menu {
     position: absolute;
     margin: 0;
     padding: 0;
-    right: 0;
+    right: 15px;
     border-left: 1px solid rgba(0, 0, 0, 0.15);
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -263,8 +322,8 @@ button {
     float: none;
     padding: 0;
     margin: 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-    height: 45px;
+    border-bottom: 1px solid #ddd;
+    height: 50px;
     width: 135px;
 }
 /*.icon-guoku, .icon-setting, .icon-setting   {*/
@@ -285,13 +344,14 @@ button {
 #header .user .menu li a {
     display: block;
     background-color: #FFFFFF;
-    text-align: right;
-    line-height: 45px;
+    line-height: 50px;
     text-decoration: none;
-    padding-right: 30px;
+    padding-left: 50px;
+    color: #666666;
 }
 #header .user .menu li a:hover {
-    background-color: #f8f8f8;
+    background-color: #eee;
+    color: #222222;
 }
 #header .user li ul {
     display: none;
@@ -306,20 +366,18 @@ button {
     top: 0;
     right: 135px;
     height: 49px;
-    line-height: 49px;
 }
 
 #header .search {
     width: 145px;
-    height: 30px;
     /*line-height: 30px;*/
-    margin: 9px 0;
     /*padding: 10px 0;*/
-    padding: 0 5px;
+    padding: 6px 5px 8px 5px;
+    /*padding: 0 5px;*/
     border: none;
     outline: 0;
     /*color: #eee;*/
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 3px;
     background: #fbfbfb;
     /*background-color: rgba(220, 220, 220, 0.95);*/
     /*background-color: #FFFFFF;*/
@@ -438,9 +496,8 @@ button {
     left: 50%;
     margin-left: -267px;
     width: 515px;
-    height: 605px;
-    border-radius: 5px;
-    
+    /*height: 500px;*/
+    border-radius: 3px;
 }
 .border_hack{
     z-index: 100000;
@@ -455,30 +512,11 @@ button {
     margin: 10px;
     padding-bottom: 20px;
 }
-
-/*.account-form .tip {*/
-    /*display: block;*/
-    /*width: 515px;*/
-    /*height: 125px;*/
-    /*background-color: #fbfbfb;*/
-    /*margin-bottom: 55px;*/
-    /*text-align: center;*/
-    /*vertical-align: bottom;*/
-/*}*/
-
-/*.account-form .tip img{*/
-    /*display: block;*/
-    /*margin-top: 30px;*/
-    /*margin-left: 175px;*/
-    /*width: 165px;*/
-    /*height: 90px;*/
-    /*background-color: #fbfbfb;*/
-/*}*/
-
 .account-form .text-input {
-    display: block;
+    display: inline-block;
     width: 243px;
-    margin: 0 auto 15px;
+    /*margin: 0 auto 15px;*/
+    margin: 0 10px 0 95px;
     padding: 10px 5px;
     height: 30px;
     line-height: 30px;
@@ -561,14 +599,10 @@ button {
     background-position: -98px -42px;
 }
 
-.login .tip img {
-    margin-top: 35px;
-}
-
 .login .remember {
     position: relative;
     width: 255px;
-    margin: 15px auto 40px;
+    margin: 15px auto 25px;
 }
 
 .login .remember input {
@@ -594,25 +628,26 @@ button {
 
 .login .to-reg {
     text-align: center;
-    margin-top: 70px;
+    margin: 10px auto 30px;
+    /*margin-top: 30px;*/
+    /*margin-bottom: 20px;*/
     color: #427ec0;
 }
 .register .tip {
     display: block;
-    width: 535px;
     background-color: #fbfbfb;
     margin-bottom: 55px;
     text-align: center;
 }
 
-.register .tip img {
-    margin: 35px 0px 10px 0px;
+.register .tip img,.login .tip img {
+    margin: 11px 0 0 0;
 }
 
 .register .agreement {
     display: block;
     width: 255px;
-    margin: 15px auto 40px;
+    margin: 15px auto 25px;
 }
 
 .register .agreement input {
@@ -620,7 +655,8 @@ button {
 }
 
 .register .to-login {
-    margin-top: 30px;
+    /*margin-top: 30px;*/
+    margin: 30px 0;
     text-align: center;
 }
 
@@ -723,21 +759,23 @@ button {
 
 .common-entity .entity-img {
     display: table-cell;
-    width: 210px;
-    height: 210px;
+    width: 208px;
+    height: 208px;
     text-align: center;
     vertical-align: middle;
     border-bottom: 1px solid #eee;
 }
 
 .common-entity .entity-img img {
+    margin: auto;
     max-width: 208px;
-    max-height: 210px;
+    max-height: 208px;
+    vertical-align: middle;
 }
 
 .common-entity .detail {
     position: relative;
-    margin: 15px 10px 0;
+    margin: 12px 10px 0;
 }
 
 .common-entity .detail .like {
@@ -770,7 +808,9 @@ button {
     padding: 30px 15px;
     border-bottom: 1px solid #eee;
     background-color: #fbfbfb;
-    background-color: rgba(251, 251, 251, .95);
+    background-color: rgba(251, 251, 251);
+    opacity: 0.95;
+    filter:alpha(opacity=95);
     font-size: 16px;
 }
 
@@ -822,7 +862,6 @@ button {
     margin: 0;
     padding: 0;
     line-height: 1.5;
-    color: #888;
 }
 
 .common-note .like {
@@ -870,7 +909,7 @@ button {
     margin: 0 0 0 15px;
 }
 
-.common-tag .entities {
+.common-tag .tag-entities {
     height: 210px;
 }
 
@@ -889,6 +928,10 @@ button {
     /*width: auto;*/
 }
 
+.entity_already_exist{
+    margin-top: 20px;
+    display: none;
+}
 .common-tag .more {
     display: block;
     font-size: 14px;
@@ -900,7 +943,7 @@ button {
 
 /*common user-------------------------------------------------------------*/
 .common-user {
-    display: inline-block;
+    float: left;
     width: 208px;
     height: 368px;
     margin: 0 30px 30px 0;
@@ -925,8 +968,12 @@ button {
 
 .common-user .stat {
     position: relative;
-    width: 150px;
+    width: 130px;
     margin: 16px auto;
+}
+
+.common-user .stat strong{
+    margin-right: 3px;
 }
 
 .common-user .stat .follows {
@@ -947,7 +994,7 @@ button {
     width: 80px;
     padding: 2px 15px 2px 10px;
     border: 1px solid #eee;
-    border-radius: 4px;
+    border-radius: 3px;
     text-decoration: none;
 }
 
@@ -1015,8 +1062,13 @@ button {
 #forget_sendmail{
     height: 40px;
     font-weight: 700;
-    border-radius: 2px;
-    margin:30px 0 0 94px;
+    border-radius: 3px;
+    margin:30px 0px 0px 94px;
+}
+#reset_password{
+    height: 40px;
+    font-weight: 700;
+    margin: 30px 0px 0px 110px;
 }
 .forget_tip{
     font-size: 20px;
@@ -1036,12 +1088,12 @@ button {
 .forget_input:hover,.forget_input:focus{
     border:1px solid #ddd;
 }
-.password input[type='submit']{
-    height: 40px;
-    font-weight: 700;
-    border-radius: 2px;
-    margin:30px 0 0 94px;
-}
+/*.password input[type='submit']{*/
+    /*height: 40px;*/
+    /*font-weight: 700;*/
+    /*border-radius: 2px;*/
+    /*margin:30px 0 0 94px;*/
+/*}*/
 .forget_input_tip{
     display: none;
     padding-left:40px; 
@@ -1052,7 +1104,7 @@ button {
 /* tag */
 a.tag {color:#0084B4 !important;}
 a.tag:hover {text-decoration:underline;}
-.tag-auto-complete {position:absolute;background:#fff;border:1px solid #DEDEDE;font-size:13px;z-index:999;top:0;left:0;min-width:152px}
+.tag-auto-complete {position:relative;background:#fff;border:1px solid #DEDEDE;font-size:13px;z-index:999;top:0;left:0;min-width:152px}
 .tag-auto-complete span {color:#BBBBBB;line-height:24px;padding:0 10px;}
 .tag-auto-complete p {color:#666666;line-height:24px;padding:0 10px;margin:0;cursor:pointer;}
 .tag-auto-complete p.hover {background:#F1F1F1;}

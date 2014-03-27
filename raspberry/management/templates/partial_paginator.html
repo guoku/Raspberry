@@ -4,7 +4,7 @@
     <div class="pagination">
         <ul>
             {% if paginator.has_previous %}
-                <li><a href="?{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}p={{ paginator.previous_page_number }}">&lt; 上一页</a></li>
+                <li><a href="?p={{ paginator.previous_page_number }}{%if paginator.parameter != None %}{{paginator.parameter}}{%endif%}">&lt; 上一页</a></li>
             {% endif %}
     
             {% if paginator.need_left_abbr %}

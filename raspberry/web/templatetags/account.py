@@ -13,9 +13,11 @@ def display_avatar_update(user_context):
 
 register.inclusion_tag("account/partial/avatar_update.html")(display_avatar_update)
 
-def show_auth_user(user_id):
+def show_auth_user(user_id, is_staff=False):
     _user_context = User(user_id).read()
     return {
-        'user_context':_user_context,
+        'user_context' : _user_context,
+        'is_staff' : is_staff
+
     }
 register.inclusion_tag("account/partial/auth.html")(show_auth_user)
