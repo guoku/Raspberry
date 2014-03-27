@@ -693,7 +693,7 @@ function initTag(){
                             $poke.addClass('poked');
 
                             if (count === 1) {
-                                $('<small>' + count + '</small>').appendTo($this);
+                                $('<small class="count_blue">' + count + '</small>').appendTo($this);
                             }
                         } else if (result === 0) {
                             count--;
