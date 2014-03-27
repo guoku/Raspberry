@@ -238,11 +238,6 @@ def edit_entity(request, entity_id):
         _title = request.POST.get("title", None)
         _intro = request.POST.get("intro", None)
         _price = request.POST.get("price", None)
-        _reset_created_time = request.POST.get("reset_created_time", "off")
-        if _reset_created_time == "on":
-            _reset_created_time = True
-        else:
-            _reset_created_time = False
         _weight = int(request.POST.get("weight", '0'))
         _mark = int(request.POST.get("mark", '0'))
         _chief_image_id = request.POST.get("chief_image", None)
@@ -256,16 +251,15 @@ def edit_entity(request, entity_id):
             _old_category_id = int(_old_category_id)
         _entity = Entity(entity_id)
         _entity.update(
-            category_id = _category_id,
-            old_category_id = _old_category_id,
-            brand = _brand,
-            title = _title,
-            intro = _intro,
-            price = _price,
-            chief_image_id = _chief_image_id,
-            weight = _weight,
-            mark = _mark,
-            reset_created_time = _reset_created_time
+            category_id=_category_id,
+            old_category_id=_old_category_id,
+            brand=_brand,
+            title=_title,
+            intro=_intro,
+            price=_price,
+            chief_image_id=_chief_image_id,
+            weight=_weight,
+            mark=_mark,
         )
 
         _note = request.POST.get("note", None)
@@ -359,10 +353,10 @@ def entity_list(request):
         
         
         _category_groups = Category.allgroups()
-        _select_entity_count = Entity.count(category_id = _category_id, status = 'select') 
-        _novus_entity_count = Entity.count(category_id = _category_id, status = 'novus') 
-        _freeze_entity_count = Entity.count(category_id = _category_id, status = 'freeze')
-        _recycle_entity_count = Entity.count(category_id = _category_id, status = 'recycle')
+        _select_entity_count = Entity.count(category_id=_category_id, status='select') 
+        _novus_entity_count = Entity.count(category_id=_category_id, status='novus') 
+        _freeze_entity_count = Entity.count(category_id=_category_id, status='freeze')
+        _recycle_entity_count = Entity.count(category_id=_category_id, status='recycle')
         
         _sort_by = request.GET.get("sort_by", "time")
         _reverse = request.GET.get("reverse", None)
@@ -382,25 +376,25 @@ def entity_list(request):
         if _sort_by == 'random':
             _paginator = None
             _entity_id_list = Entity.random(
-                status = _status,
-                count = 30
+                status=_status,
+                count=30
             )
         else:
             _paginator = Paginator(_page_num, 30, _entity_count, _para)
 
             _entity_id_list = Entity.find(
-                category_id = _category_id,
-                status = _status,
-                offset = _paginator.offset,
-                count = _paginator.count_in_one_page,
-                sort_by = _sort_by,
-                reverse = _reverse
+                category_id=_category_id,
+                status=_status,
+                offset=_paginator.offset,
+                count=_paginator.count_in_one_page,
+                sort_by=_sort_by,
+                reverse=_reverse
             )
         
         _entity_context_list = []
         _category_title_dict = Category.get_category_title_dict()
         for _entity_id in _entity_id_list:
-            # try:
+            try:
                 _entity = Entity(_entity_id)
                 _entity_context = _entity.read()
                 _entity_context['category_title'] = _category_title_dict[_entity_context['category_id']]
@@ -434,8 +428,8 @@ def entity_list(request):
                             _entity_context['is_selected'] = True
                             break
                 _entity_context_list.append(_entity_context)
-            # except Exception, e:
-            #     pass
+            except Exception, e:
+                pass
         
         return render_to_response( 
             'entity/list.html', 
