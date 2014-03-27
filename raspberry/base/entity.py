@@ -96,31 +96,30 @@ class Entity(object):
     def __insert_taobao_item(self, taobao_item_info, images):
         _weight = taobao_item_info['weight'] if taobao_item_info.has_key('weight') else 0 
         _taobao_item = Item.create_taobao_item( 
-            entity_id = self.entity_id,
-            images = images,
-            taobao_id = taobao_item_info["taobao_id"],
-            cid = taobao_item_info["cid"],
-            title = taobao_item_info["title"],
-            shop_nick = taobao_item_info["shop_nick"], 
-            price = taobao_item_info["price"], 
-            soldout = taobao_item_info["soldout"],
-            weight = _weight,
+            entity_id=self.entity_id,
+            images=images,
+            taobao_id=taobao_item_info["taobao_id"],
+            cid=taobao_item_info["cid"],
+            title=taobao_item_info["title"],
+            shop_nick=taobao_item_info["shop_nick"], 
+            price=taobao_item_info["price"], 
+            soldout=taobao_item_info["soldout"],
+            weight=_weight,
         )
         return _taobao_item.item_id
 
     def __insert_jd_item(self, jd_item_info, images):
         _weight = jd_item_info['weight'] if jd_item_info.has_key('weight') else 0
-        print self.entity_id , 'entity_id'
         _jd_item = JDItem.create_jd_item(
-            entity_id = self.entity_id,
-            images = images,
-            jd_id = jd_item_info['jd_id'],
-            cid = jd_item_info['cid'],
-            title = jd_item_info['title'],
-            shop_nick = jd_item_info['shop_nick'],
-            price = jd_item_info['price'],
-            soldout = jd_item_info['soldout'],
-            weight = _weight,
+            entity_id=self.entity_id,
+            images=images,
+            jd_id=jd_item_info['jd_id'],
+            cid=jd_item_info['cid'],
+            title=jd_item_info['title'],
+            shop_nick=jd_item_info['shop_nick'],
+            price=jd_item_info['price'],
+            soldout=jd_item_info['soldout'],
+            weight=_weight,
         )
         return _jd_item.item_id
 
@@ -217,18 +216,18 @@ class Entity(object):
                 _old_category_id = 12
                 
             _entity_obj = EntityModel.objects.create( 
-                entity_hash = _entity_hash,
-                creator_id = creator_id,
-                category_id = _old_category_id,
-                neo_category_id = category_id,
-                brand = brand,
-                title = title,
-                intro = intro,
-                price = taobao_item_info["price"], 
-                chief_image = _chief_image_id,
-                detail_images = "#".join(_detail_image_ids),
-                weight = weight,
-                rank_score = rank_score
+                entity_hash=_entity_hash,
+                creator_id=creator_id,
+                category_id=_old_category_id,
+                neo_category_id=category_id,
+                brand=brand,
+                title=title,
+                intro=intro,
+                price=taobao_item_info["price"], 
+                chief_image=_chief_image_id,
+                detail_images="#".join(_detail_image_ids),
+                weight=weight,
+                rank_score=rank_score
             )
             
             try:

@@ -247,13 +247,15 @@ def user_followings(request, user_id, template=TEMPLATE):
     _following_id_list = _query_user.read_following_user_id_list()
     _total_count = len(_following_id_list)
 
-    _paginator = Paginator(_page_num, 20, len(_following_id_list))
+    _paginator = Paginator(_page_num, 8, len(_following_id_list))
     _following_list = []
     for _u_id in _following_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         try:
-            _f_user_context = User(_u_id).read()
+            _f_user = User(_u_id)
+            _f_user_context = _f_user.read()
             if _request_user_context != None:
                 _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
+            _f_user_context['latest_like_entity_id_list'] = _f_user.read_latest_like_entity_list() 
             _following_list.append(_f_user_context)
         except Exception, e:
             pass
@@ -300,14 +302,19 @@ def user_fans(request, user_id, template=TEMPLATE):
 
     _page_num = request.GET.get('p', 1)
     _fans_id_list = _query_user.read_fan_user_id_list()
-    _paginator = Paginator(_page_num, 20, len(_fans_id_list))
+    _paginator = Paginator(_page_num, 8, len(_fans_id_list))
 
     _fans_list = []
     for _u_id in _fans_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
-        _f_user_context = User(_u_id).read()
-        if _request_user_context != None:
-            _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
-        _fans_list.append(_f_user_context)
+        try:
+            _f_user = User(_u_id)
+            _f_user_context = _f_user.read()
+            if _request_user_context != None:
+                _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
+            _f_user_context['latest_like_entity_id_list'] = _f_user.read_latest_like_entity_list() 
+            _fans_list.append(_f_user_context)
+        except Exception, e:
+            pass
     
     _duration = datetime.datetime.now() - _start_at
     WebLogTask.delay(
