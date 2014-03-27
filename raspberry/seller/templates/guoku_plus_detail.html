@@ -3,47 +3,6 @@
     果库卖家
 {% endblock %}
 {% block content %}
-    <div class="span10">
-        <img src="{{ guoku_plus_context.entity_context.chief_image.url }}" width="200"/>
-        <p>{{ guoku_plus_context.item_context.title }}</p>
-        <p>{{ guoku_plus_context.sale_price }}</p>
-        <p>共{{ guoku_plus_context.total_volume }} 件</p>
-        <p>{{ guoku_plus_context.status }}</p>
-        </p>已售出{{guoku_plus_context.sales_volume}}件</p>
-        <p> 开始日期 {{guoku_plus_context.start_time | date:'Y-m-d H:i'}}</p>
-        <p> 结束日期 {{guoku_plus_context.end_time | date:'Y-m-d H:i'}}</p>
-
-        <div>
-            销售情况
-            <p>已发出{{token_count}}个优惠码</p>
-            <p>其中{{used_token_count}} 个已使用</p>
-            <table>
-                <th>使用时间</th>
-                <th>购买者</th>
-                <th>优惠码</th>
-                <th>购买数量</th>
-                {% for token in used_token_list %}
-                    <tr>
-                        <td>
-                            {{ token.used_time | date:'Y-m-d H:i'}}
-                        </td>
-                        <td>
-                           <img src="{{token.user_context.avatar_large}}" width="80"/> {{ token.user_context.nickname }}
-                        </td>
-                        <td>
-                            {{ token.token}}
-                        </td>
-                        <td>
-                            {{ token.quantity }}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </div>
-    
-    
-    
     <div class="row">
             <div class="col-md-3">
                 <div class="affix">
@@ -73,7 +32,7 @@
                 <div class="well" style="width:400px;">
                     <div style="">
                         <a class="thumbnail">
-                        <img alt="64x64" src="http://gw2.alicdn.com/bao/uploaded/i3/T10I1QFvFeXXXXXXXX_!!0-item_pic.jpg_480x480.jpg" style="width: 200px; height: 200px;"></a>
+                        <img alt="64x64" src="{{ guoku_plus_context.entity_context.chief_image.url }}" style="width: 200px; height: 200px;"></a>
                     </div>
                     <div>
                         <h5>{{ guoku_plus_context.item_context_title }}</h5>
@@ -83,11 +42,13 @@
                         <h5>
                         <span class="label label-primary">进行中</span>
                         </h5>
-                        <p>已售出 <span class="badge">{{ guoku_plus_context.sales_volume }}</span><br> 结束日期：{{ guoku_plus_context.end_time | date:'Y-m-d H:i' }}</p>
+                        <p>已售出 <span class="badge">{{ guoku_plus_context.sales_volume }}</span></p>
+                        <p>开始日期 {{guoku_plus_context.start_time | date:'Y-m-d H:i'}}</p>
+                        <p>结束日期：{{ guoku_plus_context.end_time | date:'Y-m-d H:i' }}</p>
                 </div>
                 <div class="bs-docs-section">
                     <div class="page-header">
-                        <h3 id="js-overview">销售情况  <small>成交 2 件 | 已放出 20 个优惠码</small></h3>
+                        <h3 id="js-overview">销售情况  <small>成交 {{guoku_plus_context.sales_volume}} 件 | 已放出 {{ token_count }} 个优惠码</small></h3>
                     </div>
                     <div class="bs-example bs-example-tabs">
                         <div id="myTabContent" class="tab-content">
