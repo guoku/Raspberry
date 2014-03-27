@@ -46,11 +46,15 @@
     color: #666;
 }
 
+.setting-tip{
+    position: relative;
+    top:-2px;
+}
 .setting-icon{
     width: 20px;
     height: 17px;
     position: relative;
-    top:3px;
+    top:1px;
     display: inline-block;
     background: url("/static/v3/images/toolkit.png") -142px -270px;
 }

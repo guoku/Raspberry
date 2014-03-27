@@ -43,6 +43,8 @@ def top(array, count):
 register.filter(top)
 
 def date_format(value):
+    if value == None:
+        return 'None'
     return "%d-%d-%d %d:%d:%d"%(value.year, value.month, value.day, value.hour, value.minute, value.second)  
 register.filter(date_format)
 

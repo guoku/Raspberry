@@ -3,8 +3,9 @@
 {% load selection %}
 
 {% block title %}
-    {% trans "selection" %}
+    精选新鲜, 与优质商品不期而遇
     {% block subtitle %}
+        {% trans "selection" %}
         {% for category in category_list %}
             {% if category.category_id == curr_category_id %}
                 - {{ category.category_title }}

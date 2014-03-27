@@ -78,6 +78,10 @@ class Entity(object):
     def __ensure_entity_obj(self):
         if not hasattr(self, 'entity_obj'):
             self.entity_obj = EntityModel.objects.get(pk = self.entity_id)
+    
+    def __get_next_novus_time(self):
+        _obj = EntityModel.objects.order_by('-novus_time')[0:1].get()
+        return _obj.novus_time + datetime.timedelta(minutes=20)
 
     @classmethod
     def cal_entity_hash(cls, entity_hash_string):
@@ -357,6 +361,7 @@ class Entity(object):
             _basic_info['like_count'] = self.entity_obj.like_count 
             _basic_info["created_time"] = self.entity_obj.created_time
             _basic_info["updated_time"] = self.entity_obj.updated_time
+            _basic_info["novus_time"] = self.entity_obj.novus_time
             _basic_info["weight"] = self.entity_obj.weight
             _basic_info["mark_value"] = self.entity_obj.mark
             _basic_info["mark"] = Entity.Mark.get_title(self.entity_obj.mark)
@@ -428,6 +433,8 @@ class Entity(object):
             _context['price'] = unicode(_context['price'])
             _context['created_time'] = time.mktime(_context['created_time'].timetuple())
             _context['updated_time'] = time.mktime(_context['updated_time'].timetuple())
+            if _context['novus_time'] != None:
+                _context['novus_time'] = time.mktime(_context['novus_time'].timetuple())
         _context.update(self.__read_item_info())
         _context.update(self.__read_note_info())
 
@@ -440,7 +447,8 @@ class Entity(object):
 
         # TODO: removing entity_id in item
     
-    def update(self, category_id=None, old_category_id=None, brand=None, title=None, intro=None, price=None, chief_image_id=None, weight=None, mark=None, rank_score=None, reset_created_time=False):
+    def update(self, category_id=None, old_category_id=None, brand=None, title=None, intro=None, price=None, 
+               chief_image_id=None, weight=None, mark=None, rank_score=None):
         
         self.__ensure_entity_obj()
         if brand != None:
@@ -461,7 +469,7 @@ class Entity(object):
             self.entity_obj.rank_score = int(rank_score)
         if mark != None:
             self.entity_obj.mark = int(mark)
-        
+
         if chief_image_id != None and chief_image_id != self.entity_obj.chief_image:
             _detail_image_ids = self.entity_obj.detail_images.split('#')
             if chief_image_id in _detail_image_ids:
@@ -470,11 +478,14 @@ class Entity(object):
                 _detail_image_ids.insert(0, self.entity_obj.chief_image)
             self.entity_obj.detail_images =  "#".join(_detail_image_ids)
             self.entity_obj.chief_image = chief_image_id
+
+        if self.entity_obj.weight == 0:
+            if self.entity_obj.novus_time == None:
+                self.entity_obj.novus_time = self.__get_next_novus_time()
+        else:
+            if self.entity_obj.novus_time != None:
+                self.entity_obj.novus_time = None 
         
-        if reset_created_time == True:
-            self.entity_obj.created_time = datetime.datetime.now()
-
-
         self.entity_obj.save()
         _basic_info = self.__load_basic_info_from_cache()
         if _basic_info != None:
@@ -492,7 +503,7 @@ class Entity(object):
             _hdl = _hdl.filter(weight__gt = 0)
         elif status == 'novus':
             _sql_query += '=0'
-            _hdl = _hdl.filter(weight = 0)
+            _hdl = _hdl.filter(novus_time__isnull=False)
         elif status == 'freeze':
             _sql_query += '=-1'
             _hdl = _hdl.filter(weight = -1)
@@ -517,33 +528,31 @@ class Entity(object):
 
 
     @classmethod
-    def find(cls, root_old_category_id = None, category_id = None, 
-                  like_word = None, timestamp = None, status = None, 
-                  offset = None, count = 30, 
-                  sort_by = None, reverse = False):
+    def find(cls, root_old_category_id=None, category_id=None, like_word=None, timestamp=None, status=None, 
+             offset=None, count=30, sort_by=None, reverse=False):
         
         _hdl = EntityModel.objects.all()
         
         if root_old_category_id != None and root_old_category_id >= 1 and root_old_category_id <= 11:
-            _hdl = _hdl.filter(category__pid = root_old_category_id)
+            _hdl = _hdl.filter(category__pid=root_old_category_id)
         
         if category_id != None:
-            _hdl = _hdl.filter(neo_category_id = category_id)
+            _hdl = _hdl.filter(neo_category_id=category_id)
         
         if like_word != None: 
-            _q = Q(title__icontains = like_word)
+            _q = Q(title__icontains=like_word)
             _hdl = _hdl.filter(_q)
         
         if status == 'recycle':
-            _hdl = _hdl.filter(weight = -2)
+            _hdl = _hdl.filter(weight=-2)
         elif status == 'freeze':
-            _hdl = _hdl.filter(weight = -1)
+            _hdl = _hdl.filter(weight=-1)
         elif status == 'novus':
-            _hdl = _hdl.filter(weight = 0)
+            _hdl = _hdl.filter(novus_time__isnull=False)
         elif status == 'select':
-            _hdl = _hdl.filter(weight__gt = 0)
+            _hdl = _hdl.filter(weight__gt=0)
         elif status == 'normal':
-            _hdl = _hdl.filter(weight__gte = 0)
+            _hdl = _hdl.filter(weight__gte=0)
 
         ########## Magic Code for NOVUS editor ##############
 
@@ -555,7 +564,7 @@ class Entity(object):
 
         
         if timestamp != None:
-            _hdl = _hdl.filter(updated_time__lt = timestamp)
+            _hdl = _hdl.filter(novus_time__lt=timestamp)
        
         if sort_by == 'price':
             if reverse:
@@ -582,6 +591,11 @@ class Entity(object):
                 _hdl = _hdl.order_by('updated_time')
             else:
                 _hdl = _hdl.order_by('-updated_time')
+        elif sort_by == 'novus_time':
+            if reverse:
+                _hdl = _hdl.order_by('novus_time')
+            else:
+                _hdl = _hdl.order_by('-novus_time')
         elif sort_by == 'rank_score':
             if reverse:
                 _hdl = _hdl.order_by('rank_score')
@@ -589,8 +603,7 @@ class Entity(object):
                 _hdl = _hdl.order_by('-rank_score')
         else:
             _hdl = _hdl.order_by('-weight', '-like_count')
-             
-        
+            
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
         
@@ -842,9 +855,12 @@ class Entity(object):
                     neo_category_id = self.entity_obj.neo_category_id, 
                 )
                 _doc.save()
-                
+               
+                _weight = None 
                 if self.entity_obj.weight <= 0:
-                    self.update(weight = 1)
+                    self.update(
+                        weight=1,
+                    )
                
                 _note_context = _note.read()
                 CreateNoteSelectionMessageTask.delay(

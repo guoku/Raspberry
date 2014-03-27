@@ -266,6 +266,65 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
         context_instance=RequestContext(request)
     )
 
+def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
+    _start_at = datetime.datetime.now()
+    if request.user.is_authenticated():
+        _request_user_id = request.user.id
+    else:
+        _request_user_id = None 
+    
+    _entity_id = int(entity_id) 
+    _entity_context = Entity(_entity_id).read()
+    
+    _is_soldout = True
+    _taobao_id = None
+    for _item_id in Item.find(entity_id=_entity_id):
+        _item_context = Item(_item_id).read()
+        _taobao_id = _item_context['taobao_id']
+        if not _item_context['soldout']:
+            _is_soldout = False
+            break
+    
+    _note_list = []
+    for _note_id in Note.find(entity_id=_entity_id, reverse=True):
+        _note = Note(_note_id)
+        _note_context = _note.read()
+        if _note_context['weight'] >= 0:
+            _creator_context = User(_note_context['creator_id']).read()
+            _note_list.append({
+                'note_context' : _note_context,
+                'creator_context' : _creator_context,
+            })
+    
+    _liker_list = []
+    for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
+        _liker_list.append(User(_liker[0]).read())
+    
+    _duration = datetime.datetime.now() - _start_at
+    WebLogTask.delay(
+        duration=_duration.seconds * 1000000 + _duration.microseconds,
+        entry='wechat',
+        page='ENTITY', 
+        request=request.REQUEST, 
+        ip=get_client_ip(request), 
+        log_time=datetime.datetime.now(),
+        request_user_id=_request_user_id,
+        appendix={ 
+            'entity_id' : int(_entity_id),
+        },
+    )
+
+    return render_to_response(
+        template,
+        {
+            'entity_context' : _entity_context,
+            'note_list' : _note_list,
+            'liker_list' : _liker_list,
+            'buy_link' : _item_context['buy_link'],
+        },
+        context_instance=RequestContext(request)
+    )
+
 def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
     _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
@@ -471,10 +530,10 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
             _detail_image_urls.remove(_chief_image_url)
         
         _entity = Entity.create_by_taobao_item(
-            creator_id = request.user.id,
-            category_id = _category_id,
-            chief_image_url = _chief_image_url,
-            taobao_item_info = {
+            creator_id=request.user.id,
+            category_id=_category_id,
+            chief_image_url=_chief_image_url,
+            taobao_item_info={
                 'taobao_id' : _taobao_id,
                 'cid' : _cid,
                 'title' : _taobao_title,
@@ -482,10 +541,11 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
                 'price' : _taobao_price,
                 'soldout' : False,
             },
-            brand = _brand,
-            title = _title,
-            intro = _intro,
-            detail_image_urls = _detail_image_urls,
+            brand=_brand,
+            title=_title,
+            intro=_intro,
+            detail_image_urls=_detail_image_urls,
+            weight=-1
         )
 
         _note = _entity.add_note(creator_id=_user_id, note_text=_note_text)
@@ -539,14 +599,17 @@ def create_jd_entity(request, template):
 
 @login_required
 def like_entity(request, entity_id, target_status):
-    if request.method == 'POST':
-        _request_user_id = request.user.id
-        if target_status == '1':
-            LikeEntityTask.delay(entity_id, _request_user_id)
-            return HttpResponse('1')
-        else:
-            UnlikeEntityTask.delay(entity_id, _request_user_id)
-            return HttpResponse('0')
+    if request.is_ajax():
+        if request.method == 'POST':
+            _request_user_id = request.user.id
+            if target_status == '1':
+                LikeEntityTask.delay(entity_id, _request_user_id)
+                return HttpResponse('1')
+            else:
+                UnlikeEntityTask.delay(entity_id, _request_user_id)
+                return HttpResponse('0')
+    else:
+        raise Http404
 
 
 
