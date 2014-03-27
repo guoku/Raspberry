@@ -412,7 +412,7 @@ def jd_info(request, _cand_url):
         #TODO：进行京东类目转换
         #TODO :先用一个cid暂时使用着先
         cid = 1512
-        _selected_category_id = Category.get_category_by_taobao_cid(1512)
+        _selected_category_id = Category.get_category_by_taobao_cid('1512')
         _data = {
             'user_context' : User(request.user.id).read(),
             'cand_url' : _cand_url,
@@ -725,4 +725,6 @@ def log_visit_item(request, item_id):
             },
         )
         return HttpResponse('1')
+
+# coding=utf-8
 

@@ -152,6 +152,7 @@ class Entity(object):
                 jd_item_info['shop_nick'])
 
             try:
+                #TODO 这里是需要进行商榷的
                 _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = jd_item_info['cid'])
                 _old_category_id = _obj.guoku_category_id
 
