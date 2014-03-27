@@ -689,7 +689,7 @@ function initTag(){
 
                         if (result === 1) {
                             count++;
-                            $counter.text(count);
+                            $counter.text(count).addClass("count_blue");
                             $poke.addClass('poked');
 
                             if (count === 1) {
@@ -697,7 +697,7 @@ function initTag(){
                             }
                         } else if (result === 0) {
                             count--;
-                            $counter.text(count);
+                            $counter.text(count).removeClass("count_blue");
                             $poke.removeClass('poked');
 
                             if (count === 0) {
