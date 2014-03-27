@@ -32,14 +32,13 @@ class Item(Document):
     }
 
 class TaobaoItem(Item):
-    taobao_id = StringField( required = True)
-    cid = IntField(required = True) 
-    title = StringField(required = True)
-    shop_nick = StringField(required = True)
-    price = DecimalField(required = True)
-    soldout = BooleanField(required = True) 
-    ustation = IntField(required = False) 
-
+    taobao_id = StringField(required=True)
+    cid = IntField(required=True) 
+    title = StringField(required=True)
+    shop_nick = StringField(required=True)
+    price = DecimalField(required=True)
+    soldout = BooleanField(required=True) 
+    ustation = IntField(required=False) 
     meta = {
         'db_alias' : 'guoku-db',
         'indexes' : [ 
@@ -53,14 +52,13 @@ class TaobaoItem(Item):
     }
    
 class JDItem(Item):
-    jd_id = StringField(required = True)
-    jd_category = ListField(required = False)
-    cid = IntField(required = True) 
-    title = StringField(required = True)
-    shop_nick = StringField(required = True)
-    price = DecimalField(required = True)
-    soldout = BooleanField(required = True)
-
+    jd_id = StringField(required=True)
+    jd_category = ListField(required=False)
+    cid = IntField(required=True) 
+    title = StringField(required=True)
+    shop_nick = StringField(required=True)
+    price = DecimalField(required=True)
+    soldout = BooleanField(required=True)
     meta = {
         'db_alias' : 'guoku-db',
         'indexes' : [
@@ -131,10 +129,10 @@ class ShopScore(EmbeddedDocument):
 
 class TaobaoShopInfo(EmbeddedDocument):
     cid = IntField()
-    nick = StringField(required = True, unique = True)
+    nick = StringField(required=True, unique=True)
     pic_path = StringField()
-    sid = IntField(required = True, unique = True)
-    title = StringField(required = True)
+    sid = IntField(required=True, unique=True)
+    title = StringField(required=True)
     seller_id = IntField()
     company = StringField()
     shop_type = StringField()
