@@ -842,7 +842,6 @@ $(function(){
             data:{cand_url:entity_url},
             dataType:"json",
             success:function(data){
-                console.log(data);
                 if(data.status == "EXIST"){
                     $(".entity_already_exist a").attr("href","/detail/"+data.data.entity_hash);
                     $(".entity_already_exist").show();
@@ -850,7 +849,7 @@ $(function(){
                     $(".entity_already_exist").hide();
                     $(".entity-detail").slideDown();
                     $(".add-note").show();
-                    if(data.data.taobao_id == "undefined"){
+                    if(data.data.taobao_id == undefined){
                         $(".detail_title span:eq(1)").text(data.data.jd_title);
                         $(".detail_taobao_brand").val(data.data.brand);
                         $(".detail_title_input").val(data.data.jd_title);
@@ -871,7 +870,7 @@ $(function(){
                         outline:"none"
                     });
                     for(var i=0;i<data.data.thumb_images.length;i++){
-                        var fix = data.data.taobao_id == "undefined" ? "" : "_50x50.jpg";
+                        var fix = data.data.taobao_id == undefined ? "" : "_50x50.jpg";
                         if(i==0){
                             $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+fix+'></div>');
                         }else{
@@ -879,7 +878,7 @@ $(function(){
                         }
                         $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'>').appendTo($(".detail form"));
                     }
-                    if(data.data.taobao_id == "undefined"){
+                    if(data.data.taobao_id == undefined){
                         $('<input type="hidden" name="jd_id" value="'+data.data.jd_id+'"><input type="hidden" name="jd_title" value="'+data.data.jd_title+'">').appendTo($(".detail form"));
                         $(".detail_taobao_brand").val(data.data.brand);
                     }else{  

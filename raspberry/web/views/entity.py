@@ -422,8 +422,8 @@ def jd_info(request, _cand_url):
             'shop_link' : _jd_item_info['shop_link'],
             'brand' : _jd_item_info['brand'],
             'price' : _jd_item_info['price'],
-            'chief_image_url' : [x.replace("/n1/", "/n5") for x in _chief_image_url],
-            'thumb_images' : _jd_item_info['thumb_images'],
+            'chief_image_url' :  _chief_image_url,
+            'thumb_images' :[x.replace("/n1/", "/n5/") for x in  _jd_item_info['thumb_images']],
             'cid' : cid,
             'selected_category_id' : _selected_category_id,
             }
