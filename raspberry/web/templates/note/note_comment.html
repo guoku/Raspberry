@@ -17,9 +17,7 @@
             {% endif %}
 
             <p class="with-tag comment-content" data-creator="{{ creator_context.user_id }}" data-comment="{{ comment_context.comment_id }}">
-                {% if comment_context.reply_to_user_id != None %}回复
-                    {{ comment_context.reply_to_user_nickname }}:
-                {% endif %}{{ comment_context.content }}
+                {% if comment_context.reply_to_user_id != None %}回复{{ comment_context.reply_to_user_nickname }}:{% endif %}{{ comment_context.content }}
             </p>
             <a href="#" class="reply">回复</a>
 {#            {% if user_context %}#}
