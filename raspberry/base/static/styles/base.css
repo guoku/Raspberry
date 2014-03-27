@@ -699,6 +699,7 @@ button {
 /*------------------------------*/
 .pagination {
     text-align: center;
+    clear:both;
 }
 
 .pagination .container {
