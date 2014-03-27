@@ -1,7 +1,8 @@
+{% load staticfiles %}
 <div class="account-form login border_hack" style="display: none">
     <div class="container">
         <div class="tip">
-            <img src="/static/v3/images/signin.png"  alt="欢迎回来">
+            <img src="{% static 'images/signin.png' %}"  alt="欢迎回来">
         </div>
         <form action="{% url "web_login" %}?next={{request.path}}" method="POST">
             <div class="control-group">

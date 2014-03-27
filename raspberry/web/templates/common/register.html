@@ -1,7 +1,9 @@
+{% load staticfiles %}
+
 <div class="account-form register border_hack" style="display: none">
     <div class="container">
         <div class="tip">
-            <img src="/static/v3/images/signup.png" alt="欢迎加入果库">
+            <img src="{% static 'images/signup.png' %}" alt="欢迎加入果库">
         </div>
         <form action="{% url 'web_register' %}" method="POST">
             <div class="control-group">
