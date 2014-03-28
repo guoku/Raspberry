@@ -26,7 +26,7 @@ class SelectionFeeds(Feed):
     description_template = "feeds/selection_description.html"
 
     def items(self):
-        return NoteSelection.objects(post_time__lt = datetime.now())[:30]
+        return NoteSelection.objects(post_time__lt = datetime.now())[:60]
 
     def item_title(self, item):
         _entity_id = item.entity_id
