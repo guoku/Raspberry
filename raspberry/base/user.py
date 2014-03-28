@@ -535,31 +535,25 @@ class User(object):
         _basic_info['user_id'] = self.user_obj.id
         _basic_info['email'] = self.user_obj.email
         _basic_info['username'] = self.user_obj.username 
-        
-        if UserCensorModel.objects.filter(user = self.user_id).count() > 0:
-            _basic_info['is_censor'] = True 
-            _basic_info['nickname'] = u'我是一只小白兔'
-            _basic_info['bio'] = u'内心温柔，人畜无害' 
-            _basic_info['website'] = ''
-            _basic_info['gender'] = 'O' 
-            _basic_info['avatar_large'] = 'http://imgcdn.guoku.com/avatar/large_191181_a9b257239f709958650cd28f400dd7fe.jpg' 
-            _basic_info['avatar_small'] = 'http://imgcdn.guoku.com/avatar/small_191181_e8fe39377fc03cae8d9e3deec45c5443.jpg' 
               
+        _profile = UserProfileModel.objects.get(user_id=self.user_id)
+        _basic_info['nickname'] = _profile.nickname
+        _basic_info['verified'] = 0 
+        _basic_info['verified_type'] = 'guoku' 
+        _basic_info['verified_reason'] = 'guoku' 
+        _basic_info['gender'] = _profile.gender 
+        _basic_info['location'] = _profile.location
+        _basic_info['city'] = _profile.city
+        _basic_info['bio'] = '' if _profile.bio == None else _profile.bio 
+        
+        self.__ensure_avatar_obj()
+        _basic_info['avatar_large'] = self.avatar_obj.get_large_link() 
+        _basic_info['avatar_small'] = self.avatar_obj.get_small_link()
+        
+        if UserCensorModel.objects.filter(user=self.user_id).count() > 0:
+            _basic_info['is_censor'] = True 
         else:
-            _profile = UserProfileModel.objects.get(user_id = self.user_id)
-            _basic_info['nickname'] = _profile.nickname
-            _basic_info['verified'] = 0 
-            _basic_info['verified_type'] = 'guoku' 
-            _basic_info['verified_reason'] = 'guoku' 
-            _basic_info['gender'] = _profile.gender 
-            _basic_info['location'] = _profile.location
-            _basic_info['city'] = _profile.city
-            _basic_info['bio'] = '' if _profile.bio == None else _profile.bio 
             _basic_info['is_censor'] = False
-            
-            self.__ensure_avatar_obj()
-            _basic_info['avatar_large'] = self.avatar_obj.get_large_link() 
-            _basic_info['avatar_small'] = self.avatar_obj.get_small_link()
 
         try:
             _sina_token_obj = SinaTokenModel.objects.get(user_id = self.user_id)
@@ -568,14 +562,14 @@ class User(object):
             pass
         
         try:
-            _taobao_token_obj = TaobaoTokenModel.objects.get(user_id = self.user_id)
+            _taobao_token_obj = TaobaoTokenModel.objects.get(user_id=self.user_id)
             _basic_info['taobao_nick'] = _taobao_token_obj.screen_name
             _basic_info['taobao_token_expires_in'] = _taobao_token_obj.expires_in
         except TaobaoTokenModel.DoesNotExist:
             pass
 
         try:
-            _seller_info_obj = SellerInfoModel.objects.get(user_id = self.user_id)
+            _seller_info_obj = SellerInfoModel.objects.get(user_id=self.user_id)
             _basic_info['shop_nick'] = _seller_info_obj.shop_nick
         except SellerInfoModel.DoesNotExist:
             pass
@@ -611,6 +605,24 @@ class User(object):
             _stat_info = stat_info
         cache.set(_cache_key, _stat_info, 864000)
         return _stat_info
+    
+    def set_censor(self, censor_id):
+        _obj = UserCensorModel.objects.create(
+            user_id=self.user_id,
+            censor_id=censor_id
+        )
+        self.__reset_basic_info_to_cache()
+        User.__reset_censor_user_set_to_cache()
+    
+    def cancel_censor(self, censor_id):
+        try:
+            _obj = UserCensorModel.objects.get(user_id=self.user_id)
+            _obj.delete()
+            self.__reset_basic_info_to_cache()
+            User.__reset_censor_user_set_to_cache()
+        except Exception, e:
+            pass
+    
     
     def entity_like_count(self, category_id=None, neo_category_id=None):
         _hdl = EntityLikeModel.objects.filter(user_id = self.user_id)
@@ -722,10 +734,41 @@ class User(object):
             _stat_info = self.__reset_user_stat_info_to_cache()
         return _stat_info
     
-    def read(self):
+    def read(self, with_censor=True):
         _context = self.__read_basic_info()
         _context.update(self.__read_user_stat_info())
+        
+        if with_censor:
+            if _context['is_censor']: 
+                _context['is_censor'] = True 
+                _context['nickname'] = u'我是一只小白兔'
+                _context['bio'] = u'内心温柔，人畜无害' 
+                _context['website'] = ''
+                _context['gender'] = 'O' 
+                _context['avatar_large'] = 'http://imgcdn.guoku.com/avatar/large_191181_a9b257239f709958650cd28f400dd7fe.jpg' 
+                _context['avatar_small'] = 'http://imgcdn.guoku.com/avatar/small_191181_e8fe39377fc03cae8d9e3deec45c5443.jpg' 
         return _context
+    
+    @classmethod
+    def __load_censor_user_set_from_cache(cls):
+        _cache_key = 'censor_user_set'
+        _list = cache.get(_cache_key)
+        return _list
+            
+    @classmethod
+    def __reset_censor_user_set_to_cache(cls):
+        _cache_key = 'censor_user_set'
+        _list = set(map(lambda x : x.user_id, UserCensorModel.objects.all()))
+        cache.set(_cache_key, _list, 864000)
+        return _list
+         
+    
+    @classmethod
+    def read_censor_user_set(cls):
+        _list = cls.__load_censor_user_set_from_cache()
+        if _list == None:
+            _list = cls.__reset_censor_user_set_to_cache() 
+        return _list
             
     def __load_latest_like_entity_list_from_cache(self):
         _cache_key = 'user_%s_latest_like_entity_list'%self.user_id
