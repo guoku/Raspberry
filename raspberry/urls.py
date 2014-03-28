@@ -2,7 +2,7 @@ __author__ = 'stxiong'
 from django.conf import settings
 from django.conf.urls import url, include, patterns
 from django.contrib import admin
-from web.sitemaps import EntitySitemap, TagSitemap, CategorySitemap
+from web.sitemaps import UserSitemap, EntitySitemap, TagSitemap, CategorySitemap
 
 admin.autodiscover()
 
@@ -38,6 +38,7 @@ if settings.IMAGE_LOCAL:
 
 sitemaps = {
     # 'flatpages': FlatPageSitemap,
+    'user': UserSitemap,
     'entity': EntitySitemap,
     'tag': TagSitemap,
     'category': CategorySitemap,

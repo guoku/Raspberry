@@ -1,6 +1,20 @@
 from django.contrib.sitemaps import Sitemap
-from base.models import Entity, Entity_Tag, Neo_Category
+from base.models import User, Entity, Entity_Tag, Neo_Category
 from datetime import datetime
+
+
+class UserSitemap(Sitemap):
+    changefreq = "hourly"
+    priority = 0.6
+
+    def items(self):
+        return User.objects.all().order_by('-date_joined')
+
+    def lastmod(self, obj):
+        return obj.last_login
+
+    def location(self, obj):
+        return "/u/%s/" % obj.id
 
 class EntitySitemap(Sitemap):
     changefreq = "hourly"
@@ -10,7 +24,7 @@ class EntitySitemap(Sitemap):
         return Entity.objects.filter(updated_time__lte=self.now, weight__gte=0)
 
     def lastmod(self, obj):
-        return obj.created_time
+        return obj.updated_time
 
     def location(self, obj):
         return  obj.get_absolute_url()
@@ -24,7 +38,7 @@ class TagSitemap(Sitemap):
         return Entity_Tag.objects.filter(created_time__lte=self.now, count__gte=0)
 
     def lastmod(self, obj):
-        return obj.created_time
+        return obj.last_tagged_time
 
     def location(self, obj):
         return  obj.get_absolute_url()
