@@ -15,8 +15,11 @@
         {% display_avatar_update user_context %}
         <form method="POST" action="{% url 'web_update_profile' %}" class="base-info" id="set-base-info">
             {% csrf_token %}
-            <h3>个人资料</h3>
+            <div class="control-group">
+                <h3>个人资料</h3>
+            </div>
             {% if msg_code != None %}
+            <div class="control-group">
                 <div class="message">
                     {% if msg_code == '0' %}
                         未上传图片
@@ -24,6 +27,7 @@
                         图片太大
                     {% endif %}
                 </div>
+             </div>
             {% endif %}
             <div class="control-group">
                 <label for="{{ profile_form.nickname.id_for_label }}">{{ profile_form.nickname.label }}</label>
@@ -63,7 +67,7 @@
                 <label for="{{ profile_form.website.id_for_label }}">{{ profile_form.website.label }}</label>
                 {{ profile_form.website }}
             </div>
-            <div class="row">
+            <div class="control-group">
                 <input type="submit" value="{% trans "update profile" %}" class="btn btn-update">
             </div>
         </form>
@@ -98,14 +102,16 @@
 
         <form method="POST" action="{% url 'web_change_password' %}" class="password">
             {% csrf_token %}
-            <h3>更改密码</h3>
+            <div class="control-group">
+                <h3>更改密码</h3>
+            </div>
             {% for field in password_form %}
             <div class="control-group">
                 <label for="{{ field.id_for_label }}" >{{ field.label }}</label>
                 {{ field }}
             </div>
             {% endfor %}
-            <div class="row">
+            <div class="control-group">
                 <input type="submit" value="修改密码" class="btn btn-update">
             </div>
         </form>

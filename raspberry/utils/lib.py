@@ -1,6 +1,7 @@
 # coding=utf8
 import random 
 import string
+import urllib2
 
 def roll(tot, num):
     if tot > num * 10:
@@ -33,3 +34,13 @@ def get_random_string(length, case_sensitive = False):
     for i in range(length):
         s += random.choice(charset)
     return s
+
+def download_img(img_url):
+    try:
+        socket = urllib2.urlopen(img_url, None, 30)
+        data = socket.read()
+        return data
+    except Exception, e:
+        print e
+        return None
+

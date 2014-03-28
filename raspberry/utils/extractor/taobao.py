@@ -132,7 +132,8 @@ class TaobaoExtractor:
                 break
             except:
                 pass
-        
+        if promprice > 0:
+            price = promprice
         result = {
             "desc" : desc,
             "cid" : cid,

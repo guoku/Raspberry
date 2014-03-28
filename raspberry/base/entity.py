@@ -13,6 +13,7 @@ import time
 from category import Category 
 from image import Image
 from item import Item
+from item import JDItem
 from models import Entity as EntityModel
 from models import Entity_Like as EntityLikeModel
 from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingModel
@@ -23,7 +24,7 @@ from tasks import CleanNoteMessageTask, CreateEntityNoteMessageTask, CreateNoteS
 from note import Note
 from user import User 
 from hashlib import md5
-from utils.lib import roll
+from utils.lib import roll, download_img
 
 
 class Entity(object):
@@ -77,6 +78,10 @@ class Entity(object):
     def __ensure_entity_obj(self):
         if not hasattr(self, 'entity_obj'):
             self.entity_obj = EntityModel.objects.get(pk = self.entity_id)
+    
+    def __get_next_novus_time(self):
+        _obj = EntityModel.objects.order_by('-novus_time')[0:1].get()
+        return _obj.novus_time + datetime.timedelta(minutes=20)
 
     @classmethod
     def cal_entity_hash(cls, entity_hash_string):
@@ -91,18 +96,96 @@ class Entity(object):
     def __insert_taobao_item(self, taobao_item_info, images):
         _weight = taobao_item_info['weight'] if taobao_item_info.has_key('weight') else 0 
         _taobao_item = Item.create_taobao_item( 
-            entity_id = self.entity_id,
-            images = images,
-            taobao_id = taobao_item_info["taobao_id"],
-            cid = taobao_item_info["cid"],
-            title = taobao_item_info["title"],
-            shop_nick = taobao_item_info["shop_nick"], 
-            price = taobao_item_info["price"], 
-            soldout = taobao_item_info["soldout"],
-            weight = _weight,
+            entity_id=self.entity_id,
+            images=images,
+            taobao_id=taobao_item_info["taobao_id"],
+            cid=taobao_item_info["cid"],
+            title=taobao_item_info["title"],
+            shop_nick=taobao_item_info["shop_nick"], 
+            price=taobao_item_info["price"], 
+            soldout=taobao_item_info["soldout"],
+            weight=_weight,
         )
         return _taobao_item.item_id
-    
+
+    def __insert_jd_item(self, jd_item_info, images):
+        _weight = jd_item_info['weight'] if jd_item_info.has_key('weight') else 0
+        _jd_item = JDItem.create_jd_item(
+            entity_id=self.entity_id,
+            images=images,
+            jd_id=jd_item_info['jd_id'],
+            cid=jd_item_info['cid'],
+            title=jd_item_info['title'],
+            shop_nick=jd_item_info['shop_nick'],
+            price=jd_item_info['price'],
+            soldout=jd_item_info['soldout'],
+            weight=_weight,
+        )
+        return _jd_item.item_id
+
+
+    @classmethod
+    def create_by_jd_item(cls, creator_id, category_id, chief_image_url,
+                          jd_item_info, brand="", title="", intro="", 
+                          detail_image_urls=[], weight = 0, rank_score = 0):
+        _item = JDItem.get_item_by_jd_id(jd_item_info['jd_id'])
+        if _item == None:
+            _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
+            if _chief_image_id == None:
+                chief_image_data = download_img(chief_image_url)
+                _chief_image_obj = Image.create('jd_' + jd_item_info['jd_id'], image_data=chief_image_data)
+                _chief_image_id = _chief_image_obj.image_id
+            
+            _detail_image_ids = []
+            for _image_url in detail_image_urls:
+                _image_id = Image.get_image_id_by_origin_url(_image_url)
+                if _image_id == None:
+                    _image_data = download_img(_image_url)
+                    if _image_data == None:
+                        continue
+                    _image_obj = Image.create('jd_' + jd_item_info['jd_id'], image_data=_image_data)
+                    _image_id = _image_obj.image_id
+                _detail_image_ids.append(_image_id)
+
+            _entity_hash = cls.cal_entity_hash(jd_item_info['jd_id'] + jd_item_info['title'] + \
+                jd_item_info['shop_nick'])
+
+            try:
+                _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = jd_item_info['cid'])
+                _old_category_id = _obj.guoku_category_id
+
+            except:
+                _old_category_id = 12
+
+            _entity_obj = EntityModel.objects.create(
+                entity_hash = _entity_hash,
+                creator_id = creator_id,
+                category_id = _old_category_id,
+                neo_category_id = category_id,
+                brand = brand,
+                title = title,
+                intro = intro,
+                price = jd_item_info['price'],
+                chief_image = _chief_image_id,
+                detail_images = "#".join(_detail_image_ids),
+                weight = weight,
+                rank_score = rank_score
+            )
+            
+            try:
+                _item_images = _detail_image_ids
+                _item_images.append(_chief_image_id)
+
+                _inst = cls(_entity_obj.id)
+                _inst.entity_obj = _entity_obj
+                _jd_item_id = _inst.__insert_jd_item(jd_item_info, _item_images)
+
+                return _inst
+            except Exception, e:
+                _entity_obj.delete()
+                raise Entity.FailToCreateEntity(str(e))
+
+            
     @classmethod
     def create_by_taobao_item(cls, creator_id, category_id, chief_image_url, 
                               taobao_item_info, brand="", title="", intro="", detail_image_urls=[], 
@@ -133,18 +216,18 @@ class Entity(object):
                 _old_category_id = 12
                 
             _entity_obj = EntityModel.objects.create( 
-                entity_hash = _entity_hash,
-                creator_id = creator_id,
-                category_id = _old_category_id,
-                neo_category_id = category_id,
-                brand = brand,
-                title = title,
-                intro = intro,
-                price = taobao_item_info["price"], 
-                chief_image = _chief_image_id,
-                detail_images = "#".join(_detail_image_ids),
-                weight = weight,
-                rank_score = rank_score
+                entity_hash=_entity_hash,
+                creator_id=creator_id,
+                category_id=_old_category_id,
+                neo_category_id=category_id,
+                brand=brand,
+                title=title,
+                intro=intro,
+                price=taobao_item_info["price"], 
+                chief_image=_chief_image_id,
+                detail_images="#".join(_detail_image_ids),
+                weight=weight,
+                rank_score=rank_score
             )
             
             try:
@@ -227,6 +310,11 @@ class Entity(object):
             self.entity_obj.price = taobao_item_info['price']
             self.entity_obj.save()
         return _item_id 
+    
+    def get_entity_hash(self):
+        self.__ensure_entity_obj()
+        return self.entity_obj.entity_hash
+        
 
     @classmethod
     def get_entity_id_by_hash(cls, entity_hash):
@@ -272,6 +360,7 @@ class Entity(object):
             _basic_info['like_count'] = self.entity_obj.like_count 
             _basic_info["created_time"] = self.entity_obj.created_time
             _basic_info["updated_time"] = self.entity_obj.updated_time
+            _basic_info["novus_time"] = self.entity_obj.novus_time
             _basic_info["weight"] = self.entity_obj.weight
             _basic_info["mark_value"] = self.entity_obj.mark
             _basic_info["mark"] = Entity.Mark.get_title(self.entity_obj.mark)
@@ -343,6 +432,8 @@ class Entity(object):
             _context['price'] = unicode(_context['price'])
             _context['created_time'] = time.mktime(_context['created_time'].timetuple())
             _context['updated_time'] = time.mktime(_context['updated_time'].timetuple())
+            if _context['novus_time'] != None:
+                _context['novus_time'] = time.mktime(_context['novus_time'].timetuple())
         _context.update(self.__read_item_info())
         _context.update(self.__read_note_info())
 
@@ -355,7 +446,8 @@ class Entity(object):
 
         # TODO: removing entity_id in item
     
-    def update(self, category_id=None, old_category_id=None, brand=None, title=None, intro=None, price=None, chief_image_id=None, weight=None, mark=None, rank_score=None, reset_created_time=False):
+    def update(self, category_id=None, old_category_id=None, brand=None, title=None, intro=None, price=None, 
+               chief_image_id=None, weight=None, mark=None, rank_score=None):
         
         self.__ensure_entity_obj()
         if brand != None:
@@ -376,7 +468,7 @@ class Entity(object):
             self.entity_obj.rank_score = int(rank_score)
         if mark != None:
             self.entity_obj.mark = int(mark)
-        
+
         if chief_image_id != None and chief_image_id != self.entity_obj.chief_image:
             _detail_image_ids = self.entity_obj.detail_images.split('#')
             if chief_image_id in _detail_image_ids:
@@ -385,11 +477,14 @@ class Entity(object):
                 _detail_image_ids.insert(0, self.entity_obj.chief_image)
             self.entity_obj.detail_images =  "#".join(_detail_image_ids)
             self.entity_obj.chief_image = chief_image_id
+
+        if self.entity_obj.weight == 0:
+            if self.entity_obj.novus_time == None:
+                self.entity_obj.novus_time = self.__get_next_novus_time()
+        else:
+            if self.entity_obj.novus_time != None:
+                self.entity_obj.novus_time = None 
         
-        if reset_created_time == True:
-            self.entity_obj.created_time = datetime.datetime.now()
-
-
         self.entity_obj.save()
         _basic_info = self.__load_basic_info_from_cache()
         if _basic_info != None:
@@ -407,7 +502,7 @@ class Entity(object):
             _hdl = _hdl.filter(weight__gt = 0)
         elif status == 'novus':
             _sql_query += '=0'
-            _hdl = _hdl.filter(weight = 0)
+            _hdl = _hdl.filter(novus_time__isnull=False)
         elif status == 'freeze':
             _sql_query += '=-1'
             _hdl = _hdl.filter(weight = -1)
@@ -432,33 +527,31 @@ class Entity(object):
 
 
     @classmethod
-    def find(cls, root_old_category_id = None, category_id = None, 
-                  like_word = None, timestamp = None, status = None, 
-                  offset = None, count = 30, 
-                  sort_by = None, reverse = False):
+    def find(cls, root_old_category_id=None, category_id=None, like_word=None, timestamp=None, status=None, 
+             offset=None, count=30, sort_by=None, reverse=False):
         
         _hdl = EntityModel.objects.all()
         
         if root_old_category_id != None and root_old_category_id >= 1 and root_old_category_id <= 11:
-            _hdl = _hdl.filter(category__pid = root_old_category_id)
+            _hdl = _hdl.filter(category__pid=root_old_category_id)
         
         if category_id != None:
-            _hdl = _hdl.filter(neo_category_id = category_id)
+            _hdl = _hdl.filter(neo_category_id=category_id)
         
         if like_word != None: 
-            _q = Q(title__icontains = like_word)
+            _q = Q(title__icontains=like_word)
             _hdl = _hdl.filter(_q)
         
         if status == 'recycle':
-            _hdl = _hdl.filter(weight = -2)
+            _hdl = _hdl.filter(weight=-2)
         elif status == 'freeze':
-            _hdl = _hdl.filter(weight = -1)
+            _hdl = _hdl.filter(weight=-1)
         elif status == 'novus':
-            _hdl = _hdl.filter(weight = 0)
+            _hdl = _hdl.filter(novus_time__isnull=False)
         elif status == 'select':
-            _hdl = _hdl.filter(weight__gt = 0)
+            _hdl = _hdl.filter(weight__gt=0)
         elif status == 'normal':
-            _hdl = _hdl.filter(weight__gte = 0)
+            _hdl = _hdl.filter(weight__gte=0)
 
         ########## Magic Code for NOVUS editor ##############
 
@@ -470,7 +563,7 @@ class Entity(object):
 
         
         if timestamp != None:
-            _hdl = _hdl.filter(updated_time__lt = timestamp)
+            _hdl = _hdl.filter(novus_time__lt=timestamp)
        
         if sort_by == 'price':
             if reverse:
@@ -497,6 +590,11 @@ class Entity(object):
                 _hdl = _hdl.order_by('updated_time')
             else:
                 _hdl = _hdl.order_by('-updated_time')
+        elif sort_by == 'novus_time':
+            if reverse:
+                _hdl = _hdl.order_by('novus_time')
+            else:
+                _hdl = _hdl.order_by('-novus_time')
         elif sort_by == 'rank_score':
             if reverse:
                 _hdl = _hdl.order_by('rank_score')
@@ -504,8 +602,7 @@ class Entity(object):
                 _hdl = _hdl.order_by('-rank_score')
         else:
             _hdl = _hdl.order_by('-weight', '-like_count')
-             
-        
+            
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
         
@@ -605,7 +702,7 @@ class Entity(object):
                 user_id = _user_id
             )
             self.update_like_count()
-            User(_user_id).update_user_like_stat_info()
+            User(_user_id).update_user_like_stat_info_add_like_entity(self.entity_id)
             cache.delete("gk_e_like_u2elt_%s"%user_id)
 
 #########################   REMOVE LIKE MESSAGE AT FIRST ##########################
@@ -634,7 +731,7 @@ class Entity(object):
             )
             _obj.delete()
             self.update_like_count()
-            User(_user_id).update_user_like_stat_info()
+            User(_user_id).update_user_like_stat_info_del_like_entity(self.entity_id)
             cache.delete("gk_e_like_u2elt_%s"%user_id)
             
 #            _basic_info = self.__read_basic_info()
@@ -757,9 +854,12 @@ class Entity(object):
                     neo_category_id = self.entity_obj.neo_category_id, 
                 )
                 _doc.save()
-                
+               
+                _weight = None 
                 if self.entity_obj.weight <= 0:
-                    self.update(weight = 1)
+                    self.update(
+                        weight=1,
+                    )
                
                 _note_context = _note.read()
                 CreateNoteSelectionMessageTask.delay(

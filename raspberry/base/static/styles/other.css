@@ -3,6 +3,9 @@
  */
 @import "../base/guoku.css";
 
+#main{
+	border:1px solid #eee;
+}
 #main .center {width:352px;margin:0 auto;}
 #main .center .img-404 {height:220px;width:352px;background:url("/static/v3/images/guoku_404_500_ie6_icon.png") no-repeat;}
 #main .center .img-500 {height:220px;width:352px;background:url("/static/v3/images/guoku_404_500_ie6_icon.png") no-repeat 0 -234px;}
@@ -37,6 +40,6 @@
 #main .row .text.right {padding-left:75px;width:405px;float: right;}
 #main .row .image.right {padding-left:75px;width:405px;float: left;}
 #main .row .text.left {padding-left:75px;width:405px;float: right;}
-#main .row .text h3 {font-size:26px;color:#666666;margin:130px 0 10px;}
-#main .row .text p {font-size:18px;color:#B8B8B8;}
+#main .row .text h3 {font-size:26px;color:#666666;margin:130px 0 10px;font-weight: 600;}
+#main .row .text p {font-size:18px;color:#898989;}
 #main .row .split {height:1px;width:960px;background:url("/static/v3/images/download/line.png") no-repeat;}

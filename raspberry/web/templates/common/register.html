@@ -1,12 +1,20 @@
+{% load staticfiles %}
+
 <div class="account-form register border_hack" style="display: none">
     <div class="container">
         <div class="tip">
-            <img src="/static/v3/images/signup.png" alt="欢迎加入果库">
+            <img src="{% static 'images/signup.png' %}" alt="欢迎加入果库">
         </div>
         <form action="{% url 'web_register' %}" method="POST">
-            <input type="text" name="nickname" placeholder="昵称" class="text-input">
-            <input type="text" name="email" placeholder="邮箱" class="text-input">
-            <input type="password" name="password" placeholder="密码" class="text-input">
+            <div class="control-group">
+                <input type="text" name="nickname" placeholder="昵称" class="text-input">
+            </div>
+            <div class="control-group">
+                <input type="text" name="email" placeholder="邮箱" class="text-input">
+            </div>
+            <div class="control-group">
+                <input type="password" name="password" placeholder="密码" class="text-input">
+            </div>
             <label class="agreement"><input type="checkbox" name="agreement">同意果库协议</label>
 
             <input type="submit" value="注册" class="submit">

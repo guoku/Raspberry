@@ -17,6 +17,9 @@
                     <input type="text" class="text-input" name="cand_url" placeholder="粘贴商品链接到这里" value="{{ cand_url }}">
                     <input type="submit" value="载入" class="guoku-button">
                 </div>
+                <div class="entity_already_exist">
+                    <b>该商品已经存在 <a class="btn btn-go" href="">查看</a></b>
+                </div>
 		<div class="entity-detail">
                     <div>
                         <div class="brand">
@@ -29,7 +32,7 @@
                         </div>
                     </div>
 
-                    <h3 class="detail_title"></h3>
+                    <h3 class="detail_title"><span></span><span></span></h3>
                     <div class="img-container detail_chief_url">
                         <img />
                     </div>
@@ -45,8 +48,9 @@
                     <div class="detail">
                         <span class="nickname"></span>
 
-                        <form action="" method="POST">
+                        <form action="{% url 'web_new_entity'%}" method="POST">
                             <textarea class="text-input" name="note_text" placeholder="来说说你的评价吧？欢迎真实、有用、有趣的商品点评。"></textarea>
+                            <span></span>
                             <input type="submit" value="发表" class="guoku-button">
                         </form>
                     </div>

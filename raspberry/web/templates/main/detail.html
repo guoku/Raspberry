@@ -9,6 +9,8 @@
     {{ entity_context.title }}
 {% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/detail.css' %}">{% endblock %}
+{#{% block keyword %}果库,{{ entity_context.category_id|trans_category }},{{ entity_context.title }}{% endblock %}#}
+{% block description %}果库,{{ entity_context.category_id|trans_category }},{{ entity_context.title }}{% endblock %}
 {% block content %}
 
     <div id="detail">
@@ -26,7 +28,11 @@
         </div>
         <div class="main">
             <div class="entity">
+                {% if taobao_id %}
                 <a class="entity-img" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+                {% else %}
+                <a class="entity-img" href="http://item.jd.com/{{jd_id}}.html"  target=_blank >
+                {% endif %}
                     <img src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
                 </a>
                 <h2>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</h2>
@@ -41,7 +47,7 @@
                 </a>
                 {% if selection_note != None %}
                     <div class="selection-note">
-                        {% display_note_item selection_note %}
+                        {% display_note_item selection_note is_staff %}
                     </div>
                 {% endif %}
             </div>
@@ -52,7 +58,7 @@
 
             <div class="notes">
                 {% for note in common_note_list %}
-                    {% display_note_item note %}
+                    {% display_note_item note is_staff %}
                     {% if common_note_list|length > forloop.counter %}<div class="sep"></div>{% endif  %}
                 {% endfor %}
             </div>
@@ -60,9 +66,10 @@
             {# 判断有没有点评过 #}
             {% if user.is_authenticated  %}
                 {% if not is_user_already_note %}
-                    <div class="add-note">
+                    <div class="add-note add-note-submit">
                         <img src="{{ user_context.avatar_small }}" width="50" height="50">
                         <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">
+                            <span class="arr"></span>   
                             <textarea name="note_text" placeholder="写点评 ＃贴标签"></textarea>
                             <div class="add-note-div">
                                 <button type="button" class="cancel">取消</button>
@@ -76,8 +83,12 @@
 
         <div class="aside">
             <div class="entity-info">
+                {% if taobao_id %}
                 <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
-                    详情<span>&#65509;{{ entity_context.price }}</span>
+                {% else %}
+                <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >
+                {% endif %}
+                    购买<span>&#65509;{{ entity_context.price }}</span>
                 </a>
 {#                <div class="shop">来自于<a href="">url需替换</a></div>#}
 
@@ -104,28 +115,37 @@
             </div>
 
             <p class="category">
-                <a href="{% url 'web_category' entity_context.category_id  %}">[{{ entity_context.category_id|trans_category }}]</a>
+                <a href="{% url 'web_category' entity_context.category_id  %}">{{ entity_context.category_id|trans_category }}</a>
             </p>
 
             {% if tag_list|length > 0 %}
-            <div class="tag">
-                <h3>该商品的标签</h3>
-                <div>
-                    {% for tag in tag_list %}
-                        <a href="{% url "web_tag_detail" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>
-                    {% endfor %}
+                <div class="tag">
+                    <h3>该商品的标签</h3>
+                    <div>
+                        {% for tag in tag_list %}
+                            <a href="{% url "web_tag_detail" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
             {% endif %}
-
+            
+            
+            {% if is_staff %}
+                <div class="tag">
+                    <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target=_blank>编辑商品</a>
+                </div>
+            {% endif %}
+            
             <div class="share">
-                <a href="">分享到微博</a>
+                <a href=""><span class="weibo_icon"></span>分享到微博</a>
             </div>
 
             <div class="download">
                 <h3>下载果库客户端</h3>
                 <div>
-                    <a href="">iPhone</a> / <a href="">iPhone</a> / <a href="">iPhone</a>
+                    <a href="/download/ios/" target="_blank">iPhone</a> /
+                    <a href="/download/ios/" target="_blank">iPad</a> /
+                    <a href="http://app.guoku.com/android/latest/guoku.apk" target="_blank">Android</a>
                 </div>
             </div>
             {% if enable_guoku_plus and activity_id%}

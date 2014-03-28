@@ -3,7 +3,7 @@ from defaults import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-
+ENABLE_GUOKU_PLUS = True
 
 from mongoengine import register_connection 
 register_connection('guoku-db', 'guoku')

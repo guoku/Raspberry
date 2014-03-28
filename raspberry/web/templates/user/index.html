@@ -6,11 +6,18 @@
     {{ query_user_context.nickname|default:'我的果库' }}
     {% block subtitle %}{% endblock %}
 {% endblock %}
+{% block keyword %}果库,{{ query_user_context.nickname }}{% endblock %}
+{#{% block description %}果库,{{ query_user_context.nickname }},{{ query_user_context.bio }}{% endblock %}#}
+
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">
 {% endblock %}
 
 {% block content %}
+    {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
+    {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
+    {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}
+
     <div id="user-center">
         <div class="base">
             <img src="{{ query_user_context.avatar_large }}" alt="{{ query_user_context.nickname }}" width="120" height="120">
@@ -20,8 +27,11 @@
                 <span class="bio">{{ query_user_context.bio }}</span>
                 <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
             </div>
+            {% if is_staff %}
+                <a href="{% url 'management_edit_user' query_user_context.user_id %}" target=_blank>编</a>
+            {% endif %}
             {% if relation == 4 %}
-                <a class="setting" href="{% url 'web_setting' %}"><span>{% trans "settings" %}</span></a>
+                <a class="setting" href="{% url 'web_setting' %}"><span class="setting-icon"></span><span class="setting-tip">{% trans "settings" %}</span></a>
             {% elif relation == 3 %}
                 <a href="{% url 'web_follow' query_user_context.user_id 0 %}" class="follow-user is-fan gray-f"><span class="img_is_fun"></span><b>取消关注</b></a>
             {% elif relation == 1 %}
@@ -34,17 +44,15 @@
         </div>
 
         <div class="nav">
-            {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
-            {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
-            {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}
+
             <a href="{{ web_user_likes_url }}" {% if web_user_likes_url in request.path %}class="active"{% endif %}>{% trans 'likes' %}
-                <strong>({{ query_user_context.like_count }})</strong>
+                <strong>{{ query_user_context.like_count }}</strong>
             </a>
             <a href="{{ web_user_notes_url }}" {% if web_user_notes_url in request.path %}class="active"{% endif %}>{% trans 'notes' %}
-                <strong>({{ query_user_context.entity_note_count }})</strong>
+                <strong>{{ query_user_context.entity_note_count }}</strong>
             </a>
             <a href="{{ web_user_tags_url }}" {% if web_user_tags_url in request.path %}class="active"{% endif %}>{% trans 'tags' %}
-                <strong>({{ query_user_context.tag_count }})</strong>
+                <strong>{{ query_user_context.tag_count }}</strong>
             </a>
 
             <div class="social">
@@ -75,11 +83,11 @@
                 </ul>
 
                 {% if entity_list|length > 0 %}
-                    <div class="likes">
+                    <ul class="likes">
                         {% for entity_context in entity_list %}
                             {% display_common_entity entity_context %}
                         {% endfor %}
-                    </div>
+                    </ul>
                 {% endif %}
             </div>
 

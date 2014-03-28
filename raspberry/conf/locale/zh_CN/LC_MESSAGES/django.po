@@ -20,6 +20,9 @@ msgstr ""
 msgid "guoku"
 msgstr "果库"
 
+msgid "next"
+msgstr "下一步"
+
 msgid "sign up"
 msgstr "注册"
 
@@ -71,7 +74,16 @@ msgstr "操作"
 
 
 msgid "account settings"
-msgstr "账号设置"
+msgstr "帐号设置"
+
+msgid "avatar"
+msgstr "头像"
+
+msgid "select a file"
+msgstr "选取一个图片"
+
+msgid "max. 2 megabytes"
+msgstr "最大 2M"
 
 msgid "username"
 msgstr "用户名"
@@ -120,3 +132,9 @@ msgstr "确认密码"
 # error message
 msgid "email is not signed up."
 msgstr "邮箱没有被注册"
+
+msgid "email is signed up."
+msgstr "邮箱已被注册"
+
+msgid "nickname is signed up."
+msgstr "昵称已被使用"

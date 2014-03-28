@@ -7,8 +7,9 @@ urlpatterns = patterns(
     url(r'^new/$', 'new_entity', name = 'management_new_entity'),
     url(r'^create/taobao/$', 'create_entity_by_taobao_item', name = 'management_create_entity_by_taobao_item'),
     #url(r'^create/offline/$', 'create_entity_from_offline', name='create_entity_from_offline'),
-
+    url(r'^create/jd/$', 'create_entity_by_jd_item', name = 'management_create_entity_by_jd_item'),
     url(r'^(?P<entity_id>\w+)/edit/$', 'edit_entity', name = 'management_edit_entity'),
+    url(r'^(?P<entity_id>\w+)/edit/jd/$','edit_jd_entity', name='management_edit_jd_entity'),
     url(r'^(?P<entity_id>\w+)/merge/$', 'merge_entity', name = 'management_merge_entity'),
     url(r'^(?P<entity_id>\w+)/recycle/$', 'recycle_entity', name = 'management_recycle_entity'),
     url(r'^(?P<entity_id>\w+)/edit/image/$', 'edit_entity_image', name = 'management_edit_entity_image'),

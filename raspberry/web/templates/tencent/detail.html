@@ -1,0 +1,125 @@
+{% load common %}
+{% load user %} 
+{% load entity %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="apple-itunes-app" content="app-id=477652209"/>
+		<meta charset="utf8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+		<meta name="msapplication-tap-highlight" content="no" />
+        <meta content="yes" name="apple-mobile-web-app-capable">
+        <meta content="black" name="apple-mobile-web-app-status-bar-style">
+        <meta content="telephone=no" name="format-detection">
+        <title>来自果库的发现</title>
+
+		<style type="text/css">
+			html, body, div, ul, li, a, p, span, header, footer, input, textarea, h1, h2 {margin: 0;padding: 0;-webkit-tap-highlight-color: rgba(255,255,255,0);-webkit-appearance: none;}
+			article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {display: block;}
+			html, body {height: 100%;-webkit-text-size-adjust: none;text-size-adjust: none;}
+			body {font: normal 14px sans-serif;background-color: #FAF9F6;color: #444444;}
+            a {text-decoration:none;}
+			.dn {/*display: none;*/}
+            .clear {clear:both;}
+            .blue {background:#427ec0;color:#ffffff;padding:5px;border-radius:2px;}
+            div.with-border {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);background-color:#FFFFFF;border-radius:2px;margin:15px 5px 0 5px;}
+
+			.header {padding:5px;background-color: #343434;border-bottom:1px solid #CCCCCC;box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);height:32px;}
+			.header .logo {float:left;height:32px;margin-right: 10px;}
+			.header a.blue {float:right;font-size:14px;line-height:14px;margin:5px 0 3px;}
+            .header a.pc_link {float:right;font-size:14px;line-height:24px;margin:5px 10px 3px 0;color:#999999;}
+
+            .main {position:relative;width:100%;overflow:hidden;padding-bottom:10px;}
+            .main>.with-border {width:309px;margin-left:-154px;left:50%;position:relative;padding:0 0 5px 0;overflow:hidden;}
+            .item {padding:5px;border-bottom:1px solid #fefefe;}
+            .item .image {width:299px;min-height:200px;text-align:center;position:relative;}
+            .item .image img {max-width:299px;max-height:299px;z-index:9;}
+            .item p {margin:5px 0;}
+            .price {font-size:15px;font-family:Georgia;background: #427ec0;padding: 5px 10px;}
+            .small-avatar {width:315px;overflow:hidden;margin:10px 0 0;font-size:0;}
+            .small-avatar img {height:25px;width:25px;margin-right:8px;border-radius: 15px;}
+            .like_info{float: left;}
+            .more_info{float: right;}
+
+            .note {border-top:1px solid #F3F3F3;padding:10px 5px 4px;margin-bottom:1px;}
+            .note .avatar {float:left;height:25px;width:25px;margin-right:8px;}
+            .note img {height:35px;width:35px;border-radius: 20px;}
+            .note .username {font-weight:700;}
+            .note .text {line-height:1.35em;margin-left:43px;margin-top:-35px;}
+
+            .downloads img {float:left;margin:5px 8px 0 5px;}
+            .downloads p {margin:11px 0 8px;font-size:18px;display:inline-block;line-height:18px;}
+            .downloads .container {padding:5px 0;overflow:hidden;white-space:nowrap;}
+            .downloads a {margin-right:10px;}
+
+		</style>
+        <script >
+            function downloadApp(url) {
+                setTimeout(function(){
+                    window.location = url;
+                }, 100);
+            }
+            function goToWeb(){
+                var url = location.href.replace("/m/", "/").replace("selection", "selected");
+                if (url.indexOf("?") == -1) 
+                    url = url + "?agent=web";
+                else 
+                    url = url + "&agent=web";
+                location.href = url;
+            }
+
+        </script>
+	</head>
+
+	<body>
+        <div class="main" id="main">
+            <div class="with-border">
+                <div class="item">
+                    <div class="image">
+                        {% if is_jd %}
+                        <a href="{{ buy_link }}"><img src="{{ entity_context.chief_image.url|resize:'310' }}"/></a>
+                        {% else %}
+                        <a href="{{ buy_link }}&entry=wap"><img src="{{ entity_context.chief_image.url|resize:'310' }}" /></a>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <div class="like_info">{{ entity_context.like_count }}人喜爱</div>
+                        {%if is_jd %}
+                        <div class="more_info"><a class="blue price" href="{{ buy_link }}">详情￥{{ entity_context.price }}</a></div>
+                        {% else %}
+                        <div class="more_info"><a class="blue price" href="{{ buy_link }}&entry=wap">详情￥{{ entity_context.price }}</a></div>
+                        {% endif %}
+                        <div class="clear"></div>
+                    </div>
+                    <div class="small-avatar">
+                        {% for liker_context in liker_list|top:9 %}
+                            <img src="{{ liker_context.avatar_small }}" width="25" height="25">
+                        {% endfor %}
+                    </div>
+                </div>
+                {% for note in note_list %}
+                    <div class="note">
+                        <img src="{{ note.creator_context.avatar_small }}" width="25" height="25">
+                        
+                        <p class="text">
+                            <span class="username">{{ note.creator_context.nickname }}</span><br>{{note.note_context.content}}
+                        </p>
+                        <div class="clear"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+	</body>
+</html>
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-24696872-5']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
