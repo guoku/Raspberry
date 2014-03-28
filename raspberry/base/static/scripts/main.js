@@ -897,7 +897,9 @@ $(function(){
         $(this).addClass("current_img");
         var img_url = $(this).attr("src");
         var big_url = img_url.replace('50x50','300x300');
+        var origin_url = img_url.replace('_50x50.jpg','');
         $(".detail_chief_url img").attr("src",big_url);
+        $(".detail form input[name='chief_image_url']").val(origin_url);
     });
     $(".detail form").on("submit",function(){
         var brand = $(".detail_taobao_brand").val();
