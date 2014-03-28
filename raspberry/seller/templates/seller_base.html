@@ -93,6 +93,30 @@
                 }
             });
         });
+        $("a[data-toggle='tab']").on("shown",function(e){
+            var liElem = $(e.target).parent("li");
+            var index = $("#myTab li").index(liElem);
+            switch(index){
+                case 0:
+                    $("#myTabContent tr").show();
+                break;
+                case 1:
+                    $("#myTabContent tr").show().not($(".waiting")).hide();
+                break;
+                case 2:
+                    $("#myTabContent tr").show().not($(".approved")).hide();
+                break;
+                case 3:
+                    $("#myTabContent tr").show().not($(".ongoing")).hide();
+                break;
+                case 4:
+                    $("#myTabContent tr").show().not($(".finished")).hide();
+                break;
+                case 5:
+                    $("#myTabContent tr").show().not($(".rejected")).hide();
+                break;
+            }
+        });
     });
     </script>
 {% endblock %}
