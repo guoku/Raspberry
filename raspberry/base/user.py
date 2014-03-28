@@ -39,7 +39,7 @@ class User(object):
         def __init__(self, user_id):
             self.user_id = user_id
             try:
-                self.avatar_obj = AvatarModel.objects.using('slave').get(user_id = self.user_id)
+                self.avatar_obj = AvatarModel.objects.get(user_id = self.user_id)
             except AvatarModel.DoesNotExist, e:
                 self.avatar_obj = None
        

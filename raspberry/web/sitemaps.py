@@ -8,7 +8,7 @@ class UserSitemap(Sitemap):
     priority = 0.6
 
     def items(self):
-        return User.objects.all().order_by('-date_joined')
+        return User.objects.using('slave').all().order_by('-date_joined')
 
     def lastmod(self, obj):
         return obj.last_login
@@ -21,7 +21,7 @@ class EntitySitemap(Sitemap):
     priority = 1.0
     now = datetime.now()
     def items(self):
-        return Entity.objects.filter(updated_time__lte=self.now, weight__gte=0)
+        return Entity.objects.using('slave').filter(updated_time__lte=self.now, weight__gte=0)
 
     def lastmod(self, obj):
         return obj.updated_time
@@ -35,7 +35,7 @@ class TagSitemap(Sitemap):
     now = datetime.now()
 
     def items(self):
-        return Entity_Tag.objects.filter(created_time__lte=self.now, count__gte=0)
+        return Entity_Tag.objects.using('slave').filter(created_time__lte=self.now, count__gte=0)
 
     def lastmod(self, obj):
         return obj.last_tagged_time
