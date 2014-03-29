@@ -140,7 +140,7 @@ def apply_guoku_plus(request, user_context, shop_inst):
             return HttpResponse(u"优惠价不能大于原价")
         GuokuPlusActivity.create(item_context['taobao_id'], sale_price, total_volume, seller_remarks, item_context['shop_nick'])
         return HttpResponseRedirect(reverse("seller_index"))
-    return HttpResponse("error")
+    return HttpResponse(form.errors)
 
 @require_POST
 @seller_only
@@ -159,7 +159,8 @@ def faq(request):
 @login_required
 def verify_token(request):
     token = request.POST.get("token", None)
-    quantity = int(request.POST.get("quantity", 1))
+    quantity = int(request.POST.get("quantity", "1"))
+    print token, quantity
     if token and quantity >= 1:
         guokuplus = GuokuPlusActivity.get_activity_by_token(token)
         status = guokuplus.use_token(token, quantity)
