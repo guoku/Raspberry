@@ -1,7 +1,7 @@
 # import os.path
 from defaults import *
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 
@@ -28,6 +28,18 @@ DATABASES = {
             'init_command':'SET storage_engine=INNODB',
         }
     },
+    'slave': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'guoku',
+        'USER': 'qinzhoukan',
+        'PASSWORD': 'qinzhoukan1@#',
+        'HOST': '10.0.2.95',
+        'PORT': '',
+        'OPTIONS': {
+            'use_unicode':'utf-8',
+            'init_command':'SET storage_engine=INNODB',
+        }
+    },
 }
 
 CACHES = {
@@ -48,6 +60,7 @@ SESSION_REDIS_HOST = '10.0.2.49'
 SESSION_REDIS_PORT = 6379
 SESSION_REDIS_DB = 2
 SESSION_COOKIE_AGE = 1209600
+SESSION_COOKIE_DOMAIN = '.guoku.com'
 MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14
 
 MOGILEFS_DOMAIN = 'prod'
@@ -109,6 +122,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django.contrib.formtools',
+    'django.contrib.sitemaps',
     'djcelery',
     'base',
     'management',
@@ -131,8 +145,9 @@ SCP_USER = 'jiaxin'
 SCP_KEY = os.path.join(os.path.dirname(__file__), 'scp_key/')
 SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['guoku.com', 'www.guoku.com', 'admin.guoku.com', 'api.guoku.com']
 # APP_HOST = "http://test.guoku.com"
 SINA_BACK_URL = APP_HOST + '/sina/auth'
 TAOBAO_BACK_URL = APP_HOST + "/taobao/auth"
 
+ENABLE_GUOKU_PLUS = True

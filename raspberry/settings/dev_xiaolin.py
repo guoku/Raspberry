@@ -3,7 +3,7 @@ from defaults import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-
+ENABLE_GUOKU_PLUS = True
 
 from mongoengine import register_connection 
 register_connection('guoku-db', 'guoku')
@@ -48,7 +48,7 @@ MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
 
 SPHINX_API_VERSION = 0x116
-SPHINX_SERVER = 'localhost' 
+SPHINX_SERVER = '10.0.1.109' 
 SPHINX_port = 3312 
 
 

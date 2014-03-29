@@ -2,6 +2,8 @@ __author__ = 'stxiong'
 from django.conf import settings
 from django.conf.urls import url, include, patterns
 from django.contrib import admin
+from web.sitemaps import UserSitemap, EntitySitemap, TagSitemap, CategorySitemap
+from web.feeds import SelectionFeeds
 admin.autodiscover()
 
 handler500 = 'web.views.page_error'
@@ -16,7 +18,6 @@ urlpatterns = patterns('',
     (r'^stats/', include('stats.urls')),
 #    (r'^lotto/', include('lotto.urls')),
     (r'', include('web.urls')),
-#    (r'^3.0/activity/$', 'lotto.views.guoku_generation_3_activity'),
 )
 
 urlpatterns += patterns(
@@ -24,6 +25,7 @@ urlpatterns += patterns(
     url(r'^403/$', 'django.views.defaults.permission_denied'),
     url(r'^404/$', 'web.views.webpage_not_found'),
     url(r'^500/$', 'web.views.page_error'),
+    (r'^visit_item/$', 'mobile.views.old_visit_item'),
 )
 
 if settings.IMAGE_LOCAL:
@@ -34,6 +36,19 @@ if settings.IMAGE_LOCAL:
         (r'^image/local/category/(?P<key1>\w+)/(?P<key2>\w+)$', 'base.views.local_category_image'),
     )
 
+sitemaps = {
+    'user': UserSitemap,
+    'entity': EntitySitemap,
+    'tag': TagSitemap,
+    'category': CategorySitemap,
+}
+
+urlpatterns += patterns(
+    'django.contrib.sitemaps.views',
+    url(r'^sitemap\.xml$', 'index', {'sitemaps': sitemaps}),
+    url(r'^sitemap-(?P<section>.+)\.xml$', 'sitemap', {'sitemaps': sitemaps}),
+    url(r'^feed/selection/$', SelectionFeeds()),
+)
 
 #if settings.DEBUG:
     #import debug_toolbar

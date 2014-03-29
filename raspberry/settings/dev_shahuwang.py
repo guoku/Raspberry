@@ -9,11 +9,11 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
 from mongoengine import register_connection 
 register_connection('guoku-db', 'guoku')
 register_connection('log-db', 'guoku_log')
 
+ENABLE_GUOKU_PLUS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
@@ -66,7 +66,7 @@ MOGILEFS_DOMAIN = 'staging'
 MOGILEFS_TRACKERS = ['10.0.1.23:7001']
 
 SPHINX_API_VERSION = 0x116
-SPHINX_SERVER = 'localhost' 
+SPHINX_SERVER = '10.0.1.109' 
 SPHINX_port = 3312 
 
 
@@ -88,7 +88,7 @@ ALLOWED_HOSTS = ['*']
 #CELERY_REDIS_HOST = "localhost"
 #CELERY_REDIS_PORT = 6379
 
-BROKER_HOST = "localhost"
+BROKER_HOST = "10.0.1.109"
 BROKER_PORT = 5672
 BROKER_USER = "guest"
 BROKER_PASSWORD = "guest"
@@ -101,14 +101,14 @@ APNS_SERVER = {'HOST':'http://10.0.2.218:7077/'}
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 MEDIA_URL = ''
 STATIC_ROOT = ''
-STATIC_URL = '/static/'
+STATIC_URL = '/static/v3/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 BASE_DIR = os.getcwd()
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # ('common', os.path.join(BASE_DIR, 'static')),
-    ('common', os.path.join(os.path.dirname(__file__), 'static')),
+    #('common', os.path.join(os.path.dirname(__file__), '../static')),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.

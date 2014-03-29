@@ -33,7 +33,7 @@ function initTag(){
             tag = "";
             cursor = -1;
             length = 0;
-            $("textarea[name='note_text']").css("height","20px");
+//            $("textarea[name='note_text']").css("height","20px");
             dom.css("margin", "0");
 
             clearTimeout(timeout);
@@ -76,13 +76,14 @@ function initTag(){
                 dom.find("p").mouseover(function(){
                     dom.find("p").removeClass("hover");
                     $(this).addClass("hover");
-                }).click(function(){
+                }).click(function(e){
                     var text = $(this).text().replace("# ", "");
                     var front = obj.val().slice(0, start);
                     var back = obj.val().slice(cursor);
                     obj.val(front + text + " " + back);
 
                     init();
+                    e.preventDefault();
                 });
             });
         }
@@ -187,8 +188,8 @@ function initTag(){
                 }
             }
             
-        }).live("blur", function(){
-            init();
+        }).on("blur", function(){
+            //init();
         });
     };
 
@@ -202,20 +203,24 @@ function initTag(){
 
         popLoginBox: function () {
             var $accountForm = $('.account-form');
+            var $overlay = $('.overlay');
             var $login = $('.account-form.login');
             var $reg =  $('.account-form.register');
-
             $accountForm.on('click', formClick);
             function formClick(e) {
                 e.stopPropagation();
             }
             var flag = 1;
             var $body = $('body');
+            $overlay.show();
             $login.show();
-           $body.on('click', removeLogin);
+            $body.addClass('overlay-open');
+            $body.on('click', removeLogin);
             function removeLogin() {
                 if (flag == 1) {
+                    $overlay.hide();
                     $accountForm.hide();
+                    $body.removeClass('overlay-open');
                     $body.off('click', removeLogin);
                     $accountForm.off('click', formClick);
                 }
@@ -258,10 +263,10 @@ function initTag(){
                         var result = parseInt(data);
 
                         if (result === 1) {
-                            $counter.text(count + 1);
+                            $counter.text(" "+(count + 1));
                             $like.addClass('liked');
                         } else if (result === 0) {
-                            $counter.text(count - 1);
+                            $counter.text(" "+(count - 1));
                             $like.removeClass('liked');
                         }
                     });
@@ -283,14 +288,7 @@ function initTag(){
 
         noteHover: function () {
             var self = this;
-            $('.common-note').each(function () {
-                self.showEntityTitle($(this));
-            });
-        },
-
-        popularHover: function () {
-            var self = this;
-            $('.popular-entity').each(function (){
+            $('.common-note, .popular-entity, .common-entity').each(function () {
                 self.showEntityTitle($(this));
             });
         },
@@ -306,7 +304,7 @@ function initTag(){
 //                    return data;
                     result =  $.parseJSON(data);
                     var status = parseInt(result.status);
-                    if (status == 1) {
+                    if (status === 1) {
                         var $html = $(result.data);
                         $html.each(function () {
                             util.showEntityTitle($(this));
@@ -383,20 +381,20 @@ function initTag(){
         }
     };
 
-    var category = {
-        loadCategory: function () {
-            var $category = $('.category');
-            if ($category[0]) {
-                var counter = 1;
-                var top = 3000;
-
-                $(window).scroll(function () {
-                    var $this = $(this);
-//                    console.log($this);
-                });
-            }
-        }
-    }
+//    var category = {
+//        loadCategory: function () {
+//            var $category = $('.category');
+//            if ($category[0]) {
+//                var counter = 1;
+//                var top = 3000;
+//
+//                $(window).scroll(function () {
+//                    var $this = $(this);
+////                    console.log($this);
+//                });
+//            }
+//        }
+//    };
 
     var detail = {
         updateNote: function ($noteItem) {
@@ -462,17 +460,24 @@ function initTag(){
             });
 
             function reply($commentItem) {
-                $commentItem.find('.reply').on('click', function () {
-                    var $commentContent = $commentItem.find('.comment-content');
-                    var $nickname = $commentItem.find('.nickname');
+                $commentItem.find('.reply').live('click', function (e) {
+//                    e.preventDefault();
+                    if (!util.isUserLogined()) {
+                        util.popLoginBox();
+                    } else {
 
-                    $commentText.val('回复 ' + $nickname.text() + ': ');
-                    $commentText.focus();
-                    replyToUser = $commentContent.attr('data-creator');
-                    replyToComment = $commentContent.attr('data-comment');
+                        var $commentContent = $commentItem.find('.comment-content');
+                        var $nickname = $commentItem.find('.nickname');
+
+                        $commentText.val('回复 ' + $.trim($nickname.text()) + ': ');
+                        $commentText.focus();
+                        replyToUser = $commentContent.attr('data-creator');
+                        replyToComment = $commentContent.attr('data-comment');
+                    }
+                    return false;
                 });
 
-                $commentItem.find('.close').on('click', function (e) {
+                $commentItem.find('.close').live('click', function (e) {
                     $.post(this.href, function (data) {
                         if (parseInt(data) === 1) {
                             $commentItem.remove();
@@ -542,36 +547,42 @@ function initTag(){
             var $noteDetail = $noteItem.find('.note-detail');
 
             // 动态加载点评的评论
-            $noteItem.find('.add-comment').on('click', function (e) {
-                if (!util.isUserLogined()) {
-                    util.popLoginBox();
+            $noteItem.find('.add-comment').live('click', function (e) {
+//                e.preventDefault();
+                var $noteComment = $noteItem.find('.note-comment');
+                if ($noteComment[0]) {
+                    $noteComment.slideToggle('fast');
                 } else {
-                    var $noteComment = $noteItem.find('.note-comment');
-
-                    if ($noteComment[0]) {
-                        $noteComment.slideToggle('fast');
-                    } else {
-                        var url = '/note/' + $(this).attr('data-note') + '/comment/';
-
-                        $.get(url, function (result) {
-                            result = $.parseJSON(result);
-                            var status = parseInt(result.status);
-
-                            if (status === 1) {
+                    var url = '/note/' + $(this).attr('data-note') + '/comment/';
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        async: false,
+                        success: function(data){
+                            result =  $.parseJSON(data);
+                            var $html = $(result.data);
+                            self.noteComment($html);
+                            $html.appendTo($noteDetail);
+                            $html.slideToggle('fast');
+                            initTag();
+                        },
+                        error: function(ajaxContext) {
+                            if (!util.isUserLogined()) {
+                                util.popLoginBox();
+                            } else {
+//                                console.log(ajaxContext['responseText']);
+                                result =  $.parseJSON(ajaxContext['responseText']);
                                 var $html = $(result.data);
-
                                 self.noteComment($html);
                                 $html.appendTo($noteDetail);
                                 $html.slideToggle('fast');
                                 initTag();
-                            } else if (status === 0) {
-                                // error
                             }
-                        });
-                    }
+//                            alert(ajaxContext.responseText);
+                        }
+                    });
+                    return false;
                 }
-                return false;
-                e.preventDefault();
             });
         },
 
@@ -603,7 +614,7 @@ function initTag(){
         addNote: function () {
             
             var self = this;
-            var $addNote = $('.add-note');
+            var $addNote = $('.add-note-submit');
             var $notes = $addNote.parent().find('.notes');
             var $form = $addNote.find('form');
             var $textarea = $addNote.find('textarea');
@@ -637,7 +648,7 @@ function initTag(){
                             var $html = $(result.data);
                             self.updateNote($html);
                             self.clickComment($html);
-
+                            self.poke();
                             $('<div class="sep"></div>').appendTo($notes);
                             $html.appendTo($notes);
 
@@ -653,7 +664,7 @@ function initTag(){
 
         poke: function () {
             // 点评 点赞
-            $('.poke').on('click', function (e) {
+            $('.poke').live('click', function (e) {
                 var $this = $(this);
 
                 if (!util.isUserLogined()) {
@@ -678,15 +689,15 @@ function initTag(){
 
                         if (result === 1) {
                             count++;
-                            $counter.text(count);
+                            $counter.text(count).addClass("count_blue");
                             $poke.addClass('poked');
 
                             if (count === 1) {
-                                $('<small>' + count + '</small>').appendTo($this);
+                                $('<small class="count_blue">' + count + '</small>').appendTo($this);
                             }
                         } else if (result === 0) {
                             count--;
-                            $counter.text(count - 1);
+                            $counter.text(count).removeClass("count_blue");
                             $poke.removeClass('poked');
 
                             if (count === 0) {
@@ -767,7 +778,7 @@ function initTag(){
         },
         bindClick:function(){
             $(".click_to_top").click(function(){
-                $("body").animate({
+                $("body,html").animate({
                     scrollTop:0,
                 },500);
             });
@@ -777,14 +788,14 @@ function initTag(){
     (function init() {
         util.like();
         util.noteHover();
-        util.popularHover();
+//        util.popularHover();
         util.shareWeibo();
 
         clickToTop.caculateRight();
         clickToTop.bindClick();
 
         selection.loadSelections();
-        category.loadCategory();
+        //category.loadCategory();
 
         detail.detailImageHover();
         detail.addNote();
@@ -800,7 +811,6 @@ function initTag(){
 
 })(jQuery, document, window);
 $(function(){
-
 	$(".account-form input[name='password'],.account-form input[name='email']").on("keyup",function(){
 		if($(".account-form input[name='password']").val()!="" && $.trim($(".account-form input[name='email']").val())!=""){
 			$(".account-form input[type='submit']").removeAttr("disabled").removeClass("submit_disabled").addClass("submit");
@@ -808,10 +818,24 @@ $(function(){
 			$(".account-form input[type='submit']").attr("disabled",true).removeClass("submit").addClass("submit_disabled");
 		}
 	});
-
+    $(".add-note form").on({
+        mouseover:function(){
+            $(this).find(".arr").addClass("focus");
+        },
+        mouseleave:function(){
+            $(this).find(".arr").removeClass("focus");
+        },
+        focus:function(){
+            $(this).find(".arr").addClass("focus");
+        },
+        blur:function(){
+            $(this).find(".arr").removeClass("focus");
+        }
+    });
     $(".load-entity input[type='submit']").on("click",function(){
         var entity_url = $("input[name='cand_url']").val();
         var request_url = $(".load-entity").attr("sd");
+        var thisObj = $(this);
         $.ajax({
             type:"post",
             url:request_url,
@@ -819,43 +843,70 @@ $(function(){
             dataType:"json",
             success:function(data){
                 console.log(data);
-                $(".entity-detail").slideDown();
-                $(".add-note").show();
-                $(".detail_title").text(data.data.taobao_title);
-                $(".detail_title_input").val(data.data.taobao_title);
-                $(".detail_chief_url img").attr("src",data.data.chief_image_url);
-                $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
-                for(var i=0;i<data.data.thumb_images.length;i++){
-                    if(i==0){
-                        $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');
-                    }else{
-                        $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');
+                if(data.status == "EXIST"){
+                    $(".entity_already_exist a").attr("href","/detail/"+data.data.entity_hash);
+                    $(".entity_already_exist").show();
+                }else{
+                    $(".entity_already_exist").hide();
+                    $(".entity-detail").slideDown();
+                    $(".add-note").show();
+                    $(".detail_title span:eq(1)").text(data.data.taobao_title);
+                    $(".detail_title_input").val(data.data.taobao_title);
+                    $(".detail_chief_url img").attr("src",data.data.chief_image_url);
+                    $(".add-note .user_avatar").attr("src",data.data.user_context.avatar_small);
+                    $(".detail_thumb_images").html("");
+                    thisObj.val("重新载入");
+                    thisObj.css({
+                        background:"#bbb",
+                        border:"1px solid #ddd",
+                        color:"white",
+                        outline:"none"
+                    });
+                    for(var i=0;i<data.data.thumb_images.length;i++){
+                        if(i==0){
+                            $(".detail_thumb_images").append('<div><img class="current_img" src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');
+                        }else{
+                            $(".detail_thumb_images").append('<div><img src='+data.data.thumb_images[i]+'_50x50.jpg'+'></div>');
+                        }
+                        $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'>').appendTo($(".detail form"));
                     }
-                    $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'>').appendTo($(".detail form"));
-                }
 
-                $('<input type="hidden" name="taobao_id" value='+data.data.taobao_id+'><input type="hidden" name="shop_nick" value='+data.data.shop_nick+'><input type="hidden" name="url" value='+data.data.cand_url+'><input type="hidden" name="taobao_title" value='+data.data.taobao_titie+'><input type="hidden" name="price" value='+data.data.price+'><input type="hidden" name="chief_image_url" value='+data.data.chief_image_url+'><input type="hidden" name="cid" value='+data.data.cid+'><input type="hidden" name="selected_category_id" value='+data.data.selected_category_id+'><input type="hidden" name="brand"><input name="user_id" type="hidden" value='+data.data.user_context.user_id+'>').appendTo($(".detail form"));
+                    $('<input type="hidden" name="shop_link" value="'+data.data.shop_link+'"><input type="hidden" name="taobao_id" value="'+data.data.taobao_id+'"><input type="hidden" name="shop_nick" value="'+data.data.shop_nick+'"><input type="hidden" name="url" value="'+data.data.cand_url+'"><input type="hidden" name="price" value="'+data.data.price+'"><input type="hidden" name="chief_image_url" value="'+data.data.chief_image_url+'"><input type="hidden" name="cid" value="'+data.data.cid+'"><input type="hidden" name="taobao_title" value="'+data.data.taobao_title+'"><input type="hidden" name="selected_category_id" value="'+data.data.selected_category_id+'"><input name="user_id" type="hidden" value="'+data.data.user_context.user_id+'">').appendTo($(".detail form"));
+                }
             },
             error:function(msg){
                 console.log(msg);
             }
         });
     });
+    $(".detail_taobao_brand").on("input propertychange",function(){
+        var brand = $(this).val();
+        if(brand.length>0){
+            $(".detail_title span:eq(0)").text(brand+" - ");
+        }else{
+            $(".detail_title span:eq(0)").text(brand);
+        }
+    });
+    $(".detail_title_input").on("input propertychange",function(){
+        var title = $(this).val();
+        $(".detail_title span:eq(1)").text(title);
+    });
+    
     $("#add-entity .detail-img div img").live("click",function(){
         $(".current_img").removeClass("current_img");
         $(this).addClass("current_img");
         var img_url = $(this).attr("src");
         var big_url = img_url.replace('50x50','300x300');
+        var origin_url = img_url.replace('_50x50.jpg','');
         $(".detail_chief_url img").attr("src",big_url);
+        $(".detail form input[name='chief_image_url']").val(origin_url);
     });
     $(".detail form").on("submit",function(){
         var brand = $(".detail_taobao_brand").val();
-        if(brand.length>0){
-            $('<input name="brand" value='+brand+' />').appendTo($(".detail form"));
-            return true;
-        }else{
-            return false;
-        }
+        var taobao_title = $(".detail_title_input").val();
+        $('<input type="hidden" name="brand" value="'+brand+'">').appendTo($(".detail form"));
+        $('<input type="hidden" name="title" value="'+taobao_title+'">').appendTo($(".detail form"));
+        return true;
     });
     $("#forget_sendmail").on("click",function(){
         var email = $(".forget_input").val();
@@ -868,7 +919,7 @@ $(function(){
                 console.log(data);
                 switch(data){
                     case "success":
-                        send_status(false);
+                        send_status(false,$("#forget_sendmail"));
                         var s = 60;
                         $("#forget_sendmail").html("发送成功！<i>60</i>秒后可重新发送！").attr("send-status",1);
                         var t = setInterval(function(){
@@ -884,7 +935,7 @@ $(function(){
                         },1000);
                     break;
                     case "not_exist":
-                        $(".forget_input_tip").html('该邮箱尚未注册，<a href="">点此注册</a>').show();
+                        $(".forget_input_tip").html('该邮箱尚未注册，<a href="/register/">点此注册</a>').show();
                     break;
                     case "failed":
                         $(".forget_input_tip").html('发送失败,请尝试重新发送！').show();
@@ -896,22 +947,53 @@ $(function(){
             }
         });
     });
-    $(".forget_input").on("keyup change click",function(){
+    $(".regist_email").on("keyup change click input",function(){
         if($("#forget_sendmail").attr("send-status") == 1){
             return false;
         }
         if($.trim($(this).val()).length>0)
-        send_status(true);
+        send_status(true,$("#forget_sendmail"));
         else
-        send_status(false);
+        send_status(false,$("#forget_sendmail"));
     });
-
-    function send_status(flag){
+    $(".new_password_input").on("keyup change click input",function(){
+        if($("#reset_password").attr("send-status") == 1){
+            return false;
+        }
+        if($.trim($(this).val()).length>0)
+        send_status(true,$("#reset_password"));
+        else
+        send_status(false,$("#reset_password"));
+    });
+    function send_status(flag,elem){
         if(flag){
-            $("#forget_sendmail").removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
+            $(elem).removeClass("btn-disabled").addClass("btn-update").removeAttr("disabled");
         }else{
-            $("#forget_sendmail").removeClass("btn-update").addClass("btn-disabled").attr("disabled","true");
+            $(elem).removeClass("btn-update").addClass("btn-disabled").attr("disabled","true");
         }
     }
+
+//    if ($.browser.msie) {
+//        $('[placeholder]').focus(function() {
+//            var input = $(this);
+//            if (input.val() == input.attr('placeholder')) {
+//                input.val('');
+//                input.removeClass('placeholder');
+//            }
+//            }).blur(function() {
+//                var input = $(this);
+//                if (input.val() == '' || input.val() == input.attr('placeholder')) {
+//                input.addClass('placeholder');
+//                input.val(input.attr('placeholder'));
+//            }
+//            }).blur().parents('form').submit(function() {
+//                $(this).find('[placeholder]').each(function() {
+//                var input = $(this);
+//                if (input.val() == input.attr('placeholder')) {
+//                input.val('');
+//            }
+//        })
+//    });
+//    }
 });
 	

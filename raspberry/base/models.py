@@ -72,8 +72,12 @@ class Neo_Category(models.Model):
     title = models.CharField(max_length = 128, db_index = True, unique = True)
     image_store_hash = models.CharField(max_length = 64, db_index = True, null = True, default = None)
     status = models.IntegerField(default = 1, db_index = True)
+
     class Meta:
         ordering = ['id']
+
+    def get_absolute_url(self):
+        return "/c/%s" % self.id
 
     def __unicode__(self):
         return self.title
@@ -107,32 +111,33 @@ class Banner(models.Model):
 
 
 class Entity(models.Model):
-    entity_hash = models.CharField(max_length = 32, unique = True, db_index = True)
-    creator_id = models.IntegerField(default = None, null = True, db_index = True)
+    entity_hash = models.CharField(max_length=32, unique=True, db_index=True)
+    creator_id = models.IntegerField(default=None, null=True, db_index=True)
     category = models.ForeignKey(Category)
     neo_category = models.ForeignKey(Neo_Category)
-    brand = models.CharField(max_length = 256, null = False, default = '')
-    title = models.CharField(max_length = 256, null = False, default = '')
-    intro = models.TextField(null = False, default = '')
-    price = models.DecimalField(max_digits = 20, decimal_places = 2, default = 0, db_index = True)
-    like_count = models.IntegerField(default = 0, db_index = True)
-    mark = models.IntegerField(default = 0, db_index = True)
-    chief_image = models.CharField(max_length = 64, null = False)
-    detail_images = models.CharField(max_length = 1024, null = True)
-    created_time = models.DateTimeField(auto_now_add = True, db_index = True)
-    updated_time = models.DateTimeField(auto_now = True, db_index = True)
-    weight = models.IntegerField(default = 0, db_index = True)
-    rank_score = models.IntegerField(default = 0, db_index = True)
+    brand = models.CharField(max_length=256, null=False, default='')
+    title = models.CharField(max_length=256, null=False, default='')
+    intro = models.TextField(null=False, default='')
+    price = models.DecimalField(max_digits=20, decimal_places=2, default=0, db_index=True)
+    like_count = models.IntegerField(default=0, db_index=True)
+    mark = models.IntegerField(default=0, db_index=True)
+    chief_image = models.CharField(max_length=64, null=False)
+    detail_images = models.CharField(max_length=1024, null=True)
+    created_time = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_time = models.DateTimeField(auto_now=True, db_index=True)
+    novus_time = models.DateTimeField(db_index=True)
+    weight = models.IntegerField(default=0, db_index=True)
+    rank_score = models.IntegerField(default=0, db_index=True)
     
     search = SphinxSearch( 
-        index = 'entities',
-        weights = { 
-            'title' : 20,
-            'brand' : 10,
-            'intro' : 5,
+        index='entities',
+        weights={ 
+            'title': 20,
+            'brand': 10,
+            'intro': 5,
         }, 
-        mode = 'SPH_MATCH_ALL',
-        rankmode = 'SPH_RANK_NONE',
+        mode='SPH_MATCH_ALL',
+        rankmode='SPH_RANK_NONE',
     )
 
     def get_absolute_url(self):
@@ -231,6 +236,9 @@ class Entity_Tag(models.Model):
     class Meta:
         ordering = ['-created_time']
         unique_together = ('entity', 'user', 'tag')
+
+    def get_absolute_url(self):
+        return "/t/%s" % self.tag_hash
 
     def __unicode__(self):
         return self.tag

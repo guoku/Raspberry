@@ -1,8 +1,6 @@
 User-agent: *
 Crawl-delay: 30
 Disallow: /mobie/
-Disallow: /login/
-Disallow: /logout/
 Disallow: /present/
 Disallow: /visit_item/
 Disallow: /sina/

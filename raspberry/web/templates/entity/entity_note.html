@@ -20,10 +20,9 @@
                 {% if user_context.user_id == creator_context.user_id %}
                     <form class="clearfix update-note-form"
                           action="{% url 'web.views.entity.update_note' note_context.entity_id note_context.note_id %}"
-                          method="POST" style="display: none">
+                          method="POST">
                 	{% csrf_token %}
-                        <textarea name="note_text">{{ note_context.content }}</textarea>
-
+                        <textarea name="note_text" rows="4">{{ note_context.content }}</textarea>
                         <div>
                             <button type="button" class="cancel">取消</button>
                             <button type="submit" class="update">修改</button>
@@ -31,9 +30,9 @@
                     </form>
                 {% endif %}
                 
-                <a href="javascript:;" class="poke{%if poke_button_target_status == '0'%} poked{%endif%}" data-note="{{ note_context.note_id }}" data-target-status="{{ poke_button_target_status }}"><span></span>
+                <a href="javascript:;" class="poke{%if poke_button_target_status == '0'%} poked {% endif %}" data-note="{{ note_context.note_id }}" data-target-status="{{ poke_button_target_status }}"><span></span>
                     {% if note_context.poke_count > 0 %}
-                        <small>{{ note_context.poke_count }}</small>
+                       <small {%if poke_button_target_status == '0'%} class="count_blue" {% endif %}>{{ note_context.poke_count }}</small>
                     {% endif %}
                 </a>
                 <a href="javascript:;" class="add-comment" data-note="{{ note_context.note_id }}"><span></span>
@@ -49,6 +48,9 @@
                 {% if user_context.user_id == creator_context.user_id %}
                     <a href="javascript:;" class="update-note">修改</a>
                     <span class="my-note">你的点评</span>
+                {% endif %}
+                {% if is_staff %}
+                    <span class="my-note"><a href="{% url 'management_edit_note' note_context.note_id %}" target=_blank>编</a></span>
                 {% endif %}
             </div>
         </div>

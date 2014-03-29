@@ -72,7 +72,18 @@ class TaobaoShop(object):
         return _inst 
 
 
-    def read(self, full_info = False):
+    @staticmethod
+    def is_global_shop(shop_nick):
+        try:
+            _doc = TaobaoShopModel.objects.filter(shop_info__nick=shop_nick).first()
+            if _doc.shop_info.shop_type == 'global':
+                return 1 
+        except Exception, e:
+            pass
+        return 0 
+
+    
+    def read(self, full_info=False):
         _hdl = TaobaoShopModel.objects.filter(shop_info__nick = self.nick)
         if _hdl.count() == 0:
             return None

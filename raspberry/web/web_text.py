@@ -27,7 +27,7 @@ RESET_PASSWORD_EMAIL_HAS_BEEN_SENT = u"重置密码邮件已发送至"
 
 VERIFY_GUOKU_EMAIL = u"验证果库帐号邮箱"
 
-WEIBO_ACCOUNT_ERROR_1 = "此微博帐号不是你绑定果库的微博账号,请尝试别的微博帐号"
-WEIBO_ACCOUNT_ERROR_2 = "此微博帐号已经绑定另一个果库帐号，请尝试别的微博账号"
-TAOBAO_ACCOUNT_ERROR_1 = "此淘宝帐号不是你绑定果库的淘宝账号,请尝试别的淘宝帐号"
-TAOBAO_ACCOUNT_ERROR_2 = "此淘宝帐号已经绑定另一个果库帐号，请尝试别的淘宝账号"
+WEIBO_ACCOUNT_ERROR_1 = "此微博帐号不是你绑定果库的微博帐号,请尝试别的微博帐号"
+WEIBO_ACCOUNT_ERROR_2 = "此微博帐号已经绑定另一个果库帐号，请尝试别的微博帐号"
+TAOBAO_ACCOUNT_ERROR_1 = "此淘宝帐号不是你绑定果库的淘宝帐号,请尝试别的淘宝帐号"
+TAOBAO_ACCOUNT_ERROR_2 = "此淘宝帐号已经绑定另一个果库帐号，请尝试别的淘宝帐号"

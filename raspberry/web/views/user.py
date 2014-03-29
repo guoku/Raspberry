@@ -34,11 +34,13 @@ def user_likes(request, user_id, template=TEMPLATE):
     _query_user_context = _query_user.read() 
     if request.user.is_authenticated():
         _request_user_id = request.user.id
+        _is_staff = request.user.is_staff
         _request_user_context = User(_request_user_id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
     else:
         _request_user_id = None
+        _is_staff = False 
         _request_user_context = None
         _request_user_like_entity_set = []
         _relation = None 
@@ -77,6 +79,7 @@ def user_likes(request, user_id, template=TEMPLATE):
     return render_to_response(
         template,
         {
+            'is_staff' : _is_staff,
             'content_tab' : 'like',
             'request_user_context' : _request_user_context,
             'query_user_context' : _query_user_context,
@@ -244,13 +247,15 @@ def user_followings(request, user_id, template=TEMPLATE):
     _following_id_list = _query_user.read_following_user_id_list()
     _total_count = len(_following_id_list)
 
-    _paginator = Paginator(_page_num, 20, len(_following_id_list))
+    _paginator = Paginator(_page_num, 8, len(_following_id_list))
     _following_list = []
     for _u_id in _following_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         try:
-            _f_user_context = User(_u_id).read()
+            _f_user = User(_u_id)
+            _f_user_context = _f_user.read()
             if _request_user_context != None:
                 _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
+            _f_user_context['latest_like_entity_id_list'] = _f_user.read_latest_like_entity_list() 
             _following_list.append(_f_user_context)
         except Exception, e:
             pass
@@ -297,13 +302,19 @@ def user_fans(request, user_id, template=TEMPLATE):
 
     _page_num = request.GET.get('p', 1)
     _fans_id_list = _query_user.read_fan_user_id_list()
-    _paginator = Paginator(_page_num, 20, len(_fans_id_list))
+    _paginator = Paginator(_page_num, 8, len(_fans_id_list))
 
     _fans_list = []
     for _u_id in _fans_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
-        _f_user_context = User(_u_id).read()
-        _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
-        _fans_list.append(_f_user_context)
+        try:
+            _f_user = User(_u_id)
+            _f_user_context = _f_user.read()
+            if _request_user_context != None:
+                _f_user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
+            _f_user_context['latest_like_entity_id_list'] = _f_user.read_latest_like_entity_list() 
+            _fans_list.append(_f_user_context)
+        except Exception, e:
+            pass
     
     _duration = datetime.datetime.now() - _start_at
     WebLogTask.delay(

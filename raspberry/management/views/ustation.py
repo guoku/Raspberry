@@ -98,10 +98,13 @@ def sync_ustation(request):
         try:
             _note_id = Note.find(entity_id = _entity_context['entity_id'], selection = 1)[0]
             _note_context = Note(_note_id).read()
+            _item_context = Item(_entity_context['item_id_list'][0]).read()
+            _shop_nick = _item_context['shop_nick']
             _rslt.append({
                 'item_id' : _entity_context['taobao_id'],
                 'cid' : _entity_context['old_root_category_id'],
-                'note' : _note_context['content']
+                'note' : _note_context['content'],
+                'is_global' : TaobaoShop.is_global_shop(_shop_nick)
             })
         except Exception, e:
             pass

@@ -115,7 +115,7 @@
 #detail .add-note form {
     display: inline-block;
     width: 484px;
-    padding: 15px;
+    padding: 0px 15px 15px;
     border: 1px solid #eee;
     border-radius: 4px;
     background-color: #fff;
@@ -130,7 +130,9 @@
     border: none;
     outline: 0;
 }
-
+#detail .add-note form:hover {
+    border: 1px solid #ddd;
+}
 #detail .add-note form.active textarea {
     height: 90px;
 }
@@ -142,6 +144,24 @@
 #detail .add-note form.active div {
     display: block;
     position: relative;
+}
+.add-note form .arr{
+    width: 9px;
+    height: 16px;
+    display: inline-block;
+    background: url("../images/arrows.png") no-repeat;
+    position: relative;
+    top:15px;
+    left: -24px;
+}
+.note-operate small{
+    font-size: 14px;
+}
+.count_blue{
+    color: #427ec0;
+}
+.add-note form .focus{
+    background: url("../images/arrows_press.png") no-repeat;
 }
 .add-note-div{
     margin-top:50px;
@@ -195,18 +215,23 @@
 }
 
 .note-item .update-note-form {
+    display: none;
     margin: 10px 0;
 }
 
 .note-item .update-note-form textarea {
-    width: 507px;
+    width: 501px;
     height: 90px;
     margin: 0 0 10px 0;
-    padding: 2px;
+    padding: 5px;
     border: 1px solid #eee;
     border-radius: 5px;
     outline: none;
     resize: none;
+}
+.note-item .update-note-form textarea:focus {
+    border-color: #ade0b3;
+    background-color: #f8f8f8;
 }
 
 .note-item .update-note-form div {
@@ -241,14 +266,14 @@
 
 .note-item .selection-icon {
     display: inline-block;
-    position: absolute;
-    right: 105px;
-    /*float: right;*/
+    /*position: absolute;*/
+    /*right: 105px;*/
+    float: right;
     width: 19px;
     height: 19px;
     background: url("/static/v3/images/toolkit.png") no-repeat;
     background-position: -196px -168px;
-    margin: 4px 0 0;
+    margin: 2px 5px 0 0;
 }
 
 .note-item .poke {
@@ -404,7 +429,7 @@
     display: inline-block;
     margin-bottom: 20px;
     padding: 6px 15px;
-    border-radius: 5px;
+    border-radius: 3px;
     font-size: 16px;
     color: #fff;
     background-color: #427ec0;
@@ -489,6 +514,16 @@
     text-decoration: none;
 }
 
+#detail .share .weibo_icon{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    background:url("/static/v3/images/toolkit.png");
+    background-position: -55px -36px ;
+    position: relative;
+    top:5px;
+}
+
 #detail .download {
     padding: 25px 20px;
     border: 1px solid #eee;
@@ -500,7 +535,7 @@
 }
 
 a.tag_display {
-    color:#0084B4 !important;
+    color:#427ec0 !important;
 }
 a.tag_display:hover {
     text-decoration:underline;

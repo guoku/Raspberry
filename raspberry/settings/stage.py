@@ -28,6 +28,18 @@ DATABASES = {
             'init_command':'SET storage_engine=INNODB',
         }
     },
+    'slave': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'guoku',
+        'USER': 'qinzhoukan',
+        'PASSWORD': 'qinzhoukan1@#',
+        'HOST': '10.0.2.95',
+        'PORT': '',
+        'OPTIONS': {
+            'use_unicode':'utf-8',
+            'init_command':'SET storage_engine=INNODB',
+        }
+    },
 }
 
 CACHES = {
@@ -109,6 +121,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django.contrib.formtools',
+    'django.contrib.sitemaps',
     'djcelery',
     'base',
     'management',
@@ -140,3 +153,5 @@ SINA_APP_KEY = '2830558576'
 SINA_APP_SECRET = 'a4861c4ea9facd833eb5d828794a2fb2'
 SINA_BACK_URL = APP_HOST + '/sina/auth'
 TAOBAO_BACK_URL = APP_HOST + "/taobao/auth"
+
+ENABLE_GUOKU_PLUS = True
