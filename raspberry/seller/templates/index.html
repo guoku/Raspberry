@@ -74,7 +74,121 @@
                                         </thead>
                                         <tbody>
                                             {% for item in guokuplus_list %}
+                                            <tr class="{{ item.status }}">
+                                                <td>
+                                                    <div class="media">
+                                                        <a class="pull-left" href="http://item.taobao.com/item.htm?id={{item.item_context.taobao_id}}">
+                                                            <img class="media-object" alt="64x64" src="{{item.entity_context.chief_image.url}}" style="width: 64px; height: 64px;"></a>
+                                                        <div class="media-body">
+                                                            <h5 class="media-heading"><a href="{% url 'web_detail' item.entity_context.entity_hash %}">{{ item.item_context.title }}</a></h5>
+                                                            <p> <span style="color:#427ec0;font-size: 16px;font-family: Georgia;">￥{{ item.sale_price}} </span> | <span class="badge">共{{ item.total_volume}}件</span> | <span class="badge">已售{{ item.sales_volume}}件</span></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <h5>
+                                                        <span class="label label-success">{{ item.status }}</span>
+                                                    </h5>
+                                                    <p>开始日期：{{ item.start_time | date:'Y-m-d H:i' }}</p>
+                                                </td>
+                                                <td>
+                                                    <a href="{%url 'seller_guoku_plus_detail'%}?id={{item.activity_id}}">购买详情</a> 
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade">
+                                <div class="table-responsive" style="margin-top:20px;">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
                                             <tr>
+                                                <th style="width: 45%;">商品</th>
+                                                <th style="width: 30%;">状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in guokuplus_list %}
+                                            <tr class="{{ item.status }}">
+                                                <td>
+                                                    <div class="media">
+                                                        <a class="pull-left" href="http://item.taobao.com/item.htm?id={{item.item_context.taobao_id}}">
+                                                            <img class="media-object" alt="64x64" src="{{item.entity_context.chief_image.url}}" style="width: 64px; height: 64px;"></a>
+                                                        <div class="media-body">
+                                                            <h5 class="media-heading"><a href="{% url 'web_detail' item.entity_context.entity_hash %}">{{ item.item_context.title }}</a></h5>
+                                                            <p> <span style="color:#427ec0;font-size: 16px;font-family: Georgia;">￥{{ item.sale_price}} </span> | <span class="badge">共{{ item.total_volume}}件</span> | <span class="badge">已售{{ item.sales_volume}}件</span></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <h5>
+                                                        <span class="label label-success">{{ item.status }}</span>
+                                                    </h5>
+                                                    <p>开始日期：{{ item.start_time | date:'Y-m-d H:i' }}</p>
+                                                </td>
+                                                <td>
+                                                    <a href="{%url 'seller_guoku_plus_detail'%}?id={{item.activity_id}}">购买详情</a> 
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade">
+                                <div class="table-responsive" style="margin-top:20px;">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 45%;">商品</th>
+                                                <th style="width: 30%;">状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in guokuplus_list %}
+                                            <tr class="{{ item.status }}">
+                                                <td>
+                                                    <div class="media">
+                                                        <a class="pull-left" href="http://item.taobao.com/item.htm?id={{item.item_context.taobao_id}}">
+                                                            <img class="media-object" alt="64x64" src="{{item.entity_context.chief_image.url}}" style="width: 64px; height: 64px;"></a>
+                                                        <div class="media-body">
+                                                            <h5 class="media-heading"><a href="{% url 'web_detail' item.entity_context.entity_hash %}">{{ item.item_context.title }}</a></h5>
+                                                            <p> <span style="color:#427ec0;font-size: 16px;font-family: Georgia;">￥{{ item.sale_price}} </span> | <span class="badge">共{{ item.total_volume}}件</span> | <span class="badge">已售{{ item.sales_volume}}件</span></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <h5>
+                                                        <span class="label label-success">{{ item.status }}</span>
+                                                    </h5>
+                                                    <p>开始日期：{{ item.start_time | date:'Y-m-d H:i' }}</p>
+                                                </td>
+                                                <td>
+                                                    <a href="{%url 'seller_guoku_plus_detail'%}?id={{item.activity_id}}">购买详情</a> 
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade">
+                                <div class="table-responsive" style="margin-top:20px;">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 45%;">商品</th>
+                                                <th style="width: 30%;">状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in guokuplus_list %}
+                                            <tr class="{{ item.status }}">
                                                 <td>
                                                     <div class="media">
                                                         <a class="pull-left" href="http://item.taobao.com/item.htm?id={{item.item_context.taobao_id}}">
@@ -103,11 +217,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-
                             </div>
-                            <div class="tab-pane fade" id="profile"></div>
-                            <div class="tab-pane fade" id="profile"></div>
-                            <div class="tab-pane fade" id="profile"></div>
                         </div>
                     </div>
                 </div>
