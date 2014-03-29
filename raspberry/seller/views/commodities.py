@@ -7,7 +7,7 @@ from django.template import RequestContext
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
 
 from base.entity import Entity
-from base.taobao_shop import TaobaoShop
+from base.taobao_shop import TaobaoShop, GuokuPlusActivity
 from base.user import User
 from base.item import Item
 from forms import GuokuPlusApplicationForm, ShopVerificationForm 
@@ -71,13 +71,38 @@ def verify(request, user_context, shop_inst):
 @login_required
 @seller_only
 def guokuplus_list(request, user_context, shop_inst):
-    items = shop_inst.read_guoku_plus_application_list()
-    return render_to_response("guoku_plus_list.html",
-                    {'items' : items},
-                    context_instance = RequestContext(request))
+    #items = shop_inst.read_guoku_plus_application_list()
+    #return render_to_response(
+    #    "guoku_plus_list.html",
+    #    {'items' : items},
+    #                context_instance = RequestContext(request))
+    pass
 
 @require_GET
 @login_required
 @seller_only
-def guoku_plus_activity_list(request, user_context, shop_inst):
-    pass    
+def guoku_plus_detail(request, user_context, shop_inst):
+    guoku_plus_id = request.GET.get("id", None)
+    if guoku_plus_id:
+        guoku_plus = GuokuPlusActivity(int(guoku_plus_id))
+        guoku_plus_context = guoku_plus.read()
+        if guoku_plus_context['shop_nick'] != user_context['shop_nick']:
+            raise Http404
+        token_count = guoku_plus.get_token_count()
+        used_token_list = guoku_plus.read_token_list(used = True)
+        for item in used_token_list:
+            item['user_context'] = User(item['user_id']).read()
+
+        return render_to_response(
+            "guoku_plus_detail.html",
+            {
+                "guoku_plus_context" : guoku_plus_context,
+                "used_token_list" : used_token_list,
+                "token_count" : token_count,
+                "used_token_count" : len(used_token_list),
+                "user_context" : user_context
+            },
+            context_instance = RequestContext(request)
+        )
+    else:
+        raise Http404

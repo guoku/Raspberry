@@ -392,6 +392,7 @@ class GuokuPlusActivity(object):
         context['user_id'] = token.user_id
         context['guoku_plus_activity_id'] = token.guoku_plus_activity_id
         context['token'] = token.token
+        context['quantity'] = token.quantity
         context['used'] = token.used
         context['created_time'] = token.created_time
         context['used_time'] = token.used_time
@@ -435,7 +436,19 @@ class GuokuPlusActivity(object):
         token_obj.used_time = datetime.datetime.now()
         token_obj.save()
         return TOKEN_SUCCESS
-        
+    
+    def get_token_count(self):
+        return GuokuPlusTokenModel.objects.filter(guoku_plus_activity_id = self.activity_id).count()
+
+    def read_token_list(self, used = None):
+        _hdl = GuokuPlusTokenModel.objects.filter(guoku_plus_activity_id = self.activity_id)
+        if used != None:
+            _hdl = _hdl.filter(used = used)
+        results = []
+        for item in _hdl:
+            results.append(self.__get_token_context(item))
+        return results
+
     @classmethod
     def get_activity_by_token(cls, token):
         try:
