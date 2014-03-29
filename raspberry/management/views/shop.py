@@ -18,6 +18,8 @@ from utils.authority import staff_only
 from utils.paginator import Paginator
 from utils.extractor.taobao import TaobaoExtractor 
 
+import datetime
+
 NUM_EVERY_PAGE = 100
 ALL_GIFTS = [u"果库福利", u"应用市场活动", u"微博微信活动"]
 SHOP_TYPES = ["taobao.com", "tmall.com", "global"]
