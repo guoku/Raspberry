@@ -48,7 +48,6 @@ def user_list(request):
 @login_required
 @staff_only
 def edit_user(request, user_id, template='user/edit.html'):
-
     if request.method == 'POST':
         # _user = User(user_id)
         forms = UserForms(request.POST)
@@ -59,19 +58,19 @@ def edit_user(request, user_id, template='user/edit.html'):
             return render_to_response(
                 template,
                 {
-                    'forms':forms,
-                    'user_context' : User(user_id).read(),
+                    'forms': forms,
+                    'user_context': User(user_id).read(with_censor=False),
                 },
                 context_instance = RequestContext(request)
             )
     else:
-        _user_context = User(user_id).read()
+        _user_context = User(user_id).read(with_censor=False)
         forms = UserForms(initial=_user_context)
         return render_to_response(
             template,
             {
                 'forms': forms,
-                'user_context' : _user_context,
+                'user_context': _user_context,
             },
             context_instance = RequestContext(request)
         )
@@ -104,3 +103,16 @@ def freeze_user_note_all(request, user_id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
+@login_required
+@staff_only
+def set_censor(request, user_id):
+    _censor_id = request.user.id
+    User(user_id).set_censor(_censor_id)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@login_required
+@staff_only
+def cancel_censor(request, user_id):
+    _censor_id = request.user.id
+    User(user_id).cancel_censor(_censor_id)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])

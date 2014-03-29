@@ -21,9 +21,6 @@ class MobileNote(Note):
         
         _context['creator'] = MobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
-        if _context['creator'].has_key('is_censor') and  _context['creator']['is_censor'] == True:
-            _context['content'] = u'大家好，我是一只小白兔。'
-             
         
         if request_user_id and self.poke_already(request_user_id):
             _context['poke_already'] = 1
@@ -61,9 +58,6 @@ class MobileNote(Note):
         _context = super(MobileNote, self).read_comment(comment_id, json = True)
         _context['creator'] = MobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
-        
-        if _context['creator'].has_key('is_censor') and  _context['creator']['is_censor'] == True:
-            _context['content'] = u'大家好，我是一只小白兔。'
         
         if _context.has_key('reply_to_user_id') and _context['reply_to_user_id'] != None:
             _context['reply_to_user'] = MobileUser(_context['reply_to_user_id']).read(request_user_id)

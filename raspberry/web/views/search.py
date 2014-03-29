@@ -53,19 +53,21 @@ def search(request, template='search/search.html'):
         
         
         if _group == 'u':
-            _paginator = Paginator(_page, 24, len(_user_id_list), { 'q' : _query })
+            _paginator = Paginator(_page, 8, len(_user_id_list), { 'q' : _query, 'g' : 'u' })
             for _u_id in _user_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]: 
                 try:
-                    _user_context = User(_u_id).read()
+                    _user = User(_u_id)
+                    _user_context = _user.read()
                     if _request_user_context != None:
                         _user_context['relation'] = User.get_relation(_request_user_context['user_id'], _u_id)
+                    _user_context['latest_like_entity_id_list'] = _user.read_latest_like_entity_list() 
                     _user_list.append(_user_context)
                 except Exception, e:
                     pass
             _log_appendix['type'] = 'user'
             _log_appendix['result_users'] = _user_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
         elif _group == 't':
-            _paginator = Paginator(_page, 24, len(_tag_list), { 'q' : _query })
+            _paginator = Paginator(_page, 24, len(_tag_list), { 'q' : _query, 'g' : 't' })
             _log_appendix['type'] = 'tag'
             _log_appendix['result_tags'] = [] 
             for _tag_context in _tag_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:

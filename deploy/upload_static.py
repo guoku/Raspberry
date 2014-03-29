@@ -26,8 +26,10 @@ env.local_static_root = '/tmp/static/'
 env.remote_static_root = '/data/www/core/static/v3/'
 
 def deploy_static():
+    local('rm -rf /tmp/static/')
     with lcd('/Users/edison7500/PycharmProjects/Raspberry/raspberry'):
         local('python manage.py collectstatic --noinput --settings="raspberry.settings.stage"')
+        local('sh ../deploy/clean_static.sh')
     rsync_project(
         remote_dir = env.remote_static_root,
         local_dir = env.local_static_root,

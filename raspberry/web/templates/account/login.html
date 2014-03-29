@@ -1,12 +1,13 @@
 {% extends "account/account_base.html" %}
-{% load i18n %}
+{% load i18n staticfiles %}
 
 {% block title %}{% trans "sign in" %}{% endblock %}
 {% block form %}
     <div class="account-form login">
         <div class="form_container">
             <div class="tip">
-                <img src="/static/v3/images/signin.png"  alt="欢迎回来">
+                <img src="{% static 'images/signin.png' %}" alt="欢迎回来">
+{#                <img src="/static/v3/images/signin.png"  alt="欢迎回来">#}
             </div>
             {% if forms.errors %}
                 {% spaceless %}
@@ -28,10 +29,10 @@
                     </div>
                 {% endfor %}
                 <div class="remember">
-                    <label><input type="checkbox" name="remember_me">记住我</label>
+                    <label><input type="checkbox" name="remember_me">{% trans 'remember me' %}</label>
                     <a href="{% url 'web_forget_passwd' %}">忘记密码?</a>
                 </div>
-                <input type="submit" value="登录" class="submit_disabled" disabled="true">
+                <input type="submit" value="{% trans 'sign in' %}" class="submit_disabled" disabled="true">
             </form>
 
             <div class="third-party">
