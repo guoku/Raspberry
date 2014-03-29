@@ -110,7 +110,6 @@ class Entity(object):
 
     def __insert_jd_item(self, jd_item_info, images):
         _weight = jd_item_info['weight'] if jd_item_info.has_key('weight') else 0
-        print self.entity_id , 'entity_id'
         _jd_item = JDItem.create_jd_item(
             entity_id = self.entity_id,
             images = images,

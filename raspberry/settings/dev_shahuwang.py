@@ -78,7 +78,7 @@ MANGO_PORT = 27017
 JUMP_TO_TAOBAO = True 
 
 IMAGE_LOCAL = True 
-IMAGE_SERVER  = 'http://10.0.1.109:8000/image/local/'
+IMAGE_SERVER  = 'http://10.0.1.109/image/local/'
 APP_HOST = "http://10.0.1.109:8001"
 ALLOWED_HOSTS = ['*']
 #IMAGE_LOCAL = False 

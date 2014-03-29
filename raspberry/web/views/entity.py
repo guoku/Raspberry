@@ -411,8 +411,8 @@ def jd_info(request, _cand_url):
         _chief_image_url = _jd_item_info['thumb_images'][0]
         #TODO：进行京东类目转换
         #TODO :先用一个cid暂时使用着先
-        cid = 1512
-        _selected_category_id = Category.get_category_by_taobao_cid('1512')
+        cid = '1512' 
+        _selected_category_id = Category.get_category_by_jd_cid(cid)
         _data = {
             'user_context' : User(request.user.id).read(),
             'cand_url' : _cand_url,
@@ -559,6 +559,7 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
 
 def create_jd_entity(request, template):
     _cid = request.POST.get("cid", None)
+    _jd_id = request.POST.get("jd_id", None)
     _jd_shop_nick = request.POST.get("shop_nick", None)
     _jd_shop_link = request.POST.get("shop_link", None)
     _jd_title = request.POST.get("jd_title", None)
@@ -576,6 +577,7 @@ def create_jd_entity(request, template):
     if _chief_image_url in _detail_image_urls:
         _detail_image_urls.remove(_chief_image_url)
 
+    _detail_image_urls = [x.replace("/n5/","/n1/") for x in _detail_image_urls]
     _entity = Entity.create_by_jd_item(
             creator_id = request.user.id,
             category_id = _category_id,
@@ -593,7 +595,7 @@ def create_jd_entity(request, template):
             intro = _intro,
             detail_image_urls = _detail_image_urls,
     )
-    _note = _entry.add_note(creator_id = _user_id, note_text = _note_text)
+    _note = _entity.add_note(creator_id = _user_id, note_text = _note_text)
     return HttpResponsePermanentRedirect(reverse('web_detail', kwargs = {"entity_hash" : _entity.get_entity_hash()}))
 
 

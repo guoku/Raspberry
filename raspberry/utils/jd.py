@@ -31,3 +31,9 @@ def load_jd_item_info(jd_id):
     jd_item_info['title'] = HTMLParser.HTMLParser().unescape(jd_item_info['desc'])
     jd_item_info['shop_nick'] = jd_item_info['nick']
     return jd_item_info
+
+
+def category_map(jd_cat):
+    #TODO: 要修改,根据京东的类目返回对应的果库类目,1512只是随便弄一个
+    return '1512'
+
