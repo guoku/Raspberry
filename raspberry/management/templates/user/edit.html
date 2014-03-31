@@ -26,6 +26,17 @@
                         冻结全部点评  
                     </a>
                 </li>
+                <li>
+                    {% if user_context.is_censor %}
+                        <a href="{% url 'management_cancel_user_censor' user_context.user_id %}">
+                            撤销小白兔 
+                        </a>
+                    {% else %}
+                        <a href="{% url 'management_set_user_censor' user_context.user_id %}">
+                            变成小白兔 
+                        </a>
+                    {% endif %}
+                </li>
             </ul>
         </div>
     </div>
@@ -48,8 +59,23 @@
                 <div class="control-group">
                     <label class="control-label" for="user_id">用户ID:</label>
                     <div class="controls">
-                        <input class="input-xxlarge" type="text" id="user_id" name="user_id"
-                               value="{{ user_context.user_id }}" disabled/>
+                        <input class="input-xxlarge" type="text" id="user_id" name="user_id" value="{{ user_context.user_id }}" disabled/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="current_status">用户状态:</label>
+                    <div class="controls">
+                        {% if user_context.is_censor %}
+                            <input class="input-xxlarge" type="text" id="current_status" name="current_status" value="小白兔" disabled/>
+                            <a href="{% url 'management_cancel_user_censor' user_context.user_id %}">
+                                撤销 
+                            </a>
+                        {% else %}
+                            <input class="input-xxlarge" type="text" id="current_status" name="current_status" value="正常" disabled/>
+                            <a href="{% url 'management_set_user_censor' user_context.user_id %}">
+                                变成小白兔 
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
                 {% for field in forms %}

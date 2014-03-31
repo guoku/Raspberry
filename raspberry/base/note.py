@@ -315,8 +315,14 @@ class Note(object):
         self.__ensure_note_obj()
         return self.note_obj.entity_id 
         
-    def read(self, json = False):
+    def read(self, json=False, with_censor=True):
         _context = self.__read_note_context()
+
+        if with_censor:
+            _censor_user_set = User.read_censor_user_set()
+            if _context['creator_id'] in _censor_user_set:
+                _context['content'] = u'大家好，我是一只小白兔！爱果库更爱 @果库某工程师 ！'
+
         if json:
             _context['created_time'] = time.mktime(_context["created_time"].timetuple())
             _context['updated_time'] = time.mktime(_context["updated_time"].timetuple())

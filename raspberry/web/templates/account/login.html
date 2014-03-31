@@ -29,10 +29,10 @@
                     </div>
                 {% endfor %}
                 <div class="remember">
-                    <label><input type="checkbox" name="remember_me">记住我</label>
+                    <label><input type="checkbox" name="remember_me">{% trans 'remember me' %}</label>
                     <a href="{% url 'web_forget_passwd' %}">忘记密码?</a>
                 </div>
-                <input type="submit" value="登录" class="submit_disabled" disabled="true">
+                <input type="submit" value="{% trans 'sign in' %}" class="submit_disabled" disabled="true">
             </form>
 
             <div class="third-party">

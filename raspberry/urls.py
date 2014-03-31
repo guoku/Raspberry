@@ -2,8 +2,8 @@ __author__ = 'stxiong'
 from django.conf import settings
 from django.conf.urls import url, include, patterns
 from django.contrib import admin
-from web.sitemaps import EntitySitemap, TagSitemap, CategorySitemap
-
+from web.sitemaps import UserSitemap, EntitySitemap, TagSitemap, CategorySitemap
+from web.feeds import SelectionFeeds
 admin.autodiscover()
 
 handler500 = 'web.views.page_error'
@@ -37,19 +37,17 @@ if settings.IMAGE_LOCAL:
     )
 
 sitemaps = {
-    # 'flatpages': FlatPageSitemap,
+    'user': UserSitemap,
     'entity': EntitySitemap,
     'tag': TagSitemap,
     'category': CategorySitemap,
-    # 'user':UserSitemap,
-    # 'shop':ShopSitemap,
 }
 
 urlpatterns += patterns(
     'django.contrib.sitemaps.views',
     url(r'^sitemap\.xml$', 'index', {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', 'sitemap', {'sitemaps': sitemaps}),
-    # (r'^feed/latest/$', LatestEntriesFeed()),
+    url(r'^feed/selection/$', SelectionFeeds()),
 )
 
 #if settings.DEBUG:

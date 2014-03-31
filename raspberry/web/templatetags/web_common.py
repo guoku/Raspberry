@@ -54,8 +54,6 @@ def display_common_note(note):
     return {
         'note' : note
     }
-
-
 register.inclusion_tag("common/note.html")(display_common_note)
 
 
