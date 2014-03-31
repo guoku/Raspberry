@@ -27,6 +27,18 @@ DATABASES = {
             'init_command':'SET storage_engine=INNODB',
         }
     },
+    'slave': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'guoku_11_21',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '',                      
+        'OPTIONS': {
+            'use_unicode':'utf-8',
+            'init_command':'SET storage_engine=INNODB',
+        }
+    },
 }
 #DATABASE_ROUTERS = ['router.AuthRouter']
 '''
