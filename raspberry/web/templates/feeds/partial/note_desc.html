@@ -1,6 +1,6 @@
 {% load entity %}
 <img src="{{ entity_context.chief_image.url|resize:'320' }}" alt="{{ entity_context.title }}">
 {{ note_context.content }} @{{ creator_context.nickname }}
-
+<a href="" style="display: block;color: #fff; background-color: #427ec0;">购买 {{ entity_context.price }}</a>
 
 
