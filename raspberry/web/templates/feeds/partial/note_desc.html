@@ -1,5 +1,6 @@
 {% load entity %}
-{{ note_context.content }} @{{ creator_context.nickname }}
 <img src="{{ entity_context.chief_image.url|resize:'320' }}" alt="{{ entity_context.title }}">
+{{ note_context.content }} @{{ creator_context.nickname }}
+
 
 
