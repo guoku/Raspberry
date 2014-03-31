@@ -335,6 +335,7 @@ def user_fans(request, user_id, template=TEMPLATE):
             'content_tab' : 'fan',
             'request_user_context' : _request_user_context,
             'query_user_context' : _query_user_context,
+            'relation' : _relation,
             'user_list' : _fans_list,
             'paginator' : _paginator
         },
