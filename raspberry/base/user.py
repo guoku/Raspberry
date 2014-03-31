@@ -622,31 +622,34 @@ class User(object):
             User.__reset_censor_user_set_to_cache()
         except Exception, e:
             pass
-    
-    
-    def entity_like_count(self, category_id=None, neo_category_id=None):
-        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id)
+   
+    def __get_entity_like_hdl(self, category_id=None, neo_category_id=None, timestamp=None, price_interval=None): 
+        _hdl = EntityLikeModel.objects.filter(user_id=self.user_id)
+        if timestamp != None:
+            _hdl = _hdl.filter(created_time__lt=timestamp)
         if category_id != None:
-            _hdl = _hdl.filter(entity__category__pid = category_id)
-        
+            _hdl = _hdl.filter(entity__category__pid=category_id)
         if neo_category_id != None:
-            _hdl = _hdl.filter(entity__neo_category_id = neo_category_id)
+            _hdl = _hdl.filter(entity__neo_category_id=neo_category_id)
+        if price_interval != None:
+            _price_floor = price_interval[0]
+            _price_ceil = price_interval[1]
+            if _price_ceil < _price_floor:
+                _tmp = _price_floor
+                _price_floor = _price_ceil
+                _price_ceil = _tmp
+            _hdl = _hdl.filter(entity__price__gte=_price_floor, entity__price__lt=_price_ceil)
+        return _hdl
         
+    
+    
+    def entity_like_count(self, category_id=None, neo_category_id=None, timestamp=None, price_interval=None):
+        _hdl = self.__get_entity_like_hdl(category_id=category_id, neo_category_id=neo_category_id, timestamp=timestamp, price_interval=price_interval)
         return _hdl.count() 
         
-    def find_like_entity(self, category_id = None, neo_category_id = None, timestamp = None, offset = None, count = 30, sort_by = None, reverse = False, with_timestamp = False):
-        
-        _hdl = EntityLikeModel.objects.filter(user_id = self.user_id)
-        
-        if timestamp != None:
-            _hdl = _hdl.filter(created_time__lt = timestamp)
-        
-        if category_id != None:
-            _hdl = _hdl.filter(entity__category__pid = category_id)
-        
-        if neo_category_id != None:
-            _hdl = _hdl.filter(entity__neo_category_id = neo_category_id)
-        
+    def find_like_entity(self, category_id=None, neo_category_id=None, timestamp=None, price_interval=None, 
+                         offset=None, count=30, sort_by=None, reverse=False, with_timestamp=False):
+        _hdl = self.__get_entity_like_hdl(category_id=category_id, neo_category_id=neo_category_id, timestamp=timestamp, price_interval=price_interval)
         if sort_by == 'price':
             if reverse:
                 _hdl = _hdl.order_by('-entity__price')
