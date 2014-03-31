@@ -85,7 +85,7 @@ class Item(object):
         _context["weight"] = self.item_obj.weight
         _context["soldout"] = self.item_obj.soldout
         _context["ustation"] = self.item_obj.ustation
-        _context['buy_link'] = Item.generate_old_buy_link(str(self.item_obj.taobao_id))
+        _context['buy_link'] = Item.generate_buy_link(str(self.item_obj.id))
         _context["volume"] = 0 
         return _context
 

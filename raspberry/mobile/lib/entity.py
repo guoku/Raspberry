@@ -1,5 +1,5 @@
 # coding=utf8
-from base.item import Item
+from base.item import Item, JDItem
 from base.entity import Entity
 from note import MobileNote
 from user import MobileUser
@@ -12,6 +12,9 @@ class MobileItem(Item):
 
     def read(self):
         _context = super(MobileItem, self).read()
+        if _context == None:
+            #TODO 这里必须特别注意，权宜之计，Item修改后要对这里进行修改
+           _context = JDItem(item_id).read() 
         return _context
 
 
