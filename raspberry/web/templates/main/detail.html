@@ -29,9 +29,13 @@
         <div class="main">
             <div class="entity">
                 {% if taobao_id %}
-                <a class="entity-img" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+                    {% if taobao_id == '38194956526' %}
+                    <a class="entity-img" href="http://www.wandoujia.com/onespace?utm_source=guoku&utm_medium=banner&utm_campaign=banner"  target=_blank >
+                    {% else %}
+                    <a class="entity-img" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+                    {% endif %}
                 {% else %}
-                <a class="entity-img" href="http://item.jd.com/{{jd_id}}.html"  target=_blank >
+                    <a class="entity-img" href="http://item.jd.com/{{jd_id}}.html"  target=_blank >
                 {% endif %}
                     <img src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
                 </a>
@@ -84,7 +88,11 @@
         <div class="aside">
             <div class="entity-info">
                 {% if taobao_id %}
-                <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+                    {% if taobao_id == '38194956526' %}
+                    <a class="entity-img" href="http://www.wandoujia.com/onespace?utm_source=guoku&utm_medium=banner&utm_campaign=banner"  target=_blank >
+                    {% else %}
+                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+                    {% endif %}
                 {% else %}
                 <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >
                 {% endif %}
