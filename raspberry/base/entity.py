@@ -982,8 +982,8 @@ class Entity(object):
                 selected_time = _selection['selected_time'],
                 post_time = _post_time
             )
-            print "[%s:%s] [%d] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _selection['root_category_id'], _post_time)
+            #print "[%s:%s] [%d] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _selection['root_category_id'], _post_time)
             _post_time += datetime.timedelta(seconds = interval_secs)
-        print "%d selection arranged in total"%len(_selected)
+        #print "%d selection arranged in total"%len(_selected)
     
     
