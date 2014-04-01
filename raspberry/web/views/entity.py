@@ -253,7 +253,7 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
     if _is_jd:
         buy_link = _item_context['buy_link']
         jd_id = parse_jd_id_from_url(buy_link)
-        _item_context['buy_link'] = 'http://m.jd.com/product/%s.html'%jd_id
+        _item_context['buy_link'] = 'http://m.jd.com/product/%s.html' % jd_id
     return render_to_response(
         template,
         {

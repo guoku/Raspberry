@@ -132,7 +132,8 @@
                 <a href="?p={{ next_page_num }}">点击查看更多</a>
             </div>
             <div class="downloads with-border">
-                <img src="{{ STATIC_URL }}images/guoku_logo_new.png" />
+                <img src="{% static 'images/guoku_logo_new.png' %}">
+{#                <img src="{{ STATIC_URL }}images/guoku_logo_new.png" />#}
                 <p>现在下载，随时随地刷果库！</p>
                 <div class="container">
                     <a class="blue" onclick="downloadApp('http://itunes.apple.com/cn/app/id477652209?mt=8');" href="wx59118ccde8270caa://">iPhone版</a>
