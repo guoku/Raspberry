@@ -236,7 +236,7 @@ class JDItem(Item):
         _context["price"] = float(self.item_obj.price)
         _context["weight"] = self.item_obj.weight
         _context["soldout"] = self.item_obj.soldout
-        _context['buy_link'] = get_jd_url(str(self.item_obj.jd_id))
+        _context['buy_link'] = get_jd_url(str(self.item_obj.jd_id),mobile=True)
         _context["volume"] = 0 
         return _context
     
