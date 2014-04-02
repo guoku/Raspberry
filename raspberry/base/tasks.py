@@ -4,6 +4,7 @@ from celery.task import PeriodicTask
 from django.conf import settings
 
 from message import EntityNoteMessage, NoteSelectionMessage, UserFollowMessage, NotePokeMessage, NoteCommentMessage, NoteCommentReplyMessage
+from models import Novus_Stat
 import popularity
 import datetime
 import time
@@ -141,4 +142,35 @@ class CleanNoteMessageTask(Task):
         
         for _doc in NoteSelectionMessage.objects.filter(note_id = note_id):
             _doc.delete()
+
+class UpdateNovusStat(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    queue = "log"
+    
+    def run(self):
+        _now = datetime.datetime.now()
+        try:
+            _obj = Novus_Stat.objects.get(
+                year=_now.year, 
+                month=_now.month,
+                date=_now.day,
+                hour=_now.hour,
+            )
+        except Novus_Stat.DoesNotExist, e:
+            _obj = Novus_Stat.objects.create(
+                year=_now.year, 
+                month=_now.month,
+                date=_now.day,
+                hour=_now.hour,
+                list_impression=0,
+                edit_impression=0,
+                novus=0
+            )
+        _obj.novus += 1
+        _obj.save()
+
+
 

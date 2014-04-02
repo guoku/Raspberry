@@ -8,6 +8,7 @@ import base.selection as base_selection
 from base.entity import Entity 
 from base.note import Note 
 from base.taobao_shop import TaobaoShop 
+from base.models import Novus_Stat
 from utils.extractor.taobao import TaobaoExtractor 
 
 import datetime
@@ -115,3 +116,39 @@ class PublishApkTask(Task):
         ssh.connect(hostname = scp_host, username = scp_user, key_filename = key_filename)
         scp = SCPClient(ssh.get_transport())
         scp.put(filename, remote_file)
+
+class UpdateNovusStatImpression(Task):
+    ignore_result = True
+    time_limit = 60
+    max_retries = MAX_RETRIES
+    default_retry_delay = RETRY_DELAY
+    queue = "log"
+    
+    def run(self, impression_type='list'):
+        _now = datetime.datetime.now()
+        try:
+            _obj = Novus_Stat.objects.get(
+                year=_now.year, 
+                month=_now.month,
+                date=_now.day,
+                hour=_now.hour,
+            )
+        except Novus_Stat.DoesNotExist, e:
+            _obj = Novus_Stat.objects.create(
+                year=_now.year, 
+                month=_now.month,
+                date=_now.day,
+                hour=_now.hour,
+                list_impression=0,
+                edit_impression=0,
+                novus=0
+            )
+        if impression_type == 'edit':
+            _obj.edit_impression += 1
+        else:
+            _obj.list_impression += 1
+        _obj.save()
+
+
+
+

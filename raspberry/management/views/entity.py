@@ -18,7 +18,7 @@ from base.item import JDItem
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
-from management.tasks import MergeEntityTask
+from management.tasks import MergeEntityTask, UpdateNovusStatImpression
 from share.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
@@ -34,8 +34,6 @@ def _get_special_names(request_user_id):
             _id_list = [ 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902, 79761, 66400, 252913 ]
         elif request_user_id in [10, 19]:
             _id_list = [ 19, 10, 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902, 79761, 66400, 252913 ]
-        elif request_user_id in [252913]:
-            _id_list = [ 252913, 252928, 19, 10, 22045, 149556, 14, 149308, 195580, 68310, 209071, 105, 173660, 95424, 215653, 218336, 216902, 79761, 66400 ]
         elif request_user_id == 195580:
             _id_list = [ 195580, 215653, 209071, 79761, 66400 ] 
         elif request_user_id in [79761, 66400]:
@@ -295,6 +293,9 @@ def edit_entity(request, entity_id):
 
         _users = _get_special_names(request.user.id)
         _mark_list = Entity.Mark.all()
+        
+        if _entity_context['weight'] < 0:
+            UpdateNovusStatImpression.delay(impression_type='edit')
 
         return render_to_response( 
             'entity/edit.html', 
@@ -604,6 +605,9 @@ def entity_list(request):
                 _entity_context_list.append(_entity_context)
             except Exception, e:
                 pass
+
+        if _status == 'freeze':
+            UpdateNovusStatImpression.delay(impression_type='list')
         
         return render_to_response( 
             'entity/list.html', 
