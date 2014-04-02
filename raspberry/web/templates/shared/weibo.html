@@ -1,0 +1,11 @@
+{% load entity %}
+<div class="shared-sns">
+<form method="post" action="">
+    {% for field in forms %}
+        {{ field }}
+    {% endfor %}
+</form>
+<ul>
+    <li><img src="{{ entity_context.chief_image.url|resize:'128' }}"></li>
+</ul>
+</div>

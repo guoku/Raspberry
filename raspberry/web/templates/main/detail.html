@@ -84,88 +84,88 @@
                 {% endif %}
             {% endif %}
         </div>
-
-        <div class="aside">
-            <div class="entity-info">
-                {% if taobao_id %}
-                    {% if taobao_id == '38194956526' %}
-                    <a class="entity-img" href="http://www.wandoujia.com/onespace?utm_source=guoku&utm_medium=banner&utm_campaign=banner"  target=_blank >
-                    {% else %}
-                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
-                    {% endif %}
-                {% else %}
-                <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >
-                {% endif %}
-                    购买<span>&#65509;{{ entity_context.price }}</span>
-                </a>
+        {% include "main/partial/detail_side.html" %}
+{#        <div class="aside">#}
+{#            <div class="entity-info">#}
+{#                {% if taobao_id %}#}
+{#                    {% if taobao_id == '38194956526' %}#}
+{#                    <a class="entity-img" href="http://www.wandoujia.com/onespace?utm_source=guoku&utm_medium=banner&utm_campaign=banner"  target=_blank >#}
+{#                    {% else %}#}
+{#                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >#}
+{#                    {% endif %}#}
+{#                {% else %}#}
+{#                <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >#}
+{#                {% endif %}#}
+{#                    购买<span>&#65509;{{ entity_context.price }}</span>#}
+{#                </a>#}
 {#                <div class="shop">来自于<a href="">url需替换</a></div>#}
-
-                {% if entity_context.detail_images|length > 0 %}
-                    <div class="detail-img">
-                        <a href=""><img src="{{ entity_context.chief_image.url|resize:'64' }}"></a>
-                        {% for img in entity_context.detail_images %}
-                            <a href="javascript:;"><img src="{{ img.url|resize:'64' }}"></a>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="likes">
-                <h3>{{ entity_context.like_count }}人喜爱</h3>
-                <div>
-                    {% for liker, date in liker_list %}
-                    <a href="{% url 'web_user_likes' liker %}" target="_blank">
+{##}
+{#                {% if entity_context.detail_images|length > 0 %}#}
+{#                    <div class="detail-img">#}
+{#                        <a href=""><img src="{{ entity_context.chief_image.url|resize:'64' }}"></a>#}
+{#                        {% for img in entity_context.detail_images %}#}
+{#                            <a href="javascript:;"><img src="{{ img.url|resize:'64' }}"></a>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                {% endif %}#}
+{#            </div>#}
+{##}
+{#            <div class="likes">#}
+{#                <h3>{{ entity_context.like_count }}人喜爱</h3>#}
+{#                <div>#}
+{#                    {% for liker, date in liker_list %}#}
+{#                    <a href="{% url 'web_user_likes' liker %}" target="_blank">#}
 {#                        <img src="{{ liker }}" height="25" width="25">#}
-                        {% show_avater liker 25 %}
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
+{#                        {% show_avater liker 25 %}#}
+{#                    </a>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#            <p class="category">#}
+{#                <a href="{% url 'web_category' entity_context.category_id  %}">{{ entity_context.category_id|trans_category }}</a>#}
+{#            </p>#}
+{##}
+{#            {% if tag_list|length > 0 %}#}
+{#                <div class="tag">#}
+{#                    <h3>该商品的标签</h3>#}
+{#                    <div>#}
+{#                        {% for tag in tag_list %}#}
+{#                            <a href="{% url "web_tag_detail" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% endif %}#}
+{#            #}
+{#            #}
+{#            {% if is_staff %}#}
+{#                <div class="tag">#}
+{#                    <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target=_blank>编辑商品</a>#}
+{#                </div>#}
+{#            {% endif %}#}
+{#            #}
+{#            <div class="share">#}
+{#                <a href=""><span class="weibo_icon"></span>分享到微博</a>#}
+{#            </div>#}
 
-            <p class="category">
-                <a href="{% url 'web_category' entity_context.category_id  %}">{{ entity_context.category_id|trans_category }}</a>
-            </p>
-
-            {% if tag_list|length > 0 %}
-                <div class="tag">
-                    <h3>该商品的标签</h3>
-                    <div>
-                        {% for tag in tag_list %}
-                            <a href="{% url "web_tag_detail" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-            
-            
-            {% if is_staff %}
-                <div class="tag">
-                    <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target=_blank>编辑商品</a>
-                </div>
-            {% endif %}
-            
-            <div class="share">
-                <a href=""><span class="weibo_icon"></span>分享到微博</a>
-            </div>
-
-            <div class="download">
-                <h3>下载果库客户端</h3>
-                <div>
-                    <a href="/download/ios/" target="_blank">iPhone</a> /
-                    <a href="/download/ios/" target="_blank">iPad</a> /
-                    <a href="http://app.guoku.com/download/android/guoku-release.apk" target="_blank">Android</a>
-                </div>
-            </div>
-            {% if enable_guoku_plus and activity_id%}
-                <div>
-                    <h3>获取果库价优惠码</h3>
-                    <form action="{%url 'web_get_guokuplus_token' %}" method="POST">
-                        <input type="hidden" name="activity_id" value="{{activity_id}}"/>
-                        <input type="submit" value="获取"/>
-                    </form>
-                </div>
-            {% endif %}
-        </div>
+{#            <div class="download">#}
+{#                <h3>下载果库客户端</h3>#}
+{#                <div>#}
+{#                    <a href="/download/ios/" target="_blank">iPhone</a> /#}
+{#                    <a href="/download/ios/" target="_blank">iPad</a> /#}
+{#                    <a href="http://app.guoku.com/download/android/guoku-release.apk" target="_blank">Android</a>#}
+{#                </div>#}
+{#            </div>#}
+{#            {% if enable_guoku_plus and activity_id%}#}
+{#                <div>#}
+{#                    <h3>获取果库价优惠码</h3>#}
+{#                    <form action="{%url 'web_get_guokuplus_token' %}" method="POST">#}
+{#                        <input type="hidden" name="activity_id" value="{{activity_id}}"/>#}
+{#                        <input type="submit" value="获取"/>#}
+{#                    </form>#}
+{#                </div>#}
+{#            {% endif %}#}
+{#        </div>#}
 
         <div class="recommend">
             <h2>相似推荐</h2>
@@ -177,7 +177,9 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
+{#    </div>#}
+
+{#    {% include "shared/weibo.html" %}#}
 {% endblock %}
 
 {% block script %}
