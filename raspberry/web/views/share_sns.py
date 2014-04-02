@@ -30,7 +30,9 @@ class WeiboView(View):
         # return HttpResponse(_entity_context['chief_image']['url'])
 
     def post(self, request):
-        pass
+
+
+        return HttpResponse("shared ok")
 
 
 __author__ = 'edison7500'

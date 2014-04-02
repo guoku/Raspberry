@@ -1,11 +1,19 @@
+{% extends "base.html" %}
 {% load entity %}
+
+{% block content %}
 <div class="shared-sns">
 <form method="post" action="">
     {% for field in forms %}
         {{ field }}
     {% endfor %}
+    <input type="submit" value="分享" />
 </form>
 <ul>
     <li><img src="{{ entity_context.chief_image.url|resize:'128' }}"></li>
+{#    {% for img in entity_context.detail_images %}#}
+{#    <li><img src="{{ img.url|resize:'128' }}"></li>#}
+{#    {% endfor %}#}
 </ul>
 </div>
+{% endblock %}
