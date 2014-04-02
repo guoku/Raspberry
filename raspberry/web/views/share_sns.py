@@ -21,7 +21,7 @@ class WeiboView(View):
         _entity_context = Entity(_entity_id).read()
         _forms = ShareFrom()
 
-        return  render_to_response('shared/weibo.html',
+        return render_to_response('shared/weibo.html',
                             {
                                 'forms': _forms,
                                 'entity_context':_entity_context,

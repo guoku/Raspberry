@@ -30,7 +30,6 @@
                 <div>
                     {% for liker, date in liker_list %}
                     <a href="{% url 'web_user_likes' liker %}" target="_blank">
-{#                        <img src="{{ liker }}" height="25" width="25">#}
                         {% show_avater liker 25 %}
                     </a>
                     {% endfor %}
@@ -58,7 +57,11 @@
                     <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target=_blank>编辑商品</a>
                 </div>
             {% endif %}
-            
+
+            <div class="share">
+                <a href=""><span class="weibo_icon"></span>分享到微博</a>
+            </div>
+        
             <div class="download">
                 <h3>下载果库客户端</h3>
                 <div>
