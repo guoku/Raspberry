@@ -20,7 +20,7 @@ from models import Taobao_Item_Category_Mapping as TaobaoItemCategoryMappingMode
 from models import Note as NoteModel
 from models import Note_Comment as NoteCommentModel
 from models import NoteSelection
-from tasks import CleanNoteMessageTask, CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask
+from tasks import CleanNoteMessageTask, CreateEntityNoteMessageTask, CreateNoteSelectionMessageTask, UpdateNovusStat
 from note import Note
 from user import User 
 from hashlib import md5
@@ -493,6 +493,7 @@ class Entity(object):
         if self.entity_obj.weight == 0:
             if self.entity_obj.novus_time == None:
                 self.entity_obj.novus_time = self.get_next_novus_time()
+            UpdateNovusStat.delay()
         else:
             if self.entity_obj.novus_time != None:
                 self.entity_obj.novus_time = None 

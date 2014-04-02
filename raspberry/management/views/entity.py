@@ -18,7 +18,7 @@ from base.item import JDItem
 from base.note import Note
 from base.taobao_shop import TaobaoShop 
 from base.user import User
-from management.tasks import MergeEntityTask
+from management.tasks import MergeEntityTask, UpdateNovusStatImpression
 from share.tasks import CreateTaobaoShopTask
 from utils.authority import staff_only 
 from utils.paginator import Paginator
@@ -295,6 +295,9 @@ def edit_entity(request, entity_id):
 
         _users = _get_special_names(request.user.id)
         _mark_list = Entity.Mark.all()
+        
+        if _entity_context['weight'] < 0:
+            UpdateNovusStatImpression.delay(impression_type='edit')
 
         return render_to_response( 
             'entity/edit.html', 
@@ -604,6 +607,9 @@ def entity_list(request):
                 _entity_context_list.append(_entity_context)
             except Exception, e:
                 pass
+
+        if _status == 'freeze':
+            UpdateNovusStatImpression.delay(impression_type='list')
         
         return render_to_response( 
             'entity/list.html', 
