@@ -4,9 +4,11 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.exceptions import PermissionDenied
 
-
+from django.utils.log import getLogger
 from base.entity import Entity
 from web.forms.share_sns import ShareFrom
+
+log = getLogger('django')
 
 class WeiboView(View):
 
@@ -30,7 +32,11 @@ class WeiboView(View):
         # return HttpResponse(_entity_context['chief_image']['url'])
 
     def post(self, request):
-        pass
+        _forms = ShareFrom(request.POST)
+        log.info(_forms.content)
+        # if _forms.is_valid():
+        _content = _forms.cleaned_data['content']
+        return HttpResponse("shared ok")
 
 
 __author__ = 'edison7500'

@@ -42,16 +42,30 @@ DATABASES = {
     },
 }
 
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'redis_cache.RedisCache',
+#         'LOCATION': '10.0.2.49:6379',
+#         'TIMEOUT:': 864000,
+#         'OPTIONS': {
+#             'DB': 1,
+#             'PARSER_CLASS': 'redis.connection.HiredisParser'
+#         },
+#     },
+# }
 CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '10.0.2.49:6379',
-        'TIMEOUT:': 864000,
-        'OPTIONS': {
-            'DB': 1,
-            'PARSER_CLASS': 'redis.connection.HiredisParser'
-        },
-    },
+   "default": {
+       "BACKEND": "redis_cache.cache.RedisCache",
+       "LOCATION": [
+           "10.0.2.46:6379:10",
+           "10.0.2.47:6379:10",
+           "10.0.2.48:6379:10"
+       ],
+       "OPTIONS": {
+           "PARSER_CLASS": "redis.connection.HiredisParser",
+           "CLIENT_CLASS": "redis_cache.client.ShardClient",
+       }
+   }
 }
 
 # session
@@ -90,8 +104,8 @@ MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
 MEDIA_URL = '/uploads/'
 # STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/v3/')
 STATIC_ROOT = '/tmp/static/'
-# STATIC_URL = 'http://static.guoku.com/static/v3/'
-STATIC_URL = '/static/v3/'
+STATIC_URL = 'http://static.guoku.com/static/v3/'
+# STATIC_URL = '/static/v3/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files

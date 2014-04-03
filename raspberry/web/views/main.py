@@ -113,21 +113,8 @@ def selection(request, template='main/selection.html'):
         },
     )
     # 判断是否第一次加载
-    if _page_num == 1:
-        return render_to_response(
-            template,
-            {
-                'main_nav_deliver' : 'selection',
-                'page_num' : _page_num,
-                'curr_category_id' : _category_id,
-                'user_context' : _request_user_context,
-                'category_list' : _old_category_list,
-                'selection_list' : _selection_list,
-            },
-            context_instance = RequestContext(request)
-        )
-
-    else:
+    # if _page_num == 1:
+    if request.is_ajax():
         _ret = {
             'status' : 0,
             'msg' : '没有更多数据'
@@ -145,6 +132,21 @@ def selection(request, template='main/selection.html'):
                 'data' : _data
             }
         return JSONResponse(data=_ret)
+    else:
+        return render_to_response(
+            template,
+            {
+                'main_nav_deliver' : 'selection',
+                'page_num' : _page_num,
+                'curr_category_id' : _category_id,
+                'user_context' : _request_user_context,
+                'category_list' : _old_category_list,
+                'selection_list' : _selection_list,
+            },
+            context_instance = RequestContext(request)
+        )
+    # else:
+
 
 def wap_selection(request, template='wap/selection.html'):
     _start_at = datetime.now()
