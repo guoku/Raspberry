@@ -385,7 +385,7 @@ def unread_count(request):
 def visit_item(request, item_id):
     _start_at = datetime.datetime.now()
     
-    if item_id == '533905dea2128a2a888c912d':
+    if item_id == '533bd0caa2128a11428c912b':
         _session = request.GET.get('session', None)
         if _session != None:
             _request_user_id = Session_Key.objects.get_user_id(_session)
@@ -393,7 +393,7 @@ def visit_item(request, item_id):
             _request_user_id = None
         _duration = datetime.datetime.now() - _start_at
         MobileLogTask.delay(
-            entry="wandoujia",
+            entry="jd_bilang",
             duration = _duration.seconds * 1000000 + _duration.microseconds, 
             view = 'CLICK', 
             request = request.REQUEST, 
@@ -402,7 +402,7 @@ def visit_item(request, item_id):
             request_user_id = _request_user_id,
             appendix = {}
         )
-        return HttpResponseRedirect("http://www.wandoujia.com/onespace?utm_source=guoku&utm_medium=banner&utm_campaign=banner")
+        return HttpResponseRedirect("http://item.jd.com/1076756.html")
         
     if request.method == "GET":
         _session = request.GET.get('session', None)
@@ -499,10 +499,10 @@ def old_visit_item(request):
         _item = Item.get_item_by_taobao_id(_taobao_id)
         _item_context = _item.read()
     
-        if _taobao_id == '38194956526':
+        if _taobao_id == '38232357603':
             _duration = datetime.datetime.now() - _start_at
             MobileLogTask.delay(
-                entry="wandoujia",
+                entry="jd_bilang",
                 duration = _duration.seconds * 1000000 + _duration.microseconds, 
                 view = 'CLICK', 
                 request = request.REQUEST, 
@@ -511,7 +511,7 @@ def old_visit_item(request):
                 request_user_id = _request_user_id,
                 appendix = {}
             )
-            return HttpResponseRedirect("http://www.wandoujia.com/onespace?utm_source=guoku&utm_medium=banner&utm_campaign=banner")
+            return HttpResponseRedirect("http://item.jd.com/1076756.html")
         
         _taobaoke_info = taobaoke_mobile_item_convert(_item_context['taobao_id'])
         _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 

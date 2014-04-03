@@ -62,7 +62,13 @@ urlpatterns += patterns(
     url(r'^u/', include('web.urls.user')),
 )
 
+
+urlpatterns += patterns(
+    '',
+    url(r'^share/', include('web.urls.share_sns')),
+)
+
 urlpatterns += patterns(
     'web.views.search',
-    url('^search/$', 'search', name='web_search')
+    url(r'^search/$', 'search', name='web_search')
 )
