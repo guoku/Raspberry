@@ -75,17 +75,23 @@ db = conn.experiment
 i = 0
 #for doc in db.log_2013.find({"logged_time": {"$gt": datetime.datetime(2013, 9, 1), "$lt": datetime.datetime(2013, 10, 1)}}):
 #for doc in db.log_2013.find({"logged_time": {"$lt": datetime.datetime(2013, 8, 1)}}):
-for doc in db.log_2013.find():
+#for doc in db.log_2013.find():
+for doc in db.log_2013.find({"logged_time": {"$lt": datetime.datetime(2013, 9, 1)}}):
     try:
         entity_id =  doc['entity_id']
         if entity_dict.has_key(entity_id):
-            entity_dict[entity_id]['click_count'] += 1
+            if entity_dict[entity_id]['post_time'] != None:
+                if entity_dict[entity_id]['post_time'] < doc['logged_time']:
+                    if doc['logged_time'] - entity_dict[entity_id]['post_time'] < datetime.timedelta(hours=48):
+                        entity_dict[entity_id]['click_count'] += 1
     except Exception, e:
         print e
     i += 1
     if i % 10000 == 0:
         print "%d logs processed..."%i
 
+
+stat = {}
 for entity_id, values in entity_dict.items():
     if values['click_count'] > 0:
         fo.write(str(set_price_value(values['price'], price_distribute)))
@@ -100,7 +106,11 @@ for entity_id, values in entity_dict.items():
             else:
                 fo.write(',0')
         fo.write(',' + str(values['click_count']) + '\n')
-
+        if not stat.has_key(values['click_count']):
+            stat[values['click_count']] = 0
+        stat[values['click_count']] += 1
 fo.close() 
 
 
+for item in sorted(stat.items()):
+    print "%d\t%d"%(item[0], item[1])
