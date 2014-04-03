@@ -22,7 +22,8 @@ def load_entity_info():
     conn = MySQLdb.Connection("localhost", "root", "123456", "guoku")
     cur = conn.cursor()
     cur.execute("SET names utf8")
-    sql_query="select base_entity.id, base_note.post_time, price, base_entity.category_id, base_category.pid, base_entity.neo_category_id, base_neo_category.group_id from base_entity inner join base_note on base_entity.id=base_note.entity_id inner join base_category on base_entity.category_id=base_category.id inner join base_neo_category on base_entity.neo_category_id=base_neo_category.id;"
+#    sql_query = "select base_entity.id, base_note.post_time, price, base_entity.category_id, base_category.pid, base_entity.neo_category_id, base_neo_category.group_id from base_entity inner join base_note on base_entity.id=base_note.entity_id inner join base_category on base_entity.category_id=base_category.id inner join base_neo_category on base_entity.neo_category_id=base_neo_category.id;"
+    sql_query = "select base_entity.id, base_note.post_time, price, base_entity.category_id, base_category.pid, base_entity.neo_category_id, base_neo_category.group_id from base_entity inner join base_note on base_entity.id=base_note.entity_id inner join base_category on base_entity.category_id=base_category.id inner join base_neo_category on base_entity.neo_category_id=base_neo_category.id where base_note.post_time is not null;"
     cur.execute(sql_query)
     count = 0
     entity_dict = {}
@@ -37,7 +38,7 @@ def load_entity_info():
             'click_count': 0
         }
         count += 1
-        if count % 10000 == 0:
+        if count % 100000 == 0:
             print "%d entities loaded..."%count
     conn.commit()
     conn.close()
@@ -75,8 +76,8 @@ db = conn.experiment
 i = 0
 #for doc in db.log_2013.find({"logged_time": {"$gt": datetime.datetime(2013, 9, 1), "$lt": datetime.datetime(2013, 10, 1)}}):
 #for doc in db.log_2013.find({"logged_time": {"$lt": datetime.datetime(2013, 8, 1)}}):
-#for doc in db.log_2013.find():
-for doc in db.log_2013.find({"logged_time": {"$lt": datetime.datetime(2013, 9, 1)}}):
+for doc in db.log_2013.find():
+#for doc in db.log_2013.find({"logged_time": {"$lt": datetime.datetime(2013, 4, 1)}}):
     try:
         entity_id =  doc['entity_id']
         if entity_dict.has_key(entity_id):
@@ -87,11 +88,12 @@ for doc in db.log_2013.find({"logged_time": {"$lt": datetime.datetime(2013, 9, 1
     except Exception, e:
         print e
     i += 1
-    if i % 10000 == 0:
+    if i % 100000 == 0:
         print "%d logs processed..."%i
 
 
 stat = {}
+price_stat = {}
 for entity_id, values in entity_dict.items():
     if values['click_count'] > 0:
         fo.write(str(set_price_value(values['price'], price_distribute)))
@@ -106,11 +108,19 @@ for entity_id, values in entity_dict.items():
             else:
                 fo.write(',0')
         fo.write(',' + str(values['click_count']) + '\n')
+        
         if not stat.has_key(values['click_count']):
             stat[values['click_count']] = 0
         stat[values['click_count']] += 1
+        
+        if not price_stat.has_key(int(values['price'])):
+            price_stat[int(values['price'])] = 0
+        price_stat[int(values['price'])] += values['click_count'] 
+#    else:
+#        fo.write('alert: %d\n'%entity_id)
+        
 fo.close() 
 
 
-for item in sorted(stat.items()):
+for item in sorted(price_stat.items()):
     print "%d\t%d"%(item[0], item[1])
