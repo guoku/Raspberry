@@ -331,3 +331,12 @@ class Guoku_Plus_Token(models.Model):
     created_time = models.DateTimeField()
     used_time = models.DateTimeField(null = True)
     quantity = models.IntegerField(null = True)
+
+class Novus_Stat(models.Model):
+    year = models.IntegerField(db_index=True)
+    month = models.IntegerField(db_index=True)
+    date = models.IntegerField(db_index=True)
+    hour = models.IntegerField(db_index=True)
+    list_impression = models.IntegerField(db_index=True)
+    edit_impression = models.IntegerField(db_index=True)
+    novus = models.IntegerField(db_index=True)
