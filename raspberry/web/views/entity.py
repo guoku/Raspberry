@@ -63,6 +63,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         _request_user_poke_note_set = []
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
+    if _entity_id is None:
+        raise Http404
     _entity_context = Entity(_entity_id).read()
     _liker_list = Entity(_entity_id).liker_list(offset=0, count=20)
     _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
