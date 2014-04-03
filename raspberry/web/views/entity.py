@@ -122,7 +122,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                         'poke_button_target_status' : _poke_button_target_status,
                     })
         except Exception, e:
-            pass
+            log.error(e.message)
+            # pass
 
     _guess_entity_context = []
     _guess_entity_id_list = []
@@ -134,7 +135,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                 if len(_guess_entity_context) == 4:
                     break
         except Exception, e:
-            pass
+            log.error(e.message)
+            # pass
     
     _duration = datetime.datetime.now() - _start_at
     WebLogTask.delay(
