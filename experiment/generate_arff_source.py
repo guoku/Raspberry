@@ -60,11 +60,13 @@ def set_price_value(price, price_distribute):
 price_distribute = load_price_distribute()
 entity_dict = load_entity_info()
 
-fo = open('guoku_click_log_all.arff', 'w')
-fo.write('@relation guoku_click_log_all\n\n') 
+fo = open('guoku_click_log_all_full_feature_120h.arff', 'w')
+fo.write('@relation guoku_click_log_all_full_feature_120h\n\n') 
 
 fo.write('@attribute price NUMERIC\n')
 for i in range(1, 13):
+    fo.write('@attribute is_cp%d {0,1}\n'%i)
+for i in range(1, 165):
     fo.write('@attribute is_c%d {0,1}\n'%i)
 for i in range(1, 42):
     fo.write('@attribute is_nc%d {0,1}\n'%i)
@@ -83,7 +85,7 @@ for doc in db.log_2013.find():
         if entity_dict.has_key(entity_id):
             if entity_dict[entity_id]['post_time'] != None:
                 if entity_dict[entity_id]['post_time'] < doc['logged_time']:
-                    if doc['logged_time'] - entity_dict[entity_id]['post_time'] < datetime.timedelta(hours=48):
+                    if doc['logged_time'] - entity_dict[entity_id]['post_time'] < datetime.timedelta(hours=120):
                         entity_dict[entity_id]['click_count'] += 1
     except Exception, e:
         print e
@@ -94,11 +96,17 @@ for doc in db.log_2013.find():
 
 stat = {}
 price_stat = {}
+pc = 0
 for entity_id, values in entity_dict.items():
     if values['click_count'] > 0:
         fo.write(str(set_price_value(values['price'], price_distribute)))
         for i in range(1, 13):
             if values['category_parent_id'] == i:
+                fo.write(',1')
+            else:
+                fo.write(',0')
+        for i in range(1, 165):
+            if values['category_id'] == i:
                 fo.write(',1')
             else:
                 fo.write(',0')
@@ -120,7 +128,9 @@ for entity_id, values in entity_dict.items():
 #        fo.write('alert: %d\n'%entity_id)
         
 fo.close() 
-
+print '-------------' 
+print pc
+print '-------------' 
 
 for item in sorted(price_stat.items()):
     print "%d\t%d"%(item[0], item[1])
