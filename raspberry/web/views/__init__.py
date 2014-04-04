@@ -12,3 +12,6 @@ def webpage_not_found(request):
 
 class AboutView(TemplateView):
     template_name = "about.html"
+
+class Agreement(TemplateView):
+    template_name = "agreement.html"

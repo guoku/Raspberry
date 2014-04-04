@@ -3,6 +3,7 @@ from django.conf.urls import url, patterns, include
 
 from web.views.account import RegisterWizard, ThirdPartyRegisterWizard
 from web.forms.account import SignUpAccountFrom, SignUpAccountBioFrom
+from web.views import Agreement, AboutView
 
 FORMS = [
     ('register', SignUpAccountFrom),
@@ -71,4 +72,10 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     'web.views.search',
     url(r'^search/$', 'search', name='web_search')
+)
+
+urlpatterns += patterns(
+    'web.views',
+    url(r'agreement/$', Agreement.as_view(), name="web_agreement"),
+    url(r'about/$', AboutView.as_view(), name="web_about"),
 )
