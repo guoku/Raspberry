@@ -113,16 +113,17 @@ class TaobaoExtractor:
         if loctag.find(u'地') > 0:
             location = loctag.split(u'：')[1]
 
-        reviewtag = soup.findChildren('td', 'link_btn fix_btn')[1]
-        reviews = 0
-        if secondhand:
-            rew = re.findall(r'\d+', reviewtag.a.text)
-            if len(rew) > 0:
-                reviews = int(rew[0])
-        else:
-            rew = re.findall(r'\d+', reviewtag.a.span.text)
-            if len(rew) > 0:
-                reviews = int(rew[0])
+
+        #reviewtag = soup.findChildren('td', 'link_btn fix_btn')[1]
+        #reviews = 0
+        #if secondhand:
+        #    rew = re.findall(r'\d+', reviewtag.a.text)
+        #    if len(rew) > 0:
+        #        reviews = int(rew[0])
+        #else:
+        #    rew = re.findall(r'\d+', reviewtag.a.span.text)
+        #    if len(rew) > 0:
+        #        reviews = int(rew[0])
         nick = '' 
         for nametag in soup.select('body div.bd div.box div.detail p a img'):
             try:
@@ -143,7 +144,6 @@ class TaobaoExtractor:
             "imgs" : imgurls,
             "count" : salecount,
             "location" : location,
-            "reviews" : reviews,
             "nick" : nick,
             "shop_link" : shoplink
             #"sellerid":sellerid,
@@ -338,4 +338,7 @@ class TaobaoExtractor:
                 }
         return result
 
+
+if __name__=="__main__":
+    print TaobaoExtractor.fetch_item("38243602029")
 
