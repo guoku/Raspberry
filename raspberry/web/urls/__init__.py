@@ -76,6 +76,6 @@ urlpatterns += patterns(
 
 urlpatterns += patterns(
     'web.views',
-    url(r'agreement/$', Agreement.as_view(), name="web_agreement"),
-    url(r'about/$', AboutView.as_view(), name="web_about"),
+    url(r'^agreement/$', Agreement.as_view(), name="web_agreement"),
+    url(r'^about/$', AboutView.as_view(), name="web_about"),
 )

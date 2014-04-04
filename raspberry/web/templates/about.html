@@ -1,4 +1,123 @@
 {% extends "base.html" %}
+{% block title %}
+    关于我们
+{% endblock %}
 {% block content %}
+<div class="with-border">
+    <div class="about-left ">
+        <ul>
+            <li><a href="{% url 'web_about' %}" {% if not tab or tab == 'about' %}class="active"{% endif %}>About</a></li>
+            <li><a href="/about/faq/" {% if tab == 'faq' %}class="active"{% endif %}>FAQ</a></li>
+            <li><a href="/about/jobs/" {% if tab == 'jobs' %}class="active"{% endif %}>Jobs</a></li>
+            <li><a href="/about/links/" {% if tab == 'links' %}class="active"{% endif %}>Links</a></li>
+            <li><a href="/about/contact/" {% if tab == 'contact' %}class="active"{% endif %}>Contact</a></li>
+        </ul>
+    </div>
+    <div class="about-right">
+        {% if not tab or tab == 'about' %}
+            <div id="about" class="section">
+                <h3>欢迎加入果库</h3>
+                <p>「果库」不变的宗旨是帮助消费者更容易地买到好商品。</p><br/>
+                <p>淘宝，这样逛才够直接！</p><br />
+                <p>在互联网的浩瀚商品海洋中，好物很多，但发现很难。「果库」精选，每天向你推荐互联网上最有趣、最人气的商品，快速、简单、直接地呈现给你。方便你尽快留意和寻找到最好的商品，并且轻松便捷地购买得到。</p><br />
+                <p>随时随地刷果库：访问 <a href="/" class="tag" >guoku.com</a>，或者安装 <a href="/download/ios/" class="tag" target="_blank">iPhone</a>、<a href="/download/ios/" class="tag" target="_blank">iPad</a> 或者 <a href="http://app.guoku.com/android/latest/guoku.apk" class="tag" target="_blank">Android</a> 客户端。</p>
+                <!---
+                <h3 class="mt30">我们的团队</h3>
+                <p>我们是 14 人的小团队，总部设在北京。果库创建于 2011 年 7 月，最初从 iPad 客户端起步，至今已横跨多个平台。</p>
+                <ul class="mt30">
+                    <li>
+                        <img src="" />
+                        <label></label>
+                    </li>
+                </ul>
+                -->
+            </div>
+        {% endif %}
+        {% if tab == 'faq' %}
+            <div id="faq" class="section">
+                <h3>常见问题</h3>
+                <p class="q">你们是谁？</p>
+                <p>我们是 14 人的小团队，总部设在北京。</p>
+                <p class="q mt30">什么是果库？</p>
+                <p>「果库」帮助你发现互联网上最有趣、最人气的好商品，并且方便你轻松、便捷地买到这些好商品。目前，果库拥有自己的网站和 <a href="/download/ios/" class="tag" target="_blank">iPhone</a>、<a href="/download/ios/" class="tag" target="_blank">iPad</a>、<a href="http://app.guoku.com/android/latest/guoku.apk" class="tag" target="_blank">Android</a> 客户端。</p>
+                <p class="q mt30">如何喜爱商品？</p>
+                <p>点击 ♥ 标记喜爱的商品，避免错过精彩的推荐及适时的优惠信息。你喜爱过的商品，可以在「我的果库」查看。</p>
+                <p class="q mt30">如何为商品贴标签？</p>
+                <p>在撰写点评的输入框，便可以为商品贴标签。其书写形式是「＃+ 关键词」，输入完成，以空格、标点符号与之后的内容区隔开。贴标签的商品更容易被发现。养成贴标签的习惯，也更容易收获志同道合的朋友。你贴过的标签，可以在「我的果库」查看。</p>
+                <p class="q mt30">如何添加商品入库？</p>
+                <p>在网站顶部导航栏，可以透过「+」按钮，添加一件商品。进入添加商品页面，复制淘宝的商品链接至输入框，载入商品信息。编辑商品名称，选择无水印、质素高的商品图片，撰写有价值的点评文字，完成添加。你添加过的商品，可以在「我的果库」查看。</p>
+                <p class="q mt30">什么样的商品会出现在「精选」？</p>
+                <p>商品是货真价实，有用、有趣、有价值的好商品；图片无任何遮挡，突出商品本身，兼具美感；点评有帮助，包含有价值的信息，描述清楚，语言通顺，无错别字。最后通过审核就会出现在果库网站及客户端的「精选」。</p>
+                <p class="q mt30">如何注册果库？</p>
+                <p>你可以通过邮箱直接注册，也可以通过新浪微博、淘宝网授权达成注册。在注册完成以后，确认帐号绑定新浪微博，便可以将你喜爱的商品分享到微博。</p>
+                <p class="q mt30">谁是一只小白兔？</p>
+                <p>果库社群本着尽收世上好物的原则，鼓励各位积极添加、点评好商品，文明交流，共同打造乐观向上的消费型社群。如遇言论恶意危及他人，负能量过载，破坏社群安定团结等情况，情节恶劣者，从此变身小白兔。</p>
+                <p class="q mt30">如何与果库合作？</p>
+                <p>果库一直在寻找合作伙伴，请将你的淘宝店网址、品牌介绍、联系方式等，邮件至 <a href="mailto:bd@guoku.com" class="tag">bd@guoku.com</a>，我们会尽快与你取得联系。</p>
+            </div>
+        {% endif %}
+        {% if tab == 'contact' %}
+            <div id="contact" class="section">
+                <h3>用户服务</h3>
+                <p>如有任何疑问，意见或者想法，可以通过网页右角的「意见反馈」，</p>
+                <p>也可以在新浪微博 <a href="http://weibo.com/guoku4pk" class="tag" target="_blank">@果库某工程师</a> 寻求帮助。</p>
 
+                <h3 class="mt30">商务合作</h3>
+                <p>寻求合作，请发邮件至 <a href="mailto:bd@guoku.com" class="tag">bd@guoku.com</a></p>
+
+                <h3 class="mt30"> 联系我们</h3>
+                <p><a href="http://www.weibo.com/guoku" target="_blank" class="c666" bi="sina">- 新浪微博</a></p>
+                <p><a href="http://t.qq.com/guokuapp" target="_blank" class="c666" bi="tencent">- 腾讯微博</a></p>
+                <p><a href="http://site.douban.com/130280/" target="_blank" class="c666" bi="douban">- 豆瓣小站</a></p>
+                <img src="{{STATIC_URL}}images/aboutweixin.jpg" />
+
+                <p class="mt30">或者发邮件至 <a href="mailto:bd@guoku.com" class="tag">hi@guoku.com</a></p>
+            </div>
+        {% endif %}
+        {% if tab == 'jobs' %}
+            <div id="jobs" class="section">
+                <h3>iOS/Android 工程师</h3>
+                <p>北京 / 全职 / 10k-20k / 经验不限 / 学历本科</p><br />
+                <p>职位诱惑 : 来这里做个没节操有逼格的工程师。</p>
+
+                <p class="mt30"> 要求：</p>
+                <p>1. 基本功扎实、学习能力强。当然这是一个工程师的基本素养。</p>
+                <p>2. 思维灵活。这个团队里都是聪明的孩子，我们也只招聪明的孩子。假如你从来自我感觉良好、打小就是个脑袋好使的程序员，这里绝对是你的天堂。</p>
+                <p>3. 抗压能力强。瞄着一个目标野蛮进发，路上肯定荆棘重重。假如你觉得趁着青春就该狠狠拼一把，机会到处都有，但我们这里给你的肯定是与别不同的一个。</p>
+                <p class="mt30">特别是，只要你符合上述要求，<b>即使你从来没学过 iOS/Android 也没关系，欢迎来到现学现卖！</b></p>
+            </div>
+        {% endif %}
+        {% if tab == 'links' %}
+            <div id="links" class="section">
+                <h3>友情链接</h3>
+                <ul class="links">
+                    <li><a href="http://jandan.net/" target="_blank">煎蛋</a></li>
+                    <li><a href="http://hao.360.cn/" target="_blank">360安全网址</a></li>
+                    <li><a href="http://www.nuandao.com/" target="_blank">暖岛</a></li>
+                    <li><a href="http://www.nop.cn/" target="_blank">NOP</a></li>
+                    <li><a href="http://huaban.com/" target="_blank">花瓣网</a></li>
+                    <li><a href="http://www.duitang.com/" target="_blank">堆糖网</a></li>
+                    <li><a href="http://www.wowsai.com/" target="_blank">哇噻网</a></li>
+                    <li><a href="http://www.linkchic.com/" target="_blank">LC 风格网</a></li>
+                    <li><a href="http://www.52souluo.com/" target="_blank">我爱搜罗网</a></li>
+                    <li><a href="http://www.hao123.com/" target="_blank">hao123导航</a></li>
+                    <li><a href="http://www.xiangqu.com/" target="_blank">想去</a></li>
+                    <li><a href="http://shop.vipshop.com/home.php" target="_blank">唯品会</a></li>
+                    <li><a href="http://bbs.yokamen.cn/" target="_blank">yoka男士论坛</a></li>
+                </ul>
+                <p class="mt30">友情链接申请条件：</p>
+                <p>1. 您的网站交换链接的页面 PR 值 >=4 </p>
+                <p>2. 您的网站不包含盗版、黄色等不良内容 </p>
+                <br/>
+                <p>如果您希望交换友情链接,并符合以上条件,欢迎联系我们</p>
+                <p>E-mail：<a href="mailto:bd@guoku.com" class="tag">bd@guoku.com</a></p>
+                <p class="mt30">本站链接信息：</p>
+                <p>网站地址：http://www.guoku.com </p>
+                <p>网站名称：果库 </p>
+                <p>文字说明：果库，尽收世上好物，与优质的商品不期而遇</p>
+            </div>
+        {% endif %}
+    </div>
+    <div class="clear"></div>
+</div>
 {% endblock %}
