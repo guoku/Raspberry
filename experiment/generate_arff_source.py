@@ -5,24 +5,44 @@ import datetime
 
 
 def load_price_distribute():
-    conn = MySQLdb.Connection("localhost", "root", "123456", "experiment")
-    cur = conn.cursor()
-    cur.execute("SET names utf8")
-    
-    sql_query = "select floor from guoku_price_distribute where floor > 0 order by floor desc"
-    cur.execute(sql_query)
+    fi = open("factor/price.fct", "r")
     price_distribute = []
-    for row in cur.fetchall():
-        price_distribute.append(float(row[0]))
-    conn.commit()
-    conn.close()
+    for line in fi.readlines(): 
+        price_distribute.append(float(line.strip()))
+    fi.close()
     return price_distribute 
+
+def load_category_distribute():
+    fi = open("factor/category.fct", "r")
+    category_distribute = {} 
+    for line in fi.readlines():
+        tokens = line.strip().split('\t')
+        category_distribute[int(tokens[0])] = float(tokens[3])
+    fi.close()
+    return category_distribute 
+
+def load_neo_category_group_distribute():
+    fi = open("factor/neo_category_group.fct", "r")
+    neo_category_group_distribute = {} 
+    for line in fi.readlines():
+        tokens = line.strip().split('\t')
+        neo_category_group_distribute[int(tokens[0])] = float(tokens[3])
+    fi.close()
+    return neo_category_group_distribute 
+
+def load_category_parent_distribute():
+    fi = open("factor/category_parent.fct", "r")
+    category_parent_distribute = {} 
+    for line in fi.readlines():
+        tokens = line.strip().split('\t')
+        category_parent_distribute[int(tokens[0])] = float(tokens[3])
+    fi.close()
+    return category_parent_distribute 
 
 def load_entity_info():
     conn = MySQLdb.Connection("localhost", "root", "123456", "guoku")
     cur = conn.cursor()
     cur.execute("SET names utf8")
-#    sql_query = "select base_entity.id, base_note.post_time, price, base_entity.category_id, base_category.pid, base_entity.neo_category_id, base_neo_category.group_id from base_entity inner join base_note on base_entity.id=base_note.entity_id inner join base_category on base_entity.category_id=base_category.id inner join base_neo_category on base_entity.neo_category_id=base_neo_category.id;"
     sql_query = "select base_entity.id, base_note.post_time, price, base_entity.category_id, base_category.pid, base_entity.neo_category_id, base_neo_category.group_id from base_entity inner join base_note on base_entity.id=base_note.entity_id inner join base_category on base_entity.category_id=base_category.id inner join base_neo_category on base_entity.neo_category_id=base_neo_category.id where base_note.post_time is not null;"
     cur.execute(sql_query)
     count = 0
@@ -58,24 +78,26 @@ def set_price_value(price, price_distribute):
 
 
 price_distribute = load_price_distribute()
+category_distribute = load_category_distribute()
+category_parent_distribute = load_category_parent_distribute()
+neo_category_group_distribute = load_neo_category_group_distribute()
 entity_dict = load_entity_info()
 
-fo = open('guoku_click_log_all_full_feature_120h.arff', 'w')
-fo.write('@relation guoku_click_log_all_full_feature_120h\n\n') 
+fo = open('guoku_click_log_linear_category.arff', 'w')
+fo.write('@relation guoku_click_log_linear_category\n\n') 
 
 fo.write('@attribute price NUMERIC\n')
-for i in range(1, 13):
-    fo.write('@attribute is_cp%d {0,1}\n'%i)
-for i in range(1, 165):
-    fo.write('@attribute is_c%d {0,1}\n'%i)
-for i in range(1, 42):
-    fo.write('@attribute is_nc%d {0,1}\n'%i)
+fo.write('@attribute price_level NUMERIC\n')
+fo.write('@attribute category NUMERIC\n')
+fo.write('@attribute category_parent NUMERIC\n')
+fo.write('@attribute neo_category_grouop NUMERIC\n')
 fo.write('@attribute click NUMERIC\n\n\n')
 
 fo.write('@data\n')
 conn = pymongo.Connection('localhost', 27017)
 db = conn.experiment
 i = 0
+
 #for doc in db.log_2013.find({"logged_time": {"$gt": datetime.datetime(2013, 9, 1), "$lt": datetime.datetime(2013, 10, 1)}}):
 #for doc in db.log_2013.find({"logged_time": {"$lt": datetime.datetime(2013, 8, 1)}}):
 for doc in db.log_2013.find():
@@ -94,43 +116,22 @@ for doc in db.log_2013.find():
         print "%d logs processed..."%i
 
 
-stat = {}
-price_stat = {}
-pc = 0
 for entity_id, values in entity_dict.items():
     if values['click_count'] > 0:
-        fo.write(str(set_price_value(values['price'], price_distribute)))
-        for i in range(1, 13):
-            if values['category_parent_id'] == i:
-                fo.write(',1')
-            else:
-                fo.write(',0')
-        for i in range(1, 165):
-            if values['category_id'] == i:
-                fo.write(',1')
-            else:
-                fo.write(',0')
-        for i in range(1, 42):
-            if values['neo_category_group_id'] == i:
-                fo.write(',1')
-            else:
-                fo.write(',0')
+        fo.write(str(values['price']))
+        fo.write(',' + str(set_price_value(values['price'], price_distribute)))
+        if category_distribute.has_key(values['category_id']):
+            fo.write(',' + str(category_distribute[values['category_id']]))
+        else:
+            fo.write(',0.0') 
+        if category_parent_distribute.has_key(values['category_parent_id']):
+            fo.write(',' + str(category_parent_distribute[values['category_parent_id']]))
+        else:
+            fo.write(',0.0') 
+        if neo_category_group_distribute.has_key(values['neo_category_group_id']):
+            fo.write(',' + str(neo_category_group_distribute[values['neo_category_group_id']]))
+        else:
+            fo.write(',0.0') 
         fo.write(',' + str(values['click_count']) + '\n')
-        
-        if not stat.has_key(values['click_count']):
-            stat[values['click_count']] = 0
-        stat[values['click_count']] += 1
-        
-        if not price_stat.has_key(int(values['price'])):
-            price_stat[int(values['price'])] = 0
-        price_stat[int(values['price'])] += values['click_count'] 
-#    else:
-#        fo.write('alert: %d\n'%entity_id)
-        
 fo.close() 
-print '-------------' 
-print pc
-print '-------------' 
 
-for item in sorted(price_stat.items()):
-    print "%d\t%d"%(item[0], item[1])
