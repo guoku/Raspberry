@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Count, Sum
 from mongoengine import *
+from django.utils.log import getLogger
 from utils.apns_notification import APNSWrapper
 import datetime
 import urllib
@@ -26,6 +27,7 @@ from user import User
 from hashlib import md5
 from utils.lib import roll, download_img
 
+log = getLogger('django')
 
 class Entity(object):
     
@@ -325,7 +327,7 @@ class Entity(object):
                 _entity_id = EntityModel.objects.get(entity_hash = entity_hash).id
                 cache.set(_cache_key, _entity_id, 8640000)
             except EntityModel.DoesNotExist, e:
-                pass
+                log.error(e.message)
         return _entity_id 
     
     def clean_cache(self):
