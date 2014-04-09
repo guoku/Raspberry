@@ -40,7 +40,7 @@
 
         <div class="submit-row">
             <label>{{ wizard.form.agree_tos }}同意果库</label>
-            <small><a href="">使用协议</a></small>
+            <small><a href="{% url 'web_agreement' %}">使用协议</a></small>
             {% if wizard.form.agree_tos.errors %}
                 <span class "error-info">
                     {% for error in wizard.form.agree_tos.errors %}

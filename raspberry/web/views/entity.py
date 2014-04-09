@@ -63,6 +63,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         _request_user_poke_note_set = []
 
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
+    if _entity_id is None:
+        raise Http404
     _entity_context = Entity(_entity_id).read()
     _liker_list = Entity(_entity_id).liker_list(offset=0, count=20)
     _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
@@ -122,7 +124,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                         'poke_button_target_status' : _poke_button_target_status,
                     })
         except Exception, e:
-            pass
+            log.error(e.message)
+            # pass
 
     _guess_entity_context = []
     _guess_entity_id_list = []
@@ -134,7 +137,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                 if len(_guess_entity_context) == 4:
                     break
         except Exception, e:
-            pass
+            log.error(e.message)
+            # pass
     
     _duration = datetime.datetime.now() - _start_at
     WebLogTask.delay(
