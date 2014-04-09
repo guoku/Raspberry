@@ -129,8 +129,9 @@ window.location.href = url;</script><![endif]-->
     </div>
 </div>
 {% include 'common/click_to_top.html' %}
-    <script src="{% static 'scripts/jquery.min.js' %}"></script>
-    <script src="{% static 'scripts/main.js' %}"></script>
+
+<script src="{% static 'scripts/jquery.min.js' %}"></script>
+<script src="{% static 'scripts/main.js' %}"></script>
 {% if not request.user.is_authenticated  %}
     {% include 'common/login.html' %}
     {% include 'common/register.html' %}
