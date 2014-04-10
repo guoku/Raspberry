@@ -54,9 +54,9 @@ def selection(request, template='main/selection.html'):
         _request_user_context = User(_request_user_id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
     else:
-        _request_user_id = None 
+        _request_user_id = None
         _request_user_context = None
-        _request_user_like_entity_set = [] 
+        _request_user_like_entity_set = []
      
     _old_category_list = Old_Category.find()[0:11]
 
