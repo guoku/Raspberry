@@ -30,11 +30,17 @@ def tag_suggest(request):
     
     return JSONResponse(data=_rslt)
 
-        
+
 def tag_detail(request, tag_hash, template="tag/tag_detail.html"):
     _start_at = datetime.datetime.now()
-    _request_user_id = request.user.id if request.user.is_authenticated() else None 
-    
+    _request_user_like_entity_set = list()
+    if request.user.is_authenticated():
+        # _request_user_id = request.user.id if request.user.is_authenticated() else None
+        _request_user_id = request.user.id
+        _request_user_like_entity_set = Entity.like_set_of_user(_request_user_id)
+    else:
+        _request_user_id = None
+
     _tag_text = Tag.get_tag_text_from_hash(tag_hash)
     _entity_id_list = Tag.find_tag_entity(tag_hash)
     _page_num = request.GET.get('p', 1)
@@ -43,9 +49,11 @@ def tag_detail(request, tag_hash, template="tag/tag_detail.html"):
     _entities = [] 
     for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         try:
-            _entities.append(Entity(_entity_id).read())
+            _entity_context = Entity(_entity_id).read()
+            _entity_context['is_user_already_like'] = True if _entity_id in _request_user_like_entity_set else False
+            _entities.append(_entity_context)
         except Exception, e:
-            pass
+            log.error(e.message)
     
     _duration = datetime.datetime.now() - _start_at
     WebLogTask.delay(
