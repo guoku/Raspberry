@@ -7,7 +7,7 @@
                 {% if entity_context.brand|length != 0 %}
                     {{ entity_context.brand }}-
                 {% endif %}
-                {{ entity_context.title|truncatechars:10 }}
+                {{ entity_context.title|truncatechars:16 }}
             </h2>
         {% endspaceless %}
         <span class="price">&#65509;{{ entity_context.price }}</span>

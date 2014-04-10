@@ -119,6 +119,9 @@ msgid "my guoku"
 msgstr "我的果库"
 
 
+msgid "about our team"
+msgstr "关于我们"
+
 # password message
 msgid "old password"
 msgstr "当前密码"
