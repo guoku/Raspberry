@@ -10,8 +10,22 @@
 {% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/detail.css' %}">{% endblock %}
 {#{% block keyword %}果库,{{ entity_context.category_id|trans_category }},{{ entity_context.title }}{% endblock %}#}
-{% block keyword %}{% if entity_context.brand|length != 0 %}{{ entity_context.brand }}, {% endif %}{{ entity_context.category_id|trans_category }}{% endblock %}
-{% block description %}果库,{{ entity_context.category_id|trans_category }},{{ entity_context.title }}{% endblock %}
+{% block keyword %}
+    {% if entity_context.brand|length != 0 %}
+        {{ entity_context.brand }},
+    {% endif %}
+    {{ entity_context.category_id|group_category }},
+    {{ entity_context.category_id|trans_category }}
+{% endblock %}
+
+{% block description %}
+    {{ entity_context.category_id|group_category }},
+    {{ entity_context.category_id|trans_category }},
+    {{ entity_context.title }}
+    {% if entity_context.intro|length > 0 %}
+    {{ entity_context.intro }}
+    {% endif %}
+{% endblock %}
 {% block content %}
 
     <div id="detail">
