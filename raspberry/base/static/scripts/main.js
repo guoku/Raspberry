@@ -295,11 +295,13 @@ function initTag(){
 
         loadData: function(counter, object) {
             var url = window.location.href;
+            var time = $(".common-note:last").find(".timestr").attr("name");
+            
             $.ajax({
                 url: url,
                 type: "GET",
                 async: false,
-                data: {'p': counter },
+                data: {'p': counter,'t':time},
                 success: function(data) {
 //                    return data;
                     result =  $.parseJSON(data);

@@ -61,9 +61,10 @@ def selection(request, template='main/selection.html'):
     _old_category_list = Old_Category.find()[0:11]
 
     _page_num = int(request.GET.get('p', 1))
+    _time_filter  = request.GET.get('t', datetime.now())
     _category_id = request.GET.get('c', None)
     
-    _hdl = NoteSelection.objects.filter(post_time__lt = datetime.now())
+    _hdl = NoteSelection.objects.filter(post_time__lt = _time_filter)
     if _category_id != None:
         _category_id = int(_category_id)
         _hdl = _hdl.filter(root_category_id=_category_id)
@@ -81,7 +82,6 @@ def selection(request, template='main/selection.html'):
             _selection_note_id = _note_selection['note_id']
             _entity_id = _note_selection['entity_id']
             _entity_context = Entity(_entity_id).read()
-    
             _note = Note(_selection_note_id)
             _note_context = _note.read()
             _creator_context = User(_note_context['creator_id']).read()
