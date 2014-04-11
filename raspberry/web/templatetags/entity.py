@@ -35,7 +35,7 @@ def group_category(value):
 register.filter('group_category', group_category)
 
 def resize_image(value, size=640):
-    u = re.search("(alicdn|taobaocdn|taobao)\.com", value)
+    u = re.search("(alicdn|taobaocdn|taobao|guoku)\.com", value)
     if u:
         value = value.replace('_310x310.jpg', '')
         return "%s_%sx%s.jpg" % (value, size, size)
