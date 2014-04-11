@@ -164,9 +164,9 @@ def user_notes(request, user_id, template=TEMPLATE):
 def user_tags(request, user_id, template=TEMPLATE):
     _start_at = datetime.datetime.now()
     _query_user = User(user_id)
-    _query_user_context = _query_user.read() 
+    _query_user_context = _query_user.read()
     if request.user.is_authenticated():
-        _request_user_id = request.user.id 
+        _request_user_id = request.user.id
         _request_user_context = User(_request_user_id).read() 
         _relation = User.get_relation(_request_user_context['user_id'], _query_user_context['user_id']) 
     else:
@@ -358,7 +358,14 @@ def follow(request, user_id, target_status):
 
 def user_tag_entity(request, user_id, tag_hash, template="tag/tag_detail.html"):
     _start_at = datetime.datetime.now()
-    _request_user_id = request.user.id if request.user.is_authenticated() else None 
+    # _request_user_id = request.user.id if request.user.is_authenticated() else None
+    if request.user.is_authenticated():
+        _request_user_id = request.user.id
+        _request_user_like_entity_set = Entity.like_set_of_user(_request_user_id)
+    else:
+        _request_user_id = None
+        _request_user_like_entity_set = list()
+
     _user_context = User(user_id).read()
     _tag_text = Tag.get_tag_text_from_hash(tag_hash)
     
@@ -367,12 +374,15 @@ def user_tag_entity(request, user_id, tag_hash, template="tag/tag_detail.html"):
     _entity_id_list = Tag.find_user_tag_entity(user_id, _tag_text)
     _paginator = Paginator(_page_num, 24, len(_entity_id_list))
     
-    _entities = [] 
+    _entities = list()
     for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         try:
-            _entities.append(Entity(_entity_id).read())
+            _entity_context = Entity(_entity_id).read()
+            _entity_context['is_user_already_like'] = True if _entity_id in _request_user_like_entity_set else False
+            _entities.append(_entity_context)
+            # _entities.append(Entity(_entity_id).read())
         except Exception, e:
-            pass
+            log.error(e.message)
     
     _duration = datetime.datetime.now() - _start_at
     WebLogTask.delay(
