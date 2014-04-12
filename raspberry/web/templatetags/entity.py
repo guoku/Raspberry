@@ -17,7 +17,6 @@ def display_note_item(note, is_staff=False):
         'poke_button_target_status' : note['poke_button_target_status'],
         'is_staff' : is_staff,
     }
-
 register.inclusion_tag("entity/entity_note.html")(display_note_item)
 
 def trans_category(value):
