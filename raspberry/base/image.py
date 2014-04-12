@@ -76,6 +76,7 @@ class Image(object):
         _fp.close()
         
         for _size in Images_size:
+            log.info(_size)
             _data_resized = cls.resize(image_data, _size, _size)
             _fp = _datastore.new_file('img/' + store_hash + '.jpg_' + str(_size) + 'x' + str(_size) + '.jpg')
             _fp.write(_data_resized)
