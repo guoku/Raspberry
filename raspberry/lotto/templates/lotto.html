@@ -28,7 +28,7 @@
             .main>div {width:320px;margin-left:-160px;left:50%;position:relative;overflow:hidden;}
     
             .rotate {
-                width:320px;margin-left:-160px;left:50%;position:relative;padding-bottom:5px;overflow:hidden;height: 280px;margin-top: 30px;
+                width:320px;margin-left:-160px;left:50%;position:relative;padding-bottom:5px;overflow:hidden;height: 280px;margin-top: 170px;
             }
             .rotate-bg 
             {
@@ -45,11 +45,11 @@
             {
                 position:absolute;
                 width:320px;
-                height:413px;
+                height:488px;
                 background:url({% static 'images/bg.png' %}) no-repeat;
-                -webkit-background-size:320px 413px;
-                background-size:320px 413px;
-                margin-top: 20px;
+                -webkit-background-size:320px 488px;
+                background-size:320px 488px;
+                margin-top: 0px;
             }
             .rotate .btn-lottery {
                 width:115px;
@@ -86,23 +86,7 @@
 
 <body>
     <div class="main" id="main">
-        <div>
-            <div id="award-winner" style="font-size:10px;color:white;height:20px;background:#959595;">
-                <div style="width:900px;height:20px;white-space: nowrap;overflow:hidden;" id="scroll_div" class="scroll_div">
-                    <div id="scroll_begin">
-                        随时随地刷果库！@发炎君 是个大娘炮！@果库某工程师 为女用户加持！@果库一枝花 祝你一路顺风！@蜗牛大爷君 为每个男用户默念祝福！随时随地刷果库！@发炎君 是个大娘炮！@果库某工程师 为女用户加持！@果库一枝花 祝你一路顺风！@蜗牛大爷君 为每个男用户默念祝福！
-                    </div>
-                    <div id="scroll_end"></div>
-                </div>
-                <script type="text/javascript">ScrollImgLeft();</script>
-            </div>
-        </div>
         <div class="header">
-            <a href="{% url 'lotto_share_to_sina_weibo' %}?session={{session}}&token={{token}}">
-                <div id="sina-btn" class="sina-btn">
-                    <img src="{% static 'images/sina.png' %}" width="17" height="13" style="display:inline-block;"><span>&nbsp;分享到微博</span>
-                </div>
-            </a>
             <div class="rotate">
                 <div class="rotate-bg"></div>
                 <div class="btn-lottery"></div>
@@ -112,19 +96,24 @@
             <div style="padding:10px 25px 10px 25px;">
                 <p style="margin-top:0px;">
                     <span style="font-size:13px;color:#666;">活动时间：</span>
-                    2014年2月25日 - 3月4日
+                    2014年4月16日 - 4月22日
                 </p>
                 <p style="margin-top:10px;">
                     <span style="font-size:13px;color:#666;">活动规则：</span>
                     成功分享至微博即可获得1次抽奖机会，每人每天最多2次抽奖机会。
                 </p>
                 <p style="margin-top:10px;">
-                    <span style="font-size:13px;color:#666;">奖品发放：</span>
-                    转盘获奖后，请耐心等待。活动结束后一周内，果库工作人员会统一通过微博私信联系所有获奖用户，安排奖品发送。
+                    <span style="font-size:13px;color:#666;">奖品介绍：</span>
+                    云悦体质分析仪（30台）限量版瑜伽球（30个）定制鼠标垫（50个）。
                 </p>
                 <p style="margin-top:10px;">本活动一切解释权归果库所有。若发现作弊及僵尸用户，果库有权取消其获奖资格。</p>
             </div>
         </div>
+        <a href="{% url 'lotto_share_to_sina_weibo' %}?session={{session}}&token={{token}}">
+            <div id="sina-btn" class="sina-btn">
+                <img src="{% static 'images/sina.png' %}" width="17" height="13" style="display:inline-block;"><span>&nbsp;分享到微博</span>
+            </div>
+        </a>
     </div>
 </body>
 </html>
