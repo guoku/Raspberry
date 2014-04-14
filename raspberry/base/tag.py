@@ -205,10 +205,18 @@ class Tag(object):
     @classmethod
     def add_recommend_user_tag(cls, user_id, tag):
         _entity_count = cls.get_user_tag_entity_count(user_id, tag)
+
+        try:
+            _obj = RecommendUserTagModel.objects.filter(user_id=user_id, tag=tag).order_by('-last_tagged_time')[0:1]
+            _created_time = _obj.created_time
+        except Exception, e:
+            _created_time = datetime.datetime.now()
+
         RecommendUserTagModel.objects.create(
-            user_id = user_id,
-            tag = tag,
-            entity_count = _entity_count
+            user_id=user_id,
+            tag=tag,
+            entity_count=_entity_count,
+            created_time=_created_time
         )
     
     @classmethod
