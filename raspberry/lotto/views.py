@@ -67,11 +67,12 @@ def main(request, template='lotto.html'):
 CURRENT_KEY = 1
 def roll(request):
     _token = request.GET.get('token', None)
+    _session = request.GET.get('session', None)
     _player = Player.objects.get(token=_token)
     _code = 0
     
     if not _is_the_same_date(_player.last_share_time, datetime.datetime.now()):
-        return SuccessJsonResponse({ 'code': 5 })
+        return HttpResponseRedirect(reverse('lotto_share_to_sina_weibo') + '?session=' + _session + '&token=' + _token)
     
     if _player.share_count <= _player.roll_count:
         return SuccessJsonResponse({ 'code': 4 })
@@ -106,6 +107,7 @@ def roll(request):
 def share_to_sina_weibo(request):
     _session = request.GET.get('session', '')
     _token = request.GET.get('token', '')
+    
     if _token == '' or _token == None:
         request.session['auth_source'] = 'lotto'
         if _session != '':

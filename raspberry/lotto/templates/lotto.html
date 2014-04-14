@@ -146,7 +146,7 @@
         };
         {% if infocode == '1' %}
             $.ajax({
-                url: "{% url 'lotto_roll' %}",
+                url: "{% url 'lotto_roll' %}?session={{session}}&token={{token}}",
                 data: {
                   "session" : session,
                   "token" : token 
@@ -156,7 +156,7 @@
                     var code = data['code'];
                     var count = data['leftrollcount'];
                     if (code == 0) {
-                        var angle = [0,120, 240];
+                        var angle = [0, 120, 240];
                         angle = angle[Math.floor(Math.random() * angle.length)]
                         rotateStart(0, angle, '很遗憾，这次你没中奖')
                     }
@@ -185,54 +185,7 @@
         $(".btn-lottery").rotate({
             bind: {
                 click: function () {
-                            if (count <= 0) {
-                                if (count == -1) {
-                                    alert('请先分享到微博');
-                                }
-                                else {
-                                    alert('每天只有两次机会哦');
-                                }
-                                return;
-                             }
-                             else
-                             {
-                                    $.ajax({
-                                      url: "{% url 'lotto_roll' %}",
-                                      data: {
-                                        "session" : session,
-                                        "token" : token 
-                                      },
-                                      type: "GET",
-                                      success: function(data) {
-                                        var code = data['code'];
-                                        var count = data['leftrollcount'];
-                                        if (code == 0) {
-                                            var angle = [0,120, 240];
-                                            angle = angle[Math.floor(Math.random() * angle.length)]
-                                            rotateStart(0, angle, '很遗憾，这次你没中奖')
-                                        }
-                                        if (code == 1) {
-                                            rotateStart(1, 180, '恭喜你抽中一等奖：Beats 耳机（限量版）')
-                                        }
-                                        if (code == 2) {
-                                            rotateStart(2, 300, '恭喜你抽中二等奖：音乐花园创意音箱')
-                                        }
-                                        if (code == 3) {
-                                            rotateStart(3, 60, '恭喜你抽中三等奖：果库惊喜礼袋')
-                                        }
-                                        if (code == 4) {
-                                            alert('每天只有两次机会哦')
-                                        }
-                                        if (code == 5) {
-                                            alert('请先分享到微博')
-                                        }
-
-                                      },
-                                      error: function(data) {
-
-                                  }});
-
-                             }
+                    window.location.href = "{% url 'lotto_share_to_sina_weibo' %}?session={{session}}&token={{token}}";
                 }
             }
         });
