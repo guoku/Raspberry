@@ -331,8 +331,6 @@ def recommend_user_tag(request):
         
         _rslt = []
         _recommend_user_tag_list = Tag.get_recommend_user_tag_list()
-        if len(_recommend_user_tag_list) > _count:
-            _recommend_user_tag_list = random.sample(_recommend_user_tag_list, _count)
         for _tag_data in _recommend_user_tag_list:
             _data = {
                 'tag_name' : _tag_data[1],
