@@ -197,6 +197,7 @@ class Tag(object):
         try:
             _obj = RecommendUserTagModel.objects.get(user = user_id, tag = tag)
             _obj.entity_count = cls.get_user_tag_entity_count(user_id, tag)
+            _obj.created_time = datetime.datetime.now() 
             _obj.save()
         except RecommendUserTagModel.DoesNotExist:
             pass
