@@ -12,68 +12,68 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style">
     <meta content="telephone=no" name="format-detection">
     <title>分享微博，赢大奖！</title>
-
-    <style type="text/css">
-            html, body, div, ul, li, a, p, span, header, footer, input, textarea, h1, h2 {margin: 0;padding: 0;-webkit-tap-highlight-color: rgba(255,255,255,0);-webkit-appearance: none;}
-            article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {display: block;}
-            html, body {height: 100%;-webkit-text-size-adjust: none;text-size-adjust: none;font-family:helvetica neue,helvetica,arial,sans-serif;text-align: center;}
-            body {font: normal 14px sans-serif;background-color: #F;color: #898989;}
-            a {text-decoration:none;}
-            .dn {/*display: none;*/}
-            .clear {clear:both;}
-            .sina-btn {display:block;background:#427ec0;color:#ffffff;padding:6px 0 10px 0;border-radius:2px;margin: 0 auto;width:110px;height: 12px;font-size: 12px;margin-top:68px;}
-            div.with-border {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);background-color:#FFFFFF;border-radius:2px;margin:15px 5px 0 5px;}
-    
-            .main {position:relative;width:100%;overflow:hidden;padding-bottom:10px;}
-            .main>div {width:320px;margin-left:-160px;left:50%;position:relative;overflow:hidden;}
-    
-            .rotate {
-                width:320px;margin-left:-160px;left:50%;position:relative;padding-bottom:5px;overflow:hidden;height: 280px;margin-top: 170px;
-            }
-            .rotate-bg 
-            {
-                position:absolute;
-                width:252px;
-                height:252px;
-                top:9px;
-                left:29px;
-                background:url({% static 'images/rotate-bg.png' %});
-                -webkit-background-size:252px 252px;
-                background-size:252px 252px;
-            }
-            .header
-            {
-                position:absolute;
-                width:320px;
-                height:488px;
-                background:url({% static 'images/bg.png' %}) no-repeat;
-                -webkit-background-size:320px 488px;
-                background-size:320px 488px;
-                margin-top: 0px;
-            }
-            .rotate .btn-lottery {
-                width:115px;
-                height:115px;
-                position:absolute;
-                top:78px;
-                left:98px;
-                background:url({% static 'images/btn.png' %});
-                -webkit-background-size:115px 115px;
-                background-size:115px 115px;
-                cursor: pointer;
-            }
-            #award-winner{width:1000px;height:20px;overflow:hidden;line-height:20px;font-size:10px;} 
-            #award-winner #scroll_begin, #award-winner #scroll_end{display:inline}
-            #jd-btn {
-                display: block;
-                position: absolute;
-                width: 100%;
-                height: 150px;
-                top: 0;
-                left: 0;
-                z-index: 1000;
-            }
-        </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/lotto/lotto.css' %}">
+{#    <style type="text/css">#}
+{#            html, body, div, ul, li, a, p, span, header, footer, input, textarea, h1, h2 {margin: 0;padding: 0;-webkit-tap-highlight-color: rgba(255,255,255,0);-webkit-appearance: none;}#}
+{#            article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {display: block;}#}
+{#            html, body {height: 100%;-webkit-text-size-adjust: none;text-size-adjust: none;font-family:helvetica neue,helvetica,arial,sans-serif;text-align: center;}#}
+{#            body {font: normal 14px sans-serif;background-color: #F;color: #898989;}#}
+{#            a {text-decoration:none;}#}
+{#            .dn {/*display: none;*/}#}
+{#            .clear {clear:both;}#}
+{#            .sina-btn {display:block;background:#427ec0;color:#ffffff;padding:6px 0 10px 0;border-radius:2px;margin: 0 auto;width:110px;height: 12px;font-size: 12px;margin-top:68px;}#}
+{#            div.with-border {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);background-color:#FFFFFF;border-radius:2px;margin:15px 5px 0 5px;}#}
+{#    #}
+{#            .main {position:relative;width:100%;overflow:hidden;padding-bottom:10px;}#}
+{#            .main>div {width:320px;margin-left:-160px;left:50%;position:relative;overflow:hidden;}#}
+{#    #}
+{#            .rotate {#}
+{#                width:320px;margin-left:-160px;left:50%;position:relative;padding-bottom:5px;overflow:hidden;height: 280px;margin-top: 170px;#}
+{#            }#}
+{#            .rotate-bg #}
+{#            {#}
+{#                position:absolute;#}
+{#                width:252px;#}
+{#                height:252px;#}
+{#                top:9px;#}
+{#                left:29px;#}
+{#                background:url({% static 'images/lotto/rotate-bg.png' %});#}
+{#                -webkit-background-size:252px 252px;#}
+{#                background-size:252px 252px;#}
+{#            }#}
+{#            .header#}
+{#            {#}
+{#                position:absolute;#}
+{#                width:320px;#}
+{#                height:488px;#}
+{#                background:url({% static 'images/lotto/bg.png' %}) no-repeat;#}
+{#                -webkit-background-size:320px 488px;#}
+{#                background-size:320px 488px;#}
+{#                margin-top: 0px;#}
+{#            }#}
+{#            .rotate .btn-lottery {#}
+{#                width:115px;#}
+{#                height:115px;#}
+{#                position:absolute;#}
+{#                top:78px;#}
+{#                left:98px;#}
+{#                background:url({% static 'images/lotto/btn.png' %});#}
+{#                -webkit-background-size:115px 115px;#}
+{#                background-size:115px 115px;#}
+{#                cursor: pointer;#}
+{#            }#}
+{#            #award-winner{width:1000px;height:20px;overflow:hidden;line-height:20px;font-size:10px;} #}
+{#            #award-winner #scroll_begin, #award-winner #scroll_end{display:inline}#}
+{#            #jd-btn {#}
+{#                display: block;#}
+{#                position: absolute;#}
+{#                width: 100%;#}
+{#                height: 150px;#}
+{#                top: 0;#}
+{#                left: 0;#}
+{#                z-index: 1000;#}
+{#            }#}
+{#        </style>#}
     <script type="text/javascript"> 
             function ScrollImgLeft(){ 
             var speed=50; 
@@ -121,7 +121,7 @@
         </div>
         <a href="{% url 'lotto_share_to_sina_weibo' %}?session={{session}}&token={{token}}">
             <div id="sina-btn" class="sina-btn">
-                <img src="{% static 'images/sina.png' %}" width="17" height="13" style="display:inline-block;"><span>&nbsp;分享到微博</span>
+                <img src="{% static 'images/lotto/sina.png' %}" width="17" height="13" style="display:inline-block;"><span>&nbsp;分享到微博</span>
             </div>
         </a>
     </div>
@@ -129,7 +129,7 @@
 </html>
 
 <script src="{% static 'scripts/jquery.js' %}"></script>
-<script src="{% static 'scripts/jqueryrotate.js' %}"></script>
+<script src="{% static 'scripts/lotto/jqueryrotate.js' %}"></script>
 <script type="text/javascript">
     {% if infocode == '0' %}
         alert('每天只能分享两次哦');
