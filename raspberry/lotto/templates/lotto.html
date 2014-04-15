@@ -63,7 +63,16 @@
                 cursor: pointer;
             }
             #award-winner{width:1000px;height:20px;overflow:hidden;line-height:20px;font-size:10px;} 
-            #award-winner #scroll_begin, #award-winner #scroll_end{display:inline} 
+            #award-winner #scroll_begin, #award-winner #scroll_end{display:inline}
+            #jd-btn {
+                display: block;
+                position: absolute;
+                width: 100%;
+                height: 150px;
+                top: 0;
+                left: 0;
+                z-index: 1000;
+            }
         </style>
     <script type="text/javascript"> 
             function ScrollImgLeft(){ 
@@ -87,6 +96,7 @@
 <body>
     <div class="main" id="main">
         <div class="header">
+            <a href="http://item.jd.com/1099830.html" target="_blank" id="jd-btn"></a>
             <div class="rotate">
                 <div class="rotate-bg"></div>
                 <div class="btn-lottery"></div>
@@ -161,13 +171,13 @@
                         rotateStart(0, angle, '很遗憾，这次你没中奖')
                     }
                     if (code == 1) {
-                        rotateStart(1, 180, '恭喜你抽中一等奖：Beats 耳机（限量版）')
+                        rotateStart(1, 300, '恭喜你抽中瑜伽球')
                     }
                     if (code == 2) {
-                        rotateStart(2, 300, '恭喜你抽中二等奖：音乐花园创意音箱')
+                        rotateStart(2, 60, '恭喜你抽中定制鼠标垫')
                     }
                     if (code == 3) {
-                        rotateStart(3, 60, '恭喜你抽中三等奖：果库惊喜礼袋')
+                        rotateStart(3, 180, '恭喜你抽中云悦体质分析仪')
                     }
                     if (code == 4) {
                         alert('每天只有两次机会哦')
