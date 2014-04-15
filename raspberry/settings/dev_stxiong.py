@@ -165,7 +165,7 @@ INSTALLED_APPS = (
     'mobile',
     'seller',
     'stats',
-    #'lotto',
+    'lotto',
     'web',
     # 'redis_admin',
 )
