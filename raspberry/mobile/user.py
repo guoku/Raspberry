@@ -322,6 +322,7 @@ def random_user_tag(request):
 @check_sign
 def recommend_user_tag(request):
     if request.method == "GET":
+        _offset = int(request.GET.get('offset', '10'))
         _count = int(request.GET.get('count', '10'))
         _session = request.GET.get('session', None)
         if _session != None:
@@ -331,7 +332,7 @@ def recommend_user_tag(request):
         
         _rslt = []
         _recommend_user_tag_list = Tag.get_recommend_user_tag_list()
-        for _tag_data in _recommend_user_tag_list:
+        for _tag_data in _recommend_user_tag_list[_offset : _offset + _count]:
             _data = {
                 'tag_name' : _tag_data[1],
                 'entity_count' : _tag_data[2],
