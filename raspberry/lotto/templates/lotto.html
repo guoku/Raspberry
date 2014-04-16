@@ -96,7 +96,7 @@
 <body>
     <div class="main" id="main">
         <div class="header">
-            <a href="http://item.jd.com/1099830.html" target="_blank" id="jd-btn"></a>
+            <a href="1099830" target="_blank" id="jd-btn"></a>
             <div class="rotate">
                 <div class="rotate-bg"></div>
                 <div class="btn-lottery"></div>
@@ -114,16 +114,17 @@
                 </p>
                 <p style="margin-top:10px;">
                     <span style="font-size:13px;color:#666;">奖品介绍：</span>
-                    云悦体质分析仪（30台）限量版瑜伽球（30个）定制鼠标垫（50个）。
+                    奖品介绍： 云悦体质分析仪（30台）、瑜伽球（30个）、定制鼠标垫（50个）。
+{#                    云悦体质分析仪（30台）限量版瑜伽球（30个）定制鼠标垫（50个）。#}
                 </p>
                 <p style="margin-top:10px;">本活动一切解释权归果库所有。若发现作弊及僵尸用户，果库有权取消其获奖资格。</p>
             </div>
         </div>
-        <a href="{% url 'lotto_share_to_sina_weibo' %}?session={{session}}&token={{token}}">
-            <div id="sina-btn" class="sina-btn">
-                <img src="{% static 'images/lotto/sina.png' %}" width="17" height="13" style="display:inline-block;"><span>&nbsp;分享到微博</span>
-            </div>
-        </a>
+{#        <a href="{% url 'lotto_share_to_sina_weibo' %}?session={{session}}&token={{token}}">#}
+{#            <div id="sina-btn" class="sina-btn">#}
+{#                <img src="{% static 'images/lotto/sina.png' %}" width="17" height="13" style="display:inline-block;"><span>&nbsp;分享到微博</span>#}
+{#            </div>#}
+{#        </a>#}
     </div>
 </body>
 </html>
