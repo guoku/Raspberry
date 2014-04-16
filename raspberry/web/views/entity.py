@@ -66,6 +66,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     if _entity_id is None:
         raise Http404
     _entity_context = Entity(_entity_id).read()
+    # log.info(_entity_context)
     _liker_list = Entity(_entity_id).liker_list(offset=0, count=20)
     _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
     _tag_list = Tag.entity_tag_stat(_entity_id)

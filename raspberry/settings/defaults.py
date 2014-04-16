@@ -125,3 +125,6 @@ EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = 'key-7n8gut3y8rpk1u-0edgmgaj7vs50gig8'
 MAILGUN_SERVER_NAME = 'post.guoku.com'
 EMAIL_SUBJECT_PREFIX = '[guoku]'
+
+
+IMAGES_SIZE = [64, 128, 240, 310, 480, 640]
