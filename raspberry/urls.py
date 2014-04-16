@@ -56,11 +56,11 @@ urlpatterns += patterns(
     #   url(r'^__debug__/', include(debug_toolbar.urls)),
     #)
 
-    urlpatterns += patterns('',
+urlpatterns += patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
     )
 
-    urlpatterns += patterns('',
+urlpatterns += patterns('',
        url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
            {'document_root': settings.MEDIA_URL}),
     )
