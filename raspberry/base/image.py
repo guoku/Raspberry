@@ -61,7 +61,7 @@ class Image(object):
     @classmethod
     def save_square_image_data_fixed(cls, store_hash, image_data):
         # _image_sizes = [64, 128, 240, 310, 480, 640]
-        # log.info(Images_size)
+        log.info(store_hash)
         _datastore = Client(
             domain = settings.MOGILEFS_DOMAIN, 
             trackers = settings.MOGILEFS_TRACKERS 
