@@ -66,6 +66,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     if _entity_id is None:
         raise Http404
     _entity_context = Entity(_entity_id).read()
+    # log.info(_entity_context)
     _liker_list = Entity(_entity_id).liker_list(offset=0, count=20)
     _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
     _tag_list = Tag.entity_tag_stat(_entity_id)
@@ -414,7 +415,9 @@ def jd_info(request, _cand_url):
         _jd_item_info = load_jd_item_info(_jd_id)
         _chief_image_url = _jd_item_info['thumb_images'][0]
         #TODO：进行京东类目转换
-
+        #TODO :先用一个cid暂时使用着先
+        cid = '1512' 
+        _selected_category_id = Category.get_category_by_jd_cid(cid)
         _data = {
             'user_context' : User(request.user.id).read(),
             'cand_url' : _cand_url,
@@ -422,9 +425,12 @@ def jd_info(request, _cand_url):
             'jd_title' : _jd_item_info['title'],
             'shop_nick' : _jd_item_info['nick'],
             'shop_link' : _jd_item_info['shop_link'],
+            'brand' : _jd_item_info['brand'],
             'price' : _jd_item_info['price'],
-            'chief_image_url' : _chief_image_url,
-            'thumb_images' : _jd_item_info['thumb_images']
+            'chief_image_url' :  _chief_image_url,
+            'thumb_images' :[x.replace("/n1/", "/n5/") for x in  _jd_item_info['thumb_images']],
+            'cid' : cid,
+            'selected_category_id' : _selected_category_id,
             }
         _rslt = {
             'status' : 'SUCCESS',
@@ -508,6 +514,8 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
         )
     else:
         _taobao_id = request.POST.get("taobao_id", None)
+        if _taobao_id == None:
+            return create_jd_entity(request,template)
         _cid = request.POST.get("cid", None)
         _taobao_shop_nick = request.POST.get("shop_nick", None)
         _taobao_shop_link = request.POST.get("shop_link", None)
@@ -520,7 +528,7 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
         _user_id = request.POST.get("user_id", None)
         
         _intro = ""
-        _category_id = int(request.POST.get("selected_category_id", None))
+        _category_id = int(request.POST.get("selected_category_id", "0"))
         _detail_image_urls = request.POST.getlist("thumb_images")
         
         if _chief_image_url in _detail_image_urls:
@@ -554,6 +562,46 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
 
         return HttpResponseRedirect(reverse('web_detail', kwargs = { "entity_hash" : _entity.get_entity_hash() }))
 
+def create_jd_entity(request, template):
+    _cid = request.POST.get("cid", None)
+    _jd_id = request.POST.get("jd_id", None)
+    _jd_shop_nick = request.POST.get("shop_nick", None)
+    _jd_shop_link = request.POST.get("shop_link", None)
+    _jd_title = request.POST.get("jd_title", None)
+    _jd_price = float(request.POST.get("price", "0.0"))
+    _chief_image_url = request.POST.get("chief_image_url", None)
+    _brand = request.POST.get("brand", None)
+    _title = request.POST.get("title", None)
+    _note_text = request.POST.get("note_text", None)
+    _user_id = request.POST.get("user_id", None)
+
+    _intro = ""
+    _category_id = int(request.POST.get("selected_category_id", "0"))
+    _detail_image_urls = request.POST.getlist("thumb_images")
+
+    if _chief_image_url in _detail_image_urls:
+        _detail_image_urls.remove(_chief_image_url)
+
+    _detail_image_urls = [x.replace("/n5/","/n1/") for x in _detail_image_urls]
+    _entity = Entity.create_by_jd_item(
+            creator_id = request.user.id,
+            category_id = _category_id,
+            chief_image_url = _chief_image_url,
+            jd_item_info = {
+                "jd_id" : _jd_id,
+                "cid" : _cid,
+                "title" : _jd_title,
+                "shop_nick" : _jd_shop_nick,
+                "price" : _jd_price,
+                "soldout" : False,
+            },
+            brand = _brand,
+            title = _title,
+            intro = _intro,
+            detail_image_urls = _detail_image_urls,
+    )
+    _note = _entity.add_note(creator_id = _user_id, note_text = _note_text)
+    return HttpResponsePermanentRedirect(reverse('web_detail', kwargs = {"entity_hash" : _entity.get_entity_hash()}))
 
 
 @login_required
@@ -684,4 +732,6 @@ def log_visit_item(request, item_id):
             },
         )
         return HttpResponse('1')
+
+# coding=utf-8
 

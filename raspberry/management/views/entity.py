@@ -277,6 +277,8 @@ def edit_entity(request, entity_id):
         _item_context_list = []
         for _item_id in Item.find(entity_id = entity_id): 
             _item_context = Item(_item_id).read()
+            if _item_context == None:
+                return edit_jd_entity(request, entity_id)
             if (not _entity_context.has_key('title') or _entity_context['title'] == "") and (not _entity_context.has_key('recommend_title')):
                 _entity_context['recommend_title'] = _item_context['title']
             _item_context['commission_type'] = 'unknown' 

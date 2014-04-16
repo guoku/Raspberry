@@ -72,7 +72,8 @@ class JDExtractor:
             "category" : category,
             "imgs" : imgs,
             "nick" : nick,
-            "brand":brand,
+            "brand": brand,
+            'cid' : '',
             "shop_link" : shop_link
         }
 
@@ -80,4 +81,4 @@ class JDExtractor:
 if __name__ == '__main__':
     jd = JDExtractor()
     result = jd.fetch_item(1077000089)
-    print result['brand']
+    print result['cid']

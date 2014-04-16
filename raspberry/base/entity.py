@@ -81,7 +81,8 @@ class Entity(object):
         if not hasattr(self, 'entity_obj'):
             self.entity_obj = EntityModel.objects.get(pk = self.entity_id)
     
-    def __get_next_novus_time(self):
+    @staticmethod
+    def get_next_novus_time():
         _obj = EntityModel.objects.order_by('-novus_time')[0:1].get()
         return _obj.novus_time + datetime.timedelta(minutes=20)
 
@@ -153,12 +154,17 @@ class Entity(object):
                 jd_item_info['shop_nick'])
 
             try:
+                #TODO 这里是需要进行商榷的
                 _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = jd_item_info['cid'])
                 _old_category_id = _obj.guoku_category_id
 
             except:
                 _old_category_id = 12
-
+            
+            if weight == 0:
+                novus_time = cls.get_next_novus_time()
+            else:
+                novus_time = None
             _entity_obj = EntityModel.objects.create(
                 entity_hash = _entity_hash,
                 creator_id = creator_id,
@@ -171,6 +177,7 @@ class Entity(object):
                 chief_image = _chief_image_id,
                 detail_images = "#".join(_detail_image_ids),
                 weight = weight,
+                novus_time = novus_time,
                 rank_score = rank_score
             )
             
@@ -216,7 +223,11 @@ class Entity(object):
                 _old_category_id = _obj.guoku_category_id
             except:
                 _old_category_id = 12
-                
+            
+            if weight == 0:
+                novus_time = cls.get_next_novus_time()
+            else:
+                novus_time = None
             _entity_obj = EntityModel.objects.create( 
                 entity_hash=_entity_hash,
                 creator_id=creator_id,
@@ -229,6 +240,7 @@ class Entity(object):
                 chief_image=_chief_image_id,
                 detail_images="#".join(_detail_image_ids),
                 weight=weight,
+                novus_time = novus_time,
                 rank_score=rank_score
             )
             
@@ -482,7 +494,7 @@ class Entity(object):
 
         if self.entity_obj.weight == 0:
             if self.entity_obj.novus_time == None:
-                self.entity_obj.novus_time = self.__get_next_novus_time()
+                self.entity_obj.novus_time = self.get_next_novus_time()
             UpdateNovusStat.delay()
         else:
             if self.entity_obj.novus_time != None:
@@ -533,6 +545,9 @@ class Entity(object):
     def find(cls, root_old_category_id=None, category_id=None, like_word=None, timestamp=None, status=None, 
              offset=None, count=30, sort_by=None, reverse=False):
         
+        for _obj in EntityModel.objects.filter(weight=-1).order_by('-rank_score')[0:30]:
+            print _obj.rank_score
+
         _hdl = EntityModel.objects.all()
         
         if root_old_category_id != None and root_old_category_id >= 1 and root_old_category_id <= 11:
@@ -555,16 +570,15 @@ class Entity(object):
             _hdl = _hdl.filter(weight__gt=0)
         elif status == 'normal':
             _hdl = _hdl.filter(weight__gte=0)
-
+        
         ########## Magic Code for NOVUS editor ##############
 
-        if sort_by == 'rank_score':
-            _hdl = _hdl.filter(id__gt = 200000)
+#        if sort_by == 'rank_score':
+#            _hdl = _hdl.filter(rank_score__lt = 3000)
 
 
         #####################################################
 
-        
         if timestamp != None:
             _hdl = _hdl.filter(novus_time__lt=timestamp)
        
@@ -608,7 +622,9 @@ class Entity(object):
             
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
-        
+            for _obj in _hdl:
+                print _obj.rank_score
+
         _entity_id_list = map(lambda x: x.id, _hdl)
         
         return _entity_id_list
@@ -973,8 +989,8 @@ class Entity(object):
                 selected_time = _selection['selected_time'],
                 post_time = _post_time
             )
-            print "[%s:%s] [%d] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _selection['root_category_id'], _post_time)
+            #print "[%s:%s] [%d] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _selection['root_category_id'], _post_time)
             _post_time += datetime.timedelta(seconds = interval_secs)
-        print "%d selection arranged in total"%len(_selected)
+        #print "%d selection arranged in total"%len(_selected)
     
     
