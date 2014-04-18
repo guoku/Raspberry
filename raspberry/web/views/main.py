@@ -174,17 +174,68 @@ def web_message(request):
                     }
                     _rslt.append(_context)
                 elif isinstance(_message, NotePokeMessage):
-                    _rslt.append("2")
+                    _context = {
+                        'type' : 'note_poke_message',
+                        'create_time' : time.mktime(_message.create_time.timetuple()),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'poker' : User(_message.poker_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
                 elif isinstance(_message, NoteCommentMessage):
-                    _rslt.append("3")
+                    _context = {
+                        'type' : 'note_comment_message',
+                        'create_time' : time.mktime(_message.create_time.timetuple()),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'comment' : Note(_message.note_id).read_comment(_message.comment_id),
+                            'comment_user' : User(_message.comment_creator_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
                 elif isinstance(_message, NoteCommentReplyMessage):
-                    _rslt.append("4")
+                    _context = {
+                        'type' : 'note_comment_reply_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'comment' : Note(_message.note_id).read_comment(_message.comment_id),
+                            'replying_comment' : Note(_message.note_id).read_comment(_message.replying_comment_id),
+                            'replying_user' : User(_message.replying_user_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
                 elif isinstance(_message, EntityLikeMessage):
-                    _rslt.append("5")
+                    _context = {
+                        'type' : 'entity_like_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'liker' : User(_message.liker_id).read(_request_user_id),
+                            'entity' : Entity(_message.entity_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
                 elif isinstance(_message, EntityNoteMessage):
-                    _rslt.append("6")
+                    _context = {
+                        'type' : 'entity_note_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'entity' : Entity(_message.entity_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
                 elif isinstance(_message, NoteSelectionMessage):
-                    _rslt.append("7")
+                    _context = {
+                        'type' : 'note_selection_message',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'entity' : Entity(_message.entity_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
             except Exception, e:
                 print e
                 pass
