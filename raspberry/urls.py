@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     (r'^mobile/v3/', include('mobile.urls')),
     # (r'^admin/', include(admin.site.urls)),
     (r'^stats/', include('stats.urls')),
-#    (r'^lotto/', include('lotto.urls')),
+    (r'^lotto/', include('lotto.urls')),
     (r'', include('web.urls')),
 )
 
@@ -56,11 +56,11 @@ if settings.DEBUG:
        url(r'^__debug__/', include(debug_toolbar.urls)),
     )
 
-    #urlpatterns += patterns('',
-    #  (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    #)
+    urlpatterns += patterns('',
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    )
 
-    #urlpatterns += patterns('',
-    #    url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
-    #        {'document_root': settings.MEDIA_URL}),
-    #)
+    urlpatterns += patterns('',
+       url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
+           {'document_root': settings.MEDIA_URL}),
+    )

@@ -495,6 +495,7 @@ class Entity(object):
         if self.entity_obj.weight == 0:
             if self.entity_obj.novus_time == None:
                 self.entity_obj.novus_time = self.get_next_novus_time()
+            UpdateNovusStat.delay()
         else:
             if self.entity_obj.novus_time != None:
                 self.entity_obj.novus_time = None 
@@ -544,6 +545,9 @@ class Entity(object):
     def find(cls, root_old_category_id=None, category_id=None, like_word=None, timestamp=None, status=None, 
              offset=None, count=30, sort_by=None, reverse=False):
         
+        for _obj in EntityModel.objects.filter(weight=-1).order_by('-rank_score')[0:30]:
+            print _obj.rank_score
+
         _hdl = EntityModel.objects.all()
         
         if root_old_category_id != None and root_old_category_id >= 1 and root_old_category_id <= 11:
@@ -566,16 +570,15 @@ class Entity(object):
             _hdl = _hdl.filter(weight__gt=0)
         elif status == 'normal':
             _hdl = _hdl.filter(weight__gte=0)
-
+        
         ########## Magic Code for NOVUS editor ##############
 
-        if sort_by == 'rank_score':
-            _hdl = _hdl.filter(id__gt = 200000)
+#        if sort_by == 'rank_score':
+#            _hdl = _hdl.filter(rank_score__lt = 3000)
 
 
         #####################################################
 
-        
         if timestamp != None:
             _hdl = _hdl.filter(novus_time__lt=timestamp)
        
@@ -619,7 +622,9 @@ class Entity(object):
             
         if offset != None and count != None:
             _hdl = _hdl[offset : offset + count]
-        
+            for _obj in _hdl:
+                print _obj.rank_score
+
         _entity_id_list = map(lambda x: x.id, _hdl)
         
         return _entity_id_list
