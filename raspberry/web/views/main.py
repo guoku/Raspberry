@@ -13,6 +13,7 @@ from utils.http import JSONResponse
 from datetime import datetime
 
 from utils.paginator import Paginator
+from base.message import NeoMessage,UserFollowMessage,NotePokeMessage,EntityLikeMessage,EntityNoteMessage
 from base.models import NoteSelection
 from base.note import Note
 from base.entity import Entity
@@ -24,6 +25,7 @@ import base.popularity as popularity
 
 from web.tasks import WebLogTask
 from utils.lib import get_client_ip
+import time
 
 log = getLogger('django')
 
@@ -147,6 +149,47 @@ def selection(request, template='main/selection.html'):
         )
     # else:
 
+@login_required
+def web_message(request):
+    _start_at = datetime.now()
+    if request.method == "GET":
+        _request_user_id = 18746
+        _timestamp = request.GET.get('timestamp',None)
+        if _timestamp != None:
+            _timestamp = datetime.fromtimestamp(float(_timestamp))
+        else:
+            _timestamp = datetime.now()
+        _count = int(request.GET.get('count',30))
+
+        _rslt = []
+        for _message in NeoMessage.objects.filter(user_id=_request_user_id,created_time__lt=_timestamp).order_by('-created_time')[0:_count]:
+            try:
+                if isinstance(_message, UserFollowMessage):
+                    _context = {
+                        'type' : 'user_follow',
+                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'content': {
+                            'follower' : User(_message.follower_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
+                elif isinstance(_message, NotePokeMessage):
+                    _rslt.append("2")
+                elif isinstance(_message, NoteCommentMessage):
+                    _rslt.append("3")
+                elif isinstance(_message, NoteCommentReplyMessage):
+                    _rslt.append("4")
+                elif isinstance(_message, EntityLikeMessage):
+                    _rslt.append("5")
+                elif isinstance(_message, EntityNoteMessage):
+                    _rslt.append("6")
+                elif isinstance(_message, NoteSelectionMessage):
+                    _rslt.append("7")
+            except Exception, e:
+                print e
+                pass
+        return HttpResponse(_rslt)
+       
 
 def wap_selection(request, template='wap/selection.html'):
     _start_at = datetime.now()
