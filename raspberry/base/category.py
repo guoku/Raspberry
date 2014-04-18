@@ -221,3 +221,8 @@ class Category(object):
         except TaobaoItemNeoCategoryMappingModel.DoesNotExist: 
             pass
         return 300 
+
+    @staticmethod
+    def get_category_by_jd_cid(cid):
+    #TODO:这里后期可能要进行修改   
+        return 300

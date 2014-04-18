@@ -81,7 +81,8 @@ class Entity(object):
         if not hasattr(self, 'entity_obj'):
             self.entity_obj = EntityModel.objects.get(pk = self.entity_id)
     
-    def __get_next_novus_time(self):
+    @staticmethod
+    def get_next_novus_time():
         _obj = EntityModel.objects.order_by('-novus_time')[0:1].get()
         return _obj.novus_time + datetime.timedelta(minutes=20)
 
@@ -153,12 +154,17 @@ class Entity(object):
                 jd_item_info['shop_nick'])
 
             try:
+                #TODO 这里是需要进行商榷的
                 _obj = TaobaoItemCategoryMappingModel.objects.get(taobao_category_id = jd_item_info['cid'])
                 _old_category_id = _obj.guoku_category_id
 
             except:
                 _old_category_id = 12
-
+            
+            if weight == 0:
+                novus_time = cls.get_next_novus_time()
+            else:
+                novus_time = None
             _entity_obj = EntityModel.objects.create(
                 entity_hash = _entity_hash,
                 creator_id = creator_id,
@@ -171,6 +177,7 @@ class Entity(object):
                 chief_image = _chief_image_id,
                 detail_images = "#".join(_detail_image_ids),
                 weight = weight,
+                novus_time = novus_time,
                 rank_score = rank_score
             )
             
@@ -216,7 +223,11 @@ class Entity(object):
                 _old_category_id = _obj.guoku_category_id
             except:
                 _old_category_id = 12
-                
+            
+            if weight == 0:
+                novus_time = cls.get_next_novus_time()
+            else:
+                novus_time = None
             _entity_obj = EntityModel.objects.create( 
                 entity_hash=_entity_hash,
                 creator_id=creator_id,
@@ -229,6 +240,7 @@ class Entity(object):
                 chief_image=_chief_image_id,
                 detail_images="#".join(_detail_image_ids),
                 weight=weight,
+                novus_time = novus_time,
                 rank_score=rank_score
             )
             
@@ -482,8 +494,7 @@ class Entity(object):
 
         if self.entity_obj.weight == 0:
             if self.entity_obj.novus_time == None:
-                self.entity_obj.novus_time = self.__get_next_novus_time()
-            UpdateNovusStat.delay()
+                self.entity_obj.novus_time = self.get_next_novus_time()
         else:
             if self.entity_obj.novus_time != None:
                 self.entity_obj.novus_time = None 
@@ -973,8 +984,8 @@ class Entity(object):
                 selected_time = _selection['selected_time'],
                 post_time = _post_time
             )
-            print "[%s:%s] [%d] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _selection['root_category_id'], _post_time)
+            #print "[%s:%s] [%d] arranged @ [%s]"%(_selection['entity_id'], _selection['note_id'], _selection['root_category_id'], _post_time)
             _post_time += datetime.timedelta(seconds = interval_secs)
-        print "%d selection arranged in total"%len(_selected)
+        #print "%d selection arranged in total"%len(_selected)
     
     

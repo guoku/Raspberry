@@ -15,11 +15,12 @@ from entity import *
 from note import *
 from report import *
 from user import *
-from base.item import Item
+from base.item import Item,JDItem
 from share.tasks import MarkFootprint
 from tasks import MobileLogTask
 from utils.lib import get_client_ip
 from utils.taobao import * 
+from utils.jd import decorate_jd_url, get_jd_url
 from utils.taobaoapi.utils import taobaoke_mobile_item_convert 
 import random 
 import time
@@ -415,6 +416,9 @@ def visit_item(request, item_id):
         _outer_code = request.GET.get("outer_code", None)
         _sche = request.GET.get("sche", None)
         _item_context = Item(item_id).read()
+        
+        if _item_context == None:
+            return __visit_jd_item(request, item_id)
         _taobaoke_info = taobaoke_mobile_item_convert(_item_context['taobao_id'])
         _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
         _duration = datetime.datetime.now() - _start_at
@@ -456,12 +460,46 @@ def visit_item(request, item_id):
         return HttpResponseRedirect(decorate_taobao_url(get_taobao_url(_item_context['taobao_id'], True), _ttid, _sid, _outer_code, _sche))
             
 
+
+def __visit_jd_item(request, item_id):
+    _start_at = datetime.datetime.now()
+    if request.method == "GET":
+        _session = request.GET.get('session', None)
+        if _session != None:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        else:
+            _request_user_id = None
+        _ttid = request.GET.get("ttid", None)
+        _sid = request.GET.get("sid", None)
+        _entry = request.GET.get("entry", "mobile")
+        _outer_code = request.GET.get("outer_code", None)
+        _sche = request.GET.get("sche", None)
+        _item_context = JDItem(item_id).read()
+        buy_link = get_jd_url(_item_context['jd_id'], is_mobile=True)
+        _duration = datetime.datetime.now() - _start_at
+        _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
+        MobileLogTask.delay(
+            entry=_entry,
+            duration=_duration.seconds * 1000000 + _duration.microseconds, 
+            view='CLICK', 
+            request=request.REQUEST, 
+            ip=get_client_ip(request), 
+            log_time=datetime.datetime.now(),
+            request_user_id=_request_user_id,
+            appendix={
+                'site': 'jd',
+                'jd_id': _item_context['jd_id'],
+                'entity_id': _entity_id,
+                'tbk': False,
+            }
+        )
+        return HttpResponseRedirect(decorate_jd_url(buy_link))
+
 ######### Old visit item api ######
 ######### Should be obsolete after all client ends shift to 3.0 ######
 
 def old_visit_item(request):
     _start_at = datetime.datetime.now()
-    
     
     if request.method == "GET":
         _session = request.GET.get('session', None)

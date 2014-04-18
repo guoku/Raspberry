@@ -181,7 +181,10 @@ class JDItem(Item):
         if not hasattr(self, 'item_obj'):
             self.item_obj = JDItemDocument.objects.filter(id = self.item_id).first()
 
-
+    @staticmethod
+    def generate_buy_link(item_id):
+        _url = settings.APP_HOST + "/mobile/v3/item/%s/visit/"%item_id + "?type=mobile"
+        return _url
     @classmethod
     def get_item_by_jd_id(cls, jd_id):
         _jd_item_obj = JDItemDocument.objects.filter(jd_id = jd_id).first()
@@ -236,8 +239,9 @@ class JDItem(Item):
         _context["price"] = float(self.item_obj.price)
         _context["weight"] = self.item_obj.weight
         _context["soldout"] = self.item_obj.soldout
-        _context['buy_link'] = get_jd_url(str(self.item_obj.jd_id))
+        _context['buy_link'] =  JDItem.generate_buy_link(str(self.item_obj.id)) 
         _context["volume"] = 0 
+        print _context['buy_link']
         return _context
     
     @classmethod
