@@ -16,11 +16,11 @@ def category(request, cid, template="category/category.html"):
     _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
         _request_user_id = request.user.id
-        _request_user_context = User(_request_user_id).read() 
+        # _request_user_context = User(_request_user_id).read()
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
     else:
         _request_user_id = None 
-        _request_user_context = None
+        # _request_user_context = None
         _request_user_like_entity_set = []
     _page_num = request.GET.get('p', 1)
     _entity_count = Entity.count(category_id=cid, status='normal') 
@@ -34,7 +34,7 @@ def category(request, cid, template="category/category.html"):
             _entity_context['is_user_already_like'] = True if _entity_id in _request_user_like_entity_set else False
             _entity_list.append(_entity_context)
         except Exception, e:
-            pass
+            log.error(e.message)
     
     _duration = datetime.datetime.now() - _start_at
     WebLogTask.delay(

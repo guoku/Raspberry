@@ -119,6 +119,9 @@ msgid "my guoku"
 msgstr "我的果库"
 
 
+msgid "about our team"
+msgstr "关于我们"
+
 # password message
 msgid "old password"
 msgstr "当前密码"
@@ -146,3 +149,6 @@ msgstr "果库精选"
 
 msgid "guoku selection desc"
 msgstr "果库，最实用的网络购物指南，每日优选与发现最有趣、有用、有价值的网购商品。帮助降低发现的成本，努力提升消费的质量。"
+
+msgid "shared content"
+msgstr "果库连这都有，大家看我要来一个不？"

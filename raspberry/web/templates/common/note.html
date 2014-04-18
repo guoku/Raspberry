@@ -4,10 +4,12 @@
     <div class="entity">
         <div class="title" style="display: none">
             <h2>
+            {% spaceless %}
                 <a href="{% url 'web_detail' note.entity_context.entity_hash %}" target="_blank">
                     {% if note.entity_context.brand|length != 0 %}
                         {{ note.entity_context.brand }}
                         - {% endif %}{{ note.entity_context.title|truncatechars:20 }}</a>
+            {% endspaceless %}
             </h2>
             <span class="price">&#65509;{{ note.entity_context.price }}</span>
         </div>

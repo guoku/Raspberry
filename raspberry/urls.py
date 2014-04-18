@@ -1,10 +1,10 @@
 __author__ = 'stxiong'
 from django.conf import settings
 from django.conf.urls import url, include, patterns
-from django.contrib import admin
+# from django.contrib import admin
 from web.sitemaps import UserSitemap, EntitySitemap, TagSitemap, CategorySitemap
 from web.feeds import SelectionFeeds
-admin.autodiscover()
+# admin.autodiscover()
 
 handler500 = 'web.views.page_error'
 handler404 = 'web.views.webpage_not_found'
@@ -14,9 +14,9 @@ urlpatterns = patterns('',
     (r'^management/', include('management.urls')),
     (r'^seller/', include('seller.urls')),
     (r'^mobile/v3/', include('mobile.urls')),
-    (r'^admin/', include(admin.site.urls)),
+    # (r'^admin/', include(admin.site.urls)),
     (r'^stats/', include('stats.urls')),
-#    (r'^lotto/', include('lotto.urls')),
+    (r'^lotto/', include('lotto.urls')),
     (r'', include('web.urls')),
 )
 
@@ -50,17 +50,17 @@ urlpatterns += patterns(
     url(r'^feed/selection/$', SelectionFeeds()),
 )
 
-#if settings.DEBUG:
-    #import debug_toolbar
-    #urlpatterns += patterns('',
-    #    url(r'^__debug__/', include(debug_toolbar.urls)),
-    #)
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+       url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
 
-    #urlpatterns += patterns('',
-    #  (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    #)
+    urlpatterns += patterns('',
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    )
 
-    #urlpatterns += patterns('',
-    #    url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
-    #        {'document_root': settings.MEDIA_URL}),
-    #)
+    urlpatterns += patterns('',
+       url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
+           {'document_root': settings.MEDIA_URL}),
+    )

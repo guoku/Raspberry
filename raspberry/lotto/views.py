@@ -67,11 +67,12 @@ def main(request, template='lotto.html'):
 CURRENT_KEY = 1
 def roll(request):
     _token = request.GET.get('token', None)
+    _session = request.GET.get('session', None)
     _player = Player.objects.get(token=_token)
     _code = 0
     
     if not _is_the_same_date(_player.last_share_time, datetime.datetime.now()):
-        return SuccessJsonResponse({ 'code': 5 })
+        return HttpResponseRedirect(reverse('lotto_share_to_sina_weibo') + '?session=' + _session + '&token=' + _token)
     
     if _player.share_count <= _player.roll_count:
         return SuccessJsonResponse({ 'code': 4 })
@@ -85,12 +86,27 @@ def roll(request):
         )
     
     _acc_obj.count += 1
-    if _acc_obj.count % 50 == 0:
-        _code = 3
-        Reward.objects.create(
-            player_id = _player.id,
-            level = 3
-        )
+    if _acc_obj.count % 23 == 0:
+        if Reward.objects.filter(level=1).count() < 15:
+            _code = 1
+            Reward.objects.create(
+                player_id=_player.id,
+                level=1
+            )
+    elif _acc_obj.count % 31 == 0:
+        if Reward.objects.filter(level=2).count() < 25:
+            _code = 2
+            Reward.objects.create(
+                player_id=_player.id,
+                level=2
+            )
+    elif _acc_obj.count % 43 == 0:
+        if Reward.objects.filter(level=3).count() < 15:
+            _code = 3
+            Reward.objects.create(
+                player_id=_player.id,
+                level=3
+            )
         
     _acc_obj.save()
     _player.roll_count += 1
@@ -106,6 +122,7 @@ def roll(request):
 def share_to_sina_weibo(request):
     _session = request.GET.get('session', '')
     _token = request.GET.get('token', '')
+    
     if _token == '' or _token == None:
         request.session['auth_source'] = 'lotto'
         if _session != '':
@@ -126,7 +143,7 @@ def share_to_sina_weibo(request):
         return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token+'&ifc=0')
     
     pic_f = open(os.path.dirname(os.path.realpath(__file__)) + '/iphone.png', 'rb') 
-    sina_utils.post_weibo(_player.access_token, _player.expires_in, u'快去下载果库 3.0 ！！不少专业人士和微博红人都在偷偷用哟。果库精选了太多好物，一不小心就让你的购物车爆满，还能看到太多好玩的用户点评和吐槽，实用、有趣的个人标签… 以果库的方式，发现生活之美。戳这里下载 http://www.guoku.com/download/ios/ （分享自@果库）', pic_f) 
+    sina_utils.post_weibo(_player.access_token, _player.expires_in, u'衣带渐宽徒伤悲，唯曼妙身材与健康体格不可辜负，即日起，登录「果库」客户端即有机会获得瘦身神器 —— @云悦智能体质分析仪。通过「果库」客户端分享活动至新浪微博，更有机会赢取多一次抽奖机会！戳 → http://www.guoku.com/lotto/', pic_f) 
     
     _player.last_share_time = datetime.datetime.now()
     if _today_has_shared_already:

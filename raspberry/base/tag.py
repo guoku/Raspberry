@@ -197,6 +197,7 @@ class Tag(object):
         try:
             _obj = RecommendUserTagModel.objects.get(user = user_id, tag = tag)
             _obj.entity_count = cls.get_user_tag_entity_count(user_id, tag)
+            _obj.created_time = datetime.datetime.now() 
             _obj.save()
         except RecommendUserTagModel.DoesNotExist:
             pass
@@ -204,10 +205,19 @@ class Tag(object):
     @classmethod
     def add_recommend_user_tag(cls, user_id, tag):
         _entity_count = cls.get_user_tag_entity_count(user_id, tag)
+        
+        try:
+            for _obj in EntityTagModel.objects.filter(user_id=user_id, tag_text=tag).order_by('-last_tagged_time'):
+                _created_time = _obj.created_time
+                break
+        except Exception, e:
+            _created_time = datetime.datetime.now()
+        
         RecommendUserTagModel.objects.create(
-            user_id = user_id,
-            tag = tag,
-            entity_count = _entity_count
+            user_id=user_id,
+            tag=tag,
+            entity_count=_entity_count,
+            created_time=_created_time
         )
     
     @classmethod

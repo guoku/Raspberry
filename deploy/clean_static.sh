@@ -13,19 +13,21 @@ ComboCss='/usr/local/bin/node /usr/local/bin/csscombo'
 
 
 #echo "*** css and js version ***"
-#ver=`date '+%Y%m%d %H:%M:%S'|md5`;
+#ver=`git lg | head -n 1 | awk '{print $2}'`;
 #echo $ver;
 
 cd $root
 
 echo "*** compress js ***";
-#cd scripts/
-#find . -type f -name '*.js' -exec bash -c "${Uglifyjs} {} > {}.tmp; mv -f {}.tmp {}" \;
+cd scripts/
+find . -type f -name '*.js' -exec bash -c "${Uglifyjs} {} > {}.tmp; mv -f {}.tmp {}" \;
 #mkdir $ver
 #find . -type f -name '*.js' -exec cp {} $ver \;
 
 #mkdir static/management/js/$ver
 #cp static/management/js/*.js static/management/js/$ver
+
+cd $root
 
 echo "*** compress css ***";
 cd styles/
