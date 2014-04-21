@@ -1,1 +1,131 @@
 {% extends "base.html" %}
+{% load i18n staticfiles %}
+{% load entity user %}
+
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/message.css' %}">{% endblock %}
+{% block content %}
+	<div id="message">
+		<div id="message_list">
+			<div class="message_item user_follow_message">
+				<div class="message_left">
+					<div class="message_icon">
+						<img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+					</div>
+				</div>
+				<div class="message_right">
+					<div class="message_text">
+						<a>卷心菜</a>开始关注了你
+					</div>
+					<div class="message_time">
+						2014.06.8
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="message_item note_poke_message">
+				<div class="message_left">
+					<div class="message_icon">
+						<img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+					</div>
+				</div>
+				<div class="message_right">
+					<div class="message_text">
+						<div class="note_poke_text">你的点评收到一个赞</div>
+						<div class="note_content">"你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞"</div>
+					</div>
+					<div class="message_time">2014.09.09</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="message_item note_comment_message">
+				<div class="message_left">
+					<div class="message_icon">
+						<img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+					</div>
+				</div>
+				<div class="message_right">
+					<div class="message_text">
+						<div class="note_comment_text"><a>卷心菜</a>回复了你的点评</div>
+						<div class="comment_content">"你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞"</div>
+					</div>
+					<div class="message_time">2014.09.09</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="message_item note_comment_reply_message">
+				<div class="message_left">
+					<div class="message_icon">
+						<img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+					</div>
+				</div>
+				<div class="message_right">
+					<div class="message_text">
+						<div class="note_comment_text"><a>卷心菜</a>回复了你的点评</div>
+						<div class="comment_content">"你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞"</div>
+					</div>
+					<div class="message_time">2014.09.09</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="message_item entity_like_message">
+				<div class="message_left">
+					<div class="message_icon">
+						<img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+					</div>
+				</div>
+				<div class="message_right">
+					<div class="message_text">
+						你的商品被喜爱了
+					</div>
+					<div class="message_time">2014.09.09</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="message_item entity_note_message">
+				<div class="message_left">
+					<div class="message_icon">
+						<img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+					</div>
+				</div>
+				<div class="message_right">
+					<div class="message_text">
+						<div class="note_comment_text"><a>卷心菜</a>评论了你的商品</div>
+						<div class="comment_content">"你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞"</div>
+					</div>
+					<div class="message_time">2014.09.09</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="message_item note_selection_message">
+				<div class="message_left">
+					<div class="message_icon">
+						<img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+					</div>
+				</div>
+				<div class="message_right">
+					<div class="message_text">
+						<div class="note_comment_text"><a>卷心菜</a>评论了你的商品</div>
+						<div class="comment_content">"你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞"</div>
+					</div>
+					<div class="message_time">2014.09.09</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div id="message_side">
+			<div class="suggest_user">
+				<div class="suggest_user_title">推荐关注</div>
+				<div class="suggest_user_list">
+					<div class="download">
+						<h3>下载果库客户端</h3>
+				        <div>
+				            <a href="/download/ios/" target="_blank">iPhone</a> /
+				            <a href="/download/ios/" target="_blank">iPad</a> /
+				            <a href="http://app.guoku.com/download/android/guoku-release.apk" target="_blank">Android</a>
+				        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
