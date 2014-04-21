@@ -150,7 +150,7 @@ def selection(request, template='main/selection.html'):
     # else:
 
 @login_required
-def web_message(request):
+def web_message(request,  template='account/message.html'):
     _start_at = datetime.now()
     if request.method == "GET":
         _request_user_id = 18746
@@ -239,7 +239,13 @@ def web_message(request):
             except Exception, e:
                 print e
                 pass
-        return HttpResponse(_rslt)
+        return render_to_response(
+            template,
+            {
+                'message_list' : _rslt
+            },
+            context_instance = RequestContext(request)
+        )
        
 
 def wap_selection(request, template='wap/selection.html'):
