@@ -51,12 +51,22 @@
 }
 #message_side{
 	width: 285px;
-	height: 500px;
 	border: 1px solid #eee;
 	float: right;
 }
-.suggest_user{
+.suggest_user_title{
 	padding:15px;
 	font-size: 15px;
 	color: #444;
+}
+.suggest_user_list{
+	padding:15px;
+}
+.download,.hot_tags{
+	border-top:1px solid #eee;
+	padding:15px;
+}
+.download h3,.hot_tags h3{
+	margin-top: 8px;
+	font-weight: 600;
 }
