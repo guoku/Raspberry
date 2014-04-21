@@ -295,11 +295,13 @@ function initTag(){
 
         loadData: function(counter, object) {
             var url = window.location.href;
+            var time = $(".common-note:last").find(".timestr").attr("name");
+            
             $.ajax({
                 url: url,
                 type: "GET",
                 async: false,
-                data: {'p': counter },
+                data: {'p': counter,'t':time},
                 success: function(data) {
 //                    return data;
                     result =  $.parseJSON(data);
@@ -915,11 +917,16 @@ $(function(){
         $(".detail form input[name='chief_image_url']").val(origin_url);
     });
     $(".detail form").on("submit",function(){
-        var brand = $(".detail_taobao_brand").val();
-        var taobao_title = $(".detail_title_input").val();
-        $('<input type="hidden" name="brand" value="'+brand+'">').appendTo($(".detail form"));
-        $('<input type="hidden" name="title" value="'+taobao_title+'">').appendTo($(".detail form"));
-        return true;
+        if($.trim($(".detail form textarea[name='note_text']").val()).length>0){
+            var brand = $(".detail_taobao_brand").val();
+            var taobao_title = $(".detail_title_input").val();
+            $('<input type="hidden" name="brand" value="'+brand+'">').appendTo($(".detail form"));
+            $('<input type="hidden" name="title" value="'+taobao_title+'">').appendTo($(".detail form"));
+            return true;
+        }else{
+            $(".detail form textarea[name='note_text']").focus();
+            return false;
+        }
     });
     $("#forget_sendmail").on("click",function(){
         var email = $(".forget_input").val();
