@@ -143,7 +143,7 @@ def share_to_sina_weibo(request):
         return HttpResponseRedirect(reverse('lotto_main')+'?session='+_session+'&token='+_token+'&ifc=0')
     
     pic_f = open(os.path.dirname(os.path.realpath(__file__)) + '/iphone.png', 'rb') 
-    sina_utils.post_weibo(_player.access_token, _player.expires_in, u'衣带渐宽徒伤悲，唯曼妙身材与健康体格不可辜负，即日起，登录「果库」客户端即有机会获得瘦身神器 —— @云悦智能体质分析仪。通过「果库」客户端分享活动至新浪微博，更有机会赢取多一次抽奖机会！戳 → http://item.jd.com/1099830.html', pic_f) 
+    sina_utils.post_weibo(_player.access_token, _player.expires_in, u'衣带渐宽徒伤悲，唯曼妙身材与健康体格不可辜负，即日起，登录「果库」客户端即有机会获得瘦身神器 —— @云悦智能体质分析仪。通过「果库」客户端分享活动至新浪微博，更有机会赢取多一次抽奖机会！戳 → http://www.guoku.com/lotto/', pic_f) 
     
     _player.last_share_time = datetime.datetime.now()
     if _today_has_shared_already:
