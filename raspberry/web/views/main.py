@@ -62,7 +62,8 @@ def selection(request, template='main/selection.html'):
      
     _old_category_list = Old_Category.find()[0:11]
 
-    _page_num = int(request.GET.get('p', 1))
+    #_page_num = int(request.GET.get('p', 1))
+    _page_num = 1
     _time_filter  = request.GET.get('t', datetime.now())
     _category_id = request.GET.get('c', None)
     
@@ -76,7 +77,6 @@ def selection(request, template='main/selection.html'):
     
     _paginator = Paginator(_page_num, 30, _hdl.count())
     _note_selection_list = _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
-
     _selection_list = []
     _entity_id_list = []
     for _note_selection in _note_selection_list:
@@ -88,7 +88,6 @@ def selection(request, template='main/selection.html'):
             _note_context = _note.read()
             _creator_context = User(_note_context['creator_id']).read()
             _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
-            
             _selection_list.append(
                 {
                     'is_user_already_like': _is_user_already_like,
