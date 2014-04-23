@@ -416,8 +416,9 @@ def visit_item(request, item_id):
         _outer_code = request.GET.get("outer_code", None)
         _sche = request.GET.get("sche", None)
         _item_context = Item(item_id).read()
+        
         if _item_context == None:
-            return visit_jd_item(request, item_id)
+            return __visit_jd_item(request, item_id)
         _taobaoke_info = taobaoke_mobile_item_convert(_item_context['taobao_id'])
         _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
         _duration = datetime.datetime.now() - _start_at
@@ -460,7 +461,8 @@ def visit_item(request, item_id):
             
 
 
-def visit_jd_item(request, item_id):
+def __visit_jd_item(request, item_id):
+    _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -472,9 +474,25 @@ def visit_jd_item(request, item_id):
         _entry = request.GET.get("entry", "mobile")
         _outer_code = request.GET.get("outer_code", None)
         _sche = request.GET.get("sche", None)
-
         _item_context = JDItem(item_id).read()
         buy_link = get_jd_url(_item_context['jd_id'], is_mobile=True)
+        _duration = datetime.datetime.now() - _start_at
+        _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
+        MobileLogTask.delay(
+            entry=_entry,
+            duration=_duration.seconds * 1000000 + _duration.microseconds, 
+            view='CLICK', 
+            request=request.REQUEST, 
+            ip=get_client_ip(request), 
+            log_time=datetime.datetime.now(),
+            request_user_id=_request_user_id,
+            appendix={
+                'site': 'jd',
+                'jd_id': _item_context['jd_id'],
+                'entity_id': _entity_id,
+                'tbk': False,
+            }
+        )
         return HttpResponseRedirect(decorate_jd_url(buy_link))
 
 ######### Old visit item api ######

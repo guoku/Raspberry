@@ -20,66 +20,78 @@ class AmazonExtractor:
 
     @staticmethod
     def parser( html):
+        try:
+            soup = BeautifulSoup(html)
+            title = soup.select("span#productTitle")[0].string
+            p = soup.select("#priceblock_ourprice")
+            ptag = p[0]
+            ptag = ptag.string
+            price = re.findall(r'\d+\.\d+',ptag)[0]
 
-        soup = BeautifulSoup(html)
+            price = float(price)
 
-        title = soup.title.string
-        ti = title.rindex('-')
-        title = title[:ti]
+            imgtags = soup.select('li span span.a-button-text img')
+            imgs = []
 
-        p = soup.select("b.priceLarge")
-        ptag = p[0]
-        ptag = ptag.string
-        price = re.findall(r'\d+\.\d+',ptag)[0]
-
-        price = float(price)
-
-        imgtags = soup.select('div#thumb-strip div.thumb img')
-        imgs = []
-
-        for tag in imgtags:
-            src = tag.attrs['src']
-            i = src.index("._")
-            x = src.index("_.")
-            link = src[:i]
-            suffix = src[x+1:]
-            imgs.append(link+suffix)
-        brand = soup.select("form#handleBuy div.buying span a")[0].string
-        merchanID = soup.select("input#merchantID")[0].attrs['value']
-        nick = ''
-        shop_link = ''
-        if merchanID == 'A1AJ19PSB66TGU':
+            for tag in imgtags:
+                src = tag.attrs['src']
+                imgs.append(src)
+            brand = soup.select("a#brand")[0].string
+            merchanID = soup.select("input#merchantID")[0].attrs['value']
             nick = "亚马逊"
-            shop_link = "http://z.cn"
-        else:
-            shop_link = "http://www.amazon.cn/gp/browse.html?ie=UTF8&me=%s"%merchanID
-            nick = soup.select("div#BBAvailPlusMerchID b")[0].string
+            shop_link = "http://amazon.com"
 
-        cats = soup.select("span.zg_hrsr_ladder")[0]
-        cats = cats.select('a')
+            cats = soup.select("span.zg_hrsr_ladder")
+            if len(cats) == 0:
+                category = []
+            else:
+                cats = cats.select('a')
+                category = []
+                for c in cats:
+                    category.append(c.string)
+
+            result = {
+                "desc":title,
+                "price":price,
+                "category":category,
+                "imgs":imgs,
+                "nick":nick,
+                "shop_link":shop_link,
+                "brand":brand
+            }
+            return result
+        except:
+            return AmazonExtractor.cparser(html) 
+
+    @staticmethod
+    def cparser( html):
+        #合约机页面解析
+        soup = BeautifulSoup(html)
+        title = soup.select("span#btAsinTitle")[0].string
+        pricetag = soup.select("span#current-price")[0].string
+        price = float(re.findall("\d+\.+\d+", pricetag)[-1])
+        brand = soup.select("span#amsPopoverTrigger a")[0].string
+        imgs = [soup.select("img#prodImage")[0]['src']]
         category = []
-        for c in cats:
-            category.append(c.string)
-
         result = {
             "desc":title,
-            "price":price,
-            "category":category,
-            "imgs":imgs,
-            "nick":nick,
-            "shop_link":shop_link,
-            "brand":brand
+            "price" : price,
+            "category" : category,
+            "imgs" : imgs,
+            "nick":"亚马逊",
+            "shop_link":"http://amazon.com",
+            "brand" : brand
         }
         return result
 
-
 if __name__=="__main__":
     a = AmazonExtractor()
-    r = a.fetch_item("http://www.amazon.cn/%E9%9C%8D%E6%AF%94%E7%89%B9%E4%BA%BA-J-R-R%E2%80%A2%E6%89%98%E5%B0%94%E9%87%91/dp/B00AF3T0Y4/ref=sr_1_1?s=books&ie=UTF8&qid=1394016796&sr=1-1&keywords=%E9%9C%8D%E6%AF%94%E7%89%B9")
+    r = a.fetch_item("http://www.amazon.com/HTC-One-M7-Silver-32GB/dp/B00E6FII18/ref=pd_sim_cps_2?ie=UTF8&refRID=018T0RQ3SW73ABKJDCNV")
     print r['desc']
     print r['price']
-    print r['category'][1]
+    print r['category']
     print r['nick']
     print r['shop_link']
     print r['brand']
+    print r['imgs']
 

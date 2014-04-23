@@ -241,6 +241,7 @@ class JDItem(Item):
         _context["soldout"] = self.item_obj.soldout
         _context['buy_link'] =  JDItem.generate_buy_link(str(self.item_obj.id)) 
         _context["volume"] = 0 
+        print _context['buy_link']
         return _context
     
     @classmethod

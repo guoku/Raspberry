@@ -32,8 +32,6 @@ class MobileEntity(Entity):
             for image in _context['detail_images']:
                 _detail_images_clean.append(image['url'])
             _context['detail_images'] = _detail_images_clean
-            
-            
         
         _context['like_already'] = 0
         if request_user_id: 
@@ -70,7 +68,6 @@ class MobileEntity(Entity):
         for _like_user in self.liker_list(0, 10):
             _user_id = _like_user[0]
             _context['like_user_list'].append(MobileUser(_user_id).read(request_user_id)) 
-
         return _context    
     
     def add_note(self, creator_id, note_text, score = 0, image_data = None):
