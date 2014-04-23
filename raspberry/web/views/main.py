@@ -62,7 +62,6 @@ def selection(request, template='main/selection.html'):
      
     _old_category_list = Old_Category.find()[0:11]
 
-    #_page_num = int(request.GET.get('p', 1))
     _page_num = 1
     _time_filter  = request.GET.get('t', datetime.now())
     _category_id = request.GET.get('c', None)
@@ -166,16 +165,17 @@ def web_message(request,  template='account/message.html'):
                 if isinstance(_message, UserFollowMessage):
                     _context = {
                         'type' : 'user_follow',
-                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
                         'content': {
                             'follower' : User(_message.follower_id).read(_request_user_id)
                         }
                     }
+                    print _context
                     _rslt.append(_context)
                 elif isinstance(_message, NotePokeMessage):
                     _context = {
                         'type' : 'note_poke_message',
-                        'create_time' : time.mktime(_message.create_time.timetuple()),
+                        'create_time' : datetime.fromtimestamp(time.mktime(_message.create_time.timetuple())),
                         'content' : {
                             'note' : Note(_message.note_id).read(_request_user_id),
                             'poker' : User(_message.poker_id).read(_request_user_id)
@@ -185,7 +185,7 @@ def web_message(request,  template='account/message.html'):
                 elif isinstance(_message, NoteCommentMessage):
                     _context = {
                         'type' : 'note_comment_message',
-                        'create_time' : time.mktime(_message.create_time.timetuple()),
+                        'create_time' : datetime.fromtimestamp(time.mktime(_message.create_time.timetuple())),
                         'content' : {
                             'note' : Note(_message.note_id).read(_request_user_id),
                             'comment' : Note(_message.note_id).read_comment(_message.comment_id),
@@ -196,7 +196,7 @@ def web_message(request,  template='account/message.html'):
                 elif isinstance(_message, NoteCommentReplyMessage):
                     _context = {
                         'type' : 'note_comment_reply_message',
-                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
                         'content' : {
                             'note' : Note(_message.note_id).read(_request_user_id),
                             'comment' : Note(_message.note_id).read_comment(_message.comment_id),
@@ -208,7 +208,7 @@ def web_message(request,  template='account/message.html'):
                 elif isinstance(_message, EntityLikeMessage):
                     _context = {
                         'type' : 'entity_like_message',
-                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
                         'content' : {
                             'liker' : User(_message.liker_id).read(_request_user_id),
                             'entity' : Entity(_message.entity_id).read(_request_user_id)
@@ -218,7 +218,7 @@ def web_message(request,  template='account/message.html'):
                 elif isinstance(_message, EntityNoteMessage):
                     _context = {
                         'type' : 'entity_note_message',
-                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
                         'content' : {
                             'note' : Note(_message.note_id).read(_request_user_id),
                             'entity' : Entity(_message.entity_id).read(_request_user_id)
@@ -228,7 +228,7 @@ def web_message(request,  template='account/message.html'):
                 elif isinstance(_message, NoteSelectionMessage):
                     _context = {
                         'type' : 'note_selection_message',
-                        'created_time' : time.mktime(_message.created_time.timetuple()),
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
                         'content' : {
                             'note' : Note(_message.note_id).read(_request_user_id),
                             'entity' : Entity(_message.entity_id).read(_request_user_id)

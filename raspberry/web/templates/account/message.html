@@ -6,6 +6,26 @@
 {% block content %}
 	<div id="message">
 		<div id="message_list">
+		{% for message in message_list %}
+			{% if message.type = 'user_follow' %}
+				<div class="message_item user_follow_message">
+					<div class="message_left">
+						<div class="message_icon">
+							<img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+						</div>
+					</div>
+					<div class="message_right">
+						<div class="message_text">
+							<a>{{ message.content.follower.username }}</a>开始关注了你
+						</div>
+						<div class="message_time">
+							{{ message.created_time|date:'Y-m-d H:i:s' }}
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			{% endif %}
+		{% endfor %}
 			<div class="message_item user_follow_message">
 				<div class="message_left">
 					<div class="message_icon">
