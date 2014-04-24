@@ -97,6 +97,7 @@ def selection(request, template='main/selection.html'):
             )
             _entity_id_list.append(_entity_id)
         except Exception, e:
+	    print '.............', e
             pass
 
     _duration = datetime.now() - _start_at
@@ -238,6 +239,7 @@ def web_message(request,  template='account/message.html'):
             except Exception, e:
                 print e
                 pass
+                
         return render_to_response(
             template,
             {
