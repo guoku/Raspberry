@@ -229,7 +229,7 @@ button {
     /*display: inline-block;*/
     float: right;
     /*background: url("/static/v3/images/toolkit.png") no-repeat;*/
-    background-position: -220px -82px;
+    background-position: -179px -56px;
     padding: 0;
     /*width: 22px;*/
     /*height: 22px;*/
@@ -240,7 +240,7 @@ button {
 #header .nav-bar .add-entity a {
     display: block;
     background: url("/static/v3/images/toolkit.png") no-repeat;
-    background-position: -220px -82px;
+    background-position: -179px -56px;
     width: 22px;
     height: 22px;
     margin-top: 12px;
@@ -251,7 +251,7 @@ button {
     color:#fff;
 }
 #header .nav-bar .add-entity a:hover {
-    background-position: -247px -82px;
+    background-position: -206px -56px;
 }
 
 
@@ -394,8 +394,7 @@ button {
     margin: 10px 0 9px -32px;
     padding: 0;
     border: none;
-    /*background: url("/static/v3/images/search_icon.png") no-repeat transparent;*/
-    background: url("/static/v3/images/toolkit.png") no-repeat -56px -80px transparent;
+    background: url("/static/v3/images/toolkit.png") no-repeat -16px -54px transparent;
 }
 
 /* welcome----------------- */
@@ -680,15 +679,15 @@ button {
     position: relative;
     top: 3px;
     width: 20px;
-    height: 17px;
+    height: 18px;
     margin-right: 5px;
     background: url(/static/v3/images/toolkit.png) no-repeat;
-    background-position: -58px -129px;
+    background-position: -19px -102px;
 }
 
 .liked .icon {
     background: url(/static/v3/images/toolkit.png) no-repeat;
-    background-position: -95px -129px;
+    background-position: -56px -102px;
 }
 
 .like .count {

@@ -56,7 +56,7 @@
     position: relative;
     top:1px;
     display: inline-block;
-    background: url("/static/v3/images/toolkit.png") -142px -270px;
+    background: url("/static/v3/images/toolkit.png") -103px -245px;
 }
 
 #user-center .base .setting, #user-center .base .follow-user {

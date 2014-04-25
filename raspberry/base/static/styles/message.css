@@ -27,10 +27,23 @@
 	width: 25px;
 	height: 25px;
 }
-.message_icon img{
+.message_icon{
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;
+	background: url("/static/v3/images/toolkit.png") no-repeat;
+}
+.user_follow_message .message_icon{
+	background-position: -14px -279px;
+}
+.note_poke_message .message_icon{
+	background-position: -98px -279px;
+}
+.entity_note_message .message_icon,.note_selection_message .message_icon,.note_comment_reply_message .message_icon,.note_comment_message .message_icon{
+	background-position: -138px -279px;
+}
+.entity_like_message .message_icon{
+	background-position: -55px -279px;
 }
 .message_text{
 	margin-left: 10px;
