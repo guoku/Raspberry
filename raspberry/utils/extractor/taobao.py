@@ -256,6 +256,8 @@ class TaobaoExtractor:
         for op in optimgs:
             op = re.sub(TaobaoExtractor.IMG_POSTFIX,"",op.attrs["data-src"])
             #print op
+            if op in imgs:
+                continue
             imgs.append(op)
         shopidtag = re.findall('shopId:"(\d+)',html)
         if len(shopidtag) == 0:
@@ -306,6 +308,8 @@ class TaobaoExtractor:
         optimgs = soup.select("ul#J_UlThumb li a img")
         for op in optimgs:
             op = re.sub(TaobaoExtractor.IMG_POSTFIX,"",op.attrs["src"])
+            if op in imgs:
+                continue
             imgs.append(op)
         shopidtag = re.findall('shopId:"(\d+)',html)
         if len(shopidtag) == 0:
