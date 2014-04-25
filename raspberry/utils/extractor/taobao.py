@@ -15,7 +15,8 @@ class TaobaoExtractor:
     def fetch_item(itemid):
         
         response = urllib2.urlopen('http://a.m.taobao.com/i' + itemid + '.htm')
-        if response.url.find("cloud-jump") > -1:
+        rurl = response.url
+        if rurl.find("cloud-jump") > -1 or rurl.find("h5.m"):
             return TaobaoExtractor.fetch_redirect(itemid)
         shoptype = "taobao.com"
         if response.url.find("tmall") >= 0:
@@ -340,5 +341,5 @@ class TaobaoExtractor:
 
 
 if __name__=="__main__":
-    print TaobaoExtractor.fetch_item("38243602029")
+    print TaobaoExtractor.fetch_item("35880234748")
 
