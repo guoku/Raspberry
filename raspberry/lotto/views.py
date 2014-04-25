@@ -86,22 +86,22 @@ def roll(request):
         )
     
     _acc_obj.count += 1
-    if _acc_obj.count % 23 == 0:
-        if Reward.objects.filter(level=1).count() < 15:
+    if _acc_obj.count % 29 == 0:
+        if Reward.objects.filter(level=1).count() < 28:
             _code = 1
             Reward.objects.create(
                 player_id=_player.id,
                 level=1
             )
-    elif _acc_obj.count % 31 == 0:
-        if Reward.objects.filter(level=2).count() < 25:
+    elif _acc_obj.count % 17  == 0:
+        if Reward.objects.filter(level=2).count() < 50:
             _code = 2
             Reward.objects.create(
                 player_id=_player.id,
                 level=2
             )
-    elif _acc_obj.count % 43 == 0:
-        if Reward.objects.filter(level=3).count() < 15:
+    elif _acc_obj.count % 23 == 0:
+        if Reward.objects.filter(level=3).count() < 28:
             _code = 3
             Reward.objects.create(
                 player_id=_player.id,
