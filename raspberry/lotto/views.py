@@ -32,6 +32,9 @@ def _cal_available_roll_count(share_count, roll_count, last_share_time):
     return -1 
 
 def main(request, template='lotto.html'):
+
+    return HttpResponseRedirect(reverse('web_selection'))
+
     _session = request.GET.get('session', '')
     _token = request.GET.get('token', '')
     _infocode = request.GET.get('ifc', None)

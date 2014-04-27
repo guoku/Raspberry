@@ -30,6 +30,7 @@ urlpatterns += patterns(
 
 urlpatterns += patterns(
     'web.views.other',
+    url(r'^download/$', 'download', name='web_download'),
     url(r'^download/ios/$', 'download_ios', name='web_download_ios'),
 )
 
