@@ -55,6 +55,6 @@ def load_taobao_item_info(taobao_id):
     taobao_item_info["thumb_images"] = thumb_images
     taobao_item_info["title"] = HTMLParser.HTMLParser().unescape(taobao_item_info["desc"])
     
-    taobao_item_info["shop_nick"] = taobao_item_info["nick"]
+    taobao_item_info["shop_nick"] = taobao_item_info["nick"].decode("utf8")
      
     return taobao_item_info
