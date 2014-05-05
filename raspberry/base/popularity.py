@@ -1,13 +1,16 @@
 # coding=utf-8
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist 
-from django.db.models import Count 
+from django.db.models import Count
+from django.utils.log import getLogger
+
 import datetime, time
 import random 
 
 from category import Category
 from models import Entity_Like, Note
 from tag import Tag
+
+log = getLogger('django')
 
 
 ################# Popular Entity ###############################3
@@ -127,3 +130,50 @@ def read_popular_category(json = False):
 #        _context['updated_time'] = time.mktime(datetime.datetime.now().timetuple())
 #    return _context
 #
+
+
+################# Popular User ###############################3
+
+def _gen_popular_user_context_cache_key():
+    return "popular_user_context"
+
+POPULAR_USER_IN_DAYS = 20
+def _set_popular_user_context():
+    cache_key = _gen_popular_user_context_cache_key()
+    try:
+        t_delta = datetime.timedelta(hours = 24 * POPULAR_USER_IN_DAYS)
+
+        popular_users = {}
+        for entity_note_object in Note.objects.filter( selected_time__gt = datetime.datetime.now() - t_delta,
+                                                              selected_time__lt = datetime.datetime.now() ):
+            if entity_note_object.selector_id != None:
+                creator_id = entity_note_object.creator_id
+                if not creator_id in [3, 54687, 1994, 10, 22045, 105, 153, 93623]:
+                    if not popular_users.has_key(creator_id):
+                        popular_users[creator_id] = 0
+                    popular_users[creator_id] += 1
+
+        context = {}
+        context["updated_time"] = datetime.datetime.now()
+        context["data"] = []
+        for user_id, selected_entity_count in popular_users.items():
+            context["data"].append({ "user_id" : user_id,
+                                     "selected_entity_count" : selected_entity_count })
+        cache.set(cache_key, context)
+        return context
+    except Exception, e:
+        log.error("[set_popular_user_context] failed for : %s"%(e))
+    return None
+
+def _get_popular_user_context():
+    cache_key = _gen_popular_user_context_cache_key()
+    return cache.get(cache_key)
+
+def read_popular_user_context():
+    context = _get_popular_user_context()
+    if context == None:
+        context = _set_popular_user_context()
+    return context
+
+def cal_popular_user():
+    _set_popular_user_context()
