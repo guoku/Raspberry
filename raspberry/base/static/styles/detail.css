@@ -289,13 +289,13 @@
     height: 19px;
     margin-right: 5px;
     background: url("/static/v3/images/toolkit.png") no-repeat;
-    background-position: -90px -168px;
+    background-position: -50px -141px;
     /*background: url(/static/v3/images/icon_poke.png);*/
 }
 
 .note-item .poked span {
     /*background: url(/static/v3/images/icon_poked.png);*/
-    background-position: -125px -168px
+    background-position: -86px -168px
 }
 
 .note-item .add-comment {

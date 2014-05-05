@@ -1,0 +1,85 @@
+@import "./base.css";
+@import "./normalize.min.css";
+
+#message{
+	margin-top:30px;
+}
+#message_list{
+	width: 630px;
+	border: 1px solid #eee;
+	border-bottom:0px;
+	float: left;
+}
+.message_item{
+	padding: 15px;
+	border-bottom: 1px solid #eee;
+}
+.message_left{
+	width: 25px;
+	height: auto;
+	float: left;
+}
+.message_right{
+	width: 575px;
+	float: left;
+}
+.message_icon{
+	width: 25px;
+	height: 25px;
+}
+.message_icon{
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background: url("/static/v3/images/toolkit.png") no-repeat;
+}
+.user_follow_message .message_icon{
+	background-position: -14px -279px;
+}
+.note_poke_message .message_icon{
+	background-position: -98px -279px;
+}
+.entity_note_message .message_icon,.note_selection_message .message_icon,.note_comment_reply_message .message_icon,.note_comment_message .message_icon{
+	background-position: -138px -279px;
+}
+.entity_like_message .message_icon{
+	background-position: -55px -279px;
+}
+.message_text{
+	margin-left: 10px;
+	line-height: 28px;
+}
+.message_time{
+	margin-left: 12px;
+	font-size: 13px;
+	line-height: 30px;
+}
+.message_text a{
+	font-size: 16px;
+	padding-right: 5px;
+	color: #444;
+}
+.note_content,.comment_content{
+	padding-bottom: 15px;
+}
+#message_side{
+	width: 285px;
+	border: 1px solid #eee;
+	float: right;
+}
+.suggest_user_title{
+	padding:15px;
+	font-size: 15px;
+	color: #444;
+}
+.suggest_user_list{
+	padding:15px;
+}
+.download,.hot_tags{
+	border-top:1px solid #eee;
+	padding:15px;
+}
+.download h3,.hot_tags h3{
+	margin-top: 8px;
+	font-weight: 600;
+}

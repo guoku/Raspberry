@@ -13,6 +13,7 @@ from utils.http import JSONResponse
 from datetime import datetime
 
 from utils.paginator import Paginator
+from base.message import NeoMessage,UserFollowMessage,NotePokeMessage,EntityLikeMessage,EntityNoteMessage
 from base.models import NoteSelection
 from base.note import Note
 from base.entity import Entity
@@ -24,6 +25,7 @@ import base.popularity as popularity
 
 from web.tasks import WebLogTask
 from utils.lib import get_client_ip
+import time
 
 log = getLogger('django')
 
@@ -74,7 +76,6 @@ def selection(request, template='main/selection.html'):
     
     _paginator = Paginator(_page_num, 30, _hdl.count())
     _note_selection_list = _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
-
     _selection_list = []
     _entity_id_list = []
     for _note_selection in _note_selection_list:
@@ -86,7 +87,6 @@ def selection(request, template='main/selection.html'):
             _note_context = _note.read()
             _creator_context = User(_note_context['creator_id']).read()
             _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
-            
             _selection_list.append(
                 {
                     'is_user_already_like': _is_user_already_like,
@@ -97,6 +97,7 @@ def selection(request, template='main/selection.html'):
             )
             _entity_id_list.append(_entity_id)
         except Exception, e:
+	    print '.............', e
             pass
 
     _duration = datetime.now() - _start_at
@@ -147,6 +148,106 @@ def selection(request, template='main/selection.html'):
         )
     # else:
 
+@login_required
+def web_message(request,  template='account/message.html'):
+    _start_at = datetime.now()
+    if request.method == "GET":
+        _request_user_id = 18746
+        _timestamp = request.GET.get('timestamp',None)
+        if _timestamp != None:
+            _timestamp = datetime.fromtimestamp(float(_timestamp))
+        else:
+            _timestamp = datetime.now()
+        _count = int(request.GET.get('count',30))
+
+        _rslt = []
+        for _message in NeoMessage.objects.filter(user_id=_request_user_id,created_time__lt=_timestamp).order_by('-created_time')[0:_count]:
+            try:
+                if isinstance(_message, UserFollowMessage):
+                    _context = {
+                        'type' : 'user_follow',
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
+                        'content': {
+                            'follower' : User(_message.follower_id).read(_request_user_id)
+                        }
+                    }
+                    print _context
+                    _rslt.append(_context)
+                elif isinstance(_message, NotePokeMessage):
+                    _context = {
+                        'type' : 'note_poke_message',
+                        'create_time' : datetime.fromtimestamp(time.mktime(_message.create_time.timetuple())),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'poker' : User(_message.poker_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
+                elif isinstance(_message, NoteCommentMessage):
+                    _context = {
+                        'type' : 'note_comment_message',
+                        'create_time' : datetime.fromtimestamp(time.mktime(_message.create_time.timetuple())),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'comment' : Note(_message.note_id).read_comment(_message.comment_id),
+                            'comment_user' : User(_message.comment_creator_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
+                elif isinstance(_message, NoteCommentReplyMessage):
+                    _context = {
+                        'type' : 'note_comment_reply_message',
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'comment' : Note(_message.note_id).read_comment(_message.comment_id),
+                            'replying_comment' : Note(_message.note_id).read_comment(_message.replying_comment_id),
+                            'replying_user' : User(_message.replying_user_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
+                elif isinstance(_message, EntityLikeMessage):
+                    _context = {
+                        'type' : 'entity_like_message',
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
+                        'content' : {
+                            'liker' : User(_message.liker_id).read(_request_user_id),
+                            'entity' : Entity(_message.entity_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
+                elif isinstance(_message, EntityNoteMessage):
+                    _context = {
+                        'type' : 'entity_note_message',
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'entity' : Entity(_message.entity_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
+                elif isinstance(_message, NoteSelectionMessage):
+                    _context = {
+                        'type' : 'note_selection_message',
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
+                        'content' : {
+                            'note' : Note(_message.note_id).read(_request_user_id),
+                            'entity' : Entity(_message.entity_id).read(_request_user_id)
+                        }
+                    }
+                    _rslt.append(_context)
+            except Exception, e:
+                print e
+                pass
+                
+        return render_to_response(
+            template,
+            {
+                'message_list' : _rslt
+            },
+            context_instance = RequestContext(request)
+        )
+       
 
 def wap_selection(request, template='wap/selection.html'):
     _start_at = datetime.now()
