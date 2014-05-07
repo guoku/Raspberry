@@ -295,7 +295,7 @@
 
 .note-item .poked span {
     /*background: url(/static/v3/images/icon_poked.png);*/
-    background-position: -86px -168px
+    background-position: -86px -141px
 }
 
 .note-item .add-comment {
@@ -310,7 +310,7 @@
     height: 19px;
     margin-right: 5px;
     background: url("/static/v3/images/toolkit.png") no-repeat;
-    background-position: -160px -168px;
+    background-position: -121px -141px;
     /*background: url(/static/v3/images/icon_comment.png);*/
 }
 
@@ -532,7 +532,7 @@
     height: 30px;
     display: inline-block;
     background:url("/static/v3/images/toolkit.png");
-    background-position: -55px -36px ;
+    background-position: -18px -8px ;
     position: relative;
     top:5px;
 }

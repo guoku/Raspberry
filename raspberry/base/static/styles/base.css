@@ -333,13 +333,13 @@ button {
 
 
 #header .user .menu .icon-guoku {
-    background-position: -120px -82px;
+    background-position: -79px -56px;
 }
 #header .user .menu .icon-setting {
-    background-position: -152px -82px;
+    background-position: -111px -56px;
 }
 #header .user .menu .icon-signout {
-    background-position: -184px -82px;
+    background-position: -144px -56px;
 }
 #header .user .menu li a {
     display: block;
@@ -590,12 +590,12 @@ button {
     /*margin: auto;*/
 }
 .weibo {
-    background-position: -56px -42px;
+    background-position: -18px -8px;
     margin-left: 155px;
     margin-right: 30px;
 }
 .taobao {
-    background-position: -98px -42px;
+    background-position: -61px -8px;
 }
 
 .login .remember {
@@ -1023,12 +1023,12 @@ button {
 	height: 30px;
 	cursor: pointer;
     background: url("/static/v3/images/toolkit.png") no-repeat;
-    background-position: -125px -214px;
+    background-position: -86px -188px;
 }
 .click_em:hover{
 	width: 30px;
 	height: 30px;
-    background-position: -157px -214px;
+    background-position: -118px -188px;
 }
 /*404*/
 .center{
