@@ -170,9 +170,17 @@ class TaobaoExtractor:
             if len(sells)>0:
                 sellerid = sells[0][2]
         shoptype = "taobao.com"
+        print sellerid
         if shoplink.find("tmall") >= 0:
             shoptype = "tmall.com"
 
+        soup = BeautifulSoup(fontpage)
+        title = soup.select("a.J_TGoldlog")[0].text[:-4]
+        nick = soup.select("a.seller-name")[0].text[3:]
+        shopidtag = soup.select("a.J_TCollectShop")[1].attrs['data-init']
+        o = urlparse(shopidtag)
+        shopid = parse_qs(str(o.query))['shopId'][0]
+        '''
         #读取wap店铺首页获取店名和
         shoplink = shoplink.replace(".t",".m.t",1)
         resp = urllib2.urlopen(shoplink)
@@ -196,13 +204,14 @@ class TaobaoExtractor:
         src = nicktag.attrs["src"]
         o = urlparse(src)
         nick = parse_qs(str(o.query))['nick'][0]
+        '''
         result = {
             "type" : shoptype,
             "seller_id" : sellerid,
             "shop_id" : shopid,
             "title" : title,
-            "pic" : shoppic,
-            "nick" : nick.decode("utf8")
+            "pic" : '',
+            "nick" : nick
         }
         return result
 
@@ -348,6 +357,6 @@ class TaobaoExtractor:
 
 
 if __name__=="__main__":
-    #print TaobaoExtractor.fetch_item("35880234748")
+    print TaobaoExtractor.fetch_item("25558776712")
     print TaobaoExtractor.fetch_shop("http://shop110165889.taobao.com/?spm=2013.1.0.0.uSTb9g")
 
