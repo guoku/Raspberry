@@ -236,11 +236,12 @@ class Tag(object):
         _list = []
         _hdl = RecommendUserTagModel.objects.all()
         for _obj in _hdl: 
+            tag_hash = Tag.get_tag_hash_from_text(_obj.tag)
             if with_entity_count:
-                _list.append([_obj.user_id, _obj.tag, _obj.entity_count])
+                _list.append([_obj.user_id, _obj.tag ,tag_hash, _obj.entity_count])
             else:
                 _list.append([_obj.user_id, _obj.tag])
-        return _list
+        return _list[0:5]
                 
     
     @classmethod
