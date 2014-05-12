@@ -174,9 +174,26 @@
 		<div id="message_side">
 			<div class="suggest_user">
 				<div class="suggest_user_title">推荐关注</div>
-				<div class="suggest_user_list">
-					
-				</div>
+				<ul>
+					<li>
+						<div class="suggest_user_img">
+							<img src="http://imgcdn.guoku.com/avatar/small_241170_ce838e0ed9c613bb06ce79842913c83f.png">
+						</div>
+						<div class="suggest_user_info">
+							<div class="suggest_user_nicename">
+								<a href="/u/">casdc</a>
+							</div>
+							<div class="suggest_user_tip">casdcasdc</div>
+						</div>
+						<div class="suggest_follow">
+							<a href="/u/14/follow/1/" class="follow-user blue-f"><span class="img_follow"></span><b>关注</b></a>
+						</div>
+						<div class="clear"></div>
+					</li>
+					{% for user in popular_list %}
+						<li><a href="/u/{{ user.user_id}}">{{ user.user_context.nickname }}</a></li>
+					{% endfor %}
+				</ul>
 			</div>
 			<div class="download">
 				<h3>下载果库客户端</h3>
@@ -188,6 +205,11 @@
 			</div>
 			<div class="hot_tags">
 				<h3>热门标签</h3>
+				<ul>
+				{% for tags in recommend_tag_list %}
+					<li><a href="/t/{{ tags.2}}"># {{ tags.1 }}</a></li>
+				{% endfor %}
+				</ul>
 			</div>
 		</div>
 	</div>

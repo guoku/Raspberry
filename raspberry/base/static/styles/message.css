@@ -68,12 +68,40 @@
 	float: right;
 }
 .suggest_user_title{
-	padding:15px;
 	font-size: 15px;
 	color: #444;
 }
-.suggest_user_list{
+.suggest_user_img{
+	width: 45px;
+	height: 45px;
+	float: left;
+}
+.suggest_user_info{
+	width: 80px;
+	height: 45px;
+	padding:0px 10px;
+	float: left;
+}
+.suggest_user_nicename{
+	font-size:18px;
+	margin-top:5px;
+	height: 18px;
+}
+.suggest_user_tip{
+	font-size: 13px;
+	height: 20px;
+}
+.suggest_follow{
+	float: left;
+}
+.suggest_user{
 	padding:15px;
+}
+.suggest_user img{
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	margin-top:5px;
 }
 .download,.hot_tags{
 	border-top:1px solid #eee;
@@ -82,4 +110,29 @@
 .download h3,.hot_tags h3{
 	margin-top: 8px;
 	font-weight: 600;
+}
+#message_side ul{
+	padding: 0px 0px 0px 2px;
+}
+#message_side li{
+	line-height: 25px;
+}
+.follow-user {
+	margin-top:5px;
+    display: block;
+    padding: 5px 15px 5px 10px;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    text-decoration: none;
+}
+.blue-f{
+    color: #fff;
+    background-color: #427ebf;
+}
+.img_follow{
+    width: 20px ;
+    height: 15px;
+    border:none;
+    display: inline-block;
+    background: url("../images/toolkit2.png") no-repeat -57px -270px;
 }
