@@ -97,8 +97,9 @@ def selection(request, template='main/selection.html'):
             )
             _entity_id_list.append(_entity_id)
         except Exception, e:
-	    print '.............', e
-            pass
+            log.error(e.message)
+	        # print '.............', e.message
+            # pass
 
     _duration = datetime.now() - _start_at
     WebLogTask.delay(
