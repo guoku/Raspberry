@@ -8,7 +8,11 @@ from share.tasks import DeleteEntityNoteCommentTask, PokeEntityNoteTask, DepokeE
 from tasks import MobileLogTask 
 from utils.lib import get_client_ip
 import datetime
-import time 
+import time
+
+from django.utils.log import getLogger
+
+log = getLogger('django')
 
 @check_sign
 def category_entity_note(request, category_id):
@@ -88,6 +92,7 @@ def search_entity_note(request):
 def update_entity_note(request, note_id):
     if request.method == "POST":
         _session = request.POST.get('session', None)
+        # log.info(request.POST)
         if _session != None:
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
@@ -105,11 +110,24 @@ def update_entity_note(request, note_id):
         ## There's no authorize confirmation yet ##
         
         _note = MobileNote(note_id)
-        _note.update(
-            note_text = _note_text,
-            image_data = _image_data
-        )
+        note_context = _note.read()
+
+        # log.info(note_context)
+        if note_context['creator']['user_id'] == _request_user_id:
+            # _note.create()
+            _note.update(
+                note_text = _note_text,
+                image_data = _image_data
+            )
+        else:
+            _note.create(
+                entity_id = note_context['entity_id'],
+                creator_id = _request_user_id,
+                note_text = _note_text,
+                image_data = _image_data,
+            )
         _rslt = _note.read(_request_user_id)
+        log.info(_rslt)
         return SuccessJsonResponse(_rslt)
 
 @check_sign
