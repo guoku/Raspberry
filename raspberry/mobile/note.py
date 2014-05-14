@@ -120,12 +120,18 @@ def update_entity_note(request, note_id):
                 image_data = _image_data
             )
         else:
-            _note.create(
+            _note = MobileNote.create(
                 entity_id = note_context['entity_id'],
                 creator_id = _request_user_id,
                 note_text = _note_text,
-                image_data = _image_data,
+                image_data = _image_data
             )
+            # _note.create(
+            #     entity_id = note_context['entity_id'],
+            #     creator_id = _request_user_id,
+            #     note_text = _note_text,
+            #     image_data = _image_data,
+            # )
         _rslt = _note.read(_request_user_id)
         log.info(_rslt)
         return SuccessJsonResponse(_rslt)
