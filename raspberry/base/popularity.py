@@ -145,7 +145,7 @@ def _set_popular_user_context():
 
         popular_users = {}
         for entity_note_object in Note.objects.filter( selected_time__gt = datetime.datetime.now() - t_delta,
-                                                              selected_time__lt = datetime.datetime.now() ):
+                                                              selected_time__lt = datetime.datetime.now(), weight__gt = 1 ):
             if entity_note_object.selector_id != None:
                 creator_id = entity_note_object.creator_id
                 if not creator_id in [3, 54687, 1994, 10, 22045, 105, 153, 93623]:
