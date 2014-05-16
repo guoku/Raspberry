@@ -63,7 +63,7 @@
 					<div class="message_right">
 						<div class="message_text">
 							<div class="note_comment_text"><a href="/u/{{ message.content.follower.user_id}}">{{ message.content.comment_user.nickname }}</a>回复了你的点评</div>
-							<div class="comment_content">"你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞"</div>
+							<div class="comment_content">"{{ message.content.note.content }}"</div>
 						</div>
 						<div class="message_time">{{ message.created_time|date:'Y-m-d H:i:s' }}</div>
 					</div>
@@ -77,6 +77,20 @@
 					<div class="message_right">
 						<div class="message_text">
 							你的商品被喜爱了
+						</div>
+						<div class="message_time">{{ message.created_time|date:'Y-m-d H:i:s' }}</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			{% elif message.type = 'entity_note_message' %}
+				<div class="message_item note_comment_reply_message">
+					<div class="message_left">
+						<div class="message_icon"></div>
+					</div>
+					<div class="message_right">
+						<div class="message_text">
+							<div class="note_comment_text"><a href="/u/{{ message.content.follower.user_id}}">{{ message.content.comment_user.nickname }}</a>回复了你的点评</div>
+							<div class="comment_content">"{{ message.content.note.content }}"</div>
 						</div>
 						<div class="message_time">{{ message.created_time|date:'Y-m-d H:i:s' }}</div>
 					</div>
