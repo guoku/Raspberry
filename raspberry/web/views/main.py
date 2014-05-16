@@ -167,17 +167,17 @@ def web_message(request,  template='account/message.html'):
         _popular_list = popularity.read_popular_user_context()
         _popular_list_detail = []
         if _popular_list != None:
-            for _popular_user in _popular_list:
+            for _popular_user in _popular_list["data"]:
                 try:
                     _popu_context = {
-                        "user_id" : _popular_user.user_id,
-                        "user_context" : User(_popular_user.user_id).read()
+                        "user_id" : _popular_user["user_id"],
+                        "user_context" : User(_popular_user["user_id"]).read(),
+                        "relation" : User.get_relation(_request_user_id,_popular_user["user_id"])
                     }
                     _popular_list_detail.append(_popu_context)
                 except Exception, e:
                     print e
                     pass
-          
         _rslt = []
         for _message in NeoMessage.objects.filter(user_id=_request_user_id,created_time__lt=_timestamp).order_by('-created_time')[0:_count]:
             try:
@@ -193,7 +193,7 @@ def web_message(request,  template='account/message.html'):
                 elif isinstance(_message, NotePokeMessage):
                     _context = {
                         'type' : 'note_poke_message',
-                        'create_time' : datetime.fromtimestamp(time.mktime(_message.create_time.timetuple())),
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
                         'content' : {
                             'note' : Note(_message.note_id).read(_request_user_id),
                             'poker' : User(_message.poker_id).read(_request_user_id)
@@ -203,7 +203,7 @@ def web_message(request,  template='account/message.html'):
                 elif isinstance(_message, NoteCommentMessage):
                     _context = {
                         'type' : 'note_comment_message',
-                        'create_time' : datetime.fromtimestamp(time.mktime(_message.create_time.timetuple())),
+                        'created_time' : datetime.fromtimestamp(time.mktime(_message.created_time.timetuple())),
                         'content' : {
                             'note' : Note(_message.note_id).read(_request_user_id),
                             'comment' : Note(_message.note_id).read_comment(_message.comment_id),

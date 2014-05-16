@@ -83,7 +83,7 @@
 	float: left;
 }
 .suggest_user_nicename{
-	font-size:18px;
+	font-size:16px;
 	margin-top:5px;
 	height: 18px;
 }
@@ -92,7 +92,7 @@
 	height: 20px;
 }
 .suggest_follow{
-	float: left;
+	float: right;
 }
 .suggest_user{
 	padding:15px;
@@ -112,10 +112,10 @@
 	font-weight: 600;
 }
 #message_side ul{
-	padding: 0px 0px 0px 2px;
+	padding: 0px 5px 0px 2px;
 }
 #message_side li{
-	line-height: 25px;
+	margin-bottom: 20px;
 }
 .follow-user {
 	margin-top:5px;
@@ -135,4 +135,18 @@
     border:none;
     display: inline-block;
     background: url("../images/toolkit2.png") no-repeat -57px -270px;
+}
+.img_is_fun{
+    width: 20px ;
+    height: 15px;
+    border:none;
+    display: inline-block;
+    background: url("../images/toolkit2.png") no-repeat -112px -270px;
+}
+.img_not_fun{
+    width: 20px ;
+    height: 15px;
+    border:none;
+    display: inline-block;
+    background: url("../images/toolkit2.png") no-repeat -85px -270px;
 }
