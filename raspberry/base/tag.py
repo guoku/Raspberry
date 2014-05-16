@@ -238,10 +238,10 @@ class Tag(object):
         for _obj in _hdl: 
             tag_hash = Tag.get_tag_hash_from_text(_obj.tag)
             if with_entity_count:
-                _list.append([_obj.user_id, _obj.tag ,tag_hash, _obj.entity_count])
+                _list.append([_obj.user_id, _obj.tag , _obj.entity_count,tag_hash])
             else:
                 _list.append([_obj.user_id, _obj.tag])
-        return _list[0:5]
+        return _list
                 
     
     @classmethod
