@@ -2,6 +2,11 @@
 {% load i18n staticfiles %}
 {% load entity user %}
 
+{% block title %}
+    {{ .nickname|default:'我的果库' }}
+    {% block subtitle %}{% endblock %}
+{% endblock %}
+
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/message.css' %}">{% endblock %}
 {% block content %}
 	<div id="message">
@@ -14,7 +19,7 @@
 					</div>
 					<div class="message_right">
 						<div class="message_text">
-							<a>{{ message.content.follower.username }}</a>开始关注了你
+							<a href="/u/{{ message.content.follower.user_id}}">{{ message.content.follower.nickname }}</a>开始关注了你
 						</div>
 						<div class="message_time">
 							{{ message.created_time|date:'Y-m-d H:i:s' }}
@@ -43,7 +48,7 @@
 					</div>
 					<div class="message_right">
 						<div class="message_text">
-							<div class="note_comment_text"><a>{{ message.content.comment_user.username }}</a>回复了你的点评</div>
+							<div class="note_comment_text"><a href="/u/{{ message.content.follower.user_id}}">{{ message.content.comment_user.nickname }}</a>回复了你的点评</div>
 							<div class="comment_content">{{ message.content.note.content }}</div>
 						</div>
 						<div class="message_time">{{ message.created_time|date:'Y-m-d H:i:s' }}</div>
@@ -57,7 +62,7 @@
 					</div>
 					<div class="message_right">
 						<div class="message_text">
-							<div class="note_comment_text"><a>{{ message.content.comment_user.username }}</a>回复了你的点评</div>
+							<div class="note_comment_text"><a href="/u/{{ message.content.follower.user_id}}">{{ message.content.comment_user.nickname }}</a>回复了你的点评</div>
 							<div class="comment_content">"你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞你的点评收到一个赞"</div>
 						</div>
 						<div class="message_time">{{ message.created_time|date:'Y-m-d H:i:s' }}</div>
@@ -175,23 +180,34 @@
 			<div class="suggest_user">
 				<div class="suggest_user_title">推荐关注</div>
 				<ul>
-					<li>
-						<div class="suggest_user_img">
-							<img src="http://imgcdn.guoku.com/avatar/small_241170_ce838e0ed9c613bb06ce79842913c83f.png">
-						</div>
-						<div class="suggest_user_info">
-							<div class="suggest_user_nicename">
-								<a href="/u/">casdc</a>
-							</div>
-							<div class="suggest_user_tip">casdcasdc</div>
-						</div>
-						<div class="suggest_follow">
-							<a href="/u/14/follow/1/" class="follow-user blue-f"><span class="img_follow"></span><b>关注</b></a>
-						</div>
-						<div class="clear"></div>
-					</li>
 					{% for user in popular_list %}
-						<li><a href="/u/{{ user.user_id}}">{{ user.user_context.nickname }}</a></li>
+						{% if forloop.counter < 6 %}
+						<li>
+							<div class="suggest_user_img">
+								<img src="{{ user.user_context.avatar_large }}">
+							</div>
+							<div class="suggest_user_info">
+								<div class="suggest_user_nicename">
+									<a href="/u/{{ user.user_id}}">{{ user.user_context.nickname }}</a>
+								</div>
+								<div class="suggest_user_tip">casdcasdc</div>
+							</div>
+							<div class="suggest_follow">
+								{% if user.relation == 4 %}
+					                <a class="setting" href="{% url 'web_setting' %}"><span class="setting-icon"></span><span class="setting-tip">{% trans "settings" %}</span></a>
+					            {% elif user.relation == 3 %}
+					                <a href="/u/14/follow/0/" class="follow-user is-fan gray-f"><span class="img_is_fun"></span><b>取消关注</b></a>
+					            {% elif user.relation == 1 %}
+					                <a href="/u/14/follow/0/" class="follow-user gray-f"><span class="img_not_fun"></span><b>取消关注</b></a>
+					            {% elif relation == 2 %}
+					                <a href="/u/14/follow/1/" class="follow-user is-fan blue-f"><span src="" class="img_follow"></span><b>关注</b></a>
+					            {% elif user.relation == 0 %}
+					                <a href="/u/14/follow/1/" class="follow-user blue-f"><span class="img_follow"></span><b>关注</b></a>
+					            {% endif %}
+							</div>
+							<div class="clear"></div>
+						</li>
+						{% endif %}
 					{% endfor %}
 				</ul>
 			</div>
@@ -207,7 +223,9 @@
 				<h3>热门标签</h3>
 				<ul>
 				{% for tags in recommend_tag_list %}
+					{% if forloop.counter < 6 %}
 					<li><a href="/t/{{ tags.2}}"># {{ tags.1 }}</a></li>
+					{% endif %}
 				{% endfor %}
 				</ul>
 			</div>

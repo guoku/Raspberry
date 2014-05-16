@@ -141,7 +141,7 @@ POPULAR_USER_IN_DAYS = 20
 def _set_popular_user_context():
     cache_key = _gen_popular_user_context_cache_key()
     try:
-        t_delta = datetime.timedelta(hours = 124 * POPULAR_USER_IN_DAYS)
+        t_delta = datetime.timedelta(hours = 24 * POPULAR_USER_IN_DAYS)
 
         popular_users = {}
         for entity_note_object in Note.objects.filter( selected_time__gt = datetime.datetime.now() - t_delta,
