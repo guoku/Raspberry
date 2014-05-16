@@ -164,11 +164,10 @@ def web_message(request,  template='account/message.html'):
 
         _recommend_tag_list = Tag.get_recommend_user_tag_list()
 
-        _popular_list = popularity._get_popular_user_context()
+        _popular_list = popularity.read_popular_user_context()
         _popular_list_detail = []
-        print _popular_list
         if _popular_list != None:
-            for _popular_user in _popular_list.data:
+            for _popular_user in _popular_list:
                 try:
                     _popu_context = {
                         "user_id" : _popular_user.user_id,
