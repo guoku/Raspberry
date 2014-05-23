@@ -255,10 +255,9 @@ class TaobaoExtractor:
 
         price = float(ps[0])
         imgs = []
-        optimgs = soup.select("ul.tb-img a")
+        optimgs = soup.select("ul#J_UlThumb li img")
         for op in optimgs:
-            style = op.attrs['style']
-            link = re.findall("\\((.+)\\)",style)[0]
+            link = op.attrs['data-src']
             op = re.sub(TaobaoExtractor.IMG_POSTFIX,"",link)
             imgs.append(op)
         shopidtag = re.findall('shopId:"(\d+)',html)
@@ -347,6 +346,6 @@ class TaobaoExtractor:
 
 
 if __name__=="__main__":
-    print TaobaoExtractor.fetch_item("39124275312")
-    print TaobaoExtractor.fetch_shop("http://shop110165889.taobao.com/?spm=2013.1.0.0.uSTb9g")
+    print TaobaoExtractor.fetch_item("39106594583")
+    #print TaobaoExtractor.fetch_shop("http://shop110165889.taobao.com/?spm=2013.1.0.0.uSTb9g")
 
