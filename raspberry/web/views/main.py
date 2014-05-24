@@ -397,6 +397,7 @@ def popular(request, template='main/popular.html'):
     _popular_updated_time = datetime.now() 
    
     _popular_entities = popularity.read_popular_entity_from_cache(scale=_group)
+    # log.info(_popular_entities)
     if _popular_entities != None:
         _popular_updated_time = _popular_entities['updated_time']
         for row in _popular_entities['data'][0:60]:

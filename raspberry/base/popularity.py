@@ -7,7 +7,7 @@ import datetime, time
 import random 
 
 from category import Category
-from models import Entity_Like, Note
+from models import Entity_Like, Note, Entity
 from tag import Tag
 
 log = getLogger('django')
@@ -17,7 +17,7 @@ log = getLogger('django')
 
 def _generate_popular_entity_to_cache(scale = 'daily'):
     
-    _start = datetime.datetime.now()
+    # _start = datetime.datetime.now()
     if scale == "monthly":
         _t_delta = datetime.timedelta(hours = 720) 
     elif scale == "weekly":
@@ -25,13 +25,16 @@ def _generate_popular_entity_to_cache(scale = 'daily'):
     else:
         _t_delta = datetime.timedelta(hours = 24) 
     _cache_key = 'entity_popularity_' + scale
-   
-    _results = Entity_Like.objects.filter( 
+
+    block_entities = Entity.objects.filter(weight__lt = 0).values('id')
+    _results = Entity_Like.objects.filter(
         created_time__gt = datetime.datetime.now() - _t_delta, 
         created_time__lt = datetime.datetime.now() 
-    ).values("entity").annotate(like_count = Count("entity")).order_by("-like_count")
+    ).exclude(entity__in = block_entities).values("entity").annotate(like_count = Count("entity")).order_by("-like_count")
+    # log.info(_results)
 
-    _context = {}
+    log.info(block_entities)
+    _context = dict()
     _context["updated_time"] = datetime.datetime.now()
     _context["data"] = [] 
     for _row in _results[0:100]:
@@ -50,7 +53,7 @@ def read_popular_entity_from_cache(scale = 'daily', json = False):
     _cache_key = 'entity_popularity_' + scale
     _context = cache.get(_cache_key)
     if _context == None:
-        return None 
+        return _generate_popular_entity_to_cache(scale)
     else:  
         if json:
             _context['updated_time'] = time.mktime(datetime.datetime.now().timetuple())
@@ -145,7 +148,7 @@ def _set_popular_user_context():
 
         popular_users = {}
         for entity_note_object in Note.objects.filter( selected_time__gt = datetime.datetime.now() - t_delta,
-                                                              selected_time__lt = datetime.datetime.now(), weight__gt = 1 ):
+                                                              selected_time__lt = datetime.datetime.now(), weight__gt = -1):
             if entity_note_object.selector_id != None:
                 creator_id = entity_note_object.creator_id
                 if not creator_id in [3, 54687, 1994, 10, 22045, 105, 153, 93623]:
