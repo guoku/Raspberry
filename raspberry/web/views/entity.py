@@ -318,7 +318,6 @@ def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
             'entity_id' : int(_entity_id),
         },
     )
-
     return render_to_response(
         template,
         {

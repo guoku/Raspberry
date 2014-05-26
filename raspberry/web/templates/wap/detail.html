@@ -99,7 +99,7 @@
                         {%if is_jd %}
                         <a href="{{ buy_link }}"><img src="{{ entity_context.chief_image.url|resize:'310'}}" /></a>
                         {% else %}
-                        <a href="{{ buy_link }}&entry=wap"><img src="{{ entity_context.chief_image.url|resize:'310' }}" /></a>
+                        <a href="{{ buy_link }}&entry=wap"><img title="{{ entity_context.title }}" id="product_image" src="{{ entity_context.chief_image.url|resize:'310' }}" /></a>
                         {% endif %}
                     </div>
                     <div>
@@ -151,4 +151,46 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
+</script>
+<script type="text/javascript"></script>
+<script type="text/javascript">
+    var image_elem = document.getElementById("product_image");
+    var imageUrl = image_elem.getAttribute("src");
+    var lineLink = location.href;
+    var shareTitle = "果库，尽收世上好物！";
+    var descContent = image_elem.getAttribute("title");
+    var appid = "gh_e938cd73d7d4";
+    function shareFriend(){
+        WeixinJSBridge.invoke('sendAppMessage',{
+            "appid":appid,
+            "img_url":imageUrl,
+            "img_width":200,
+            "img_height":200,
+            "link":lineLink,
+            "desc":descContent,
+            "title":shareTitle
+        },function(){
+            //error
+        });
+    }
+    function shareTimeLine(){
+        WeixinJSBridge.invoke('shareTimeLine',{
+            "img_url":imageUrl,
+            "img_width":200,
+            "img_height":200,
+            "link":lineLink,
+            "desc":descContent,
+            "title":shareTitle
+        },function(){
+            //error
+        });
+    }
+    document.addEventListener('WeixinJSBridgeReady',function onBridgeReady(){
+        WeixinJSBridge.on('menu:share:appmessage',function(argv){
+            shareFriend();
+        });
+        WeixinJSBridge.on('menu:share:timeline',function(argv){
+            shareTimeLine();
+        });
+    });
 </script>
