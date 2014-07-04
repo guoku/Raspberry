@@ -39,7 +39,7 @@ class TaobaoExtractor:
 
         cattag = soup.p
         if cattag == None:
-            #print "已经下架"
+            print "已经下架"
             return None
         
         atag = cattag.findChildren('a')
@@ -159,6 +159,7 @@ class TaobaoExtractor:
             shoplink = shoplink.replace(".m.", ".", 1)
         resp = urllib2.urlopen(shoplink)
         if resp.code != 200:
+            print "fetch_shop error"
             return None
         fontpage = resp.read()
         sellerid = 0
@@ -300,7 +301,7 @@ class TaobaoExtractor:
         imgs = []
         fimg = soup.select("img#J_ImgBooth")
         if len(fimg) == 0:
-            #print 'pic is none'
+            print 'pic is none'
             return None 
         fjpg = fimg[0].attrs['src']
         fjpg = re.sub(TaobaoExtractor.IMG_POSTFIX,"",fjpg)
@@ -314,19 +315,20 @@ class TaobaoExtractor:
             imgs.append(op)
         shopidtag = re.findall('shopId:"(\d+)',html)
         if len(shopidtag) == 0:
-            #print 'shopid is none'
+            print 'shopid is none'
             return None
         sl = soup.select("span.slogo a")
         shoplink = "http://shop"+shopidtag[0]+".taobao.com"
         if len(sl) > 0 :
             shoplink = sl[0].attrs['href']
-        pricetag = soup.select("strong.J_originalPrice")
+        pricetag = soup.select("span.originPrice")
         if len(pricetag) == 0:
-            #print 'no price'
+            print 'no price'
             return None
         pr = pricetag[0].string
         ps = re.findall("\d+\.\d+",pr)
         if len(ps) == 0:
+            print "pic len is 0"
             return None
         price = float(ps[0])
         result = {
@@ -346,6 +348,6 @@ class TaobaoExtractor:
 
 
 if __name__=="__main__":
-    print TaobaoExtractor.fetch_item("39106594583")
+    print TaobaoExtractor.fetch_item("35270965562")
     #print TaobaoExtractor.fetch_shop("http://shop110165889.taobao.com/?spm=2013.1.0.0.uSTb9g")
 
