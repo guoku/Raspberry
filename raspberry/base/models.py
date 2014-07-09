@@ -2,8 +2,24 @@
 from djangosphinx.models import SphinxSearch
 from django.contrib.auth.models import User
 from django.db import models
-from stream_models import *
 
+from stream_models import *
+from manager.entity import EntityManager
+
+
+class BaseModel(models.Model):
+
+    class Meta:
+        abstract = True
+
+    def toDict(self):
+        fields = []
+        for f in  self._meta.fields:
+            fields.append(f.column)
+        d = {}
+        for attr in fields:
+            d[attr] = "%s" % getattr(self, attr)
+        return d
 
 class User_Profile(models.Model):
     Man = u'M'
@@ -110,7 +126,7 @@ class Banner(models.Model):
         ordering = ['-created_time']
 
 
-class Entity(models.Model):
+class Entity(BaseModel):
     entity_hash = models.CharField(max_length=32, unique=True, db_index=True)
     creator_id = models.IntegerField(default=None, null=True, db_index=True)
     category = models.ForeignKey(Category)
@@ -128,6 +144,8 @@ class Entity(models.Model):
     novus_time = models.DateTimeField(db_index=True)
     weight = models.IntegerField(default=0, db_index=True)
     rank_score = models.IntegerField(default=0, db_index=True)
+
+    objects = EntityManager()
     
     search = SphinxSearch( 
         index='entities',
@@ -140,13 +158,14 @@ class Entity(models.Model):
         rankmode='SPH_RANK_NONE',
     )
 
-    def get_absolute_url(self):
-        return "/detail/%s" % self.entity_hash
-
     class Meta:
         ordering = ['-created_time']
 
+    def get_absolute_url(self):
+        return "/detail/%s" % self.entity_hash
 
+    def __unicode__(self):
+        return self.title
  
 class Entity_Like(models.Model):
     entity = models.ForeignKey(Entity)
@@ -181,6 +200,9 @@ class Note(models.Model):
     class Meta:
         ordering = ['-created_time']
         unique_together = ('entity', 'creator_id')
+
+    def __unicode__(self):
+        return self.note
 
 class Note_Poke(models.Model):
     note = models.ForeignKey(Note)

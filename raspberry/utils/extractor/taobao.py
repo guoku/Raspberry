@@ -149,6 +149,6 @@ class TaobaoExtractor:
 
 
 if __name__=="__main__":
-    print TaobaoExtractor.fetch_item("16592999390")
+    print TaobaoExtractor.fetch_item("39681973010")
     #print TaobaoExtractor.fetch_shop("http://shop110165889.taobao.com/?spm=2013.1.0.0.uSTb9g")
 
