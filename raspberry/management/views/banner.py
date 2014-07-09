@@ -93,9 +93,6 @@ def edit_banner(request, banner_id):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
-        
-    
-
 @login_required
 @staff_only
 def delete_banner(request, banner_id):

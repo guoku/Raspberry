@@ -1,7 +1,7 @@
 #coding=utf-8
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from management.tasks import FreezeUserEntityNoteAll, PushMessageToUserTask
@@ -16,7 +16,7 @@ logger = logging.getLogger('django.request')
 
 @login_required
 @staff_only
-def user_list(request):
+def user_list(request, template='user/list.html'):
     _page_num = int(request.GET.get("p", "1"))
     _user_count = User.count()
     _paginator = Paginator(_page_num, 30, _user_count)
@@ -35,7 +35,7 @@ def user_list(request):
             pass
         
     return render_to_response( 
-        'user/list.html', 
+        template,
         {
             'active_division' : 'user',
             'context_list' : _context_list,

@@ -6,7 +6,7 @@ from mongoengine import *
 from django.utils.log import getLogger
 from utils.apns_notification import APNSWrapper
 import datetime
-import urllib
+# import urllib
 import random
 import time
 
