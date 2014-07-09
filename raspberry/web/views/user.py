@@ -230,7 +230,7 @@ def user_tags(request, user_id, template=TEMPLATE):
 
 
 def user_followings(request, user_id, template=TEMPLATE):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     _query_user = User(user_id)
     _query_user_context = _query_user.read() 
     if request.user.is_authenticated():
@@ -260,18 +260,18 @@ def user_followings(request, user_id, template=TEMPLATE):
         except Exception, e:
             pass
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='USER_FOLLOWINGS', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'user_id' : int(user_id),
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='USER_FOLLOWINGS',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'user_id' : int(user_id),
+    #     },
+    # )
 
     return render_to_response(
         template,
@@ -288,7 +288,7 @@ def user_followings(request, user_id, template=TEMPLATE):
 
 
 def user_fans(request, user_id, template=TEMPLATE):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     _query_user = User(user_id)
     _query_user_context = _query_user.read() 
     if request.user.is_authenticated():
@@ -316,18 +316,18 @@ def user_fans(request, user_id, template=TEMPLATE):
         except Exception, e:
             pass
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='USER_FANS', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'user_id' : int(user_id),
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='USER_FANS',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'user_id' : int(user_id),
+    #     },
+    # )
 
     return render_to_response(
         template,
@@ -357,7 +357,7 @@ def follow(request, user_id, target_status):
             return HttpResponse('1')
 
 def user_tag_entity(request, user_id, tag_hash, template="tag/tag_detail.html"):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     # _request_user_id = request.user.id if request.user.is_authenticated() else None
     if request.user.is_authenticated():
         _request_user_id = request.user.id
@@ -384,20 +384,20 @@ def user_tag_entity(request, user_id, tag_hash, template="tag/tag_detail.html"):
         except Exception, e:
             log.error(e.message)
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='USER_TAG', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'tag' : _tag_text, 
-            'user_id' : int(user_id), 
-            'result_entities' : _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='USER_TAG',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'tag' : _tag_text,
+    #         'user_id' : int(user_id),
+    #         'result_entities' : _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
+    #     },
+    # )
     
     return render_to_response(template,
         {
