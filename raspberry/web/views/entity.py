@@ -141,19 +141,19 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
             log.error(e.message)
             # pass
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='ENTITY', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'entity_id' : int(_entity_id),
-            'guess_entities' : _guess_entity_id_list,
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='ENTITY',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'entity_id' : int(_entity_id),
+    #         'guess_entities' : _guess_entity_id_list,
+    #     },
+    # )
     if _taobao_id != None: 
         return render_to_response(
             template,
@@ -242,19 +242,19 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
     for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
         _liker_list.append(User(_liker[0]).read())
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds,
-        entry='wap',
-        page='ENTITY', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'entity_id' : int(_entity_id),
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     entry='wap',
+    #     page='ENTITY',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'entity_id' : int(_entity_id),
+    #     },
+    # )
     if _is_jd:
         buy_link = _item_context['buy_link']
         jd_id = parse_jd_id_from_url(buy_link)
@@ -305,19 +305,19 @@ def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
     for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
         _liker_list.append(User(_liker[0]).read())
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds,
-        entry='wechat',
-        page='ENTITY', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'entity_id' : int(_entity_id),
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     entry='wechat',
+    #     page='ENTITY',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'entity_id' : int(_entity_id),
+    #     },
+    # )
     return render_to_response(
         template,
         {
@@ -396,10 +396,6 @@ def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
         },
         context_instance=RequestContext(request)
     )
-
-
-
-
 
 
 def jd_info(request, _cand_url):
@@ -557,6 +553,7 @@ def create_entity(request, template='entity/new_entity_from_user.html'):
 
         return HttpResponseRedirect(reverse('web_detail', kwargs = { "entity_hash" : _entity.get_entity_hash() }))
 
+
 def create_jd_entity(request, template):
     _cid = request.POST.get("cid", None)
     _jd_id = request.POST.get("jd_id", None)
@@ -711,21 +708,21 @@ def log_visit_item(request, item_id):
         _item_id = request.POST.get("item_id", None) 
         _item_context = Item(item_id).read()
         _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
-        WebLogTask.delay(
-            duration=0,
-            entry='web',
-            page='CLICK', 
-            request=request.REQUEST, 
-            ip=get_client_ip(request), 
-            log_time=datetime.datetime.now(),
-            request_user_id=_request_user_id,
-            appendix={
-                'site' : 'taobao',
-                'taobao_id' : _item_context['taobao_id'],
-                'item_id' : item_id, 
-                'entity_id' : _entity_id, 
-            },
-        )
+        # WebLogTask.delay(
+        #     duration=0,
+        #     entry='web',
+        #     page='CLICK',
+        #     request=request.REQUEST,
+        #     ip=get_client_ip(request),
+        #     log_time=datetime.datetime.now(),
+        #     request_user_id=_request_user_id,
+        #     appendix={
+        #         'site' : 'taobao',
+        #         'taobao_id' : _item_context['taobao_id'],
+        #         'item_id' : item_id,
+        #         'entity_id' : _entity_id,
+        #     },
+        # )
         return HttpResponse('1')
 
 # coding=utf-8
