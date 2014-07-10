@@ -140,7 +140,7 @@ INSTALLED_APPS = (
     'web',
     'share',
     # 'edm',
-    'lotto',
+    # 'lotto',
     'gunicorn',
 )
 

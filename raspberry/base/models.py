@@ -178,7 +178,7 @@ class Entity_Like(models.Model):
         unique_together = ('entity', 'user_id')
 
 class Note(models.Model):
-    entity = models.ForeignKey(Entity)
+    entity = models.ForeignKey(Entity, related_name="notes")
     note = models.TextField(null = True)
     score = models.IntegerField(db_index = True, default = 0)
     figure = models.CharField(max_length = 256, null = False, default = '')

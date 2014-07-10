@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     (r'^mobile/v3/', include('mobile.urls')),
     # (r'^admin/', include(admin.site.urls)),
     (r'^stats/', include('stats.urls')),
-    (r'^lotto/', include('lotto.urls')),
+    # (r'^lotto/', include('lotto.urls')),
     (r'', include('web.urls')),
 )
 

@@ -47,10 +47,10 @@
                     {% if taobao_id == '38232357603' %}
                     <a class="entity-img" href="http://item.jd.com/1076756.html"  target=_blank >
                     {% else %}
-                    <a class="entity-img" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+                    <a class="entity-img" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
                     {% endif %}
                 {% else %}
-                    <a class="entity-img" href="http://item.jd.com/{{jd_id}}.html"  target=_blank >
+                    <a class="entity-img" href="http://item.jd.com/{{ jd_id }}.html"  target=_blank >
                 {% endif %}
                     <img itemprop="image"  src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
                 </a>
