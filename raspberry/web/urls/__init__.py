@@ -42,7 +42,7 @@ urlpatterns += patterns(
     url(r'^weixin/present/(?P<entity_id>\d+)/$', 'wechat_entity_detail', name='wechat_detail'),
     url(r'^tencent/detail/(?P<entity_hash>\w+)/$', 'tencent_entity_detail', name='tencent_detail'),
     url(r'^entity/', include('web.urls.entity')),
-    url(r'^note/', include('web.urls.note')),
+    # url(r'^note/', include('web.urls.note')),
     url(r'^item/(?P<item_id>\w+)/visit/log/$', 'log_visit_item', name='web_log_visit_item'),
 )
 
@@ -66,10 +66,10 @@ urlpatterns += patterns(
 )
 
 
-urlpatterns += patterns(
-    '',
-    url(r'^share/', include('web.urls.share_sns')),
-)
+# urlpatterns += patterns(
+#     '',
+#     url(r'^share/', include('web.urls.share_sns')),
+# )
 
 urlpatterns += patterns(
     'web.views.search',
