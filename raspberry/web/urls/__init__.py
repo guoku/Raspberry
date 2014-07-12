@@ -18,7 +18,7 @@ urlpatterns = patterns(
     url('^m/selection/$', 'wap_selection', name='wap_selection'),
     url('^tencent/selection/$', 'tencent_selection', name='tencent_selection'),
     url('^popular/$', 'popular', name='web_popular'),
-    url('^guokuplus/token/$', 'get_guokuplus_token', name='web_get_guokuplus_token'),
+    # url('^guokuplus/token/$', 'get_guokuplus_token', name='web_get_guokuplus_token'),
     url(r'^c/', include('web.urls.category')),
     url(r'^t/', include('web.urls.tag')),
 )
