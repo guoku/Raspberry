@@ -676,20 +676,20 @@ def add_note(request, entity_id, template='entity/entity_note.html'):
         return HttpResponse(json.dumps(_ret))
 
 
-# @login_required
-# def update_note(request, entity_id, note_id):
-#     if request.method == 'POST':
-#         _note_text = request.POST.get('note_text', None)
-#
-#         if _note_text is not None and len(_note_text) > 0:
-#             _note_context = Note(note_id).read()
-#
-#             # 判断当前用户是否具有修改权限
-#             if _note_context['creator_id'] == request.user.id:
-#                 _entity = Entity(entity_id)
-#                 _entity.update_note(note_id, note_text=_note_text)
-#
-#                 return HttpResponse('1')
+@login_required
+def update_note(request, entity_id, note_id):
+    if request.method == 'POST':
+        _note_text = request.POST.get('note_text', None)
+
+        if _note_text is not None and len(_note_text) > 0:
+            _note_context = Note(note_id).read()
+
+            # 判断当前用户是否具有修改权限
+            if _note_context['creator_id'] == request.user.id:
+                _entity = Entity(entity_id)
+                _entity.update_note(note_id, note_text=_note_text)
+
+                return HttpResponse('1')
 
 
 # @login_required
