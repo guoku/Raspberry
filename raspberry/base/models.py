@@ -135,7 +135,7 @@ class Entity(BaseModel):
     title = models.CharField(max_length=256, null=False, default='')
     intro = models.TextField(null=False, default='')
     price = models.DecimalField(max_digits=20, decimal_places=2, default=0, db_index=True)
-    # like_count = models.IntegerField(default=0, db_index=True)
+    like_count = models.IntegerField(default=0, db_index=True)
     mark = models.IntegerField(default=0, db_index=True)
     chief_image = models.CharField(max_length=64, null=False)
     detail_images = models.CharField(max_length=1024, null=True)
@@ -158,9 +158,9 @@ class Entity(BaseModel):
         rankmode='SPH_RANK_NONE',
     )
 
-    @property
-    def like_count(self):
-        return self.entity_like_set.count()
+    # @property
+    # def like_count(self):
+    #     return self.entity_like_set.count()
 
     class Meta:
         ordering = ['-created_time']
