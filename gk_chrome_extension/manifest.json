@@ -9,7 +9,7 @@
       "19": "images/icon19.png",
       "38": "images/icon38.png"
     },
-    "default_title": "Add to GK",
+    "default_title": "add item to guoku",
     "default_popup": "popup.html"
   },
   "background": {
@@ -18,10 +18,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*.taobao.com/*", "http://*.tmall.com/*"],
+      "matches": ["http://*.taobao.com/*", "http://*.tmall.com/*", "http://*.jd.com/*"],
       "css": ["gk_content.css"],
       "js": ["gk_content.js"]
     }
   ],
-  "permissions": ["tabs", "http://114.113.154.47:8000/", "http://10.0.1.148:8000/", "http://admin.guoku.com/"]
+  "permissions": ["tabs", "http://admin.guoku.com/"]
 }

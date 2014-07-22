@@ -48,15 +48,15 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     if _agent == 'iphone' or _agent == 'android' :
         return HttpResponseRedirect(reverse('wap_detail', kwargs = { "entity_hash" : entity_hash })) 
     
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
-        _request_user_id = request.user.id
+        # _request_user_id = request.user.id
         _is_staff = request.user.is_staff
         _request_user_context = User(request.user.id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _request_user_poke_note_set = Note.poke_set_of_user(request.user.id)
     else:
-        _request_user_id = None 
+        # _request_user_id = None
         _is_staff = False 
         _request_user_context = None
         _request_user_like_entity_set = []
