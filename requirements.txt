@@ -22,8 +22,6 @@ feedparser==5.1.3
 greenlet==0.4.2
 gunicorn==18.0
 hiredis==0.1.1
-ipdb==0.8
-ipython==1.1.0
 kombu==3.0.8
 mongoengine==0.8.6
 paramiko==1.12.0
@@ -43,5 +41,4 @@ sinaweibopy==1.1.3
 six==1.4.1
 sqlparse==0.1.10
 wsgiref==0.1.2
-zinnia-threaded-comments==0.2
 zope.interface==4.0.5
