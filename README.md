@@ -21,5 +21,3 @@ virtualenv django15
 source /path/to/django15/bin/active
 pip install -r requirements.txt
 ```
-
-

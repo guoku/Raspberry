@@ -32,6 +32,7 @@ class UserForms(forms.Form):
         _bio = self.cleaned_data['bio']
         _website = self.cleaned_data['website']
 
+
         _user = User(user_id)
         _user.reset_account(username=_username, email=_email)
         _user.set_profile(_nickname, gender=_gender, bio=_bio, website=_website)

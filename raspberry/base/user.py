@@ -454,7 +454,7 @@ class User(object):
         #     return True
         # return False
     
-    def reset_account(self, username = None, password = None, email = None): 
+    def reset_account(self, username = None, password = None, email = None):
         self.__ensure_user_obj()
         
         if email != None:

@@ -122,6 +122,7 @@ class Banner(models.Model):
     created_time = models.DateTimeField(auto_now_add = True, db_index = True)
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
     weight = models.IntegerField(default = 0, db_index = True)
+
     class Meta:
         ordering = ['-created_time']
 
