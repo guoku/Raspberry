@@ -6,9 +6,14 @@ body {
     height: 100%;
     color: #666;
     background-color: #fff;
-    font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
-
+html,
+button,
+input,
+select,
+textarea {
+    font-family: 'Open Sans','Helvetica Neue',Arial,'Hiragino Sans GB','Microsoft YaHei','WenQuanYi Micro Hei',sans-serif;    
+}
 ul {
     list-style: none;
 }
@@ -175,6 +180,7 @@ button {
     position: fixed;
     top: 0;
     left: 0;
+    overflow: hidden;
     z-index: 1000;
     height: 49px;
     width: 100%;
@@ -183,75 +189,75 @@ button {
     background-color: rgba(52, 52, 52, .95);
 }
 
+#header a {
+    display: inline-block;
+}
+
 #header .header-container {
     position: relative;
     width: 960px;
+    padding: 0 15px;
     height: 49px;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
-#header h1 {
-    margin: 0;
-    line-height: 49px;
+#header li a,
+#header .logo,
+#header .search {
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+#header .title,
+#header .nav-bar {
+    float: left;
+}
+
+#header li.active,
+#header li.link:hover,
+#header .title:hover {
+    background: #585858;
+    color: #fff;
+}
+#header .nav-bar a:hover{
+    color:#fff;
 }
 
 #header .logo {
-    position: absolute;
-    left: 0;
-    top: 9px;
+    padding-top: 9px;
+    padding-bottom: 9px;
 }
 
 #header .nav-bar {
-    /*float: left;*/
-    position: absolute;
-    top: 0;
-    left: 127px;
-    height: 49px;
-    width: 500px;
-    line-height: 49px;
-    margin: 0;
+    margin: 0 0 0 15px;
     padding: 0;
 }
 
 #header li {
     float: left;
-    margin-right: 25px;
-    padding: 0 11px;
-    color: #cdcbcb;
+    height: 49px;
+    line-height: 49px;
+    font-size: 18px;
+    color: #eee;
+}
+#header li+li {
+    margin-left: 10px;
 }
 
-#header li.active {
-    color: #fff;
+#header .add-entity {
 }
 
-
-#header .nav-bar .add-entity {
-    /*display: inline-block;*/
-    float: right;
-    /*background: url("/static/v3/images/toolkit.png") no-repeat;*/
-    background-position: -179px -56px;
-    padding: 0;
-    /*width: 22px;*/
-    /*height: 22px;*/
-    /*margin-top: 12px;*/
-    margin-right: 25px;
-}
-
-#header .nav-bar .add-entity a {
+#header .add-entity i {
     display: block;
     background: url("/static/v3/images/toolkit.png") no-repeat;
-    background-position: -179px -56px;
+    background-position: -181px -56px;
     width: 22px;
     height: 22px;
-    margin-top: 12px;
-    /*width: 22px;*/
-    /*height: 22px;*/
+    margin: 13px 0 13px;
 }
-#header .nav-bar a:hover{
-    color:#fff;
-}
-#header .nav-bar .add-entity a:hover {
-    background-position: -206px -56px;
+#header .add-entity:hover i {
+    background-position: -208px -56px;
 }
 
 
@@ -263,15 +269,14 @@ button {
     margin: 12px;
 }
 
+#header .user,
+#header .search {
+    float: right;
+}
+
 #header .user {
-    /*position: absolute;*/
-    /*top: 0;*/
-    float: right!important;
-    /*width: 135px;*/
     margin: 0;
     padding: 0;
-    /*top: 0;*/
-    /*right: 0;*/
 }
 
 #header .user li {
@@ -280,7 +285,6 @@ button {
 }
 #header .user li span {
     display: block;
-    /*text-align: center;*/
     line-height: 49px;
 }
 #header .user li a {
@@ -361,40 +365,32 @@ button {
     display: block;
 }
 
-#header form {
-    position: absolute;
-    top: 0;
-    right: 135px;
-    height: 49px;
-}
-
-#header .search {
-    width: 145px;
-    /*line-height: 30px;*/
-    /*padding: 10px 0;*/
-    padding: 6px 5px 8px 5px;
-    /*padding: 0 5px;*/
+#header .search .search-text {
+    float: left;
+    width: 120px;
+    border-radius: 4px;
     border: none;
-    outline: 0;
-    /*color: #eee;*/
-    border-radius: 3px;
-    background: #fbfbfb;
-    /*background-color: rgba(220, 220, 220, 0.95);*/
-    /*background-color: #FFFFFF;*/
+    padding: 6px 8px;
+    background: #eee;
+    line-height: 17px;
+    font-size: 14px;
+    margin: 11px 0;
+    outline: none;
 }
-#header form input:focus {
-    border-color: #ade0b3;
-    background-color: #f8f8f8;
+#header .search .search-text:focus {
+    background: #fff;
+    box-shadow: 0 0 3px #000;
 }
-
-#header .search-submit {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-    margin: 10px 0 9px -32px;
-    padding: 0;
+#header .search .search-submit {
+    float: left;
+    background: transparent;
     border: none;
-    background: url("/static/v3/images/toolkit.png") no-repeat -16px -54px transparent;
+    outline: none;
+    background: url(/static/v3/images/toolkit.png) no-repeat -16px -54px transparent;
+    margin: 11px 0 11px -28px;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
 }
 
 /* welcome----------------- */

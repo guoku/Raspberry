@@ -46,7 +46,7 @@ window.location.href = url;</script><![endif]-->
 <body>
 <div id="header">
     <div class="overlay"></div>
-    <div class="header-container">
+    <div class="header-container clearfix">
         {% url 'web_selection' as web_selection %}
         {% url 'web_popular' as web_popular_url %}
         <div class="title">
@@ -54,10 +54,10 @@ window.location.href = url;</script><![endif]-->
             <a href="{% url 'web_selection' %}" class="logo"><img src="{% static 'images/logo.png' %}"></a>
         </div>
 
-        <ul class="nav-bar">
-            <li {% if web_selection in request.path %}class="active"{% endif %}><a href="{% url 'web_selection' %}">精选</a></li>
-            <li {% if web_popular_url in request.path %}class="active"{% endif %}><a href="{{ web_popular_url }}">热门</a></li>
-            <li class="add-entity"><a href="{% url 'web_new_entity' %}"></a></li>
+        <ul class="nav-bar clearfix">
+            <li class="{% if web_selection in request.path %}active{% endif %} link"><a href="{% url 'web_selection' %}">精选</a></li>
+            <li class="{% if web_popular_url in request.path %}active{% endif %} link"><a href="{{ web_popular_url }}">热门</a></li>
+            <li class="add-entity link"><a href="{% url 'web_new_entity' %}"><i></i></a></li>
         </ul>
 
 
@@ -65,15 +65,15 @@ window.location.href = url;</script><![endif]-->
             {% if request.user.is_authenticated  %}
                 {% show_auth_user request.user.id request.user.is_staff %}
             {% else %}
-                <li><a href="{% url 'web_login' %}?next={{request.path}}">{% trans 'sign in' %}</a></li>
+                <li class="link"><a href="{% url 'web_login' %}?next={{request.path}}">{% trans 'sign in' %}</a></li>
                 <li><span>&#124;</span></li>
-                <li><a href="{% url 'web_register' %}">{% trans 'sign up' %}</a></li>
+                <li class="link"><a href="{% url 'web_register' %}">{% trans 'sign up' %}</a></li>
             {% endif %}
         </ul>
 
         {% block search %}
-            <form action="{% url 'web_search' %}" method="GET">
-                <input type="text" placeholder="搜你想要的" name="q" class="search">
+            <form action="{% url 'web_search' %}" method="GET" class="search clearfix">
+                <input type="text" placeholder="搜你想要的" name="q" class="search-text">
                 <input class="search-submit" type="submit" value="">
             </form>
         {% endblock %}
