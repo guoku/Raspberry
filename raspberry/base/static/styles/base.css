@@ -377,8 +377,10 @@ button {
     font-size: 14px;
     margin: 11px 0;
     outline: none;
+    transition: width .2s;
 }
 #header .search .search-text:focus {
+    width: 240px;
     background: #fff;
     box-shadow: 0 0 3px #000;
 }
