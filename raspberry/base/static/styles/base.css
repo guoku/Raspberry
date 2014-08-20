@@ -224,8 +224,10 @@ button {
 }
 
 #header .logo {
-    padding-top: 9px;
     height: 49px;
+}
+#header img {
+    padding-top: 9px;
 }
 
 #header .nav-bar {
