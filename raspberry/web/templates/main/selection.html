@@ -17,7 +17,17 @@
 {#{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/selection.css' %}">{% endblock %}#}
 
 {% block content %}
-
+    <div class="container">
+        <div class="row">
+            {% for selection in selection_list %}
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img class="lazy" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url }}" style="max-height: 270px;max-width: 270px;">
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {#    <div id="selection">#}
 {#        <ul class="nav">#}
 {#            <li {% if curr_category_id == 0 %}class="active"{% endif %}>#}
