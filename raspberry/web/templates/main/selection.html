@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load i18n staticfiles %}
-{% load selection %}
+{#{% load selection %}#}
+{% load entity %}
+
 
 {% block title %}
     精选新鲜, 与优质商品不期而遇
@@ -22,7 +24,7 @@
             {% for selection in selection_list %}
                 <div class="col-sm-6 col-md-4">
                     <div class="thumbnail">
-                        <img class="lazy" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url }}" style="max-height: 270px;max-width: 270px;">
+                        <img class="lazy" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}" style="max-height: 270px;max-width: 270px;">
 {#                        <div class="caption">#}
 {#                            <p>{{ selection.note_context.content|truncatechars:90 }}</p>#}
 {#                        </div>#}
