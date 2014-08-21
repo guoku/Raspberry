@@ -692,19 +692,11 @@ def update_note(request, entity_id, note_id):
                 return HttpResponse('1')
 
 
-<<<<<<< HEAD
 @login_required
 def delete_note(request, entity_id, note_id):
     if request.method == 'POST':
         # 暂时不需要该功能 以前版本没有
         pass
-=======
-# @login_required
-# def delete_note(request, entity_id, note_id):
-#     if request.method == 'POST':
-#         # 暂时不需要该功能 以前版本没有
-#         pass
->>>>>>> f05909e29a86637bbc2728786cf9cb90af3e2241
 
 def log_visit_item(request, item_id):
     if request.user.is_authenticated():
