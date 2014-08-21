@@ -159,6 +159,10 @@ class Entity(BaseModel):
         rankmode='SPH_RANK_NONE',
     )
 
+    # @property
+    # def like_count(self):
+    #     return self.entity_like_set.count()
+
     class Meta:
         ordering = ['-created_time']
 

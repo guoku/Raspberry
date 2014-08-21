@@ -48,15 +48,15 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
     if _agent == 'iphone' or _agent == 'android' :
         return HttpResponseRedirect(reverse('wap_detail', kwargs = { "entity_hash" : entity_hash })) 
     
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
-        _request_user_id = request.user.id
+        # _request_user_id = request.user.id
         _is_staff = request.user.is_staff
         _request_user_context = User(request.user.id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
         _request_user_poke_note_set = Note.poke_set_of_user(request.user.id)
     else:
-        _request_user_id = None 
+        # _request_user_id = None
         _is_staff = False 
         _request_user_context = None
         _request_user_like_entity_set = []
@@ -692,11 +692,19 @@ def update_note(request, entity_id, note_id):
                 return HttpResponse('1')
 
 
+<<<<<<< HEAD
 @login_required
 def delete_note(request, entity_id, note_id):
     if request.method == 'POST':
         # 暂时不需要该功能 以前版本没有
         pass
+=======
+# @login_required
+# def delete_note(request, entity_id, note_id):
+#     if request.method == 'POST':
+#         # 暂时不需要该功能 以前版本没有
+#         pass
+>>>>>>> f05909e29a86637bbc2728786cf9cb90af3e2241
 
 def log_visit_item(request, item_id):
     if request.user.is_authenticated():
