@@ -26,9 +26,9 @@ window.location.href = url;</script><![endif]-->
     <meta content="果库,Guoku" property="og:title">
 
     {% block css %}
-{#        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.2.0/css/bootstrap.css' %}">#}
-        <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.2.0/css/bootstrap.min.css' %}">
+{#        <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">#}
+{#        <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">#}
     {% endblock %}
 
 </head>
@@ -120,8 +120,8 @@ window.location.href = url;</script><![endif]-->
 {% include 'common/click_to_top.html' %}
 
 <script src="{% static 'scripts/jquery.min.js' %}"></script>
-{#<script src="{% static 'bootstrap-3.2.0/js/bootstrap.min.js' %}">#}
-<script src="{% static 'scripts/main.js' %}"></script>
+<script src="{% static 'bootstrap-3.2.0/js/bootstrap.min.js' %}"></script>
+{#<script src="{% static 'scripts/main.js' %}"></script>#}
 {% if not request.user.is_authenticated  %}
     {% include 'common/login.html' %}
     {% include 'common/register.html' %}
