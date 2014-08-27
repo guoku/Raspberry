@@ -6,7 +6,8 @@
                     {% if taobao_id == '38232357603' %}
                     <a class="price" href="http://item.jd.com/1076756.html"  target=_blank >
                     {% else %}
-                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+{#                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >#}
+                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" biz-itemid="{{taobao_id}}" target=_blank>
                     {% endif %}
                 {% else %}
                 <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >
