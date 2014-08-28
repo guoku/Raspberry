@@ -134,6 +134,7 @@ window.location.href = url;</script><![endif]-->
 
     </script>
     <!-- End Google Analytics -->
+
 {% if not request.user.is_authenticated  %}
     {% include 'common/login.html' %}
     {% include 'common/register.html' %}
