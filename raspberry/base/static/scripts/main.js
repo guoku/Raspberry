@@ -332,7 +332,7 @@ function initTag(){
                 content = content.replace(/<[\s\S]*?>/g, "");
                 content = content.replace(/%/, "");
                 content = content.replace(/&nbsp;/, "");
-                console.log(content);
+//                console.log(content);
                 var param = {
                     url:url,
                     type:'3',
