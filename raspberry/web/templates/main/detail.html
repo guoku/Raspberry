@@ -8,7 +8,7 @@
     {% endif %}
     {{ entity_context.title }}
 {% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/detail.css' %}">{% endblock %}
+{#{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/detail.css' %}">{% endblock %}#}
 {#{% block keyword %}果库,{{ entity_context.category_id|trans_category }},{{ entity_context.title }}{% endblock %}#}
 {% block keyword %}
     {% if entity_context.brand|length != 0 %}
@@ -26,200 +26,182 @@
     {{ entity_context.intro }}
     {% endif %}
 {% endblock %}
+
+
 {% block content %}
-
-    <div id="detail" itemscope itemtype="http://data-vocabulary.org/Product">
-        <div class="breadcrumb">
-        <ul>
-            <li><span class="home"></span></li>
-            {% if selection_note %}
-            <li><a href="{% url 'web_selection' %}">{% trans 'selection' %}</a></li>
-            <li>&frasl;</li>
-            {% endif %}
-            <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
-            <li>&frasl;</li>
-            <li>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</li>
-        </ul>
-        </div>
-        <div class="main">
-            <div class="entity">
-                {% if taobao_id %}
-                    {% if taobao_id == '38232357603' %}
-                    <a class="entity-img" href="http://item.jd.com/1076756.html"  target=_blank >
-                    {% else %}
-                    <a class="entity-img" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-8 col-sm-8 col-md-8" id="detail" itemscope itemtype="http://data-vocabulary.org/Product">
+                <ol class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    {% if selection_note %}
+                        <li><a href="{% url 'web_selection' %}">{% trans 'selection' %}</a></li>
                     {% endif %}
-                {% else %}
-                    <a class="entity-img" href="http://item.jd.com/{{ jd_id }}.html"  target=_blank >
-                {% endif %}
-                    <img itemprop="image"  src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
-                </a>
-                <h2>{% if entity_context.brand|length != 0 %}<span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span></h2>
-
-                {% if is_user_already_like %}
-                    <a href="{% url 'web_like_entity' entity_context.entity_id '0' %}" class="like liked">
-                {% else %}
-                    <a href="{% url 'web_like_entity' entity_context.entity_id '1' %}" class="like">
-                {% endif %}
-                    <span class="icon"></span>
-                    <span class="count">{{ entity_context.like_count }}</span>{% trans 'likes' %}
-                </a>
-                {% if selection_note != None %}
-                    <div class="selection-note">
-                        {% display_note_item selection_note is_staff %}
-                    </div>
-                {% endif %}
-            </div>
-
-            {% if selection_note != None and common_note_list|length > 0 %}
-                <p class="note-count">还有 <span itemprop="count">{{ common_note_list|length }}</span> 条点评</p>
-            {% endif %}
-
-            <div class="notes" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
-                {% for note in common_note_list %}
-                    {% display_note_item note is_staff %}
-                    {% if common_note_list|length > forloop.counter %}<div class="sep"></div>{% endif  %}
-                {% endfor %}
-            </div>
-
-            {# 判断有没有点评过 #}
-            {% if user.is_authenticated  %}
-                {% if not is_user_already_note %}
-                    <div class="add-note add-note-submit">
-                        <img src="{{ user_context.avatar_small }}" width="50" height="50">
-                        <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">
-                            <span class="arr"></span>   
-                            <textarea name="note_text" placeholder="写点评 ＃贴标签"></textarea>
-                            <div class="add-note-div">
-                                <button type="button" class="cancel">取消</button>
-                                <button type="submit" class="submit">点评</button>
+                    <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
+                    <li class="active">{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</li>
+                </ol>
+                <div class="row">
+                    <a class="thumbnail" href="http://item.taobao.com/item.htm?id={{ taobao_id }}">
+                        <img itemprop="image"  src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
+                    </a>
+                <h2>{% if entity_context.brand|length != 0 %}
+                    <span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span>
+                </h2>
+                </div>
+{#        </div>#}
+                <div class="row">
+                    <h2>相似推荐</h2>
+                    {% for entity_context in guess_entity_context %}
+                        <div class="col-xs-6 col-sm-3">
+                            <div class="thumbnail">
+                                <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank">
+                                    <img class="img-responsive" src="{{ entity_context.chief_image.url|resize:'240' }}" alt="">
+                                </a>
                             </div>
-                        </form>
-                    </div>
-                {% endif %}
-            {% endif %}
+                        </div>
+                    {% endfor %}
+{#                </div>#}
+                </div>
+            </div>
+
+            <div class="col-xs-4 col-sm-4 col-md-4" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
+                {% include "main/partial/detail_side.html" %}
+            </div>
         </div>
-        {% include "main/partial/detail_side.html" %}
-{#        <div class="aside">#}
-{#            <div class="entity-info">#}
+    </div>
+{#    <div id="detail" itemscope itemtype="http://data-vocabulary.org/Product">#}
+{#        <div class="breadcrumb">#}
+{#        <ul>#}
+{#            <li><span class="home"></span></li>#}
+{#            {% if selection_note %}#}
+{#            <li><a href="{% url 'web_selection' %}">{% trans 'selection' %}</a></li>#}
+{#            <li>&frasl;</li>#}
+{#            {% endif %}#}
+{#            <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>#}
+{#            <li>&frasl;</li>#}
+{#            <li>{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</li>#}
+{#        </ul>#}
+{#        </div>#}
+{#        <div class="main">#}
+{#            <div class="entity">#}
 {#                {% if taobao_id %}#}
-{#                    {% if taobao_id == '38194956526' %}#}
-{#                    <a class="entity-img" href="http://www.wandoujia.com/onespace?utm_source=guoku&utm_medium=banner&utm_campaign=banner"  target=_blank >#}
+{#                    {% if taobao_id == '38232357603' %}#}
+{#                    <a class="entity-img" href="http://item.jd.com/1076756.html"  target=_blank >#}
 {#                    {% else %}#}
-{#                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >#}
+{#                    <a class="entity-img" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >#}
 {#                    {% endif %}#}
 {#                {% else %}#}
-{#                <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >#}
+{#                    <a class="entity-img" href="http://item.jd.com/{{ jd_id }}.html"  target=_blank >#}
 {#                {% endif %}#}
-{#                    购买<span>&#65509;{{ entity_context.price }}</span>#}
+{#                    <img itemprop="image"  src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">#}
 {#                </a>#}
-{#                <div class="shop">来自于<a href="">url需替换</a></div>#}
+{#                <h2>{% if entity_context.brand|length != 0 %}<span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span></h2>#}
 {##}
-{#                {% if entity_context.detail_images|length > 0 %}#}
-{#                    <div class="detail-img">#}
-{#                        <a href=""><img src="{{ entity_context.chief_image.url|resize:'64' }}"></a>#}
-{#                        {% for img in entity_context.detail_images %}#}
-{#                            <a href="javascript:;"><img src="{{ img.url|resize:'64' }}"></a>#}
-{#                        {% endfor %}#}
+{#                {% if is_user_already_like %}#}
+{#                    <a href="{% url 'web_like_entity' entity_context.entity_id '0' %}" class="like liked">#}
+{#                {% else %}#}
+{#                    <a href="{% url 'web_like_entity' entity_context.entity_id '1' %}" class="like">#}
+{#                {% endif %}#}
+{#                    <span class="icon"></span>#}
+{#                    <span class="count">{{ entity_context.like_count }}</span>{% trans 'likes' %}#}
+{#                </a>#}
+{#                {% if selection_note != None %}#}
+{#                    <div class="selection-note">#}
+{#                        {% display_note_item selection_note is_staff %}#}
 {#                    </div>#}
 {#                {% endif %}#}
 {#            </div>#}
 {##}
-{#            <div class="likes">#}
-{#                <h3>{{ entity_context.like_count }}人喜爱</h3>#}
-{#                <div>#}
-{#                    {% for liker, date in liker_list %}#}
-{#                    <a href="{% url 'web_user_likes' liker %}" target="_blank">#}
-{#                        <img src="{{ liker }}" height="25" width="25">#}
-{#                        {% show_avater liker 25 %}#}
-{#                    </a>#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <p class="category">#}
-{#                <a href="{% url 'web_category' entity_context.category_id  %}">{{ entity_context.category_id|trans_category }}</a>#}
-{#            </p>#}
-{##}
-{#            {% if tag_list|length > 0 %}#}
-{#                <div class="tag">#}
-{#                    <h3>该商品的标签</h3>#}
-{#                    <div>#}
-{#                        {% for tag in tag_list %}#}
-{#                            <a href="{% url "web_tag_detail" tag.tag_hash %}" target="_blank">＃{{ tag.tag }}</a>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
-{#                </div>#}
+{#            {% if selection_note != None and common_note_list|length > 0 %}#}
+{#                <p class="note-count">还有 <span itemprop="count">{{ common_note_list|length }}</span> 条点评</p>#}
 {#            {% endif %}#}
-{#            #}
-{#            #}
-{#            {% if is_staff %}#}
-{#                <div class="tag">#}
-{#                    <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target=_blank>编辑商品</a>#}
-{#                </div>#}
-{#            {% endif %}#}
-{#            #}
-{#            <div class="share">#}
-{#                <a href=""><span class="weibo_icon"></span>分享到微博</a>#}
+{##}
+{#            <div class="notes" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">#}
+{#                {% for note in common_note_list %}#}
+{#                    {% display_note_item note is_staff %}#}
+{#                    {% if common_note_list|length > forloop.counter %}<div class="sep"></div>{% endif  %}#}
+{#                {% endfor %}#}
 {#            </div>#}
 
-{#            <div class="download">#}
-{#                <h3>下载果库客户端</h3>#}
-{#                <div>#}
-{#                    <a href="/download/ios/" target="_blank">iPhone</a> /#}
-{#                    <a href="/download/ios/" target="_blank">iPad</a> /#}
-{#                    <a href="http://app.guoku.com/download/android/guoku-release.apk" target="_blank">Android</a>#}
-{#                </div>#}
-{#            </div>#}
-{#            {% if enable_guoku_plus and activity_id%}#}
-{#                <div>#}
-{#                    <h3>获取果库价优惠码</h3>#}
-{#                    <form action="{%url 'web_get_guokuplus_token' %}" method="POST">#}
-{#                        <input type="hidden" name="activity_id" value="{{activity_id}}"/>#}
-{#                        <input type="submit" value="获取"/>#}
-{#                    </form>#}
-{#                </div>#}
+            {# 判断有没有点评过 #}
+{#            {% if user.is_authenticated  %}#}
+{#                {% if not is_user_already_note %}#}
+{#                    <div class="add-note add-note-submit">#}
+{#                        <img src="{{ user_context.avatar_small }}" width="50" height="50">#}
+{#                        <form action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST">#}
+{#                            <span class="arr"></span>   #}
+{#                            <textarea name="note_text" placeholder="写点评 ＃贴标签"></textarea>#}
+{#                            <div class="add-note-div">#}
+{#                                <button type="button" class="cancel">取消</button>#}
+{#                                <button type="submit" class="submit">点评</button>#}
+{#                            </div>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                {% endif %}#}
 {#            {% endif %}#}
 {#        </div>#}
 
-        <div class="recommend">
-            <h2>相似推荐</h2>
-            <div>
-                {% for entity_context in guess_entity_context %}
-                    <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank">
-                        <img src="{{ entity_context.chief_image.url|resize:'240' }}" alt="">
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
+
+{#        <div class="recommend">#}
+{#            <h2>相似推荐</h2>#}
+{#            <div>#}
+{#                {% for entity_context in guess_entity_context %}#}
+{#                    <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank">#}
+{#                        <img src="{{ entity_context.chief_image.url|resize:'240' }}" alt="">#}
+{#                    </a>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </div>#}
 {#    </div>#}
 
 {#    {% include "shared/weibo.html" %}#}
+
 {% endblock %}
 
+
+
 {% block script %}
-    <script type="text/javascript">
-        function logClick(item_id) {
-            var url = '/item/' + item_id + '/visit/log/';
-            var data = {
-                entry: 'web' 
-            };
-            $.post(url, data);
+{#    <script type="text/javascript">#}
+{#        function logClick(item_id) {#}
+{#            var url = '/item/' + item_id + '/visit/log/';#}
+{#            var data = {#}
+{#                entry: 'web' #}
+{#            };#}
+{#            $.post(url, data);#}
+{#        };#}
+{#        (function(win,doc){#}
+{#            var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];#}
+{#            if (!win.alimamatk_show) {#}
+{#                s.charset = 'gbk';#}
+{#                s.async = true;#}
+{#                s.src = "http://a.alimama.cn/tkapi.js";#}
+{#                s.kslite = "";#}
+{#                h.insertBefore(s, h.firstChild);#}
+{#            }#}
+{#            var o = {#}
+{#                appkey: "21419640"#}
+{#            };#}
+{#            win.alimamatk_onload = win.alimamatk_onload || [];#}
+{#            win.alimamatk_onload.push(o);#}
+{#        })(window,document);#}
+{#    </script>#}
+<script type="text/javascript">
+    (function(win,doc){
+        var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
+        if (!win.alimamatk_show) {
+            s.charset = "gbk";
+            s.async = true;
+            s.src = "http://a.alimama.cn/tkapi.js";
+            h.insertBefore(s, h.firstChild);
+        }
+        var o = {
+            pid: "mm_28514026_4132785_24810648",/*推广单元ID，用于区分不同的推广渠道*/
+            appkey: "21419640",/*通过TOP平台申请的appkey，设置后引导成交会关联appkey*/
+            unid: ""/*自定义统计字段*/
         };
-        (function(win,doc){
-            var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
-            if (!win.alimamatk_show) {
-                s.charset = 'gbk';
-                s.async = true;
-                s.src = "http://a.alimama.cn/tkapi.js";
-                s.kslite = "";
-                h.insertBefore(s, h.firstChild);
-            }
-            var o = {
-                appkey: "21419640"
-            }
-            win.alimamatk_onload = win.alimamatk_onload || [];
-            win.alimamatk_onload.push(o);
-        })(window,document);
-    </script>
+        win.alimamatk_onload = win.alimamatk_onload || [];
+        win.alimamatk_onload.push(o);
+    })(window,document);
+</script>
+
 {% endblock %}

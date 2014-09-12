@@ -23,8 +23,10 @@
         <div class="row">
             {% for selection in selection_list %}
                 <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail">
-                        <img class="lazy" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}" style="max-height: 270px;max-width: 270px;">
+                    <div class="row">
+                        <a class="thumbnail" href="{% url 'web_detail' selection.entity_context.entity_hash %}">
+                            <img class="lazy img-responsive" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}">
+                        </a>
 {#                        <div class="caption">#}
 {#                            <p>{{ selection.note_context.content|truncatechars:90 }}</p>#}
 {#                        </div>#}
