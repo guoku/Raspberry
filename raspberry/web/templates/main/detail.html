@@ -40,17 +40,19 @@
                     <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
                     <li class="active">{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</li>
                 </ol>
-                <div class="row">
-                    <a class="thumbnail" href="http://item.taobao.com/item.htm?id={{ taobao_id }}">
-                        <img itemprop="image"  src="{{ entity_context.chief_image.url|resize }}" alt="{{ entity_context.title }}">
+                <div class="thumbnail">
+                    <a  href="http://item.taobao.com/item.htm?id={{ taobao_id }}">
+                        <img itemprop="image"  src="{{ entity_context.chief_image.url|resize:'640' }}" alt="{{ entity_context.title }}">
                     </a>
-                <h2>{% if entity_context.brand|length != 0 %}
-                    <span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span>
-                </h2>
+                    <div class="caption">
+                        <h3>{% if entity_context.brand|length != 0 %}
+                            <span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span>
+                        </h3>
+                    </div>
                 </div>
 {#        </div>#}
                 <div class="row">
-                    <h2>相似推荐</h2>
+                    <h4>相似推荐</h4>
                     {% for entity_context in guess_entity_context %}
                         <div class="col-xs-6 col-sm-3">
                             <div class="thumbnail">

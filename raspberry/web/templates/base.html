@@ -24,7 +24,7 @@ window.location.href = url;</script><![endif]-->
     <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
 
 
-    <meta name="viewport" content="width=device-width">
+{#    <meta name="viewport" content="width=device-width">#}
     <meta content="果库,Guoku" property="og:site_name">
     <meta content="http://www.guoku.com" property="og:url">
     <meta content="果库,Guoku" property="og:title">
@@ -64,8 +64,8 @@ window.location.href = url;</script><![endif]-->
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'web_login' %}?next={{ request.path }}">{% trans 'sign in' %}</a></li>
-                    <li><a href="{% url 'web_register' %}">{% trans 'sign up' %}</a></li>
+                    <li><a href="{% url 'web_login' %}?next={{ request.path }}" data-toggle="modal" data-target="#AccountModal">{% trans 'sign in' %}</a></li>
+                    <li><a href="{% url 'web_register' %}" data-toggle="modal" data-target="#AccountModal">{% trans 'sign up' %}</a></li>
                 </ul>
                 <form class="navbar-form navbar-right" action="{% url 'web_search' %}" method="get">
                     <input class="form-control" type="text" placeholder="搜你想要的">
@@ -91,6 +91,14 @@ window.location.href = url;</script><![endif]-->
             </div>
         </div>
     </footer>
+{% endblock %}
+
+{% block modal %}
+    <div id="AccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="AccountModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content"></div>
+        </div>
+    </div>
 {% endblock %}
 
 {#<div id="header">#}
@@ -188,7 +196,7 @@ window.location.href = url;</script><![endif]-->
 {#    <script src="{% static 'scripts/login.js' %}"></script>#}
 {#{% endif %}#}
 
-{% block Analytics %}{% endblock %}
+{#{% block Analytics %}{% endblock %}#}
 
     <!-- Google Analytics -->
     <script>
@@ -202,5 +210,7 @@ window.location.href = url;</script><![endif]-->
 
     </script>
     <!-- End Google Analytics -->
+
+{% block script %}{% endblock %}
 </body>
 </html>

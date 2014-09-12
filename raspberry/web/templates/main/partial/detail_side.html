@@ -18,7 +18,7 @@
 {##}
 {#                {% if entity_context.detail_images|length > 0 %}#}
 {#                    <div class="detail-img">#}
-{#                        <a href=""><img src="{{ entity_context.chief_image.url|resize:'64' }}"></a>#}
+{#                        <a href=""></a>#}
 {#                        {% for img in entity_context.detail_images %}#}
 {#                            <a href="javascript:;"><img src="{{ img.url|resize:'64' }}"></a>#}
 {#                        {% endfor %}#}
@@ -35,6 +35,28 @@
             购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>
         </a>
     </div>
+
+{% if entity_context.detail_images|length > 0 %}
+    <div class="panel-body">
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <a href="javascript:;">
+                        <img class="img-responsive" src="{{ entity_context.chief_image.url|resize:'64' }}">
+                    </a>
+                </div>
+            </div>
+
+            {% for img in entity_context.detail_images %}
+            <div class="col-sm-3">
+                <div class="thumbnail">
+                    <a href="javascript:;">
+                        <img class="img-responsive" src="{{ img.url|resize:'64' }}">
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+{% endif %}
 
     <div class="panel-heading">{{ entity_context.like_count }}人喜爱</div>
     <div class="panel-body">

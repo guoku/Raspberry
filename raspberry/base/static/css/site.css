@@ -1,10 +1,36 @@
-/*body {*/
-    /*font-family: "Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","WenQuanYi Micro Hei",sans-serif;*/
-/*}*/
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #ffffff;
+    border-right: 1px solid #eee;
+  }
+}
+
+
+body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
     font-family: "Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
 }
 body {
-    padding-top: 80px;
-    font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;
+    padding-top: 50px;
+    /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
+}
+/*.gk-selection-flow .thumbnail-gk .pic-container .good-pic {*/
+    /*height: 310px;*/
+    /*border-radius: 0;*/
+/*}*/
+
+.thumbnail {
+    border-radius: 0;
+}
+
+.thumbnail-gk {
+    height: 448px;
 }
