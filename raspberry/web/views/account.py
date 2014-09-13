@@ -131,10 +131,14 @@ class ThirdPartyRegisterWizard(RegisterWizard):
 
 def login(request, template = 'account/login.html'):
     redirect_url = web_utils.get_login_redirect_url(request)
+    template = template
     if not redirect_url:
         redirect_url = reverse('web_selection')
     if request.user.is_authenticated():
         return HttpResponseRedirect(redirect_url)
+
+    if request.is_ajax():
+        template = 'account/partial/ajax_login.html'
 
     if request.method == 'POST':
         _forms = SignInAccountForm(request.POST)

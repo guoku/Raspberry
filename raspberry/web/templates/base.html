@@ -64,8 +64,11 @@ window.location.href = url;</script><![endif]-->
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'web_login' %}?next={{ request.path }}" data-toggle="modal" data-target="#AccountModal">{% trans 'sign in' %}</a></li>
-                    <li><a href="{% url 'web_register' %}" data-toggle="modal" data-target="#AccountModal">{% trans 'sign up' %}</a></li>
+                    {% if request.user.is_authenticated  %}
+                    {% else %}
+                        <li><a href="{% url 'web_login' %}?next={{ request.path }}" data-toggle="modal" data-target="#SignInModal">{% trans 'sign in' %}</a></li>
+                        <li><a href="{% url 'web_register' %}" data-toggle="modal" data-target="#SignUpModal">{% trans 'sign up' %}</a></li>
+                    {% endif %}
                 </ul>
                 <form class="navbar-form navbar-right" action="{% url 'web_search' %}" method="get">
                     <input class="form-control" type="text" placeholder="搜你想要的">
@@ -94,11 +97,16 @@ window.location.href = url;</script><![endif]-->
 {% endblock %}
 
 {% block modal %}
-    <div id="AccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="AccountModal" aria-hidden="true">
+    <div id="SignInModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="SignInModal" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content"></div>
         </div>
     </div>
+{#    <div id="SignUpModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="SignUpModal" aria-hidden="true">#}
+{#        <div class="modal-dialog modal-lg">#}
+{#            <div class="modal-content"></div>#}
+{#        </div>#}
+{#    </div>#}
 {% endblock %}
 
 {#<div id="header">#}

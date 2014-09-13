@@ -28,9 +28,9 @@ class SignInAccountForm(forms.Form):
     }
 
     next = forms.CharField(required=False, widget=forms.HiddenInput())
-    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'text-input', 'placeholder': _('email')}),
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('email')}),
                              label=_('email'), help_text=_(''))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('password')}),
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('password')}),
                                label=_('password'), help_text=_(''), min_length=6, max_length=20)
 
     def clean_email(self):

@@ -1,45 +1,82 @@
-{% extends "account/account_base.html" %}
-{% load i18n staticfiles %}
-
-{% block title %}{% trans "sign in" %}{% endblock %}
-{% block form %}
-    <div class="account-form login">
-        <div class="form_container">
-            <div class="tip">
-                <img src="{% static 'images/signin.png' %}" alt="欢迎回来">
+{#{% extends "account/account_base.html" %}#}
+{#{% load i18n staticfiles %}#}
+{##}
+{#{% block title %}{% trans "sign in" %}{% endblock %}#}
+{#{% block form %}#}
+{#    <div class="account-form login">#}
+{#        <div class="form_container">#}
+{#            <div class="tip">#}
+{#                <img src="{% static 'images/signin.png' %}" alt="欢迎回来">#}
 {#                <img src="/static/v3/images/signin.png"  alt="欢迎回来">#}
-            </div>
-            {% if forms.errors %}
-                {% spaceless %}
-            <div class="error-message">
-                邮箱或密码错误
+{#            </div>#}
+{#            {% if forms.errors %}#}
+{#                {% spaceless %}#}
+{#            <div class="error-message">#}
+{#                邮箱或密码错误#}
 {#                {% for field in forms %}#}
 {#                    {% for error in field.errors %}#}
 {#                        {{ error }}#}
 {#                    {% endfor %}#}
 {#                {% endfor %}#}
-            </div>
-                {% endspaceless %}
-            {% endif %}
-            <form action="{% url "web_login" %}" method="POST">
-                {% csrf_token %}
-                {% for field in forms %}
-                    <div class="control-group">
-                        {{ field }}
-                    </div>
-                {% endfor %}
-                <div class="remember">
-                    <label><input type="checkbox" name="remember_me">{% trans 'remember me' %}</label>
-                    <a href="{% url 'web_forget_passwd' %}">忘记密码?</a>
-                </div>
-                <input type="submit" value="{% trans 'sign in' %}" class="submit_disabled" disabled="true">
-            </form>
+{#            </div>#}
+{#                {% endspaceless %}#}
+{#            {% endif %}#}
+{#            <form action="{% url "web_login" %}" method="POST">#}
+{#                {% csrf_token %}#}
+{#                {% for field in forms %}#}
+{#                    <div class="control-group">#}
+{#                        {{ field }}#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#                <div class="remember">#}
+{#                    <label><input type="checkbox" name="remember_me">{% trans 'remember me' %}</label>#}
+{#                    <a href="{% url 'web_forget_passwd' %}">忘记密码?</a>#}
+{#                </div>#}
+{#                <input type="submit" value="{% trans 'sign in' %}" class="submit_disabled" disabled="true">#}
+{#            </form>#}
+{##}
+{#            <div class="third-party">#}
+{#                <a href="{% url 'web_login_by_sina' %}" class="weibo"></a>#}
+{#                <a href="{% url 'web_login_by_taobao' %}" class="taobao"></a>#}
+{#            </div>#}
+{#            <div class="to-reg"><a href="{% url 'web_register' %}">注册帐号 >></a></div>#}
+{#        </div>#}
+{#    </div>#}
+{#{% endblock %}#}
 
-            <div class="third-party">
-                <a href="{% url 'web_login_by_sina' %}" class="weibo"></a>
-                <a href="{% url 'web_login_by_taobao' %}" class="taobao"></a>
-            </div>
-            <div class="to-reg"><a href="{% url 'web_register' %}">注册帐号 >></a></div>
+{% extends "base.html" %}
+{% load i18n staticfiles %}
+
+
+{% block title %}{% trans "sign in" %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <form class="form-horizontal" role="form" method="post" action="{% url 'web_login' %}">
+                {% csrf_token %}
+                <h2></h2>
+                <fieldset>
+                    {% for field in forms %}
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-4">
+                            {{ field }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="checkbox">
+                        <div class="col-sm-2 col-sm-offset-4">
+                        <label>
+                            <input type="checkbox" value="remember-me">{% trans 'remember me' %}
+                        </label>
+                        </div>
+                    </div>
+                </fieldset>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans 'sign in' %}</button>
+            </form>
         </div>
     </div>
+
 {% endblock %}
+
+{% block modal %} {% endblock %}

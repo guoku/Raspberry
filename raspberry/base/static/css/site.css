@@ -30,7 +30,18 @@ body {
 .thumbnail {
     border-radius: 0;
 }
-
 .thumbnail-gk {
     height: 448px;
+}
+
+.pic-container {
+    border-bottom: 1px solid #cccccc;
+    display: block;
+    height: 320px;
+
+    padding-bottom: 10px;
+}
+
+.form-control {
+    border-radius: 0;
 }
