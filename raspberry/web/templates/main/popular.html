@@ -11,47 +11,60 @@
 {#{% endblock %}#}
 
 {% block content %}
-    <div id="popular">
-        <div class="time">
-            <div class="nav">
-                <a href="{% url 'web_popular' %}?group=daily" {% if group == 'daily' %}class="active"{% endif %}>24 小时</a>
-                <span class="sep">|</span>
-                <a href="{% url 'web_popular' %}?group=weekly" {% if group == 'weekly' %}class="active"{% endif %}>7 天</a>
-            </div>
-
-            <span class="recent">最近更新：{{ popular_updated_time|format_time }}</span>
-        </div>
-
-        <ul class="entities">
+    <div class="container">
+        <div class="row">
             {% for popular in popular_list %}
-                <li class="popular-entity">
-                    <div class="title">
-                        {% spaceless %}
-                        <h2>
-                            {% if popular.entity_context.brand|length != 0 %}
-                                {{ popular.entity_context.brand }}
-                                -{% endif %}
-                            {{ popular.entity_context.title|truncatechars:15 }}
-                        </h2>
-                        {% endspaceless %}
-                        <span class="price">&#65509;{{ popular.entity_context.price }}</span>
-                    </div>
-                    <a href="{% url 'web_detail' popular.entity_context.entity_hash %}" class="entity-img">
-                        <img alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
-                    </a>
-
-                    <div class="detail">
-                        {% if popular.is_user_already_like %}
-                            <a href="{% url 'web_like_entity' popular.entity_context.entity_id '0' %}" class="like liked">
-                        {% else %}
-                            <a href="{% url 'web_like_entity' popular.entity_context.entity_id '1' %}" class="like">
-                        {% endif %}
-                            <span class="icon"></span>喜爱
-                            <span class="count">{{ popular.entity_context.like_count }}</span>
+                <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                        <a href="{% url 'web_detail' popular.entity_context.entity_hash %}">
+                            <img class="img-responsive" alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
                         </a>
                     </div>
-                </li>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     </div>
+{#    <div id="popular">#}
+{#        <div class="time">#}
+{#            <div class="nav">#}
+{#                <a href="{% url 'web_popular' %}?group=daily" {% if group == 'daily' %}class="active"{% endif %}>24 小时</a>#}
+{#                <span class="sep">|</span>#}
+{#                <a href="{% url 'web_popular' %}?group=weekly" {% if group == 'weekly' %}class="active"{% endif %}>7 天</a>#}
+{#            </div>#}
+{##}
+{#            <span class="recent">最近更新：{{ popular_updated_time|format_time }}</span>#}
+{#        </div>#}
+{##}
+{#        <ul class="entities">#}
+{#            {% for popular in popular_list %}#}
+{#                <li class="popular-entity">#}
+{#                    <div class="title">#}
+{#                        {% spaceless %}#}
+{#                        <h2>#}
+{#                            {% if popular.entity_context.brand|length != 0 %}#}
+{#                                {{ popular.entity_context.brand }}#}
+{#                                -{% endif %}#}
+{#                            {{ popular.entity_context.title|truncatechars:15 }}#}
+{#                        </h2>#}
+{#                        {% endspaceless %}#}
+{#                        <span class="price">&#65509;{{ popular.entity_context.price }}</span>#}
+{#                    </div>#}
+{#                    <a href="{% url 'web_detail' popular.entity_context.entity_hash %}" class="entity-img">#}
+{#                        <img alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">#}
+{#                    </a>#}
+{##}
+{#                    <div class="detail">#}
+{#                        {% if popular.is_user_already_like %}#}
+{#                            <a href="{% url 'web_like_entity' popular.entity_context.entity_id '0' %}" class="like liked">#}
+{#                        {% else %}#}
+{#                            <a href="{% url 'web_like_entity' popular.entity_context.entity_id '1' %}" class="like">#}
+{#                        {% endif %}#}
+{#                            <span class="icon"></span>喜爱#}
+{#                            <span class="count">{{ popular.entity_context.like_count }}</span>#}
+{#                        </a>#}
+{#                    </div>#}
+{#                </li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+{#    </div>#}
 {% endblock %}
