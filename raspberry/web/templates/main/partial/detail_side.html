@@ -1,54 +1,9 @@
 {% load entity user %}
 
-<<<<<<< HEAD
-{#        <div class="col-sm-4">#}
-{#            <div class="entity-info" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">#}
-{#                {% if taobao_id %}#}
-{#                    {% if taobao_id == '38232357603' %}#}
-{#                    <a class="price" href="http://item.jd.com/1076756.html"  target=_blank >#}
-{#                    {% else %}#}
-{#                    <a class="btn btn-primary" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank" biz-itemid="39142380902" href="http://item.taobao.com/item.htm?id=39142380902" _hover-ignore="1">#}
-{#                    {% endif %}#}
-{#                {% else %}#}
-{#                    <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >#}
-{#                {% endif %}#}
-{#                    <meta itemprop="currency" content="RMB" />#}
-{#                    购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>#}
-{#                </a>#}
-=======
-        <div class="aside">
-            <div class="entity-info" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
-                {% if taobao_id %}
-                    {% if taobao_id == '38232357603' %}
-                    <a class="price" href="http://item.jd.com/1076756.html"  target=_blank >
-                    {% else %}
-{#                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >#}
-                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" biz-itemid="{{taobao_id}}" target=_blank>
-                    {% endif %}
-                {% else %}
-                <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >
-                {% endif %}
-                    <meta itemprop="currency" content="RMB" />
-                    购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>
-                </a>
->>>>>>> master
-{#                <div class="shop">来自于<a href="">url需替换</a></div>#}
-{##}
-{#                {% if entity_context.detail_images|length > 0 %}#}
-{#                    <div class="detail-img">#}
-{#                        <a href=""></a>#}
-{#                        {% for img in entity_context.detail_images %}#}
-{#                            <a href="javascript:;"><img src="{{ img.url|resize:'64' }}"></a>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
-{#                {% endif %}#}
-{#            </div>#}
-
-{#            <div class="row">#}
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <a class="btn btn-primary btn-lg" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank" biz-itemid="39142380902" _hover-ignore="1">
+        <a class="btn btn-primary btn-buy" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank" biz-itemid="39142380902" _hover-ignore="1">
             <meta itemprop="currency" content="RMB" />
             购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>
         </a>

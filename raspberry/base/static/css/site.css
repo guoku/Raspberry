@@ -45,3 +45,14 @@ body {
 .form-control {
     border-radius: 0;
 }
+
+.btn-buy {
+    font-size: 16px;
+}
+.btn-buy > span {
+    font: 22px Georgia,serif;
+}
+.btn-like {
+    display: inline-block;
+    border-radius: 0;
+}

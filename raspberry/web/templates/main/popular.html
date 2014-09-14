@@ -9,11 +9,11 @@
 {#{% block css %}#}
 {#    <link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">#}
 {#{% endblock %}#}
-{% block css %}
+{#{% block css %}#}
 <style>
 .img-box{
     display:table-cell;
-    height:0px;
+    height:0;
     padding-bottom:100%;
 }
 .img-box > img
@@ -23,7 +23,7 @@
     vertical-align: middle;
 }
 </style>
-{% endblock %}
+{#{% endblock %}#}
 {% block content %}
     <div class="container">
         <div class="row">

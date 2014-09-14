@@ -63,6 +63,7 @@ window.location.href = url;</script><![endif]-->
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated  %}
+                        {% include 'account/partial/auth.html' %}
                     {% else %}
                         <li><a href="{% url 'web_login' %}?next={{ request.path }}" data-toggle="modal" data-target="#SignInModal">{% trans 'sign in' %}</a></li>
                         <li><a href="{% url 'web_register' %}" data-toggle="modal" data-target="#SignUpModal">{% trans 'sign up' %}</a></li>
@@ -96,7 +97,7 @@ window.location.href = url;</script><![endif]-->
 
 {% block modal %}
     <div id="SignInModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="SignInModal" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content"></div>
         </div>
     </div>
@@ -194,7 +195,6 @@ window.location.href = url;</script><![endif]-->
 {#{% include 'common/click_to_top.html' %}#}
 
 <script src="{% static 'scripts/jquery.min.js' %}"></script>
-<<<<<<< HEAD
 <script src="{% static 'bootstrap-3.2.0/js/bootstrap.min.js' %}"></script>
 {#<script src="{% static 'scripts/main.js' %}"></script>#}
 {#{% if not request.user.is_authenticated  %}#}
@@ -204,10 +204,7 @@ window.location.href = url;</script><![endif]-->
 {#{% endif %}#}
 
 {#{% block Analytics %}{% endblock %}#}
-=======
-<script src="{% static 'scripts/main.js' %}"></script>
-<script src="http://l.tbcdn.cn/apps/top/x/sdk.js?appkey=21419640"></script>
->>>>>>> master
+
 
     <!-- Google Analytics -->
     <script>
@@ -221,15 +218,7 @@ window.location.href = url;</script><![endif]-->
 
     </script>
     <!-- End Google Analytics -->
-<<<<<<< HEAD
-=======
 
-{% if not request.user.is_authenticated  %}
-    {% include 'common/login.html' %}
-    {% include 'common/register.html' %}
-    <script src="{% static 'scripts/login.js' %}"></script>
-{% endif %}
->>>>>>> master
 
 {% block script %}{% endblock %}
 </body>

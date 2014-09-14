@@ -1,17 +1,30 @@
 {% load i18n %}
 {#<div class="dropdown">#}
-    <li>
-        <a href="{% url 'web_user_index' user_context.user_id %}" class="user-avatar">
-            <img src="{{ user_context.avatar_small }}" width="30" height="30">
-        </a>
-        <span class="icon-menu"></span>
-        <ul class="menu">
-            <li><span class="icon-guoku"></span><a href="{% url 'web_user_index' user_context.user_id %}">{% trans "my guoku" %}</a></li>
-            <li><span class="icon-setting"></span><a href="{% url 'web_setting' %}">{% trans "settings" %}</a></li>
-            {% if is_staff %}
-                <li><span class="icon-setting"></span><a href="{% url 'management_entity_list' %}">管理</a></li>
-            {% endif %}
-            <li><span class="icon-signout"></span><a href="{% url 'web_logout' %}">{% trans "sign out" %}</a></li>
-        </ul>
-    </li>
+{#    <li>#}
+{#        <a href="{% url 'web_user_index' user_context.user_id %}" class="user-avatar">#}
+{#            <img src="{{ user_context.avatar_small }}" width="30" height="30">#}
+{#        </a>#}
+{#        <span class="icon-menu"></span>#}
+{#        <ul class="menu">#}
+{#            <li><span class="icon-guoku"></span><a href="{% url 'web_user_index' user_context.user_id %}">{% trans "my guoku" %}</a></li>#}
+{#            <li><span class="icon-setting"></span><a href="{% url 'web_setting' %}">{% trans "settings" %}</a></li>#}
+{#            {% if is_staff %}#}
+{#                <li><span class="icon-setting"></span><a href="{% url 'management_entity_list' %}">管理</a></li>#}
+{#            {% endif %}#}
+{#            <li><span class="icon-signout"></span><a href="{% url 'web_logout' %}">{% trans "sign out" %}</a></li>#}
+{#        </ul>#}
+{#    </li>#}
 {#</div>#}
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding: 10px;">
+        <img class="img-responsive img-circle" src="{{ user_context.avatar_small }}" style="width: 30px; height: 30px;">
+    </a>
+    <ul class="dropdown-menu" role="menu">
+        <li><span class="icon-guoku"></span><a href="{% url 'web_user_index' user_context.user_id %}">{% trans "my guoku" %}</a></li>
+        <li><span class="icon-setting"></span><a href="{% url 'web_setting' %}">{% trans "settings" %}</a></li>
+        {% if is_staff %}
+            <li><span class="icon-setting"></span><a href="{% url 'management_entity_list' %}">管理</a></li>
+        {% endif %}
+        <li><span class="icon-signout"></span><a href="{% url 'web_logout' %}">{% trans "sign out" %}</a></li>
+    </ul>
+</li>
