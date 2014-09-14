@@ -53,20 +53,7 @@ CACHES = {
         },
     },
 }
-# CACHES = {
-#    "default": {
-#        "BACKEND": "redis_cache.cache.RedisCache",
-#        "LOCATION": [
-#            "10.0.2.46:6379:10",
-#            "10.0.2.47:6379:10",
-#            "10.0.2.48:6379:10"
-#        ],
-#        "OPTIONS": {
-#            "PARSER_CLASS": "redis.connection.HiredisParser",
-#            "CLIENT_CLASS": "redis_cache.client.ShardClient",
-#        }
-#    }
-# }
+
 
 # session
 SESSION_ENGINE = 'redis_sessions.session'

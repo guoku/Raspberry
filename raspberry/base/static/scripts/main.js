@@ -328,6 +328,10 @@ function initTag(){
 //                console.log(url);
                 var pic = $('.entity-img img').attr("src");
                 var content = $('.selection-note .note-item .note-detail p').html();
+//
+                content = content.replace(/<[\s\S]*?>/g, "");
+                content = content.replace(/%/, "");
+                content = content.replace(/&nbsp;/, "");
 //                console.log(content);
                 var param = {
                     url:url,

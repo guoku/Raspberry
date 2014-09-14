@@ -196,6 +196,7 @@ window.location.href = url;</script><![endif]-->
 {#{% include 'common/click_to_top.html' %}#}
 
 <script src="{% static 'scripts/jquery.min.js' %}"></script>
+<<<<<<< HEAD
 <script src="{% static 'bootstrap-3.2.0/js/bootstrap.min.js' %}"></script>
 {#<script src="{% static 'scripts/main.js' %}"></script>#}
 {#{% if not request.user.is_authenticated  %}#}
@@ -205,6 +206,10 @@ window.location.href = url;</script><![endif]-->
 {#{% endif %}#}
 
 {#{% block Analytics %}{% endblock %}#}
+=======
+<script src="{% static 'scripts/main.js' %}"></script>
+<script src="http://l.tbcdn.cn/apps/top/x/sdk.js?appkey=21419640"></script>
+>>>>>>> master
 
     <!-- Google Analytics -->
     <script>
@@ -218,6 +223,15 @@ window.location.href = url;</script><![endif]-->
 
     </script>
     <!-- End Google Analytics -->
+<<<<<<< HEAD
+=======
+
+{% if not request.user.is_authenticated  %}
+    {% include 'common/login.html' %}
+    {% include 'common/register.html' %}
+    <script src="{% static 'scripts/login.js' %}"></script>
+{% endif %}
+>>>>>>> master
 
 {% block script %}{% endblock %}
 </body>

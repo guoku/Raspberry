@@ -1,5 +1,6 @@
 {% load entity user %}
 
+<<<<<<< HEAD
 {#        <div class="col-sm-4">#}
 {#            <div class="entity-info" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">#}
 {#                {% if taobao_id %}#}
@@ -14,6 +15,23 @@
 {#                    <meta itemprop="currency" content="RMB" />#}
 {#                    购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>#}
 {#                </a>#}
+=======
+        <div class="aside">
+            <div class="entity-info" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
+                {% if taobao_id %}
+                    {% if taobao_id == '38232357603' %}
+                    <a class="price" href="http://item.jd.com/1076756.html"  target=_blank >
+                    {% else %}
+{#                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" data-itemid="{{taobao_id}}" data-unid="{{outer_code}}" target=_blank bi="btn_taobao" onclick="logClick('{{item_id}}');" >#}
+                    <a class="price" href="http://item.taobao.com/item.htm?id={{taobao_id}}" biz-itemid="{{taobao_id}}" target=_blank>
+                    {% endif %}
+                {% else %}
+                <a class="price" href="http://item.jd.com/{{jd_id}}.html" target=_blank >
+                {% endif %}
+                    <meta itemprop="currency" content="RMB" />
+                    购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>
+                </a>
+>>>>>>> master
 {#                <div class="shop">来自于<a href="">url需替换</a></div>#}
 {##}
 {#                {% if entity_context.detail_images|length > 0 %}#}
