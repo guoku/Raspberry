@@ -26,7 +26,7 @@ def user_index(request, user_id):
 
 
 def user_likes(request, user_id, template=TEMPLATE):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     _category_id = request.GET.get('c', None)
     _page_num = int(request.GET.get('p', '1'))
     _price = request.GET.get('price', None)
@@ -62,26 +62,26 @@ def user_likes(request, user_id, template=TEMPLATE):
         except Exception, e:
             pass
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='USER_LIKE', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'user_id' : int(user_id),
-            'result_entities' : _entity_id_list,
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='USER_LIKE',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'user_id' : int(user_id),
+    #         'result_entities' : _entity_id_list,
+    #     },
+    # )
 
     return render_to_response(
         template,
         {
             'is_staff' : _is_staff,
             'content_tab' : 'like',
-            'request_user_context' : _request_user_context,
+            'user_context' : _request_user_context,
             'query_user_context' : _query_user_context,
             'relation' : _relation,
             'category_list' : _old_category_list,

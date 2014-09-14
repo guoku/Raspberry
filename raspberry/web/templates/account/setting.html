@@ -3,121 +3,133 @@
 {% load account %}
 
 {% block title %}{% trans "settings" %}{% endblock %}
-{% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">
+{#{% block css %}#}
+{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">#}
 {#    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">#}
-{% endblock %}
+{#{% endblock %}#}
 
 {% block content %}
-    <div id="setting">
+    <div class="container">
+        <div class="row">
+            <h2>{% trans 'account settings' %}</h2>
+            <form method="post" action="{% url 'web_update_profile' %}" class="form-horizontal">
+                {% csrf_token %}
+                <fieldset>
 
-        <h2>{% trans "account settings" %}</h2>
-        {% display_avatar_update user_context %}
-        <form method="POST" action="{% url 'web_update_profile' %}" class="base-info" id="set-base-info">
-            {% csrf_token %}
-            <div class="control-group">
-                <h3>个人资料</h3>
-            </div>
-            {% if msg_code != None %}
-            <div class="control-group">
-                <div class="message">
-                    {% if msg_code == '0' %}
-                        未上传图片
-                    {% elif msg_code == '1' %}
-                        图片太大
-                    {% endif %}
-                </div>
-             </div>
-            {% endif %}
-            <div class="control-group">
-                <label for="{{ profile_form.nickname.id_for_label }}">{{ profile_form.nickname.label }}</label>
-                {{ profile_form.nickname }}
-            </div>
-
-            <div class="control-group">
-                <label for="{{ profile_form.email.id_for_label }}">{{ profile_form.email.label }}</label>
-                {{ profile_form.email }}
-            </div>
-
-            <div class="control-group">
-                <label for="{{ profile_form.bio.id_for_label }}">{{ profile_form.bio.label }}</label>
-                {{ profile_form.bio }}
-            </div>
-
-            <div style="display: none;"> 
-                <p id="default_location_value">{{ profile_form.location.value }}</p>
-                <p id="default_city_value">{{ profile_form.city.value }}</p>
-            </div>
-
-            <div class="control-group">
-                <label>{{ profile_form.location.label }}</label>
-                {{ profile_form.location }}
-                {{ profile_form.city }}
-            </div>
-
-            <div class="control-group">
-                <label>{{ profile_form.gender.label }}</label>
-                {% for radio in profile_form.gender %}
-                    <span>{{ radio.choice_label }}</span>
-                    {{ radio.tag }}
-                {% endfor %}
-            </div>
-
-            <div class="control-group">
-                <label for="{{ profile_form.website.id_for_label }}">{{ profile_form.website.label }}</label>
-                {{ profile_form.website }}
-            </div>
-            <div class="control-group">
-                <input type="submit" value="{% trans "update profile" %}" class="btn btn-update">
-            </div>
-        </form>
-        
-        <div class="control-group">
-            <label>新浪微博</label>
-
-            {% if user_context.sina_screen_name %}
-            <span class="sns-name">
-                @{{ user_context.sina_screen_name }}
-            </span>
-            <a href="{%url 'web_unbind_sina'%}?next={%url "web_setting" %}">取消绑定</a>
-            {% else %}
-            <span class="sns-name"></span>
-            <a class="active" href="{%url 'web_bind_sina'%}?next={%url "web_setting" %}">绑定新浪微博</a>
-            {% endif %}
-
+                </fieldset>
+                <button type="submit" class="btn btn-primary">{% trans "update profile" %}</button>
+            </form>
         </div>
-        <div class="control-group">
-            <label>淘宝网</label>
-            {% if user_context.taobao_nick %}
-            <span class="sns-name">
-                {{ user_context.taobao_nick }}
-            </span>
-            <a href="{%url 'web_unbind_taobao' %}?next={%url "web_setting"%}">取消绑定</a>
-            {% else %}
-            <span class="sns-name">
-            </span>
-            <a class="active" href="{%url 'web_bind_taobao' %}?next={%url "web_setting"%}">绑定淘宝网</a>
-            {% endif %}
-        </div>
-
-        <form method="POST" action="{% url 'web_change_password' %}" class="password">
-            {% csrf_token %}
-            <div class="control-group">
-                <h3>更改密码</h3>
-            </div>
-            {% for field in password_form %}
-            <div class="control-group">
-                <label for="{{ field.id_for_label }}" >{{ field.label }}</label>
-                {{ field }}
-            </div>
-            {% endfor %}
-            <div class="control-group">
-                <input type="submit" value="修改密码" class="btn btn-update">
-            </div>
-        </form>
     </div>
+{#    <div id="setting">#}
+{##}
+{#        <h2>{% trans "account settings" %}</h2>#}
+{#        {% display_avatar_update user_context %}#}
+{#        <form method="POST" action="{% url 'web_update_profile' %}" class="base-info" id="set-base-info">#}
+{#            {% csrf_token %}#}
+{#            <div class="control-group">#}
+{#                <h3>个人资料</h3>#}
+{#            </div>#}
+{#            {% if msg_code != None %}#}
+{#            <div class="control-group">#}
+{#                <div class="message">#}
+{#                    {% if msg_code == '0' %}#}
+{#                        未上传图片#}
+{#                    {% elif msg_code == '1' %}#}
+{#                        图片太大#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#             </div>#}
+{#            {% endif %}#}
+{#            <div class="control-group">#}
+{#                <label for="{{ profile_form.nickname.id_for_label }}">{{ profile_form.nickname.label }}</label>#}
+{#                {{ profile_form.nickname }}#}
+{#            </div>#}
+{##}
+{#            <div class="control-group">#}
+{#                <label for="{{ profile_form.email.id_for_label }}">{{ profile_form.email.label }}</label>#}
+{#                {{ profile_form.email }}#}
+{#            </div>#}
+{##}
+{#            <div class="control-group">#}
+{#                <label for="{{ profile_form.bio.id_for_label }}">{{ profile_form.bio.label }}</label>#}
+{#                {{ profile_form.bio }}#}
+{#            </div>#}
+{##}
+{#            <div style="display: none;"> #}
+{#                <p id="default_location_value">{{ profile_form.location.value }}</p>#}
+{#                <p id="default_city_value">{{ profile_form.city.value }}</p>#}
+{#            </div>#}
+{##}
+{#            <div class="control-group">#}
+{#                <label>{{ profile_form.location.label }}</label>#}
+{#                {{ profile_form.location }}#}
+{#                {{ profile_form.city }}#}
+{#            </div>#}
+{##}
+{#            <div class="control-group">#}
+{#                <label>{{ profile_form.gender.label }}</label>#}
+{#                {% for radio in profile_form.gender %}#}
+{#                    <span>{{ radio.choice_label }}</span>#}
+{#                    {{ radio.tag }}#}
+{#                {% endfor %}#}
+{#            </div>#}
+{##}
+{#            <div class="control-group">#}
+{#                <label for="{{ profile_form.website.id_for_label }}">{{ profile_form.website.label }}</label>#}
+{#                {{ profile_form.website }}#}
+{#            </div>#}
+{#            <div class="control-group">#}
+{#                <input type="submit" value="{% trans "update profile" %}" class="btn btn-update">#}
+{#            </div>#}
+{#        </form>#}
+{#        #}
+{#        <div class="control-group">#}
+{#            <label>新浪微博</label>#}
+{##}
+{#            {% if user_context.sina_screen_name %}#}
+{#            <span class="sns-name">#}
+{#                @{{ user_context.sina_screen_name }}#}
+{#            </span>#}
+{#            <a href="{%url 'web_unbind_sina'%}?next={%url "web_setting" %}">取消绑定</a>#}
+{#            {% else %}#}
+{#            <span class="sns-name"></span>#}
+{#            <a class="active" href="{%url 'web_bind_sina'%}?next={%url "web_setting" %}">绑定新浪微博</a>#}
+{#            {% endif %}#}
+{##}
+{#        </div>#}
+{#        <div class="control-group">#}
+{#            <label>淘宝网</label>#}
+{#            {% if user_context.taobao_nick %}#}
+{#            <span class="sns-name">#}
+{#                {{ user_context.taobao_nick }}#}
+{#            </span>#}
+{#            <a href="{%url 'web_unbind_taobao' %}?next={%url "web_setting"%}">取消绑定</a>#}
+{#            {% else %}#}
+{#            <span class="sns-name">#}
+{#            </span>#}
+{#            <a class="active" href="{%url 'web_bind_taobao' %}?next={%url "web_setting"%}">绑定淘宝网</a>#}
+{#            {% endif %}#}
+{#        </div>#}
+{##}
+{#        <form method="POST" action="{% url 'web_change_password' %}" class="password">#}
+{#            {% csrf_token %}#}
+{#            <div class="control-group">#}
+{#                <h3>更改密码</h3>#}
+{#            </div>#}
+{#            {% for field in password_form %}#}
+{#            <div class="control-group">#}
+{#                <label for="{{ field.id_for_label }}" >{{ field.label }}</label>#}
+{#                {{ field }}#}
+{#            </div>#}
+{#            {% endfor %}#}
+{#            <div class="control-group">#}
+{#                <input type="submit" value="修改密码" class="btn btn-update">#}
+{#            </div>#}
+{#        </form>#}
+{#    </div>#}
 {% endblock %}
 
-{% block script %}
-    <script src="{% static 'scripts/account.js' %}"></script>
-{% endblock %}
+{#{% block script %}#}
+{#    <script src="{% static 'scripts/account.js' %}"></script>#}
+{#{% endblock %}#}
