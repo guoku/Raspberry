@@ -112,39 +112,39 @@ class SignUpAccountBioFrom(forms.Form):
         required=False
     )
     bio = forms.CharField(
-        widget=forms.Textarea(attrs={'rows':'4', 'class':'textarea-input'}),
+        widget=forms.Textarea(attrs={'rows':'4', 'class':'form-control'}),
         label=_('bio'), 
         help_text=_(''), 
         required=False
     )
     gender = forms.ChoiceField(
-        widget = forms.RadioSelect(), 
+        widget = forms.RadioSelect(attrs={'class':'form-control'}),
         choices=GENDER_CHOICES,
         label=_('gender'), 
         help_text=_(''), 
         required=False
     )
     website = forms.URLField(
-        widget=forms.TextInput(attrs={'class':'text-input'}),
+        widget=forms.TextInput(attrs={'class':'form-control'}),
         label=_('website'), 
         help_text=_(''), 
         required=False
     )
     location = forms.CharField(
-        widget=forms.Select(attrs={"name" : "location", "class" : "location"}),
+        widget=forms.Select(attrs={"name" : "location", "class" : "form-control"}),
         label=_('location'),
         required=False
     )
     city = forms.CharField(
-        widget=forms.Select(attrs={'name' : 'city', 'class' : 'city'}),
+        widget=forms.Select(attrs={'name' : 'city', 'class' : 'form-control'}),
         label=_('city'),
         required=False
     )
 
 class SettingAccountForm(SignUpAccountBioFrom):
-    nickname = forms.CharField(widget=forms.TextInput(attrs={'class':'text-input'}),
+    nickname = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),
                                label=_('nickname'), help_text=_(''), required=False)
-    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'text-input', 'placeholder': _('email')}),
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('email')}),
                              label=_('email'), help_text=_(''))
 
 class ChangePasswordForm(forms.Form):
