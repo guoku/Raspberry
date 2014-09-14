@@ -23,8 +23,6 @@ window.location.href = url;</script><![endif]-->
 
     <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
 
-
-{#    <meta name="viewport" content="width=device-width">#}
     <meta content="果库,Guoku" property="og:site_name">
     <meta content="http://www.guoku.com" property="og:url">
     <meta content="果库,Guoku" property="og:title">
@@ -49,7 +47,7 @@ window.location.href = url;</script><![endif]-->
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand hidden-sm" href="http://guoku.com">果库</a>
+                <a class="navbar-brand hidden-sm" href="{{ request.hostname }}">果库</a>
             </div>
             <div class="navbar-collapse collapse" role="navigation">
                 <ul class="nav navbar-nav">
