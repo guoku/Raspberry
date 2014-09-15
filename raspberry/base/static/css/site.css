@@ -48,14 +48,18 @@ a:focus {
 /* 去圆角处理 */
 .thumbnail {
     border-radius: 0;
-    -webkit-box-shadow: inherit;
-    box-shadow: inherit;
 }
 
 .panel {
     border-radius: 0;
+    -webkit-box-shadow: inherit;
+    box-shadow: inherit;
 }
 
+.btn {
+    border: 0;
+    border-radius: 0px;
+}
 /* 导航栏选中状态处理 */
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
     background-color: initial;
