@@ -54,5 +54,24 @@ body {
 }
 .btn-like {
     display: inline-block;
+    /*border-radius: 0;*/
+    background-color: #fff;
     border-radius: 0;
+    border-color: #ccc;
+    /*border: #cccccc solid 1px;*/
+    color: #333;
+}
+.btn-like:hover,
+.btn-like:focus,
+.btn-like:active,
+.btn-like.active,
+.open > .dropdown-toggle.btn-default {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.btn-like:active,
+.btn-like.active,
+.open > .dropdown-toggle.btn-like {
+  background-image: none;
 }

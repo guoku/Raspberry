@@ -37,7 +37,8 @@
                             <img class="lazy img-responsive" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}">
                         </a>
                         <div class="caption">
-                            <p>{{ selection.note_context.content|truncatechars:90 }}</p>
+                            <p>{{ selection.note_context.content|truncatechars:60 }}</p>
+                            <a class="btn btn-like" href="#">{% trans 'likes' %}</a>
                         </div>
                     </div>
                 </div>
