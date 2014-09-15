@@ -18,9 +18,11 @@
                 <div class="col-xs-6 col-sm-4 col-md-3">
                     <div class="thumbnail">
                         <div class="img-box">
-                            <a href="{% url 'web_detail' popular.entity_context.entity_hash %}">
-                                <img class="img-responsive" alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
-                            </a>
+                            <div>
+                                <a href="{% url 'web_detail' popular.entity_context.entity_hash %}">
+                                    <img class="img-responsive" alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

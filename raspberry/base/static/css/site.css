@@ -67,11 +67,20 @@ a:focus {
     padding-bottom:100%;
 }
 
-.img-box > a >img
+.img-box > div{
+    display:block;
+    height:auto;
+}
+
+.img-box > div > a{
+    display:inline-block;
+    vertical-align: middle;
+}
+
+.img-box > div > a >img
 {
     max-height:100%;
     max-width:100%;
-    vertical-align: middle;
 }
 
 
