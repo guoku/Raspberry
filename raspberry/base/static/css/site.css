@@ -27,6 +27,11 @@ body {
     /*border-radius: 0;*/
 /*}*/
 
+.navbar-brand {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
 .thumbnail {
     border-radius: 0;
 }
@@ -50,7 +55,7 @@ body {
 .popular-box {
     /*border-bottom: 1px solid #cccccc;*/
     display: block;
-    height: 240px;
+    height: 215px;
     /*width: 240px;*/
     /*text-align: center;*/
 }
