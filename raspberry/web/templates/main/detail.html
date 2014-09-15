@@ -55,13 +55,15 @@
                 </div>
 
                 <div class="row">
-                    <h4>相似推荐</h4>
+                    <div class="col-md-12"><h4>相似推荐</h4></div>
                     {% for entity_context in guess_entity_context %}
                         <div class="col-xs-6 col-sm-3">
                             <div class="thumbnail">
-                                <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank">
-                                    <img class="img-responsive" src="{{ entity_context.chief_image.url|resize:'240' }}" alt="">
-                                </a>
+                                <div class="img-box">
+                                    <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank">
+                                        <img class="img-responsive" src="{{ entity_context.chief_image.url|resize:'240' }}" alt="">
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}

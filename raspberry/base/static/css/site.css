@@ -14,6 +14,7 @@
   }
 }
 
+/* 最大宽度限制处理 */
 @media (min-width: 1200px){
     .container {
         width: 970px;
@@ -25,7 +26,7 @@ body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
     font-family: "Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
 }
 body {
-    padding-top: 50px;
+    padding-top: 100px;
     /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
 }
 /*.gk-selection-flow .thumbnail-gk .pic-container .good-pic {*/
@@ -39,6 +40,13 @@ a {
     text-decoration: none;
 }
 
+a:hover,
+a:focus {
+  color: #333333;
+  text-decoration: underline;
+}
+
+/* 去圆角处理 */
 .thumbnail {
     border-radius: 0;
 }
@@ -46,6 +54,30 @@ a {
 .panel {
     border-radius: 0;
 }
+
+/* 导航栏选中状态处理 */
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    background-color: initial;
+}
+
+/* 图片宽高相等处理 */
+.img-box{
+    display:block;
+    height:0;
+    padding-bottom:100%;
+}
+
+.img-box > a >img
+{
+    max-height:100%;
+    max-width:100%;
+    vertical-align: middle;
+}
+
+
+
+
+
 
 .thumbnail-gk {
     height: 448px;
