@@ -54,19 +54,19 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <h4>相似推荐</h4>
-                    {% for entity_context in guess_entity_context %}
-                        <div class="col-xs-6 col-sm-3">
-                            <div class="thumbnail">
-                                <a href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank">
+{#                <div class="row">#}
+                <h4>相似推荐</h4>
+                {% for entity_context in guess_entity_context %}
+                    <div class="col-xs-6 col-sm-3">
+                            <div class="thumbnail thumbnail-recommend">
+                                <a class="recommend-box" href="{% url 'web_detail' entity_context.entity_hash %}" target="_blank">
                                     <img class="img-responsive" src="{{ entity_context.chief_image.url|resize:'240' }}" alt="">
                                 </a>
                             </div>
-                        </div>
-                    {% endfor %}
+                    </div>
+                {% endfor %}
 
-                </div>
+{#                </div>#}
             </div>
 
             <div class="col-sm-4 col-md-4" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
