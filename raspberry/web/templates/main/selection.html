@@ -38,12 +38,14 @@
             {% for selection in selection_list %}
                 <div class="col-sm-6 col-md-4">
                     <div class="thumbnail thumbnail-selection">
-                        <a class="selection-box"  href="{% url 'web_detail' selection.entity_context.entity_hash %}">
-                            <img class="lazy img-responsive" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}">
-                        </a>
+                        <div class="img-box">
+                            <a  href="{% url 'web_detail' selection.entity_context.entity_hash %}">
+                                <img class="lazy img-responsive" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}">
+                            </a>
+                        </div>
                         <div class="caption">
                             <p>{{ selection.note_context.content|truncatechars:60 }}</p>
-                            <a class="btn btn-like" href="#">{% trans 'likes' %}</a>
+                            <a class="btn btn-like" href="#"><i class="fa fa-heart-o"></i> {% trans 'likes' %}</a>
                         </div>
                     </div>
                 </div>
