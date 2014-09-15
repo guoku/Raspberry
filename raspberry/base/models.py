@@ -5,7 +5,10 @@ from django.db import models
 
 from stream_models import *
 from manager.entity import EntityManager
+from django.conf import settings
 
+
+image_server = getattr(settings, 'IMAGE_SERVER', None)
 
 class BaseModel(models.Model):
 
@@ -62,6 +65,10 @@ class Avatar(models.Model):
     class Meta:
         app_label = 'base'
         ordering = ['-uploaded_time']
+
+    @property
+    def avatar_small_url(self):
+        return "%s%s" % (image_server, self.avatar_small)
 
 class Seed_User(models.Model):
     user_id = models.IntegerField(null = False, db_index = True, unique = True)

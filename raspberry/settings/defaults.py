@@ -1,7 +1,10 @@
 import os.path
 
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('guoku', 'hi@guoku.com'),
 )
 
 MANAGERS = ADMINS
@@ -14,7 +17,7 @@ LANGUAGE_CODE = 'zh-cn'
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
-# USE_TZ = True
+USE_TZ = False
 
 LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), '../conf/locale'),
@@ -127,4 +130,8 @@ MAILGUN_SERVER_NAME = 'post.guoku.com'
 EMAIL_SUBJECT_PREFIX = '[guoku]'
 
 
+MOGILEFS_DOMAIN = 'prod'
+MOGILEFS_TRACKERS = ['10.0.2.50:7001']
+IMAGE_LOCAL = DEBUG
+IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 IMAGES_SIZE = [64, 128, 240, 310, 480, 640]
