@@ -1,18 +1,25 @@
-@media (min-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 51px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #ffffff;
-    border-right: 1px solid #eee;
-  }
+@-moz-document url-prefix() {
+    fieldset {
+        display: table-cell;
+    }
 }
+body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
+    font-family: "Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+}
+body {
+    padding-top: 100px;
+    /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
+}
+
+/*.sub-header {*/
+    /*border-bottom: 1px solid rgb(238, 238, 238);*/
+    /*padding-bottom: 10px;*/
+/*}*/
+/*.navbar-fixed-top {*/
+    /*border: 0 none;*/
+/*}*/
+
+
 
 /* 最大宽度限制处理 */
 @media (min-width: 1200px){
@@ -22,13 +29,7 @@
 }
 
 
-body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
-    font-family: "Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
-}
-body {
-    padding-top: 100px;
-    /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
-}
+
 /*.gk-selection-flow .thumbnail-gk .pic-container .good-pic {*/
     /*height: 310px;*/
     /*border-radius: 0;*/
@@ -58,7 +59,7 @@ a:focus {
 
 .btn {
     border: 0;
-    border-radius: 0px;
+    border-radius: 0;
 }
 /* 导航栏选中状态处理 */
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
@@ -70,6 +71,7 @@ a:focus {
     display:block;
     height:0;
     padding-bottom:100%;
+    /*border-bottom: 1px solid #cccccc;*/
 }
 
 .img-box > a{
@@ -91,6 +93,7 @@ a:focus {
     max-width:100%;
 }
 
+<<<<<<< HEAD
 /* 商品详情页喜爱头像列表 */
 .like-user-list > div
 {
@@ -104,6 +107,11 @@ a:focus {
   padding:0px;
   border:0px;
   margin: 0 5px 10px 5px;
+}
+
+.caption {
+    border-top: 1px solid #cccccc;
+    margin-top: 5px;
 }
 
 /* 商品详情页分类 */
@@ -120,17 +128,17 @@ a:focus {
     border: 1px solid #f1f1f1;
 }
 
-
 .thumbnail-gk {
 
 }
+
 .list-unstyled {
     list-style: none outside none;
     padding-left: 0;
 }
 
 .jumbotron {
-    margin-top: -20px;
+    margin-top: -50px;
 }
 
 .navbar-brand {
@@ -160,9 +168,9 @@ a:focus {
     padding: 0 10px;
 }
 
-.thumbnail {
-    border-radius: 0;
-}
+/*.thumbnail {*/
+    /*border-radius: 0;*/
+/*}*/
 .thumbnail-selection {
     height: 448px;
     /*text-align: center;*/
@@ -236,5 +244,9 @@ a:focus {
 .btn-like.active,
 .open > .dropdown-toggle.btn-like {
   background-image: none;
+}
+
+.breadcrumb {
+    background: none;
 }
 

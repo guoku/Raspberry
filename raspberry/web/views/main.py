@@ -35,22 +35,22 @@ def index(request):
 @require_http_methods(['GET'])
 def selection(request, template='main/selection.html'):
     
-    _user_agent = request.META['HTTP_USER_AGENT']
-    if _user_agent == None:
-        log.error("[selection] Remote Host [%s] access selection without user agent" % (request.META['REMOTE_ADDR']))
-        raise Http404
+    # _user_agent = request.META['HTTP_USER_AGENT']
+    # if _user_agent == None:
+    #     log.error("[selection] Remote Host [%s] access selection without user agent" % (request.META['REMOTE_ADDR']))
+    #     raise Http404
     
-    _agent = request.GET.get('agent', 'default')
-    if _agent == 'default' :
-        if 'iPhone' in _user_agent :
-            _agent = 'iphone'
-        if 'Android' in _user_agent :
-            _agent = 'android'
-    if _agent == 'iphone' or _agent == 'android' :
-        return HttpResponseRedirect(reverse('wap_selection'))
+    # _agent = request.GET.get('agent', 'default')
+    # if _agent == 'default' :
+    #     if 'iPhone' in _user_agent :
+    #         _agent = 'iphone'
+    #     if 'Android' in _user_agent :
+    #         _agent = 'android'
+    # if _agent == 'iphone' or _agent == 'android' :
+    #     return HttpResponseRedirect(reverse('wap_selection'))
+    #
     
-    
-    _start_at = datetime.now()
+    # _start_at = datetime.now()
     if request.user.is_authenticated():
         _request_user_id = request.user.id
         _request_user_context = User(_request_user_id).read() 
@@ -101,19 +101,19 @@ def selection(request, template='main/selection.html'):
 	        # print '.............', e.message
             # pass
 
-    _duration = datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='SELECTION', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'root_category_id' : int(_category_id),
-            'result_entities' : _entity_id_list,
-        },
-    )
+    # _duration = datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='SELECTION',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'root_category_id' : int(_category_id),
+    #         'result_entities' : _entity_id_list,
+    #     },
+    # )
     # 判断是否第一次加载
     # if _page_num == 1:
     if request.is_ajax():

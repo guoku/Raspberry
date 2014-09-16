@@ -4,26 +4,45 @@
 
 {% block title %}品类 － {{ category_id|trans_category }}{% endblock %}
 {% block keyword %}{{ category_id|trans_category }}{% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/category.css' %}">{% endblock %}
+{#{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/category.css' %}">{% endblock %}#}
 {% block content %}
-    <div id="category">
-        <div class="nav">
-            <ul>
-                <li>{{ category_id|trans_category }}</li>
-            </ul>
+    <div class="container">
+        <div class="row">
+            <p>{{ category_id|trans_category }}</p>
         </div>
-
-{#        <div class="category">#}
-            <ul class="entities">
-            {% spaceless %}
-                {% for entity in entity_list %}
-                    {% display_common_entity entity %}
-                {% endfor %}
-            {% endspaceless %}
-            </ul>
-{#        </div>#}
-        {% if paginator %}
-            {% display_web_paginator paginator %}
-        {% endif %}
+        <div class="row">
+            {% for entity in entity_list %}
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                <div class="thumbnail">
+                    <div class="img-box">
+                    <a href="{% url 'web_detail' entity.entity_hash %}">
+                        <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity.chief_image.url|resize:'240' }}">
+                    </a>
+                    </div>
+{#                    </a>#}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
+{#    <div id="category">#}
+{#        <div class="nav">#}
+{#            <ul>#}
+{#                <li>{{ category_id|trans_category }}</li>#}
+{#            </ul>#}
+{#        </div>#}
+{##}
+{#        <div class="category">#}
+{#            <ul class="entities">#}
+{#            {% spaceless %}#}
+{#                {% for entity in entity_list %}#}
+{#                    {% display_common_entity entity %}#}
+{#                {% endfor %}#}
+{#            {% endspaceless %}#}
+{#            </ul>#}
+{#        </div>#}
+{#        {% if paginator %}#}
+{#            {% display_web_paginator paginator %}#}
+{#        {% endif %}#}
+{#    </div>#}
 {% endblock %}

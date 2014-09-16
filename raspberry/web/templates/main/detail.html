@@ -38,7 +38,6 @@
                         <li><a href="{% url 'web_selection' %}">{% trans 'selection' %}</a></li>
                     {% endif %}
                     <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
-                    <li class="active">{% if entity_context.brand|length != 0 %}{{ entity_context.brand }} - {% endif %}{{ entity_context.title }}</li>
                 </ol>
             </div>
         </div>
@@ -74,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-4 col-md-4" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
+            <div class="col-sm-4" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
                 {% include "main/partial/detail_side.html" %}
             </div>
         </div>
