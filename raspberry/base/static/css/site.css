@@ -82,18 +82,17 @@ a:focus {
     left: 50%;
     -webkit-transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,50%);
     transform: translate(-50%,-50%);
 }
 
 .img-box > a >img
 {
-    display:inline-block;
-    vertical-align: middle;
     max-height:100%;
     max-width:100%;
 }
 
-<<<<<<< HEAD
 /* 商品详情页喜爱头像列表 */
 .like-user-list > div
 {
