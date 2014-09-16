@@ -13,11 +13,12 @@
         <div class="row">
             {% for entity in entity_list %}
             <div class="col-xs-6 col-sm-4 col-md-3">
-                <div class="thumbnail img-box">
-{#                    <div class="">#}
+                <div class="thumbnail">
+                    <div class="img-box">
                     <a href="{% url 'web_detail' entity.entity_hash %}">
                         <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity.chief_image.url|resize:'240' }}">
                     </a>
+                    </div>
 {#                    </a>#}
                 </div>
             </div>

@@ -45,7 +45,7 @@
                         </div>
                         <div class="caption">
                             <p>{{ selection.note_context.content|truncatechars:60 }}</p>
-                            <a class="btn btn-like" href="#"><i class="fa fa-heart-o"></i> {% trans 'likes' %}</a>
+                            <a class="btn btn-like" href="#"><i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ selection.entity_context.like_count }}</span></a>
                         </div>
                     </div>
                 </div>
