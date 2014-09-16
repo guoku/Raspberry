@@ -214,3 +214,7 @@ a:focus {
   background-image: none;
 }
 
+.breadcrumb {
+    background: none;
+}
+
