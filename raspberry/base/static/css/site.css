@@ -3,37 +3,23 @@
         display: table-cell;
     }
 }
+body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
+    font-family: "Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+}
+body {
+    padding-top: 100px;
+    /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
+}
 
-@media (min-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 51px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #ffffff;
-    border-right: 1px solid #eee;
-  }
-}
-.nav-sidebar {
-  margin-right: -21px; /* 20px padding + 1px border */
-  margin-bottom: 20px;
-  margin-left: -20px;
-}
-.nav-sidebar > li > a {
-  padding-right: 20px;
-  padding-left: 20px;
-}
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-  color: #fff;
-  background-color: #428bca;
-}
+/*.sub-header {*/
+    /*border-bottom: 1px solid rgb(238, 238, 238);*/
+    /*padding-bottom: 10px;*/
+/*}*/
+/*.navbar-fixed-top {*/
+    /*border: 0 none;*/
+/*}*/
+
+
 
 /* 最大宽度限制处理 */
 @media (min-width: 1200px){
@@ -43,13 +29,7 @@
 }
 
 
-body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
-    font-family: "Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
-}
-body {
-    padding-top: 100px;
-    /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
-}
+
 /*.gk-selection-flow .thumbnail-gk .pic-container .good-pic {*/
     /*height: 310px;*/
     /*border-radius: 0;*/
@@ -120,11 +100,6 @@ a:focus {
 
 
 
-
-
-.thumbnail-gk {
-
-}
 .list-unstyled {
     list-style: none outside none;
     padding-left: 0;
