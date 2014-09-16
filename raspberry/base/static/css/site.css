@@ -91,9 +91,34 @@ a:focus {
     max-width:100%;
 }
 
+/* 商品详情页喜爱头像列表 */
+.like-user-list > div
+{
+    padding:0px;
+    margin:0px;
+    width:35px;
+}
+
+.like-user-list > div > .thumbnail
+{
+  padding:0px;
+  border:0px;
+  margin: 0 5px 10px 5px;
+}
+
+/* 商品详情页分类 */
+.detail-category{
+    background: #f0f0f0;
+    padding: 15px 0 15px 15px;
+}
+.detail-category > a{
+    color: #427ec0;
+}
 
 
-
+.list-group-item {
+    border: 1px solid #f1f1f1;
+}
 
 
 .thumbnail-gk {
