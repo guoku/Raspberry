@@ -8,6 +8,7 @@ body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
 }
 body {
     padding-top: 100px;
+    color: #666;
     /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
 }
 
@@ -221,6 +222,7 @@ a:focus {
 .btn-buy > span {
     font: 22px Georgia,serif;
 }
+/* 喜欢按钮 */
 .btn-like {
     display: inline-block;
     /*border-radius: 0;*/
@@ -245,13 +247,38 @@ a:focus {
   background-image: none;
 }
 
+/* */
 .breadcrumb {
     background: none;
 }
 
+/* 自定义翻页 */
 .pager > li > a {
     margin-left: 5px;
     margin-right: 5px;
     border-radius: 0;
+    color: #898989;
+    font-weight: 700;
+}
+.pager .disabled > a {
+    background-color: #427DBF;
+    cursor: not-allowed;
+    color: #fff
 }
 
+
+/* 分类页面 */
+.category-header {
+    background-color: #FBFBFB;
+    border: 1px solid #eee;
+    height: 40px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 30px;
+}
+.category-header > p {
+    padding-left: 40px;
+    font-size: 16px;
+    line-height: 38px;
+    /*color: rgb(102, 102, 102);*/
+}
