@@ -282,3 +282,21 @@ a:focus {
     line-height: 38px;
     /*color: rgb(102, 102, 102);*/
 }
+
+/* 搜索页面 */
+.navbar-search {
+    background-color: #F8F8F8;
+    /*border-color: ;*/
+    border: 1px solid #E7E7E7;
+    min-height: 38px;
+}
+
+.search-header >h2 {
+    font-size: 18px;
+    font-weight: 400;
+    margin: 20px 0 25px;
+}
+.search-header >h2 >span {
+    color: #333;
+    margin-right: 10px;
+}

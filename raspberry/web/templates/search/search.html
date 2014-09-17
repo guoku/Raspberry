@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% load web_common %}
+{% load web_common entity %}
 
 {% block title %}商品搜索 － {{ query }}{% endblock %}
 {#{% block css %}#}
@@ -9,15 +9,37 @@
 {#{% endblock %}#}
 {% block content %}
     <div class="container">
+        <div class="row search-header">
+            <h2><span>「{{ query }}」</span>的搜索结果</h2>
+        </div>
+        <nav class="navbar navbar-search navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="{% url 'web_search' %}?q={{ query }}&g=e">商品 <strong>{{ entity_result_count }}</strong></a>
+                        </li>
+                        <li>
+                            <a href="{% url 'web_search' %}?q={{ query }}&g=u">用户 <strong>{{ user_result_count }}</strong></a>
+                        </li>
+                        <li>
+                            <a href="{% url 'web_search' %}?q={{ query }}&g=t">标签 <strong>{{tag_result_count}}</strong></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
         <div class="row">
             {% if group == 'e' %}
                 {% if entity_list|length > 0 %}
                     {% for entity_context in entity_list %}
                         <div class="col-xs-6 col-sm-3">
                             <div class="thumbnail">
-                                <a class="img-box" href="">
-                                    <img class="img-responsive" src="">
-                                </a>
+                                <div class="img-box">
+                                    <a href="{% url 'web_detail' entity_context.entity_hash %}">
+                                        <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity_context.chief_image.url|resize:'240' }}">
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
@@ -29,10 +51,12 @@
 {#                </ul>#}
             {% endif %}
 
-            {% if paginator %}
-                {% include "common/web_paginator.html" with paginator=paginator %}
-            {% endif %}
+
         </div>
+
+        {% if paginator %}
+            {% include "common/web_paginator.html" with paginator=paginator %}
+        {% endif %}
     </div>
 {#    <div id="search">#}
 {#        <h2><span>「{{ query }}」</span>的搜索结果</h2>#}

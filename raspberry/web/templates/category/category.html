@@ -19,24 +19,24 @@
                 <div class="thumbnail">
                     <div class="img-box">
                     <a href="{% url 'web_detail' entity.entity_hash %}">
-                        <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity.chief_image.url|resize:'240' }}">
+                        <img class="img-responsive" alt="{{ entity.title }}" src="{{ entity.chief_image.url|resize:'240' }}">
                     </a>
                     </div>
                     <div class="caption">
+{#                        <div class="col-sm-6">#}
                         <a class="btn btn-like" href="#">
-                            <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ selection.entity_context.like_count }}</span>
+                            <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ entity.like_count }}</span>
                         </a>
+{#                        </div>#}
                     </div>
                 </div>
 
             </div>
             {% endfor %}
-
-
+        </div>
         {% if paginator %}
             {% include "common/web_paginator.html" with paginator=paginator %}
         {% endif %}
-        </div>
     </div>
 {#    <div id="category">#}
 {#        <div class="nav">#}

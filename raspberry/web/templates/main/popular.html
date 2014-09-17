@@ -33,6 +33,11 @@
                                 <img class="img-responsive" alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
                             </a>
                         </div>
+                        <div class="caption">
+                            <a class="btn btn-like" href="#">
+                                <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ popular.entity_context.like_count }}</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             {% endfor %}
