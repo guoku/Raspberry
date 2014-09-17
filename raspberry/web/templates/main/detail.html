@@ -31,9 +31,9 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <ol class="breadcrumb">
-                    <li><a href="#">Home</a></li>
+                    <li class="active">Home</li>
                     {% if selection_note %}
                         <li><a href="{% url 'web_selection' %}">{% trans 'selection' %}</a></li>
                     {% endif %}
@@ -52,8 +52,9 @@
                         <h3>{% if entity_context.brand|length != 0 %}
                             <span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span>
                         </h3>
-                        <a class="btn btn-like" href="#">
+                        <a class="btn btn-like-detail" href="#">
                             <i class="fa fa-heart-o"></i>
+                            {{ entity_context.like_count }}
                             {% trans 'likes' %}
                         </a>
                         <div class="selection-note">

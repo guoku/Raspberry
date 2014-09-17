@@ -104,14 +104,23 @@ a:focus {
 
 .like-user-list > div > .thumbnail
 {
-  padding:0px;
-  border:0px;
+  padding:0;
+  border:0;
   margin: 0 5px 10px 5px;
 }
 
 .caption {
-    border-top: 1px solid #cccccc;
+    border-top: 1px solid #ccc;
     margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.guoku-caption {
+    border-top: 1px solid #ccc;
+    margin: 5px 5px 0 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 /* 商品详情页分类 */
@@ -128,9 +137,6 @@ a:focus {
     border: 1px solid #f1f1f1;
 }
 
-.thumbnail-gk {
-
-}
 
 .list-unstyled {
     list-style: none outside none;
@@ -216,6 +222,7 @@ a:focus {
     border-radius: 0;
 }
 
+/* 购买按钮 */
 .btn-buy {
     font-size: 16px;
 }
@@ -228,14 +235,27 @@ a:focus {
     /*border-radius: 0;*/
     background-color: #fff;
     border-radius: 0;
-    border-color: #ccc;
+    padding-left: 0;
+    padding-right: 0;
+    /*border-color: #ccc;*/
     /*border: #cccccc solid 1px;*/
+    color: #333;
+}
+.btn-like-detail {
+    display: inline-block;
+    /*border-radius: 0;*/
+    background-color: #fff;
+    border-radius: 0;
+    /*border-color: #ccc;*/
+    border: #ccc solid 1px;
     color: #333;
 }
 .btn-like:hover,
 .btn-like:focus,
-.btn-like:active,
 .btn-like.active,
+.btn-like-detail:hover,
+.btn-like-detail:focus,
+.btn-like-detail:active,
 .open > .dropdown-toggle.btn-default {
   color: #333;
   background-color: #e6e6e6;

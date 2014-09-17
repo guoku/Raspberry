@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load i18n staticfiles %}
 {% load web_common entity %}
 
 {% block title %}商品搜索 － {{ query }}{% endblock %}
@@ -40,21 +40,28 @@
                                         <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity_context.chief_image.url|resize:'240' }}">
                                     </a>
                                 </div>
-                                <div class="caption">
-
+                                <div class="row guoku-caption">
+                                    <div class="col-xs-6">
+                                        <a class="btn btn-like" href="#">
+                                            <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ entity_context.like_count }}</span>
+                                        </a>
+                                    </div>
+{#                                    <div class="col-xs-6">#}
+{##}
+{#                                    </div>#}
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
                 {% endif %}
-{#                < class="entities">#}
-{#                    {% for entity_context in entity_list %}#}
-{#                        {% display_common_entity entity_context %}#}
-{#                    {% endfor %}#}
-{#                </ul>#}
             {% endif %}
 
+            {% if group == 'u' %}
+                {% if user_list|length > 0 %}
 
+
+                {% endif %}
+            {% endif %}
         </div>
 
         {% if paginator %}
