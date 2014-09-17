@@ -14,19 +14,19 @@
         </div>
         <nav class="navbar navbar-search navbar-static-top" role="navigation">
             <div class="container">
-                <div class="navbar-collapse collapse">
+{#                <div class="navbar-collapse collapse">#}
                     <ul class="nav navbar-nav">
-                        <li class="active">
+                        <li class="active col-xs-4">
                             <a href="{% url 'web_search' %}?q={{ query }}&g=e">商品 <strong>{{ entity_result_count }}</strong></a>
                         </li>
-                        <li>
+                        <li class="col-xs-4">
                             <a href="{% url 'web_search' %}?q={{ query }}&g=u">用户 <strong>{{ user_result_count }}</strong></a>
                         </li>
-                        <li>
+                        <li class="col-xs-4">
                             <a href="{% url 'web_search' %}?q={{ query }}&g=t">标签 <strong>{{tag_result_count}}</strong></a>
                         </li>
                     </ul>
-                </div>
+{#                </div>#}
             </div>
         </nav>
         <div class="row">
