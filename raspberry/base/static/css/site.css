@@ -123,6 +123,11 @@ a:focus {
     padding-bottom: 10px;
 }
 
+
+/* 商品详情页 */
+.entity-title {
+    margin-bottom: 40px;
+}
 /* 商品详情页分类 */
 .detail-category{
     background: #f0f0f0;

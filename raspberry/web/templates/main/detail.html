@@ -49,17 +49,14 @@
                         <img itemprop="image"  src="{{ entity_context.chief_image.url|resize:'640' }}" alt="{{ entity_context.title }}">
                     </a>
                     <div class="caption">
-                        <h3>{% if entity_context.brand|length != 0 %}
+                        <h4 class="entity-title">{% if entity_context.brand|length != 0 %}
                             <span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span>
-                        </h3>
+                        </h4>
                         <a class="btn btn-like-detail" href="#">
                             <i class="fa fa-heart-o"></i>
                             {{ entity_context.like_count }}
                             {% trans 'likes' %}
                         </a>
-                        <div class="selection-note">
-
-                        </div>
                     </div>
                 </div>
 
