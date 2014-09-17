@@ -37,7 +37,7 @@
                     {% if selection_note %}
                         <li><a href="{% url 'web_selection' %}">{% trans 'selection' %}</a></li>
                     {% endif %}
-                    <li><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
+                    <li class="active"><a href="{% url 'web_category' entity_context.category_id %}">{{ entity_context.category_id|trans_category }}</a></li>
                 </ol>
             </div>
         </div>

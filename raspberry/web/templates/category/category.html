@@ -23,18 +23,20 @@
                     </a>
                     </div>
                     <div class="caption">
-
+                        <a class="btn btn-like" href="#">
+                            <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ selection.entity_context.like_count }}</span>
+                        </a>
                     </div>
                 </div>
 
             </div>
             {% endfor %}
-        </div>
+
+
         {% if paginator %}
-{#            <div class="row">#}
-                {% include "common/web_paginator.html" with paginator=paginator %}
-{#            </div>#}
+            {% include "common/web_paginator.html" with paginator=paginator %}
         {% endif %}
+        </div>
     </div>
 {#    <div id="category">#}
 {#        <div class="nav">#}
