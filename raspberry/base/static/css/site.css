@@ -249,3 +249,9 @@ a:focus {
     background: none;
 }
 
+.pager > li > a {
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 0;
+}
+

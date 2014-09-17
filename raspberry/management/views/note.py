@@ -200,9 +200,6 @@ def update_note_selection_info(request, entity_id, note_id):
         post_time = _post_time
     )
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
-    
-
-
 
 
 @login_required

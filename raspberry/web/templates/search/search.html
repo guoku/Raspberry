@@ -3,57 +3,57 @@
 {% load web_common %}
 
 {% block title %}商品搜索 － {{ query }}{% endblock %}
-{% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/search.css' %}">
-{% endblock %}
+{#{% block css %}#}
+{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">#}
+{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/search.css' %}">#}
+{#{% endblock %}#}
 {% block content %}
-    <div id="search">
-        <h2><span>「{{ query }}」</span>的搜索结果</h2>
-
-        <div class="nav">
-            <a href="{% url 'web_search' %}?q={{ query }}&g=e" {% if group == 'e' %}class="active"{% endif %}>
-                商品 <strong>{{entity_result_count}}</strong>
-            </a>
-            <a href="{% url 'web_search' %}?q={{ query }}&g=u" {% if group == 'u' %}class="active"{% endif %}>
-                用户 <strong>{{user_result_count}}</strong>
-            </a>
-            <a href="{% url 'web_search' %}?q={{ query }}&g=t" {% if group == 't' %}class="active"{% endif %}>
-                标签 <strong>{{tag_result_count}}</strong>
-            </a>
-        </div>
-        
-        {% if group == 'e' %}
-            {% if entity_list|length > 0 %}
-                <ul class="entities">
-                    {% for entity_context in entity_list %}
-                        {% display_common_entity entity_context %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-        {% elif group == 'u' %}
-            {% if user_list|length > 0 %}
-                <div class="users">
-                    {% for user_context in user_list %}
-                        {% display_common_user user_context %}
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-        {% elif group == 't' %}
-            {% if tag_list|length > 0 %}
-                <ul class="tags">
-                    {% for tag_context in tag_list %}
-                        {% display_common_tag tag_context %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-        {% endif %}
-
-        {% if paginator %}
-            {% display_web_paginator paginator %}
-        {% endif %}
-    </div>
+{#    <div id="search">#}
+{#        <h2><span>「{{ query }}」</span>的搜索结果</h2>#}
+{##}
+{#        <div class="nav">#}
+{#            <a href="{% url 'web_search' %}?q={{ query }}&g=e" {% if group == 'e' %}class="active"{% endif %}>#}
+{#                商品 <strong>{{entity_result_count}}</strong>#}
+{#            </a>#}
+{#            <a href="{% url 'web_search' %}?q={{ query }}&g=u" {% if group == 'u' %}class="active"{% endif %}>#}
+{#                用户 <strong>{{user_result_count}}</strong>#}
+{#            </a>#}
+{#            <a href="{% url 'web_search' %}?q={{ query }}&g=t" {% if group == 't' %}class="active"{% endif %}>#}
+{#                标签 <strong>{{tag_result_count}}</strong>#}
+{#            </a>#}
+{#        </div>#}
+{#        #}
+{#        {% if group == 'e' %}#}
+{#            {% if entity_list|length > 0 %}#}
+{#                <ul class="entities">#}
+{#                    {% for entity_context in entity_list %}#}
+{#                        {% display_common_entity entity_context %}#}
+{#                    {% endfor %}#}
+{#                </ul>#}
+{#            {% endif %}#}
+{##}
+{#        {% elif group == 'u' %}#}
+{#            {% if user_list|length > 0 %}#}
+{#                <div class="users">#}
+{#                    {% for user_context in user_list %}#}
+{#                        {% display_common_user user_context %}#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            {% endif %}#}
+{##}
+{#        {% elif group == 't' %}#}
+{#            {% if tag_list|length > 0 %}#}
+{#                <ul class="tags">#}
+{#                    {% for tag_context in tag_list %}#}
+{#                        {% display_common_tag tag_context %}#}
+{#                    {% endfor %}#}
+{#                </ul>#}
+{#            {% endif %}#}
+{##}
+{#        {% endif %}#}
+{##}
+{#        {% if paginator %}#}
+{#            {% display_web_paginator paginator %}#}
+{#        {% endif %}#}
+{#    </div>#}
 {% endblock %}

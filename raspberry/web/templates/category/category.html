@@ -24,6 +24,11 @@
             </div>
             {% endfor %}
         </div>
+        {% if paginator %}
+{#            <div class="row">#}
+                {% include "common/web_paginator.html" with paginator=paginator %}
+{#            </div>#}
+        {% endif %}
     </div>
 {#    <div id="category">#}
 {#        <div class="nav">#}
