@@ -74,8 +74,11 @@ window.location.href = url;</script><![endif]-->
                         <li><a href="{% url 'web_register' %}" data-toggle="modal" data-target="#SignUpModal">{% trans 'sign up' %}</a></li>
                     {% endif %}
                 </ul>
-                <form class="navbar-form navbar-right" action="{% url 'web_search' %}" method="get">
-                    <input class="form-control" name="q" type="text" placeholder="搜你想要的">
+                <form class="navbar-form navbar-right" action="{% url 'web_search' %}" method="get" role="form">
+                    <div class="form-group">
+                        <input class="form-control" name="q" type="text" placeholder="搜你想要的">
+{#                        <i class="fa fa-search"></i>#}
+                    </div>
                 </form>
             </div>
         </div>

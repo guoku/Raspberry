@@ -26,20 +26,21 @@
         </div>
         <div class="row">
             {% for popular in popular_list %}
-                <div class="col-xs-6 col-sm-4 col-md-3">
-                    <div class="thumbnail">
-                        <div class="img-box">
-                            <a href="{% url 'web_detail' popular.entity_context.entity_hash %}">
-                                <img class="img-responsive" alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
-                            </a>
-                        </div>
-                        <div class="caption">
-                            <a class="btn btn-like" href="#">
-                                <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ popular.entity_context.like_count }}</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                {% include "common/entity.html" with entity_context=popular.entity_context %}
+{#                <div class="col-xs-6 col-sm-4 col-md-3">#}
+{#                    <div class="thumbnail">#}
+{#                        <div class="img-box">#}
+{#                            <a href="{% url 'web_detail' popular.entity_context.entity_hash %}">#}
+{#                                <img class="img-responsive" alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">#}
+{#                            </a>#}
+{#                        </div>#}
+{#                        <div class="caption">#}
+{#                            <a class="btn btn-like" href="#">#}
+{#                                <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ popular.entity_context.like_count }}</span>#}
+{#                            </a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
             {% endfor %}
         </div>
     </div>
