@@ -231,10 +231,8 @@ a:focus {
 .btn-user {
     display: inline-block;
     font-size: 14px;
-    padding-left: 0;
-    padding-right: 0;
-    /*position: absolute;*/
-    /*right: 15px;*/
+    /*color: #333;*/
+    padding: 0;
 }
 /* 喜欢按钮 */
 .btn-like {
