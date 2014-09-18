@@ -64,10 +64,15 @@
                             </a>
                         </div>
                         <div class="caption">
-                            <p>{{ selection.note_context.content|truncatechars:60 }}</p>
-                            <a class="btn btn-like" href="#">
-                                <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ selection.entity_context.like_count }}</span>
-                            </a>
+                            <p class="note">{{ selection.note_context.content|truncatechars:70 }}</p>
+                            <div class="col-xs-6 col-sm-6">
+                                <a class="btn btn-like" href="{% url 'web_like_entity' selection.entity_context.entity_id '1' %}"><i class="fa fa-heart-o fa-lg"></i>&nbsp; {% trans 'likes' %} {{ selection.entity_context.like_count }}</a>
+                            </div>
+                            <div class="col-xs-6 col-sm-5 col-sm-offset-1">
+                                <a class="btn btn-like" href="{% url 'web_user_index' selection.creator_context.user_id %}"  target="_blank">
+                                    <img class="img-circle" src="{{ selection.creator_context.avatar_small }}" width="30" height="30" style="float: left;">&nbsp; {{ selection.creator_context.nickname|truncatechars:10 }}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
