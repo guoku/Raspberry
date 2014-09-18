@@ -15,22 +15,23 @@
                 <p>{{ category_id|trans_category }}</p>
             </div>
             {% for entity in entity_list %}
-            <div class="col-xs-6 col-sm-4">
-                <div class="thumbnail">
-                    <div class="img-box">
-                    <a href="{% url 'web_detail' entity.entity_hash %}">
-                        <img class="img-responsive" alt="{{ entity.title }}" src="{{ entity.chief_image.url|resize:'240' }}">
-                    </a>
-                    </div>
-                    <div class="caption">
+                {% include 'common/entity.html' with entity_context=entity %}
+{#            <div class="col-xs-6 col-sm-4">#}
+{#                <div class="thumbnail">#}
+{#                    <div class="img-box">#}
+{#                    <a href="{% url 'web_detail' entity.entity_hash %}">#}
+{#                        <img class="img-responsive" alt="{{ entity.title }}" src="{{ entity.chief_image.url|resize:'240' }}">#}
+{#                    </a>#}
+{#                    </div>#}
+{#                    <div class="caption">#}
 {#                        <div class="col-sm-6">#}
-                        <a class="btn btn-like" href="#">
-                            <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ entity.like_count }}</span>
-                        </a>
+{#                        <a class="btn btn-like" href="#">#}
+{#                            <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ entity.like_count }}</span>#}
+{#                        </a>#}
 {#                        </div>#}
-                    </div>
-                </div>
-            </div>
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
             {% endfor %}
         </div>
         {% if paginator %}
