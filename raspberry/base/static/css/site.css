@@ -131,8 +131,17 @@ a:focus {
     margin-left: 5px;
     margin-right: 5px;
 }
-.caption .note {
-    height: 80px;
+
+
+@media (min-width: 768px){
+    .caption .note {
+        height: 100px;
+    }
+}
+@media (min-width: 992px){
+    .caption .note {
+        height: 80px;
+    }
 }
 
 .guoku-caption {
