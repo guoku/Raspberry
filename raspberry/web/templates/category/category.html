@@ -15,7 +15,7 @@
                 <p>{{ category_id|trans_category }}</p>
             </div>
             {% for entity in entity_list %}
-            <div class="col-xs-6 col-sm-4 col-md-3">
+            <div class="col-xs-6 col-sm-4">
                 <div class="thumbnail">
                     <div class="img-box">
                     <a href="{% url 'web_detail' entity.entity_hash %}">
@@ -30,7 +30,6 @@
 {#                        </div>#}
                     </div>
                 </div>
-
             </div>
             {% endfor %}
         </div>

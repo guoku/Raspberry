@@ -1,31 +1,53 @@
+{% load i18n %}
 {% load entity %}
 
-<li class="common-entity">
-    <div class="title">
-        {% spaceless %}
-            <h2>
-                {% if entity_context.brand|length != 0 %}
-                    {{ entity_context.brand }}-
+
+<div class="col-xs-6 col-sm-3">
+    <div class="thumbnail">
+        <div class="img-box">
+            <a href="{% url 'web_detail' entity_context.entity_hash %}">
+                <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity_context.chief_image.url|resize:'240' }}">
+            </a>
+        </div>
+        <div class="caption">
+            <a class="btn btn-like" href="#">
+                {% if entity_context.is_user_already_like %}
+                    <i class="fa fa-heart fa-lg" style="color: red;"></i>
+                {% else %}
+                    <i class="fa fa-heart-o fa-lg"></i>
                 {% endif %}
-                {{ entity_context.title|truncatechars:16 }}
-            </h2>
-        {% endspaceless %}
-        <span class="price">&#65509;{{ entity_context.price }}</span>
+                {% trans 'likes' %} <span>{{ entity_context.like_count }}</span>
+            </a>
+        </div>
     </div>
+</div>
 
-    <a href="{% url 'web_detail' entity_context.entity_hash %}" class="entity-img" target="_blank" >
-        <img src="{{ entity_context.chief_image.url|resize:'240' }}" alt="{{ entity_context.title }}">
-    </a>
-
-    <div class="detail">
-        {% if entity_context.is_user_already_like %}
-            <a href="{% url 'web_like_entity' entity_context.entity_id '0' %}" class="like liked">
-        {% else %}
-            <a href="{% url 'web_like_entity' entity_context.entity_id '1' %}" class="like">
-        {% endif %}
-            <span class="icon"></span>喜爱
-            <span class="count">{{ entity_context.like_count }}</span>
-        </a>
-        <span class="price">价格<span>&#65509;{{ entity_context.price }}</span></span>
-    </div>
-</li>
+{#<li class="common-entity">#}
+{#    <div class="title">#}
+{#        {% spaceless %}#}
+{#            <h2>#}
+{#                {% if entity_context.brand|length != 0 %}#}
+{#                    {{ entity_context.brand }}-#}
+{#                {% endif %}#}
+{#                {{ entity_context.title|truncatechars:16 }}#}
+{#            </h2>#}
+{#        {% endspaceless %}#}
+{#        <span class="price">&#65509;{{ entity_context.price }}</span>#}
+{#    </div>#}
+{##}
+{#    <a href="{% url 'web_detail' entity_context.entity_hash %}" class="entity-img" target="_blank" >#}
+{#        <img src="{{ entity_context.chief_image.url|resize:'240' }}" alt="{{ entity_context.title }}">#}
+{#    </a>#}
+{##}
+{#    <div class="detail">#}
+{#        {% if entity_context.is_user_already_like %}#}
+{#            <a href="{% url 'web_like_entity' entity_context.entity_id '0' %}" class="like liked">#}
+{#        {% else %}#}
+{#            <a href="{% url 'web_like_entity' entity_context.entity_id '1' %}" class="like">#}
+{#        {% endif %}#}
+{#            <span class="icon"></span>喜爱#}
+{#            <span class="count">{{ entity_context.like_count }}</span>#}
+{#        </a>#}
+{#        <span class="price">价格<span>&#65509;{{ entity_context.price }}</span></span>#}
+{#    </div>#}
+{#</li>#}

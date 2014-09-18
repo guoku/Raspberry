@@ -1,19 +1,52 @@
 {% extends "base.html" %}
 {% load i18n staticfiles %}
-{% load web_common %}
+{% load web_common entity %}
 
 {% block title %}
     {{ query_user_context.nickname|default:'我的果库' }}
     {% block subtitle %}{% endblock %}
 {% endblock %}
 {% block keyword %}果库,{{ query_user_context.nickname }}{% endblock %}
-{#{% block description %}果库,{{ query_user_context.nickname }},{{ query_user_context.bio }}{% endblock %}#}
+{% block description %}果库,{{ query_user_context.nickname }},{{ query_user_context.bio }}{% endblock %}
 
 {#{% block css %}#}
 {#    <link rel="stylesheet" type="text/css" href="{% static 'styles/user.css' %}">#}
 {#{% endblock %}#}
 
 {% block content %}
+    {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
+    <div class="container">
+
+        <div class="row">
+            {% if web_user_likes_url in request.path %}
+                {% for entity_context in entity_list %}
+                    {% include "common/entity.html" with entity_context=entity_context %}
+{#                    <div class="col-xs-6 col-sm-3">#}
+{#                        <div class="thumbnail">#}
+{#                            <div class="img-box">#}
+{#                                <a href="{% url 'web_detail' entity_context.entity_hash %}">#}
+{#                                    <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity_context.chief_image.url|resize:'240' }}">#}
+{#                                </a>#}
+{#                            </div>#}
+{#                            <div class="caption">#}
+{#                                <a class="btn btn-like" href="#">#}
+{#                                    {% if entity_context.is_user_already_like %}#}
+{#                                        <i class="fa fa-heart fa-lg"></i>#}
+{#                                    {% else %}#}
+{#                                        <i class="fa fa-heart fa-lg"></i>#}
+{#                                    {% endif %}#}
+{#                                    {% trans 'likes' %} <span>{{ popular.entity_context.like_count }}</span>#}
+{#                                </a>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+                {% endfor %}
+                {% if paginator %}
+                    {% include "common/web_paginator.html" with paginator=paginator %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
 {#    {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}#}
 {#    {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}#}
 {#    {% url 'web_user_tags'  query_user_context.user_id as web_user_tags_url %}#}
