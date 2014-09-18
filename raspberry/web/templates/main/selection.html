@@ -30,12 +30,15 @@
                     <h3 class="welcome">大开眼界的剁手指南，
                     <br>
                     一目了然的优质生活主张。 </h3>
-                    <div class="row">
-                        <div class="col-sm-4">
+                    <div class="row welcome-sign">
+                        <div class="col-sm-3">
                             <a class="btn btn-primary btn-lg" type="button" href="{% url 'web_register' %}" data-toggle="modal" data-target="#SignUpModal" >注册账号</a>
                         </div>
-                        <div class="col-sm-8">
-                            <span>已有账号，</span> <a class="btn btn-link" type="button" href="{% url 'web_login' %}?next={{ request.path }}" data-toggle="modal" data-target="#SignInModal">从这里登录</a>
+                        <div class="col-sm-9">
+                            <div class="welcome-login">
+                                <span>已有账号，</span>
+                                <a class="btn btn-link btn-lg" type="button" href="{% url 'web_login' %}?next={{ request.path }}" data-toggle="modal" data-target="#SignInModal">从这里登录</a>
+                            </div>
                         </div>
                     </div>
                 </div>

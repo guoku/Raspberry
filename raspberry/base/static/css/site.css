@@ -100,6 +100,16 @@ a:focus {
     max-width:100%;
 }
 
+/* welcome */
+.welcome-sign {
+    margin-top: 30px;
+}
+.welcome-login {
+    font-size: 18px;
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
 /* 商品详情页喜爱头像列表 */
 .like-user-list > div
 {
@@ -122,7 +132,7 @@ a:focus {
     margin-right: 5px;
 }
 .caption .note {
-
+    height: 80px;
 }
 
 .guoku-caption {
