@@ -158,7 +158,8 @@ a:focus {
 }
 /* 商品详情页分类 */
 .detail-category{
-    background: #f0f0f0;
+    border: 1px solid #f1f1f1;
+    background: #fbfbfb;
     padding: 15px 0 15px 15px;
 }
 .detail-category > a{
@@ -257,9 +258,8 @@ a:focus {
 }
 .btn-like-detail {
     display: inline-block;
-    /*border-radius: 0;*/
+    border-radius: 5px;
     background-color: #fff;
-    border-radius: 0;
     /*border-color: #ccc;*/
     border: #ccc solid 1px;
     color: #333;
@@ -287,6 +287,7 @@ a:focus {
 /* */
 .breadcrumb {
     background: none;
+    padding: 0px;
 }
 
 /* 自定义翻页 */

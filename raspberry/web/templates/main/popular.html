@@ -14,14 +14,12 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-md-12">
                 <ol class="breadcrumb">
                     <li {% if group == 'daily' %}class="active"{% endif %}><a href="{% url 'web_popular' %}?group=daily">24 小时</a></li>
                     <li {% if group == 'weekly' %}class="active"{% endif %}><a href="{% url 'web_popular' %}?group=weekly">7 天</a></li>
+                    <p class="pull-right">最近更新：{{ popular_updated_time|format_time }}</p>
                 </ol>
-            </div>
-            <div class="col-sm-offset-3 col-sm-3 hidden-xs hidden-sm">
-                <p>最近更新：{{ popular_updated_time|format_time }}</p>
             </div>
         </div>
         <div class="row">
