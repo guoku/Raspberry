@@ -56,7 +56,7 @@
         </div>
         <div class="row">
             {% for selection in selection_list %}
-                <div class="col-sm-6 col-md-4">
+                <div class="col-sm-4">
                     <div class="thumbnail thumbnail-selection">
                         <div class="img-box">
                             <a  href="{% url 'web_detail' selection.entity_context.entity_hash %}">
@@ -65,12 +65,16 @@
                         </div>
                         <div class="caption">
                             <p class="note">{{ selection.note_context.content|truncatechars:70 }}</p>
-                            <div class="col-xs-6 col-sm-6">
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-5 col-sm-offset-1">
                                 <a class="btn btn-like" href="{% url 'web_like_entity' selection.entity_context.entity_id '1' %}"><i class="fa fa-heart-o fa-lg"></i>&nbsp; {% trans 'likes' %} {{ selection.entity_context.like_count }}</a>
                             </div>
                             <div class="col-xs-6 col-sm-5 col-sm-offset-1">
-                                <a class="btn btn-like" href="{% url 'web_user_index' selection.creator_context.user_id %}"  target="_blank">
-                                    <img class="img-circle" src="{{ selection.creator_context.avatar_small }}" width="30" height="30" style="float: left;">&nbsp; {{ selection.creator_context.nickname|truncatechars:10 }}
+                                <a class="btn btn-user" href="{% url 'web_user_index' selection.creator_context.user_id %}"  target="_blank">
+                                    <p>
+                                    <img class="img-circle" src="{{ selection.creator_context.avatar_small }}" width="30" height="30" >&nbsp; {{ selection.creator_context.nickname|truncatechars:10 }}
+                                    </p>
                                 </a>
                             </div>
                         </div>

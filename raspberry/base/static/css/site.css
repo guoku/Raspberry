@@ -217,6 +217,15 @@ a:focus {
 .btn-buy > span {
     font: 22px Georgia,serif;
 }
+/* 用户按钮*/
+.btn-user {
+    display: inline-block;
+    font-size: 14px;
+    padding-left: 0;
+    padding-right: 0;
+    /*position: absolute;*/
+    /*right: 15px;*/
+}
 /* 喜欢按钮 */
 .btn-like {
     display: inline-block;
@@ -238,6 +247,9 @@ a:focus {
     border: #ccc solid 1px;
     color: #333;
 }
+.btn-user:hover,
+.btn-user:focus,
+.btn-user:active,
 .btn-like:hover,
 .btn-like:focus,
 .btn-like.active,
