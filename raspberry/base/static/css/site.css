@@ -67,6 +67,12 @@ a:focus {
     background-color: initial;
 }
 
+.nav-home {
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 20px;
+}
+
 /* 图片宽高相等处理 */
 .img-box{
     display:block;
