@@ -20,11 +20,11 @@
         <img class="img-responsive img-circle" src="{{ user.avatar.avatar_small_url }}" style="width: 30px; height: 30px;">
     </a>
     <ul class="dropdown-menu" role="menu">
-        <li><span class="icon-guoku"></span><a href="{% url 'web_user_index' user.pk %}">{% trans "my guoku" %}</a></li>
-        <li><span class="icon-setting"></span><a href="{% url 'web_setting' %}">{% trans "settings" %}</a></li>
         {% if user.is_staff %}
-            <li><span class="icon-setting"></span><a href="{% url 'management_entity_list' %}">管理</a></li>
+            <li><a href="{% url 'management_entity_list' %}"><i class="fa fa-pencil-square-o fa-lg"></i>&nbsp; 管理</a></li>
         {% endif %}
-        <li><span class="icon-signout"></span><a href="{% url 'web_logout' %}">{% trans "sign out" %}</a></li>
+        <li><a href="{% url 'web_user_index' user.pk %}"><i class="fa fa-user fa-lg"></i>&nbsp; {% trans "my guoku" %}</a></li>
+        <li><a href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans "settings" %}</a></li>
+        <li><a href="{% url 'web_logout' %}"><i class="fa fa-sign-out fa-lg"></i>&nbsp; {% trans "sign out" %}</a></li>
     </ul>
 </li>
