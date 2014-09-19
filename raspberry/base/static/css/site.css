@@ -12,13 +12,10 @@ body {
     /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
 }
 
-/*.sub-header {*/
-    /*border-bottom: 1px solid rgb(238, 238, 238);*/
-    /*padding-bottom: 10px;*/
-/*}*/
-/*.navbar-fixed-top {*/
-    /*border: 0 none;*/
-/*}*/
+
+i {
+    color: #666;
+}
 
 
 
@@ -31,10 +28,6 @@ body {
 
 
 
-/*.gk-selection-flow .thumbnail-gk .pic-container .good-pic {*/
-    /*height: 310px;*/
-    /*border-radius: 0;*/
-/*}*/
 
 a {
     color: #333333;

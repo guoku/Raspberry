@@ -66,6 +66,7 @@ window.location.href = url;</script><![endif]-->
                         <a href="{{ web_popular_url }}">{% trans 'popular' %}</a>
                     </li>
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated  %}
                         {% include 'account/partial/auth.html' with user_context=request.user %}

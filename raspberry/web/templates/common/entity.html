@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load entity %}
 
-
+{% url 'web_popular' as web_popular_url %}
 <div class="col-xs-6 col-sm-3">
     <div class="thumbnail">
         <div class="img-box">
@@ -10,6 +10,7 @@
             </a>
         </div>
         <div class="caption">
+{#            <div class="pull-left">#}
             <a class="btn btn-like" href="#">
                 {% if entity_context.is_user_already_like %}
                     <i class="fa fa-heart fa-lg" style="color: red;"></i>
@@ -18,6 +19,7 @@
                 {% endif %}
                 {% trans 'likes' %} <span>{{ entity_context.like_count }}</span>
             </a>
+{#            </div>#}
         </div>
     </div>
 </div>
