@@ -21,8 +21,13 @@
 {#                <div class="pull-left">#}
                     <img class="img-circle img-responsive" src="{{ query_user_context.avatar_large }}" alt="{{ query_user_context.nickname }}" width="120" height="120">
 {#                </div>#}
+                <div>
+                    <p><strong>{{ query_user_context.nickname }}</strong></p>
+                    <p>{{ query_user_context.bio }}</p>
                     <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
-                <div class="pull-right">
+                </div>
+
+                <div class="pull-right hidden-xs">
                     <a class="btn btn-default" href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans 'settings' %}</a>
                 </div>
             </div>
