@@ -11,13 +11,14 @@ body {
     color: #666;
     /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
 }
-
-
 i {
     color: #666;
 }
-
-
+a:hover,
+a:focus {
+  color: #333333;
+  text-decoration: underline;
+}
 
 /* 最大宽度限制处理 */
 @media (min-width: 1200px){
@@ -26,18 +27,9 @@ i {
     }
 }
 
-
-
-
 a {
     color: #333333;
     text-decoration: none;
-}
-
-a:hover,
-a:focus {
-  color: #333333;
-  text-decoration: underline;
 }
 
 /* 去圆角处理 */
@@ -330,4 +322,17 @@ a:focus {
 .search-header >h2 >span {
     color: #333;
     margin-right: 10px;
+}
+
+/* 用户页 */
+.user-info {
+    border: 1px solid #ccc;
+    margin: 0 15px 15px 15px;
+    padding: 10px;
+    height: 188px;
+}
+.user-info >img {
+    margin: 15px;
+    display: inline-block;
+    float: left;
 }

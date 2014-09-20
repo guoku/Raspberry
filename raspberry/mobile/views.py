@@ -376,7 +376,10 @@ def popular(request):
 def unread_count(request):
     if request.method == "GET":
         _session = request.GET.get('session', None)
-        _request_user_id = Session_Key.objects.get_user_id(_session)
+        try:
+            _request_user_id = Session_Key.objects.get_user_id(_session)
+        except Session_Key.DoesNotExist, e:
+            return ErrorJsonResponse(data=list(), status=404)
         return SuccessJsonResponse({
             'unread_message_count' : MobileUser(_request_user_id).get_unread_message_count(),
             'unread_selection_count' : MobileUser(_request_user_id).get_unread_selection_count()

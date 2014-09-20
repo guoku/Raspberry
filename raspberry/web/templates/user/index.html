@@ -16,7 +16,17 @@
 {% block content %}
     {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
     <div class="container">
-
+        <div class="row">
+            <div class="user-info">
+{#                <div class="pull-left">#}
+                    <img class="img-circle img-responsive" src="{{ query_user_context.avatar_large }}" alt="{{ query_user_context.nickname }}" width="120" height="120">
+{#                </div>#}
+                    <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
+                <div class="pull-right">
+                    <a class="btn btn-default" href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans 'settings' %}</a>
+                </div>
+            </div>
+        </div>
         <div class="row">
             {% if web_user_likes_url in request.path %}
                 {% for entity_context in entity_list %}
