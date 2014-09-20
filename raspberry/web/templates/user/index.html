@@ -15,6 +15,8 @@
 
 {% block content %}
     {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
+    {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
+    
     <div class="container">
         <div class="row">
             <div class="user-info">
@@ -31,15 +33,28 @@
                     <a class="btn btn-default" href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans 'settings' %}</a>
                 </div>
             </div>
+            <div class="navbar nav-user-index">
+                <ul class="nav navbar-nav pull-left">
+                    <li {% if web_user_likes_url in request.path %}class="active"{% endif %}>
+                        <a href="{{ web_user_likes_url }}">{% trans 'likes' %}&nbsp; <strong>{{ query_user_context.like_count }}</strong></a>
+                    </li>
+                    <li {% if web_user_notes_url in request.path %}class="active"{% endif %}>
+                        <a href="{{ web_user_notes_url }}">{% trans 'notes' %}&nbsp; <strong>{{ query_user_context.entity_note_count }}</strong></a>
+                    </li>
+                </ul>
+            </div>
         </div>
+
         <div class="row">
             {% if web_user_likes_url in request.path %}
                 {% for entity_context in entity_list %}
                     {% include "common/entity.html" with entity_context=entity_context %}
                 {% endfor %}
-                {% if paginator %}
-                    {% include "common/web_paginator.html" with paginator=paginator %}
-                {% endif %}
+
+            {% endif %}
+
+            {% if paginator %}
+                {% include "common/web_paginator.html" with paginator=paginator %}
             {% endif %}
         </div>
     </div>
