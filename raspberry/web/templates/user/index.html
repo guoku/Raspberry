@@ -16,7 +16,7 @@
 {% block content %}
     {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
     {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
-    
+
     <div class="container">
         <div class="row">
             <div class="user-info">
@@ -34,13 +34,17 @@
                 </div>
             </div>
             <div class="navbar nav-user-index">
-                <ul class="nav navbar-nav pull-left">
-                    <li {% if web_user_likes_url in request.path %}class="active"{% endif %}>
+                <ul class="nav nav-pills pull-left" role="tablist">
+                    <li role="presentation" {% if web_user_likes_url in request.path %}class="active"{% endif %}>
                         <a href="{{ web_user_likes_url }}">{% trans 'likes' %}&nbsp; <strong>{{ query_user_context.like_count }}</strong></a>
                     </li>
-                    <li {% if web_user_notes_url in request.path %}class="active"{% endif %}>
+                    <li role="presentation" {% if web_user_notes_url in request.path %}class="active"{% endif %}>
                         <a href="{{ web_user_notes_url }}">{% trans 'notes' %}&nbsp; <strong>{{ query_user_context.entity_note_count }}</strong></a>
                     </li>
+                </ul>
+                <ul class="nav nav-pills pull-right hidden-xs" role="tablist">
+                    <li><a href="#">关注了&nbsp; <strong>{{ query_user_context.following_count }}</strong>人</a></li>
+                    <li><a href="#">关注者&nbsp; <strong>{{ query_user_context.fan_count }}</strong></a></li>
                 </ul>
             </div>
         </div>
@@ -50,7 +54,12 @@
                 {% for entity_context in entity_list %}
                     {% include "common/entity.html" with entity_context=entity_context %}
                 {% endfor %}
+            {% endif %}
 
+            {% if web_user_notes_url in request.path %}
+                {% for note in note_list %}
+                    {% include "common/entity.html" with entity_context=note.entity_context %}
+                {% endfor %}
             {% endif %}
 
             {% if paginator %}

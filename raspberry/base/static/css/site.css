@@ -340,17 +340,19 @@ a {
     border-radius: 0;
     border: 1px solid #ccc;
     border-top: 0;
-    /*border-left: 1px solid #ccc;*/
-    /*border-right: 1px solid #ccc;*/
-    /*border-bottom: 1px solid #ccc;*/
     margin: 0 15px 15px 15px;
     background-color: #FBFBFB;
     font-size: 16px;
+    min-height: 38px;
 }
-.nav-user-index .active {
-    background-color: #427ec0;
+.nav-user-index >ul >li >a {
+    border-radius: 0;
+    /*padding-bottom: 20px;*/
+}
+/*.nav-user-index >ul >li.active {*/
+    /*background-color: #427ec0;*/
     /*color: #fff;*/
-}
-.nav-user-index .active >a {
-    color: #fff;
-}
+/*}*/
+/*.nav-user-index .active >a {*/
+    /*color: #fff;*/
+/*}*/
