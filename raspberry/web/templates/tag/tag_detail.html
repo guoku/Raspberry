@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-{% load i18n staticfiles %}
+{% load i18n %}
 {% load web_common %}
 
 {% block title %}{{ tag }}{% endblock %}
-{#{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/tags.css' %}">{% endblock %}#}
 {% block content %}
     <div class="container">
         <div class="row">
@@ -18,22 +17,4 @@
             {% include "common/web_paginator.html" with paginator=paginator %}
         {% endif %}
     </div>
-{#    <div id="tags">#}
-{#        <div class="nav">#}
-{#            <ul>#}
-{#                <li>#{{ tag }}</li>#}
-{#            </ul>#}
-{#        </div>#}
-{##}
-{#        <ul class="entities">#}
-{#            {% spaceless %}#}
-{#                {% for entity in entities %}#}
-{#                    {% display_common_entity entity %}#}
-{#                {% endfor %}#}
-{#            {% endspaceless %}#}
-{#        </ul>#}
-{#        {% if paginator %}#}
-{#            {% display_web_paginator paginator %}#}
-{#        {% endif %}#}
-{#    </div>#}
 {% endblock %}
