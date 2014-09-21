@@ -272,12 +272,12 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
     )
 
 def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
-    _start_at = datetime.datetime.now()
-    if request.user.is_authenticated():
-        _request_user_id = request.user.id
-    else:
-        _request_user_id = None 
-    
+    # _start_at = datetime.datetime.now()
+    # if request.user.is_authenticated():
+    #     _request_user_id = request.user.id
+    # else:
+    #     _request_user_id = None
+    #
     _entity_id = int(entity_id) 
     _entity_context = Entity(_entity_id).read()
     

@@ -52,7 +52,7 @@
                         <h4 class="entity-title">{% if entity_context.brand|length != 0 %}
                             <span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span>
                         </h4>
-                        <a class="btn btn-like-detail" href="#">
+                        <a class="btn btn-like-detail" href="{% url 'web_like_entity' entity_context.entity_id '1' %}">
                             <i class="fa fa-heart-o"></i>
                             {{ entity_context.like_count }}
                             {% trans 'likes' %}
