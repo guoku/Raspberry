@@ -48,7 +48,7 @@
 //                    console.log(this);
                     var re = /64x64/;
                     var url_string = this.src.replace(re, '640x640');
-                    $this.find('.entity-chief-img img')[0].src = url_string;
+                    $this.find('.entity-detail img')[0].src = url_string;
                 });
             });
         },

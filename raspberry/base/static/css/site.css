@@ -14,6 +14,14 @@ body {
 i {
     color: #666;
 }
+/* 精选点评标记 */
+.fa-star {
+    color: #FF9500;
+}
+/* 喜欢按钮 */
+.fa-heart {
+    color: red;
+}
 a:hover,
 a:focus {
   color: #333333;
@@ -211,10 +219,7 @@ a {
     /*color: #333;*/
     padding: 5px;
 }
-/* 喜欢按钮 */
-.fa-heart {
-    color: red;
-}
+
 .btn-like {
     display: inline-block;
     /*border-radius: 0;*/
@@ -326,6 +331,9 @@ a {
 .list-group-item {
     border: 1px solid #f1f1f1;
 }
+.entity-detail {
+    padding-bottom: 15px;
+}
 
 .selection-note {
     margin: 30px 15px 0 15px;
@@ -338,6 +346,7 @@ a {
 }
 .selection-note .note-text {
     padding-left: 0;
+    padding-bottom: 10px;
 }
 
 /* 用户页 */
