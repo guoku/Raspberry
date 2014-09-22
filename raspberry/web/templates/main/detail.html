@@ -64,19 +64,22 @@
                     </div>
 
                     <div class="selection-note row">
-                        <div class="col-sm-2 note-user">
-                            <a style="float: left;" href="{% url 'web_user_likes' selection_note.creator_context.user_id %}" target="_blank" >
-                                <img class="img-circle" src="{{ selection_note.creator_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
+
+                        <div class="media">
+                            <a class="pull-left"  href="{% url 'web_user_likes' selection_note.creator_context.user_id %}" target="_blank" >
+                                <img class="media-object img-circle" src="{{ selection_note.creator_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
                             </a>
-                        </div>
-                        <div class="col-sm-10 note-text">
-                            <a href="{% url 'web_user_likes' selection_note.creator_context.user_id %}"><p>
-                            {{ selection_note.creator_context.nickname }}
-                            {% if selection_note.creator_context.bio %}
-                                <small>{{ selection_note.creator_context.bio }}</small>
-                            {% endif %}
-                            </p></a>
-                            <p class="with-tag s" >{{ selection_note.note_context.content|escape }}</p>
+                          <div class="media-body">
+                            <div class="note-text">
+                                <a href="{% url 'web_user_likes' selection_note.creator_context.user_id %}"><p>
+                                {{ selection_note.creator_context.nickname }}
+                                {% if selection_note.creator_context.bio %}
+                                    <small>{{ selection_note.creator_context.bio }}</small>
+                                {% endif %}
+                                </p></a>
+                                <p class="with-tag s" >{{ selection_note.note_context.content|escape }}</p>
+                            </div>
+                          </div>
                         </div>
                     </div>
                 </div>
