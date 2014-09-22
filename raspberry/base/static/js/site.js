@@ -8,7 +8,6 @@
     var util = {
         like: function () {
             // 喜爱 like entity
-//            var self = this;
             $('.btn-like, .btn-like-detail').live('click', function (e) {
                 var like = $(this);
                 var counter = like.find('.like-count');
@@ -19,7 +18,6 @@
                     status = 1;
                 }
                 url = url.replace(/\/[01]\//,"/"+status+"/");
-//                console.log(url);
                 $.post(url, function(data){
                     var count = parseInt(counter.text());
                     var result = parseInt(data);
@@ -34,34 +32,24 @@
                         heart.addClass('fa-heart-o');
                     }
                 });
-//                console.log($counter.text());
-//                if (!self.isUserLogined()) {
-//                    self.popLoginBox();
-//                } else {
-//                    var $like = $(this);
-//                    var $counter = $like.find('.count');
-//                    var url = $(this).attr("href");
-//                    if(url[url.length-2] == 1)
-//                    	var like_status = 0;
-//                    else
-//                    	var like_status = 1;
-//                   	var s = url.replace(/\/[01]\//,"/"+like_status+"/");
-//                   	$(this).attr("href",s);
-//                    $.post(url, function (data) {
-//                        var count = parseInt($counter.text());
-//                        var result = parseInt(data);
-//
-//                        if (result === 1) {
-//                            $counter.text(" "+(count + 1));
-//                            $like.addClass('liked');
-//                        } else if (result === 0) {
-//                            $counter.text(" "+(count - 1));
-//                            $like.removeClass('liked');
-//                        }
-//                    });
-//                }
-
                 e.preventDefault();
+            });
+        }
+    };
+
+    var detail = {
+
+        detailImageHover: function () {
+            // 鼠标放细节图上后效果
+
+            $('#detail').each(function () {
+                var $this = $(this);
+                $this.find('.detail-img img').on('mouseover', function () {
+//                    console.log(this);
+                    var re = /64x64/;
+                    var url_string = this.src.replace(re, '640x640');
+                    $this.find('.entity-chief-img img')[0].src = url_string;
+                });
             });
         }
     };
@@ -69,6 +57,8 @@
     (function init() {
 
         util.like();
+
+        detail.detailImageHover();
 
     })();
 
