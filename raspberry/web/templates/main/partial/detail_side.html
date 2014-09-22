@@ -62,19 +62,19 @@
 
         {% if is_staff %}
             <div class="list-group-item">
-                <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target=_blank>编辑商品</a>
+                <a href="{% url 'management_edit_entity' entity_context.entity_id %}" target=_blank><i class="fa fa-pencil-square-o fa-lg"></i>&nbsp; 编辑商品</a>
             </div>
         {% endif %}
 
-        <div class="list-group-item">
-            <a href="javascript:;"><span class="weibo_icon"></span>分享到微博</a>
+        <div class="list-group-item share">
+            <a href="javascript:;"><i class="fa fa-share-alt fa-lg"></i>&nbsp; 分享到微博</a>
         </div>
-        <div class="list-group-item">
-            <h5 class="list-group-item-heading">下载果库客户端</h5>
-            <a href="/download/ios/" target="_blank">iPhone</a>
-            <a href="/download/ios/" target="_blank">iPad</a>
-            <a href="http://app.guoku.com/download/android/guoku-release.apk" target="_blank">Android</a>
-        </div>
+{#        <div class="list-group-item">#}
+{#            <h5 class="list-group-item-heading">下载果库客户端</h5>#}
+{#            <a href="/download/ios/" target="_blank">iPhone</a>#}
+{#            <a href="/download/ios/" target="_blank">iPad</a>#}
+{#            <a href="http://app.guoku.com/download/android/guoku-release.apk" target="_blank">Android</a>#}
+{#        </div>#}
     </div>
 
 

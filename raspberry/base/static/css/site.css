@@ -137,30 +137,7 @@ a {
 }
 
 
-/* 商品详情页 */
-.entity-title {
-    margin-bottom: 40px;
-}
-/* 商品详情页分类 */
-.detail-category{
-    border: 1px solid #f1f1f1;
-    background: #fbfbfb;
-    padding: 15px 0 15px 15px;
-}
-.detail-category > a{
-    color: #427ec0;
-}
 
-
-.list-group-item {
-    border: 1px solid #f1f1f1;
-}
-
-
-.list-unstyled {
-    list-style: none outside none;
-    padding-left: 0;
-}
 
 .jumbotron {
     margin-top: -50px;
@@ -199,20 +176,25 @@ a {
 /*.thumbnail {*/
     /*border-radius: 0;*/
 /*}*/
-.thumbnail-selection {
-    height: 448px;
+/*.thumbnail-selection {*/
+    /*height: 448px;*/
     /*text-align: center;*/
-}
-.thumbnail-popular {
-    height: 253px;
+/*}*/
+/*.thumbnail-popular {*/
+    /*height: 253px;*/
     /*text-align: center;*/
-}
-.thumbnail-recommend {
-    height: 155px;
-}
+/*}*/
+/*.thumbnail-recommend {*/
+    /*height: 155px;*/
+/*}*/
 
 .form-control {
     border-radius: 0;
+}
+
+.list-unstyled {
+    list-style: none outside none;
+    padding-left: 0;
 }
 
 /* 购买按钮 */
@@ -325,6 +307,37 @@ a {
 .search-header >h2 >span {
     color: #333;
     margin-right: 10px;
+}
+
+/* 商品详情页 */
+.entity-title {
+    margin-bottom: 40px;
+}
+/* 商品详情页分类 */
+.detail-category{
+    border: 1px solid #f1f1f1;
+    background: #fbfbfb;
+    padding: 15px 0 15px 15px;
+}
+.detail-category > a{
+    color: #427ec0;
+}
+
+.list-group-item {
+    border: 1px solid #f1f1f1;
+}
+
+.selection-note {
+    margin: 30px 15px 0 15px;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+}
+.selection-note .note-user {
+    /*margin-left: 15px;*/
+    padding-left: 0;
+}
+.selection-note .note-text {
+    padding-left: 0;
 }
 
 /* 用户页 */

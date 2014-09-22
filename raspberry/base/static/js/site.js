@@ -51,6 +51,41 @@
                     $this.find('.entity-chief-img img')[0].src = url_string;
                 });
             });
+        },
+
+        shareWeibo: function() {
+//            var self = this;
+
+            $('.share a').live('click', function(e){
+                e.preventDefault();
+
+                var url = location.href;
+//                console.log(url);
+                var pic = $('.entity-chief-img img').attr("src");
+                console.log(pic);
+                var content = $('.selection-note .note-item .note-detail p').html();
+//
+                content = content.replace(/<[\s\S]*?>/g, "");
+                content = content.replace(/%/, "");
+                content = content.replace(/&nbsp;/, "");
+//                console.log(content);
+                var param = {
+                    url:url,
+                    type:'3',
+                    count:'0',
+                    appkey:'1459383851',
+                    title:content,
+                    pic:pic,
+                    ralateUid:'2179686555',
+                    rnd:new Date().valueOf()
+                };
+                var temp = [];
+                for( var p in param ){
+                    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+                }
+                var link = "http://service.weibo.com/share/share.php?" + temp.join('&');
+                window.open(link);
+            });
         }
     };
 
@@ -59,6 +94,7 @@
         util.like();
 
         detail.detailImageHover();
+        detail.shareWeibo();
 
     })();
 

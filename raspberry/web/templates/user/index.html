@@ -32,7 +32,9 @@
                 </div>
 
                 <div class="pull-right hidden-xs">
-                    <a class="btn btn-default" href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans 'settings' %}</a>
+                    {% if relation == 4 %}
+                        <a class="btn btn-default" href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans 'settings' %}</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="navbar nav-user-index">

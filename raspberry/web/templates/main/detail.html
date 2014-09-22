@@ -53,10 +53,31 @@
                             <span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span>
                         </h4>
                         <a class="btn btn-like-detail" href="{% url 'web_like_entity' entity_context.entity_id '1' %}">
-                            <i class="fa fa-heart-o"></i>
-                            {{ entity_context.like_count }}
+                            {% if is_user_already_like %}
+                                <i class="fa fa-heart fa-lg"></i>
+                            {% else %}
+                                <i class="fa fa-heart-o fa-lg"></i>
+                            {% endif %}
+                            &nbsp; <span class="like-count">{{ entity_context.like_count }}</span>
                             {% trans 'likes' %}
                         </a>
+                    </div>
+
+                    <div class="selection-note row">
+                        <div class="col-sm-2 note-user">
+                            <a style="float: left;" href="{% url 'web_user_likes' selection_note.creator_context.user_id %}" target="_blank" >
+                                <img class="img-circle" src="{{ selection_note.creator_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
+                            </a>
+                        </div>
+                        <div class="col-sm-10 note-text">
+                            <a href="{% url 'web_user_likes' selection_note.creator_context.user_id %}"><p>
+                            {{ selection_note.creator_context.nickname }}
+                            {% if selection_note.creator_context.bio %}
+                                <small>{{ selection_note.creator_context.bio }}</small>
+                            {% endif %}
+                            </p></a>
+                            <p class="with-tag s" >{{ selection_note.note_context.content|escape }}</p>
+                        </div>
                     </div>
                 </div>
 
