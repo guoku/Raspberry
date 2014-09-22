@@ -72,7 +72,7 @@ a {
     height:0;
     padding-bottom:100%;
     overflow:hidden;
-    /*border-bottom: 1px solid #cccccc;*/
+    /*border-bottom: 1px solid #dddddd;*/
 }
 
 .img-box > a{
@@ -91,6 +91,7 @@ a {
 {
     max-height:100%;
     max-width:100%;
+    background-color: #f6f6f6;
 }
 
 /* welcome */
@@ -119,12 +120,30 @@ a {
 }
 
 .caption {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #ddd;
+    margin-top: 5px;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.entity-detail .caption {
+    border-top: 1px solid #ddd;
     margin-top: 5px;
     margin-left: 5px;
     margin-right: 5px;
 }
 
+@media (max-width: 768px){
+    .note-avatar{
+        width: 36px;
+    }
+}
+
+@media (min-width: 992px){
+    .note-avatar{
+        width: 50px;
+    }
+}
 
 @media (min-width: 768px){
     .caption .note {
@@ -138,7 +157,7 @@ a {
 }
 
 .guoku-caption {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #ddd;
     margin: 5px 5px 0 5px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -176,7 +195,7 @@ a {
     font-size: 16px;
 }
 .footer-bottom ul > li + li:before {
-    color: #ccc;
+    color: #ddd;
     content: "|";
     padding: 0 10px;
 }
@@ -227,16 +246,16 @@ a {
     border-radius: 0;
     padding-left: 5px;
     padding-right: 5px;
-    /*border-color: #ccc;*/
-    /*border: #cccccc solid 1px;*/
+    /*border-color: #ddd;*/
+    /*border: #dddddd solid 1px;*/
     color: #333;
 }
 .btn-like-detail {
     display: inline-block;
     border-radius: 5px;
     background-color: #fff;
-    /*border-color: #ccc;*/
-    border: #ccc solid 1px;
+    /*border-color: #ddd;*/
+    border: #ddd solid 1px;
     color: #333;
 }
 .btn-user:hover,
@@ -338,7 +357,7 @@ a {
 .selection-note {
     margin: 30px 15px 0 15px;
     padding-top: 20px;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #ddd;
 }
 .selection-note .note-user {
     /*margin-left: 15px;*/
