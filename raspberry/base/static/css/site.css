@@ -69,6 +69,14 @@ a {
     padding-left: 30px;
 }
 
+.navbar-menu > li{
+    margin-right: 20px;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+color: #bcbcbc;
+}
+
 .nav-home {
     margin-right: 5px;
     margin-left: 5px;
@@ -341,6 +349,14 @@ a {
 .detail-category > a{
     color: #427ec0;
 }
+.detail-tag > h4{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.detail-tag > p > a{
+    color: #666666;
+}
 
 .list-group-item {
     border: 1px solid #f1f1f1;
@@ -367,14 +383,14 @@ a {
 .common-note-list {
     margin: 0;
     /*padding: 4px;*/
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
     /*border-bottom: 1px solid #ccc;*/
     /*margin-bottom: 20px;*/
 }
 .common-note-item {
     padding: 15px 19px 10px 19px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ddd;
 }
 
 /* 发送点评表单 */
