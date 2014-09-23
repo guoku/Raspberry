@@ -61,10 +61,10 @@
 
                 var url = location.href;
 //                console.log(url);
-                var pic = $('.entity-chief-img img').attr("src");
-                console.log(pic);
-                var content = $('.selection-note .note-item .note-detail p').html();
-//
+                var pic = $('.entity-detail img').attr("src");
+//                console.log(pic);
+                var content = $('.selection-note .note-text .content').html();
+                console.log(content)
                 content = content.replace(/<[\s\S]*?>/g, "");
                 content = content.replace(/%/, "");
                 content = content.replace(/&nbsp;/, "");
