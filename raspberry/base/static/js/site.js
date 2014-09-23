@@ -86,6 +86,53 @@
                 var link = "http://service.weibo.com/share/share.php?" + temp.join('&');
                 window.open(link);
             });
+        },
+
+        postNote: function () {
+            var $note = $(".post-note");
+            var $form = $note.find("form");
+            var $textarea = $form.find("textarea");
+//            console.log($textarea);
+
+            $textarea.on('focus', function(){
+//
+                $form.addClass('active');
+            });
+//console.log($note);
+
+            var $cancel = $form.find('.btn-cancel');
+//                console.log($cancel);
+            $cancel.live('click', function() {
+//                console.log(this);
+                $form.removeClass('active');
+            });
+
+            $form.on('submit', function (e) {
+                if ($.trim($textarea.value).length === 0) {
+                    $textarea.value = '';
+                    $textarea.focus();
+                } else {
+                    $.post(this.action, $form.serialize(), function (result){
+                        result = $.parseJSON(result);
+                        var status = parseInt(result.status);
+                        if (status === 1) {
+                            var $html = $(result.data);
+//                            self.updateNote($html);
+//                            self.clickComment($html);
+//                            self.poke();
+//                            $('<div class="sep"></div>').appendTo($notes);
+//                            $html.appendTo($notes);
+
+                            $note.remove();
+                        } else if (status === 0) {
+                            // error
+                        }
+                    });
+                }
+
+//                console.log("OKOKOKO");
+                 e.preventDefault();
+            });
         }
     };
 
@@ -95,7 +142,7 @@
 
         detail.detailImageHover();
         detail.shareWeibo();
-
+        detail.postNote();
     })();
 
 

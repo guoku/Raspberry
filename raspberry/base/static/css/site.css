@@ -378,23 +378,23 @@ a {
 }
 
 /* 发送点评表单 */
-.post-note {
+.post-note >form {
     /*padding: 5px;*/
 }
-.post-note > textarea {
+.post-note >form > textarea {
     /*border: 0;*/
     resize: none;
 }
-.post-note .action {
+.post-note >form .action {
     display: none;
     padding: 5px;
 }
 
-.post-note.active textarea{
+.post-note >form.active textarea{
     /*border: 1px solid #ddd;*/
     min-height: 90px;
 }
-.post-note.active .action {
+.post-note >form.active .action {
     display: block;
 }
 

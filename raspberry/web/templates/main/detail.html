@@ -110,13 +110,13 @@
                             <div class="pull-left">
                                 <img class="media-object img-circle" src="{{ user_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
                             </div>
-                            <div class="media-body">
-                                <form class="form-horizontal post-note" action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST" role="form">
+                            <div class="media-body post-note">
+                                <form class="form-horizontal " action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST" role="form">
                                     <textarea class="form-control" name="note_text" placeholder="写点评 ＃贴标签"></textarea>
 {#                                    <div class="form-group">#}
                                     <div class="action pull-right">
-                                        <button class="btn btn-default btn-cancel">取消</button>
-                                        <button class="btn btn-primary btn-post">点评</button>
+                                        <button class="btn btn-default btn-cancel" type="button">取消</button>
+                                        <button class="btn btn-primary btn-post" type="submit">点评</button>
                                     </div>
 {#                                    </div>#}
                                 </form>
