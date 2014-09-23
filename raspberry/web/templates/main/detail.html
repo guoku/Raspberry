@@ -103,26 +103,30 @@
                 {% include 'main/partial/detail_note.html' with common_note_list=common_note_list %}
 
 {#                判断登录用户#}
-                {% if request.user.is_authenticated  %}
-                    <div class="row" style="background-color: #fbfbfb;margin:0 0 20px 0;">
+                {% if not is_user_already_note %}
+                    {% if request.user.is_authenticated  %}
+                    <div class="row" style="background-color: #fbfbfb; margin: 0;">
                         <div class="media" style="padding: 15px">
                             <div class="pull-left">
                                 <img class="media-object img-circle" src="{{ user_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
                             </div>
                             <div class="media-body">
-                                <form class="form-horizontal" action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST" role="form">
+                                <form class="form-horizontal post-note" action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST" role="form">
+                                    <textarea class="form-control" name="note_text" placeholder="写点评 ＃贴标签"></textarea>
 {#                                    <div class="form-group">#}
-{#                                        <div class="col-sm-10 col-sm-offset-1">#}
-                                            <textarea class="form-control" name="note_text" placeholder="写点评 ＃贴标签"></textarea>
-{#                                         </div>#}
+                                    <div class="action pull-right">
+                                        <button class="btn btn-default btn-cancel">取消</button>
+                                        <button class="btn btn-primary btn-post">点评</button>
+                                    </div>
 {#                                    </div>#}
                                 </form>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 {% endif %}
 
-                <div class="row">
+                <div class="row" style="margin-top: 20px">
                     <div class="col-md-12"><h4>相似推荐</h4></div>
                     {% for entity_context in guess_entity_context %}
                         <div class="col-xs-6 col-sm-3">

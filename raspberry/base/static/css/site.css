@@ -377,6 +377,34 @@ a {
     border-bottom: 1px solid #ccc;
 }
 
+/* 发送点评表单 */
+.post-note {
+    /*padding: 5px;*/
+}
+.post-note > textarea {
+    /*border: 0;*/
+    resize: none;
+}
+.post-note .action {
+    display: none;
+    padding: 5px;
+}
+
+.post-note.active textarea{
+    /*border: 1px solid #ddd;*/
+    min-height: 90px;
+}
+.post-note.active .action {
+    display: block;
+}
+
+/*.post-note .action .btn-cancel {*/
+    /*border: 1px solid #ccc;*/
+/*}*/
+/*.post-note >form .action .btn-post {*/
+    /*border: 1px solid #ccc;*/
+/*}*/
+
 /* 用户页 */
 .user-info {
     border: 1px solid #ddd;
