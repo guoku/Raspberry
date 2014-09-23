@@ -60,6 +60,15 @@ a {
     background-color: initial;
 }
 
+.navbar-inverse {
+    background-color: #343434;
+    background-color: rgba(52,52,52,.95);
+    border: 0;
+}
+.navbar-menu {
+    padding-left: 30px;
+}
+
 .nav-home {
     margin-right: 5px;
     margin-left: 5px;
