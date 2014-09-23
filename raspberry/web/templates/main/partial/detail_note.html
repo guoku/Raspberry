@@ -1,0 +1,28 @@
+{% load web_common %}
+<div class="row common-note-list" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
+                    {% for note in common_note_list %}
+                        {% spaceless %}
+                            <div class="media common-note-item">
+                                <a class="pull-left" href="{% url 'web_user_likes' note.creator_context.user_id %}" target="_blank" >
+                                    <img class="media-object img-circle" src="{{ note.creator_context.avatar_small }}" alt="{{ note.creator_context.nickname }}">
+                                </a>
+                                <div class="media-body">
+                                    <a href="{% url 'web_user_likes' note.creator_context.user_id %}">
+                                        <p class="media-heading">{{ note.creator_context.nickname }}&nbsp; {% if note.creator_context.bio %}<small>{{ note.creator_context.bio }}</small>{% endif %}</p>
+                                    </a>
+                                    <div class="note-text">
+                                        <p class="with-tag content" >{{ note.note_context.content|escape }}</p>
+                                        <p>
+                                            <a href="javascript:;" class="add-comment" data-note="{{ note.note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>&nbsp;
+                                            {% if note.note_context.comment_count > 0 %}
+                                                <span>{{ note.note_context.comment_count }}</span>
+                                            {% endif %}
+                                            </a>
+                                            <span style="float: right;">{{ note.note_context.created_time|format_time }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endspaceless %}
+                    {% endfor %}
+</div>

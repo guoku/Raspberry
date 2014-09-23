@@ -67,19 +67,22 @@
                     <div class="row selection-note">
                         {% spaceless %}
                         <div class="media">
-                            <a class="pull-left note-avatar"  href="{% url 'web_user_likes' selection_note.creator_context.user_id %}" target="_blank" >
+                            <a class="pull-left"  href="{% url 'web_user_likes' selection_note.creator_context.user_id %}" target="_blank" >
                                 <img class="media-object img-circle" src="{{ selection_note.creator_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
                             </a>
                             <div class="media-body">
+                                <a href="{% url 'web_user_likes' selection_note.creator_context.user_id %}">
+                                    <p class="media-heading">{{ selection_note.creator_context.nickname }}&nbsp; {% if selection_note.creator_context.bio %}<small>{{ selection_note.creator_context.bio }}</small>{% endif %}</p>
+                                </a>
                                 <div class="note-text">
-                                    <p>
-                                        <a href="{% url 'web_user_likes' selection_note.creator_context.user_id %}">
-                                            {{ selection_note.creator_context.nickname }}
-                                        </a>
-                                        {% if selection_note.creator_context.bio %}
-                                            <small>{{ selection_note.creator_context.bio }}</small>
-                                        {% endif %}
-                                    </p>
+{#                                    <p>#}
+{#                                        <a href="{% url 'web_user_likes' selection_note.creator_context.user_id %}">#}
+{#                                            {{ selection_note.creator_context.nickname }}#}
+{#                                        </a>#}
+{#                                        {% if selection_note.creator_context.bio %}#}
+{#                                            <small>{{ selection_note.creator_context.bio }}</small>#}
+{#                                        {% endif %}#}
+{#                                    </p>#}
                                     <p class="with-tag content" >{{ selection_note.note_context.content|escape }}</p>
                                     <p>
                                         <a href="javascript:;" class="add-comment" data-note="{{ selection_note.note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>
@@ -97,31 +100,27 @@
                     {% endif %}
                 </div>
 
+                {% include 'main/partial/detail_note.html' with common_note_list=common_note_list %}
 
-                <div class="row common-note" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
-                    {% for note in common_note_list %}
-                        {% spaceless %}
-                            <div class="media" style="padding: 15px 19px 10px 19px; border-bottom: 1px solid #ccc;">
-                                <a class="pull-left note-avatar">
-                                    <img class="media-object img-circle" src="{{ note.creator_context.avatar_small }}" alt="{{ note.creator_context.nickname }}">
-                                </a>
-                                <div class="media-body">
-                                    <div class="note-text">
-                                        <p class="with-tag content" >{{ note.note_context.content|escape }}</p>
-                                        <p>
-                                            <a href="javascript:;" class="add-comment" data-note="{{ note.note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>&nbsp;
-                                            {% if note.note_context.comment_count > 0 %}
-                                                <span>{{ note.note_context.comment_count }}</span>
-                                            {% endif %}
-                                            </a>
-                                            <span style="float: right;">{{ note.note_context.created_time|format_time }}</span>
-                                        </p>
-                                    </div>
-                                </div>
+{#                判断登录用户#}
+                {% if request.user.is_authenticated  %}
+                    <div class="row" style="background-color: #fbfbfb;margin:0 0 20px 0;">
+                        <div class="media" style="padding: 15px">
+                            <div class="pull-left">
+                                <img class="media-object img-circle" src="{{ user_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
                             </div>
-                        {% endspaceless %}
-                    {% endfor %}
-                </div>
+                            <div class="media-body">
+                                <form class="form-horizontal" action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST" role="form">
+{#                                    <div class="form-group">#}
+{#                                        <div class="col-sm-10 col-sm-offset-1">#}
+                                            <textarea class="form-control" name="note_text" placeholder="写点评 ＃贴标签"></textarea>
+{#                                         </div>#}
+{#                                    </div>#}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
 
                 <div class="row">
                     <div class="col-md-12"><h4>相似推荐</h4></div>

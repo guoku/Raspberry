@@ -209,20 +209,6 @@ a {
     padding: 0 10px;
 }
 
-/*.thumbnail {*/
-    /*border-radius: 0;*/
-/*}*/
-/*.thumbnail-selection {*/
-    /*height: 448px;*/
-    /*text-align: center;*/
-/*}*/
-/*.thumbnail-popular {*/
-    /*height: 253px;*/
-    /*text-align: center;*/
-/*}*/
-/*.thumbnail-recommend {*/
-    /*height: 155px;*/
-/*}*/
 
 .form-control {
     border-radius: 0;
@@ -378,13 +364,17 @@ a {
     padding-left: 0;
     padding-bottom: 10px;
 }
-.common-note {
+.common-note-list {
     margin: 0;
     /*padding: 4px;*/
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
     /*border-bottom: 1px solid #ccc;*/
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
+}
+.common-note-item {
+    padding: 15px 19px 10px 19px;
+    border-bottom: 1px solid #ccc;
 }
 
 /* 用户页 */
