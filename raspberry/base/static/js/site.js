@@ -64,7 +64,7 @@
                 var pic = $('.entity-detail img').attr("src");
 //                console.log(pic);
                 var content = $('.selection-note .note-text .content').html();
-                console.log(content)
+//                console.log(content);
                 content = content.replace(/<[\s\S]*?>/g, "");
                 content = content.replace(/%/, "");
                 content = content.replace(/&nbsp;/, "");
