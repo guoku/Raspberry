@@ -14,6 +14,12 @@ body {
 i {
     color: #ccc;
 }
+
+.line{
+    background:#eee;
+    height:1px;
+    margin-top: 20px;
+}
 /* 精选点评标记 */
 .fa-star {
     color: #FF9500;
@@ -46,12 +52,25 @@ a {
 /* 去圆角处理 */
 .thumbnail {
     border-radius: 0;
+    border: 1px solid #eee;
 }
 
 .panel {
     border-radius: 0;
     -webkit-box-shadow: inherit;
     box-shadow: inherit;
+    border: 1px solid #eee;
+}
+
+.form-control {
+    -webkit-box-shadow: inherit;
+    box-shadow: inherit;
+    border: 1px solid #eee;
+}
+.form-control:focus{
+    -webkit-box-shadow: inherit;
+    box-shadow: inherit;
+    border: 1px solid #ccc;
 }
 
 .btn {
@@ -92,7 +111,7 @@ color: #bcbcbc;
     height:0;
     padding-bottom:100%;
     overflow:hidden;
-    /*border-bottom: 1px solid #dddddd;*/
+    /*border-bottom: 1px solid #eeeddd;*/
 }
 
 .img-box > a{
@@ -140,14 +159,14 @@ color: #bcbcbc;
 }
 
 .caption {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #eee;
     margin-top: 5px;
     margin-left: -5px;
     margin-right: -5px;
 }
 
 .entity-detail .caption {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #eee;
     margin-top: 5px;
     margin-left: 5px;
     margin-right: 5px;
@@ -177,7 +196,7 @@ color: #bcbcbc;
 }
 
 .guoku-caption {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #eee;
     margin: 5px 5px 0 5px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -215,7 +234,7 @@ color: #bcbcbc;
     font-size: 16px;
 }
 .footer-bottom ul > li + li:before {
-    color: #ddd;
+    color: #eee;
     content: "|";
     padding: 0 10px;
 }
@@ -252,16 +271,16 @@ color: #bcbcbc;
     border-radius: 0;
     padding-left: 5px;
     padding-right: 5px;
-    /*border-color: #ddd;*/
-    /*border: #dddddd solid 1px;*/
+    /*border-color: #eee;*/
+    /*border: #eeeddd solid 1px;*/
     color: #333;
 }
 .btn-like-detail {
     display: inline-block;
     border-radius: 5px;
     background-color: #fff;
-    /*border-color: #ddd;*/
-    border: #ddd solid 1px;
+    /*border-color: #eee;*/
+    border: #eee solid 1px;
     color: #333;
 }
 .btn-user:hover,
@@ -347,15 +366,15 @@ color: #bcbcbc;
     font-size: 12px;
     color: #999;
 }
-.
-
 
 /* 商品详情页分类 */
+
 .detail-category{
     border: 1px solid #f1f1f1;
     background: #fbfbfb;
     padding: 15px 0 15px 15px;
 }
+
 .detail-category > a{
     color: #427ec0;
 }
@@ -380,7 +399,7 @@ color: #bcbcbc;
 .selection-note {
     margin: 30px 15px 0 15px;
     padding-top: 20px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #eee;
 }
 .selection-note .note-user {
     /*margin-left: 15px;*/
@@ -393,14 +412,13 @@ color: #bcbcbc;
 .common-note-list {
     margin: 0;
     /*padding: 4px;*/
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
     /*border-bottom: 1px solid #ccc;*/
     /*margin-bottom: 20px;*/
 }
 .common-note-item {
     padding: 15px 19px 10px 19px;
-    border-bottom: 1px solid #ddd;
 }
 
 /* 发送点评表单 */
@@ -417,7 +435,7 @@ color: #bcbcbc;
 }
 
 .post-note >form.active textarea{
-    /*border: 1px solid #ddd;*/
+    /*border: 1px solid #eee;*/
     min-height: 90px;
 }
 .post-note >form.active .action {
@@ -433,7 +451,7 @@ color: #bcbcbc;
 
 /* 用户页 */
 .user-info {
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
     margin: 0 15px 0 15px;
     padding: 10px;
     height: 188px;
@@ -445,7 +463,7 @@ color: #bcbcbc;
 }
 .nav-user-index {
     border-radius: 0;
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
     border-top: 0;
     margin: 0 15px 15px 15px;
     background-color: #FBFBFB;
