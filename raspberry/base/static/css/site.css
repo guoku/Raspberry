@@ -12,11 +12,12 @@ body {
     /*font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;*/
 }
 i {
-    color: #666;
+    color: #ccc;
 }
 /* 精选点评标记 */
 .fa-star {
     color: #FF9500;
+    font-size: 14px;
 }
 /* 喜欢按钮 */
 .fa-heart {
@@ -25,8 +26,10 @@ i {
 a:hover,
 a:focus {
   color: #333333;
-  text-decoration: underline;
+  text-decoration: none;
 }
+
+.bio{color: #999;}
 
 /* 最大宽度限制处理 */
 @media (min-width: 1200px){
@@ -272,8 +275,8 @@ color: #bcbcbc;
 .btn-like-detail:active,
 .open > .dropdown-toggle.btn-default {
   color: #333;
-  background-color: #e6e6e6;
-  border-color: #adadad;
+  /*background-color: #e6e6e6;*/
+  /*border-color: #adadad;*/
 }
 .btn-like:active,
 .btn-like.active,
@@ -340,6 +343,13 @@ color: #bcbcbc;
 .entity-title {
     margin-bottom: 40px;
 }
+.note-text .create-time{
+    font-size: 12px;
+    color: #999;
+}
+.
+
+
 /* 商品详情页分类 */
 .detail-category{
     border: 1px solid #f1f1f1;
