@@ -63,6 +63,7 @@
                         </a>
                     </div>
 
+{#                <div class="note-detail">#}
                     {% if selection_note != None %}
                     <div class="row selection-note">
                         {% spaceless %}
@@ -84,7 +85,7 @@
                                         {% endif %}
                                         </a>
                                         <span class="pull-right create-time">{{ selection_note.note_context.created_time|format_time }}</span>
-                                        <i class="fa fa-star fa-lg pull-right"></i>
+                                        <i class="fa fa-star fa-lg pull-right" style="margin: 5px 5px 0 0;"></i>
                                     </p>
                                 </div>
                             </div>
@@ -95,7 +96,7 @@
                 </div>
 
                 {% include 'main/partial/detail_note.html' with common_note_list=common_note_list taobao_id=taobao_id %}
-
+{#                </div>#}
 {#                判断登录用户#}
                 {% if not is_user_already_note %}
                     {% if request.user.is_authenticated  %}

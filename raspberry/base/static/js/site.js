@@ -190,6 +190,32 @@
 //                console.log("OKOKOKO");
                  e.preventDefault();
             });
+        },
+
+        noteAction: function () {
+
+            var noteDetail = $(".selection-note, .common-note-item");
+            noteDetail.each(function(){
+//                var $this = $(this);
+                detail.clickComment($(this));
+            });
+        },
+
+        clickComment: function (note) {
+
+//            var noteDetail = $(".selection-note, .common-note-item");
+//            console.log(noteDetail);
+//            console.log(note);
+            note.find('.add-comment').live('click', function (e) {
+//                console.log("click click");
+                var comments = note.find('.note-comment');
+                if(comments) {
+                    comments.slideToggle('fast');
+                } else {
+
+
+                }
+            });
         }
     };
 
@@ -202,6 +228,7 @@
         detail.detailImageHover();
         detail.shareWeibo();
         detail.postNote();
+        detail.noteAction();
     })();
 
 

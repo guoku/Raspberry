@@ -1,8 +1,8 @@
 {% load web_common %}
+{% spaceless %}
 <div class="row common-note-list" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
-                    {% for note in common_note_list %}
-                        {% spaceless %}
-                            <div class="media common-note-item">
+    {% for note in common_note_list %}
+        <div class="media common-note-item">
                                 <a class="pull-left" href="{% url 'web_user_likes' note.creator_context.user_id %}" target="_blank" >
                                     <img class="media-object img-circle" src="{{ note.creator_context.avatar_small }}" alt="{{ note.creator_context.nickname }}">
                                 </a>
@@ -18,12 +18,12 @@
                                                 <span>{{ note.note_context.comment_count }}</span>
                                             {% endif %}
                                             </a>
-                                            <span style="float: right;">{{ note.note_context.created_time|format_time }}</span>
+                                            <span  class="pull-right create-time">{{ note.note_context.created_time|format_time }}</span>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="line"></div>
-                            </div>
-                        {% endspaceless %}
-                    {% endfor %}
+        </div>
+    {% endfor %}
 </div>
+{% endspaceless %}
