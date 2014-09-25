@@ -71,7 +71,7 @@
                         <div class="caption">
                             <p class="note">{{ selection.note_context.content|truncatechars:70 }}</p>
                         </div>
-                        <div style="padding-left: 15px;padding-right: 15px;padding-bottom: 40px;">
+                        <div style="padding-left: 5px;padding-right: 5px;padding-bottom: 40px;">
                             <div class="pull-left">
                                 <a class="btn btn-like" href="{% url 'web_like_entity' selection.entity_context.entity_id '1' %}" target="_blank">
                                     {% if selection.is_user_already_like %}
