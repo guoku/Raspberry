@@ -16,13 +16,13 @@ import datetime
 
 
 def search(request, template='search/search.html'):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
         _request_user_id = request.user.id
         _request_user_context = User(_request_user_id).read() 
         _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
     else:
-        _request_user_id = None 
+        # _request_user_id = None
         _request_user_context = None
         _request_user_like_entity_set = [] 
 
@@ -90,16 +90,16 @@ def search(request, template='search/search.html'):
                 except Exception, e:
                     pass
 
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='SEARCH', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix=_log_appendix
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='SEARCH',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix=_log_appendix
+    # )
     
     return render_to_response(
         template,

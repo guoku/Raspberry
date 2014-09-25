@@ -44,6 +44,7 @@
 //            console.log($selection);
             if ($selection) {
                 var counter = 1;
+                var flag = false;
 //                console.log(counter);
                 $(window).scroll(function () {
                     if($(window).scrollTop()>100){
@@ -57,31 +58,34 @@
                     }
 
                     //这里临时不采用自动加载，换成分页
-                    if (($(window).height() + $(window).scrollTop()) >= $(document).height()) {
+                    if (($(window).height() + $(window).scrollTop()) >= $(document).height() && flag == false) {
 //                        console.log("okokokokoko");
+                        flag = true;
                         var url = window.location.href;
 //                        var time = $(".common-note:last").find(".timestr").attr("name");
 //                        var time = $selection.find().attr("name");
                         var last_entity = $selection.find('.entity-selection:last');
                         var time = last_entity.find(".timestr").attr("name");
-                        console.log(last_entity);
-//                        $.ajax({
-//                            url: url,
-//                            type: "GET",
-//                            data: {'p': counter,'t':time},
-//                            success: function(data) {
-////                    return data;
-//                                result =  $.parseJSON(data);
-//                                var status = parseInt(result.status);
-//                                if (status === 1) {
-//                                    var $html = $(result.data);
-////                                    $html.each(function () {
-////                                        util.showEntityTitle($(this));
-////                                    });
-//                                    $html.appendTo(object);
-//                                }
-//                            }
-//                        });
+//                        console.log(time);
+                        $.ajax({
+                            url: url,
+                            type: "GET",
+                            data: {'p': counter,'t':time},
+                            success: function(data) {
+//                    return data;
+                                result =  $.parseJSON(data);
+                                var status = parseInt(result.status);
+                                if (status === 1) {
+                                    var $html = $(result.data);
+//                                    $html.each(function () {
+//                                        util.showEntityTitle($(this));
+//                                    });
+                                    $html.appendTo($selection);
+                                    counter ++;
+                                    flag = false;
+                                }
+                            }
+                        });
                     }
                 });
             }
