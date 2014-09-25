@@ -372,7 +372,7 @@ color: #bcbcbc;
 .detail-category{
     border: 1px solid #f1f1f1;
     background: #fbfbfb;
-    padding: 15px 0 15px 15px;
+    padding: 10px 0 10px 15px;
 }
 
 .detail-category > a{
@@ -385,6 +385,18 @@ color: #bcbcbc;
 
 .detail-tag > p > a{
     color: #666666;
+}
+
+.detail-edit{
+    padding: 15px 0 15px 15px;
+}
+
+.detail-share{
+    padding: 15px 0 15px 15px;
+}
+
+.detail-download{
+    padding: 15px 0 15px 15px;
 }
 
 .list-group-item {
