@@ -17,20 +17,32 @@
 {#        {% endif %}#}
 {#    </div>#}
 {#{% endspaceless %}#}
-
+<div class="note-comment-list" style="display: none">
+{% spaceless %}
 {% for comment in comment_list %}
     <div class="media">
-        <a class="pull-left" href="{% url 'web.views.user.user_index' creator_context.user_id %}">
-            <img class="media-object  img-circle" src="{{ creator_context.avatar_small }}">
+        <a class="pull-left" href="{% url 'web.views.user.user_index' comment.creator_context.user_id %}">
+            <img class="media-object  img-circle" src="{{ comment.creator_context.avatar_small }}">
         </a>
         <div class="media-body">
-            <p class="media-heading">{{ creator_context.nickname }}</p>
-            <p class="with-tag comment-content" data-creator="{{ creator_context.user_id }}" data-comment="{{ comment.comment_id }}">
-                {% if comment.reply_to_user_id != None %}回复{{ comment.reply_to_user_nickname }}:{% endif %}{{ comment.content }}
+            <p class="media-heading">{{ comment.creator_context.nickname }}</p>
+            <p class="with-tag comment-content" data-creator="{{ creator_context.user_id }}" data-comment="{{ comment.comment_context.comment_id }}">
+                {% if comment.comment_context.reply_to_user_id != None %}回复{{ comment.comment_context.reply_to_user_nickname }}:{% endif %}{{ comment.comment_context.content }}
             </p>
         </div>
     </div>
 {% endfor %}
+{% endspaceless %}
 
+<form class="form-horizontal" role="form" method="POST" action="{% url 'web.views.note.add_comment' note_context.note_id %}">
+    <fieldset>
+        <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-10">
+            <input  type="text" name="comment_text" class="form-control" value="" />
+            </div>
+        </div>
+    </fieldset>
+</form>
+</div>
 
 

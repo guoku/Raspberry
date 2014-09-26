@@ -41,9 +41,11 @@
         loadData: function () {
 
             var $selection = $('#selection');
-//            console.log($selection);
-            if ($selection) {
-                var counter = 1;
+            var page = $selection.parent().find('.pager');
+            var counter = 1;
+            page.hide();
+
+            if ($selection[0]) {
                 var flag = false;
 //                console.log(counter);
                 $(window).scroll(function () {
@@ -57,9 +59,15 @@
 //                        $(".click_to_top").fadeOut();
                     }
 
+                    if (counter % 3 == 0 ) {
+                        page.show();
+                    } else {
+                        page.hide();
+                    }
                     //这里临时不采用自动加载，换成分页
-                    if (($(window).height() + $(window).scrollTop()) >= $(document).height() && flag == false) {
+                    if (($(window).height() + $(window).scrollTop()) >= $(document).height() && flag == false && counter % 3 != 0) {
 //                        console.log("okokokokoko");
+//                        page.hide();
                         flag = true;
                         var url = window.location.href;
 //                        var time = $(".common-note:last").find(".timestr").attr("name");
@@ -72,7 +80,6 @@
                             type: "GET",
                             data: {'p': counter,'t':time},
                             success: function(data) {
-//                    return data;
                                 result =  $.parseJSON(data);
                                 var status = parseInt(result.status);
                                 if (status === 1) {
@@ -203,17 +210,48 @@
 
         clickComment: function (note) {
 
-//            var noteDetail = $(".selection-note, .common-note-item");
+
 //            console.log(noteDetail);
 //            console.log(note);
             note.find('.add-comment').live('click', function (e) {
-//                console.log("click click");
-                var comments = note.find('.note-comment');
-                if(comments) {
+                var comments = note.find('.note-comment-list');
+                var notecontent = note.find(".note-content");
+                console.log(notecontent);
+                if(comments[0]) {
                     comments.slideToggle('fast');
                 } else {
 
-
+                    var url = '/note/' + $(this).attr('data-note') + '/comment/';
+                    console.log(url);
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        async: false,
+                        success: function(data){
+                            result =  $.parseJSON(data);
+                            var $html = $(result.data);
+//                            self.noteComment($html);
+                            $html.appendTo(notecontent);
+                            $html.slideToggle('fast');
+//                            initTag();
+                        },
+                        error: function(ajaxContext) {
+                             console.log(ajaxContext['responseText']);
+//                            if (!util.isUserLogined()) {
+//                                util.popLoginBox();
+//                            } else {
+////                                console.log(ajaxContext['responseText']);
+//                                result =  $.parseJSON(ajaxContext['responseText']);
+//                                var $html = $(result.data);
+//                                self.noteComment($html);
+//                                $html.appendTo($noteDetail);
+//                                $html.slideToggle('fast');
+//                                initTag();
+//                            }
+//                            alert(ajaxContext.responseText);
+                        }
+                    });
+                    return false;
                 }
             });
         }

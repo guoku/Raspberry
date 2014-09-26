@@ -68,9 +68,9 @@ def get_comments(request, note_id, template='note/note_comment_list.html'):
         # 'status': '1',
         'data': _data
     }
-    if len( _note_context['comment_id_list'] ) < 1:
+    # if len( _note_context['comment_id_list'] ) < 1:
         # raise Http404
-        return JSONResponse(_ret, status=404)
+        # return JSONResponse(_ret, status=404)
     return JSONResponse(_ret)
 
 

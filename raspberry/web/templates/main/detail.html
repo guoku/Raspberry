@@ -71,7 +71,7 @@
                             <a class="pull-left"  href="{% url 'web_user_likes' selection_note.creator_context.user_id %}" target="_blank" >
                                 <img class="media-object img-circle" src="{{ selection_note.creator_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
                             </a>
-                            <div class="media-body">                            
+                            <div class="media-body note-content">
                                 <p class="media-heading">
                                     <a href="{% url 'web_user_likes' selection_note.creator_context.user_id %}">{{ selection_note.creator_context.nickname }}</a>
                                     &nbsp; {% if selection_note.creator_context.bio %}<small class="bio">{{ selection_note.creator_context.bio }}</small>{% endif %}

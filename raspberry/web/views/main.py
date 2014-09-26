@@ -135,7 +135,10 @@ def selection(request, template='main/selection.html'):
             }
         return JSONResponse(data=_ret)
     else:
-        c = {
+
+        return render_to_response(
+            template,
+            {
                 # 'main_nav_deliver' : 'selection',
                 'paginator': _paginator,
                 'page_num' : _page_num,
@@ -144,10 +147,6 @@ def selection(request, template='main/selection.html'):
                 'category_list' : _old_category_list,
                 'selection_list' : _selection_list,
             },
-
-        return render_to_response(
-            template,
-            c,
             context_instance = RequestContext(request)
         )
     # else:
