@@ -34,7 +34,7 @@
 {% endfor %}
 {% endspaceless %}
 
-<form class="form-horizontal" role="form" method="POST" action="{% url 'web.views.note.add_comment' note_context.note_id %}">
+<form class="form-horizontal" role="form" method="POST" action="{% url 'web.views.note.add_comment' note_context.note_id %}" style="margin-top: 10px;">
     <fieldset>
         <div class="form-group">
             <div class="col-sm-offset-1 col-sm-10">
@@ -42,6 +42,11 @@
             </div>
         </div>
     </fieldset>
+
+    <div class="action pull-right" style="margin-top:10px;">
+        <button class="btn btn-default btn-cancel" style="margin-right:10px;" type="button">取消</button>
+        <button class="btn btn-primary btn-post" type="submit">点评</button>
+    </div>
 </form>
 </div>
 
