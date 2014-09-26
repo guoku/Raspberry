@@ -20,10 +20,10 @@
 
 {% block content %}
     {% if not user.is_authenticated %}
-    <div class="jumbotron">
+    <div class="jumbotron hidden-xs">
         <div class="container">
             <div class="row">
-                <div class="col-sm-5 col-sm-offset-1 hidden-xs">
+                <div class="col-sm-5 col-sm-offset-1">
                     <img src="{% static 'images/brand.png' %}">
                 </div>
                 <div class="col-sm-6">
@@ -32,11 +32,11 @@
                     一目了然的优质生活主张。 </h3>
                     <div class="row welcome-sign">
                         <div class="col-sm-3">
-                            <a class="btn btn-primary btn-lg" type="button" href="{% url 'web_register' %}" data-toggle="modal" data-target="#SignUpModal" >注册账号</a>
+                            <a class="btn btn-primary btn-lg" type="button" href="{% url 'web_register' %}" data-toggle="modal" data-target="#SignUpModal" >注册帐号</a>
                         </div>
                         <div class="col-sm-9">
                             <div class="welcome-login">
-                                <span>已有账号，</span>
+                                <span>已有帐号，</span>
                                 <a class="btn btn-link btn-lg" type="button" href="{% url 'web_login' %}?next={{ request.path }}" data-toggle="modal" data-target="#SignInModal">从这里登录</a>
                             </div>
                         </div>
@@ -57,15 +57,17 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="row">
+        <div class="row" id="selection">
             {% for selection in selection_list %}
                 <div class="col-xs-12 col-sm-4 col-md-4">
-                    <div class="thumbnail">
+                    <div class="thumbnail entity-selection">
+                        <span class="timestr" name="{{ selection.note_context.post_time|date:"Y-m-d H:i:s" }}"></span>
                         <div class="img-box">
                             <a  href="{% url 'web_detail' selection.entity_context.entity_hash %}" target="_blank">
                                 <img class="lazy img-responsive" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}">
                             </a>
                         </div>
+
                         <div class="caption">
                             <p class="note">{{ selection.note_context.content|truncatechars:70 }}</p>
                         </div>
@@ -92,5 +94,8 @@
                 </div>
             {% endfor %}
         </div>
+        {% if paginator %}
+            {% include "common/web_paginator.html" with paginator=paginator %}
+        {% endif %}
     </div>
 {% endblock %}

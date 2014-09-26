@@ -37,6 +37,70 @@
         }
     };
 
+    var selection = {
+        loadData: function () {
+
+            var $selection = $('#selection');
+            var page = $selection.parent().find('.pager');
+            var counter = 1;
+            page.hide();
+
+            if ($selection[0]) {
+                var flag = false;
+//                console.log(counter);
+                $(window).scroll(function () {
+                    if($(window).scrollTop()>100){
+//                        if($(".click_to_top").css("display") == "none"){
+//                            clickToTop.caculateRight();
+//                            $(".click_to_top").fadeIn();
+//                        }
+                    }else{
+//                        if($(".click_to_top").css("display") == "block")
+//                        $(".click_to_top").fadeOut();
+                    }
+
+                    if (counter % 3 == 0 ) {
+                        page.show();
+                    } else {
+                        page.hide();
+                    }
+                    //这里临时不采用自动加载，换成分页
+                    if (($(window).height() + $(window).scrollTop()) >= $(document).height() && flag == false && counter % 3 != 0) {
+//                        console.log("okokokokoko");
+//                        page.hide();
+                        flag = true;
+                        var url = window.location.href;
+//                        var time = $(".common-note:last").find(".timestr").attr("name");
+//                        var time = $selection.find().attr("name");
+                        var last_entity = $selection.find('.entity-selection:last');
+                        var time = last_entity.find(".timestr").attr("name");
+//                        console.log(time);
+                        $.ajax({
+                            url: url,
+                            type: "GET",
+                            data: {'p': counter,'t':time},
+                            success: function(data) {
+                                result =  $.parseJSON(data);
+                                var status = parseInt(result.status);
+                                if (status === 1) {
+                                    var $html = $(result.data);
+//                                    $html.each(function () {
+//                                        util.showEntityTitle($(this));
+//                                    });
+                                    $html.appendTo($selection);
+                                    counter ++;
+                                    flag = false;
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+//            var entities = $selection.find('.entity-selection');
+//            console.log(entities);
+        }
+    };
+
     var detail = {
 
         detailImageHover: function () {
@@ -133,6 +197,63 @@
 //                console.log("OKOKOKO");
                  e.preventDefault();
             });
+        },
+
+        noteAction: function () {
+
+            var noteDetail = $(".selection-note, .common-note-item");
+            noteDetail.each(function(){
+//                var $this = $(this);
+                detail.clickComment($(this));
+            });
+        },
+
+        clickComment: function (note) {
+
+
+//            console.log(noteDetail);
+//            console.log(note);
+            note.find('.add-comment').live('click', function (e) {
+                var comments = note.find('.note-comment-list');
+                var notecontent = note.find(".note-content");
+                console.log(notecontent);
+                if(comments[0]) {
+                    comments.slideToggle('fast');
+                } else {
+
+                    var url = '/note/' + $(this).attr('data-note') + '/comment/';
+                    console.log(url);
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        async: false,
+                        success: function(data){
+                            result =  $.parseJSON(data);
+                            var $html = $(result.data);
+//                            self.noteComment($html);
+                            $html.appendTo(notecontent);
+                            $html.slideToggle('fast');
+//                            initTag();
+                        },
+                        error: function(ajaxContext) {
+                             console.log(ajaxContext['responseText']);
+//                            if (!util.isUserLogined()) {
+//                                util.popLoginBox();
+//                            } else {
+////                                console.log(ajaxContext['responseText']);
+//                                result =  $.parseJSON(ajaxContext['responseText']);
+//                                var $html = $(result.data);
+//                                self.noteComment($html);
+//                                $html.appendTo($noteDetail);
+//                                $html.slideToggle('fast');
+//                                initTag();
+//                            }
+//                            alert(ajaxContext.responseText);
+                        }
+                    });
+                    return false;
+                }
+            });
         }
     };
 
@@ -140,9 +261,12 @@
 
         util.like();
 
+        selection.loadData();
+
         detail.detailImageHover();
         detail.shareWeibo();
         detail.postNote();
+        detail.noteAction();
     })();
 
 

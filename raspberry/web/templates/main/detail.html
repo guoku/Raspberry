@@ -63,6 +63,7 @@
                         </a>
                     </div>
 
+{#                <div class="note-detail">#}
                     {% if selection_note != None %}
                     <div class="row selection-note">
                         {% spaceless %}
@@ -70,7 +71,7 @@
                             <a class="pull-left"  href="{% url 'web_user_likes' selection_note.creator_context.user_id %}" target="_blank" >
                                 <img class="media-object img-circle" src="{{ selection_note.creator_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
                             </a>
-                            <div class="media-body">                            
+                            <div class="media-body note-content">
                                 <p class="media-heading">
                                     <a href="{% url 'web_user_likes' selection_note.creator_context.user_id %}">{{ selection_note.creator_context.nickname }}</a>
                                     &nbsp; {% if selection_note.creator_context.bio %}<small class="bio">{{ selection_note.creator_context.bio }}</small>{% endif %}
@@ -84,7 +85,7 @@
                                         {% endif %}
                                         </a>
                                         <span class="pull-right create-time">{{ selection_note.note_context.created_time|format_time }}</span>
-                                        <i class="fa fa-star fa-lg pull-right"></i>
+                                        <i class="fa fa-star fa-lg pull-right" style="margin: 5px 5px 0 0;"></i>
                                     </p>
                                 </div>
                             </div>
@@ -94,8 +95,8 @@
                     {% endif %}
                 </div>
 
-                {% include 'main/partial/detail_note.html' with common_note_list=common_note_list %}
-
+                {% include 'main/partial/detail_note.html' with common_note_list=common_note_list taobao_id=taobao_id %}
+{#                </div>#}
 {#                判断登录用户#}
                 {% if not is_user_already_note %}
                     {% if request.user.is_authenticated  %}
@@ -106,7 +107,9 @@
                             </div>
                             <div class="media-body post-note">
                                 <form class="form-horizontal " action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST" role="form">
-                                    <textarea class="form-control" name="note_text" placeholder="写点评 ＃贴标签"></textarea>
+                                    <fieldset>
+                                        <textarea class="form-control" name="note_text" placeholder="写点评 ＃贴标签"></textarea>
+                                    </fieldset>
                                     <div class="action pull-right" style="margin-top:10px;">
                                         <button class="btn btn-default btn-cancel" style="margin-right:10px;" type="button">取消</button>
                                         <button class="btn btn-primary btn-post" type="submit">点评</button>
