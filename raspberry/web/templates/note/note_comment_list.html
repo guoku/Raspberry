@@ -17,7 +17,7 @@
 {#        {% endif %}#}
 {#    </div>#}
 {#{% endspaceless %}#}
-<div class="note-comment-list" style="display: none">
+<div class="note-comment-list" style="display: none; border: 1px solid #eee;padding: 10px;">
 {% spaceless %}
 {% for comment in comment_list %}
     <div class="media">
@@ -43,9 +43,9 @@
         </div>
     </fieldset>
 
-    <div class="action pull-right" style="margin-top:10px;">
-        <button class="btn btn-default btn-cancel" style="margin-right:10px;" type="button">取消</button>
-        <button class="btn btn-primary btn-post" type="submit">点评</button>
+    <div class="comment-action" style="height: 28px; position: relative;">
+        <button class="btn btn-default btn-cancel" style="border: 1px solid #ccc; right: 70px; position: absolute;" type="button">取消</button>
+        <button class="btn btn-primary btn-comment" style="position: absolute; right: 10px;" type="submit">评论</button>
     </div>
 </form>
 </div>
