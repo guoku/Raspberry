@@ -25,13 +25,20 @@
             <img class="media-object  img-circle" src="{{ comment.creator_context.avatar_small }}">
         </a>
         <div class="media-body">
-            <p class="media-heading">{{ comment.creator_context.nickname }}</p>
+            <p class="media-heading nickname">
+                {{ comment.creator_context.nickname }}
+                {% if request.user.id == comment.comment_context.creator_id or request.user.id == comment.note_context.creator_id %}
+                    <a href="{% url 'web.views.note.delete_comment' comment.comment_context.note_id comment.comment_context.comment_id %}" class="close" style="margin-right: 40px">&times;</a>
+            {% endif %}
+            </p>
             <p class="with-tag comment-content" data-creator="{{ comment.creator_context.user_id }}" data-comment="{{ comment.comment_context.comment_id }}" style="color: #999;">
                 {% if comment.comment_context.reply_to_user_id != None %}回复{{ comment.comment_context.reply_to_user_nickname }}:{% endif %}{{ comment.comment_context.content }}
                 <a  href="javascript:;" class="reply pull-right" style="margin-right: 40px">回复</a>
             </p>
         </div>
+        <hr style="margin: 10px 0 5px 0;" />
     </div>
+
 {% endfor %}
 {% endspaceless %}
 
