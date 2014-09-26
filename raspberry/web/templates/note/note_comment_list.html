@@ -26,8 +26,9 @@
         </a>
         <div class="media-body">
             <p class="media-heading">{{ comment.creator_context.nickname }}</p>
-            <p class="with-tag comment-content" data-creator="{{ creator_context.user_id }}" data-comment="{{ comment.comment_context.comment_id }}">
+            <p class="with-tag comment-content" data-creator="{{ comment.creator_context.user_id }}" data-comment="{{ comment.comment_context.comment_id }}" style="color: #999;">
                 {% if comment.comment_context.reply_to_user_id != None %}回复{{ comment.comment_context.reply_to_user_nickname }}:{% endif %}{{ comment.comment_context.content }}
+                <a  href="javascript:;" class="reply pull-right" style="margin-right: 40px">回复</a>
             </p>
         </div>
     </div>
