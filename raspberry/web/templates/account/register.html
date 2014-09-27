@@ -1,63 +1,99 @@
-{% extends "account/account_base.html" %}
+{#{% extends "account/account_base.html" %}#}
+{#{% load i18n %}#}
+{##}
+{#{% block title %}{% trans 'sign up' %}{% endblock %}#}
+{#{% block form %}#}
+{#    <div class="account-form">#}
+{#    <form action="" method="POST" id="register">#}
+{#        {% csrf_token %}#}
+{#        {% if third_party_data%}#}
+{#        <fieldset>#}
+{#            <div id="third_party_info">#}
+{#                <div class="third-party-user">#}
+{#                    <div class="avatar">#}
+{#                        <img src="{{ third_party_data.avatar_large }}" />#}
+{#                    </div>#}
+{#                    <h4 class="heading m0">Hi {{ third_party_data.screen_name }}，</h4>#}
+{#                    <span>欢迎通过{%if source == 'sina' %}新浪微博{% else %} {% if source == 'taobao' %}淘宝{% endif %}{% endif %}，创建果库帐号</span>#}
+{#                </div>#}
+{#            </div>#}
+{#        </fieldset>#}
+{#        {% endif %}#}
+{#        <h2>注册帐号</h2> | 已有帐号？<a href="{% url 'web_login' %}">请登录</a>#}
+{#        <p>第{{ wizard.steps.step1 }}步，共{{ wizard.steps.count }}步</p>#}
+{#        {{ wizard.management_form }}#}
+{#        {% for field in wizard.form %}#}
+{#            {% if field.name != "agree_tos" %}#}
+{#            <div class="control-group">#}
+{#                {{ field }}#}
+{#            {% if field.errors %}#}
+{#                <span class="error-info">#}
+{#                {% for error in field.errors %}#}
+{#                    {{ error|escape }}#}
+{#                {% endfor %}#}
+{#                </span>#}
+{#            {% endif %}#}
+{#            </div>#}
+{#            {% endif %}#}
+{#        {% endfor %}#}
+{##}
+{#        <div class="submit-row">#}
+{#            <label>{{ wizard.form.agree_tos }}同意果库</label>#}
+{#            <small><a href="{% url 'web_agreement' %}">使用协议</a></small>#}
+{#            {% if wizard.form.agree_tos.errors %}#}
+{#                <span class "error-info">#}
+{#                    {% for error in wizard.form.agree_tos.errors %}#}
+{#                        {{ error|escape }}#}
+{#                    {% endfor %}#}
+{#                </span>#}
+{#            {% endif %}#}
+{#            <div class="control-group">#}
+{#                <button type="submit"  class="btn btn-next">{% trans 'next' %}</button>#}
+{#            </div>#}
+{#        </div>#}
+{#    </form>#}
+{#    </div>#}
+{#{% endblock %}#}
+{##}
+{#{% block third_party_login %}#}
+{#    {% if third_party_data %}#}
+{#    {% else %}#}
+{#        {{ block.super }}#}
+{#    {% endif %}#}
+{#{% endblock %}#}
+
+
+{% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans 'sign up' %}{% endblock %}
-{% block form %}
-    <div class="account-form">
-    <form action="" method="POST" id="register">
-        {% csrf_token %}
-        {% if third_party_data%}
-        <fieldset>
-            <div id="third_party_info">
-                <div class="third-party-user">
-                    <div class="avatar">
-                        <img src="{{ third_party_data.avatar_large }}" />
+{% block title %}{% trans "sign up" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+            <p><strong>注册帐号</strong> | 已有帐号？<a href="{% url 'web_login' %}">请登录</a></p>
+            <p>第{{ wizard.steps.step1 }}步，共{{ wizard.steps.count }}步</p>
+            {{ wizard.management_form }}
+        </div>
+        <form class="form-horizontal" role="form" method="post" action="{% url 'web_register' %}">
+            {% csrf_token %}
+            <fieldset>
+                {% for field in wizard.form %}
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-4">
+                            {{ field }}
+                        </div>
                     </div>
-                    <h4 class="heading m0">Hi {{ third_party_data.screen_name }}，</h4>
-                    <span>欢迎通过{%if source == 'sina' %}新浪微博{% else %} {% if source == 'taobao' %}淘宝{% endif %}{% endif %}，创建果库帐号</span>
+                {% endfor %}
+            </fieldset>
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans 'next' %}</button>
                 </div>
             </div>
-        </fieldset>
-        {% endif %}
-        <h2>注册帐号</h2> | 已有帐号？<a href="{% url 'web_login' %}">请登录</a>
-        <p>第{{ wizard.steps.step1 }}步，共{{ wizard.steps.count }}步</p>
-        {{ wizard.management_form }}
-        {% for field in wizard.form %}
-            {% if field.name != "agree_tos" %}
-            <div class="control-group">
-                {{ field }}
-            {% if field.errors %}
-                <span class="error-info">
-                {% for error in field.errors %}
-                    {{ error|escape }}
-                {% endfor %}
-                </span>
-            {% endif %}
-            </div>
-            {% endif %}
-        {% endfor %}
-
-        <div class="submit-row">
-            <label>{{ wizard.form.agree_tos }}同意果库</label>
-            <small><a href="{% url 'web_agreement' %}">使用协议</a></small>
-            {% if wizard.form.agree_tos.errors %}
-                <span class "error-info">
-                    {% for error in wizard.form.agree_tos.errors %}
-                        {{ error|escape }}
-                    {% endfor %}
-                </span>
-            {% endif %}
-            <div class="control-group">
-                <button type="submit"  class="btn btn-next">{% trans 'next' %}</button>
-            </div>
-        </div>
-    </form>
+        </form>
     </div>
-{% endblock %}
-
-{% block third_party_login %}
-    {% if third_party_data %}
-    {% else %}
-        {{ block.super }}
-    {% endif %}
+</div>
 {% endblock %}

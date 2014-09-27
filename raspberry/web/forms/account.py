@@ -70,14 +70,14 @@ class SignUpAccountFrom(forms.Form):
         'nickname_exist': _("nickname is signed up."),
         'not_agree_tos': _("you must agree terms of service.")
     }
-    nickname = forms.CharField(widget=forms.TextInput(attrs={'class': 'text-input', 'placeholder': _('nickname')}),
+    nickname = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('nickname')}),
                                label=_('nickname'), help_text=_(''))
-    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'text-input', 'placeholder': _('email')}),
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('email')}),
                              label=_('email'), help_text=_(''))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('password')}),
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('password')}),
                                label=_('password'), help_text=_(''))
 
-    agree_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs={'checked' : 'checked'}))
+    agree_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs={'checked' : 'checked'}), initial=True)
 
     def clean_email(self):
         cleaned_data = self.cleaned_data
