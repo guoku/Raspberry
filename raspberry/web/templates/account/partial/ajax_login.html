@@ -1,6 +1,6 @@
 {% load i18n staticfiles %}
 
-
+        <div class="row">
             <form class="form-horizontal" role="form" method="post" action="{% url 'web_login' %}">
                 {% csrf_token %}
                 <h2></h2>
@@ -20,5 +20,10 @@
                         </div>
                     </div>
                 </fieldset>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans 'sign in' %}</button>
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans 'sign in' %}</button>
+                    </div>
+                </div>
             </form>
+        </div>

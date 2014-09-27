@@ -208,6 +208,57 @@
             });
         },
 
+        commentAction: function(comment) {
+//            var cancel = comment.find('.btn-cancel');
+//            console.log(cancel);
+
+            var form = comment.find('form');
+            var commentText = form.find('input');
+            var replyToUser = '';
+            var replyToComment = '';
+
+            comment.find('.btn-cancel').on('click', function() {
+//                console.log(comment);
+                comment.slideToggle('fast');
+                commentText.val('');
+            });
+
+            function reply(commentItem) {
+//                console.log(commentItem);
+                commentItem.find('.reply').live('click', function (e) {
+
+//                    e.preventDefault();
+//                    if (!util.isUserLogined()) {
+//                        util.popLoginBox();
+//                    } else {
+
+                    var commentContent = commentItem.find('.comment-content');
+                    var nickname = commentItem.find('.nickname');
+//                    console.log(nickname);
+                    commentText.val('回复 ' + $.trim(nickname.text()) + ': ');
+                    commentText.focus();
+                    replyToUser = commentContent.attr('data-creator');
+                    replyToComment = commentContent.attr('data-comment');
+//                    }
+                    return false;
+                });
+
+                commentItem.find('.close').live('click', function (e) {
+                    $.post(this.href, function (data) {
+                        if (parseInt(data) === 1) {
+                            comment.remove();
+                        }
+                    });
+
+                    e.preventDefault();
+                });
+            }
+
+            comment.find('.media').each(function () {
+                reply($(this));
+            });
+        },
+
         clickComment: function (note) {
 
 
@@ -216,7 +267,7 @@
             note.find('.add-comment').live('click', function (e) {
                 var comments = note.find('.note-comment-list');
                 var notecontent = note.find(".note-content");
-                console.log(notecontent);
+//                console.log(notecontent);
                 if(comments[0]) {
                     comments.slideToggle('fast');
                 } else {
@@ -231,6 +282,7 @@
                             result =  $.parseJSON(data);
                             var $html = $(result.data);
 //                            self.noteComment($html);
+                            detail.commentAction($html);
                             $html.appendTo(notecontent);
                             $html.slideToggle('fast');
 //                            initTag();
