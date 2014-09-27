@@ -209,9 +209,6 @@
         },
 
         commentAction: function(comment) {
-//            var cancel = comment.find('.btn-cancel');
-//            console.log(cancel);
-
             var form = comment.find('form');
             var commentText = form.find('input');
             var replyToUser = '';
@@ -224,9 +221,8 @@
             });
 
             function reply(commentItem) {
-//                console.log(commentItem);
-                commentItem.find('.reply').live('click', function (e) {
-
+//                console.log(commentItem.find('.reply'));
+                commentItem.find('.reply').on('click', function (e) {
 //                    e.preventDefault();
 //                    if (!util.isUserLogined()) {
 //                        util.popLoginBox();
@@ -243,19 +239,63 @@
                     return false;
                 });
 
-                commentItem.find('.close').live('click', function (e) {
+                commentItem.find('.close').on('click', function (e) {
                     $.post(this.href, function (data) {
                         if (parseInt(data) === 1) {
-                            comment.remove();
+                            commentItem.remove();
                         }
                     });
 
-                    e.preventDefault();
+                    return false;
                 });
             }
 
             comment.find('.media').each(function () {
                 reply($(this));
+            });
+
+//            var commentItem = commentItem;
+            form.on('submit', function(e) {
+                var input = commentText[0];
+                var text = input.value;
+
+                text = text.replace(/^回复.*[:：]/, function (str, index) {
+                    if (index === 0) {
+                        return '';
+                    }
+                    return str;
+                });
+                text = $.trim(text);
+                if (text.length > 0) {
+                    var url = form[0].action;
+                    var data = {
+                        comment_text: text,
+                        reply_to_user_id: replyToUser,
+                        reply_to_comment_id: replyToComment
+                    };
+
+                    $.post(url, data, function (result) {
+                        result = $.parseJSON(result);
+                        var status = parseInt(result.status);
+
+                        if (status === 1) {
+                            var $html = $(result.data);
+                            reply($html);
+
+                            $html.insertBefore(form);
+                        } else {
+                            // error
+                        }
+
+                        input.value = '';
+                        replyToUser = '';
+                        replyToComment = '';
+                    });
+                } else {
+                    input.value = '';
+                    input.focus();
+                }
+                e.preventDefault();
             });
         },
 
@@ -273,7 +313,7 @@
                 } else {
 
                     var url = '/note/' + $(this).attr('data-note') + '/comment/';
-                    console.log(url);
+//                    console.log(url);
                     $.ajax({
                         url: url,
                         type: 'GET',

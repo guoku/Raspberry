@@ -1,28 +1,46 @@
-{% spaceless %}
-    <div class="note-comment-item">
-        <a class="avatar" href="{% url 'web.views.user.user_index' creator_context.user_id %}">
-            <img src="{{ creator_context.avatar_small }}" height="32" width="32">
-        </a>
-
-        <div class="note-comment-detail">
-            <a class="nickname"
-               href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}
-            </a>
-
+{#{% spaceless %}#}
+{#    <div class="note-comment-item">#}
+{#        <a class="avatar" href="{% url 'web.views.user.user_index' creator_context.user_id %}">#}
+{#            <img src="{{ creator_context.avatar_small }}" height="32" width="32">#}
+{#        </a>#}
+{##}
+{#        <div class="note-comment-detail">#}
+{#            <a class="nickname"#}
+{#               href="{% url 'web.views.user.user_index' creator_context.user_id %}">{{ creator_context.nickname }}#}
+{#            </a>#}
+{##}
             {# 判断当前用户是否是点评的创建者或评论的创建者，如果是则允许删除 #}
-
-            {% if user_context.user_id == comment_context.creator_id or user_context.user_id == note_context.creator_id %}
-                <a href="{% url 'web.views.note.delete_comment' comment_context.note_id comment_context.comment_id %}"
-                   class="close">&times;</a>
-            {% endif %}
-
-            <p class="with-tag comment-content" data-creator="{{ creator_context.user_id }}" data-comment="{{ comment_context.comment_id }}">
-                {% if comment_context.reply_to_user_id != None %}回复{{ comment_context.reply_to_user_nickname }}:{% endif %}{{ comment_context.content }}
-            </p>
-            <a href="#" class="reply">回复</a>
+{##}
+{#            {% if user_context.user_id == comment_context.creator_id or user_context.user_id == note_context.creator_id %}#}
+{#                <a href="{% url 'web.views.note.delete_comment' comment_context.note_id comment_context.comment_id %}"#}
+{#                   class="close">&times;</a>#}
+{#            {% endif %}#}
+{##}
+{#            <p class="with-tag comment-content" data-creator="{{ creator_context.user_id }}" data-comment="{{ comment_context.comment_id }}">#}
+{#                {% if comment_context.reply_to_user_id != None %}回复{{ comment_context.reply_to_user_nickname }}:{% endif %}{{ comment_context.content }}#}
+{#            </p>#}
+{#            <a href="#" class="reply">回复</a>#}
 {#            {% if user_context %}#}
 {#            <a href="javascript:;" class="reply">回复</a>#}
 {#            {% endif %}#}
+{#        </div>#}
+{#    </div>#}
+{#{% endspaceless %}#}
+    <div class="media">
+        <a class="pull-left" href="{% url 'web.views.user.user_index' creator_context.user_id %}">
+            <img class="media-object  img-circle" src="{{ creator_context.avatar_small }}">
+        </a>
+        <div class="media-body">
+            <p class="media-heading ">
+                <span class="nickname">{{ creator_context.nickname }}</span>
+                {% if request.user.id == comment_context.creator_id or request.user.id == note_context.creator_id %}
+                    <a href="{% url 'web.views.note.delete_comment' comment_context.note_id comment_context.comment_id %}" class="close" style="margin-right: 40px">&times;</a>
+            {% endif %}
+            </p>
+            <p class="with-tag comment-content" data-creator="{{ creator_context.user_id }}" data-comment="{{ comment_context.comment_id }}" style="color: #999;">
+                {% if comment_context.reply_to_user_id != None %}回复{{ comment_context.reply_to_user_nickname }}:{% endif %}{{ comment_context.content }}
+                <a  href="javascript:;" class="reply pull-right" style="margin-right: 40px">回复</a>
+            </p>
         </div>
+        <hr style="margin: 10px 0 5px 0;" />
     </div>
-{% endspaceless %}

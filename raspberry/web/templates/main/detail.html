@@ -79,9 +79,9 @@
                                 <div class="note-text">
                                     <p class="with-tag content" >{{ selection_note.note_context.content|escape }}</p>
                                     <p>
-                                        <a href="javascript:;" class="add-comment" data-note="{{ selection_note.note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>
+                                        <a href="javascript:;" class="add-comment" data-note="{{ selection_note.note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>&nbsp;
                                         {% if selection_note.note_context.comment_count > 0 %}
-                                            <small>{{ selection_note.note_context.comment_count }}</small>
+                                            <span>{{ selection_note.note_context.comment_count }}</span>
                                         {% endif %}
                                         </a>
                                         <span class="pull-right create-time">{{ selection_note.note_context.created_time|format_time }}</span>
