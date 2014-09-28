@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 sidebar">
+                {% url 'web_agreement' as web_agreement_url %}
+            {% block sidebar %}
+                <ul class="nav nav-sidebar">
+                    <li><a href="#">{% trans 'about' %}</a></li>
+                    <li><a href="#">{% trans 'jobs' %}</a></li>
+                    <li {% if web_agreement_url in request.path %}class="active"{% endif %}><a href="{% url 'web_agreement' %}">{% trans 'agreement' %}</a></li>
+                </ul>
+            {% endblock %}
+            </div>
+            <div class="col-sm-offset-3 col-sm-9">
+                {% block main %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
