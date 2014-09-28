@@ -522,10 +522,11 @@ color: #bcbcbc;
   }
 }
 .nav-sidebar {
-  margin-right: -21px;
+    margin-right: -21px;
   /*margin-bottom: 20px;*/
-  margin-left: -20px;
-  text-align: center;
+    margin-left: -20px;
+    text-align: center;
+    font: 16px;
 }
 .nav-sidebar > li > a {
   padding-right: 20px;
