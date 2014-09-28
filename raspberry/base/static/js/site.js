@@ -6,6 +6,18 @@
 
 
     var util = {
+        modalSignIn: function(html) {
+            var signModal = $('#SignInModal');
+            var signContent = signModal.find('.modal-content');
+            if (signContent.find('.row')[0]) {
+                signModal.modal('show');
+            } else {
+                html.appendTo(signContent);
+                signModal.modal('show');
+            }
+        },
+
+
         like: function () {
             // 喜爱 like entity
             $('.btn-like, .btn-like-detail').live('click', function (e) {
@@ -18,20 +30,49 @@
                     status = 1;
                 }
                 url = url.replace(/\/[01]\//,"/"+status+"/");
-                $.post(url, function(data){
-                    var count = parseInt(counter.text());
-                    var result = parseInt(data);
-//                    console.log(result);
-                    if (result === 1) {
-                        counter.text(" "+(count + 1));
-                        heart.removeClass('fa-heart-o');
-                        heart.addClass('fa-heart');
-                    } else if (result === 0) {
-                        counter.text(" "+(count - 1));
-                        heart.removeClass('fa-heart');
-                        heart.addClass('fa-heart-o');
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    success: function(data) {
+                        var count = parseInt(counter.text());
+                        var result = parseInt(data);
+                        if (result === 1) {
+                            counter.text(" "+(count + 1));
+                            heart.removeClass('fa-heart-o');
+                            heart.addClass('fa-heart');
+                        } else if (result === 0){
+                            counter.text(" "+(count - 1));
+                            heart.removeClass('fa-heart');
+                            heart.addClass('fa-heart-o');
+                        } else {
+                            var html = $(data);
+                            util.modalSignIn(html);
+//                            $('#SignInModal').modal('show');
+//                            var signcontent = $('#SignInModal').find('.modal-content');
+//                            html.appendTo(signcontent);
+//                            $('#SignInModal').modal('show');
+                        }
                     }
+//                    statusCode: {
+//                        302: function() {
+//                            console.log('need login');
+//                        }
+//                    }
                 });
+//                $.post(url, function(data){
+//                    var count = parseInt(counter.text());
+//                    var result = parseInt(data);
+////                    console.log(result);
+//                    if (result === 1) {
+//                        counter.text(" "+(count + 1));
+//                        heart.removeClass('fa-heart-o');
+//                        heart.addClass('fa-heart');
+//                    } else if (result === 0) {
+//                        counter.text(" "+(count - 1));
+//                        heart.removeClass('fa-heart');
+//                        heart.addClass('fa-heart-o');
+//                    }
+//                });
                 e.preventDefault();
             });
         }
@@ -317,7 +358,7 @@
                     $.ajax({
                         url: url,
                         type: 'GET',
-                        async: false,
+//                        async: false,
                         success: function(data){
                             result =  $.parseJSON(data);
                             var $html = $(result.data);
