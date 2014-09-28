@@ -165,6 +165,10 @@ color: #bcbcbc;
     margin-right: -5px;
 }
 
+.thumbnail .caption {
+    padding-bottom: 0px;
+}
+
 .entity-detail .caption {
     border-top: 1px solid #eee;
     margin-top: 5px;
@@ -271,6 +275,8 @@ color: #bcbcbc;
     border-radius: 0;
     padding-left: 5px;
     padding-right: 5px;
+    padding-top: 10px;
+    height: 40px;
     /*border-color: #eee;*/
     /*border: #eeeddd solid 1px;*/
     color: #333;
@@ -296,6 +302,7 @@ color: #bcbcbc;
   color: #333;
   /*background-color: #e6e6e6;*/
   /*border-color: #adadad;*/
+  box-shadow: none;
 }
 .btn-like:active,
 .btn-like.active,
