@@ -20,4 +20,4 @@ class JobsView(TemplateView):
     template_name = "jobs.html"
 
 class FaqView(TemplateView):
-    template_name = "faq.html"
+    template_name = "base_faq.html"
