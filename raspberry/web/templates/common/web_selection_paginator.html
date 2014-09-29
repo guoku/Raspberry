@@ -1,8 +1,13 @@
+{% load i18n %}
+{% load web_common %}
+
 {% spaceless %}
 <div class="row clearfix">
     <ul class="pager">
-        <li><a href="#">上一页</a></li>
-        <li><a href="#">下一页</a></li>
+        {% if paginator.has_previous %}
+            <li><a href="{{ url }}?p={{ paginator.previous_page_number |selection_previous_paginator }}">上一页</a></li>
+        {% endif %}
+        <li><a href="{{ url }}?p={{ paginator.next_page_number|selection_next_paginator }}">{% trans 'next' %}</a></li>
     </ul>
 </div>
 {% endspaceless %}

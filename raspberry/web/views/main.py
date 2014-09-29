@@ -62,7 +62,7 @@ def selection(request, template='main/selection.html'):
      
     _old_category_list = Old_Category.find()[0:11]
 
-    _page_num = 1
+    _page_num = request.GET.get('p', 1)
     _time_filter  = request.GET.get('t', datetime.now())
     _category_id = request.GET.get('c', None)
     
