@@ -6,12 +6,14 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3 sidebar">
-                {% url 'web_agreement' as web_agreement_url %}
+            {% url 'web_about' as web_about_url %}
+            {% url 'web_jobs' as web_jobs_url %}
+            {% url 'web_agreement' as web_agreement_url %}
             {% block sidebar %}
                 <ul class="nav nav-sidebar">
-                    <li><a href="#"><strong>{% trans 'about' %}</strong></a></li>
+                    <li {% if web_about_url in request.path %}class="active" {% endif %}><a href="{{ web_about_url }}"><strong>{% trans 'about' %}</strong></a></li>
                     <li><a href="#"><strong>{% trans 'faq' %}</strong></a></li>
-                    <li><a href="#"><strong>{% trans 'jobs' %}</strong></a></li>
+                    <li {% if web_jobs_url in request.path %}class="active" {% endif %}><a href="{{ web_jobs_url }}"><strong>{% trans 'jobs' %}</strong></a></li>
                     <li><a href="#"><strong>{% trans 'links' %}</strong></a></li>
                     <li {% if web_agreement_url in request.path %}class="active"{% endif %}><a href="{% url 'web_agreement' %}"><strong>{% trans 'agreement' %}</strong></a></li>
                 </ul>
