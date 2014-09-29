@@ -152,3 +152,19 @@ msgstr "果库，最实用的网络购物指南，每日优选与发现最有趣
 
 msgid "shared content"
 msgstr "果库连这都有，大家看我要来一个不？"
+
+# static page
+msgid "about"
+msgstr "关于"
+
+msgid "faq"
+msgstr "提问"
+
+msgid "jobs"
+msgstr "工作"
+
+msgid "links"
+msgstr "友情链接"
+
+msgid "agreement"
+msgstr "关于"
