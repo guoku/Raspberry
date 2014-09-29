@@ -12,15 +12,15 @@
             {% url 'web_faq' as web_faq_url %}
             {% block sidebar %}
                 <ul class="nav nav-sidebar">
-                    <li {% if web_about_url in request.path %}class="active" {% endif %}><a href="{{ web_about_url }}"><strong>ABOUT {% trans 'about' %}</strong></a></li>
-                    <li {% if web_faq_url in request.path %}class="active" {% endif %}><a href="{{ web_faq_url }}"><strong>FAQ {% trans 'faq' %}</strong></a></li>
-                    <li {% if web_jobs_url in request.path %}class="active" {% endif %}><a href="{{ web_jobs_url }}"><strong>JOBS {% trans 'jobs' %}</strong></a></li>
-                    <li><a href="#"><strong>LINKS {% trans 'links' %}</strong></a></li>
-                    <li {% if web_agreement_url in request.path %}class="active"{% endif %}><a href="{% url 'web_agreement' %}"><strong>AGREEMENT {% trans 'agreement' %}</strong></a></li>
+                    <li {% if web_about_url in request.path %}class="active" {% endif %}><a href="{{ web_about_url }}"><span>ABOUT {% trans 'about' %}</span></a></li>
+                    <li {% if web_faq_url in request.path %}class="active" {% endif %}><a href="{{ web_faq_url }}"><span>FAQ {% trans 'faq' %}</span></a></li>
+                    <li {% if web_jobs_url in request.path %}class="active" {% endif %}><a href="{{ web_jobs_url }}"><span>JOBS {% trans 'jobs' %}</span></a></li>
+                    <li><a href="#"><span>LINKS {% trans 'links' %}</span></a></li>
+                    <li {% if web_agreement_url in request.path %}class="active"{% endif %}><a href="{% url 'web_agreement' %}"><span>AGREEMENT {% trans 'agreement' %}</span></a></li>
                 </ul>
             {% endblock %}
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-9 static-page">
                 {% block main %}{% endblock %}
             </div>
         </div>

@@ -518,26 +518,23 @@ color: #bcbcbc;
     /*overflow-x: hidden;*/
     /*overflow-y: auto; *//* Scrollable contents if viewport is shorter than content. */
     /*background-color: #ffffff;*/
-    border-top: 1px solid #eee;
-    border-right: 1px solid #eee;
-    border-left: 1px solid #eee;
   }
 /*}*/
 .nav-sidebar {
-    margin-right: -21px;
-  /*margin-bottom: 20px;*/
-    margin-left: -20px;
-    text-align: center;
-    font-size: 16px;
+    text-align: left;
+    font-size: 13px;
+    border: 1px solid #eee;
 }
 .nav-sidebar > li > a {
   padding-right: 20px;
   padding-left: 20px;
-  border-bottom: 1px solid #eee;
 }
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus {
   color: #fff;
-  background-color: #428bca;
+  background-color: #427ec0;
+}
+.static-page h4 {
+    margin-top: 20px;
 }
