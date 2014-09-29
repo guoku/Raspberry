@@ -11,7 +11,7 @@
         </div>
         <div class="caption">
 {#            <div class="pull-left">#}
-            <a class="btn btn-like" href="#">
+            <a class="btn btn-like" href="{% url 'web_like_entity' entity_context.entity_id '1' %}" target="_blank">
                 {% if entity_context.is_user_already_like %}
                     <i class="fa fa-heart fa-lg" style="color: red;"></i>
                 {% else %}
