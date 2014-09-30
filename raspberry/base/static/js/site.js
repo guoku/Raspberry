@@ -20,16 +20,17 @@
 
         like: function () {
             // 喜爱 like entity
-            $('.btn-like, .btn-like-detail').live('click', function (e) {
+            $('.btn-like, .btn-like-detail').on('click', function (e) {
                 var like = $(this);
                 var counter = like.find('.like-count');
                 var url = $(this).attr("href");
                 var heart = like.find("i");
-                var status = 0;
-                if (heart.hasClass("fa-heart-o")) {
-                    status = 1;
-                }
-                url = url.replace(/\/[01]\//,"/"+status+"/");
+//                var status = 0;
+//                if (heart.hasClass("fa-heart-o")) {
+//                    status = 1;
+//                }
+//                url = url.replace(/\/[01]\//,"/"+status+"/");
+//                console.log(url);
                 $.ajax({
                     url: url,
                     type: 'POST',
@@ -41,9 +42,11 @@
                             heart.removeClass('fa-heart-o');
                             heart.addClass('fa-heart');
                         } else if (result === 0){
-                            counter.text(" "+(count - 1));
-                            heart.removeClass('fa-heart');
-                            heart.addClass('fa-heart-o');
+                            if (count >0) {
+                                counter.text(" " + (count - 1));
+                                heart.removeClass('fa-heart');
+                                heart.addClass('fa-heart-o');
+                            }
                         } else {
                             var html = $(data);
                             util.modalSignIn(html);
@@ -161,7 +164,7 @@
         shareWeibo: function() {
 //            var self = this;
 
-            $('.share a').live('click', function(e){
+            $('.share a').on('click', function(e){
                 e.preventDefault();
 
                 var url = location.href;
@@ -207,7 +210,7 @@
 
             var $cancel = $form.find('.btn-cancel');
 //                console.log($cancel);
-            $cancel.live('click', function() {
+            $cancel.on('click', function() {
 //                console.log(this);
                 $form.removeClass('active');
             });
