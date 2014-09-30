@@ -153,7 +153,7 @@ def selection(request, template='main/selection.html'):
 
 @login_required
 def web_message(request,  template='account/message.html'):
-    _start_at = datetime.now()
+    # _start_at = datetime.now()
     if request.method == "GET":
         _request_user_id = request.user.id
         _timestamp = request.GET.get('timestamp',None)
