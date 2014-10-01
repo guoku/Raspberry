@@ -25,11 +25,11 @@
                 var counter = like.find('.like-count');
                 var url = $(this).attr("href");
                 var heart = like.find("i");
-//                var status = 0;
-//                if (heart.hasClass("fa-heart-o")) {
-//                    status = 1;
-//                }
-//                url = url.replace(/\/[01]\//,"/"+status+"/");
+                var status = 0;
+                if (heart.hasClass("fa-heart-o")) {
+                    status = 1;
+                }
+                url = url.replace(/\/[01]\//,"/"+status+"/");
 //                console.log(url);
                 $.ajax({
                     url: url,
@@ -42,6 +42,7 @@
                             heart.removeClass('fa-heart-o');
                             heart.addClass('fa-heart');
                         } else if (result === 0){
+//                            console.log(result);
                             if (count >0) {
                                 counter.text(" " + (count - 1));
                                 heart.removeClass('fa-heart');
