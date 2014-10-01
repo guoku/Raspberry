@@ -252,7 +252,11 @@ color: #bcbcbc;
     list-style: none outside none;
     padding-left: 0;
 }
-
+/* 取消按钮 */
+.btn-cancel {
+    background-color: #ccc;
+    color: #898989;
+}
 /* 购买按钮 */
 .btn-buy {
     font-size: 16px;
@@ -260,14 +264,14 @@ color: #bcbcbc;
 .btn-buy > span {
     font: 22px Georgia,serif;
 }
-/* 用户按钮*/
+/* 用户按钮 */
 .btn-user {
     display: inline-block;
     font-size: 14px;
     /*color: #333;*/
     padding: 5px;
 }
-
+/* 喜欢按钮 */
 .btn-like {
     display: inline-block;
     /*border-radius: 0;*/
@@ -289,6 +293,7 @@ color: #bcbcbc;
     border: #eee solid 1px;
     color: #333;
 }
+
 .btn-user:hover,
 .btn-user:focus,
 .btn-user:active,
