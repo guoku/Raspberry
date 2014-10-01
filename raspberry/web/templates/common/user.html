@@ -6,7 +6,10 @@
         <a class="pull-left" href="{% url 'web_user_index' user_context.user_id %}" target="_blank">
             <img class="media-object" src="{{ user_context.avatar_large }}" width="80" height="80">
         </a>
-        <a href="{% url 'web_follow' user_context.user_id 1 %}" class="btn btn-primary pull-right"><i class="fa fa-plus fa-lg" style="color: #fff"></i>&nbsp; <b>关注</b></a>
+        {% if user_context.relation == 3 %}
+
+            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="btn btn-primary pull-right"><i class="fa fa-plus fa-lg" style="color: #fff"></i>&nbsp; <b>关注</b></a>
+        {% endif %}
         <div class="media-body">
             <h4 class="media-heading">{{ user_context.nickname }}</h4>
             <p>
