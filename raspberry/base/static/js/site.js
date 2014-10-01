@@ -51,32 +51,57 @@
                         } else {
                             var html = $(data);
                             util.modalSignIn(html);
-//                            $('#SignInModal').modal('show');
-//                            var signcontent = $('#SignInModal').find('.modal-content');
-//                            html.appendTo(signcontent);
-//                            $('#SignInModal').modal('show');
                         }
                     }
-//                    statusCode: {
-//                        302: function() {
-//                            console.log('need login');
-//                        }
-//                    }
                 });
-//                $.post(url, function(data){
-//                    var count = parseInt(counter.text());
-//                    var result = parseInt(data);
-////                    console.log(result);
-//                    if (result === 1) {
-//                        counter.text(" "+(count + 1));
-//                        heart.removeClass('fa-heart-o');
-//                        heart.addClass('fa-heart');
-//                    } else if (result === 0) {
-//                        counter.text(" "+(count - 1));
-//                        heart.removeClass('fa-heart');
-//                        heart.addClass('fa-heart-o');
-//                    }
-//                });
+                e.preventDefault();
+            });
+        },
+
+        createEntity: function () {
+            var form = $('.create-entity form');
+            var entityExist = $(".entity-exist");
+            var addEntity = $(".add-entity");
+            var imageThumbails = $(".image-thumbnails");
+//            console.log(entityExist);
+            form.on('submit', function(e) {
+                var entity_url = form.find("input[name='cand_url']").val();
+//                console.log(this.action);
+                $.ajax({
+                    type: 'post',
+                    url: this.action,
+                    data: {cand_url:entity_url},
+                    dataType:"json",
+                    success : function (data) {
+                        if(data.status == "EXIST") {
+                            entityExist.find('a').attr("href", "/detail/"+data.data.entity_hash);
+                            entityExist.slideDown();
+                        } else {
+                            entityExist.slideUp();
+                            if (data.data.taobao_id == undefined) {
+
+                            } else {
+                                $(".detail_title span:eq(1)").text(data.data.taobao_title);
+//                                $(".detail_title_input").val(data.data.taobao_title);
+                                var title = $.trim(data.data.taobao_title);
+                                addEntity.find(".title").text(title);
+                                addEntity.find("input[name=title]").val(title);
+                            }
+                            addEntity.find(".entity-chief-img").attr('src', data.data.chief_image_url);
+                            imageThumbails.html("");
+                            for(var i=0; i < data.data.thumb_images.length; i++) {
+                                console.log(data.data.thumb_images[i]);
+                                var fix = data.data.taobao_id == undefined ? "" : "_50x50.jpg";
+                                imageThumbails.append("<div class='col-xs-3 col-sm-2'><div class='thumbnail'><div class='img-box'><img class='img-responsive' src="
+                                    +data.data.thumb_images[i]+fix+"></div></div></div>");
+                            }
+                            addEntity.slideDown();
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
                 e.preventDefault();
             });
         }
@@ -349,7 +374,7 @@
 
 //            console.log(noteDetail);
 //            console.log(note);
-            note.find('.add-comment').live('click', function (e) {
+            note.find('.add-comment').on('click', function (e) {
                 var comments = note.find('.note-comment-list');
                 var notecontent = note.find(".note-content");
 //                console.log(notecontent);
@@ -397,7 +422,7 @@
     (function init() {
 
         util.like();
-
+        util.createEntity();
         selection.loadData();
 
         detail.detailImageHover();

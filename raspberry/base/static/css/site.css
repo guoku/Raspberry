@@ -20,6 +20,10 @@ i {
     height:1px;
     margin-top: 20px;
 }
+
+.fa-plus {
+    color: #ffffff;
+}
 /* 精选点评标记 */
 .fa-star {
     color: #FF9500;
@@ -521,7 +525,22 @@ color: #bcbcbc;
     /*color: #fff;*/
 /*}*/
 
-
+/* 添加商品页 */
+.create-entity {
+    background-color: #fff;
+}
+.entity-exist {
+    margin-top: 30px;
+    display: none;
+}
+.add-entity {
+    margin-top: 30px;
+    /*margin-bottom: 20px;*/
+    display: none;
+}
+.add-entity .title {
+    margin-top: 20px;
+}
 /* 静态页 */
 .sidebar {
     padding: 0 20px 0 20px;
