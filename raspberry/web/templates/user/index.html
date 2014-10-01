@@ -16,6 +16,7 @@
 {% block content %}
     {% url 'web_user_likes' query_user_context.user_id as web_user_likes_url %}
     {% url 'web_user_notes' query_user_context.user_id as web_user_notes_url %}
+    {% url 'web_user_tags' query_user_context.user_id as web_user_tags_url %}
     {% url 'web_user_fans' query_user_context.user_id as web_user_fans_url %}
     {% url 'web_user_followings' query_user_context.user_id as web_user_followings_url %}
 
@@ -44,6 +45,9 @@
                     </li>
                     <li role="presentation" {% if web_user_notes_url in request.path %}class="active"{% endif %}>
                         <a href="{{ web_user_notes_url }}">{% trans 'notes' %}&nbsp; <strong>{{ query_user_context.entity_note_count }}</strong></a>
+                    </li>
+                    <li role="presentation" {% if web_user_tags_url in request.path %}class="active" {% endif %}>
+                        <a href="{{ web_user_tags_url }}">{% trans 'tags' %}&nbsp; <strong>{{ query_user_context.tag_count }}</strong></a>
                     </li>
                 </ul>
                 <ul class="nav nav-pills pull-right hidden-xs" role="tablist">
@@ -80,6 +84,14 @@
             <div class="row">
                 {% for note in note_list %}
                     {% include "common/entity.html" with entity_context=note.entity_context %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if web_user_tags_url in request.path %}
+            <div class="row">
+                {% for tag_context in tag_list %}
+                    {% include "common/tag.html" with tag_context=tag_context user_id=query_user_context.user_id %}
                 {% endfor %}
             </div>
         {% endif %}
