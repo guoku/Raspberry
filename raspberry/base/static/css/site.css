@@ -29,11 +29,26 @@ i {
 .fa-heart {
     color: red;
 }
+/* 搜索 */
+.fa-search {
+    color: #000000;
+}
+
+.search input {
+    border: 0;
+}
+.search .input-group-addon {
+    border-radius: 0;
+    background-color: #fff;
+    border: 0;
+}
+
 a:hover,
 a:focus {
   color: #333333;
   text-decoration: none;
 }
+
 
 .bio{color: #999;}
 
