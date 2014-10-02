@@ -78,7 +78,7 @@ window.location.href = url;</script><![endif]-->
                         {% include 'account/partial/auth.html' with user_context=request.user %}
                     {% else %}
                         <li><a href="{% url 'web_login' %}?next={{ request.path }}" data-toggle="modal" data-target="#SignInModal">{% trans 'sign in' %}</a></li>
-                        <li><a href="{% url 'web_register' %}" data-toggle="modal" data-target="#SignUpModal">{% trans 'sign up' %}</a></li>
+                        <li><a href="{% url 'web_register' %}">{% trans 'sign up' %}</a></li>
                     {% endif %}
                 </ul>
             {% endif %}
