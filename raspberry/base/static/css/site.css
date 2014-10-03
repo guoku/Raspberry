@@ -117,6 +117,15 @@ color: #bcbcbc;
     margin-bottom: 20px;
 }
 
+.navbar-toggle{
+    margin-right: 0px;
+}
+
+/* 页码 */
+.pager li {
+    display: inline-block;
+    margin-top: 10px;
+}
 /* 图片宽高相等处理 */
 .img-box{
     display:block;
