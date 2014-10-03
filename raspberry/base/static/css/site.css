@@ -100,6 +100,9 @@ a {
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
     background-color: initial;
 }
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
+    background-color: initial;
+}
 
 .navbar-inverse {
     background-color: #343434;
@@ -115,6 +118,10 @@ color: #bcbcbc;
     margin-right: 5px;
     margin-left: 5px;
     margin-bottom: 20px;
+}
+
+.dropdown-menu>li>a{
+    padding: 10px 20px;
 }
 
 .navbar-toggle{
