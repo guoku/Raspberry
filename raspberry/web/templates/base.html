@@ -73,7 +73,7 @@ window.location.href = url;</script><![endif]-->
                     {% url 'web_popular' as web_popular_url %}
                     <li {% if web_popular_url in request.path %}class="active" {% endif %}>
                         <a href="{{ web_popular_url }}">{% trans 'popular' %}</a>
-                    </li>
+                    </li>1
                 </ul>
 
                 {% url 'web_login' as web_login_url %}
@@ -97,7 +97,7 @@ window.location.href = url;</script><![endif]-->
                 </form>
 
                 <ul class="nav navbar-nav navbar-right hidden-sm hidden-xs">
-                    <li><a href="#"><i class="fa fa-plus" style="padding-right:40px;font-size:18px;"></i></a></li>
+                    <li><a href="{% url 'web_new_entity' %}"><i class="fa fa-plus" style="padding-right:40px;font-size:18px;"></i></a></li>
                 </ul>
             </div>
         </div>
