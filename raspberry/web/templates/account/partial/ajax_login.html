@@ -1,6 +1,9 @@
 {% load i18n staticfiles %}
 
         <div class="row">
+            <div class="col-sm-offset-4 col-sm-4" style="margin-top: 20px;">
+                <img class="img-responsive" alt="欢迎回来" src="http://static.guoku.com/static/v3/images/signin.png">
+            </div>
             <form class="form-horizontal" role="form" method="post" action="{% url 'web_login' %}">
                 {% csrf_token %}
                 <h2></h2>
@@ -14,9 +17,12 @@
                     {% endfor %}
                     <div class="checkbox">
                         <div class="col-sm-2 col-sm-offset-4">
-                        <label>
-                            <input type="checkbox" value="remember-me">{% trans 'remember me' %}
-                        </label>
+                            <label>
+                                <input type="checkbox" value="remember-me">{% trans 'remember me' %}
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                             <a class="pull-right" href="{% url 'web_forget_passwd' %}">忘记密码?</a>
                         </div>
                     </div>
                 </fieldset>
@@ -26,4 +32,7 @@
                     </div>
                 </div>
             </form>
+            <div class="col-sm-offset-4 col-sm-4" style="margin-bottom: 30px;">
+                <a class="btn btn-link" href="{% url 'web_register' %}">注册帐号&nbsp; >></a>
+            </div>
         </div>

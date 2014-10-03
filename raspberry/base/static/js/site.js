@@ -190,7 +190,7 @@
         shareWeibo: function() {
 //            var self = this;
 
-            $('.share a').on('click', function(e){
+            $('.detail-share a').on('click', function(e){
                 e.preventDefault();
 
                 var url = location.href;

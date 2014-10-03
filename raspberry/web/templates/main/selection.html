@@ -32,7 +32,7 @@
                     一目了然的优质生活主张。 </h3>
                     <div class="row welcome-sign">
                         <div class="col-sm-3">
-                            <a class="btn btn-primary btn-lg" type="button" href="{% url 'web_register' %}" data-toggle="modal" data-target="#SignUpModal" >注册帐号</a>
+                            <a class="btn btn-primary btn-lg" type="button" href="{% url 'web_register' %}">注册帐号</a>
                         </div>
                         <div class="col-sm-9">
                             <div class="welcome-login">
@@ -47,7 +47,7 @@
     </div>
     {% endif %}
     <div class="container">
-        <div class="row">
+        <div class="row hidden-xs">
             <ul class="nav nav-pills nav-home" role="tablist">
                 <li {% if curr_category_id == 0 %}role="presentation" class="disabled"{% endif %}><a href="{% url 'web_selection' %}">所有</a></li>
                 {% for category in category_list %}
@@ -73,15 +73,6 @@
                         </div>
                         <div style="padding-left: 5px;padding-right: 5px;padding-bottom: 40px;">
                             <div class="pull-left">
-{#                                {% if selection.is_user_already_like %}#}
-{#                                    <a class="btn btn-like" href="{% url 'web_like_entity' selection.entity_context.entity_id '0' %}" target="_blank">#}
-{#                                        <i class="fa fa-heart fa-lg"></i>&nbsp;{% trans 'likes' %} <span class="like-count">{{ selection.entity_context.like_count }}</span>#}
-{#                                    </a>#}
-{#                                {% else %}#}
-{#                                    <a class="btn btn-like" href="{% url 'web_like_entity' selection.entity_context.entity_id '1' %}" target="_blank">#}
-{#                                        <i class="fa fa-heart-o fa-lg"></i>&nbsp;{% trans 'likes' %} <span class="like-count">{{ selection.entity_context.like_count }}</span>#}
-{#                                    </a>#}
-{#                                {% endif %}#}
                                 <a class="btn btn-like" href="{% url 'web_like_entity' selection.entity_context.entity_id '1' %}" target="_blank">
                                     {% if selection.is_user_already_like %}
                                         <i class="fa fa-heart fa-lg"></i>
