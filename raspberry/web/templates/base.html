@@ -73,7 +73,7 @@ window.location.href = url;</script><![endif]-->
                     {% url 'web_popular' as web_popular_url %}
                     <li {% if web_popular_url in request.path %}class="active" {% endif %}>
                         <a href="{{ web_popular_url }}">{% trans 'popular' %}</a>
-                    </li>1
+                    </li>
                 </ul>
 
                 {% url 'web_login' as web_login_url %}
