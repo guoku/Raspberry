@@ -6,18 +6,15 @@
 {% block title %}热门{% endblock %}
 {% block keyword %}果库,购物分享,淘宝网购物,淘宝网精选,精品推荐,果库热门,品质生活{% endblock %}
 {% block description %}热门，每日、每周、每月的最高人气商品，反映最近网络购物的潮流趋势，便于你快速并且简单、直接地找到自己喜爱的商品。{% endblock %}
-{#{% block css %}#}
-{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/popular.css' %}">#}
-{#{% endblock %}#}
-{#{% block css %}#}
-{#{% endblock %}#}
+
+
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <ol class="breadcrumb">
-                    <li {% if group == 'daily' %}class="active"{% endif %}><a href="{% url 'web_popular' %}?group=daily">24 小时</a></li>
-                    <li {% if group == 'weekly' %}class="active"{% endif %}><a href="{% url 'web_popular' %}?group=weekly">7 天</a></li>
+                    <li {% if group == 'daily' %}class="disabled"{% endif %}><a href="{% url 'web_popular' %}?group=daily">24 小时</a></li>
+                    <li {% if group == 'weekly' %}class="disabled"{% endif %}><a href="{% url 'web_popular' %}?group=weekly">7 天</a></li>
                     <p class="pull-right">最近更新：{{ popular_updated_time|format_time }}</p>
                 </ol>
             </div>
@@ -29,47 +26,4 @@
             {% endfor %}
         </div>
     </div>
-{#    <div id="popular">#}
-{#        <div class="time">#}
-{#            <div class="nav">#}
-{#                <a href="{% url 'web_popular' %}?group=daily" {% if group == 'daily' %}class="active"{% endif %}>24 小时</a>#}
-{#                <span class="sep">|</span>#}
-{#                <a href="{% url 'web_popular' %}?group=weekly" {% if group == 'weekly' %}class="active"{% endif %}>7 天</a>#}
-{#            </div>#}
-{##}
-{#            <span class="recent">最近更新：{{ popular_updated_time|format_time }}</span>#}
-{#        </div>#}
-{##}
-{#        <ul class="entities">#}
-{#            {% for popular in popular_list %}#}
-{#                <li class="popular-entity">#}
-{#                    <div class="title">#}
-{#                        {% spaceless %}#}
-{#                        <h2>#}
-{#                            {% if popular.entity_context.brand|length != 0 %}#}
-{#                                {{ popular.entity_context.brand }}#}
-{#                                -{% endif %}#}
-{#                            {{ popular.entity_context.title|truncatechars:15 }}#}
-{#                        </h2>#}
-{#                        {% endspaceless %}#}
-{#                        <span class="price">&#65509;{{ popular.entity_context.price }}</span>#}
-{#                    </div>#}
-{#                    <a href="{% url 'web_detail' popular.entity_context.entity_hash %}" class="entity-img">#}
-{#                        <img alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">#}
-{#                    </a>#}
-{##}
-{#                    <div class="detail">#}
-{#                        {% if popular.is_user_already_like %}#}
-{#                            <a href="{% url 'web_like_entity' popular.entity_context.entity_id '0' %}" class="like liked">#}
-{#                        {% else %}#}
-{#                            <a href="{% url 'web_like_entity' popular.entity_context.entity_id '1' %}" class="like">#}
-{#                        {% endif %}#}
-{#                            <span class="icon"></span>喜爱#}
-{#                            <span class="count">{{ popular.entity_context.like_count }}</span>#}
-{#                        </a>#}
-{#                    </div>#}
-{#                </li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
-{#    </div>#}
 {% endblock %}
