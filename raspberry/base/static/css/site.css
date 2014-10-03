@@ -35,7 +35,7 @@ i {
 }
 /* 搜索 */
 .fa-search {
-    color: #000000;
+    color: #ccc;
 }
 
 .search input {
@@ -105,13 +105,6 @@ a {
     background-color: #343434;
     background-color: rgba(52,52,52,.95);
     border: 0;
-}
-.navbar-menu {
-    padding-left: 30px;
-}
-
-.navbar-menu > li{
-    margin-right: 20px;
 }
 
 .navbar-inverse .navbar-nav>li>a {
@@ -195,9 +188,16 @@ color: #bcbcbc;
     margin-right: 5px;
 }
 
+.entity-detail >a >img {
+    padding: 20px;
+}
+
 @media (max-width: 768px){
     .note-avatar{
         width: 36px;
+    }
+    .entity-detail >a >img {
+        padding: 10px;
     }
 }
 
@@ -238,7 +238,16 @@ color: #bcbcbc;
 .navbar-brand {
     padding-bottom: 10px;
     padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 40px;
 }
+
+@media (max-width: 768px){
+    .navbar-brand{
+        padding-left: 0px;
+    }
+}
+
 .footer {
     border-top: 1px solid #e5e5e5;
     color: #777;

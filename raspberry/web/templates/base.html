@@ -59,12 +59,12 @@ window.location.href = url;</script><![endif]-->
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand hidden-sm" href="{{ request.hostname }}">
+                <a class="navbar-brand" href="{{ request.hostname }}">
                     <img alt="guoku" src="{% static 'images/logo.png' %}">
                 </a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-menu">
+                <ul class="nav navbar-nav">
                     {% url 'web_selection' as web_selection_url %}
                     <li {% if web_selection_url in request.path %}class="active"{% endif %}>
                         <a href="{{ web_selection_url }}">{% trans 'selection' %}</a>
