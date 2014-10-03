@@ -167,4 +167,4 @@ msgid "links"
 msgstr "友情链接"
 
 msgid "agreement"
-msgstr "关于"
+msgstr "协议"
