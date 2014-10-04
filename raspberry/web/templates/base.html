@@ -27,13 +27,13 @@ window.location.href = url;</script><![endif]-->
     <meta content="http://www.guoku.com" property="og:url">
     <meta content="果库,Guoku" property="og:title">
 {#    <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">#}
-    {% block css %}
+
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.2.0/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}">
 {#        <link rel="stylesheet" type="text/css" href="{% static 'styles/normalize.min.css' %}">#}
 {#        <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">#}
-    {% endblock %}
+    {% block css %}{% endblock %}
 
 <!-- Respond.js proxy on external server -->
     <!--[if lt IE 9]>

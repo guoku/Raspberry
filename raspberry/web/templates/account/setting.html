@@ -2,11 +2,12 @@
 {% load i18n staticfiles %}
 {% load account %}
 
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.fileupload.css' %}">
+{% endblock %}
+
+
 {% block title %}{% trans "settings" %}{% endblock %}
-{#{% block css %}#}
-{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">#}
-{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">#}
-{#{% endblock %}#}
 
 {% block content %}
     <div class="container">
@@ -14,8 +15,13 @@
             <h2 class="col-sm-offset-4">{% trans 'account settings' %}</h2>
             <hr />
         </div>
+
         <div class="row">
-{#            <h3 class="col-sm-offset-4">个人资料</h3>#}
+            {% include 'account/partial/avatar_update.html' with user_context=user_context %}
+        </div>
+
+        <div class="row">
+            <h3 class="col-sm-offset-4">个人资料</h3>
             <form method="post" action="{% url 'web_update_profile' %}" class="form-horizontal">
                 {% csrf_token %}
                 <fieldset>
@@ -36,16 +42,22 @@
             </form>
         </div>
         <div class="row">
-            <form class="form-horizontal" method="post">
+            <h3 class="col-sm-offset-4">更改密码</h3>
+            <form method="POST" action="{% url 'web_change_password' %}" class="form-horizontal">
                 {% csrf_token %}
                 <fieldset>
-{#                    <div class="form-group">#}
-{#                        <label class="col-sm-offset-3 col-sm-2 control-label"></label>#}
-{#                    </div>#}
+                    {% for field in password_form %}
+                        <div class="form-group">
+                            <label class="col-sm-offset-3 col-sm-2 control-label" for="{{ field.id_for_label }}" >{{ field.label }}:</label>
+                            <div class="col-sm-4">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </fieldset>
                 <div class="form-group">
                     <div class="col-sm-4 col-sm-offset-5">
-                        <button type="submit" class="btn btn-primary">{% trans "update profile" %}</button>
+                        <button type="submit" class="btn btn-primary">修改密码</button>
                     </div>
                 </div>
             </form>
@@ -158,6 +170,26 @@
 {#            </div>#}
 {#        </form>#}
 {#    </div>#}
+
+{% endblock %}
+
+
+{% block script %}
+    <script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+    <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'js/jquery.fileupload.js' %}"></script>
+    <script>
+$(function () {
+    $('#fileupload').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo(document.body);
+            });
+        }
+    });
+});
+</script>
 {% endblock %}
 
 {#{% block script %}#}

@@ -106,11 +106,11 @@ class SignUpAccountFrom(forms.Form):
         return self.cleaned_data['agree_tos']
 
 class SignUpAccountBioFrom(forms.Form):
-    avatar = forms.FileField(
-        label=_('select a file'), 
-        help_text=_('max. 2 megabytes'), 
-        required=False
-    )
+    # avatar = forms.FileField(
+    #     label=_('select a file'),
+    #     help_text=_('max. 2 megabytes'),
+    #     required=False
+    # )
     bio = forms.CharField(
         widget=forms.Textarea(attrs={'rows':'4', 'class':'form-control'}),
         label=_('bio'), 
@@ -148,9 +148,9 @@ class SettingAccountForm(SignUpAccountBioFrom):
                              label=_('email'), help_text=_(''))
 
 class ChangePasswordForm(forms.Form):
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('old password')}), label=_('old password'), help_text=_(''))
-    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('new password')}), label=_('new password'), help_text=_(''), min_length=6, max_length=20)
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('confirm password')}), label=_('confirm password'), help_text=_(''), min_length=6, max_length=20)
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('old password')}), label=_('old password'), help_text=_(''))
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('new password')}), label=_('new password'), help_text=_(''), min_length=6, max_length=20)
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('confirm password')}), label=_('confirm password'), help_text=_(''), min_length=6, max_length=20)
 
     def __init__(self, user, data=None):
         self.user = user
