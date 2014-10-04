@@ -388,6 +388,7 @@ def update_profile(request):
 def setting(request, template = 'account/setting.html'):
     _msg_code = request.GET.get('msg', None)
     _user_context = User(request.user.id).read()
+    log.info(_user_context)
     profile_form = SettingAccountForm(initial = _user_context)
     password_form = ChangePasswordForm(request.user)
     return render_to_response(

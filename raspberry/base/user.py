@@ -544,6 +544,7 @@ class User(object):
         _basic_info['gender'] = _profile.gender 
         _basic_info['location'] = _profile.location
         _basic_info['city'] = _profile.city
+        _basic_info['website'] = _profile.website
         _basic_info['bio'] = '' if _profile.bio == None else _profile.bio 
         
         self.__ensure_avatar_obj()
