@@ -48,7 +48,7 @@
 
     var settings = {
         setAddress: function() {
-            var setting = $('#settings');
+            var setting = $('#settings, #register-bio');
             var location = setting.find('.location');
             var city = setting.find('.city');
             var l = Location.location;
