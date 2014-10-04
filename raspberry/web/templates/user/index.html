@@ -29,13 +29,13 @@
                 {% if relation == 4 %}
                     <a class="btn btn-default pull-right" href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans 'settings' %}</a>
                 {% elif relation == 3 %}
-                    <a class="btn btn-cancel pull-right"><i class="fa fa-exchange fa-lg" style="color: #fff"></i>&nbsp; 取消关注</a>
+                    <a class="follow is-fan btn btn-cancel pull-right" href="{% url 'web_follow' query_user_context.user_id 0 %}"><i class="fa fa-exchange fa-lg"></i>&nbsp; 取消关注</a>
                 {% elif relation == 1 %}
-                    <a class="btn btn-cancel pull-right"><i class="fa fa-check fa-lg" style="color: #fff"></i>&nbsp; 取消光柱</a>
+                    <a class="follow btn btn-cancel pull-right" href="{% url 'web_follow' query_user_context.user_id 0 %}"><i class="fa fa-check fa-lg"></i>&nbsp; 取消光柱</a>
                 {% elif relation == 2 %}
-                    <a class="btn btn-primary pull-right"><i class="fa fa-plus" style="color: #fff"></i>&nbsp; 关注</a>
+                    <a class="follow is-fan btn btn-primary pull-right" href="{% url 'web_follow' query_user_context.user_id 1 %}"><i class="fa fa-plus"></i>&nbsp; 关注</a>
                 {% elif relation == 0 %}
-                    <a class="btn btn-primary pull-right"><i class="fa fa-plus" style="color: #fff"></i>&nbsp; 关注</a>
+                    <a class="follow btn btn-primary pull-right" href="{% url 'web_follow' query_user_context.user_id 1 %}"><i class="fa fa-plus" ></i>&nbsp; 关注</a>
                 {% endif %}
 
                 <div class="media-body">

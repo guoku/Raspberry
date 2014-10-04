@@ -38,6 +38,14 @@ i {
     color: #ccc;
 }
 
+.fa-check {
+    color: #fff;
+}
+
+.fa-exchange {
+    color: #fff;
+}
+
 .search input {
     border: 0;
 }
