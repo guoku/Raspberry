@@ -96,9 +96,11 @@ window.location.href = url;</script><![endif]-->
                     </div>
                 </form>
 
+                {% if web_login_url not in request.path and web_register_url not in request.path %}
                 <ul class="nav navbar-nav navbar-right hidden-sm hidden-xs">
                     <li><a href="{% url 'web_new_entity' %}"><i class="fa fa-plus" style="padding-right:40px;font-size:18px;"></i></a></li>
                 </ul>
+                {% endif %}
             </div>
         </div>
     </header>
