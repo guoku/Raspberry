@@ -17,6 +17,7 @@
             }
         },
 
+//      初始化 tag
         initTag: function () {
 
             var array = $(".with-tag");
@@ -110,6 +111,7 @@
             var form = $('.create-entity form');
             var entityExist = $(".entity-exist");
             var addEntity = $(".add-entity");
+            var addEntityNote = $(".add-entity-note");
             var imageThumbails = $(".image-thumbnails");
 //            console.log(entityExist);
             form.on('submit', function(e) {
@@ -126,6 +128,10 @@
                             entityExist.slideDown();
                         } else {
                             entityExist.slideUp();
+
+                            console.log(data.data.user_context);
+                            addEntityNote.find("a img").attr("src", data.data.user_context.avatar_small);
+//                            addEntityNote.find('.media-heading').html(data.data.user_context.nickname);
                             if (data.data.taobao_id == undefined) {
 
                             } else {
@@ -138,12 +144,21 @@
                             addEntity.find(".entity-chief-img").attr('src', data.data.chief_image_url);
                             imageThumbails.html("");
                             for(var i=0; i < data.data.thumb_images.length; i++) {
-                                console.log(data.data.thumb_images[i]);
+//                                console.log(data.data.thumb_images[i]);
                                 var fix = data.data.taobao_id == undefined ? "" : "_50x50.jpg";
                                 imageThumbails.append("<div class='col-xs-3 col-sm-2'><div class='thumbnail'><div class='img-box'><img class='img-responsive' src="
                                     +data.data.thumb_images[i]+fix+"></div></div></div>");
                             }
+
+                            if(data.data.taobao_id == undefined){
+                                $('<input type="hidden" name="jd_id" value="'+data.data.jd_id+'"><input type="hidden" name="jd_title" value="'+data.data.jd_title+'">').appendTo($(".add-entity-note form"));
+                                $(".detail_taobao_brand").val(data.data.brand);
+                            } else {
+                                $('<input type="hidden" name="taobao_id" value="'+data.data.taobao_id+'"><input type="hidden" name="taobao_title" value="'+data.data.taobao_title+'">').appendTo($(".add-entity-note form"));
+                            }
+                            $('<input type="hidden" name="shop_link" value="'+data.data.shop_link+'"><input type="hidden" name="shop_nick" value="'+data.data.shop_nick+'"><input type="hidden" name="url" value="'+data.data.cand_url+'"><input type="hidden" name="price" value="'+data.data.price+'"><input type="hidden" name="chief_image_url" value="'+data.data.chief_image_url+'"><input type="hidden" name="cid" value="'+data.data.cid+'"><input type="hidden" name="selected_category_id" value="'+data.data.selected_category_id+'"><input name="user_id" type="hidden" value="'+data.data.user_context.user_id+'">').appendTo($(".add-entity-note form"));
                             addEntity.slideDown();
+                            addEntityNote.slideDown();
                         }
                     },
                     error: function(error) {

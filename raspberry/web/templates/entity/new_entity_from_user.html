@@ -11,7 +11,7 @@
 
             <div class="col-sm-8">
 
-                <div class="well create-entity" style="border-radius: 0;">
+                <div class="well create-entity" style="border-radius: 0;margin-bottom: 0;">
                     <p>选择货真价实，有用、有趣、有价值的好商品</p>
                     <form class="form-horizontal" method="post" action="{% url 'web_load_item_info' %}">
                         <fieldset>
@@ -48,7 +48,31 @@
                         <div class="image-thumbnails"></div>
                     </div>
                 </div>
+                <div class="row" style="margin: 0;">
+                <div class="media add-entity-note">
+                    <a class="pull-left" href="#" style="padding: 20px 0 0 20px; margin: 0;"><img class="img-circle media-object" width="60" height="60" src=""></a>
+                    <div class="media-body">
+{#                        <h4 class="media-heading"></h4>#}
+                        <form class="form-horizontal" action="{% url 'web_new_entity'%}" method="POST">
+                            <fieldset>
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <textarea class="form-control" name="note_text" style="resize: none;" rows="4" placeholder="来说说你的评价吧？欢迎真实、有用、有趣的商品点评。"></textarea>
+                                </div>
+                            </div>
+                            </fieldset>
+                            <div class="form-group">
+                                <div class="col-sm-offset-9 col-sm-3">
+                                <button class="btn btn-primary" type="submit">发表</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                </div>
             </div>
+
+            {# slidebar #}
             <div class="hidden-xs col-sm-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
