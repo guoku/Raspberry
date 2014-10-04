@@ -82,11 +82,30 @@
             {{ wizard.management_form }}
             <fieldset>
                 {% for field in wizard.form %}
-                    <div class="form-group">
+                    {% if field.name != "agree_tos" %}
+                    <div class="form-group {% if field.errors %}has-error{% endif %}">
                         <div class="col-sm-4 col-sm-offset-4">
                             {{ field }}
                         </div>
+                        {% for error in field.errors %}
+                            <span class="help-block col-sm-2" style="background-color: #ffffcc; border: 1px solid #ccc;">{{ error|escape }}</span>
+                        {% endfor %}
                     </div>
+                    {% else %}
+                        <div class="checkbox">
+                            <label class="col-sm-2 col-sm-offset-4">
+                                {{ field }}同意果库
+                            </label>
+
+                            <small class="col-sm-2"><a href="{% url 'web_agreement' %}">使用协议</a></small>
+                            {% if wizard.form.agree_tos.errors %}
+                                <span>
+                                {% for error in wizard.form.agree_tos.errors %}{{ error|escape }}{% endfor %}
+                                </span>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
                 {% endfor %}
             </fieldset>
             <div class="form-group">
@@ -98,24 +117,3 @@
     </div>
 </div>
 {% endblock %}
-
-
-{#{% block script %}#}
-{#    <script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>#}
-{#    <script src="{% static 'js/jquery.ui.widget.js' %}"></script>#}
-{#    <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>#}
-{#    <script src="{% static 'js/jquery.fileupload.js' %}"></script>#}
-{#    <script src="{% static 'js/account.js' %}"></script>#}
-{#    <script>#}
-{#$(function () {#}
-{#    $('#fileupload').fileupload({#}
-{#        dataType: 'json',#}
-{#        done: function (e, data) {#}
-{#            $.each(data.result.files, function (index, file) {#}
-{#                $('<p/>').text(file.name).appendTo(document.body);#}
-{#            });#}
-{#        }#}
-{#    });#}
-{#});#}
-{#</script>#}
-{#{% endblock %}#}
