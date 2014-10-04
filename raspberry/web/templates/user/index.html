@@ -22,22 +22,29 @@
 
     <div class="container">
         <div class="row">
-            <div class="user-info">
-{#                <div class="pull-left">#}
-                    <img class="img-circle img-responsive" src="{{ query_user_context.avatar_large }}" alt="{{ query_user_context.nickname }}" width="120" height="120">
-{#                </div>#}
-                <div>
-                    <p><strong>{{ query_user_context.nickname }}</strong></p>
-                    <p>{{ query_user_context.bio }}</p>
-                    <address>{{ query_user_context.location }} {{ query_user_context.city }}</address>
-                </div>
+            <div class="media" style="border: 1px solid #ccc; padding: 20px; margin: 0 15px 0 15px;">
+                <a class="pull-left" href="#">
+                    <img class="media-object img-responsive img-circle" src="{{ query_user_context.avatar_large }}" alt="{{ query_user_context.nickname }}" width="120" height="120" />
+                </a>
+                {% if relation == 4 %}
+                    <a class="btn btn-default pull-right" href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans 'settings' %}</a>
+                {% elif relation == 3 %}
+                    <a class="btn btn-cancel pull-right"><i class="fa fa-exchange fa-lg" style="color: #fff"></i>&nbsp; 取消关注</a>
+                {% elif relation == 1 %}
+                    <a class="btn btn-cancel pull-right"><i class="fa fa-check fa-lg" style="color: #fff"></i>&nbsp; 取消光柱</a>
+                {% elif relation == 2 %}
+                    <a class="btn btn-primary pull-right"><i class="fa fa-plus" style="color: #fff"></i>&nbsp; 关注</a>
+                {% elif relation == 0 %}
+                    <a class="btn btn-primary pull-right"><i class="fa fa-plus" style="color: #fff"></i>&nbsp; 关注</a>
+                {% endif %}
 
-                <div class="pull-right hidden-xs">
-                    {% if relation == 4 %}
-                        <a class="btn btn-default" href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans 'settings' %}</a>
-                    {% endif %}
+                <div class="media-body">
+                    <h4 class="media-heading">{{ query_user_context.nickname }}</h4>
+                    <p>{{ query_user_context.bio }}</p>
+                    <address>{{ query_user_context.location }}  {{ query_user_context.city }}</address>
                 </div>
             </div>
+
             <div class="navbar nav-user-index">
                 <ul class="nav nav-pills pull-left" role="tablist">
                     <li role="presentation" {% if web_user_likes_url in request.path %}class="active"{% endif %}>
@@ -64,10 +71,10 @@
         {% if web_user_likes_url in request.path %}
             <div class="row">
                 <ul class="nav nav-pills nav-home" role="tablist">
-                    <li {% if curr_category_id == 0 %}role="presentation" class="disabled"{% endif %}><a href="{% url 'web_selection' %}">所有</a></li>
+                    <li {% if curr_category_id == 0 %}role="presentation" class="disabled"{% endif %}><a href="{{ web_user_likes_url }}">所有</a></li>
                     {% for category in category_list %}
                         <li {% if category.category_id == curr_category_id %}role="presentation" class="disabled"{% endif %}>
-                            <a href="{% url 'web_selection' %}?c={{ category.category_id }}">{{ category.category_title }}</a>
+                            <a href="{{ web_user_likes_url }}?c={{ category.category_id }}">{{ category.category_title }}</a>
                         </li>
                     {% endfor %}
                 </ul>

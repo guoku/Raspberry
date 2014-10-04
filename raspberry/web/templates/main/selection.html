@@ -95,7 +95,7 @@
             {% endfor %}
         </div>
         {% if paginator %}
-            {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url %}
+            {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url cid=curr_category_id %}
         {% endif %}
     </div>
 {% endblock %}
