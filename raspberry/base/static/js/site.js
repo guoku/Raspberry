@@ -150,7 +150,9 @@
                                 var fix = data.data.taobao_id == undefined ? "" : "_50x50.jpg";
                                 imageThumbails.append("<div class='col-xs-3 col-sm-2'><div class='thumbnail'><div class='img-box'><img class='img-responsive' src="
                                     +data.data.thumb_images[i]+fix+"></div></div></div>");
+                                $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'>').appendTo($(".add-entity-note form"));
                             }
+
 
                             if(data.data.taobao_id == undefined){
                                 $('<input type="hidden" name="jd_id" value="'+data.data.jd_id+'"><input type="hidden" name="jd_title" value="'+data.data.jd_title+'">').appendTo($(".add-entity-note form"));
@@ -158,7 +160,14 @@
                             } else {
                                 $('<input type="hidden" name="taobao_id" value="'+data.data.taobao_id+'"><input type="hidden" name="taobao_title" value="'+data.data.taobao_title+'">').appendTo($(".add-entity-note form"));
                             }
-                            $('<input type="hidden" name="shop_link" value="'+data.data.shop_link+'"><input type="hidden" name="shop_nick" value="'+data.data.shop_nick+'"><input type="hidden" name="url" value="'+data.data.cand_url+'"><input type="hidden" name="price" value="'+data.data.price+'"><input type="hidden" name="chief_image_url" value="'+data.data.chief_image_url+'"><input type="hidden" name="cid" value="'+data.data.cid+'"><input type="hidden" name="selected_category_id" value="'+data.data.selected_category_id+'"><input name="user_id" type="hidden" value="'+data.data.user_context.user_id+'">').appendTo($(".add-entity-note form"));
+                            $('<input type="hidden" name="shop_link" value="'+data.data.shop_link+'">' +
+                                '<input type="hidden" name="shop_nick" value="'+data.data.shop_nick+'">' +
+                                '<input type="hidden" name="url" value="'+data.data.cand_url+'">' +
+                                '<input type="hidden" name="price" value="'+data.data.price+'">' +
+                                '<input type="hidden" name="chief_image_url" value="'+data.data.chief_image_url+'">' +
+                                '<input type="hidden" name="cid" value="'+data.data.cid+'">' +
+                                '<input type="hidden" name="selected_category_id" value="'+data.data.selected_category_id+'">' +
+                                '<input name="user_id" type="hidden" value="'+data.data.user_context.user_id+'">').appendTo($(".add-entity-note form"));
                             addEntity.slideDown();
                             addEntityNote.slideDown();
                         }
@@ -188,7 +197,21 @@
         },
 
         postNewEntity: function() {
-            var NewEntityNoteForm = $(".add-entity-note form");
+            var newEntityForm = $(".add-entity-note form");
+
+            newEntityForm.on("submit", function (e){
+                var text = $.trim(newEntityForm.find("textarea[name='note_text']").val());
+                if (text.length > 0) {
+                    var brand = $(".add-entity input[name='brand']").val();
+                    var title = $(".add-entity input[name='title']").val();
+                    $('<input type="hidden" name="brand" value="'+brand+'">').appendTo(newEntityForm);
+                    $('<input type="hidden" name="title" value="'+title+'">').appendTo(newEntityForm);
+                    return true;
+                } else {
+                    $(".add-entity-note form textarea[name='note_text']").focus();
+                    return false;
+                }
+            });
         }
     };
 
@@ -512,6 +535,8 @@
 
         createNewEntity.createEntity();
         createNewEntity.BrandAndTitle();
+        createNewEntity.postNewEntity();
+
 
         selection.loadData();
 
