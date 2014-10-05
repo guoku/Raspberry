@@ -129,7 +129,7 @@
                         } else {
                             entityExist.slideUp();
 
-                            console.log(data.data.user_context);
+//                            console.log(data.data.user_context);
                             addEntityNote.find("a img").attr("src", data.data.user_context.avatar_small);
 //                            addEntityNote.find('.media-heading').html(data.data.user_context.nickname);
                             if (data.data.taobao_id == undefined) {
@@ -166,6 +166,23 @@
                     }
                 });
                 e.preventDefault();
+            });
+        },
+
+        BrandAndTitle: function() {
+            var addEntity = $(".add-entity");
+            addEntity.find("input[name='brand']").on('input propertychange', function() {
+                var brand = $(this).val();
+                if (brand.length > 0) {
+                    addEntity.find(".brand").html(brand + " -");
+                } else {
+//                    console.log("nonono");
+                    addEntity.find(".brand").html(brand);
+                }
+            });
+            addEntity.find("input[name='title']").on('input propertychange', function() {
+                var title = $(this).val();
+                addEntity.find(".title").html(title);
             });
         }
     };
@@ -488,6 +505,7 @@
         util.follower();
         util.createEntity();
         util.initTag();
+        util.BrandAndTitle();
 
         selection.loadData();
 
