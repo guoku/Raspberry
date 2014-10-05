@@ -105,8 +105,10 @@
                 });
                 e.preventDefault();
             })
-        },
+        }
+    };
 
+    var createNewEntity = {
         createEntity: function () {
             var form = $('.create-entity form');
             var entityExist = $(".entity-exist");
@@ -176,7 +178,6 @@
                 if (brand.length > 0) {
                     addEntity.find(".brand").html(brand + " -");
                 } else {
-//                    console.log("nonono");
                     addEntity.find(".brand").html(brand);
                 }
             });
@@ -184,6 +185,10 @@
                 var title = $(this).val();
                 addEntity.find(".title").html(title);
             });
+        },
+
+        postNewEntity: function() {
+            var NewEntityNoteForm = $(".add-entity-note form");
         }
     };
 
@@ -503,9 +508,10 @@
 
         util.like();
         util.follower();
-        util.createEntity();
         util.initTag();
-        util.BrandAndTitle();
+
+        createNewEntity.createEntity();
+        createNewEntity.BrandAndTitle();
 
         selection.loadData();
 
