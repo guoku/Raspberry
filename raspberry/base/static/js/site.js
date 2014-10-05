@@ -101,6 +101,9 @@
                         $this.html('<i class="fa fa-plus"></i>&nbsp; 关注');
 //                        $this.html('<span class="img_follow"></span><b>关注</b>');
                         $this.removeClass("btn-cancel").addClass("btn-primary");
+                    } else {
+                        var html = $(data);
+                        util.modalSignIn(html);
                     }
                 });
                 e.preventDefault();
