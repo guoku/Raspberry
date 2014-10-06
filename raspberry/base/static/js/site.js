@@ -494,10 +494,6 @@
             function reply(commentItem) {
 //                console.log(commentItem.find('.reply'));
                 commentItem.find('.reply').on('click', function (e) {
-//                    e.preventDefault();
-//                    if (!util.isUserLogined()) {
-//                        util.popLoginBox();
-//                    } else {
 
                     var commentContent = commentItem.find('.comment-content');
                     var nickname = commentItem.find('.nickname');
