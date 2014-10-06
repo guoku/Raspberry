@@ -117,9 +117,10 @@
                         {% endspaceless %}
                     </div>
                     {% endif %}
+                {% include 'main/partial/detail_note.html' with common_note_list=common_note_list taobao_id=taobao_id %}
                 </div>
 
-                {% include 'main/partial/detail_note.html' with common_note_list=common_note_list taobao_id=taobao_id %}
+
 {#                </div>#}
 {#                判断登录用户#}
                 {% if not is_user_already_note %}

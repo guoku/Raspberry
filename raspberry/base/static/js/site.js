@@ -401,8 +401,8 @@
                         var status = parseInt(result.status);
                         if (status === 1) {
                             var $html = $(result.data);
-//                            self.updateNote($html);
-//                            self.clickComment($html);
+                            self.updateNote($html);
+                            self.clickComment($html);
 //                            self.poke();
 //                            $('<div class="sep"></div>').appendTo($notes);
 //                            $html.appendTo($notes);
@@ -598,18 +598,6 @@
                         },
                         error: function(ajaxContext) {
                              console.log(ajaxContext['responseText']);
-//                            if (!util.isUserLogined()) {
-//                                util.popLoginBox();
-//                            } else {
-////                                console.log(ajaxContext['responseText']);
-//                                result =  $.parseJSON(ajaxContext['responseText']);
-//                                var $html = $(result.data);
-//                                self.noteComment($html);
-//                                $html.appendTo($noteDetail);
-//                                $html.slideToggle('fast');
-//                                initTag();
-//                            }
-//                            alert(ajaxContext.responseText);
                         }
                     });
                     return false;
