@@ -586,7 +586,7 @@
                     $.ajax({
                         url: url,
                         type: 'GET',
-//                        async: false,
+                        async: false,
                         success: function(data){
                             result =  $.parseJSON(data);
                             var $html = $(result.data);
