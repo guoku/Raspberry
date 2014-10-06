@@ -227,9 +227,11 @@
                     $(this).addClass('current-image');
                     var image_url = $(this).find('img').attr('src');
 //                    console.log(image_url.replace('64x64', '310x310'));
-                    var big_image_url = image_url.replace('64x64', '640x640');
-                    console.log(big_image_url);
-                    $('.entity-chief-img').attr('src', big_image_url);
+                    var origin_image_url = image_url.replace('_64x64.jpg', '');
+//                    console.log(big_image_url);
+                    $('.entity-chief-img').attr('src', origin_image_url);
+//                    console.log($(".add-entity-note form input[name='chief_image_url']"));
+                    $(".add-entity-note form input[name='chief_image_url']").val(origin_image_url);
                 }
             });
         },
