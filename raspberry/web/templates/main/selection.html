@@ -64,7 +64,7 @@
                         <span class="timestr" name="{{ selection.note_context.post_time|date:"Y-m-d H:i:s" }}"></span>
                         <div class="img-box">
                             <a  href="{% url 'web_detail' selection.entity_context.entity_hash %}" target="_blank">
-                                <img class="lazy img-responsive" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}">
+                                <img class="lazy img-responsive" alt="{{ selection.entity_context.title }}"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}">
                             </a>
                         </div>
 
@@ -94,6 +94,7 @@
                 </div>
             {% endfor %}
         </div>
+        <a class="btn btn-top" href="javascript:;"  title="回到顶部"></a>
         {% if paginator %}
             {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url cid=curr_category_id %}
         {% endif %}
