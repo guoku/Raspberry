@@ -455,23 +455,45 @@
                         reply_to_comment_id: replyToComment
                     };
 
-                    $.post(url, data, function (result) {
-                        result = $.parseJSON(result);
-                        var status = parseInt(result.status);
-
-                        if (status === 1) {
-                            var $html = $(result.data);
-                            reply($html);
-
-                            $html.insertBefore(form);
-                        } else {
-                            // error
+                    $.ajax({
+                        type:"post",
+                        url:url,
+                        data:data,
+                        success: function(result) {
+//                            console.log(result);
+                            try {
+                                result = $.parseJSON(result);
+                                var status = parseInt(result.status);
+                                if (status === 1) {
+                                    var $html = $(result.data);
+                                    reply($html);
+                                    $html.insertBefore(form);
+                                }
+                            } catch (err) {
+                                var html = $(result);
+                                util.modalSignIn(html);
+                            }
                         }
-
-                        input.value = '';
-                        replyToUser = '';
-                        replyToComment = '';
                     });
+//                    $.post(url, data, function (result) {
+//                        result = $.parseJSON(result);
+//                        var status = parseInt(result.status);
+//
+//                        if (status === 1) {
+//                            var $html = $(result.data);
+//                            reply($html);
+//
+//                            $html.insertBefore(form);
+//                        } else {
+//                            // error
+//                            var html = $(result);
+//                            util.modalSignIn(html)
+//                        }
+//
+//                        input.value = '';
+//                        replyToUser = '';
+//                        replyToComment = '';
+//                    });
                 } else {
                     input.value = '';
                     input.focus();
