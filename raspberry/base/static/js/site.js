@@ -376,7 +376,7 @@
             var $note = $(".post-note");
             var $form = $note.find("form");
             var $textarea = $form.find("textarea");
-//            console.log($textarea);
+//            console.log($textarea.value);
 
             $textarea.on('focus', function(){
 //
@@ -392,8 +392,8 @@
             });
 
             $form.on('submit', function (e) {
-                if ($.trim($textarea.value).length === 0) {
-                    $textarea.value = '';
+                if ($.trim($textarea[0].value).length === 0) {
+                    $textarea[0].value = '';
                     $textarea.focus();
                 } else {
                     $.post(this.action, $form.serialize(), function (result){
@@ -401,13 +401,15 @@
                         var status = parseInt(result.status);
                         if (status === 1) {
                             var $html = $(result.data);
-                            self.updateNote($html);
-                            self.clickComment($html);
+                            detail.updateNote($html);
+                            detail.clickComment($html);
+                            console.log($html);
 //                            self.poke();
 //                            $('<div class="sep"></div>').appendTo($notes);
-//                            $html.appendTo($notes);
+                            $html.appendTo($(".common-note-list"));
+//
 
-                            $note.remove();
+                            $note.parent().remove();
                         } else if (status === 0) {
                             // error
                         }

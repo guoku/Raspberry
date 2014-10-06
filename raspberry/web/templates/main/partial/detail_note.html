@@ -1,49 +1,9 @@
-{% load web_common %}
+{#{% load web_common %}#}
 
 {% spaceless %}
 <div class="row common-note-list" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
     {% for note in common_note_list %}
-        <div class="media common-note-item">
-            <div class="line"></div>
-            <a class="pull-left" href="{% url 'web_user_likes' note.creator_context.user_id %}" target="_blank" >
-                <img class="media-object img-circle" src="{{ note.creator_context.avatar_small }}" alt="{{ note.creator_context.nickname }}">
-            </a>
-                <div class="media-body note-content">
-                                    <a href="{% url 'web_user_likes' note.creator_context.user_id %}">
-                                        <p class="media-heading">{{ note.creator_context.nickname }}&nbsp; {% if note.creator_context.bio %}<small>{{ note.creator_context.bio }}</small>{% endif %}</p>
-                                    </a>
-                                    <div class="note-text">
-                                        <p class="with-tag content" >{{ note.note_context.content|escape }}</p>
-                                            {% if note.user_context.user_id == note.creator_context.user_id %}
-                                            <form class="form-horizontal update-note-form" action="{% url 'web.views.entity.update_note' note.note_context.entity_id note.note_context.note_id %}" method="POST" style="display: none;">
-                                                <fieldset>
-                                                    <textarea class="form-control" name="note_text" rows="4">{{ note_context.content }}</textarea>
-                                                </fieldset>
-                                                <div class="control-group" style="margin-bottom:10px;">
-                                                    <button class="btn btn-default btn-cancel" style="margin-right:10px;" type="button">取消</button>
-                                                    <button class="btn btn-primary btn-post" type="submit">修改</button>
-                                                </div>
-                                            </form>
-                                            {% endif %}
-                                        <p>
-                                            <a href="javascript:;" class="add-comment" data-note="{{ note.note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>&nbsp;
-                                            {% if note.note_context.comment_count > 0 %}
-                                                <span style="color: #ccc">{{ note.note_context.comment_count }}</span>
-                                            {% endif %}
-                                            {% if note.user_context.user_id == note.creator_context.user_id %}
-                                                <a class="update-note"><i class="fa fa-pencil-square-o fa-lg"></i></a>
-                                            {% endif %}
-                                            </a>
-
-                                            <span  class="pull-right create-time">{{ note.note_context.created_time|format_time }}</span>
-                                            {% if note.user_context.user_id == note.creator_context.user_id %}
-                                                <span class="pull-right my-note">你的点评</span>
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                </div>
-
-        </div>
+        {% include 'main/partial/ajax_detail_note.html' with note_context=note.note_context creator_context=note.creator_context user_context=note.user_context %}
     {% endfor %}
 </div>
 {% endspaceless %}
