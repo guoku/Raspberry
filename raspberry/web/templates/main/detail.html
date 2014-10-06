@@ -90,8 +90,15 @@
                                             <span>{{ selection_note.note_context.comment_count }}</span>
                                         {% endif %}
                                         </a>
+                                        {% if user_context.user_id == selection_note.creator_context.user_id %}
+                                            <a class="update-note"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+                                        {% endif %}
+
                                         <span class="pull-right create-time">{{ selection_note.note_context.created_time|format_time }}</span>
                                         <i class="fa fa-star fa-lg pull-right" style="margin: 5px 5px 0 0;"></i>
+                                        {% if user_context.user_id == selection_note.creator_context.user_id %}
+                                            <span class="pull-right my-note">你的点评</span>
+                                        {% endif %}
                                     </p>
                                 </div>
                             </div>

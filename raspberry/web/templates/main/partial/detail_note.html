@@ -16,10 +16,18 @@
                                         <p>
                                             <a href="javascript:;" class="add-comment" data-note="{{ note.note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>&nbsp;
                                             {% if note.note_context.comment_count > 0 %}
-                                                <span>{{ note.note_context.comment_count }}</span>
+                                                <span style="color: #ccc">{{ note.note_context.comment_count }}</span>
+                                            {% endif %}
+                                            {% if note.user_context.user_id == note.creator_context.user_id %}
+                                                <a class="update-note"><i class="fa fa-pencil-square-o fa-lg"></i></a>
                                             {% endif %}
                                             </a>
+
+
                                             <span  class="pull-right create-time">{{ note.note_context.created_time|format_time }}</span>
+                                            {% if note.user_context.user_id == note.creator_context.user_id %}
+                                                <span class="pull-right my-note">你的点评</span>
+                                            {% endif %}
                                         </p>
                                     </div>
                 </div>
