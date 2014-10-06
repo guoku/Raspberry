@@ -262,6 +262,12 @@
             var page = $selection.parent().find('.pager');
             var counter = 1;
             page.hide();
+            $(".btn-top").on('click', function() {
+                $("html, body").animate(
+                    {scrollTop : 0}, 800
+                );
+                return false;
+            });
 
             if ($selection[0]) {
                 var flag = false;
