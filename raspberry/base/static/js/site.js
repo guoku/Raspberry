@@ -425,6 +425,55 @@
             noteDetail.each(function(){
 //                var $this = $(this);
                 detail.clickComment($(this));
+                detail.updateNote($(this));
+            });
+        },
+
+        updateNote: function (noteItem) {
+//            console.log(noteItem);
+            var note_content = noteItem.find(".note-content .content");
+            var note_update_form = noteItem.find(".update-note-form");
+            var note_text = note_update_form.find('textarea');
+            var origin_text = note_content.html();
+            noteItem.find(".update-note").on('click', function() {
+//                var form = noteItem.find();
+//                console.log(note_update_form);
+                if (note_update_form.css('display') != 'block') {
+                    note_content.hide();
+                    note_update_form.show();
+                    note_text.html(origin_text);
+//                    console.log(origin_text);
+//                    return;
+                } else {
+                    note_update_form.hide();
+                    note_content.show();
+                }
+            });
+
+            note_update_form.find('.btn-cancel').on('click', function() {
+                note_update_form.hide();
+                note_content.show();
+            });
+            note_update_form.on('submit', function(e) {
+//                    note_text[0].value;
+//                    var url = note_update_form[0].action;
+//                    console.log(note_text[0].value);
+                    var note_content_text = $.trim(note_text[0].value);
+                    if (note_content_text.length > 0) {
+                        $.ajax({
+                            type: 'post',
+                            url: note_update_form[0].action,
+                            data: $(this).serialize(),
+                            success: function (data) {
+                                if (parseInt(data) === 1) {
+                                    note_content.html(note_content_text);
+                                    note_update_form.hide();
+                                    note_content.show();
+                                }
+                            }
+                        });
+                    }
+                e.preventDefault();
             });
         },
 
