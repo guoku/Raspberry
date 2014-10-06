@@ -262,14 +262,10 @@
                 var flag = false;
 //                console.log(counter);
                 $(window).scroll(function () {
-                    if($(window).scrollTop()>100){
-//                        if($(".click_to_top").css("display") == "none"){
-//                            clickToTop.caculateRight();
-//                            $(".click_to_top").fadeIn();
-//                        }
-                    }else{
-//                        if($(".click_to_top").css("display") == "block")
-//                        $(".click_to_top").fadeOut();
+                    if($(this).scrollTop()>100) {
+                        $(".btn-top").fadeIn();
+                    } else {
+                        $(".btn-top").fadeOut();
                     }
 
                     if (counter % 3 == 0 ) {
