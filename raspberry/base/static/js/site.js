@@ -225,8 +225,11 @@
                 if (!$(this).hasClass('current-image')) {
                     object.find(".current-image").removeClass('current-image');
                     $(this).addClass('current-image');
-                    var image = this.find('img').attr('src');
-                    console.log(image);
+                    var image_url = $(this).find('img').attr('src');
+//                    console.log(image_url.replace('64x64', '310x310'));
+                    var big_image_url = image_url.replace('64x64', '640x640');
+                    console.log(big_image_url);
+                    $('.entity-chief-img').attr('src', big_image_url);
                 }
             });
         },
