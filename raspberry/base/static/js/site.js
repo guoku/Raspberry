@@ -458,8 +458,8 @@
 //                    note_text[0].value;
 //                    var url = note_update_form[0].action;
 //                    console.log(note_text[0].value);
-                    var note_content_text = $.trim(note_text[0].value);
-                    if (note_content_text.length > 0) {
+                var note_content_text = $.trim(note_text[0].value);
+                if (note_content_text.length > 0) {
                         $.ajax({
                             type: 'post',
                             url: note_update_form[0].action,
@@ -472,7 +472,9 @@
                                 }
                             }
                         });
-                    }
+                    } else {
+                    note_text.focus();
+                }
                 e.preventDefault();
             });
         },
