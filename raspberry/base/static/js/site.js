@@ -148,20 +148,36 @@
                             }
                             addEntity.find(".entity-chief-img").attr('src', data.data.chief_image_url);
                             imageThumbails.html("");
+                            var html_string = "";
                             for(var i=0; i < data.data.thumb_images.length; i++) {
 //                                console.log(data.data.thumb_images[i]);
-                                var fix = data.data.taobao_id == undefined ? "" : "_50x50.jpg";
-                                imageThumbails.append("<div class='col-xs-3 col-sm-2'><div class='thumbnail'><div class='img-box'><img class='img-responsive' src="
-                                    +data.data.thumb_images[i]+fix+"></div></div></div>");
+                                var fix = data.data.taobao_id == undefined ? "" : "_64x64.jpg";
+                                if (i == 0) {
+                                    html_string = "<div class='col-xs-3 col-sm-2'><div class='current-image thumbnail'><img class='img-responsive' src="
+                                        + data.data.thumb_images[i] + fix + "></div></div>";
+//                                    imageThumbails.append(html_string);
+                                    $(html_string).appendTo(imageThumbails);
+
+                                } else {
+                                    html_string = "<div class='col-xs-3 col-sm-2'><div class='thumbnail'><img class='img-responsive' src="
+                                        + data.data.thumb_images[i] + fix + "></div></div>";
+                                    $(html_string).appendTo(imageThumbails);
+//                                    imageThumbails.append(html_string);
+//                                    createNewEntity.changeChiefImage($(html_string));
+//                                     console.log("okokoko");
+                                }
+
                                 $('<input name="thumb_images" type="hidden" value='+data.data.thumb_images[i]+'>').appendTo($(".add-entity-note form"));
                             }
-
+                            createNewEntity.changeChiefImage(imageThumbails);
 
                             if(data.data.taobao_id == undefined){
-                                $('<input type="hidden" name="jd_id" value="'+data.data.jd_id+'"><input type="hidden" name="jd_title" value="'+data.data.jd_title+'">').appendTo($(".add-entity-note form"));
+                                $('<input type="hidden" name="jd_id" value="'+data.data.jd_id+'">' +
+                                    '<input type="hidden" name="jd_title" value="'+data.data.jd_title+'">').appendTo($(".add-entity-note form"));
                                 $(".detail_taobao_brand").val(data.data.brand);
                             } else {
-                                $('<input type="hidden" name="taobao_id" value="'+data.data.taobao_id+'"><input type="hidden" name="taobao_title" value="'+data.data.taobao_title+'">').appendTo($(".add-entity-note form"));
+                                $('<input type="hidden" name="taobao_id" value="'+data.data.taobao_id+'">' +
+                                    '<input type="hidden" name="taobao_title" value="'+data.data.taobao_title+'">').appendTo($(".add-entity-note form"));
                             }
                             $('<input type="hidden" name="shop_link" value="'+data.data.shop_link+'">' +
                                 '<input type="hidden" name="shop_nick" value="'+data.data.shop_nick+'">' +
@@ -196,6 +212,22 @@
             addEntity.find("input[name='title']").on('input propertychange', function() {
                 var title = $(this).val();
                 addEntity.find(".title").html(title);
+            });
+        },
+
+        changeChiefImage : function(object) {
+            console.log(object);
+            var image = object.find(".thumbnail");
+
+
+            image.on('click', function() {
+//                console.log($(this));
+                if (!$(this).hasClass('current-image')) {
+                    object.find(".current-image").removeClass('current-image');
+                    $(this).addClass('current-image');
+                    var image = this.find('img').attr('src');
+                    console.log(image);
+                }
             });
         },
 
@@ -475,25 +507,6 @@
                             }
                         }
                     });
-//                    $.post(url, data, function (result) {
-//                        result = $.parseJSON(result);
-//                        var status = parseInt(result.status);
-//
-//                        if (status === 1) {
-//                            var $html = $(result.data);
-//                            reply($html);
-//
-//                            $html.insertBefore(form);
-//                        } else {
-//                            // error
-//                            var html = $(result);
-//                            util.modalSignIn(html)
-//                        }
-//
-//                        input.value = '';
-//                        replyToUser = '';
-//                        replyToComment = '';
-//                    });
                 } else {
                     input.value = '';
                     input.focus();
@@ -503,7 +516,6 @@
         },
 
         clickComment: function (note) {
-
 
 //            console.log(noteDetail);
 //            console.log(note);
@@ -560,6 +572,7 @@
 
         createNewEntity.createEntity();
         createNewEntity.BrandAndTitle();
+//        createNewEntity.changeChiefImage();
         createNewEntity.postNewEntity();
 
 
