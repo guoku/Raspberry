@@ -637,3 +637,16 @@ color: #bcbcbc;
 .static-page h4 {
     margin-top: 20px;
 }
+
+.btn-download {
+    position: absolute;
+    z-index: 10000000;
+    /*top: 10px;*/
+    /*left: 42px;*/
+    bottom: 80px;
+    height: 40px;
+    width: 180px;
+    font-size: 18px;
+    text-align: center;
+    margin-left: 40px;
+}

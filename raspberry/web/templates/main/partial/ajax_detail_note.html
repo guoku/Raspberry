@@ -1,27 +1,29 @@
 {% load web_common %}
 <div class="media common-note-item">
     <div class="line"></div>
-            <a class="pull-left" href="{% url 'web_user_likes' creator_context.user_id %}" target="_blank" >
-                <img class="media-object img-circle" src="{{ creator_context.avatar_small }}" alt="{{ creator_context.nickname }}">
-            </a>
-            <div class="media-body note-content">
-                                    <a href="{% url 'web_user_likes' creator_context.user_id %}">
-                                        <p class="media-heading">{{ creator_context.nickname }}&nbsp; {% if creator_context.bio %}<small>{{ creator_context.bio }}</small>{% endif %}</p>
-                                    </a>
-                                    <div class="note-text">
-                                        <p class="with-tag content" >{{ note_context.content|escape }}</p>
-                                            {% if user_context.user_id == creator_context.user_id %}
-                                            <form class="form-horizontal update-note-form" action="{% url 'web.views.entity.update_note' note_context.entity_id note_context.note_id %}" method="POST" style="display: none;">
-                                                <fieldset>
-                                                    <textarea class="form-control" name="note_text" rows="4">{{ note_context.content }}</textarea>
-                                                </fieldset>
-                                                <div class="control-group" style="margin-bottom:10px;">
-                                                    <button class="btn btn-default btn-cancel" style="margin-right:10px;" type="button">取消</button>
-                                                    <button class="btn btn-primary btn-post" type="submit">修改</button>
-                                                </div>
-                                            </form>
-                                            {% endif %}
-                                        <p>
+    <a class="pull-left" href="{% url 'web_user_likes' creator_context.user_id %}" target="_blank" >
+        <img class="media-object img-circle" src="{{ creator_context.avatar_small }}" alt="{{ creator_context.nickname }}">
+    </a>
+    <div class="media-body note-content">
+        <a href="{% url 'web_user_likes' creator_context.user_id %}">
+            <p class="media-heading">{{ creator_context.nickname }}&nbsp; {% if creator_context.bio %}<small>{{ creator_context.bio }}</small>{% endif %}</p>
+        </a>
+        <div class="note-text">
+            <p class="with-tag content" >{{ note_context.content|escape }}</p>
+                {% if user_context.user_id == creator_context.user_id %}
+                    <form class="form-horizontal update-note-form" action="{% url 'web.views.entity.update_note' note_context.entity_id note_context.note_id %}" method="POST" style="display: none;">
+                        <fieldset>
+                            <textarea class="form-control" name="note_text" rows="4" style="resize: none;">{{ note_context.content }}</textarea>
+                        </fieldset>
+                        <div class="control-group" style="margin-bottom:10px;">
+                            <div class="col-sm-offset-9">
+                                <button class="btn btn-default btn-cancel" style="margin-right:10px;" type="button">取消</button>
+                                <button class="btn btn-primary btn-post" type="submit">修改</button>
+                            </div>
+                        </div>
+                    </form>
+                {% endif %}
+            <p>
                                             <a href="javascript:;" class="add-comment" data-note="{{ note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>&nbsp;
                                             {% if note_context.comment_count > 0 %}
                                                 <span style="color: #ccc">{{ note.note_context.comment_count }}</span>
@@ -35,7 +37,7 @@
                                             {% if user_context.user_id == creator_context.user_id %}
                                                 <span class="pull-right my-note">你的点评</span>
                                             {% endif %}
-                                        </p>
-                                    </div>
-            </div>
+            </p>
+        </div>
+    </div>
 </div>
