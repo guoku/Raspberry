@@ -158,7 +158,7 @@ msgid "about"
 msgstr "关于"
 
 msgid "faq"
-msgstr "提问"
+msgstr "常见问题"
 
 msgid "jobs"
 msgstr "工作"
