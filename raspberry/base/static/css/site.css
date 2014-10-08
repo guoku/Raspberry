@@ -18,7 +18,7 @@ i {
 .line{
     background:#eee;
     height:1px;
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .fa-plus {
@@ -368,6 +368,26 @@ color: #bcbcbc;
   background-image: none;
 }
 
+.btn-top {
+    display: none;
+    float: right;
+    background-color: #eee;
+    border: 1px solid#cccccc;
+    position: fixed;
+    /*right: 10px;*/
+    opacity: 0.8;
+    bottom: 120px;
+    width: 30px;
+    height: 30px;
+    z-index: 1000000;
+    text-align: center;
+    line-height: 28px;
+    /*vertical-align: middle;*/
+}
+.btn-top:hover {
+    background-color: #e0e0e0;
+}
+
 /* */
 .breadcrumb {
     background: none;
@@ -472,7 +492,7 @@ color: #bcbcbc;
     margin-bottom: 0;
 }
 
-
+/* 精选点评*/
 .selection-note {
     margin: 30px 15px 0 15px;
     padding-top: 20px;
@@ -486,16 +506,31 @@ color: #bcbcbc;
     padding-left: 0;
     padding-bottom: 10px;
 }
+/* 点评 */
 .common-note-list {
     margin: 0;
     /*padding: 4px;*/
-    border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
+    /*border-left: 1px solid #eee;*/
+    /*border-right: 1px solid #eee;*/
     /*border-bottom: 1px solid #ccc;*/
     /*margin-bottom: 20px;*/
 }
 .common-note-item {
-    padding: 15px 19px 10px 19px;
+    padding: 15px 19px 5px 19px;
+    margin: 0;
+}
+
+.update-note {
+    margin: 5px 0;
+}
+.update-note:before {
+    color: #ccc;
+    content: "|";
+    padding: 0 10px;
+}
+.my-note {
+    font-size: 12px;
+    margin-right: 20px;
 }
 
 /* 发送点评表单 */
@@ -602,4 +637,17 @@ color: #bcbcbc;
 }
 .static-page h4 {
     margin-top: 20px;
+}
+
+.btn-download {
+    position: absolute;
+    z-index: 10000000;
+    /*top: 10px;*/
+    /*left: 42px;*/
+    bottom: 80px;
+    height: 40px;
+    width: 180px;
+    font-size: 18px;
+    text-align: center;
+    margin-left: 40px;
 }

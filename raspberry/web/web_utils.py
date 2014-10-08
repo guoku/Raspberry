@@ -24,7 +24,7 @@ def signup(email, password, nickname, **kwargs):
     return _new_user
 
 def get_login_redirect_url(request):
-    pattern = re.compile(r'like')
+    pattern = re.compile(r'like|follow|comment')
     next_url = get_redirect_url(request)
 
     match = pattern.search(next_url)
