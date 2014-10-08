@@ -537,7 +537,7 @@ color: #bcbcbc;
 }
 .add-comment:before,
 .update-note:before {
-    color: #ccc;
+    color: #eee;
     content: "|";
     padding: 0 10px;
 }
