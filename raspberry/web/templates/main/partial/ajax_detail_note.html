@@ -23,7 +23,13 @@
                         </div>
                     </form>
                 {% endif %}
+
             <p>
+                <a href="javascript:;" class="poke" data-note="{{ selection_note.note_context.note_id }}"><i class="fa fa-thumbs-o-up fa-lg"></i>&nbsp;
+                                        {% if selection_note.note_context.poker_count > 0 %}
+                                            <span>{{ selection_note.note_context.poker_count }}</span>
+                                        {% endif %}
+                </a>
                                             <a href="javascript:;" class="add-comment" data-note="{{ note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>&nbsp;
                                             {% if note_context.comment_count > 0 %}
                                                 <span style="color: #ccc">{{ note.note_context.comment_count }}</span>
