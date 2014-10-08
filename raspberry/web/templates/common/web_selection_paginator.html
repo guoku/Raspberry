@@ -8,12 +8,12 @@
         {% if paginator.has_previous %}
             <li><a href="{{ url }}?p={{ paginator.previous_page_number |selection_previous_paginator }}">上一页</a></li>
         {% endif %}
-        <li><a href="{{ url }}?p={{ paginator.next_page_number|selection_next_paginator }}">{% trans 'next' %}</a></li>
+        <li><a href="{{ url }}?p={{ paginator.next_page_number|selection_next_paginator }}">下一页</a></li>
     {% else %}
         {% if paginator.has_previous %}
             <li><a href="{{ url }}?c={{ cid }}&p={{ paginator.previous_page_number |selection_previous_paginator }}">上一页</a></li>
         {% endif %}
-        <li><a href="{{ url }}?c={{ cid }}&p={{ paginator.next_page_number|selection_next_paginator }}">{% trans 'next' %}</a></li>
+        <li><a href="{{ url }}?c={{ cid }}&p={{ paginator.next_page_number|selection_next_paginator }}">下一页</a></li>
     {% endif %}
     </ul>
 </div>
