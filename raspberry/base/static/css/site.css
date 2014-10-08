@@ -519,10 +519,23 @@ color: #bcbcbc;
     padding: 15px 19px 5px 19px;
     margin: 0;
 }
+.poke {
+    margin: 5px 0 ;
+}
+.poke span {
+    color: #ccc;
+}
+.add-comment {
+    margin: 5px 0;
+}
+.add-comment span {
+    color: #ccc;
+}
 
 .update-note {
     margin: 5px 0;
 }
+.add-comment:before,
 .update-note:before {
     color: #ccc;
     content: "|";
