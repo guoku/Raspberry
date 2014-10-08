@@ -203,6 +203,7 @@ color: #bcbcbc;
 
 .thumbnail .caption {
     padding-bottom: 0px;
+    padding-top: 5px;
 }
 
 .entity-detail .caption {
