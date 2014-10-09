@@ -403,7 +403,7 @@
                             var $html = $(result.data);
                             detail.updateNote($html);
                             detail.clickComment($html);
-                            console.log($html);
+//                            console.log($html);
 //                            self.poke();
 //                            $('<div class="sep"></div>').appendTo($notes);
                             $html.appendTo($(".common-note-list"));
@@ -428,6 +428,7 @@
 //                var $this = $(this);
                 detail.clickComment($(this));
                 detail.updateNote($(this));
+                detail.poke($(this));
             });
         },
 
@@ -605,6 +606,53 @@
                     return false;
                 }
             });
+        },
+
+        poke : function (note) {
+//            console.log("OKOKOKOKO");
+            note.find('.poke').on('click', function (e) {
+//                console.log($(this));
+                var poke = $(this);
+                var note_id = poke.attr('data-note');
+                var url = '/note/' + note_id + '/poke/';
+//                console.log(url);
+                if(poke.attr("data-target-status") == 1){
+                    	poke.attr("data-target-status",0);
+                    	poke.addClass('active');
+                        url+="1/";
+                }else{
+                    	poke.removeClass('active');
+                    	poke.attr("data-target-status",1);
+                        url+="0/";
+                }
+
+                $.ajax({
+                    type:'post',
+                    url: url,
+                    success: function (data){
+                        var count = parseInt($counter.text()) || 0;
+                        var result = parseInt(data);
+
+                        if (result === 1) {
+                            count++;
+//                            $counter.text(count).addClass("count_blue");
+                            poke.addClass('active');
+
+                            if (count === 1) {
+                                $('<small class="count_blue">' + count + '</small>').appendTo($this);
+                            }
+                        } else if (result === 0) {
+                            count--;
+//                            $counter.text(count).removeClass("count_blue");
+                            poke.removeClass('acitve');
+
+                            if (count === 0) {
+                                $this.find('small').remove();
+                            }
+                        }
+                    }
+                });
+            })
         }
     };
 
