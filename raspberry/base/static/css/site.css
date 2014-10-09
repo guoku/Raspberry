@@ -104,6 +104,11 @@ a {
     border: 0;
     border-radius: 0;
 }
+
+.panel-default>.panel-heading {
+    padding: 5px 15px;
+    background: #fbfbfb;
+}
 /* 导航栏选中状态处理 */
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
     background-color: initial;
@@ -654,13 +659,10 @@ color: #bcbcbc;
 
 .btn-download {
     position: absolute;
-    z-index: 10000000;
-    /*top: 10px;*/
-    /*left: 42px;*/
-    bottom: 80px;
+    bottom: 100px;
     height: 40px;
-    width: 180px;
+    width: 120px;
     font-size: 18px;
     text-align: center;
-    margin-left: 40px;
+    margin-left: 50px;
 }
