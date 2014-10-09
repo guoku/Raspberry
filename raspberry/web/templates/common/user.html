@@ -1,16 +1,16 @@
 {% load entity user %}
 
 
-<div class="col-sm-4">
+<div class="col-sm-6 col-xs-12 col-md-4">
     <div class="thumbnail" style="padding: 10px;padding-top:20px;height: 100px;">
         <div class="media">
             <a class="pull-left" href="{% url 'web_user_index' user_context.user_id %}" target="_blank">
                 <img class="media-object img-circle" src="{{ user_context.avatar_large }}" width="60" height="60">
             </a>
             {% if user_context.relation == 3 %}
-                <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow is-fan btn btn-cancel pull-right"><i class="fa fa-exchange fa-lg" style="color: #fff"></i>&nbsp; <b>取消关注</b></a>
+                <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow is-fan btn btn-cancel pull-right"><i class="fa fa-exchange fa-lg" style="color: #ccc"></i>&nbsp; <b>取消关注</b></a>
             {% elif user_context.relation == 1 %}
-                <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow btn btn-cancel pull-right"><i class="fa fa-check fa-lg" style="color: #fff"></i>&nbsp; <b>取消关注</b></a>
+                <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow btn btn-cancel pull-right"><i class="fa fa-check fa-lg" style="color: #ccc"></i>&nbsp; <b>取消关注</b></a>
             {% elif user_context.relation == 2 %}
                 <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow is-fan btn btn-primary pull-right"><i class="fa fa-plus fa-lg" style="color: #fff"></i>&nbsp; <b>关注</b></a>
             {% else  %}

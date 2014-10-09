@@ -312,8 +312,9 @@ color: #bcbcbc;
 }
 /* 取消按钮 */
 .btn-cancel {
-    background-color: #ccc;
-    color: #898989;
+    background-color: #f8f8f8;
+    color: #999;
+    border: 1px solid #eee;
 }
 /* 购买按钮 */
 .btn-buy {
