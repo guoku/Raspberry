@@ -107,8 +107,8 @@ class SignUpAccountFrom(forms.Form):
 
 class SignUpAccountBioFrom(forms.Form):
     avatar = forms.FileField(
-        label=_('select a file'), 
-        help_text=_('max. 2 megabytes'), 
+        label=_('select a file'),
+        help_text=_('max. 2 megabytes'),
         required=False
     )
     bio = forms.CharField(
@@ -118,7 +118,7 @@ class SignUpAccountBioFrom(forms.Form):
         required=False
     )
     gender = forms.ChoiceField(
-        widget = forms.RadioSelect(attrs={'class':'form-control'}),
+        widget = forms.RadioSelect(),
         choices=GENDER_CHOICES,
         label=_('gender'), 
         help_text=_(''), 
@@ -131,26 +131,26 @@ class SignUpAccountBioFrom(forms.Form):
         required=False
     )
     location = forms.CharField(
-        widget=forms.Select(attrs={"name" : "location", "class" : "form-control"}),
+        widget=forms.Select(attrs={"name" : "location", "class" : "form-control location"}),
         label=_('location'),
         required=False
     )
     city = forms.CharField(
-        widget=forms.Select(attrs={'name' : 'city', 'class' : 'form-control'}),
+        widget=forms.Select(attrs={'name' : 'city', 'class' : 'form-control city'}),
         label=_('city'),
         required=False
     )
 
 class SettingAccountForm(SignUpAccountBioFrom):
     nickname = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),
-                               label=_('nickname'), help_text=_(''), required=False)
+                               label=_('nickname'), help_text=_(''), required=True)
     email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('email')}),
                              label=_('email'), help_text=_(''))
 
 class ChangePasswordForm(forms.Form):
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('old password')}), label=_('old password'), help_text=_(''))
-    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('new password')}), label=_('new password'), help_text=_(''), min_length=6, max_length=20)
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'text-input', 'placeholder': _('confirm password')}), label=_('confirm password'), help_text=_(''), min_length=6, max_length=20)
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('old password')}), label=_('old password'), help_text=_(''))
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('new password')}), label=_('new password'), help_text=_(''), min_length=6, max_length=20)
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('confirm password')}), label=_('confirm password'), help_text=_(''), min_length=6, max_length=20)
 
     def __init__(self, user, data=None):
         self.user = user

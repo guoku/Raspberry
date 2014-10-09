@@ -1,73 +1,158 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load i18n staticfiles %}
 
 {% block title %}添加商品 － 果库{% endblock %}
-{% block css %}
-	<link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/entity.css' %}">{% endblock %}
 
 {% block content %}
-    <div id="add-entity">
-        <h2>添加商品入库</h2>
+    <div class="container">
+        <div class="row">
 
-        <div class="entity">
-            <div class="guoku-block container">
-                <div sd="{% url 'web_load_item_info' %}"  class="load-entity">
-                    <p>选择货真价实，有用、有趣、有价值的好商品 </p>
-                    <input type="text" class="text-input" name="cand_url" placeholder="粘贴商品链接到这里" value="{{ cand_url }}">
-                    <input type="submit" value="载入" class="guoku-button">
-                </div>
-                <div class="entity_already_exist">
-                    <b>该商品已经存在 <a class="btn btn-go" href="">查看</a></b>
-                </div>
-		<div class="entity-detail">
-                    <div>
-                        <div class="brand">
-                            <p>品牌</p>
-                            <input type="text" class="text-input detail_taobao_brand" placeholder="如果有">
+            <h3 class="col-sm-12">添加商品入库</h3>
+
+            <div class="col-sm-8">
+
+                <div class="well create-entity" style="border-radius: 0;margin-bottom: 0;">
+                    <p>选择货真价实，有用、有趣、有价值的好商品</p>
+                    <form class="form-horizontal" method="post" action="{% url 'web_load_item_info' %}">
+                        <fieldset>
+                            <div class="form-group">
+                                <div class="col-xs-8 col-sm-8">
+                                    <input type="text" class="form-control" name="cand_url" placeholder="粘贴商品链接到这里" value="{{ cand_url }}">
+                                </div>
+                                <div class="col-xs-4 col-sm-4">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-plus fa-lg"></i>&nbsp; 载入</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <div class="row entity-exist">
+                        <label class="col-sm-3">该商品已经存在</label>
+                        <a class="btn btn-primary" href="#" target="_blank"><i class="fa fa-link fa-lg"></i>&nbsp; 查看</a>
+                    </div>
+                    <div class="row add-entity">
+                        <div class="col-sm-4">
+                            <label>品牌</label>
+                            <input class="form-control" type="text" name="brand" placeholder="如果有">
                         </div>
-                        <div class="title">
-                            <p>商品名称</p>
-                            <input type="text" class="text-input detail_title_input">
+                        <div class="col-sm-8">
+                            <label>商品名称</label>
+                            <input class="form-control" type="text" name="title" />
                         </div>
-                    </div>
 
-                    <h3 class="detail_title"><span></span><span></span></h3>
-                    <div class="img-container detail_chief_url">
-                        <img />
-                    </div>
-                    <div class="detail-img detail_thumb_images">
-                        
+                        <h4 class="col-sm-12"><span class="brand"></span><span class="title"></span></h4>
+                        <div class="col-sm-12">
+                            <div class="thumbnail">
+                                <img class="img-responsive entity-chief-img" src="">
+                            </div>
+                        </div>
+                        <div class="image-thumbnails"></div>
                     </div>
                 </div>
-       	    </div>
-            <div class="add-note">
-                <div class="guoku-block note-container">
-                    <a class="avatar"><img width="50" height="50" class="user_avatar"></a>
-
-                    <div class="detail">
-                        <span class="nickname"></span>
-
-                        <form action="{% url 'web_new_entity'%}" method="POST">
-                            <textarea class="text-input" name="note_text" placeholder="来说说你的评价吧？欢迎真实、有用、有趣的商品点评。"></textarea>
-                            <span></span>
-                            <input type="submit" value="发表" class="guoku-button">
+                <div class="row" style="margin: 0;">
+                <div class="media add-entity-note">
+                    <a class="pull-left" href="#" style="padding: 20px 0 0 20px; margin: 0;"><img class="img-circle media-object" width="60" height="60" src=""></a>
+                    <div class="media-body">
+{#                        <h4 class="media-heading"></h4>#}
+                        <form class="form-horizontal" action="{% url 'web_new_entity'%}" method="POST" style="padding-top: 20px;">
+                            <fieldset>
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <textarea class="form-control" name="note_text" style="resize: none;" rows="4" placeholder="来说说你的评价吧？欢迎真实、有用、有趣的商品点评。"></textarea>
+                                </div>
+                            </div>
+                            </fieldset>
+                            <div class="form-group">
+                                <div class="col-sm-offset-9 col-sm-3">
+                                <button class="btn btn-primary" type="submit">发表</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
+                </div>
             </div>
-        </div>
 
-        <div class="aside guoku-block">
-            <div>
-                <h4>果库全是好商品</h4>
-                <p>如果，一件商品，<br>
-                    你愿意让家人使用或与朋友分享，也许这就应该是件不错的东西。</p>
-            </div>
-            <div>
-                <h4>创建人信息</h4>
-                <p>作为第一个把商品推荐到果库的人，你将被永久记录在商品页。</p>
+            {# slidebar #}
+            <div class="hidden-xs col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>果库全是好商品</h4>
+                    </div>
+                    <div class="panel-body">
+                        如果，一件商品，<br />
+                    你愿意让家人使用或与朋友分享，也许这就应该是件不错的东西。
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h4>创建人信息</h4></div>
+                    <div class="panel-body">作为第一个把商品推荐到果库的人，你将被永久记录在商品页。</div>
+                </div>
             </div>
         </div>
     </div>
 {% endblock %}
+{#{% block content %}#}
+{#    <div id="add-entity">#}
+{#        <h2>添加商品入库</h2>#}
+{##}
+{#        <div class="entity">#}
+{#            <div class="guoku-block container">#}
+{#                <div sd="{% url 'web_load_item_info' %}"  class="load-entity">#}
+{#                    <p>选择货真价实，有用、有趣、有价值的好商品 </p>#}
+{#                    <input type="text" class="text-input" name="cand_url" placeholder="粘贴商品链接到这里" value="{{ cand_url }}">#}
+{#                    <input type="submit" value="载入" class="guoku-button">#}
+{#                </div>#}
+{#                <div class="entity_already_exist">#}
+{#                    <b>该商品已经存在 <a class="btn btn-go" href="">查看</a></b>#}
+{#                </div>#}
+{#		<div class="entity-detail">#}
+{#                    <div>#}
+{#                        <div class="brand">#}
+{#                            <p>品牌</p>#}
+{#                            <input type="text" class="text-input detail_taobao_brand" placeholder="如果有">#}
+{#                        </div>#}
+{#                        <div class="title">#}
+{#                            <p>商品名称</p>#}
+{#                            <input type="text" class="text-input detail_title_input">#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                    <h3 class="detail_title"><span></span><span></span></h3>#}
+{#                    <div class="img-container detail_chief_url">#}
+{#                        <img />#}
+{#                    </div>#}
+{#                    <div class="detail-img detail_thumb_images">#}
+{#                        #}
+{#                    </div>#}
+{#                </div>#}
+{#       	    </div>#}
+{#            <div class="add-note">#}
+{#                <div class="guoku-block note-container">#}
+{#                    <a class="avatar"><img width="50" height="50" class="user_avatar"></a>#}
+{##}
+{#                    <div class="detail">#}
+{#                        <span class="nickname"></span>#}
+{##}
+{#                        <form action="{% url 'web_new_entity'%}" method="POST">#}
+{#                            <textarea class="text-input" name="note_text" placeholder="来说说你的评价吧？欢迎真实、有用、有趣的商品点评。"></textarea>#}
+{#                            <span></span>#}
+{#                            <input type="submit" value="发表" class="guoku-button">#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <div class="aside guoku-block">#}
+{#            <div>#}
+{#                <h3>果库全是好商品</h3>#}
+{#                <p>如果，一件商品，<br>#}
+{#                    你愿意让家人使用或与朋友分享，也许这就应该是件不错的东西。</p>#}
+{#            </div>#}
+{#            <div>#}
+{#                <h3>创建人信息</h3>#}
+{#                <p>作为第一个把商品推荐到果库的人，你将被永久记录在商品页。</p>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#{% endblock %}#}

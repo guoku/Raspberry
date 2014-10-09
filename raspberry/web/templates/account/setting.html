@@ -2,44 +2,132 @@
 {% load i18n staticfiles %}
 {% load account %}
 
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.fileupload.css' %}">
+{% endblock %}
+
+
 {% block title %}{% trans "settings" %}{% endblock %}
-{#{% block css %}#}
-{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">#}
-{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/account.css' %}">#}
-{#{% endblock %}#}
 
 {% block content %}
-    <div class="container">
+    <div class="container" id="settings">
         <div class="row">
-            <h2>{% trans 'account settings' %}</h2>
+            <h2 class="col-sm-offset-4">{% trans 'account settings' %}</h2>
+            <hr />
+        </div>
+
+        <div class="row">
+            {% include 'account/partial/avatar_update.html' with user_context=user_context %}
+        </div>
+
+        <div class="row">
+            <h3 class="col-sm-offset-4">个人资料</h3>
+            <hr />
             <form method="post" action="{% url 'web_update_profile' %}" class="form-horizontal">
                 {% csrf_token %}
                 <fieldset>
-                    {% for field in profile_form %}
+                    <div class="form-group">
+                        <label class="col-sm-offset-3 col-sm-2 control-label" for="{{ profile_form.nickname.id_for_label }}">{{ profile_form.nickname.label }}</label>
+                        <div class="col-sm-4">
+                             {{ profile_form.nickname }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-offset-3 col-sm-2 control-label" for="{{ profile_form.email.id_for_label }}">{{ profile_form.email.label }}</label>
+                        <div class="col-sm-4">
+                            {{ profile_form.email }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-offset-3 col-sm-2 control-label" for="{{ profile_form.bio.id_for_label }}">{{ profile_form.bio.label }}</label>
+                        <div class="col-sm-4">
+                            {{ profile_form.bio }}
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="display: none;">
+                        <p id="default_location_value">{{ profile_form.location.value }}</p>
+                        <p id="default_city_value">{{ profile_form.city.value }}</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-offset-3 col-sm-2 control-label" for="{{ profile_form.location.id_for_label }}" >{{ profile_form.location.label }}</label>
+                        <div class="col-sm-2">
+                            {{ profile_form.location }}
+                        </div>
+                        <div class="col-sm-2">
+                            {{ profile_form.city }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-offset-3 col-sm-2 control-label" for="{{ profile_form.gender.id_for_label  }}">{{ profile_form.gender.label  }}</label>
+                        <div class="col-sm-4">
+                            {% for radio in profile_form.gender %}
+                            <label class="checkbox-inline">{{ radio.choice_label }} {{ radio.tag }}&nbsp; </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+{#                    <div class="form-group">#}
+{#                        <label class="col-sm-offset-3 col-sm-2 control-label" for="{{ profile_form.website.id_for_label }}">{{ profile_form.website.label }}</label>#}
+{#                        <div class="col-sm-4">#}
+{#                            {{ profile_form.website }}#}
+{#                        </div>#}
+{#                    </div>#}
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-5">
+                        <button type="submit" class="btn btn-primary">{% trans "update profile" %}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <label class="col-sm-offset-4 col-sm-2 control-label">新浪微博</label>
+            {% if user_context.sina_screen_name %}
+                <p class="col-sm-2">@{{ user_context.sina_screen_name }}</p>
+                <div class="col-sm-2">
+                    <a href="{%url 'web_unbind_sina'%}?next={%url "web_setting" %}">取消绑定</a>
+                </div>
+            {% else %}
+                <div class="col-sm-offset-2 col-sm-2">
+                    <a href="{%url 'web_unbind_sina'%}?next={%url "web_setting" %}">取消绑定</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <label class="col-sm-offset-4 col-sm-2 control-label">淘宝网</label>
+            {% if user_context.taobao_nick %}
+                <p class="col-sm-2">@{{ user_context.taobao_nick }}</p>
+                <div class="col-sm-2">
+                   <a href="{%url 'web_unbind_taobao' %}?next={%url "web_setting"%}">取消绑定</a>
+                </div>
+            {% else %}
+                <div class="col-sm-offset-2 col-sm-2">
+                    <a class="active" href="{%url 'web_bind_taobao' %}?next={%url "web_setting"%}">绑定淘宝网</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <h3 class="col-sm-offset-4">更改密码</h3>
+            <hr />
+            <form method="POST" action="{% url 'web_change_password' %}" class="form-horizontal">
+                {% csrf_token %}
+                <fieldset>
+                    {% for field in password_form %}
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                            <div class="col-sm-10">
+                            <label class="col-sm-offset-3 col-sm-2 control-label" for="{{ field.id_for_label }}" >{{ field.label }}:</label>
+                            <div class="col-sm-4">
                                 {{ field }}
                             </div>
                         </div>
                     {% endfor %}
                 </fieldset>
                 <div class="form-group">
-                    <div class="col-sm-4 col-sm-offset-2">
-                        <button type="submit" class="btn btn-primary">{% trans "update profile" %}</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="row">
-            <form class="form-horizontal" method="post">
-                {% csrf_token %}
-                <fieldset>
-
-                </fieldset>
-                <div class="form-group">
-                    <div class="col-sm-4 col-sm-offset-2">
-                        <button type="submit" class="btn btn-primary">{% trans "update profile" %}</button>
+                    <div class="col-sm-4 col-sm-offset-5">
+                        <button type="submit" class="btn btn-primary">修改密码</button>
                     </div>
                 </div>
             </form>
@@ -152,6 +240,28 @@
 {#            </div>#}
 {#        </form>#}
 {#    </div>#}
+
+{% endblock %}
+
+
+{% block script %}
+{#    <script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>#}
+    <script src="{% static 'js/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'js/jquery.fileupload.js' %}"></script>
+    <script src="{% static 'js/account.js' %}"></script>
+    <script>
+$(function () {
+    $('#fileupload').fileupload({
+{#        dataType: 'json',#}
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo(document.body);
+            });
+        }
+    });
+});
+</script>
 {% endblock %}
 
 {#{% block script %}#}

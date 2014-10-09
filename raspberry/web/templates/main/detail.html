@@ -31,7 +31,7 @@
 {% block content %}
     <div class="container" id="detail" xmlns="http://www.w3.org/1999/html">
         <div class="row">
-            <div class="col-md-12">
+            <div class="hidden-xs col-md-12">
                 <ol class="breadcrumb">
                     <li class="active"><i class="fa fa-home fa-lg"></i></li>
                     {% if selection_note %}
@@ -45,22 +45,28 @@
         <div class="row">
             <div class="col-sm-8 col-md-8" id="detail" itemscope itemtype="http://data-vocabulary.org/Product">
                 <div class="thumbnail entity-detail">
-                    <a href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank">
-                        <img style="padding:20px;" itemprop="image"  src="{{ entity_context.chief_image.url|resize:'640' }}" alt="{{ entity_context.title }}">
+                    <a href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank" biz-itemid="{{ taobao_id }}" _hover-ignore="1">
+                        <img itemprop="image"  src="{{ entity_context.chief_image.url|resize:'640' }}" alt="{{ entity_context.title }}">
                     </a>
                     <div class="caption" style="border:0px">
                         <h4 class="entity-title">{% if entity_context.brand|length != 0 %}
                             <span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span>
                         </h4>
+{#                        <div class="col-sm-6">#}
                         <a class="btn btn-like-detail" href="{% url 'web_like_entity' entity_context.entity_id '1' %}">
                             {% if is_user_already_like %}
                                 <i class="fa fa-heart fa-lg"></i>
                             {% else %}
                                 <i class="fa fa-heart-o fa-lg"></i>
                             {% endif %}
-                            &nbsp; <span class="like-count">{{ entity_context.like_count }}</span>
-                            {% trans 'likes' %}
+                            &nbsp;{% trans 'likes' %}<span class="like-count">{{ entity_context.like_count }}</span>
                         </a>
+{#                        </div>#}
+                        <div class="hidden-sm hidden-md hidden-lg pull-right">
+                            <a class=" btn btn-primary" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank" biz-itemid="{{ taobao_id }}" _hover-ignore="1">
+                                <meta itemprop="currency" content="RMB" />购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>
+                            </a>
+                        </div>
                     </div>
 
 {#                <div class="note-detail">#}
@@ -78,14 +84,37 @@
                                 </p>
                                 <div class="note-text">
                                     <p class="with-tag content" >{{ selection_note.note_context.content|escape }}</p>
+                                        {% if user_context.user_id == selection_note.creator_context.user_id %}
+                                            <form class="form-horizontal update-note-form" action="{% url 'web.views.entity.update_note' selection_note.note_context.entity_id selection_note.note_context.note_id %}" method="POST" style="display: none;">
+                                                <fieldset>
+                                                    <textarea class="form-control" name="note_text" rows="4">{{ note_context.content }}</textarea>
+                                                </fieldset>
+                                                <div class="control-group" style="margin-bottom:10px;">
+                                                    <button class="btn btn-default btn-cancel" style="margin-right:10px;" type="button">取消</button>
+                                                    <button class="btn btn-primary btn-post" type="submit">修改</button>
+                                                </div>
+                                            </form>
+                                        {% endif %}
                                     <p>
+                                        <a href="javascript:;" class="poke" data-note="{{ selection_note.note_context.note_id }}"><i class="fa fa-thumbs-o-up fa-lg"></i>&nbsp;
+                                        {% if selection_note.note_context.poke_count > 0 %}
+                                            <span>{{ selection_note.note_context.poke_count }}</span>
+                                        {% endif %}
+                                        </a>
                                         <a href="javascript:;" class="add-comment" data-note="{{ selection_note.note_context.note_id }}"><i class="fa fa-comment-o fa-lg"></i>&nbsp;
                                         {% if selection_note.note_context.comment_count > 0 %}
                                             <span>{{ selection_note.note_context.comment_count }}</span>
                                         {% endif %}
                                         </a>
+                                        {% if user_context.user_id == selection_note.creator_context.user_id %}
+                                            <a class="update-note"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+                                        {% endif %}
+
                                         <span class="pull-right create-time">{{ selection_note.note_context.created_time|format_time }}</span>
                                         <i class="fa fa-star fa-lg pull-right" style="margin: 5px 5px 0 0;"></i>
+                                        {% if user_context.user_id == selection_note.creator_context.user_id %}
+                                            <span class="pull-right my-note">你的点评</span>
+                                        {% endif %}
                                     </p>
                                 </div>
                             </div>
@@ -93,9 +122,11 @@
                         {% endspaceless %}
                     </div>
                     {% endif %}
+
+                    {% include 'main/partial/detail_note.html' with common_note_list=common_note_list taobao_id=taobao_id %}
                 </div>
 
-                {% include 'main/partial/detail_note.html' with common_note_list=common_note_list taobao_id=taobao_id %}
+
 {#                </div>#}
 {#                判断登录用户#}
                 {% if not is_user_already_note %}

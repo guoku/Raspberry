@@ -18,7 +18,11 @@ i {
 .line{
     background:#eee;
     height:1px;
-    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.fa-plus {
+    color: #ffffff;
 }
 /* 精选点评标记 */
 .fa-star {
@@ -29,11 +33,34 @@ i {
 .fa-heart {
     color: red;
 }
+/* 搜索 */
+.fa-search {
+    color: #ccc;
+}
+
+.fa-check {
+    color: #fff;
+}
+
+.fa-exchange {
+    color: #fff;
+}
+
+.search input {
+    border: 0;
+}
+.search .input-group-addon {
+    border-radius: 0;
+    background-color: #fff;
+    border: 0;
+}
+
 a:hover,
 a:focus {
   color: #333333;
   text-decoration: none;
 }
+
 
 .bio{color: #999;}
 
@@ -81,18 +108,14 @@ a {
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
     background-color: initial;
 }
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
+    background-color: initial;
+}
 
 .navbar-inverse {
     background-color: #343434;
     background-color: rgba(52,52,52,.95);
     border: 0;
-}
-.navbar-menu {
-    padding-left: 30px;
-}
-
-.navbar-menu > li{
-    margin-right: 20px;
 }
 
 .navbar-inverse .navbar-nav>li>a {
@@ -105,6 +128,19 @@ color: #bcbcbc;
     margin-bottom: 20px;
 }
 
+.dropdown-menu>li>a{
+    padding: 10px 20px;
+}
+
+.navbar-toggle{
+    margin-right: 0px;
+}
+
+/* 页码 */
+.pager li {
+    display: inline-block;
+    margin-top: 10px;
+}
 /* 图片宽高相等处理 */
 .img-box{
     display:block;
@@ -167,6 +203,7 @@ color: #bcbcbc;
 
 .thumbnail .caption {
     padding-bottom: 0px;
+    padding-top: 5px;
 }
 
 .entity-detail .caption {
@@ -176,9 +213,16 @@ color: #bcbcbc;
     margin-right: 5px;
 }
 
+.entity-detail >a >img {
+    padding: 20px;
+}
+
 @media (max-width: 768px){
     .note-avatar{
         width: 36px;
+    }
+    .entity-detail >a >img {
+        padding: 10px;
     }
 }
 
@@ -219,7 +263,16 @@ color: #bcbcbc;
 .navbar-brand {
     padding-bottom: 10px;
     padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 40px;
 }
+
+@media (max-width: 768px){
+    .navbar-brand{
+        padding-left: 0px;
+    }
+}
+
 .footer {
     border-top: 1px solid #e5e5e5;
     color: #777;
@@ -252,7 +305,11 @@ color: #bcbcbc;
     list-style: none outside none;
     padding-left: 0;
 }
-
+/* 取消按钮 */
+.btn-cancel {
+    background-color: #ccc;
+    color: #898989;
+}
 /* 购买按钮 */
 .btn-buy {
     font-size: 16px;
@@ -260,14 +317,14 @@ color: #bcbcbc;
 .btn-buy > span {
     font: 22px Georgia,serif;
 }
-/* 用户按钮*/
+/* 用户按钮 */
 .btn-user {
     display: inline-block;
     font-size: 14px;
     /*color: #333;*/
     padding: 5px;
 }
-
+/* 喜欢按钮 */
 .btn-like {
     display: inline-block;
     /*border-radius: 0;*/
@@ -289,6 +346,7 @@ color: #bcbcbc;
     border: #eee solid 1px;
     color: #333;
 }
+
 .btn-user:hover,
 .btn-user:focus,
 .btn-user:active,
@@ -308,6 +366,26 @@ color: #bcbcbc;
 .btn-like.active,
 .open > .dropdown-toggle.btn-like {
   background-image: none;
+}
+
+.btn-top {
+    display: none;
+    float: right;
+    background-color: #eee;
+    border: 1px solid#cccccc;
+    position: fixed;
+    /*right: 10px;*/
+    opacity: 0.8;
+    bottom: 120px;
+    width: 30px;
+    height: 30px;
+    z-index: 1000000;
+    text-align: center;
+    line-height: 28px;
+    /*vertical-align: middle;*/
+}
+.btn-top:hover {
+    background-color: #e0e0e0;
 }
 
 /* */
@@ -414,7 +492,7 @@ color: #bcbcbc;
     margin-bottom: 0;
 }
 
-
+/* 精选点评*/
 .selection-note {
     margin: 30px 15px 0 15px;
     padding-top: 20px;
@@ -428,16 +506,44 @@ color: #bcbcbc;
     padding-left: 0;
     padding-bottom: 10px;
 }
+/* 点评 */
 .common-note-list {
     margin: 0;
     /*padding: 4px;*/
-    border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
+    /*border-left: 1px solid #eee;*/
+    /*border-right: 1px solid #eee;*/
     /*border-bottom: 1px solid #ccc;*/
     /*margin-bottom: 20px;*/
 }
 .common-note-item {
-    padding: 15px 19px 10px 19px;
+    padding: 15px 19px 5px 19px;
+    margin: 0;
+}
+.poke {
+    margin: 5px 0 ;
+}
+.poke span {
+    color: #ccc;
+}
+.add-comment {
+    margin: 5px 0;
+}
+.add-comment span {
+    color: #ccc;
+}
+
+.update-note {
+    margin: 5px 0;
+}
+.add-comment:before,
+.update-note:before {
+    color: #eee;
+    content: "|";
+    padding: 0 10px;
+}
+.my-note {
+    font-size: 12px;
+    margin-right: 20px;
 }
 
 /* 发送点评表单 */
@@ -500,3 +606,61 @@ color: #bcbcbc;
 /*.nav-user-index .active >a {*/
     /*color: #fff;*/
 /*}*/
+
+/* 添加商品页 */
+.create-entity {
+    background-color: #fff;
+}
+.entity-exist {
+    margin-top: 30px;
+    display: none;
+}
+.add-entity {
+    margin-top: 30px;
+    /*margin-bottom: 20px;*/
+    display: none;
+}
+.add-entity .title {
+    margin-top: 20px;
+}
+.add-entity-note {
+    /*margin: 0;*/
+    background-color: #f9f9f9;
+    display: none;
+}
+/* 静态页 */
+.sidebar {
+    padding: 0 20px 0 20px;
+}
+/*}*/
+.nav-sidebar {
+    text-align: left;
+    font-size: 13px;
+    border: 1px solid #eee;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #427ec0;
+}
+.static-page h4 {
+    margin-top: 20px;
+}
+
+.btn-download {
+    position: absolute;
+    z-index: 10000000;
+    /*top: 10px;*/
+    /*left: 42px;*/
+    bottom: 80px;
+    height: 40px;
+    width: 180px;
+    font-size: 18px;
+    text-align: center;
+    margin-left: 40px;
+}

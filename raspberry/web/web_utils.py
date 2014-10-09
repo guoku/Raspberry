@@ -1,11 +1,16 @@
-from django.conf import settings
+# from django.conf import settings
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
-
+from django.utils.log import getLogger
 from base.user import User
 from utils.lib import get_random_string
-import random
-import string
+import re
+# import random
+# import string
+
+log = getLogger('django')
+
+
 def signup(email, password, nickname, **kwargs):
     _new_user = User.create(email=email, password=password)
     _new_user.set_profile(
@@ -19,7 +24,14 @@ def signup(email, password, nickname, **kwargs):
     return _new_user
 
 def get_login_redirect_url(request):
+    pattern = re.compile(r'like|follow|comment')
     next_url = get_redirect_url(request)
+
+    match = pattern.search(next_url)
+
+    if match:
+        return request.META['HTTP_REFERER']
+
     if next_url:
         return next_url
     return reverse("web_selection")

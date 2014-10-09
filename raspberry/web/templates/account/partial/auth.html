@@ -9,7 +9,8 @@
     </a>
     <ul class="dropdown-menu" role="menu">
         {% if user.is_staff %}
-            <li><a href="{% url 'management_entity_list' %}"><i class="fa fa-pencil-square-o fa-lg"></i>&nbsp; 管理</a></li>
+            <li><a href="{% url 'management_entity_list' %}" target="_blank"><i class="fa fa-pencil-square-o fa-lg"></i>&nbsp; 管理</a></li>
+            <li class="divider"></li>
         {% endif %}
         <li><a href="{% url 'web_user_index' user.pk %}"><i class="fa fa-user fa-lg"></i>&nbsp; {% trans "my guoku" %}</a></li>
         <li><a href="{% url 'web_setting' %}"><i class="fa fa-cog fa-lg"></i>&nbsp; {% trans "settings" %}</a></li>

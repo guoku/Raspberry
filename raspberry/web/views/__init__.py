@@ -15,3 +15,9 @@ class AboutView(TemplateView):
 
 class Agreement(TemplateView):
     template_name = "agreement.html"
+
+class JobsView(TemplateView):
+    template_name = "jobs.html"
+
+class FaqView(TemplateView):
+    template_name = "base_faq.html"

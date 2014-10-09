@@ -644,7 +644,7 @@ def get_notes(request, entity_id, template='entity/entity_note_list.html'):
 
 
 @login_required
-def add_note(request, entity_id, template='entity/entity_note.html'):
+def add_note(request, entity_id, template='main/partial/ajax_detail_note.html'):
     if request.method == 'POST':
         _note_text = request.POST.get('note_text', None)
         _ret = {

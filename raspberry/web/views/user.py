@@ -247,7 +247,7 @@ def user_followings(request, user_id, template=TEMPLATE):
     _following_id_list = _query_user.read_following_user_id_list()
     _total_count = len(_following_id_list)
 
-    _paginator = Paginator(_page_num, 8, len(_following_id_list))
+    _paginator = Paginator(_page_num, 15, len(_following_id_list))
     _following_list = []
     for _u_id in _following_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
         try:
@@ -302,7 +302,7 @@ def user_fans(request, user_id, template=TEMPLATE):
 
     _page_num = request.GET.get('p', 1)
     _fans_id_list = _query_user.read_fan_user_id_list()
-    _paginator = Paginator(_page_num, 8, len(_fans_id_list))
+    _paginator = Paginator(_page_num, 15, len(_fans_id_list))
 
     _fans_list = []
     for _u_id in _fans_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:

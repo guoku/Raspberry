@@ -131,6 +131,7 @@ class ThirdPartyRegisterWizard(RegisterWizard):
 
 def login(request, template = 'account/login.html'):
     redirect_url = web_utils.get_login_redirect_url(request)
+    log.info("url url %s" % redirect_url)
     template = template
     if not redirect_url:
         redirect_url = reverse('web_selection')
@@ -388,6 +389,7 @@ def update_profile(request):
 def setting(request, template = 'account/setting.html'):
     _msg_code = request.GET.get('msg', None)
     _user_context = User(request.user.id).read()
+    log.info(_user_context)
     profile_form = SettingAccountForm(initial = _user_context)
     password_form = ChangePasswordForm(request.user)
     return render_to_response(

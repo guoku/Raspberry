@@ -1,72 +1,145 @@
+{#{% extends "base.html" %}#}
+{#{% load i18n staticfiles %}#}
+{#{% load account %}#}
+{##}
+{#{% block title %}完善信息{% endblock %}#}
+{#{% block css %}#}
+{#    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">#}
+{#{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#    <div id="setting">#}
+{#        <h2>{% trans "account settings" %}</h2>#}
+{##}
+{#        <div class="guoku-block">#}
+{#            {% display_avatar_update user_context %}#}
+{#            #}
+{#            <form method="POST" action="" class="base-info" enctype="multipart/form-data">#}
+{#                {% csrf_token %}#}
+{#                {{ wizard.management_form }}#}
+{#                <h3>个人资料</h3>#}
+{##}
+{#                <div class="avatar">#}
+{#                    <img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">#}
+{#                </div>#}
+{#                {% if wizard.form.errors %}#}
+{#                <div class="control-group">#}
+{#                    <div class="message">#}
+{#                        {% for field in wizard.form  %}#}
+{#                            {% for error in field.errors %}#}
+{#                                {{ error }}#}
+{#                            {% endfor %}#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                </div>#}
+{#                {% endif %}#}
+{#                <div class="control-group">#}
+{#                    <label>{{ wizard.form.avatar.label }} {{ wizard.form.avatar.help_text }}</label>#}
+{#                    {{ wizard.form.avatar }}#}
+{#                </div>#}
+{#                <div class="control-group">#}
+{#                    <label for="bio">{{ wizard.form.bio.label }}</label>#}
+                    {#<textarea name="bio" id="bio" class="text-input" rows="4">{{ user_context.bio }}</textarea>#}
+{#                    {{ wizard.form.bio }}#}
+{#                </div>#}
+{##}
+{#                <div style="display: none;">#}
+{#                    <p id="default_location_value">{{ profile_form.location.value }}</p>#}
+{#                    <p id="default_city_value">{{ profile_form.city.value }}</p>#}
+{#                </div>#}
+{#                <div class="control-group">#}
+{#                    <label>{{ wizard.form.location.label }}</label>#}
+{#                    {{ wizard.form.location }}#}
+{#                    {{ wizard.form.city }}#}
+{#                </div>#}
+{##}
+{#                <div class="control-group">#}
+{#                    <label>性别</label>#}
+{#                    {% for radio in wizard.form.gender %}#}
+{#                        <span> {{ radio.choice_label }}</span>#}
+{#                        {{radio.tag }}#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{##}
+{#                <div class="control-group">#}
+{#                    <label for="website">网址</label>#}
+{#                    {{ wizard.form.website }}#}
+{#                </div>#}
+{#                <div class="row">#}
+{#                    <input type="submit" value="完成" class="btn btn-update">#}
+{#                </div>#}
+{#            </form>#}
+{#        </div>#}
+{#    </div>#}
+{#{% endblock %}#}
+{##}
+{#{% block script %}#}
+{#    <script src="{% static 'scripts/account.js' %}"></script>#}
+{#{% endblock %}#}
 {% extends "base.html" %}
 {% load i18n staticfiles %}
 {% load account %}
 
+
 {% block title %}完善信息{% endblock %}
-{% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}">
-{% endblock %}
 
 {% block content %}
-    <div id="setting">
-        <h2>{% trans "account settings" %}</h2>
+    <div class="container" id="register-bio">
+        <div class="row">
+            <h2 class="col-sm-offset-4">完成注册</h2>
+            <hr />
+        </div>
 
-        <div class="guoku-block">
-{#            {% display_avatar_update user_context %}#}
-            
-            <form method="POST" action="" class="base-info" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-sm-offset-5">
+                <div class="thumbnails">
+                    <img class="img-responsive img-circle"  src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+                </div>
+            </div>
+        </div>
+{#        <hr />#}
+        <div class="row">
+            <form method="POST" action="" class="form-horizontal" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ wizard.management_form }}
-{#                <h3>个人资料</h3>#}
-
-                <div class="avatar">
-                    <img src="http://imgcdn.guoku.com/avatar/large_241170_637c2ee4729634de9fc848f9754c263b.png">
+                <fieldset>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="{{ wizard.form.avatar.id_for_label }}">{{ wizard.form.avatar.label }} </label>
+                    <div class="col-sm-4">
+                        {{ wizard.form.avatar }}
+                    </div>
                 </div>
-                {% if wizard.form.errors %}
-                <div class="control-group">
-                    <div class="message">
-                        {% for field in wizard.form  %}
-                            {% for error in field.errors %}
-                                {{ error }}
-                            {% endfor %}
+
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="{{ wizard.form.bio.id_for_label }}">{{ wizard.form.bio.label }}</label>
+                    <div class="col-sm-4">
+                         {{  wizard.form.bio }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="{{ wizard.form.location.id_for_label }}" >{{ wizard.form.location.label }}</label>
+                    <div class="col-sm-2">
+                        {{ wizard.form.location }}
+                    </div>
+                    <div class="col-sm-2">
+                            {{ wizard.form.city }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="{{ wizard.form.gender.id_for_label  }}">{{ wizard.form.gender.label  }}</label>
+                    <div class="col-sm-4">
+                        {% for radio in wizard.form.gender %}
+                            <label class="checkbox-inline">{{ radio.choice_label }} {{ radio.tag }}&nbsp; </label>
                         {% endfor %}
                     </div>
                 </div>
-                {% endif %}
-                <div class="control-group">
-                    <label>{{ wizard.form.avatar.label }} {{ wizard.form.avatar.help_text }}</label>
-                    {{ wizard.form.avatar }}
-                </div>
-                <div class="control-group">
-                    <label for="bio">{{ wizard.form.bio.label }}</label>
-                    {#<textarea name="bio" id="bio" class="text-input" rows="4">{{ user_context.bio }}</textarea>#}
-                    {{ wizard.form.bio }}
-                </div>
-
-                <div style="display: none;">
-                    <p id="default_location_value">{{ profile_form.location.value }}</p>
-                    <p id="default_city_value">{{ profile_form.city.value }}</p>
-                </div>
-                <div class="control-group">
-                    <label>{{ wizard.form.location.label }}</label>
-                    {{ wizard.form.location }}
-                    {{ wizard.form.city }}
-                </div>
-
-                <div class="control-group">
-                    <label>性别</label>
-                    {% for radio in wizard.form.gender %}
-                        <span> {{ radio.choice_label }}</span>
-                        {{radio.tag }}
-                    {% endfor %}
-                </div>
-
-                <div class="control-group">
-                    <label for="website">网址</label>
-                    {{ wizard.form.website }}
-                </div>
-                <div class="row">
-                    <input type="submit" value="完成" class="btn btn-update">
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <button type="submit" class="btn btn-primary btn-block">完成</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -74,5 +147,7 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'scripts/account.js' %}"></script>
+
+    <script src="{% static 'js/account.js' %}"></script>
+
 {% endblock %}

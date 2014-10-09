@@ -1,34 +1,61 @@
 {% load entity user %}
 
-<div class="common-user">
-    <a class="avatar" href="{% url 'web_user_index' user_context.user_id %}" target="_blank">
-{#        <img src="{{ user_context.avatar_large }}" width="80" height="80">#}
-        {% show_avater user_context.user_id 80 %}
-    </a>
-    <a href="{% url 'web_user_index' user_context.user_id %}" class="nickname" target="_blank">
-        {{ user_context.nickname|truncatechars:10 }}
-    </a>
 
-    <div class="stat">
-        <span><strong>{{ user_context.fan_count }}</strong>粉丝</span>
-        <span class="follows"><strong>{{ user_context.following_count }}</strong>关注</span>
-    </div>
-    <div class="follow">
-        {% if user_context.relation == 3 %}
-            <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user is-fan gray-f"><span class="img_is_fun"></span><b>取消关注</b></a>
-        {% elif user_context.relation == 1 %}
-            <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user gray-f"><span class="img_not_fun"></span><b>取消关注</b></a>
-        {% elif user_context.relation == 2 %}
-            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user is-fan blue-f"><span src="" class="img_follow"></span><b>关注</b></a>
-        {% elif user_context.relation == 0 %}
-            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user blue-f"><span class="img_follow"></span><b>关注</b></a>
-        {% endif %}
-    </div>
-    <div class="like-entities">
-        {% for entity_context in user_context.latest_like_entities %}
-            <a href="{% url 'web_user_index' user_context.user_id %}" class="like-entity" target="_blank">
-                <img src="{{ entity_context.chief_image.url|resize:'64' }}">
+<div class="col-sm-4">
+    <div class="thumbnail" style="padding: 10px;padding-top:20px;height: 100px;">
+        <div class="media">
+            <a class="pull-left" href="{% url 'web_user_index' user_context.user_id %}" target="_blank">
+                <img class="media-object img-circle" src="{{ user_context.avatar_large }}" width="60" height="60">
             </a>
-        {% endfor %}
+            {% if user_context.relation == 3 %}
+                <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow is-fan btn btn-cancel pull-right"><i class="fa fa-exchange fa-lg" style="color: #fff"></i>&nbsp; <b>取消关注</b></a>
+            {% elif user_context.relation == 1 %}
+                <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow btn btn-cancel pull-right"><i class="fa fa-check fa-lg" style="color: #fff"></i>&nbsp; <b>取消关注</b></a>
+            {% elif user_context.relation == 2 %}
+                <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow is-fan btn btn-primary pull-right"><i class="fa fa-plus fa-lg" style="color: #fff"></i>&nbsp; <b>关注</b></a>
+            {% else  %}
+                <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow btn btn-primary pull-right"><i class="fa fa-plus fa-lg" style="color: #fff"></i>&nbsp; <b>关注</b></a>
+            {% endif %}
+            <div class="media-body" style="padding-top:5px;">
+                <h4 class="media-heading">{{ user_context.nickname }}</h4>
+                <p>
+                    <span>{{ user_context.fan_count }}</span>粉丝
+                    <span>{{ user_context.following_count }}</span>关注
+                </p>
+            </div>
+
+        </div>
     </div>
 </div>
+{#<div class="common-user">#}
+{#    <a class="avatar" href="{% url 'web_user_index' user_context.user_id %}" target="_blank">#}
+{#        <img src="{{ user_context.avatar_large }}" width="80" height="80">#}
+{#        {% show_avater user_context.user_id 80 %}#}
+{#    </a>#}
+{#    <a href="{% url 'web_user_index' user_context.user_id %}" class="nickname" target="_blank">#}
+{#        {{ user_context.nickname|truncatechars:10 }}#}
+{#    </a>#}
+{##}
+{#    <div class="stat">#}
+{#        <span><strong>{{ user_context.fan_count }}</strong>粉丝</span>#}
+{#        <span class="follows"><strong>{{ user_context.following_count }}</strong>关注</span>#}
+{#    </div>#}
+{#    <div class="follow">#}
+{#        {% if user_context.relation == 3 %}#}
+{#            <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user is-fan gray-f"><span class="img_is_fun"></span><b>取消关注</b></a>#}
+{#        {% elif user_context.relation == 1 %}#}
+{#            <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow-user gray-f"><span class="img_not_fun"></span><b>取消关注</b></a>#}
+{#        {% elif user_context.relation == 2 %}#}
+{#            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user is-fan blue-f"><span src="" class="img_follow"></span><b>关注</b></a>#}
+{#        {% elif user_context.relation == 0 %}#}
+{#            <a href="{% url 'web_follow' user_context.user_id 1 %}" class="follow-user blue-f"><span class="img_follow"></span><b>关注</b></a>#}
+{#        {% endif %}#}
+{#    </div>#}
+{#    <div class="like-entities">#}
+{#        {% for entity_context in user_context.latest_like_entities %}#}
+{#            <a href="{% url 'web_user_index' user_context.user_id %}" class="like-entity" target="_blank">#}
+{#                <img src="{{ entity_context.chief_image.url|resize:'64' }}">#}
+{#            </a>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#</div>#}

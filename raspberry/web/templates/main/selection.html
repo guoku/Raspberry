@@ -32,7 +32,7 @@
                     一目了然的优质生活主张。 </h3>
                     <div class="row welcome-sign">
                         <div class="col-sm-3">
-                            <a class="btn btn-primary btn-lg" type="button" href="{% url 'web_register' %}" data-toggle="modal" data-target="#SignUpModal" >注册帐号</a>
+                            <a class="btn btn-primary btn-lg" type="button" href="{% url 'web_register' %}">注册帐号</a>
                         </div>
                         <div class="col-sm-9">
                             <div class="welcome-login">
@@ -47,7 +47,7 @@
     </div>
     {% endif %}
     <div class="container">
-        <div class="row">
+        <div class="row hidden-xs">
             <ul class="nav nav-pills nav-home" role="tablist">
                 <li {% if curr_category_id == 0 %}role="presentation" class="disabled"{% endif %}><a href="{% url 'web_selection' %}">所有</a></li>
                 {% for category in category_list %}
@@ -64,7 +64,7 @@
                         <span class="timestr" name="{{ selection.note_context.post_time|date:"Y-m-d H:i:s" }}"></span>
                         <div class="img-box">
                             <a  href="{% url 'web_detail' selection.entity_context.entity_hash %}" target="_blank">
-                                <img class="lazy img-responsive" alt="Headroom.js"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}">
+                                <img class="lazy img-responsive" alt="{{ selection.entity_context.title }}"  src="{{ selection.entity_context.chief_image.url|resize:'310' }}">
                             </a>
                         </div>
 
@@ -94,8 +94,13 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="row hidden-xs">
+            <div class="col-sm-offset-12">
+            <a class="btn-top" href="javascript:;"  title="回到顶部" target="_self"><i class="fa fa-angle-up fa-lg"></i></a>
+            </div>
+        </div>
         {% if paginator %}
-            {% include "common/web_paginator.html" with paginator=paginator %}
+            {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url cid=curr_category_id %}
         {% endif %}
     </div>
 {% endblock %}
