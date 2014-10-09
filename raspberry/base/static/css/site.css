@@ -530,7 +530,8 @@ color: #bcbcbc;
 .poke span {
     color: #ccc;
 }
-.poke .active {
+.poke.active span,
+.poke.active i {
     color: #427EC0;
 }
 .add-comment {

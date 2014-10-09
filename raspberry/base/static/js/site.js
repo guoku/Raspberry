@@ -614,14 +614,15 @@
 //                console.log($(this));
                 var poke = $(this);
                 var note_id = poke.attr('data-note');
+                var counter = poke.find('span');
                 var url = '/note/' + note_id + '/poke/';
 //                console.log(url);
                 if(poke.attr("data-target-status") == 1){
                     	poke.attr("data-target-status",0);
-                    	poke.addClass('active');
+//                    	poke.addClass('active');
                         url+="1/";
                 }else{
-                    	poke.removeClass('active');
+//                    	poke.removeClass('active');
                     	poke.attr("data-target-status",1);
                         url+="0/";
                 }
@@ -630,7 +631,7 @@
                     type:'post',
                     url: url,
                     success: function (data){
-                        var count = parseInt($counter.text()) || 0;
+                        var count = parseInt(counter.html()) || 0;
                         var result = parseInt(data);
 
                         if (result === 1) {
@@ -639,16 +640,23 @@
                             poke.addClass('active');
 
                             if (count === 1) {
-                                $('<small class="count_blue">' + count + '</small>').appendTo($this);
+                                $('<span>' + count + '</span>').appendTo(poke);
+                            } else {
+                                counter.html(count);
                             }
                         } else if (result === 0) {
                             count--;
 //                            $counter.text(count).removeClass("count_blue");
-                            poke.removeClass('acitve');
+                            poke.removeClass('active');
 
                             if (count === 0) {
-                                $this.find('small').remove();
+                                poke.find('span').remove();
+                            } else {
+                                counter.html(count);
                             }
+                        } else {
+                            var html = $(data);
+                            util.modalSignIn(html);
                         }
                     }
                 });
