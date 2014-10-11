@@ -3,7 +3,7 @@
 {% spaceless %}
 <div class="row common-note-list" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
     {% for note in common_note_list %}
-        {% include 'main/partial/ajax_detail_note.html' with note_context=note.note_context creator_context=note.creator_context user_context=note.user_context %}
+        {% include 'main/partial/ajax_detail_note.html' with note_context=note.note_context creator_context=note.creator_context user_context=note.user_context poke_button_target_status=note.poke_button_target_status %}
     {% endfor %}
 </div>
 {% endspaceless %}

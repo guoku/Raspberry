@@ -34,33 +34,25 @@
                 {% if entity_list|length > 0 %}
                     {% for entity_context in entity_list %}
                         {% include 'common/entity.html' with entity_context=entity_context %}
-{#                        <div class="col-xs-6 col-sm-3">#}
-{#                            <div class="thumbnail">#}
-{#                                <div class="img-box">#}
-{#                                    <a href="{% url 'web_detail' entity_context.entity_hash %}">#}
-{#                                        <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity_context.chief_image.url|resize:'240' }}">#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                                <div class="row guoku-caption">#}
-{#                                    <div class="col-xs-6">#}
-{#                                        <a class="btn btn-like" href="#">#}
-{#                                            <i class="fa fa-heart-o"></i> {% trans 'likes' %} <span>{{ entity_context.like_count }}</span>#}
-{#                                        </a>#}
-{#                                    </div>#}
-{#                                    <div class="col-xs-6">#}
-{##}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
                     {% endfor %}
                 {% endif %}
             {% endif %}
 
             {% if group == 'u' %}
                 {% if user_list|length > 0 %}
+                    {% for user_context in user_list %}
+                        {% include 'common/user.html' with user_context=user_context %}
+
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
 
 
+            {% if group == 't' %}
+                {% if tag_list|length > 0 %}
+                    {% for tag_context in tag_list %}
+                        {% include 'common/tag.html' with tag_context=tag_context %}
+                    {% endfor %}
                 {% endif %}
             {% endif %}
         </div>
