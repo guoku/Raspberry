@@ -139,7 +139,11 @@
                             <div class="media-body post-note">
                                 <form class="form-horizontal " action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST" role="form">
                                     <fieldset>
-                                        <textarea class="form-control" name="note_text" placeholder="写点评 ＃贴标签"></textarea>
+{#                                        <div class="form-group">#}
+{#                                            <div class="col-xs-offset-1 col-xs-10 col-sm-offset-1 col-sm-10">#}
+                                            <textarea class="form-control" name="note_text" style="resize: none;" placeholder="写点评 ＃贴标签"></textarea>
+{#                                            </div>#}
+{#                                        </div>#}
                                     </fieldset>
                                     <div class="action pull-right" style="margin-top:10px;">
                                         <button class="btn btn-default btn-cancel" style="margin-right:10px;" type="button">取消</button>

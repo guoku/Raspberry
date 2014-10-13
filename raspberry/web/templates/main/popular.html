@@ -21,8 +21,26 @@
         </div>
         <div class="row">
             {% for popular in popular_list %}
-                {% include "common/entity.html" with entity_context=popular.entity_context %}
-
+{#                {% include "common/entity.html" with entity_context=popular.entity_context is_user_already_like=popular.is_user_already_like %}#}
+                <div class="col-xs-6 col-sm-3">
+                    <div class="thumbnail">
+                        <div class="img-box">
+                            <a href="{% url 'web_detail' popular.entity_context.entity_hash %}">
+                                <img class="img-responsive" alt="{{ popular.entity_context.title }}" src="{{ popular.entity_context.chief_image.url|resize:'240' }}">
+                            </a>
+                        </div>
+                        <div class="caption">
+                            <a class="btn btn-like" href="{% url 'web_like_entity' popular.entity_context.entity_id '1' %}" target="_blank">
+                            {% if popular.is_user_already_like %}
+                                <i class="fa fa-heart fa-lg"></i>
+                            {% else %}
+                                <i class="fa fa-heart-o fa-lg"></i>
+                            {% endif %}
+                            {% trans 'likes' %} <span class="like-count">{{ popular.entity_context.like_count }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>

@@ -76,11 +76,13 @@ urlpatterns += patterns(
     url(r'^search/$', 'search', name='web_search')
 )
 
-from web.views import Agreement, AboutView, JobsView, FaqView
+from web.views import Agreement, AboutView, JobsView, FaqView, LinksView
+
 urlpatterns += patterns(
     'web.views',
     url(r'^agreement/$', Agreement.as_view(), name="web_agreement"),
     url(r'^about/$', AboutView.as_view(), name="web_about"),
     url(r'^jobs/$', JobsView.as_view(), name="web_jobs"),
     url(r'^faq/$', FaqView.as_view(), name='web_faq'),
+    url(r'^links/$', LinksView.as_view(), name='web_links')
 )
