@@ -21,3 +21,7 @@ class JobsView(TemplateView):
 
 class FaqView(TemplateView):
     template_name = "base_faq.html"
+
+
+class LinksView(TemplateView):
+    template_name = "links.html"
