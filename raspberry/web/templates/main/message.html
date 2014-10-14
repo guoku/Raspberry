@@ -59,8 +59,10 @@
 
         <div class="hidden-xs col-sm-4">
             <ul class="list-group">
-                <li class="list-group-item">推荐关注</li>
-                <li class="list-group-item">热门标签</li>
+                <li class="list-group-item disabled">推荐关注</li>
+
+
+                <li class="list-group-item disabled">热门标签</li>
                 {% for tag in recommend_tag_list %}
 {#                    {{ tag }}#}
                     {% if forloop.counter < 6 %}
@@ -68,6 +70,12 @@
                     {% endif %}
                 {% endfor %}
 {#                <div class="panel-body">推荐关注</div>#}
+                <li class="list-group-item disabled">下载果库客户端</li>
+                <li class="list-group-item">
+                    <a href="/download/ios/" target="_blank">iPhone</a> /
+                    <a href="/download/ios/" target="_blank">iPad</a> /
+                    <a href="/download/ios/" target="_blank">Android</a>
+                </li>
             </ul>
         </div>
     </div>
