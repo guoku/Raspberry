@@ -1,10 +1,57 @@
 {% extends "base.html" %}
-{% load staticfiles %}
-{% load web %}
+{% load i18n staticfiles %}
+{% load entity user %}
 
 {% block title %}我的消息{% endblock %}
-{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/entity.css' %}">{% endblock %}
+{#{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/entity.css' %}">{% endblock %}#}
+
 
 {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8" style="border: 1px solid #ccc">
+            {% for message in message_list %}
+                {% if message.type == 'user_follow' %}
+                    <div class="media">
+                        <div class="pull-left">
+                            <i class="fa fa-user fa-2x media-object"></i>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="{% url 'web_user_likes' message.content.follower.user_id %}">{{ message.content.follower.nickname }}</a>开始关注了你</h4>
+                            <p>{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
+                    </div>
+{#                    <hr />#}
+                {% elif message.type == 'note_poke_message'%}
+                    <div class="media">
+                        <div class="pull-left">
+                            <i class="fa fa-thumbs-up fa-2x media-object"></i>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">你的点评收到一个赞</h4>
+                            <p>{{ message.content.note.content }}</p>
+                            <p>{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
+                    </div>
+                {% elif message.type == 'note_comment_message' %}
+                    <div class="media">
+                        <div class="pull-left">
+                            <i class="fa fa-comment fa-2x media-object"></i>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="{% url 'web_user_likes' message.content.follower.user_id %}">{{ message.content.comment_user.nickname }}</a>回复了你的点评</h4>
+                            <p>{{ message.content.note.content }}</p>
+                            <p>{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <hr />
+            {% endfor %}
+        </div>
 
+        <div class="hidden-xs col-sm-4">
+
+        </div>
+    </div>
+</div>
 {% endblock %}
