@@ -44,13 +44,31 @@
                             <p>{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
                         </div>
                     </div>
+                {% elif message.type == 'entity_like_message' %}
+                    <div class="media">
+                        <div class="pull-left">
+                            <i class="fa fa-header fa-2x media-object"></i>
+                        </div>
+                        <h4 class="media-heading">你的商品被喜爱了</h4>
+                        <p>{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                    </div>
                 {% endif %}
                 <hr />
             {% endfor %}
         </div>
 
         <div class="hidden-xs col-sm-4">
-
+            <ul class="list-group">
+                <li class="list-group-item">推荐关注</li>
+                <li class="list-group-item">热门标签</li>
+                {% for tag in recommend_tag_list %}
+{#                    {{ tag }}#}
+                    {% if forloop.counter < 6 %}
+                        <li class="list-group-item"><a target="_blank" href="{% url 'web_tag_detail' tag.3 %}"># {{ tag.1 }}</a></li>
+                    {% endif %}
+                {% endfor %}
+{#                <div class="panel-body">推荐关注</div>#}
+            </ul>
         </div>
     </div>
 </div>
