@@ -42,7 +42,16 @@
                     </div>
                 </div>
             </form>
-            <div class="col-xs-offset-2 col-xs-8 col-sm-offset-4 col-sm-4" style="margin-bottom: 30px;">
+            <div class="col-xs-offset-2 col-xs-4 col-sm-offset-4 col-sm-4">
+                <a href="{% url 'web_login_by_sina' %}"><img src="{% static 'images/setting_icon_sina.png' %}"></a>
+                <a href="{% url 'web_login_by_taobao' %}" style="margin-left: 10px;"><img src="{% static 'images/setting_icon_taobao.png' %}"></a>
+{#                <a href="{% url 'web_login_by_taobao' %}"><></a>#}
+            </div>
+{#            <div class="col-xs-2 col-sm-2">#}
+{#                #}
+{#            </div>#}
+{#            <br />#}
+            <div class="col-xs-offset-2 col-xs-8 col-sm-offset-4 col-sm-4" style="margin-bottom: 30px;margin-top: 15px;">
                 <a class="btn btn-link" href="{% url 'web_register' %}">注册帐号&nbsp; >></a>
             </div>
         </div>
