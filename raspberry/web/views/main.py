@@ -34,23 +34,7 @@ def index(request):
 
 @require_http_methods(['GET'])
 def selection(request, template='main/selection.html'):
-    
-    # _user_agent = request.META['HTTP_USER_AGENT']
-    # if _user_agent == None:
-    #     log.error("[selection] Remote Host [%s] access selection without user agent" % (request.META['REMOTE_ADDR']))
-    #     raise Http404
-    
-    # _agent = request.GET.get('agent', 'default')
-    # if _agent == 'default' :
-    #     if 'iPhone' in _user_agent :
-    #         _agent = 'iphone'
-    #     if 'Android' in _user_agent :
-    #         _agent = 'android'
-    # if _agent == 'iphone' or _agent == 'android' :
-    #     return HttpResponseRedirect(reverse('wap_selection'))
-    #
-    
-    # _start_at = datetime.now()
+
     if request.user.is_authenticated():
         _request_user_id = request.user.id
         _request_user_context = User(_request_user_id).read() 
@@ -152,7 +136,7 @@ def selection(request, template='main/selection.html'):
     # else:
 
 @login_required
-def web_message(request,  template='account/message.html'):
+def web_message(request,  template='main/message.html'):
     # _start_at = datetime.now()
     if request.method == "GET":
         _request_user_id = request.user.id
