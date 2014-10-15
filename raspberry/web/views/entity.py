@@ -32,23 +32,24 @@ from utils.jd import parse_jd_id_from_url, load_jd_item_info
 
 log = getLogger('django')
 
+@login_required
+def add_entity(request, templates='entity/add_new_entity.html'):
+
+    if request.method == 'GET':
+        data = request.GET.get('data', None)
+        if not data:
+            raise Http404
+
+
+        return render_to_response(
+            templates,
+            {
+
+            },
+            context_instance=RequestContext(request)
+        )
 
 def entity_detail(request, entity_hash, template='main/detail.html'):
-    # _user_agent = request.META['HTTP_USER_AGENT']
-    # if _user_agent == None:
-    #     log.error("[selection] Remote Host [%s] access selection without user agent" % (request.META['REMOTE_ADDR']))
-    #     raise Http404
-    #
-    # _agent = request.GET.get('agent', 'default')
-    # if _agent == 'default' :
-    #     if 'iPhone' in _user_agent :
-    #         _agent = 'iphone'
-    #     if 'Android' in _user_agent :
-    #         _agent = 'android'
-    # if _agent == 'iphone' or _agent == 'android' :
-    #     return HttpResponseRedirect(reverse('wap_detail', kwargs = { "entity_hash" : entity_hash }))
-    
-    # _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
         # _request_user_id = request.user.id
         _is_staff = request.user.is_staff
@@ -139,21 +140,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                     break
         except Exception, e:
             log.error(e.message)
-            # pass
-    
-    # _duration = datetime.datetime.now() - _start_at
-    # WebLogTask.delay(
-    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
-    #     page='ENTITY',
-    #     request=request.REQUEST,
-    #     ip=get_client_ip(request),
-    #     log_time=datetime.datetime.now(),
-    #     request_user_id=_request_user_id,
-    #     appendix={
-    #         'entity_id' : int(_entity_id),
-    #         'guess_entities' : _guess_entity_id_list,
-    #     },
-    # )
+
     if _taobao_id != None: 
         return render_to_response(
             template,
@@ -614,7 +601,6 @@ def like_entity(request, entity_id, target_status):
         raise Http404
 
 
-
 def get_notes(request, entity_id, template='entity/entity_note_list.html'):
     if request.method == 'GET':
         _user_context = User(request.user.id).read()
@@ -727,6 +713,4 @@ def log_visit_item(request, item_id):
         #     },
         # )
         return HttpResponse('1')
-
-# coding=utf-8
 

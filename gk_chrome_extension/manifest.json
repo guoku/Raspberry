@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "GuoKu chrome helper",
-  "version": "0.0.2",
+  "name": "果库 小助手",
+  "version": "1.0",
   "description": "For guoku'er add taobao item",
   "author": "evantre",
   "browser_action": {
@@ -18,9 +18,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*.taobao.com/*", "http://*.tmall.com/*", "http://*.jd.com/*"],
+      "matches": ["http://item.taobao.com/*", "http://*.tmall.com/*", "http://*.jd.com/*"],
       "css": ["gk_content.css"],
-      "js": ["gk_content.js"]
+      "js": ["gk_content.js"],
+      "run_at": "document_end" 
     }
   ],
   "permissions": ["tabs", "http://admin.guoku.com/"]
