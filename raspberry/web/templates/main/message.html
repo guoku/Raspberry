@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+l{% extends "base.html" %}
 {% load i18n staticfiles %}
 {% load entity user %}
 
@@ -9,73 +9,72 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-sm-8" style="border: 1px solid #ccc">
+        <div class="col-sm-8" style="border: 1px solid #eee; padding-top:20px;">
             {% for message in message_list %}
                 {% if message.type == 'user_follow' %}
                     <div class="media">
-                        <div class="pull-left">
+                        <div class="pull-left message-icon">
                             <i class="fa fa-user fa-2x media-object"></i>
                         </div>
                         <div class="media-body">
-                            <h4 class="media-heading"><a href="{% url 'web_user_likes' message.content.follower.user_id %}">{{ message.content.follower.nickname }}</a>开始关注了你</h4>
-                            <p>{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                            <p class="media-heading"><a href="{% url 'web_user_likes' message.content.follower.user_id %}">{{ message.content.follower.nickname }}</a>开始关注了你</p>
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
                         </div>
                     </div>
-{#                    <hr />#}
                 {% elif message.type == 'note_poke_message'%}
                     <div class="media">
-                        <div class="pull-left">
+                        <div class="pull-left message-icon">
                             <i class="fa fa-thumbs-up fa-2x media-object"></i>
                         </div>
                         <div class="media-body">
-                            <h4 class="media-heading">你的点评收到一个赞</h4>
+                            <p class="media-heading">你的点评收到一个赞</p>
                             <p>{{ message.content.note.content }}</p>
-                            <p>{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
                         </div>
                     </div>
                 {% elif message.type == 'note_comment_message' %}
                     <div class="media">
-                        <div class="pull-left">
+                        <div class="pull-left message-icon">
                             <i class="fa fa-comment fa-2x media-object"></i>
                         </div>
                         <div class="media-body">
-                            <h4 class="media-heading"><a href="{% url 'web_user_likes' message.content.follower.user_id %}">{{ message.content.comment_user.nickname }}</a>回复了你的点评</h4>
+                            <p class="media-heading"><a href="{% url 'web_user_likes' message.content.follower.user_id %}">{{ message.content.comment_user.nickname }}</a>回复了你的点评</p>
                             <p>{{ message.content.note.content }}</p>
-                            <p>{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
                         </div>
                     </div>
                 {% elif message.type == 'entity_like_message' %}
                     <div class="media">
-                        <div class="pull-left">
+                        <div class="pull-left message-icon">
                             <i class="fa fa-header fa-2x media-object"></i>
                         </div>
-                        <h4 class="media-heading">你的商品被喜爱了</h4>
-                        <p>{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        <p class="media-heading">你的商品被喜爱了</p>
+                        <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
                     </div>
                 {% endif %}
-                <hr />
+               <div class="line"></div>
             {% endfor %}
         </div>
 
         <div class="hidden-xs col-sm-4">
             <ul class="list-group">
-                <li class="list-group-item disabled">推荐关注</li>
+                <li class="list-group-item">推荐关注</li>
 
 
-                <li class="list-group-item disabled">热门标签</li>
+                <li class="list-group-item">
+                <h4>热门标签</h4>
                 {% for tag in recommend_tag_list %}
-{#                    {{ tag }}#}
                     {% if forloop.counter < 6 %}
-                        <li class="list-group-item"><a target="_blank" href="{% url 'web_tag_detail' tag.3 %}"># {{ tag.1 }}</a></li>
+                        <p class=""><a target="_blank" href="{% url 'web_tag_detail' tag.3 %}"># {{ tag.1 }}</a></p>
                     {% endif %}
                 {% endfor %}
-{#                <div class="panel-body">推荐关注</div>#}
-                <li class="list-group-item disabled">下载果库客户端</li>
-                <li class="list-group-item">
+                </li>
+                <li class="list-group-item detail-download">
+                    <h5 class="list-group-item-heading">下载果库客户端</h5>
                     <a href="/download/ios/" target="_blank">iPhone</a> /
                     <a href="/download/ios/" target="_blank">iPad</a> /
                     <a href="/download/ios/" target="_blank">Android</a>
-                </li>
+               </li>
             </ul>
         </div>
     </div>
