@@ -9,7 +9,7 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-sm-8" style="border: 1px solid #ccc">
+        <div class="col-sm-8" style="border: 1px solid #ccc; padding-top: 20px;">
             {% for message in message_list %}
                 {% if message.type == 'user_follow' %}
                     <div class="media">
