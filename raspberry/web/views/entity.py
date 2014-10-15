@@ -201,11 +201,12 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         )
 
 def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
-    _start_at = datetime.datetime.now()
-    if request.user.is_authenticated():
-        _request_user_id = request.user.id
-    else:
-        _request_user_id = None 
+    return HttpResponseRedirect(reverse('web_detail', args=[entity_hash]))
+    # _start_at = datetime.datetime.now()
+    # if request.user.is_authenticated():
+    #     _request_user_id = request.user.id
+    # else:
+    #     _request_user_id = None
     
     
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
@@ -272,6 +273,7 @@ def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
     )
 
 def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
+
     # _start_at = datetime.datetime.now()
     # if request.user.is_authenticated():
     #     _request_user_id = request.user.id
@@ -330,19 +332,19 @@ def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
     )
 
 def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
-    _start_at = datetime.datetime.now()
-    if request.user.is_authenticated():
-        _request_user_id = request.user.id
-    else:
-        _request_user_id = None 
+    # _start_at = datetime.datetime.now()
+    # if request.user.is_authenticated():
+    #     _request_user_id = request.user.id
+    # else:
+    #     _request_user_id = None
     
     
     _entity_id = Entity.get_entity_id_by_hash(entity_hash)
     _entity_context = Entity(_entity_id).read()
     
-    _is_soldout = True
-    _taobao_id = None
-    _jd_id = None
+    # _is_soldout = True
+    # _taobao_id = None
+    # _jd_id = None
     _is_jd = False
     for _item_id in Item.find(entity_id=_entity_id):
         _item_context = Item(_item_id).read()
@@ -371,19 +373,19 @@ def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
     for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
         _liker_list.append(User(_liker[0]).read())
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds,
-        entry='tencent',
-        page='ENTITY', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'entity_id' : int(_entity_id),
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     entry='tencent',
+    #     page='ENTITY',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'entity_id' : int(_entity_id),
+    #     },
+    # )
 
     return render_to_response(
         template,
