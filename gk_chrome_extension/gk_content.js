@@ -6,6 +6,8 @@ var gk_read_state_url = gk_host + "management/entity/item/taobao/state";
 
 var location_href = location.href;
 
+console.log(location_href);
+
 if (/id|item_id/ig.test(location_href)) {
     var options = {
         url: gk_read_state_url + "?url=" + encodeURIComponent(location_href)

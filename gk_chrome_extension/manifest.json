@@ -20,8 +20,8 @@
     {
       "matches": ["http://item.taobao.com/*", "http://*.tmall.com/*", "http://*.jd.com/*"],
       "css": ["gk_content.css"],
-      "js": ["gk_content.js"],
-      "run_at": "document_end" 
+      "js": ["gk_content.js"]
+      // "run_at": "document_end" 
     }
   ],
   "permissions": ["tabs", "http://admin.guoku.com/"]
