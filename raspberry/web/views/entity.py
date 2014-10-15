@@ -32,23 +32,24 @@ from utils.jd import parse_jd_id_from_url, load_jd_item_info
 
 log = getLogger('django')
 
+@login_required
+def add_entity(request, templates='entity/add_new_entity.html'):
+
+    if request.method == 'GET':
+        data = request.GET.get('data', None)
+        if not data:
+            raise Http404
+
+
+        return render_to_response(
+            templates,
+            {
+
+            },
+            context_instance=RequestContext(request)
+        )
 
 def entity_detail(request, entity_hash, template='main/detail.html'):
-    # _user_agent = request.META['HTTP_USER_AGENT']
-    # if _user_agent == None:
-    #     log.error("[selection] Remote Host [%s] access selection without user agent" % (request.META['REMOTE_ADDR']))
-    #     raise Http404
-    #
-    # _agent = request.GET.get('agent', 'default')
-    # if _agent == 'default' :
-    #     if 'iPhone' in _user_agent :
-    #         _agent = 'iphone'
-    #     if 'Android' in _user_agent :
-    #         _agent = 'android'
-    # if _agent == 'iphone' or _agent == 'android' :
-    #     return HttpResponseRedirect(reverse('wap_detail', kwargs = { "entity_hash" : entity_hash }))
-    
-    # _start_at = datetime.datetime.now()
     if request.user.is_authenticated():
         # _request_user_id = request.user.id
         _is_staff = request.user.is_staff
@@ -139,21 +140,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                     break
         except Exception, e:
             log.error(e.message)
-            # pass
-    
-    # _duration = datetime.datetime.now() - _start_at
-    # WebLogTask.delay(
-    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
-    #     page='ENTITY',
-    #     request=request.REQUEST,
-    #     ip=get_client_ip(request),
-    #     log_time=datetime.datetime.now(),
-    #     request_user_id=_request_user_id,
-    #     appendix={
-    #         'entity_id' : int(_entity_id),
-    #         'guess_entities' : _guess_entity_id_list,
-    #     },
-    # )
+
     if _taobao_id != None: 
         return render_to_response(
             template,
@@ -201,77 +188,79 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         )
 
 def wap_entity_detail(request, entity_hash, template='wap/detail.html'):
-    _start_at = datetime.datetime.now()
-    if request.user.is_authenticated():
-        _request_user_id = request.user.id
-    else:
-        _request_user_id = None 
+    return HttpResponseRedirect(reverse('web_detail', args=[entity_hash]))
+    # _start_at = datetime.datetime.now()
+    # if request.user.is_authenticated():
+    #     _request_user_id = request.user.id
+    # else:
+    #     _request_user_id = None
     
     
-    _entity_id = Entity.get_entity_id_by_hash(entity_hash)
-    _entity_context = Entity(_entity_id).read()
-    
-    _is_soldout = True
-    _taobao_id = None
-    _jd_id = None
-    _is_jd = False
-    for _item_id in Item.find(entity_id=_entity_id):
-        _item_context = Item(_item_id).read()
-        if _item_context == None:
-            _item_context = JDItem(_item_id).read()
-            _jd_id = _item_context['jd_id']
-            _is_jd = True
-        else:
-            _taobao_id = _item_context['taobao_id']
-        if not _item_context['soldout']:
-            _is_soldout = False
-            break
-    
-    _note_list = []
-    for _note_id in Note.find(entity_id=_entity_id, reverse=True):
-        _note = Note(_note_id)
-        _note_context = _note.read()
-        if _note_context['weight'] >= 0:
-            _creator_context = User(_note_context['creator_id']).read()
-            _note_list.append({
-                'note_context' : _note_context,
-                'creator_context' : _creator_context,
-            })
-    
-    _liker_list = []
-    for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
-        _liker_list.append(User(_liker[0]).read())
-    
-    # _duration = datetime.datetime.now() - _start_at
-    # WebLogTask.delay(
-    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
-    #     entry='wap',
-    #     page='ENTITY',
-    #     request=request.REQUEST,
-    #     ip=get_client_ip(request),
-    #     log_time=datetime.datetime.now(),
-    #     request_user_id=_request_user_id,
-    #     appendix={
-    #         'entity_id' : int(_entity_id),
+    # _entity_id = Entity.get_entity_id_by_hash(entity_hash)
+    # _entity_context = Entity(_entity_id).read()
+    #
+    # _is_soldout = True
+    # _taobao_id = None
+    # _jd_id = None
+    # _is_jd = False
+    # for _item_id in Item.find(entity_id=_entity_id):
+    #     _item_context = Item(_item_id).read()
+    #     if _item_context == None:
+    #         _item_context = JDItem(_item_id).read()
+    #         _jd_id = _item_context['jd_id']
+    #         _is_jd = True
+    #     else:
+    #         _taobao_id = _item_context['taobao_id']
+    #     if not _item_context['soldout']:
+    #         _is_soldout = False
+    #         break
+    #
+    # _note_list = []
+    # for _note_id in Note.find(entity_id=_entity_id, reverse=True):
+    #     _note = Note(_note_id)
+    #     _note_context = _note.read()
+    #     if _note_context['weight'] >= 0:
+    #         _creator_context = User(_note_context['creator_id']).read()
+    #         _note_list.append({
+    #             'note_context' : _note_context,
+    #             'creator_context' : _creator_context,
+    #         })
+    #
+    # _liker_list = []
+    # for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
+    #     _liker_list.append(User(_liker[0]).read())
+    #
+    # # _duration = datetime.datetime.now() - _start_at
+    # # WebLogTask.delay(
+    # #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    # #     entry='wap',
+    # #     page='ENTITY',
+    # #     request=request.REQUEST,
+    # #     ip=get_client_ip(request),
+    # #     log_time=datetime.datetime.now(),
+    # #     request_user_id=_request_user_id,
+    # #     appendix={
+    # #         'entity_id' : int(_entity_id),
+    # #     },
+    # # )
+    # if _is_jd:
+    #     buy_link = _item_context['buy_link']
+    #     jd_id = parse_jd_id_from_url(buy_link)
+    #     _item_context['buy_link'] = 'http://m.jd.com/product/%s.html' % jd_id
+    # return render_to_response(
+    #     template,
+    #     {
+    #         'entity_context' : _entity_context,
+    #         'note_list' : _note_list,
+    #         'liker_list' : _liker_list,
+    #         'buy_link' : _item_context['buy_link'],
+    #         'is_jd' : _is_jd,
     #     },
+    #     context_instance=RequestContext(request)
     # )
-    if _is_jd:
-        buy_link = _item_context['buy_link']
-        jd_id = parse_jd_id_from_url(buy_link)
-        _item_context['buy_link'] = 'http://m.jd.com/product/%s.html' % jd_id
-    return render_to_response(
-        template,
-        {
-            'entity_context' : _entity_context,
-            'note_list' : _note_list,
-            'liker_list' : _liker_list,
-            'buy_link' : _item_context['buy_link'],
-            'is_jd' : _is_jd,
-        },
-        context_instance=RequestContext(request)
-    )
 
 def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
+
     # _start_at = datetime.datetime.now()
     # if request.user.is_authenticated():
     #     _request_user_id = request.user.id
@@ -330,72 +319,73 @@ def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
     )
 
 def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
-    _start_at = datetime.datetime.now()
-    if request.user.is_authenticated():
-        _request_user_id = request.user.id
-    else:
-        _request_user_id = None 
+    return HttpResponseRedirect(reverse('web_detail', args=[entity_hash]))
+    # _start_at = datetime.datetime.now()
+    # if request.user.is_authenticated():
+    #     _request_user_id = request.user.id
+    # else:
+    #     _request_user_id = None
     
     
-    _entity_id = Entity.get_entity_id_by_hash(entity_hash)
-    _entity_context = Entity(_entity_id).read()
-    
-    _is_soldout = True
-    _taobao_id = None
-    _jd_id = None
-    _is_jd = False
-    for _item_id in Item.find(entity_id=_entity_id):
-        _item_context = Item(_item_id).read()
-        if _item_context == None:
-            _item_context = JDItem(_item_id).read()
-            _jd_id = _item_context['jd_id']
-            _is_jd = True
-        else:
-            _taobao_id = _item_context['taobao_id']
-        if not _item_context['soldout']:
-            _is_soldout = False
-            break
-    
-    _note_list = []
-    for _note_id in Note.find(entity_id=_entity_id, reverse=True):
-        _note = Note(_note_id)
-        _note_context = _note.read()
-        if _note_context['weight'] >= 0:
-            _creator_context = User(_note_context['creator_id']).read()
-            _note_list.append({
-                'note_context' : _note_context,
-                'creator_context' : _creator_context,
-            })
-    
-    _liker_list = []
-    for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
-        _liker_list.append(User(_liker[0]).read())
-    
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds,
-        entry='tencent',
-        page='ENTITY', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'entity_id' : int(_entity_id),
-        },
-    )
-
-    return render_to_response(
-        template,
-        {
-            'entity_context' : _entity_context,
-            'note_list' : _note_list,
-            'liker_list' : _liker_list,
-            'buy_link' : _item_context['buy_link'],
-            'is_jd' : _is_jd,
-        },
-        context_instance=RequestContext(request)
-    )
+    # _entity_id = Entity.get_entity_id_by_hash(entity_hash)
+    # _entity_context = Entity(_entity_id).read()
+    #
+    # # _is_soldout = True
+    # # _taobao_id = None
+    # # _jd_id = None
+    # _is_jd = False
+    # for _item_id in Item.find(entity_id=_entity_id):
+    #     _item_context = Item(_item_id).read()
+    #     if _item_context == None:
+    #         _item_context = JDItem(_item_id).read()
+    #         _jd_id = _item_context['jd_id']
+    #         _is_jd = True
+    #     else:
+    #         _taobao_id = _item_context['taobao_id']
+    #     if not _item_context['soldout']:
+    #         _is_soldout = False
+    #         break
+    #
+    # _note_list = []
+    # for _note_id in Note.find(entity_id=_entity_id, reverse=True):
+    #     _note = Note(_note_id)
+    #     _note_context = _note.read()
+    #     if _note_context['weight'] >= 0:
+    #         _creator_context = User(_note_context['creator_id']).read()
+    #         _note_list.append({
+    #             'note_context' : _note_context,
+    #             'creator_context' : _creator_context,
+    #         })
+    #
+    # _liker_list = []
+    # for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
+    #     _liker_list.append(User(_liker[0]).read())
+    #
+    # # _duration = datetime.datetime.now() - _start_at
+    # # WebLogTask.delay(
+    # #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    # #     entry='tencent',
+    # #     page='ENTITY',
+    # #     request=request.REQUEST,
+    # #     ip=get_client_ip(request),
+    # #     log_time=datetime.datetime.now(),
+    # #     request_user_id=_request_user_id,
+    # #     appendix={
+    # #         'entity_id' : int(_entity_id),
+    # #     },
+    # # )
+    #
+    # return render_to_response(
+    #     template,
+    #     {
+    #         'entity_context' : _entity_context,
+    #         'note_list' : _note_list,
+    #         'liker_list' : _liker_list,
+    #         'buy_link' : _item_context['buy_link'],
+    #         'is_jd' : _is_jd,
+    #     },
+    #     context_instance=RequestContext(request)
+    # )
 
 
 def jd_info(request, _cand_url):
@@ -611,7 +601,6 @@ def like_entity(request, entity_id, target_status):
         raise Http404
 
 
-
 def get_notes(request, entity_id, template='entity/entity_note_list.html'):
     if request.method == 'GET':
         _user_context = User(request.user.id).read()
@@ -724,6 +713,4 @@ def log_visit_item(request, item_id):
         #     },
         # )
         return HttpResponse('1')
-
-# coding=utf-8
 
