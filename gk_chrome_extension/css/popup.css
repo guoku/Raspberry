@@ -1,0 +1,14 @@
+
+body {			/* Change width and height to own preferences */
+	width: 500px;
+	/*height: 400px;*/
+	/*overflow-x: hidden;*/
+}
+
+#entity {
+	display: none;
+}
+
+#create-entity {
+	display: none;
+}

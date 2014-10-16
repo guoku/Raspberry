@@ -4,7 +4,6 @@ from django.conf.urls import url, include, patterns
 # from django.contrib import admin
 from web.sitemaps import UserSitemap, EntitySitemap, TagSitemap, CategorySitemap
 from web.feeds import SelectionFeeds
-# admin.autodiscover()
 
 handler500 = 'web.views.page_error'
 handler404 = 'web.views.webpage_not_found'
