@@ -270,29 +270,29 @@ def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
     _entity_id = int(entity_id) 
     _entity_context = Entity(_entity_id).read()
     return HttpResponseRedirect(reverse('web_detail', args=[_entity_context['entity_hash']]))
-    _is_soldout = True
-    _taobao_id = None
-    for _item_id in Item.find(entity_id=_entity_id):
-        _item_context = Item(_item_id).read()
-        _taobao_id = _item_context['taobao_id']
-        if not _item_context['soldout']:
-            _is_soldout = False
-            break
-    
-    _note_list = []
-    for _note_id in Note.find(entity_id=_entity_id, reverse=True):
-        _note = Note(_note_id)
-        _note_context = _note.read()
-        if _note_context['weight'] >= 0:
-            _creator_context = User(_note_context['creator_id']).read()
-            _note_list.append({
-                'note_context' : _note_context,
-                'creator_context' : _creator_context,
-            })
-    
-    _liker_list = []
-    for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
-        _liker_list.append(User(_liker[0]).read())
+    # _is_soldout = True
+    # _taobao_id = None
+    # for _item_id in Item.find(entity_id=_entity_id):
+    #     _item_context = Item(_item_id).read()
+    #     _taobao_id = _item_context['taobao_id']
+    #     if not _item_context['soldout']:
+    #         _is_soldout = False
+    #         break
+    #
+    # _note_list = []
+    # for _note_id in Note.find(entity_id=_entity_id, reverse=True):
+    #     _note = Note(_note_id)
+    #     _note_context = _note.read()
+    #     if _note_context['weight'] >= 0:
+    #         _creator_context = User(_note_context['creator_id']).read()
+    #         _note_list.append({
+    #             'note_context' : _note_context,
+    #             'creator_context' : _creator_context,
+    #         })
+    #
+    # _liker_list = []
+    # for _liker in Entity(_entity_id).liker_list(offset=0, count=20):
+    #     _liker_list.append(User(_liker[0]).read())
     
     # _duration = datetime.datetime.now() - _start_at
     # WebLogTask.delay(
