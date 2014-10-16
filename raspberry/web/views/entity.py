@@ -269,7 +269,7 @@ def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
     #
     _entity_id = int(entity_id) 
     _entity_context = Entity(_entity_id).read()
-    
+    return HttpResponseRedirect(reverse('web_detail', args=[_entity_context['entity_hash']]))
     _is_soldout = True
     _taobao_id = None
     for _item_id in Item.find(entity_id=_entity_id):
