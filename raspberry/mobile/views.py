@@ -27,7 +27,7 @@ import time
 
 @check_sign
 def homepage(request):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     _session = request.GET.get('session', None)
     if _session != None:
         _request_user_id = Session_Key.objects.get_user_id(_session)
@@ -76,17 +76,17 @@ def homepage(request):
 #    else:
 #        _rslt['config']['jump_to_taobao'] = 0
     
-        
-    _duration = datetime.datetime.now() - _start_at
-    MobileLogTask.delay(
-        duration = _duration.seconds * 1000000 + _duration.microseconds, 
-        view = 'HOMEPAGE', 
-        request = request.REQUEST, 
-        ip = get_client_ip(request), 
-        log_time = datetime.datetime.now(),
-        request_user_id = _request_user_id,
-        appendix = _log_appendix 
-    )
+    #
+    # _duration = datetime.datetime.now() - _start_at
+    # MobileLogTask.delay(
+    #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+    #     view = 'HOMEPAGE',
+    #     request = request.REQUEST,
+    #     ip = get_client_ip(request),
+    #     log_time = datetime.datetime.now(),
+    #     request_user_id = _request_user_id,
+    #     appendix = _log_appendix
+    # )
     return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -156,7 +156,7 @@ def feed(request):
 
 @check_sign
 def message(request):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -251,20 +251,20 @@ def message(request):
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, message = True)
         
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(
-            duration = _duration.seconds * 1000000 + _duration.microseconds, 
-            view = 'MESSAGE', 
-            request = request.REQUEST, 
-            ip = get_client_ip(request), 
-            log_time = datetime.datetime.now(),
-            request_user_id = _request_user_id,
-        )
+        # _duration = datetime.datetime.now() - _start_at
+        # MobileLogTask.delay(
+        #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+        #     view = 'MESSAGE',
+        #     request = request.REQUEST,
+        #     ip = get_client_ip(request),
+        #     log_time = datetime.datetime.now(),
+        #     request_user_id = _request_user_id,
+        # )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
 def selection(request):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -302,24 +302,24 @@ def selection(request):
         if _request_user_id != None:
             MarkFootprint.delay(user_id = _request_user_id, selection = True)
         
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(
-            duration = _duration.seconds * 1000000 + _duration.microseconds, 
-            view = 'SELECTION', 
-            request = request.REQUEST, 
-            ip = get_client_ip(request), 
-            log_time = datetime.datetime.now(),
-            request_user_id = _request_user_id,
-            appendix = { 
-                'root_category_id' : int(_root_cat_id),
-                'result_entities' : _entity_id_list,
-            },
-        )
+        # _duration = datetime.datetime.now() - _start_at
+        # MobileLogTask.delay(
+        #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+        #     view = 'SELECTION',
+        #     request = request.REQUEST,
+        #     ip = get_client_ip(request),
+        #     log_time = datetime.datetime.now(),
+        #     request_user_id = _request_user_id,
+        #     appendix = {
+        #         'root_category_id' : int(_root_cat_id),
+        #         'result_entities' : _entity_id_list,
+        #     },
+        # )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
 def popular(request):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -352,16 +352,16 @@ def popular(request):
                 _log_appendix = { 'scale' : 'DAY' }
             _log_appendix['result_entities'] = _entity_id_list
                 
-            _duration = datetime.datetime.now() - _start_at
-            MobileLogTask.delay(
-                duration = _duration.seconds * 1000000 + _duration.microseconds, 
-                view = 'POPULAR', 
-                request = request.REQUEST, 
-                ip = get_client_ip(request), 
-                log_time = datetime.datetime.now(),
-                request_user_id = _request_user_id,
-                appendix =  _log_appendix 
-            )
+            # _duration = datetime.datetime.now() - _start_at
+            # MobileLogTask.delay(
+            #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+            #     view = 'POPULAR',
+            #     request = request.REQUEST,
+            #     ip = get_client_ip(request),
+            #     log_time = datetime.datetime.now(),
+            #     request_user_id = _request_user_id,
+            #     appendix =  _log_appendix
+            # )
             return SuccessJsonResponse(_rslt)
         else:
             return ErrorJsonResponse(
@@ -427,39 +427,39 @@ def visit_item(request, item_id):
         _duration = datetime.datetime.now() - _start_at
         
        	if _taobaoke_info and _taobaoke_info.has_key('click_url'):
-            MobileLogTask.delay(
-                entry=_entry,
-                duration = _duration.seconds * 1000000 + _duration.microseconds, 
-                view = 'CLICK', 
-                request = request.REQUEST, 
-                ip = get_client_ip(request), 
-                log_time = datetime.datetime.now(),
-                request_user_id = _request_user_id,
-                appendix = {
-                    'site' : 'taobao',
-                    'taobao_id' : _item_context['taobao_id'],
-                    'item_id' : item_id, 
-                    'entity_id' : _entity_id,
-                    'tbk' : True,
-                }
-            )
+            # MobileLogTask.delay(
+            #     entry=_entry,
+            #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+            #     view = 'CLICK',
+            #     request = request.REQUEST,
+            #     ip = get_client_ip(request),
+            #     log_time = datetime.datetime.now(),
+            #     request_user_id = _request_user_id,
+            #     appendix = {
+            #         'site' : 'taobao',
+            #         'taobao_id' : _item_context['taobao_id'],
+            #         'item_id' : item_id,
+            #         'entity_id' : _entity_id,
+            #         'tbk' : True,
+            #     }
+            # )
             return HttpResponseRedirect(decorate_taobao_url(_taobaoke_info['click_url'], _ttid, _sid, _outer_code, _sche))
         
-        MobileLogTask.delay(
-            entry=_entry,
-            duration=_duration.seconds * 1000000 + _duration.microseconds, 
-            view='CLICK', 
-            request=request.REQUEST, 
-            ip=get_client_ip(request), 
-            log_time=datetime.datetime.now(),
-            request_user_id=_request_user_id,
-            appendix={
-                'site': 'taobao',
-                'taobao_id': _item_context['taobao_id'],
-                'entity_id': _entity_id,
-                'tbk': False,
-            }
-        )
+        # MobileLogTask.delay(
+        #     entry=_entry,
+        #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+        #     view='CLICK',
+        #     request=request.REQUEST,
+        #     ip=get_client_ip(request),
+        #     log_time=datetime.datetime.now(),
+        #     request_user_id=_request_user_id,
+        #     appendix={
+        #         'site': 'taobao',
+        #         'taobao_id': _item_context['taobao_id'],
+        #         'entity_id': _entity_id,
+        #         'tbk': False,
+        #     }
+        # )
         return HttpResponseRedirect(decorate_taobao_url(get_taobao_url(_item_context['taobao_id'], True), _ttid, _sid, _outer_code, _sche))
             
 
