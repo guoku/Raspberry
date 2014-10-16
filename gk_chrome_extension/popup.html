@@ -3,17 +3,29 @@
 <head>
     <meta charset="utf-8">
     <title>Add item</title>
-    <!-- // <script src="js/jquery-1.11.1.min.js"></script> -->
-    <!-- // <script src="js/bootstrap.min.js"></script> -->
+
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="css/helper.css" rel="stylesheet" media="screen">
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
+    <link href="css/popup.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<div class="container">
-		<div class="row">
+		<div id="message" class="row">
+			<div class="alert alert-success" role="alert">
+				<!-- <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> -->
+				<strong><i class="fa fa-circle-o-notch fa-spin"></i></strong> 加载中 ....
+			</div>
+		</div>
+		<div id="entity" class="row">
+			<!-- <div></div> -->
+			<h4 class="col-xs-offset-2"></h4>
+			<em class="col-xs-offset-2"></em>
+			<p class="col-xs-offset-2"></p>
+		</div>
+		<div id="image" class="row">
 
 		</div>
-		<div class="row">
+		<div id="create-entity" class="row">
 			<form class="form-horizontal" action="http://test.guoku.com/entity/add/" method="post">
 				<fieldset>
 					<div class="form-group">
@@ -47,5 +59,9 @@
 			</form>
 		</div>
 	</div>
+
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/popup.js"></script>
 </body>
 </html>
