@@ -41,9 +41,9 @@
                             <p class="media-heading"><a href="{% url 'web_user_likes' message.content.comment_user.user_id %}">{{ message.content.comment_user.nickname }}</a>&nbsp; 回复了你的点评</p>
                             <p>{{ message.content.note.content }}</p>
                             <div class="media">
-                                <div class="pull-left">
+                                <a class="pull-left" target="_blank" href="{% url 'web_user_likes' message.content.comment_user.user_id %}">
                                     <img class="media-object img-circle" src="{{ message.content.comment_user.avatar_small }}">
-                                </div>
+                                </a>
                                 <div class="media-body">
                                     <strong class="media-heading">{{ message.content.comment_user.nickname }}</strong>
                                     <p>{{ message.content.comment.content }}</p>
@@ -72,9 +72,9 @@
                             <p class="media-heading"><a target="_blank" href="{% url 'web_user_likes' message.content.replying_user.user_id %}">{{ message.content.replying_user.nickname }}</a>&nbsp; 回复了你的点评</p>
                             <p>{{ message.content.note.content }}</p>
                             <div class="media">
-                                <div class="pull-left">
+                                <a class="pull-left" target="_blank" href="{% url 'web_user_likes' message.content.replying_user.user_id %}">
                                     <img class="media-object img-circle" src="{{ message.content.replying_user.avatar_small }}">
-                                </div>
+                                </a>
                                 <div class="media-body">
                                     <strong class="media-heading">{{ message.content.replying_user.nickname }}</strong>
                                     <p>{{ message.content.replying_comment.content }}</p>
