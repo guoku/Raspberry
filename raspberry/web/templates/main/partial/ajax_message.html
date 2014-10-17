@@ -92,6 +92,12 @@
                         <div class="pull-left message-icon">
                             <i class="fa fa-star fa-2x media-object"></i>
                         </div>
+                        <div class="media-body">
+{#                            {{ message.content }}#}
+                            <p class="media-heading">你添加的商品被收录精选</p>
+                            <p><a target="_blank" href="{% url 'web_detail' message.content.entity.entity_hash %}"><img class="img-thumbnail img-responsive" src="{{ message.content.entity.chief_image.url|resize:'64' }}"></a></p>
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
                     </div>
                 {% endif %}
 {#                {{ message.type }}#}

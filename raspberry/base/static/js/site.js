@@ -700,7 +700,8 @@
                             type: 'GET',
                             data: {'timestamp':timestamp},
                             success: function(data){
-                                result = $.parseJSON(data);
+//                                console.log(data);
+                                var result = $.parseJSON(data);
                                 var status = parseInt(result.status);
                                 if (status == 1 ) {
                                     var html = $(result.data);

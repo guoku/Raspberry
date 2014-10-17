@@ -260,7 +260,7 @@ def web_message(request,  template='main/message.html'):
                     'status' : '1',
                     'data' : _data
                 }
-                return JSONResponse(_ret)
+            return JSONResponse(_ret)
         # log.info(_rslt)
         return render_to_response(
             template,
