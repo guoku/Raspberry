@@ -118,13 +118,16 @@ a {
 }
 
 .navbar-inverse {
-    background-color: #343434;
-    background-color: rgba(52,52,52,.95);
+    background-color: #565658;
+    background-color: rgba(78,78,82,.95);
     border: 0;
 }
 
 .navbar-inverse .navbar-nav>li>a {
 color: #bcbcbc;
+}
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
+    border-color: #303030;
 }
 
 .nav-home {
