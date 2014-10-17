@@ -33,6 +33,13 @@ def format_time(value):
 
 register.filter(format_time)
 
+
+def timestamp(value):
+    # log.info(type(value))
+    return time.mktime(value.timetuple())
+register.filter('timestamp', timestamp)
+
+
 def selection_previous_paginator(value):
     if value % 3 == 0:
         value -= 2

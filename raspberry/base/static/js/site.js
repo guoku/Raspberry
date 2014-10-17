@@ -664,6 +664,12 @@
         }
     };
 
+    var message = {
+        loadData: function(){
+
+        }
+    };
+
     (function init() {
 
         util.like();

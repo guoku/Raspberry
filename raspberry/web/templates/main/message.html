@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n staticfiles %}
-{% load entity user %}
+{% load entity user web_common %}
 
 {% block title %}我的消息{% endblock %}
 {#{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/entity.css' %}">{% endblock %}#}
@@ -104,7 +104,7 @@
                     </div>
                 {% endif %}
 {#                {{ message.type }}#}
-               <div class="line"></div>
+               <div class="line timestr" timestamp="{{ message.created_time|timestamp }}"></div>
             {% endfor %}
         </div>
 
