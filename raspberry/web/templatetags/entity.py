@@ -3,7 +3,7 @@ from django.utils.log import getLogger
 from django import template
 from base.category import Category
 from base.category import Category_Group
-
+from base.entity import Entity
 import re
 
 register = template.Library()
@@ -41,3 +41,20 @@ def resize_image(value, size=640):
     else:
         return value
 register.filter('resize', resize_image)
+
+def entity_title(value):
+    _entity_context = Entity(value).read()
+
+    return _entity_context['title']
+register.filter('entity_title', entity_title)
+
+def entity_chief_image(value):
+    _entity_context = Entity(value).read()
+
+    return _entity_context['chief_image']['url']
+register.filter('entity_chief_image', entity_chief_image)
+
+def entity_hash(value):
+    _entity_context = Entity(value).read()
+    return _entity_context['entity_hash']
+register.filter('entity_hash', entity_hash)

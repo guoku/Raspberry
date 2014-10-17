@@ -19,3 +19,10 @@ def show_avater(value, size=64):
     }
 
 register.inclusion_tag("user/partial/avatar.html")(show_avater)
+
+
+def nickname(value):
+    _user_context = User(value).read()
+
+    return _user_context['nickname']
+register.filter('nickname', nickname)

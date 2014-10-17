@@ -13,7 +13,8 @@ from utils.http import JSONResponse
 from datetime import datetime
 
 from utils.paginator import Paginator
-from base.message import NeoMessage,UserFollowMessage,NotePokeMessage,EntityLikeMessage,EntityNoteMessage
+from base.message import NeoMessage, UserFollowMessage, NoteSelectionMessage, NoteCommentReplyMessage, NotePokeMessage, NoteCommentMessage, EntityLikeMessage, EntityNoteMessage
+# from base.message import *
 from base.models import NoteSelection
 from base.note import Note
 from base.entity import Entity
@@ -150,20 +151,20 @@ def web_message(request,  template='main/message.html'):
 
         _recommend_tag_list = Tag.get_recommend_user_tag_list()
 
-        _popular_list = popularity.read_popular_user_context()
-        _popular_list_detail = []
-        if _popular_list != None:
-            for _popular_user in _popular_list["data"]:
-                try:
-                    _popu_context = {
-                        "user_id" : _popular_user["user_id"],
-                        "user_context" : User(_popular_user["user_id"]).read(),
-                        "relation" : User.get_relation(_request_user_id,_popular_user["user_id"])
-                    }
-                    _popular_list_detail.append(_popu_context)
-                except Exception, e:
-                    print e
-                    pass
+        # _popular_list = popularity.read_popular_user_context()
+        # _popular_list_detail = []
+        # if _popular_list != None:
+        #     for _popular_user in _popular_list["data"]:
+        #         try:
+        #             _popu_context = {
+        #                 "user_id" : _popular_user["user_id"],
+        #                 "user_context" : User(_popular_user["user_id"]).read(),
+        #                 "relation" : User.get_relation(_request_user_id,_popular_user["user_id"])
+        #             }
+        #             _popular_list_detail.append(_popu_context)
+        #         except Exception, e:
+        #             log.error(e.message)
+
         _rslt = []
         for _message in NeoMessage.objects.filter(user_id=_request_user_id,created_time__lt=_timestamp).order_by('-created_time')[0:_count]:
             try:
@@ -240,15 +241,15 @@ def web_message(request,  template='main/message.html'):
                     }
                     _rslt.append(_context)
             except Exception, e:
-                print e
-                pass
-                
+                log.error(e.message)
+
+        log.info(_rslt)
         return render_to_response(
             template,
             {
                 'message_list' : _rslt,
                 'recommend_tag_list' : _recommend_tag_list,
-                'popular_list' : _popular_list_detail
+                # 'popular_list' : _popular_list_detail
             },
             context_instance = RequestContext(request)
         )

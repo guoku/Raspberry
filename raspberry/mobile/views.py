@@ -15,7 +15,7 @@ from entity import *
 from note import *
 from report import *
 from user import *
-from base.item import Item,JDItem
+from base.item import Item, JDItem
 from share.tasks import MarkFootprint
 from tasks import MobileLogTask
 from utils.lib import get_client_ip
@@ -423,8 +423,8 @@ def visit_item(request, item_id):
         if _item_context == None:
             return __visit_jd_item(request, item_id)
         _taobaoke_info = taobaoke_mobile_item_convert(_item_context['taobao_id'])
-        _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1 
-        _duration = datetime.datetime.now() - _start_at
+        # _entity_id = _item_context['entity_id'] if _item_context.has_key('entity_id') else -1
+        # _duration = datetime.datetime.now() - _start_at
         
        	if _taobaoke_info and _taobaoke_info.has_key('click_url'):
             # MobileLogTask.delay(
