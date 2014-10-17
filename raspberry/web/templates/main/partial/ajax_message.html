@@ -1,0 +1,98 @@
+{% load entity user web_common %}
+
+{% for message in message_list %}
+                {% if message.type == 'user_follow' %}
+                    <div class="media">
+                        <div class="pull-left message-icon">
+                            <i class="fa fa-user fa-2x media-object"></i>
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading"><a target="_blank" href="{% url 'web_user_likes' message.content.follower.user_id %}">{{ message.content.follower.nickname }}</a>&nbsp; 开始关注了你</p>
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
+                    </div>
+                {% elif message.type == 'note_poke_message'%}
+                    <div class="media">
+                        <div class="pull-left message-icon">
+                            <i class="fa fa-thumbs-up fa-2x media-object"></i>
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading"><a target="_blank" href="{% url 'web_user_likes' message.content.poker.user_id %}">{{ message.content.poker.nickname }}</a>&nbsp; 赞了你对 <strong>{{ message.content.note.entity_id|entity_title }}</strong> 的点评</p>
+                            <p><a target="_blank" href="{% url 'web_detail' message.content.note.entity_id|entity_hash %}"><img class="img-thumbnail img-responsive" src="{{ message.content.note.entity_id|entity_chief_image|resize:'64' }}"></a></p>
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
+                    </div>
+                {% elif message.type == 'note_comment_message' %}
+                    <div class="media">
+                        <div class="pull-left message-icon">
+                            <i class="fa fa-comment fa-2x media-object"></i>
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading"><a href="{% url 'web_user_likes' message.content.comment_user.user_id %}">{{ message.content.comment_user.nickname }}</a>&nbsp; 回复了你的点评</p>
+                            <p>{{ message.content.note.content }}</p>
+                            <div class="media">
+                                <a class="pull-left" target="_blank" href="{% url 'web_user_likes' message.content.comment_user.user_id %}">
+                                    <img class="media-object img-circle" src="{{ message.content.comment_user.avatar_small }}">
+                                </a>
+                                <div class="media-body">
+                                    <strong class="media-heading">{{ message.content.comment_user.nickname }}</strong>
+                                    <p>{{ message.content.comment.content }}</p>
+                                </div>
+                            </div>
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
+                    </div>
+                {% elif message.type == 'entity_like_message' %}
+                    <div class="media">
+                        <div class="pull-left message-icon">
+                            <i class="fa fa-header fa-2x media-object"></i>
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading">你的商品被喜爱了</p>
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
+                    </div>
+                {% elif message.type == 'note_comment_reply_message' %}
+                    <div class="media">
+                        <div class="pull-left message-icon">
+                            <i class="fa fa-comment fa-2x media-object"></i>
+                        </div>
+                        <div class="media-body">
+{#                            {{ message.content }}#}
+                            <p class="media-heading"><a target="_blank" href="{% url 'web_user_likes' message.content.replying_user.user_id %}">{{ message.content.replying_user.nickname }}</a>&nbsp; 回复了你的点评</p>
+                            <p>{{ message.content.note.content }}</p>
+                            <div class="media">
+                                <a class="pull-left" target="_blank" href="{% url 'web_user_likes' message.content.replying_user.user_id %}">
+                                    <img class="media-object img-circle" src="{{ message.content.replying_user.avatar_small }}">
+                                </a>
+                                <div class="media-body">
+                                    <strong class="media-heading">{{ message.content.replying_user.nickname }}</strong>
+                                    <p>{{ message.content.replying_comment.content }}</p>
+                                </div>
+                            </div>
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
+                    </div>
+                {% elif message.type == 'entity_note_message' %}
+                    <div class="media">
+                        <div class="pull-left message-icon">
+                            <i class="fa fa-comment fa-2x media-object"></i>
+                        </div>
+                        <div class="media-body">
+{#                            {{ message.content }}#}
+                            <p class="media-heading"><a target="_blank" href="{% url 'web_user_likes' message.content.note.creator_id %}">{{ message.content.note.creator_id|nickname }}</a>&nbsp; 点评了你推荐的商品</p>
+                            <p><a target="_blank" href="{% url 'web_detail' message.content.entity.entity_hash %}"><img class="img-responsive img-thumbnail" src="{{ message.content.entity.chief_image.url|resize:'64' }}"></a></p>
+                            <p>{{ message.content.note.content }}</p>
+
+                            <p class="message-time">{{ message.created_time|date:'Y-m-d H:i:s' }}</p>
+                        </div>
+                    </div>
+                {% elif message.type == 'note_selection_message' %}
+                    <div class="media">
+                        <div class="pull-left message-icon">
+                        </div>
+                    </div>
+                {% endif %}
+{#                {{ message.type }}#}
+               <div class="line timestr" timestamp="{{ message.created_time|timestamp }}"></div>
+{% endfor %}

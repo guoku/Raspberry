@@ -139,6 +139,7 @@ def selection(request, template='main/selection.html'):
 @login_required
 def web_message(request,  template='main/message.html'):
     # _start_at = datetime.now()
+
     if request.method == "GET":
         _request_user_id = request.user.id
         _timestamp = request.GET.get('timestamp',None)
@@ -243,7 +244,24 @@ def web_message(request,  template='main/message.html'):
             except Exception, e:
                 log.error(e.message)
 
-        log.info(_rslt)
+        if request.is_ajax():
+            # template = 'main/partial/ajax_message.html'
+            _ret = {
+                'status' : 0,
+                'msg' : '没有更多数据'
+            }
+            if len(_rslt) > 0:
+                _t = loader.get_template('main/partial/ajax_message.html')
+                _c = RequestContext(request, {
+                    'message_list': _rslt,
+                })
+                _data = _t.render(_c)
+                _ret = {
+                    'status' : '1',
+                    'data' : _data
+                }
+                return JSONResponse(_ret)
+        # log.info(_rslt)
         return render_to_response(
             template,
             {

@@ -108,6 +108,15 @@
                 });
                 e.preventDefault();
             })
+        },
+
+        gotop: function() {
+            $(".btn-top").on('click', function() {
+                $("html, body").animate(
+                    {scrollTop : 0}, 800
+                );
+                return false;
+            });
         }
     };
 
@@ -262,12 +271,7 @@
             var page = $selection.parent().find('.pager');
             var counter = 1;
             page.hide();
-            $(".btn-top").on('click', function() {
-                $("html, body").animate(
-                    {scrollTop : 0}, 800
-                );
-                return false;
-            });
+
 
             if ($selection[0]) {
                 var flag = false;
@@ -666,7 +670,49 @@
 
     var message = {
         loadData: function(){
+            var message = $("#message");
+//            console.log(message);
+//            $(".btn-top").on('click', function() {
+//                $("html, body").animate(
+//                    {scrollTop : 0}, 800
+//                );
+//                return false;
+//            });
 
+            if (message[0]) {
+                var flag = false;
+                $(window).scroll(function () {
+                    if ($(this).scrollTop() > 100) {
+                        $(".btn-top").fadeIn();
+                    } else {
+                        $(".btn-top").fadeOut();
+                    }
+
+//                    console.log(($(window).height()));
+                    if (($(window).height() + $(window).scrollTop()) >= $(document).height() && flag == false) {
+                        flag = true;
+                        var url = window.location.href;
+                        var last_message = message.find('.timestr:last');
+                        var timestamp = last_message.attr('timestamp');
+
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            data: {'timestamp':timestamp},
+                            success: function(data){
+                                result = $.parseJSON(data);
+                                var status = parseInt(result.status);
+                                if (status == 1 ) {
+                                    var html = $(result.data);
+//                                console.log(html);
+                                    html.appendTo(message);
+                                }
+                                flag = false;
+                            }
+                        });
+                    }
+                });
+            }
         }
     };
 
@@ -675,6 +721,7 @@
         util.like();
         util.follower();
         util.initTag();
+        util.gotop();
 
         createNewEntity.createEntity();
         createNewEntity.BrandAndTitle();
@@ -688,6 +735,8 @@
         detail.shareWeibo();
         detail.postNote();
         detail.noteAction();
+
+        message.loadData();
     })();
 
 
