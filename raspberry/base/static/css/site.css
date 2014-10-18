@@ -129,6 +129,9 @@ color: #bcbcbc;
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
     border-color: #303030;
 }
+.navbar-inverse .navbar-nav .open .dropdown-menu .divider {
+background-color: #303030;
+}
 
 .nav-home {
     margin-right: 5px;
