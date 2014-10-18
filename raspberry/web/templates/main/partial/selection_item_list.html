@@ -27,7 +27,7 @@
                                     {% else %}
                                         <i class="fa fa-heart-o fa-lg"></i>
                                     {% endif %}
-                                    &nbsp; {% trans 'likes' %} <span class="like-count">{{ selection.entity_context.like_count }}</span>
+                                    {% trans 'likes' %} <span class="like-count">{{ selection.entity_context.like_count }}</span>
                                 </a>
                                 <a class="btn btn-user pull-right" href="{% url 'web_user_index' selection.creator_context.user_id %}"  target="_blank">
                                     <p style="margin: 0;">
