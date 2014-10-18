@@ -28,14 +28,15 @@
                             <i class="fa fa-comment fa-2x media-object"></i>
                         </div>
                         <div class="media-body">
+{#                            {{ message.content }}#}
                             <p class="media-heading"><a href="{% url 'web_user_likes' message.content.comment_user.user_id %}">{{ message.content.comment_user.nickname }}</a>&nbsp; 回复了你的点评</p>
                             <p>{{ message.content.note.content }}</p>
                             <div class="media message">
-                                <a class="pull-left" target="_blank" href="{% url 'web_user_likes' message.content.comment_user.user_id %}">
-                                    <img class="media-object img-circle" src="{{ message.content.comment_user.avatar_small }}">
+                                <a class="pull-left" target="_blank" href="{% url 'web_detail' message.content.note.entity_id|entity_hash %}">
+                                    <img class="media-object img-circle" src="{{ message.content.note.entity_id|entity_chief_image|resize:'240' }}">
                                 </a>
                                 <div class="media-body">
-                                    <strong class="media-heading">{{ message.content.comment_user.nickname }}</strong>
+                                    <strong class="media-heading">回复</strong>
                                     <p>{{ message.content.comment.content }}</p>
                                 </div>
                             </div>
@@ -58,14 +59,15 @@
                             <i class="fa fa-comment fa-2x media-object"></i>
                         </div>
                         <div class="media-body">
+{#                            {{ message.content }}#}
                             <p class="media-heading"><a target="_blank" href="{% url 'web_user_likes' message.content.replying_user.user_id %}">{{ message.content.replying_user.nickname }}</a>&nbsp; 回复了你的点评</p>
                             <p>{{ message.content.note.content }}</p>
                             <div class="media message">
-                                <a class="pull-left" target="_blank" href="{% url 'web_user_likes' message.content.replying_user.user_id %}">
-                                    <img class="media-object img-circle" src="{{ message.content.replying_user.avatar_small }}">
+                                <a class="pull-left" target="_blank" href="{% url 'web_detail' message.content.note.entity_id|entity_hash %}">
+                                    <img class="media-object" src="{{ message.content.note.entity_id|entity_chief_image|resize:'240'  }}">
                                 </a>
                                 <div class="media-body">
-                                    <strong class="media-heading">{{ message.content.replying_user.nickname }}</strong>
+                                    <strong class="media-heading">回复</strong>
                                     <p>{{ message.content.replying_comment.content }}</p>
                                 </div>
                             </div>
