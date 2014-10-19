@@ -70,6 +70,7 @@
 
         {% if web_user_likes_url in request.path %}
             <div class="row">
+                <div class="col-md-12">
                 <ul class="nav nav-pills nav-home" role="tablist">
                     <li {% if curr_category_id == 0 %}role="presentation" class="disabled"{% endif %}><a href="{{ web_user_likes_url }}">所有</a></li>
                     {% for category in category_list %}
@@ -82,6 +83,7 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
+                </div>
             </div>
             <div class="row">
 
