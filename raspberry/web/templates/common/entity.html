@@ -6,7 +6,7 @@
     <div class="thumbnail">
         <div class="img-box">
             <a href="{% url 'web_detail' entity_context.entity_hash %}">
-                <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity_context.chief_image.url|resize:'240' }}">
+                <img class="img-responsive" alt="{{ entity_context.title }}" src="{{ entity_context.chief_image.url|resize:'240' }}" width='240' height='240'>
             </a>
         </div>
         <div class="caption">
