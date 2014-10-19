@@ -302,7 +302,7 @@
 //                            console.log(p);
                             p = parseInt(p[1]);
                         } else {
-                            p = 0;
+                            p = 1;
                         }
 //                        console.log(url);
 //                        var time = $(".common-note:last").find(".timestr").attr("name");
