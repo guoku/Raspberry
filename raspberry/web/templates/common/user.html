@@ -5,7 +5,7 @@
     <div class="thumbnail" style="padding: 10px;padding-top:20px;height: 100px;">
         <div class="media">
             <a class="pull-left" href="{% url 'web_user_index' user_context.user_id %}" target="_blank">
-                <img class="media-object img-circle" src="{{ user_context.avatar_large }}" width="60" height="60">
+                <img class="media-object img-circle" src="{{ user_context.avatar_large }}" width="60" height="60" style="width:60px;height:60px;">
             </a>
             {% if user_context.relation == 3 %}
                 <a href="{% url 'web_follow' user_context.user_id 0 %}" class="follow is-fan btn btn-cancel pull-right"><i class="fa fa-exchange fa-lg" style="color: #ccc"></i>&nbsp; <b>取消关注</b></a>

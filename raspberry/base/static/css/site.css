@@ -111,9 +111,13 @@ a {
 }
 /* 导航栏选中状态处理 */
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    background-color: #565658;
+    background-color: rgba(68,68,72,0);
     background-color: initial;
 }
 .navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
+    background-color: #565658;
+    background-color: rgba(68,68,72,0);
     background-color: initial;
 }
 
@@ -129,14 +133,27 @@ color: #bcbcbc;
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
     border-color: #303030;
 }
-.navbar-inverse .navbar-nav .open .dropdown-menu .divider {
-background-color: #303030;
+@media (max-width: 767px){
+    .navbar-inverse .navbar-nav .open .dropdown-menu .divider {
+    background-color: #303030;
+    }
 }
 
 .nav-home {
-    margin-right: 5px;
-    margin-left: 5px;
     margin-bottom: 20px;
+}
+
+.nav-home .disabled{
+    background: #f8f8f8;
+}
+.nav.nav-home >li{
+    margin-right: 5px;
+}
+.nav.nav-home >li>a {
+    padding: 5px 10px;
+}
+.nav-pills>li>a {
+    border-radius: 0px;
 }
 
 .dropdown-menu>li>a{
@@ -652,6 +669,12 @@ background-color: #303030;
 .sidebar {
     padding: 0 20px 0 20px;
 }
+@media (max-width: 767px){
+    .sidebar {
+        padding: 0 15px 0 15px;
+    }
+}
+
 /*}*/
 .nav-sidebar {
     text-align: left;
@@ -701,7 +724,7 @@ background-color: #303030;
     padding-top: 10px;
     float: right;
 }
-.message img {
+.message .message-image {
     max-width: 120px;
 }
 
