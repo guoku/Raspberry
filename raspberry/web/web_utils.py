@@ -27,13 +27,12 @@ def get_login_redirect_url(request):
     pattern = re.compile(r'like|follow|comment|poke')
     next_url = get_redirect_url(request)
 
-    match = pattern.search(next_url)
-
-    if match:
-        return request.META['HTTP_REFERER']
-
     if next_url:
+        match = pattern.search(next_url)
+        if match:
+            return request.META['HTTP_REFERER']
         return next_url
+    
     return reverse("web_selection")
 
 def get_redirect_url(request):
