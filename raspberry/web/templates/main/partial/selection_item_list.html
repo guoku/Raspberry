@@ -21,7 +21,7 @@
                             <p class="note">{{ selection.note_context.content|truncatechars:70 }}</p>
                         </div>
                         <div style="white-space:nowrap;overflow:hidden;">
-                                <a class="btn btn-like" href="{% url 'web_like_entity' selection.entity_context.entity_id '1' %}" target="_blank">
+                                <a class="btn btn-like pull-left" href="{% url 'web_like_entity' selection.entity_context.entity_id '1' %}" target="_blank">
                                     {% if selection.is_user_already_like %}
                                         <i class="fa fa-heart fa-lg"></i>
                                     {% else %}

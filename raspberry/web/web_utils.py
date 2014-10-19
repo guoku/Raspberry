@@ -32,7 +32,7 @@ def get_login_redirect_url(request):
         if match:
             return request.META['HTTP_REFERER']
         return next_url
-    
+
     return reverse("web_selection")
 
 def get_redirect_url(request):
