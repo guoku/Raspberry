@@ -297,12 +297,21 @@
                         var aQuery = window.location.href.split('?');
 
                         var url = aQuery[0];
+                        var p = 1;
                         if (aQuery.length > 1) {
-                            var p = aQuery[1].split('=');
-//                            console.log(p);
-                            p = parseInt(p[1]);
-                        } else {
-                            p = 1;
+//                            var p = aQuery[1].split('=');
+////                            console.log(p);
+//                            p = parseInt(p[1]);
+                            var param = aQuery[1].split('&');
+                            if (param.length > 1) {
+                                p = param[1].split('=');
+                                p = parseInt(p[1]);
+                            } else {
+                                p = param[0].split('=');
+                                p = parseInt(p[1]);
+                            }
+
+
                         }
 //                        console.log(url);
 //                        var time = $(".common-note:last").find(".timestr").attr("name");
