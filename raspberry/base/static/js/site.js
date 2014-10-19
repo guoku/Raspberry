@@ -293,7 +293,18 @@
 //                        console.log("okokokokoko");
 //                        page.hide();
                         flag = true;
-                        var url = window.location.href;
+//                        var url = window.location.href;
+                        var aQuery = window.location.href.split('?');
+
+                        var url = aQuery[0];
+                        if (aQuery.length > 1) {
+                            var p = aQuery[1].split('=');
+//                            console.log(p);
+                            p = parseInt(p[1]);
+                        } else {
+                            p = 0;
+                        }
+//                        console.log(url);
 //                        var time = $(".common-note:last").find(".timestr").attr("name");
 //                        var time = $selection.find().attr("name");
                         var last_entity = $selection.find('.entity-selection:last');
@@ -302,7 +313,7 @@
                         $.ajax({
                             url: url,
                             type: "GET",
-                            data: {'p': counter,'t':time},
+                            data: {'p': p+counter,'t':time},
                             success: function(data) {
                                 result =  $.parseJSON(data);
                                 var status = parseInt(result.status);
