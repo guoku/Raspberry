@@ -297,32 +297,45 @@
                         var aQuery = window.location.href.split('?');
 
                         var url = aQuery[0];
-                        var p = 1;
+                        var p = 1; var c = 0;
                         if (aQuery.length > 1) {
-//                            var p = aQuery[1].split('=');
-////                            console.log(p);
-//                            p = parseInt(p[1]);
                             var param = aQuery[1].split('&');
+                            var param_p; var param_c;
+//                            console.log(param);
                             if (param.length > 1) {
-                                p = param[1].split('=');
-                                p = parseInt(p[1]);
+                                param_c = param[0].split('=');
+                                c = parseInt(param_c[1]);
+                                param_p = param[1].split('=');
+                                p = parseInt(param_p[1]);
                             } else {
-                                p = param[0].split('=');
-                                p = parseInt(p[1]);
+
+                                param_c = param[0].split('=');
+//                                console.log(p);
+                                if (param_c[0] == 'c') {
+                                    c = parseInt(param_c[1]);
+                                } else {
+
+                                    p = parseInt(param_c[1]);
+                                }
                             }
-
-
                         }
-//                        console.log(url);
-//                        var time = $(".common-note:last").find(".timestr").attr("name");
-//                        var time = $selection.find().attr("name");
+
                         var last_entity = $selection.find('.entity-selection:last');
                         var time = last_entity.find(".timestr").attr("name");
+                        var data = {
+                            'p': p+counter,
+                            't':time
+                        };
+
+                        if (c != 0 ){
+                            data['c'] = c;
+                        }
+//                        console.log(data);
 //                        console.log(time);
                         $.ajax({
                             url: url,
                             type: "GET",
-                            data: {'p': p+counter,'t':time},
+                            data: data,
                             success: function(data) {
                                 result =  $.parseJSON(data);
                                 var status = parseInt(result.status);
