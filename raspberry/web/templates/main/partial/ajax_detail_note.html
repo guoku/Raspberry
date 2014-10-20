@@ -2,7 +2,7 @@
 <div class="media common-note-item">
     <div class="line"></div>
     <a class="pull-left" href="{% url 'web_user_likes' creator_context.user_id %}" target="_blank" >
-        <img class="media-object img-circle" src="{{ creator_context.avatar_small }}" alt="{{ creator_context.nickname }}">
+        <img class="media-object img-circle" src="{{ creator_context.avatar_small }}" alt="{{ creator_context.nickname }}" width='50' height='50'>
     </a>
     <div class="media-body note-content">
         <a href="{% url 'web_user_likes' creator_context.user_id %}">
