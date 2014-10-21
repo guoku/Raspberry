@@ -10,7 +10,7 @@ class CreateEventBannerForms(forms.Form):
     )
     event_banner_image = forms.FileField(
         label=_('event banner image'),
-        widget=forms.FileInput(attrs={'class':'form-control'}),
+        widget=forms.FileInput(attrs={'class':'controls'}),
         help_text=_(''),
     )
 
