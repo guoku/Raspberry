@@ -63,6 +63,8 @@ urlpatterns += patterns(
 
     url(r'^account/', include('web.urls.account')),
     url(r'^u/', include('web.urls.user')),
+
+    url(r'^event/', include('web.urls.event')),
 )
 
 

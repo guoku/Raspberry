@@ -41,9 +41,9 @@
             }
         },
 
-        like: function () {
+        like: function (object) {
             // 喜爱 like entity
-            $('.btn-like, .btn-like-detail').on('click', function (e) {
+            object.find('.btn-like, .btn-like-detail').on('click', function (e) {
                 var like = $(this);
                 var counter = like.find('.like-count');
                 var url = $(this).attr("href");
@@ -344,6 +344,7 @@
 //                                    $html.each(function () {
 //                                        util.showEntityTitle($(this));
 //                                    });
+                                    util.like($html);
                                     $html.appendTo($selection);
                                     counter ++;
                                     flag = false;
@@ -751,8 +752,9 @@
     };
 
     (function init() {
+//        console.log($.find());
 
-        util.like();
+        util.like($('body'));
         util.follower();
         util.initTag();
         util.gotop();
