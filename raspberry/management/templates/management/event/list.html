@@ -1,7 +1,34 @@
-{% extends "management_base.html" %}
-{% load management %}
+{% extends "new_management_base.html" %}
+{% load i18n management %}
 
 {% block content %}
+    <div class="container">
+        <div class="row">
+            <ul class="nav nav-pills" role="tablist">
+                <li><a class="btn btn-primary" href="#">{% trans 'add' %}</a></li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{% trans 'images' %}</th>
+                            <th>{% trans 'link' %}</th>
+                            <th>{% trans 'operation' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for banner in banners %}
+                            <tr>
+                                <td>{{ banner.pk }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    
 {% endblock %}
