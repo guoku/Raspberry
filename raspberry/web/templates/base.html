@@ -35,10 +35,13 @@ window.location.href = url;</script><![endif]-->
     <!--[if lt IE 9]>
       <script src="{% static 'js/html5shiv.min.js' %}"></script>
       <script src="{% static 'js/respond.min.js' %}"></script>
+
 	<link href="http://static.guoku.com/respond-proxy.html" id="respond-proxy" rel="respond-proxy" />
 	<link href="http://{{ request.META.HTTP_HOST }}/respond.proxy.gif" id="respond-redirect" rel="respond-redirect" />
 	<script src="http://{{ request.META.HTTP_HOST }}/respond.proxy.js"></script>
 
+{#    <script src="http://{{ request.META.HTTP_HOST }}/html5shiv.min.js"></script>#}
+{#    <script src="http://{{ request.META.HTTP_HOST }}/respond.min.js"></script>#}
     <![endif]-->
 
 </head>
