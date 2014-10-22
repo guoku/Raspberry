@@ -3,13 +3,27 @@
 
 {% block content %}
     <div class="container">
+
+        <div class="row carousel" data-ride="carousel">
+            {% for show in show_banners %}
+                <div class="item">
+                    <img src="{{ show.banner.image_url }}" width="940" height="430">
+                    <div class="carousel-caption">
+
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
         <div class="row">
             <ul class="nav nav-pills" role="tablist">
                 <li><a class="btn btn-primary" href="{% url 'management_event_banner_create' %}">{% trans 'add' %}</a></li>
             </ul>
         </div>
         <div class="row">
-            <div class="table-responsive">
+            <div class="table-responsive" style="margin: 20px 0 20px 0;">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -20,9 +34,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for banner in banners %}
+                        {% for banner in event_banners %}
                             <tr>
                                 <td>{{ banner.pk }}</td>
+                                <td><img class="img-polaroid" style="max-height:150px;max-width:150px;" src="{{ banner.image_url }}"></td>
+                                <td>{{ banner.link }}</td>
+                                <td><a class="btn btn-default" href="{% url 'management_event_banner_edit' banner.pk %}">{% trans 'edit' %}</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>

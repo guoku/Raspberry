@@ -9,12 +9,13 @@ from management.forms.event_banner import CreateEventBannerForms, EditEventBanne
 
 def list(request, template='management/event/list.html'):
 
-    _show = Show_Event_Banner.objects.all()
-
+    _show_banners = Show_Event_Banner.objects.all()
+    _event_banners = Event_Banner.objects.all()
     return render_to_response(
         template,
         {
-
+            'show_banners':_show_banners,
+            'event_banners': _event_banners,
         },
         context_instance=RequestContext(request)
     )

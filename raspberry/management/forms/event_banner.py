@@ -65,18 +65,24 @@ class CreateEventBannerForms(BaseBannerForm):
         # log.info(event_banner_image)
         _image = HandleImage(event_banner_image)
         file_path = "%s%s.jpg" % (image_path, _image.name)
-        f = default_storage.save(file_path, ContentFile(_image.image_data))
-        log.info(f)
+        default_storage.save(file_path, ContentFile(_image.image_data))
+        # log.info(f)
         #
         _event_banner = Event_Banner.objects.create(
             link = link,
+            image = file_path,
         )
         #
-        # if position > 0:
-        #     show = Show_Event_Banner.objects.get(pk = position)
-        #     show.banner = _event_banner
-        #     show.save()
-        # pass
+        if position > 0:
+            try:
+                show = Show_Event_Banner.objects.get(pk = position)
+                show.banner = _event_banner
+                show.save()
+            except Show_Event_Banner.DoesNotExist:
+                Show_Event_Banner.objects.create(
+                    banner = _event_banner
+                )
+        return _event_banner
 
 class EditEventBannerForms(BaseBannerForm):
 

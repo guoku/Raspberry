@@ -398,6 +398,14 @@ class Event_Banner(models.Model):
         except Show_Event_Banner.DoesNotExist:
             return 0
 
+    @property
+    def has_show_banner(self):
+        try:
+            self.show
+            return True
+        except Show_Event_Banner.DoesNotExist:
+            return False
+
 class Show_Event_Banner(models.Model):
     banner = models.OneToOneField(Event_Banner, related_name='show')
     created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
