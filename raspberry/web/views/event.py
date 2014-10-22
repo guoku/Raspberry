@@ -1,14 +1,72 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.views.decorators.http import require_http_methods
+from django.utils.log import getLogger
 
+from datetime import datetime
 
+from base.models import NoteSelection
+from base.note import Note
+from base.entity import Entity
+from base.tag import Tag
+from base.user import User
+from utils.paginator import Paginator
+
+log = getLogger('django')
+
+@require_http_methods(['GET'])
 def home(request, template='events/home.html'):
 
+    if request.user.is_authenticated():
+        # _request_user_id = request.user.id
+        _request_user_context = User(request.user.id).read()
+        _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
+    else:
+        # _request_user_id = None
+        _request_user_context = None
+        _request_user_like_entity_set = []
 
+    _page_num = request.GET.get('p', 1)
+    _time_filter  = request.GET.get('t', datetime.now())
+    _hdl = NoteSelection.objects.filter(post_time__lt = _time_filter)
+    _hdl.order_by('-post_time')
+
+    _paginator = Paginator(_page_num, 30, _hdl.count())
+    _note_selection_list = _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
+    # log.info(_hdl)
+    _selection_list = []
+    _entity_id_list = []
+    for _note_selection in _note_selection_list:
+        try:
+            _selection_note_id = _note_selection['note_id']
+            _entity_id = _note_selection['entity_id']
+            _entity_context = Entity(_entity_id).read()
+            _note = Note(_selection_note_id)
+            _note_context = _note.read()
+            _creator_context = User(_note_context['creator_id']).read()
+            _is_user_already_like = True if _entity_id in _request_user_like_entity_set else False
+            _selection_list.append(
+                {
+                    'is_user_already_like': _is_user_already_like,
+                    'entity_context': _entity_context,
+                    'note_context': _note_context,
+                    'creator_context': _creator_context,
+                }
+            )
+            _entity_id_list.append(_entity_id)
+        except Exception, e:
+            log.error(e.message)
+
+    log.info(_selection_list)
     return render_to_response(
         template,
         {
-
+            'paginator': _paginator,
+            'page_num' : _page_num,
+                # 'curr_category_id' : _category_id,
+            'user_context' : _request_user_context,
+                # 'category_list' : _old_category_list,
+            'selection_list' : _selection_list,
         },
         context_instance=RequestContext(request)
     )
