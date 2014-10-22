@@ -1,5 +1,11 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
+from django.utils.log import getLogger
+
+from base.models import Event_Banner, Show_Event_Banner
+
+log = getLogger('django')
+
 
 class BaseBannerForm(forms.Form):
 
@@ -48,8 +54,20 @@ class CreateEventBannerForms(BaseBannerForm):
     # )
 
     def save(self):
-
-        pass
+        link = self.cleaned_data.get('link')
+        event_banner_image = self.cleaned_data.get('event_banner_image')
+        position = self.clean_position()
+        log.info(event_banner_image)
+        #
+        # _event_banner = Event_Banner.objects.create(
+        #     link = link,
+        # )
+        #
+        # if position > 0:
+        #     show = Show_Event_Banner.objects.get(pk = position)
+        #     show.banner = _event_banner
+        #     show.save()
+        # pass
 
 class EditEventBannerForms(BaseBannerForm):
 
