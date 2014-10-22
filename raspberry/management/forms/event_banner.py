@@ -1,11 +1,16 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from django.utils.log import getLogger
 
-from base.models import Event_Banner, Show_Event_Banner
+from base.handle_image import HandleImage
+from base.models import Show_Event_Banner, Event_Banner
 
 log = getLogger('django')
 
+from django.conf import settings
+image_path = getattr(settings, 'MOGILEFS_MEDIA_URL', 'images/')
 
 class BaseBannerForm(forms.Form):
 
@@ -57,11 +62,15 @@ class CreateEventBannerForms(BaseBannerForm):
         link = self.cleaned_data.get('link')
         event_banner_image = self.cleaned_data.get('event_banner_image')
         position = self.clean_position()
-        log.info(event_banner_image)
+        # log.info(event_banner_image)
+        _image = HandleImage(event_banner_image)
+        file_path = "%s%s.jpg" % (image_path, _image.name)
+        f = default_storage.save(file_path, ContentFile(_image.image_data))
+        log.info(f)
         #
-        # _event_banner = Event_Banner.objects.create(
-        #     link = link,
-        # )
+        _event_banner = Event_Banner.objects.create(
+            link = link,
+        )
         #
         # if position > 0:
         #     show = Show_Event_Banner.objects.get(pk = position)
