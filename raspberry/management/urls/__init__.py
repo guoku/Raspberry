@@ -27,6 +27,7 @@ urlpatterns = patterns(
     url(r'^tag/', include('management.urls.tag')),
 
     url(r'^event/', include('management.urls.event')),
+    durl(r'^recommend/', include('management.urls.recommendation')),
 )
 
 __author__ = 'edison7500'

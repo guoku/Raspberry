@@ -376,7 +376,7 @@ class Novus_Stat(models.Model):
     novus = models.IntegerField(db_index=True)
 
 
-
+# event banner
 
 class Event_Banner(models.Model):
     image = models.CharField(max_length=255, null=False)
@@ -408,6 +408,43 @@ class Event_Banner(models.Model):
 
 class Show_Event_Banner(models.Model):
     banner = models.OneToOneField(Event_Banner, related_name='show')
+    created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
+
+    class Meta:
+        ordering = ['id']
+
+# editor recommendation
+
+class Editor_Recommendation(models.Model):
+    image = models.CharField(max_length=255, null=False)
+    link = models.CharField(max_length=255, null=False)
+    created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
+    updated_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
+
+    class Meta:
+        ordering = ['-created_time']
+
+    @property
+    def image_url(self):
+        return "%s%s" % (image_server, self.image)
+
+    @property
+    def position(self):
+        try:
+            return self.show.pk
+        except Show_Editor_Recommendation.DoesNotExist:
+            return 0
+
+    @property
+    def has_show_banner(self):
+        try:
+            self.show
+            return True
+        except Show_Editor_Recommendation.DoesNotExist:
+            return False
+
+class Show_Editor_Recommendation(models.Model):
+    recommendation = models.OneToOneField(Editor_Recommendation, related_name='show', unique=False)
     created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     class Meta:

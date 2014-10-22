@@ -5,12 +5,14 @@ from django.utils.log import getLogger
 
 from datetime import datetime
 
-from base.models import NoteSelection
+from base.models import NoteSelection, Show_Event_Banner, Event_Banner
 from base.note import Note
 from base.entity import Entity
 from base.tag import Tag
 from base.user import User
 from utils.paginator import Paginator
+
+
 
 log = getLogger('django')
 
@@ -58,9 +60,14 @@ def home(request, template='events/home.html'):
             log.error(e.message)
 
     log.info(_selection_list)
+
+    _show_event_banners = Show_Event_Banner.objects.all()
+
+
     return render_to_response(
         template,
         {
+            'show_event_banners': _show_event_banners,
             'paginator': _paginator,
             'page_num' : _page_num,
                 # 'curr_category_id' : _category_id,
