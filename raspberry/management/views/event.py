@@ -45,16 +45,26 @@ def edit(request, event_banner_id, template='management/event/edit.html'):
     except Event_Banner.DoesNotExist:
         raise Http404
 
+    data = {
+        # 'content_type': _banner.content_type,
+        # 'key': _banner.key,
+        'link': _event_banner.link,
+        'position':_event_banner.position,
+
+    }
 
     if request.method == "POST":
         _forms = EditEventBannerForms(_event_banner, request.POST, request.FILES)
+        if _forms.is_valid():
+            _forms.save()
     else:
-        _forms = EditEventBannerForms(_event_banner)
+        _forms = EditEventBannerForms(_event_banner, data=data)
 
 
     return render_to_response(
         template,
         {
+            'event_banner':_event_banner,
             'forms': _forms,
         },
         context_instance=RequestContext(request)

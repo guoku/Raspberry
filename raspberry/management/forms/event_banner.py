@@ -23,6 +23,7 @@ class BaseBannerForm(forms.Form):
         label=_('event banner image'),
         widget=forms.FileInput(attrs={'class':'controls'}),
         help_text=_(''),
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):
@@ -117,7 +118,32 @@ class EditEventBannerForms(BaseBannerForm):
                                                   help_text=_(''))
 
     def save(self):
-        pass
+        event_banner_image = self.cleaned_data.get('event_banner_image')
+        position = self.clean_position()
+
+        log.info(position)
+
+        if event_banner_image:
+            _image = HandleImage(event_banner_image)
+            file_path = "%s%s.jpg" % (image_path, _image.name)
+            default_storage.save(file_path, ContentFile(_image.image_data))
+            self.banner.image = file_path
+            self.banner.save()
+
+        if position > 0 and self.banner.position == 0:
+            show = Show_Event_Banner.objects.get(pk= position)
+            show.banner = self.banner
+            show.save()
+        elif self.banner.position != position:
+            show = Show_Event_Banner.objects.get(pk = position)
+            tmp_show = Show_Event_Banner.objects.get(pk = self.banner.position)
+            tmp_banner = show.banner
+            show.banner = self.banner
+            tmp_show.banner = tmp_banner
+
+            show.save()
+            tmp_show.save()
+
 
 
 __author__ = 'edison'

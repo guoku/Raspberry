@@ -14,7 +14,7 @@
                 <div class="carousel-inner" role="listbox">
                     {% for show in show_banners %}
                         <div class="item {% if 1 == show.pk %}active{% endif %}">
-                            <img src="{{ show.banner.image_url }}" width="940" height="430">
+                            <img src="{{ show.banner.image_url }}">
                             <div class="carousel-caption">
 
                             </div>
@@ -34,7 +34,7 @@
 
         <div class="row" style="margin-top: 20px;">
             <ul class="nav nav-pills" role="tablist">
-                <li><a class="btn btn-primary" href="{% url 'management_event_banner_create' %}">{% trans 'add' %}</a></li>
+                <li><a target="_blank" class="btn btn-primary" href="{% url 'management_event_banner_create' %}">{% trans 'add' %}</a></li>
             </ul>
         </div>
         <div class="row">
@@ -54,7 +54,7 @@
                                 <td>{{ banner.pk }}</td>
                                 <td><img class="img-polaroid" style="max-height:150px;max-width:150px;" src="{{ banner.image_url }}"></td>
                                 <td>{{ banner.link }}</td>
-                                <td><a class="btn btn-default" href="{% url 'management_event_banner_edit' banner.pk %}">{% trans 'edit' %}</a></td>
+                                <td><a target="_blank" class="btn btn-default" href="{% url 'management_event_banner_edit' banner.pk %}">{% trans 'edit' %}</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
