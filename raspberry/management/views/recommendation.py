@@ -7,7 +7,7 @@ from base.models import Show_Editor_Recommendation, Editor_Recommendation
 from management.forms.editor_recommendation import CreateEditorRecommendForms, EditEditorRecommendForms
 
 
-def list(request, template='management/event/list.html'):
+def list(request, template='management/recommendation/list.html'):
 
     _show_editor_recommendations = Show_Editor_Recommendation.objects.all()
     _editor_recommendations = Editor_Recommendation.objects.all()
@@ -20,7 +20,7 @@ def list(request, template='management/event/list.html'):
         context_instance=RequestContext(request)
     )
 
-def create(request, template='management/event/create.html'):
+def create(request, template='management/recommendation/create.html'):
 
     if request.method == "POST":
         _forms = CreateEditorRecommendForms(request.POST, request.FILES)
@@ -38,7 +38,7 @@ def create(request, template='management/event/create.html'):
     )
 
 
-def edit(request, event_banner_id, template='management/event/edit.html'):
+def edit(request, event_banner_id, template='management/recommendation/edit.html'):
 
     try:
         _event_banner = Editor_Recommendation.objects.get(pk = event_banner_id)
