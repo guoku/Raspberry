@@ -10,9 +10,17 @@
                     <li>双十一值得买</li>
                 </ul>
             </div>
-            <div>
-
+        <div class="row" id="event">
+            {% include "main/partial/selection_item_list.html" with selection_list=selection_list %}
+        </div>
+        <div class="row hidden-xs">
+            <div class="col-sm-offset-12">
+                <a class="btn-top" href="javascript:;"  title="回到顶部" target="_self"><i class="fa fa-angle-up fa-lg"></i></a>
             </div>
+        </div>
+        {% if paginator %}
+            {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url cid=curr_category_id %}
+        {% endif %}
         </div>
     </div>
 {% endblock %}
