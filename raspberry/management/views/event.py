@@ -38,7 +38,7 @@ def create(request, template='management/event/create.html'):
     )
 
 
-def edit(request, event_banner_id, template=''):
+def edit(request, event_banner_id, template='management/event/edit.html'):
 
     try:
         _event_banner = Event_Banner.objects.get(pk = event_banner_id)
