@@ -1,6 +1,7 @@
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
 
 from base.models import Show_Event_Banner, Event_Banner
 from management.forms.event_banner import CreateEventBannerForms, EditEventBannerForms
@@ -23,8 +24,8 @@ def create(request, template='management/event/create.html'):
     if request.method == "POST":
         _forms = CreateEventBannerForms(request.POST, request.FILES)
         if _forms.is_valid():
-            _forms.save()
-
+            _event_banner = _forms.save()
+            return HttpResponseRedirect(reverse('management_event_banner_edit', args=[_event_banner.id]))
     else:
         _forms = CreateEventBannerForms()
     return render_to_response(
