@@ -13,6 +13,7 @@
         </div>
 
        <div class="row">
+<<<<<<< HEAD
             <div class="col-md-12">
                 <div id="carousel-guoku" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
@@ -25,9 +26,24 @@
                             <div class="item {% if 1 == show.pk %}active{% endif %}">
                                 <a target="_blank" href="{{ show.banner.link }}"><img src="{{ show.banner.image_url }}"></a>
                                 <div class="carousel-caption">
+=======
+            <div id="carousel-guoku" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    {% for show in show_event_banners %}
+                        <li data-target="#carousel-guoku" data-slide-to="{{ show.pk }}" {% if 1 == show.pk %}class="active"{% endif %}></li>
+                    {% endfor %}
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    {% for show in show_event_banners %}
+                        <div class="item {% if 1 == show.pk %}active{% endif %}">
+{#                            <div class="thumbnail">#}
+                            <a target="_blank" href="{{ show.banner.link }}"><img class="img-responsive" src="{{ show.banner.image_url }}"></a>
+                            <div class="carousel-caption">
+>>>>>>> 76dcb83ff74522c468122480aea8fc5076741db4
 
                                 </div>
                             </div>
+<<<<<<< HEAD
                         {% endfor %}
                     </div>
                     <a class="left carousel-control" href="#carousel-guoku" role="button" data-slide="prev">
@@ -38,10 +54,26 @@
                         <span class="glyphicon glyphicon-chevron-right"></span>
                         <span class="sr-only">Next</span>
                     </a>
+=======
+{#                            </div>#}
+                        </div>
+                    {% endfor %}
+>>>>>>> 76dcb83ff74522c468122480aea8fc5076741db4
                 </div>
             </div>
        </div>
 
+        <div class="row">
+            {% for show_editor in show_editor_recommendations %}
+                <div class="col-sm-6">
+                    <div class="thumbnail">
+                        <a target="_blank" href="{{ show_editor.recommendation.link }}">
+                            <img class="img-responsive" src="{{ show_editor.recommendation.image_url }}">
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
         <div class="row" id="event" style="margin-top:60px;">
             {% include "main/partial/selection_item_list.html" with selection_list=selection_list %}

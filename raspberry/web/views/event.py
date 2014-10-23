@@ -5,7 +5,7 @@ from django.utils.log import getLogger
 
 from datetime import datetime
 
-from base.models import NoteSelection, Show_Event_Banner, Event_Banner
+from base.models import NoteSelection, Show_Event_Banner, Show_Editor_Recommendation
 from base.note import Note
 from base.entity import Entity
 from base.tag import Tag
@@ -62,12 +62,13 @@ def home(request, template='events/home.html'):
     log.info(_selection_list)
 
     _show_event_banners = Show_Event_Banner.objects.all()
-
+    _show_editor_recommendations = Show_Editor_Recommendation.objects.all()
 
     return render_to_response(
         template,
         {
             'show_event_banners': _show_event_banners,
+            'show_editor_recommendations': _show_editor_recommendations,
             'paginator': _paginator,
             'page_num' : _page_num,
                 # 'curr_category_id' : _category_id,
