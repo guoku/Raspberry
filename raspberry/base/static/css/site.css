@@ -15,6 +15,14 @@ i {
     color: #ccc;
 }
 
+
+/* 轮播 */
+.carousel-control.left {
+  background-image:none;
+}
+.carousel-control.right {
+  background-image:none;
+}
 .line{
     background:#eee;
     height:1px;
