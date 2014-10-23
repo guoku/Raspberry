@@ -19,7 +19,7 @@ class BaseRecommendationForm(forms.Form):
         widget=forms.TextInput(attrs={'class':'form-control'}),
         help_text=_(''),
     )
-    event_banner_image = forms.FileField(
+    editor_recommend_image = forms.FileField(
         label=_('event banner image'),
         widget=forms.FileInput(attrs={'class':'controls'}),
         help_text=_(''),
@@ -46,29 +46,18 @@ class BaseRecommendationForm(forms.Form):
         return int(_position)
 
 class CreateEditorRecommendForms(BaseRecommendationForm):
-    #
-    # link = forms.URLField(
-    #     label=_('link'),
-    #     widget=forms.TextInput(attrs={'class':'form-control'}),
-    #     help_text=_(''),
-    # )
-    # event_banner_image = forms.FileField(
-    #     label=_('event banner image'),
-    #     widget=forms.FileInput(attrs={'class':'controls'}),
-    #     help_text=_(''),
-    # )
 
     def save(self):
         link = self.cleaned_data.get('link')
-        event_banner_image = self.cleaned_data.get('event_banner_image')
+        editor_recommend_image = self.cleaned_data.get('editor_recommend_image')
         position = self.clean_position()
         # log.info(event_banner_image)
-        _image = HandleImage(event_banner_image)
+        _image = HandleImage(editor_recommend_image)
         file_path = "%s%s.jpg" % (image_path, _image.name)
         default_storage.save(file_path, ContentFile(_image.image_data))
         # log.info(f)
         #
-        _event_banner = Editor_Recommendation.objects.create(
+        _recommendation = Editor_Recommendation.objects.create(
             link = link,
             image = file_path,
         )
@@ -76,32 +65,20 @@ class CreateEditorRecommendForms(BaseRecommendationForm):
         if position > 0:
             try:
                 show = Show_Editor_Recommendation.objects.get(pk = position)
-                show.banner = _event_banner
+                show.recommendation = _recommendation
                 show.save()
             except Show_Editor_Recommendation.DoesNotExist:
                 Show_Editor_Recommendation.objects.create(
-                    banner = _event_banner
+                    recommendation =_recommendation
                 )
-        return _event_banner
+        return _recommendation
 
 class EditEditorRecommendForms(BaseRecommendationForm):
 
-    # link = forms.URLField(
-    #     label=_('link'),
-    #     widget=forms.TextInput(attrs={'class':'form-control'}),
-    #     help_text=_(''),
-    # )
-    #
-    # event_banner_image = forms.FileField(
-    #     label=_('event banner image'),
-    #     widget=forms.FileInput(attrs={'class':'controls'}),
-    #     help_text=_(''),
-    # )
-
-    def __init__(self, banner, *args, **kwargs):
-        self.banner = banner
+    def __init__(self, recommendation, *args, **kwargs):
+        self.recommendation = recommendation
         super(EditEditorRecommendForms, self).__init__(*args, **kwargs)
-        if self.banner.has_show_banner:
+        if self.recommendation.has_show_banner:
             (none, first, second, third, fourth) = (0, 1, 2, 3, 4)
             BANNER_POSITION_CHOICES = (
                 # (none, _("none")),
@@ -116,28 +93,33 @@ class EditEditorRecommendForms(BaseRecommendationForm):
                                                   help_text=_(''))
 
     def save(self):
-        event_banner_image = self.cleaned_data.get('event_banner_image')
+        editor_recommend_image = self.cleaned_data.get('editor_recommend_image')
         position = self.clean_position()
 
         log.info(position)
 
-        if event_banner_image:
-            _image = HandleImage(event_banner_image)
+        if editor_recommend_image:
+            _image = HandleImage(editor_recommend_image)
             file_path = "%s%s.jpg" % (image_path, _image.name)
             default_storage.save(file_path, ContentFile(_image.image_data))
-            self.banner.image = file_path
-            self.banner.save()
+            self.recommendation.image = file_path
+            self.recommendation.save()
 
-        if position > 0 and self.banner.position == 0:
-            show = Show_Editor_Recommendation.objects.get(pk= position)
-            show.banner = self.banner
-            show.save()
+        if position > 0 and self.recommendation.position == 0:
+            try:
+                show = Show_Editor_Recommendation.objects.get(pk= position)
+                show.recommendation = self.recommendation
+                show.save()
+            except Show_Editor_Recommendation.DoesNotExist:
+                Show_Editor_Recommendation.objects.create(
+                    recommendation = self.recommendation,
+                )
         elif self.banner.position != position:
             show = Show_Editor_Recommendation.objects.get(pk = position)
             tmp_show = Show_Editor_Recommendation.objects.get(pk = self.banner.position)
             tmp_banner = show.banner
-            show.banner = self.banner
-            tmp_show.banner = tmp_banner
+            show.recommendation = self.recommendation
+            tmp_show.recommendation = tmp_banner
 
             show.save()
             tmp_show.save()

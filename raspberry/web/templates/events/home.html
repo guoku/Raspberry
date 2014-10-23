@@ -22,10 +22,12 @@
                 <div class="carousel-inner" role="listbox">
                     {% for show in show_event_banners %}
                         <div class="item {% if 1 == show.pk %}active{% endif %}">
-                            <a target="_blank" href="{{ show.banner.link }}"><img src="{{ show.banner.image_url }}"></a>
+{#                            <div class="thumbnail">#}
+                            <a target="_blank" href="{{ show.banner.link }}"><img class="img-responsive" src="{{ show.banner.image_url }}"></a>
                             <div class="carousel-caption">
 
                             </div>
+{#                            </div>#}
                         </div>
                     {% endfor %}
                 </div>
@@ -42,6 +44,17 @@
             </div>
        </div>
 
+        <div class="row">
+            {% for show_editor in show_editor_recommendations %}
+                <div class="col-sm-6">
+                    <div class="thumbnail">
+                        <a target="_blank" href="{{ show_editor.recommendation.link }}">
+                            <img class="img-responsive" src="{{ show_editor.recommendation.image_url }}">
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
         <div class="row" id="event">
             {% include "main/partial/selection_item_list.html" with selection_list=selection_list %}

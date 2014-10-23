@@ -4,7 +4,13 @@
 {% block content %}
     <div class="container">
         <div class="row">
-
+            {% for show in show_editor_recommendations %}
+                <div class="col-sm-6">
+                    <div class="thumbnail">
+                        <img class="img-responsive" src="{{ show.recommendation.image_url }}">
+                    </div>
+                </div>
+            {% endfor %}
         </div>
 
         <div class="row" style="margin-top: 20px;">
