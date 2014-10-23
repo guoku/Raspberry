@@ -24,12 +24,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for banner in event_banners %}
+                        {% for recommend in editor_recommendations %}
                             <tr>
-                                <td>{{ banner.pk }}</td>
-                                <td><img class="img-polaroid" style="max-height:150px;max-width:150px;" src="{{ banner.image_url }}"></td>
-                                <td>{{ banner.link }}</td>
-                                <td><a target="_blank" class="btn btn-default" href="{% url 'management_event_banner_edit' banner.pk %}">{% trans 'edit' %}</a></td>
+                                <td>{{ recommend.pk }}</td>
+                                <td><img class="img-polaroid" style="max-height:150px;max-width:150px;" src="{{ recommend.image_url }}"></td>
+                                <td>{{ recommend.link }}</td>
+                                <td><a target="_blank" class="btn btn-default" href="{% url 'management_event_banner_edit' recommend.pk %}">{% trans 'edit' %}</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>

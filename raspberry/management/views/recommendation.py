@@ -41,30 +41,30 @@ def create(request, template='management/recommendation/create.html'):
 def edit(request, event_banner_id, template='management/recommendation/edit.html'):
 
     try:
-        _event_banner = Editor_Recommendation.objects.get(pk = event_banner_id)
+        _editor_recommendation = Editor_Recommendation.objects.get(pk = event_banner_id)
     except Editor_Recommendation.DoesNotExist:
         raise Http404
 
     data = {
         # 'content_type': _banner.content_type,
         # 'key': _banner.key,
-        'link': _event_banner.link,
-        'position':_event_banner.position,
+        'link': _editor_recommendation.link,
+        'position':_editor_recommendation.position,
 
     }
 
     if request.method == "POST":
-        _forms = EditEditorRecommendForms(_event_banner, request.POST, request.FILES)
+        _forms = EditEditorRecommendForms(_editor_recommendation, request.POST, request.FILES)
         if _forms.is_valid():
             _forms.save()
     else:
-        _forms = EditEditorRecommendForms(_event_banner, data=data)
+        _forms = EditEditorRecommendForms(_editor_recommendation, data=data)
 
 
     return render_to_response(
         template,
         {
-            'event_banner':_event_banner,
+            'event_banner':_editor_recommendation,
             'forms': _forms,
         },
         context_instance=RequestContext(request)
