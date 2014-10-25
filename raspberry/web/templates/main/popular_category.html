@@ -41,15 +41,24 @@
             </div>
         </div>
 
+        {% for kind in kinds %}
         <div class="row">
-            {% for kind in kinds %}
+            <div class="col-sm-12">
+                {{ kind.title }}
+            </div>
+            {% for category in kind.content %}
                 <div class="col-sm-2">
-                {{ kind }}
                     <div class="thumbnail">
-                        <img class="img-responsive" src="{{ kind.category_icon_large }}">
+                        <img class="img-responsive" src="{{ category.category_icon_large }}">
                     </div>
                 </div>
             {% endfor %}
+{#                    <div class="thumbnail">#}
+{#                        <img class="img-responsive" src="{{ kind.category_icon_large }}">#}
+{#                    </div>#}
+{#                </div>#}
+
         </div>
+        {% endfor %}
      </div>
 {% endblock %}
