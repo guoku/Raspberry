@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load category %}
 
 {% block content %}
      <div class="container">
@@ -53,6 +54,7 @@
                     <div class="col-sm-2">
                         <div class="thumbnail">
                             <img class="img-responsive" src="{{ category.category_icon_large }}">
+                            <p>{{ category.category_title|show_category }}</p>
                         </div>
                     </div>
                     {% endif %}
