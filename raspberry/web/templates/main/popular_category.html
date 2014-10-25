@@ -47,11 +47,13 @@
                 {{ kind.title }}
             </div>
             {% for category in kind.content %}
+                {% if category.status != 0 %}
                 <div class="col-sm-2">
                     <div class="thumbnail">
                         <img class="img-responsive" src="{{ category.category_icon_large }}">
                     </div>
                 </div>
+                {% endif %}
             {% endfor %}
 {#                    <div class="thumbnail">#}
 {#                        <img class="img-responsive" src="{{ kind.category_icon_large }}">#}
