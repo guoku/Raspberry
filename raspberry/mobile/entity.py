@@ -13,7 +13,7 @@ import time
 
 @check_sign
 def entity_list(request):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -58,23 +58,23 @@ def entity_list(request):
             except Exception, e:
                 pass
         
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(
-            duration = _duration.seconds * 1000000 + _duration.microseconds, 
-            view = 'NOVUS', 
-            request = request.REQUEST, 
-            ip = get_client_ip(request),
-            log_time = datetime.datetime.now(),
-            request_user_id = _request_user_id,
-            appendix = { 'result_entities' : _entity_id_list },
-        )
+        # _duration = datetime.datetime.now() - _start_at
+        # MobileLogTask.delay(
+        #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+        #     view = 'NOVUS',
+        #     request = request.REQUEST,
+        #     ip = get_client_ip(request),
+        #     log_time = datetime.datetime.now(),
+        #     request_user_id = _request_user_id,
+        #     appendix = { 'result_entities' : _entity_id_list },
+        # )
         
         return SuccessJsonResponse(_rslt)
     
 
 @check_sign
 def search_entity(request):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         _type = request.GET.get('type', None)
@@ -111,26 +111,26 @@ def search_entity(request):
                 _entity.read(_request_user_id)
             )
         
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(
-            duration = _duration.seconds * 1000000 + _duration.microseconds, 
-            view = 'SEARCH_ENTITY', 
-            request = request.REQUEST, 
-            ip = get_client_ip(request), 
-            log_time = datetime.datetime.now(),
-            request_user_id = _request_user_id,
-            appendix = { 
-                'query' : _query_string,
-                'result_entities' : _entity_id_list[_offset : _offset + _count], 
-            },
-        )
+        # _duration = datetime.datetime.now() - _start_at
+        # MobileLogTask.delay(
+        #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+        #     view = 'SEARCH_ENTITY',
+        #     request = request.REQUEST,
+        #     ip = get_client_ip(request),
+        #     log_time = datetime.datetime.now(),
+        #     request_user_id = _request_user_id,
+        #     appendix = {
+        #         'query' : _query_string,
+        #         'result_entities' : _entity_id_list[_offset : _offset + _count],
+        #     },
+        # )
         
         return SuccessJsonResponse(_rslt)
 
 
 @check_sign
 def category_entity(request, category_id):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     if request.method == "GET":
         _session = request.GET.get('session', None)
         if _session != None:
@@ -161,19 +161,19 @@ def category_entity(request, category_id):
                 _entity.read(_request_user_id)
             )
             
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(
-            duration = _duration.seconds * 1000000 + _duration.microseconds, 
-            view = 'CATEGORY_ENTITY', 
-            request = request.REQUEST, 
-            ip = get_client_ip(request), 
-            log_time = datetime.datetime.now(),
-            request_user_id = _request_user_id,
-            appendix = { 
-                'neo_category_id' : int(category_id),
-                'result_entities' : _entity_id_list 
-            },
-        )
+        # _duration = datetime.datetime.now() - _start_at
+        # MobileLogTask.delay(
+        #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+        #     view = 'CATEGORY_ENTITY',
+        #     request = request.REQUEST,
+        #     ip = get_client_ip(request),
+        #     log_time = datetime.datetime.now(),
+        #     request_user_id = _request_user_id,
+        #     appendix = {
+        #         'neo_category_id' : int(category_id),
+        #         'result_entities' : _entity_id_list
+        #     },
+        # )
         
         return SuccessJsonResponse(_rslt)
 

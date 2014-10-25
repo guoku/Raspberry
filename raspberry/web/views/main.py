@@ -24,7 +24,7 @@ from base.taobao_shop import GuokuPlusActivity
 from base.category import Old_Category
 import base.popularity as popularity
 from base.banner import Banner
-
+from base.category import Category
 # from web.tasks import WebLogTask
 from utils.lib import get_client_ip
 import time
@@ -353,8 +353,8 @@ def popular(request, template='main/popular.html'):
 def popular_category(request, template="main/popular_category.html"):
     _banners = Banner.find(status = 'active')
 
-    _kinds = popularity.read_popular_category()['data']
-    log.info(_kinds)
+    _kinds = Category.all_group_with_full_category()
+    log.info(len(_kinds))
     return render_to_response(
         template,
         {
