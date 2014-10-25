@@ -42,25 +42,27 @@
         </div>
 
         {% for kind in kinds %}
-        <div class="row">
-            <div class="col-sm-12">
-                {{ kind.title }}
-            </div>
-            {% for category in kind.content %}
-                {% if category.status != 0 %}
-                <div class="col-sm-2">
-                    <div class="thumbnail">
-                        <img class="img-responsive" src="{{ category.category_icon_large }}">
-                    </div>
+{#            {{ kind.category_count }}#}
+            {% if kind.status != 0 %}
+            <div class="row">
+                <div class="col-sm-12">
+                    {{ kind.title }}
                 </div>
-                {% endif %}
-            {% endfor %}
+                {% for category in kind.content %}
+                    {% if category.status != 0 %}
+                    <div class="col-sm-2">
+                        <div class="thumbnail">
+                            <img class="img-responsive" src="{{ category.category_icon_large }}">
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
 {#                    <div class="thumbnail">#}
 {#                        <img class="img-responsive" src="{{ kind.category_icon_large }}">#}
 {#                    </div>#}
 {#                </div>#}
-
-        </div>
+            </div>
+            {% endif %}
         {% endfor %}
      </div>
 {% endblock %}
