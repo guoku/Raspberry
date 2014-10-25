@@ -21,6 +21,8 @@ urlpatterns = patterns(
     # url('^guokuplus/token/$', 'get_guokuplus_token', name='web_get_guokuplus_token'),
     url(r'^c/', include('web.urls.category')),
     url(r'^t/', include('web.urls.tag')),
+
+    url(r'^kind/$', 'popular_category', name='web_kind'),
 )
 
 urlpatterns += patterns(
@@ -63,7 +65,10 @@ urlpatterns += patterns(
 
     url(r'^account/', include('web.urls.account')),
     url(r'^u/', include('web.urls.user')),
+)
 
+urlpatterns += patterns(
+    'web.views.event',
     url(r'^event/', include('web.urls.event')),
 )
 
