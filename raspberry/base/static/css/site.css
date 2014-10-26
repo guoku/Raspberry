@@ -444,7 +444,12 @@ color: #bcbcbc;
     cursor: not-allowed;
     color: #fff
 }
-
+/* 品类*/
+.category-list > .col-md-2{padding-right: 10px;}
+.category{background: #f9f9f9;}
+.category >a{padding: 5px 5px 0px 5px;display: block;}
+.category >a > img{max-width: 32px;max-height: 32px;}
+.category >a > p{text-align: center;padding-top: 10px;color: #999;white-space: nowrap;overflow: hidden;font-size: 13px;margin: 0px -10px 10px -10px;}
 
 /* 分类页面 */
 .category-header {
