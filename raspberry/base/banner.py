@@ -87,7 +87,8 @@ class Banner(object):
                 'image' : Image(_obj.image).getlink(),
                 'key' : _obj.key,
                 'content_type' : _obj.content_type,
-                'weight' : _obj.weight
+                'weight' : _obj.weight,
+                'web_url': _obj.web_url,
             })
 
         return _banner_context_list

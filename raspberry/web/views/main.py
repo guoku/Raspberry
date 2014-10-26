@@ -354,7 +354,7 @@ def popular_category(request, template="main/popular_category.html"):
     _banners = Banner.find(status = 'active')
 
     _kinds = Category.all_group_with_full_category()
-    log.info(_kinds)
+    # log.info(_kinds)
     return render_to_response(
         template,
         {

@@ -19,13 +19,13 @@
                             {% for banner in banners %}
                                 {% if forloop.first %}
                                 <div class="item active">
-                                    <a target="_blank" href="{{ banner.url }}"><img src="{{ banner.image }}" style="margin:0 auto;max-height:200px;"></a>
+                                    <a target="_blank" href="{{ banner.web_url }}"><img src="{{ banner.image }}" style="margin:0 auto;max-height:200px;"></a>
                                     <div class="carousel-caption">
                                     </div>
                                 </div>
                                 {% else %}
                                 <div class="item">
-                                    <a target="_blank" href="{{ banner.url }}"><img src="{{ banner.image }}" style="margin:0 auto;max-height:200px;"></a>
+                                    <a target="_blank" href="{{ banner.web_url }}"><img src="{{ banner.image }}" style="margin:0 auto;max-height:200px;"></a>
                                     <div class="carousel-caption">
                                     </div>
                                 </div>

@@ -3,11 +3,14 @@ from djangosphinx.models import SphinxSearch
 from django.contrib.auth.models import User
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.utils.log import getLogger
 
 from stream_models import *
 from manager.entity import EntityManager
 from django.conf import settings
 
+
+log = getLogger('django')
 
 image_server = getattr(settings, 'IMAGE_SERVER', None)
 
@@ -141,7 +144,8 @@ class Banner(models.Model):
         if self.content_type == 'entity':
             try:
                 entity = Entity.objects.get(pk = self.key)
-            except Entity.DoesNotExist:
+            except Entity.DoesNotExist, e:
+                log.error(e.message)
                 return
             return reverse('web_detail', args=[entity.entity_hash])
 
