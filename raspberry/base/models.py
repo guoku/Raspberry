@@ -2,6 +2,7 @@
 from djangosphinx.models import SphinxSearch
 from django.contrib.auth.models import User
 from django.db import models
+from django.core.urlresolvers import reverse
 
 from stream_models import *
 from manager.entity import EntityManager
@@ -132,6 +133,17 @@ class Banner(models.Model):
 
     class Meta:
         ordering = ['-created_time']
+
+
+    @property
+    def web_url(self):
+
+        if self.content_type == 'entity':
+            try:
+                entity = Entity.objects.get(pk = self.key)
+            except Entity.DoesNotExist:
+                return
+            return reverse('web_detail', args=[entity.entity_hash])
 
 
 class Entity(BaseModel):
