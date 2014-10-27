@@ -14,7 +14,8 @@ body {
 i {
     color: #ccc;
 }
-
+/*去掉苹果的默认UI来渲染按钮*/
+input[type="submit"], input[type="reset"], input[type="button"], button,textarea { -webkit-appearance: none; }
 
 /* 轮播 */
 .carousel-control.left {
@@ -198,7 +199,7 @@ color: #bcbcbc;
 .img-box > a >img
 {
     background-color: #f6f6f6;
-    height: 100%;
+    width: 100%;
     max-height:100%;
     max-width:100%;
     max-width: 280px\9;
@@ -221,6 +222,7 @@ color: #bcbcbc;
     padding:0px;
     margin:0px;
     width:35px;
+    height: 35px;
 }
 
 .like-user-list > div > .thumbnail
@@ -229,7 +231,11 @@ color: #bcbcbc;
   border:0;
   margin: 0 5px 10px 5px;
 }
-
+.like-user-list > div > .thumbnail >a> img
+{
+    width:25px;
+    height: 25px;
+}
 .caption {
     border-top: 1px solid #eee;
     margin-top: 5px;
