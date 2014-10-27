@@ -35,6 +35,18 @@ def index(request, tempalte='main/home.html'):
     _banners = Banner.find(status = 'active')
     _home_category = popularity.read_popular_category()['data'][0:12]
 
+
+    if request.user.is_authenticated():
+        _request_user_id = request.user.id
+        _request_user_context = User(_request_user_id).read()
+        _request_user_like_entity_set = Entity.like_set_of_user(request.user.id)
+    else:
+        # _request_user_id = None
+        _request_user_context = None
+        _request_user_like_entity_set = []
+
+        
+
     return render_to_response(
         tempalte,
         {
