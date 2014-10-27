@@ -41,7 +41,16 @@
             </div>
        </div>
 
-        <div class="row"  style="margin-top:20px;">
+        <div class="row" style="margin-top: 40px;">
+            <p class="pull-left">编辑推荐</p>
+{#            <div class="col-md-12">#}
+{#                <ul class="nav nav-pills nav-home" role="tablist">#}
+{#                    <li>编辑推荐</li>#}
+{#                </ul>#}
+{#            </div>#}
+        </div>
+
+        <div class="row" >
             {% for show_editor in show_editor_recommendations %}
                 <div class="col-sm-6">
                     <div class="thumbnail">
@@ -51,6 +60,15 @@
                     </div>
                 </div>
             {% endfor %}
+        </div>
+
+        <div class="row">
+            <p class="pull-left">精选商品</p>
+{#            <div class="col-md-12">#}
+{#                <ul class="nav nav-pills nav-home" role="tablist">#}
+{#                    <li>精选商品</li>#}
+{#                </ul>#}
+{#            </div>#}
         </div>
 
         <div class="row" id="event">

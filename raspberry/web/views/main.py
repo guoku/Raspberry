@@ -31,8 +31,19 @@ import time
 
 log = getLogger('django')
 
-def index(request):
-    return HttpResponseRedirect(reverse('web_selection'))
+def index(request, tempalte='main/home.html'):
+    _banners = Banner.find(status = 'active')
+    _home_category = popularity.read_popular_category()['data'][0:12]
+
+    return render_to_response(
+        tempalte,
+        {
+            'banners': _banners,
+            'home_category': _home_category,
+        },
+        context_instance = RequestContext(request)
+    )
+    # return HttpResponseRedirect(reverse('web_selection'))
 
 @require_http_methods(['GET'])
 def selection(request, template='main/selection.html'):
@@ -351,14 +362,14 @@ def popular(request, template='main/popular.html'):
 
 @require_GET
 def popular_category(request, template="main/popular_category.html"):
-    _banners = Banner.find(status = 'active')
+    # _banners = Banner.find(status = 'active')
 
     _kinds = Category.all_group_with_full_category()
     # log.info(_kinds)
     return render_to_response(
         template,
         {
-            'banners': _banners,
+            # 'banners': _banners,
             'kinds': _kinds,
         },
         context_instance=RequestContext(request)
