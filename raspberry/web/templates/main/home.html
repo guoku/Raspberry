@@ -48,20 +48,26 @@
 
 
         <div class="row" style="margin-top: 40px;">
-            <div class="col-sm-12">
+            <div class="col-xs-12 col-md-4">
                 <p class="pull-left">热门品类</p>
-                <a href="{% url 'web_kind' %}" target="_blank" class="pull-right">显示更多&#62</a>
+                <a href="{% url 'web_kind' %}" target="_blank" class="pull-right" style="color:#bababa;">显示更多&#62</a>
             </div>
-            {% for category in home_category  %}
-                <div class="col-sm-2">
-                    <div class="thumbnail category">
-                        <a href="{% url 'web_category' category.category_id  %}" target="_blank">
-                            <img src="{{ category.category_icon_large }}" width="60" height="60">
-                            <p>{{ category.category_title|show_category }}</p>
-                        </a>
+        <div>
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+                <div class="row">
+                {% for category in home_category  %}
+                    <div class="col-xs-4 col-md-2">
+                        <div class="thumbnail category">
+                            <a href="{% url 'web_category' category.category_id  %}">
+                                <img src="{{ category.category_icon_large }}" width="60" height="60">
+                                <p>{{ category.category_title|show_category }}</p>
+                            </a>
+                        </div>
                     </div>
+                {% endfor %}
                 </div>
-            {% endfor %}
+            </div>
         </div>
 
     </div>

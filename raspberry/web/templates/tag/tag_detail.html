@@ -6,8 +6,10 @@
 {% block content %}
     <div class="container">
         <div class="row">
-             <div class="category-header">
-                <p>#{{ tag }}</p>
+            <div class="col-md-12">
+                <div class="category-header">
+                    <p>#{{ tag }}</p>
+                </div>
             </div>
             {% for entity in entities %}
                 {% include 'common/entity.html' with entity_context=entity %}
