@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% block title %}双十一专题{% endblock %}
 {% block keyword %}果库专题,双十一,双十二,打折促销,福利优惠,抽奖免费送,淘宝网购物,淘宝网精选专辑{% endblock %}
 {% block description %}果库专题，超实用的网络购物专辑，发现好物更便捷，闪购商品更迅速。品质生活，你值得拥有。{% endblock %}
 
@@ -83,9 +84,9 @@
                 <a class="btn-top" href="javascript:;"  title="回到顶部" target="_self"><i class="fa fa-angle-up fa-lg"></i></a>
             </div>
         </div>
-        {% if paginator %}
-            {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url cid=curr_category_id %}
-        {% endif %}
+{#        {% if paginator %}#}
+{#            {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url cid=curr_category_id %}#}
+{#        {% endif %}#}
 
     </div>
 {% endblock %}
