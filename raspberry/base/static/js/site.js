@@ -751,9 +751,22 @@
         }
     };
 
-//    var category = {
-//
-//    };
+    var event = {
+        gotop: function() {
+            var event = $("#event");
+
+            if (event[0]) {
+                $(window).scroll(function (){
+                    if ($(this).scrollTop() > 100) {
+                        $(".btn-top").fadeIn();
+                    } else {
+                        $(".btn-top").fadeOut();
+                    }
+                });
+            }
+
+        }
+    };
 
     (function init() {
 //        console.log($.find());
@@ -777,6 +790,8 @@
         detail.noteAction();
 
         message.loadData();
+
+        event.gotop();
     })();
 
 
