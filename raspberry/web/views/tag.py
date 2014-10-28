@@ -32,7 +32,7 @@ def tag_suggest(request):
 
 
 def tag_detail(request, tag_hash, template="tag/tag_detail.html"):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     _request_user_like_entity_set = list()
     if request.user.is_authenticated():
         # _request_user_id = request.user.id if request.user.is_authenticated() else None
@@ -55,19 +55,19 @@ def tag_detail(request, tag_hash, template="tag/tag_detail.html"):
         except Exception, e:
             log.error(e.message)
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='TAG', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'tag' : _tag_text, 
-            'result_entities' : _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='TAG',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'tag' : _tag_text,
+    #         'result_entities' : _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
+    #     },
+    # )
     
     return render_to_response(template,
         {

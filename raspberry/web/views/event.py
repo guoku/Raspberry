@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods
@@ -28,16 +30,34 @@ def home(request, template='events/home.html'):
         _request_user_context = None
         _request_user_like_entity_set = []
 
+
+    # _tag_text = Tag.get_tag_text_from_hash('8bae48fe')
+    _entity_id_list = Tag.find_tag_entity('8bae48fe') # 双十一标签 hash
     _page_num = request.GET.get('p', 1)
+    # _paginator = Paginator(_page_num, 24, len(_entity_id_list))
+
+
+    # _entities = []
+    # for _entity_id in _entity_id_list[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]:
+    #     try:
+    #         _entity_context = Entity(_entity_id).read()
+    #         _entity_context['is_user_already_like'] = True if _entity_id in _request_user_like_entity_set else False
+    #         _entities.append(_entity_context)
+    #     except Exception, e:
+    #         log.error(e.message)
+    #
+    #
+    # log.info(_entities)
+    # _page_num = request.GET.get('p', 1)
     _time_filter  = request.GET.get('t', datetime.now())
-    _hdl = NoteSelection.objects.filter(post_time__lt = _time_filter)
+    _hdl = NoteSelection.objects.filter(post_time__lt = _time_filter, entity_id__in=_entity_id_list)
     _hdl.order_by('-post_time')
 
     _paginator = Paginator(_page_num, 30, _hdl.count())
     _note_selection_list = _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
-    # log.info(_hdl)
+    log.info(_hdl)
     _selection_list = []
-    _entity_id_list = []
+    # _entity_id_list = []
     for _note_selection in _note_selection_list:
         try:
             _selection_note_id = _note_selection['note_id']
@@ -59,7 +79,7 @@ def home(request, template='events/home.html'):
         except Exception, e:
             log.error(e.message)
 
-    log.info(_selection_list)
+    # log.info(_selection_list)
 
     _show_event_banners = Show_Event_Banner.objects.all()
     _show_editor_recommendations = Show_Editor_Recommendation.objects.all()
@@ -75,6 +95,8 @@ def home(request, template='events/home.html'):
             'user_context' : _request_user_context,
                 # 'category_list' : _old_category_list,
             'selection_list' : _selection_list,
+            # "entities": _entities,
+            # "paginator" : _paginator
         },
         context_instance=RequestContext(request)
     )
