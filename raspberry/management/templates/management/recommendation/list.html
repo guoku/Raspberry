@@ -15,7 +15,7 @@
 
         <div class="row" style="margin-top: 20px;">
             <ul class="nav nav-pills" role="tablist">
-                <li><a target="_blank" class="btn btn-primary" href="{% url 'management_event_banner_create' %}">{% trans 'add' %}</a></li>
+                <li><a target="_blank" class="btn btn-primary" href="{% url 'management_recommend_create' %}">{% trans 'add' %}</a></li>
             </ul>
         </div>
         <div class="row">
@@ -35,7 +35,7 @@
                                 <td>{{ recommend.pk }}</td>
                                 <td><img class="img-polaroid" style="max-height:150px;max-width:150px;" src="{{ recommend.image_url }}"></td>
                                 <td>{{ recommend.link }}</td>
-                                <td><a target="_blank" class="btn btn-default" href="{% url 'management_event_banner_edit' recommend.pk %}">{% trans 'edit' %}</a></td>
+                                <td><a target="_blank" class="btn btn-default" href="{% url 'management_recommend_edit' recommend.pk %}">{% trans 'edit' %}</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>

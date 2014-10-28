@@ -4,6 +4,14 @@
 
 {% block content %}
 
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-sm-6">
+            <div class="thumbnail">
+                <img src="{{ event_banner.image_url }}">
+            </div>
+        </div>
+    </div>
+
     {% if forms.errors %}
         <div class="row">
             <div class="alert alert-danger alert-dismissable" role="alert">

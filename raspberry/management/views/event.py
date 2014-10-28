@@ -48,6 +48,8 @@ def edit(request, event_banner_id, template='management/event/edit.html'):
     data = {
         # 'content_type': _banner.content_type,
         # 'key': _banner.key,
+
+        # 'event_banner':_event_banner,
         'link': _event_banner.link,
         'position':_event_banner.position,
 

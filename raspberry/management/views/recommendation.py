@@ -64,7 +64,7 @@ def edit(request, event_banner_id, template='management/recommendation/edit.html
     return render_to_response(
         template,
         {
-            'event_banner':_editor_recommendation,
+            'editor_recommendation':_editor_recommendation,
             'forms': _forms,
         },
         context_instance=RequestContext(request)
