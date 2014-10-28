@@ -64,11 +64,6 @@ window.location.href = url;</script><![endif]-->
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    {% url 'web_index' as web_home_url %}
-                    <li {% if web_home_url in requesst.path %}class="active"{% endif %}>
-                        <a href="{{ web_home_url }}">首页</a>
-                    </li>
-
                     {% url 'web_selection' as web_selection_url %}
                     <li {% if web_selection_url in request.path %}class="active"{% endif %}>
                         <a href="{{ web_selection_url }}">{% trans 'selection' %}</a>

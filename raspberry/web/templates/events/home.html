@@ -3,7 +3,10 @@
 {% block keyword %}果库专题,双十一,双十二,打折促销,福利优惠,抽奖免费送,淘宝网购物,淘宝网精选专辑{% endblock %}
 {% block description %}果库专题，超实用的网络购物专辑，发现好物更便捷，闪购商品更迅速。品质生活，你值得拥有。{% endblock %}
 
-
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'owl-carousel/owl.carousel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'owl-carousel/owl.theme.css' %}">
+{% endblock %}
 {% block content %}
     <div class="container">
         <div class="row">
@@ -46,12 +49,9 @@
        </div>
 
         <div class="row" style="margin-top: 40px;">
-            <p class="pull-left">编辑推荐</p>
-{#            <div class="col-md-12">#}
-{#                <ul class="nav nav-pills nav-home" role="tablist">#}
-{#                    <li>编辑推荐</li>#}
-{#                </ul>#}
-{#            </div>#}
+            <div class="col-md-12">
+                <p class="pull-left">编辑推荐</p>
+            </div>
         </div>
 
         <div class="row" >
@@ -67,12 +67,9 @@
         </div>
 
         <div class="row">
-            <p class="pull-left">精选商品</p>
-{#            <div class="col-md-12">#}
-{#                <ul class="nav nav-pills nav-home" role="tablist">#}
-{#                    <li>精选商品</li>#}
-{#                </ul>#}
-{#            </div>#}
+            <div class="col-md-12">
+                <p class="pull-left">精选商品</p>
+            </div>
         </div>
 
         <div class="row" id="event">
@@ -89,3 +86,28 @@
 
     </div>
 {% endblock %}
+
+
+{% block script %}
+<script src="{% static 'owl-carousel/owl.carousel.js' %}"></script>
+<script type="text/javascript">
+        $(document).ready(function() {
+            $("#owl").owlCarousel({
+                  navigation : true, // Show next and prev buttons
+                  slideSpeed : 300,
+                  paginationSpeed : 400,
+                  singleItem:false,
+             
+                  // "singleItem:true" is a shortcut for:
+                  // items : 1, 
+                  // itemsDesktop : false,
+                  // itemsDesktopSmall : false,
+                  // itemsTablet: false,
+                  // itemsMobile : false
+             
+              });
+        });
+    </script>
+{% endblock %}
+
+
