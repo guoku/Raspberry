@@ -19,22 +19,22 @@
 {#{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'styles/selection.css' %}">{% endblock %}#}
 
 {% block content %}
-    {% if not user.is_authenticated %}
-    <div class="jumbotron hidden-xs">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-5 col-sm-offset-1">
-                    <img src="{% static 'images/brand.png' %}">
-                </div>
-                <div class="col-sm-6" style="padding-top:30px;">
-                    <h3 class="welcome">大开眼界的剁手指南，
-                    <br>
-                    一目了然的优质生活主张。 </h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
+{#    {% if not user.is_authenticated %}#}
+{#    <div class="jumbotron hidden-xs">#}
+{#        <div class="container">#}
+{#            <div class="row">#}
+{#                <div class="col-sm-5 col-sm-offset-1">#}
+{#                    <img src="{% static 'images/brand.png' %}">#}
+{#                </div>#}
+{#                <div class="col-sm-6" style="padding-top:30px;">#}
+{#                    <h3 class="welcome">大开眼界的剁手指南，#}
+{#                    <br>#}
+{#                    一目了然的优质生活主张。 </h3>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    {% endif %}#}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
