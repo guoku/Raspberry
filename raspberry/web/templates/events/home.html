@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n staticfiles %}
-
+{% load web_common %}
 
 {% block title %}双十一专题{% endblock %}
 {% block keyword %}果库专题,双十一,双十二,打折促销,福利优惠,抽奖免费送,淘宝网购物,淘宝网精选专辑{% endblock %}
@@ -91,6 +91,8 @@
         <div class="row">
             <div class="col-md-12">
                 <p class="pull-left">精选商品</p>
+
+                <p class="pull-right">最新更新: {{ selection_list.0.note_context.post_time|format_time }}</p>
             </div>
         </div>
 

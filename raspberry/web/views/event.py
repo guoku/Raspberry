@@ -1,5 +1,5 @@
 # coding=utf-8
-
+from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods
@@ -13,7 +13,8 @@ from base.note import Note
 from base.entity import Entity
 from base.tag import Tag
 from base.user import User
-from utils.paginator import Paginator
+from base.extend.paginator import ExtentPaginator, PageNotAnInteger, EmptyPage
+# from utils.paginator import Paginator
 from utils.http import JSONResponse
 
 
@@ -54,9 +55,18 @@ def home(request, template='events/home.html'):
     _hdl = NoteSelection.objects.filter(post_time__lt = _time_filter, entity_id__in=_entity_id_list)
     _hdl.order_by('-post_time')
 
-    _paginator = Paginator(_page_num, 30, _hdl.count())
-    _note_selection_list = _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
-    log.info(_hdl)
+    _paginator = ExtentPaginator(_hdl, 30)
+    # _paginator = ExtentPaginator(_page_num, 30, _hdl)
+    # _note_selection_list = _hdl[_paginator.offset : _paginator.offset + _paginator.count_in_one_page]
+    try:
+        _note_selection_list = _paginator.page(_page_num)
+    except PageNotAnInteger:
+        _note_selection_list = _paginator.page(1)
+    except Exception, e:
+        log.error("Error: %s" % e.message)
+        raise Http404
+
+    log.info(_note_selection_list)
     _selection_list = []
     # _entity_id_list = []
     for _note_selection in _note_selection_list:

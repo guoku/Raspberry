@@ -767,7 +767,8 @@
 
                     if (($(window).height() + $(window).scrollTop()) >= $(document).height() && flag == false) {
                         flag = true;
-                        var url = window.location.href;
+                        var aQuery = window.location.href.split('?');
+                        var url = aQuery[0];
                         var last_event = event.find('.entity-selection:last');
                         var time = last_event.find('.timestr:last');
                         var timestamp = time.attr('timestamp');
