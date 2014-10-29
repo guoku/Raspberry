@@ -102,9 +102,10 @@
                 <a class="btn-top" href="javascript:;"  title="回到顶部" target="_self"><i class="fa fa-angle-up fa-lg"></i></a>
             </div>
         </div>
-{#        {% if paginator %}#}
-{#            {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url cid=curr_category_id %}#}
-{#        {% endif %}#}
+
+        {% if paginator %}
+            {% include "events/event_paginator.html" with paginator=paginator url=request.url  %}
+        {% endif %}
 
     </div>
 {% endblock %}
