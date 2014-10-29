@@ -776,7 +776,7 @@
                         $.ajax({
                             url: url,
                             type: 'GET',
-                            data: {'timestamp':timestamp, 'p':counter },
+                            data: {'timestamp':timestamp, 'p':++counter },
                             success: function(data){
 //                                console.log(data);
                                 var result = $.parseJSON(data);
@@ -787,7 +787,7 @@
                                     html.appendTo(event);
                                 }
                                 flag = false;
-                                counter ++;
+//                                counter ++;
                             }
                         });
                     }
