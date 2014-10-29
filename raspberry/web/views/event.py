@@ -3,9 +3,10 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods
+from django.template import loader
 from django.utils.log import getLogger
-
 from datetime import datetime
+
 
 from base.models import NoteSelection, Show_Event_Banner, Show_Editor_Recommendation
 from base.note import Note
@@ -13,7 +14,7 @@ from base.entity import Entity
 from base.tag import Tag
 from base.user import User
 from utils.paginator import Paginator
-
+from utils.http import JSONResponse
 
 
 log = getLogger('django')
@@ -83,6 +84,25 @@ def home(request, template='events/home.html'):
 
     _show_event_banners = Show_Event_Banner.objects.all()
     _show_editor_recommendations = Show_Editor_Recommendation.objects.all()
+
+    if request.is_ajax():
+        _ret = {
+            'status' : 0,
+            'msg' : '没有更多数据'
+        }
+
+        if _selection_list:
+            _t = loader.get_template('main/partial/selection_item_list.html')
+            _c = RequestContext(request, {
+                'selection_list': _selection_list,
+            })
+            _data = _t.render(_c)
+
+            _ret = {
+                'status' : '1',
+                'data' : _data
+            }
+        return JSONResponse(data=_ret)
 
     return render_to_response(
         template,

@@ -2,11 +2,16 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 from base.models import Show_Editor_Recommendation, Editor_Recommendation
 from management.forms.editor_recommendation import CreateEditorRecommendForms, EditEditorRecommendForms
+from utils.authority import staff_only
 
 
+
+@login_required
+@staff_only
 def list(request, template='management/recommendation/list.html'):
 
     _show_editor_recommendations = Show_Editor_Recommendation.objects.all()
@@ -20,6 +25,8 @@ def list(request, template='management/recommendation/list.html'):
         context_instance=RequestContext(request)
     )
 
+@login_required
+@staff_only
 def create(request, template='management/recommendation/create.html'):
 
     if request.method == "POST":
@@ -38,6 +45,8 @@ def create(request, template='management/recommendation/create.html'):
     )
 
 
+@login_required
+@staff_only
 def edit(request, event_banner_id, template='management/recommendation/edit.html'):
 
     try:

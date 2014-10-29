@@ -2,11 +2,15 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 from base.models import Show_Event_Banner, Event_Banner
 from management.forms.event_banner import CreateEventBannerForms, EditEventBannerForms
+from utils.authority import staff_only
 
 
+@login_required
+@staff_only
 def list(request, template='management/event/list.html'):
 
     _show_banners = Show_Event_Banner.objects.all()
@@ -20,6 +24,8 @@ def list(request, template='management/event/list.html'):
         context_instance=RequestContext(request)
     )
 
+@login_required
+@staff_only
 def create(request, template='management/event/create.html'):
 
     if request.method == "POST":
@@ -38,6 +44,8 @@ def create(request, template='management/event/create.html'):
     )
 
 
+@login_required
+@staff_only
 def edit(request, event_banner_id, template='management/event/edit.html'):
 
     try:

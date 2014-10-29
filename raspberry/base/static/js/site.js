@@ -752,15 +752,43 @@
     };
 
     var event = {
-        gotop: function() {
+        loadData: function() {
             var event = $("#event");
+            var counter = 1;
 
             if (event[0]) {
+                var flag = false;
                 $(window).scroll(function (){
                     if ($(this).scrollTop() > 100) {
                         $(".btn-top").fadeIn();
                     } else {
                         $(".btn-top").fadeOut();
+                    }
+
+                    if (($(window).height() + $(window).scrollTop()) >= $(document).height() && flag == false) {
+                        flag = true;
+                        var url = window.location.href;
+                        var last_event = event.find('.entity-selection:last');
+                        var time = last_event.find('.timestr:last');
+                        var timestamp = time.attr('timestamp');
+
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            data: {'timestamp':timestamp, 'p':counter },
+                            success: function(data){
+//                                console.log(data);
+                                var result = $.parseJSON(data);
+                                var status = parseInt(result.status);
+                                if (status == 1 ) {
+                                    var html = $(result.data);
+//                                console.log(html);
+                                    html.appendTo(event);
+                                }
+                                flag = false;
+                                counter ++;
+                            }
+                        });
                     }
                 });
             }
@@ -791,7 +819,7 @@
 
         message.loadData();
 
-        event.gotop();
+        event.loadData();
     })();
 
 
