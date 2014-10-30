@@ -38,8 +38,8 @@
                 {% for show in show_event_banners %}
                     <div class="item">
 {#                    {{ show.banner.banner_type }}#}
-                        {% if show.banner.banner_type == '1' %}
-                            <a datatype="1" biz-sellerid="{{ show.banner.user_id }}" href="#" target="_blank">
+                        {% if show.banner.banner_type == 1 %}
+                            <a datatype="1" biz-sellerid="{{ show.banner.user_id }}" target="_blank" href="#">
                                 <img src="{{ show.banner.image_url }}" alt="">
                             </a>
                         {% else %}
@@ -132,7 +132,7 @@
                 autoPlay: 3000, //Set AutoPlay to 3 seconds
                   items : 1,
                   itemsDesktop : [1199,3],
-                  itemsDesktopSmall : [979,3]       
+                  itemsDesktopSmall : [979,3]
               });
         });
 </script>
