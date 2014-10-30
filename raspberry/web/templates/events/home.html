@@ -32,27 +32,27 @@
             </div>
         </div>
 
-    <div class="row">
-        <div class="col-md-12" style="overflow: hidden;">
-            <div id="owl" class="owl-carousel owl-theme" style="opacity: 1; display: block;">
-                {% for show in show_event_banners %}
-                    <div class="item">
+{#    <div class="row">#}
+{#        <div class="col-md-12" style="overflow: hidden;">#}
+{#            <div id="owl" class="owl-carousel owl-theme" style="opacity: 1; display: block;">#}
+{#                {% for show in show_event_banners %}#}
+{#                    <div class="item">#}
 {#                    {{ show.banner.banner_type }}#}
-                        {% if show.banner.banner_type == 1 %}
-                            <a datatype="1" biz-sellerid="{{ show.banner.user_id }}" target="_blank" href="#">
-                                <img src="{{ show.banner.image_url }}" alt="">
-                            </a>
-                        {% else %}
-                            <a href="{{ show.banner.link }}" target="_blank">
-                                <img src="{{ show.banner.image_url }}" alt="">
-                            </a>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-       <div class="row" style="display:none;">
+{#                        {% if show.banner.banner_type == 1 %}#}
+{#                            <a datatype="1" biz-sellerid="{{ show.banner.user_id }}" target="_blank" href="#">#}
+{#                                <img src="{{ show.banner.image_url }}" alt="">#}
+{#                            </a>#}
+{#                        {% else %}#}
+{#                            <a href="{{ show.banner.link }}" target="_blank">#}
+{#                                <img src="{{ show.banner.image_url }}" alt="">#}
+{#                            </a>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+       <div class="row">
             <div class="col-md-12">
                 <div id="carousel-guoku" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
@@ -63,7 +63,15 @@
                     <div class="carousel-inner" role="listbox">
                         {% for show in show_event_banners %}
                             <div class="item {% if 1 == show.pk %}active{% endif %}">
-                                <a target="_blank" href="{{ show.banner.link }}"><img src="{{ show.banner.image_url }}"></a>
+                                {% if show.banner.banner_type == 1  %}
+                                    <a datatype="1" biz-sellerid="{{ show.banner.user_id }}" target="_blank" href="#">
+                                        <img src="{{ show.banner.image_url }}" alt="">
+                                    </a>
+                                {% else %}
+                                <a target="_blank" href="{{ show.banner.link }}">
+                                    <img src="{{ show.banner.image_url }}">
+                                </a>
+                                {% endif %}
                                 <div class="carousel-caption">
                                 </div>
                             </div>
@@ -125,17 +133,17 @@
 
 
 {% block script %}
-<script src="{% static 'owl-carousel/owl.carousel.js' %}"></script>
-<script type="text/javascript">
-        $(document).ready(function() {
-            $("#owl").owlCarousel({
-                autoPlay: 3000, //Set AutoPlay to 3 seconds
-                  items : 1,
-                  itemsDesktop : [1199,3],
-                  itemsDesktopSmall : [979,3]
-              });
-        });
-</script>
+{#<script src="{% static 'owl-carousel/owl.carousel.js' %}"></script>#}
+{#<script type="text/javascript">#}
+{#        $(document).ready(function() {#}
+{#            $("#owl").owlCarousel({#}
+{#                autoPlay: 3000, //Set AutoPlay to 3 seconds#}
+{#                  items : 1,#}
+{#                  itemsDesktop : [1199,3],#}
+{#                  itemsDesktopSmall : [979,3]#}
+{#              });#}
+{#        });#}
+{#</script>#}
 
 {#{% block script %}#}
 <script type="text/javascript">
