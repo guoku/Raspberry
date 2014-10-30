@@ -37,9 +37,16 @@
             <div id="owl" class="owl-carousel owl-theme" style="opacity: 1; display: block;">
                 {% for show in show_event_banners %}
                     <div class="item">
-                        <a href="{{ show.banner.link }}" target="_blank">
-                            <img src="{{ show.banner.image_url }}" alt="">
-                        </a>
+{#                    {{ show.banner.banner_type }}#}
+                        {% if show.banner.banner_type == '1' %}
+                            <a datatype="1" biz-sellerid="{{ show.banner.user_id }}" href="#" target="_blank">
+                                <img src="{{ show.banner.image_url }}" alt="">
+                            </a>
+                        {% else %}
+                            <a href="{{ show.banner.link }}" target="_blank">
+                                <img src="{{ show.banner.image_url }}" alt="">
+                            </a>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
