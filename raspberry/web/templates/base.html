@@ -75,12 +75,14 @@ window.location.href = url;</script><![endif]-->
                     </li>
 
                     {% url 'web_kind' as web_kind_url %}
-                    <li {% if web_kind_url in request.path %}class="active" {% endif %}>
+{#                    {{ web_kind_url  }}#}
+                    <li {% if web_kind_url in request.path %}class="active"{% endif %}>
                         <a href="{{ web_kind_url }}">品类</a>
                     </li>
 
                     {% url 'web_event_home' as web_event_home_url %}
-                    <li {% if web_event_home_url in request.path %}class="avtive" {% endif %}>
+{#                {{ web_event_home_url }}#}
+                    <li {% if web_event_home_url in request.path %}class="active" {% endif %}>
                         <a href="{{ web_event_home_url }}">专题</a>
                     </li>
                 </ul>
