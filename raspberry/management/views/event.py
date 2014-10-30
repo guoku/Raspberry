@@ -8,6 +8,11 @@ from base.models import Show_Event_Banner, Event_Banner
 from management.forms.event_banner import CreateEventBannerForms, EditEventBannerForms
 from utils.authority import staff_only
 
+from django.utils.log import getLogger
+
+
+log = getLogger('django')
+
 
 @login_required
 @staff_only
@@ -53,6 +58,8 @@ def edit(request, event_banner_id, template='management/event/edit.html'):
     except Event_Banner.DoesNotExist:
         raise Http404
 
+    log.info("user id %s" % _event_banner.user_id)
+
     data = {
         # 'content_type': _banner.content_type,
         # 'key': _banner.key,
@@ -60,7 +67,8 @@ def edit(request, event_banner_id, template='management/event/edit.html'):
         # 'event_banner':_event_banner,
         'link': _event_banner.link,
         'position':_event_banner.position,
-
+        'banner_type':_event_banner.banner_type,
+        'user_id':_event_banner.user_id,
     }
 
     if request.method == "POST":

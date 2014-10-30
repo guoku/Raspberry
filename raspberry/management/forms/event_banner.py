@@ -26,8 +26,23 @@ class BaseBannerForm(forms.Form):
         required=False,
     )
 
+    user_id = forms.CharField(
+        label=_('taobao user id'),
+        widget=forms.TextInput(attrs={'class':'form-control'}),
+        help_text=_(''),
+        required=False,
+    )
+
     def __init__(self, *args, **kwargs):
         super(BaseBannerForm, self).__init__(*args, **kwargs)
+
+        self.fields['banner_type'] = forms.ChoiceField(
+            label= _('banner type'),
+            choices=Event_Banner.BANNER_TYPE__CHOICES,
+            widget=forms.Select(attrs={'class':'form-control'}),
+            help_text=_(''),
+        )
+
         (none, first, second, third, fourth, fifth) = (0, 1, 2, 3, 4, 5)
         BANNER_POSITION_CHOICES = (
             (none, _("none")),
@@ -41,6 +56,7 @@ class BaseBannerForm(forms.Form):
                                                   choices=BANNER_POSITION_CHOICES,
                                                   widget=forms.Select(attrs={'class':'form-control',}),
                                                   help_text=_(''))
+
 
     def clean_position(self):
         _position = self.cleaned_data.get('position')
@@ -63,6 +79,10 @@ class CreateEventBannerForms(BaseBannerForm):
         link = self.cleaned_data.get('link')
         event_banner_image = self.cleaned_data.get('event_banner_image')
         position = self.clean_position()
+        banner_type = self.cleaned_data.get('banner_type')
+        user_id = self.cleaned_data.get('user_id')
+
+
         # log.info(event_banner_image)
         _image = HandleImage(event_banner_image)
         file_path = "%s%s.jpg" % (image_path, _image.name)
@@ -72,6 +92,8 @@ class CreateEventBannerForms(BaseBannerForm):
         _event_banner = Event_Banner.objects.create(
             link = link,
             image = file_path,
+            banner_type = banner_type,
+            user_id = user_id,
         )
         #
         if position > 0:
@@ -119,21 +141,31 @@ class EditEventBannerForms(BaseBannerForm):
 
     def save(self):
         event_banner_image = self.cleaned_data.get('event_banner_image')
+        link = self.cleaned_data.get('link')
+        user_id = self.cleaned_data.get('user_id')
+        banner_type = self.cleaned_data.get('banner_type')
         position = self.clean_position()
 
-        log.info(position)
+
+        # log.info(position)
+        self.banner.link = link
+        # self.banner.position = position
+        self.banner.user_id = user_id
+        self.banner.banner_type = banner_type
 
         if event_banner_image:
             _image = HandleImage(event_banner_image)
             file_path = "%s%s.jpg" % (image_path, _image.name)
             default_storage.save(file_path, ContentFile(_image.image_data))
             self.banner.image = file_path
-            self.banner.save()
+
+        self.banner.save()
 
         if position > 0 and self.banner.position == 0:
             show = Show_Event_Banner.objects.get(pk= position)
             show.banner = self.banner
             show.save()
+
         elif self.banner.position != position:
             show = Show_Event_Banner.objects.get(pk = position)
             tmp_show = Show_Event_Banner.objects.get(pk = self.banner.position)
