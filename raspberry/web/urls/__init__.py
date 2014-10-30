@@ -22,7 +22,7 @@ urlpatterns = patterns(
     url(r'^c/', include('web.urls.category')),
     url(r'^t/', include('web.urls.tag')),
 
-    url(r'^kind/$', 'popular_category', name='web_kind'),
+    url(r'^category/$', 'popular_category', name='web_kind'),
 )
 
 urlpatterns += patterns(

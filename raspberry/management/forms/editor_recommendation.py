@@ -114,12 +114,12 @@ class EditEditorRecommendForms(BaseRecommendationForm):
                 Show_Editor_Recommendation.objects.create(
                     recommendation = self.recommendation,
                 )
-        elif self.banner.position != position:
+        elif self.recommendation.position != position:
             show = Show_Editor_Recommendation.objects.get(pk = position)
-            tmp_show = Show_Editor_Recommendation.objects.get(pk = self.banner.position)
-            tmp_banner = show.banner
+            tmp_show = Show_Editor_Recommendation.objects.get(pk = self.recommendation.position)
+            recommendation = show.recommendation
             show.recommendation = self.recommendation
-            tmp_show.recommendation = tmp_banner
+            tmp_show.recommendation = recommendation
 
             show.save()
             tmp_show.save()
