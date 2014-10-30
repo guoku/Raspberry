@@ -3,6 +3,7 @@ from djangosphinx.models import SphinxSearch
 from django.contrib.auth.models import User
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.utils.log import getLogger
 
 from stream_models import *
@@ -395,7 +396,15 @@ class Novus_Stat(models.Model):
 # event banner
 
 class Event_Banner(models.Model):
+    (item, shop) = (0, 1)
+    BANNER_TYPE__CHOICES = [
+        (item, _("item")),
+        (shop, _("shop")),
+    ]
+
     image = models.CharField(max_length=255, null=False)
+    banner_type = models.IntegerField(choices=BANNER_TYPE__CHOICES, default=item)
+    user_id = models.CharField(max_length=30, null=True)
     link = models.CharField(max_length=255, null=True)
     created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
     updated_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
