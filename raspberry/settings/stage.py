@@ -81,29 +81,6 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'raspberry.urls'
 
-# INSTALLED_APPS = (
-#     'django.contrib.admin',
-#     'django.contrib.auth',
-#     'django.contrib.contenttypes',
-#     # 'django.contrib.sessions',
-#     'django.contrib.staticfiles',
-#     'django.contrib.messages',
-#     'django.contrib.formtools',
-#     'django.contrib.sitemaps',
-#
-#     'djcelery',
-#     'base',
-#     'management',
-#     'mobile',
-#     'seller',
-#     'stats',
-#     'web',
-#     'share',
-#     # 'lotto',
-#     # 'edm',
-#     'gunicorn',
-# )
-
 #GUOKU_APNS_KEY = os.path.join(os.path.dirname(__file__), 'apns_key/')
 GUOKU_APNS_KEY = '/data/www/raspberry/apns_key/'
 APNS_SERVER = {'HOST': 'http://10.0.2.46:7077/'}

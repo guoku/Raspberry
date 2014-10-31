@@ -1,4 +1,5 @@
-import os.path
+# import os.path
+from static import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -191,22 +192,10 @@ DEFAULT_FILE_STORAGE = 'storages.backends.mogile.MogileFSStorage'
 # DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 # IMAGE_SIZE = [128, 310, 640]
 
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
-MEDIA_URL = '/uploads/'
-# STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/v3/')
-STATIC_ROOT = '/tmp/static/'
-STATIC_URL = 'http://static.guoku.com/static/v3/'
-# STATIC_URL = '/static/v3/'
-ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-# Additional locations of static files
-STATICFILES_DIRS = (
-
-)
 
 
 # scp
-
 SCP_HOST = '10.0.2.46'
 SCP_USER = 'jiaxin'
 SCP_KEY = os.path.join(os.path.dirname(__file__), 'scp_key/')
