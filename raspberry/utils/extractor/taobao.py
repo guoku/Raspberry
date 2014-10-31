@@ -101,21 +101,32 @@ class TaobaoExtractor:
         desc = soup.title.string[0:-12]
         imgs = []
         fimg = soup.select("img#J_ImgBooth")
-        # print fimg
+        print fimg
         if len(fimg) == 0:
             print 'pic is none'
-            return None 
-        fjpg = fimg[0].attrs['data-src']
+            return None
+
+        fjpg = fimg[0].attrs.get('data-src')
+        if not fjpg:
+            fjpg = fimg[0].attrs['src']
+
         fjpg = re.sub(TaobaoExtractor.IMG_POSTFIX,"",fjpg)
         # print fjpg
         imgs.append(fjpg)
         optimgs = soup.select("ul#J_UlThumb li a img")
         # print optimgs
         for op in optimgs:
-            op = re.sub(TaobaoExtractor.IMG_POSTFIX,"",op.attrs["data-src"])
-            if op in imgs:
+            # print op
+            try:
+                optimg = re.sub(TaobaoExtractor.IMG_POSTFIX, "", op.attrs.get('src'))
+            # print "image image %s" %op
+            # if not optimg:
+            except :
+                optimg = re.sub(TaobaoExtractor.IMG_POSTFIX, "", op.attrs.get('data-src'))
+
+            if optimg in imgs:
                 continue
-            imgs.append(op)
+            imgs.append(optimg)
         shopidtag = re.findall('shopId:"(\d+)',html)
         # print shopidtag
         if len(shopidtag) == 0:
@@ -126,8 +137,9 @@ class TaobaoExtractor:
         # print shoplink
         if len(sl) > 0 :
             shoplink = sl[0].attrs['href']
-        # pricetag = soup.select("span.originPrice")
-        pricetag = soup.select("em.tb-rmb-num")
+        pricetag = soup.select("span.originPrice")
+        if not pricetag:
+            pricetag = soup.select("em.tb-rmb-num")
         print pricetag
         if len(pricetag) == 0:
             print 'no price'
@@ -156,6 +168,6 @@ class TaobaoExtractor:
 
 
 if __name__=="__main__":
-    print TaobaoExtractor.fetch_item("37107641937")
+    print TaobaoExtractor.fetch_item("36668554861")
     #print TaobaoExtractor.fetch_shop("http://shop110165889.taobao.com/?spm=2013.1.0.0.uSTb9g")
 
