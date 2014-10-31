@@ -60,6 +60,14 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
 )
 
+# session
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_HOST = '10.0.2.48'
+SESSION_REDIS_PORT = 6379
+SESSION_REDIS_DB = 2
+SESSION_COOKIE_AGE = 1209600
+MAX_SESSION_EXPIRATION_TIME = 60 * 60 * 24 * 14
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -103,6 +111,30 @@ LOGGING = {
     }
 }
 
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    # 'django.contrib.sessions',
+    'django.contrib.staticfiles',
+    'django.contrib.messages',
+    'django.contrib.formtools',
+    'django.contrib.sitemaps',
+    'djcelery',
+    'base',
+    'management',
+    'mobile',
+    'seller',
+    'stats',
+    'web',
+    'share',
+    # 'edm',
+    # 'lotto',
+    'gunicorn',
+)
+
+
+
 INTERNAL_IPS = ('127.0.0.1',)
 
 # taobao api key and sercet
@@ -130,6 +162,21 @@ MAILGUN_SERVER_NAME = 'post.guoku.com'
 EMAIL_SUBJECT_PREFIX = '[guoku]'
 
 
+CELERY_RESULT_BACKEND = "redis://10.0.2.100:6379/0"
+BROKER_TRANSPORT = "librabbitmq"
+BROKER_HOST = "10.0.2.100"
+BROKER_USER = "raspberry"
+BROKER_PASSWORD = "raspberry1@#"
+BROKER_VHOST = "raspberry"
+BROKER_POOL_LIMIT = 10
+CELERY_ACKS_LATE = True
+CELERYD_PREFETCH_MULTIPLIER = 1
+CELERY_DISABLE_RATE_LIMITS = True
+
+
+
+
+
 MOGILEFS_DOMAIN = 'prod'
 MOGILEFS_TRACKERS = ['10.0.2.50:7001']
 IMAGE_LOCAL = DEBUG
@@ -143,3 +190,24 @@ MOGILEFS_MEDIA_URL = 'images/'
 DEFAULT_FILE_STORAGE = 'storages.backends.mogile.MogileFSStorage'
 # DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 # IMAGE_SIZE = [128, 310, 640]
+
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
+MEDIA_URL = '/uploads/'
+# STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/v3/')
+STATIC_ROOT = '/tmp/static/'
+STATIC_URL = 'http://static.guoku.com/static/v3/'
+# STATIC_URL = '/static/v3/'
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+
+)
+
+
+# scp
+
+SCP_HOST = '10.0.2.46'
+SCP_USER = 'jiaxin'
+SCP_KEY = os.path.join(os.path.dirname(__file__), 'scp_key/')
+SCP_REMOTE_FILE = '/data/www/core/download/android/guoku-release.apk'
