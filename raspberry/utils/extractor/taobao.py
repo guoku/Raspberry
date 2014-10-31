@@ -101,28 +101,34 @@ class TaobaoExtractor:
         desc = soup.title.string[0:-12]
         imgs = []
         fimg = soup.select("img#J_ImgBooth")
+        # print fimg
         if len(fimg) == 0:
             print 'pic is none'
             return None 
-        fjpg = fimg[0].attrs['src']
+        fjpg = fimg[0].attrs['data-src']
         fjpg = re.sub(TaobaoExtractor.IMG_POSTFIX,"",fjpg)
-        #print fjpg
+        # print fjpg
         imgs.append(fjpg)
         optimgs = soup.select("ul#J_UlThumb li a img")
+        # print optimgs
         for op in optimgs:
-            op = re.sub(TaobaoExtractor.IMG_POSTFIX,"",op.attrs["src"])
+            op = re.sub(TaobaoExtractor.IMG_POSTFIX,"",op.attrs["data-src"])
             if op in imgs:
                 continue
             imgs.append(op)
         shopidtag = re.findall('shopId:"(\d+)',html)
+        # print shopidtag
         if len(shopidtag) == 0:
             print 'shopid is none'
             return None
         sl = soup.select("span.slogo a")
         shoplink = "http://shop"+shopidtag[0]+".taobao.com"
+        # print shoplink
         if len(sl) > 0 :
             shoplink = sl[0].attrs['href']
-        pricetag = soup.select("span.originPrice")
+        # pricetag = soup.select("span.originPrice")
+        pricetag = soup.select("em.tb-rmb-num")
+        print pricetag
         if len(pricetag) == 0:
             print 'no price'
             return None
@@ -145,10 +151,11 @@ class TaobaoExtractor:
             "shop_link" : shoplink,
             "location" : ""
                 }
+        print result
         return result
 
 
 if __name__=="__main__":
-    print TaobaoExtractor.fetch_item("39681973010")
+    print TaobaoExtractor.fetch_item("37107641937")
     #print TaobaoExtractor.fetch_shop("http://shop110165889.taobao.com/?spm=2013.1.0.0.uSTb9g")
 
