@@ -163,9 +163,9 @@ MAILGUN_SERVER_NAME = 'post.guoku.com'
 EMAIL_SUBJECT_PREFIX = '[guoku]'
 
 
-CELERY_RESULT_BACKEND = "redis://10.0.2.100:6379/0"
+CELERY_RESULT_BACKEND = "redis://10.0.2.95:6379/0"
 BROKER_TRANSPORT = "librabbitmq"
-BROKER_HOST = "10.0.2.100"
+BROKER_HOST = "10.0.2.95"
 BROKER_USER = "raspberry"
 BROKER_PASSWORD = "raspberry1@#"
 BROKER_VHOST = "raspberry"

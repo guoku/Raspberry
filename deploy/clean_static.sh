@@ -13,13 +13,13 @@ ComboCss='/usr/local/bin/node /usr/local/bin/csscombo'
 
 
 #echo "*** css and js version ***"
-#ver=`git lg | head -n 1 | awk '{print $2}'`;
-#echo $ver;
+# ver=`git log | head -n 1 | awk '{print $2}'`;
+# echo $ver;
 
 cd $root
 
 echo "*** compress js ***";
-cd scripts/
+cd js/
 find . -type f -name '*.js' -exec bash -c "${Uglifyjs} {} > {}.tmp; mv -f {}.tmp {}" \;
 #mkdir $ver
 #find . -type f -name '*.js' -exec cp {} $ver \;
@@ -30,7 +30,7 @@ find . -type f -name '*.js' -exec bash -c "${Uglifyjs} {} > {}.tmp; mv -f {}.tmp
 cd $root
 
 echo "*** compress css ***";
-cd styles/
+cd css/
 CssList=$(find . -type f -name '*.css' -exec basename {} \;)
 for css in $CssList
 do
