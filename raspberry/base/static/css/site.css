@@ -509,6 +509,7 @@ padding-left: 10px;
 /* 商品详情页 */
 .entity-title {
     margin-bottom: 40px;
+    /*font-size: 18px;*/
 }
 .note-text .create-time{
     font-size: 12px;

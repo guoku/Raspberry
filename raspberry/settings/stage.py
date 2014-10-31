@@ -97,3 +97,5 @@ SINA_BACK_URL = APP_HOST + '/sina/auth'
 TAOBAO_BACK_URL = APP_HOST + "/taobao/auth"
 
 ENABLE_GUOKU_PLUS = True
+
+STATIC_URL = 'http://static.guoku.com/static/v3/'
