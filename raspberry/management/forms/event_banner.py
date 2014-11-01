@@ -12,7 +12,8 @@ log = getLogger('django')
 from django.conf import settings
 image_path = getattr(settings, 'MOGILEFS_MEDIA_URL', 'images/')
 
-class BaseBannerForm(forms.Form):
+
+class BaseEventBannerForm(forms.Form):
 
     link = forms.URLField(
         label=_('link'),
@@ -34,7 +35,7 @@ class BaseBannerForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(BaseBannerForm, self).__init__(*args, **kwargs)
+        super(BaseEventBannerForm, self).__init__(*args, **kwargs)
 
         self.fields['banner_type'] = forms.ChoiceField(
             label= _('banner type'),
@@ -62,7 +63,7 @@ class BaseBannerForm(forms.Form):
         _position = self.cleaned_data.get('position')
         return int(_position)
 
-class CreateEventBannerForms(BaseBannerForm):
+class CreateEventBannerForms(BaseEventBannerForm):
     #
     # link = forms.URLField(
     #     label=_('link'),
@@ -107,7 +108,7 @@ class CreateEventBannerForms(BaseBannerForm):
                 )
         return _event_banner
 
-class EditEventBannerForms(BaseBannerForm):
+class EditEventBannerForms(BaseEventBannerForm):
 
     # link = forms.URLField(
     #     label=_('link'),
