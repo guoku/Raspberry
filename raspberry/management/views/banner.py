@@ -1,9 +1,10 @@
 #coding=utf-8
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+# from django.http import HttpResponseBadRequest
 import HTMLParser
 import re 
 import datetime
@@ -15,7 +16,9 @@ from base.models import Banner as BannerModel
 from utils.authority import staff_only 
 from utils.paginator import Paginator
 
-from management.forms.banner import CreateBannerForm
+# from management.forms.banner import CreateBannerForm
+
+
 
 @login_required
 @staff_only
@@ -90,14 +93,19 @@ def create_banner(request):
             image_data = _image_data,
             weight = _weight
         )
-    return HttpResponseRedirect(reverse('management_banner_list'))
+        return HttpResponseRedirect(reverse('management_banner_list'))
+    else:
+        return HttpResponseBadRequest()
+
 
 @login_required
 @staff_only
 def edit_banner(request, banner_id):
     if request.method == 'GET':
+
         _banner_context = Banner(banner_id).read()
-        return render_to_response( 
+
+        return render_to_response(
             'banner/edit.html', 
             {
                 'active_division' : 'banner',
