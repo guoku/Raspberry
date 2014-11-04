@@ -84,7 +84,7 @@ window.location.href = url;</script><![endif]-->
                     {% url 'web_event_home' as web_event_home_url %}
 {#                {{ web_event_home_url }}#}
                     <li {% if web_event_home_url in request.path %}class="active" {% endif %}>
-                        <a href="{{ web_event_home_url }}">专题</a>
+                        <a href="{{ web_event_home_url }}">专题<img class="" alt="双十一专题" title="双十一" src="{% static 'images/111102.gif' %}" style="margin-top: -20px;"></a>
                     </li>
                 </ul>
 
