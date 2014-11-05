@@ -94,16 +94,19 @@ class EditEditorRecommendForms(BaseRecommendationForm):
 
     def save(self):
         editor_recommend_image = self.cleaned_data.get('editor_recommend_image')
+        link = self.cleaned_data.get('link')
         position = self.clean_position()
 
-        log.info(position)
+        # log.info(position)
+        self.recommendation.link = link
 
         if editor_recommend_image:
             _image = HandleImage(editor_recommend_image)
             file_path = "%s%s.jpg" % (image_path, _image.name)
             default_storage.save(file_path, ContentFile(_image.image_data))
             self.recommendation.image = file_path
-            self.recommendation.save()
+
+        self.recommendation.save()
 
         if position > 0 and self.recommendation.position == 0:
             try:
