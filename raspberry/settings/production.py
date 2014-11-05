@@ -69,16 +69,16 @@ IMAGE_SERVER  = 'http://imgcdn.guoku.com/'
 APP_HOST = 'http://www.guoku.com'
 
 
-MOGILEFS_DOMAIN = 'prod'
-MOGILEFS_TRACKERS = ['10.0.2.50:7001']
-MOGILEFS_MEDIA_URL = 'images/'
-DEFAULT_FILE_STORAGE = 'storages.backends.mogile.MogileFSStorage'
-IMAGE_SIZE = [128, 310, 640]
+# MOGILEFS_DOMAIN = 'prod'
+# MOGILEFS_TRACKERS = ['10.0.2.50:7001']
+# MOGILEFS_MEDIA_URL = 'images/'
+# DEFAULT_FILE_STORAGE = 'storages.backends.mogile.MogileFSStorage'
+# IMAGE_SIZE = [128, 310, 640]
 
 
 
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
-MEDIA_URL = '/uploads/'
+# MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../uploads')
+# MEDIA_URL = '/uploads/'
 # STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/v3/')
 
 

@@ -784,6 +784,7 @@
                                 if (status == 1 ) {
                                     var html = $(result.data);
 //                                console.log(html);
+                                    util.like(html);
                                     html.appendTo(event);
                                 }
                                 flag = false;

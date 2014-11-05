@@ -1,19 +1,24 @@
 #coding=utf-8
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+# from django.http import HttpResponseBadRequest
 import HTMLParser
 import re 
 import datetime
 import time
 import json
 
-from base.banner import Banner 
+from base.banner import Banner
 from base.models import Banner as BannerModel 
 from utils.authority import staff_only 
 from utils.paginator import Paginator
+
+# from management.forms.banner import CreateBannerForm
+
+
 
 @login_required
 @staff_only
@@ -38,11 +43,27 @@ def banner_list(request):
 
 @login_required
 @staff_only
-def new_banner(request):
+def new_banner(request, template="management/banner/create.html"):
+
+    # if request.method == "POST":
+    #     _forms = CreateBannerForm(request.POST, request.FILES)
+    #     if _forms.is_valid():
+    #         _forms.save()
+    #         return HttpResponseRedirect(reverse('management_banner_list'))
+    # else:
+    #     _forms = CreateBannerForm()
+    # return render_to_response(
+    #     template,
+    #     {
+    #         'forms': _forms,
+    #
+    #     },
+    #     context_instance=RequestContext(request),
+    # )
     if request.method == 'GET':
         _content_type_list = ['entity', 'category', 'user', 'user_tag', 'outlink']
         return render_to_response(
-            'banner/new.html', 
+            'banner/new.html',
             {
                 'active_division' : 'banner',
                 'content_type_list' : _content_type_list
@@ -72,14 +93,19 @@ def create_banner(request):
             image_data = _image_data,
             weight = _weight
         )
-    return HttpResponseRedirect(reverse('management_banner_list'))
+        return HttpResponseRedirect(reverse('management_banner_list'))
+    else:
+        return HttpResponseBadRequest()
+
 
 @login_required
 @staff_only
 def edit_banner(request, banner_id):
     if request.method == 'GET':
+
         _banner_context = Banner(banner_id).read()
-        return render_to_response( 
+
+        return render_to_response(
             'banner/edit.html', 
             {
                 'active_division' : 'banner',

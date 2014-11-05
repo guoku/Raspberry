@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+# from django.core.files.storage import default_storage
+# from django.core.files.base import ContentFile
 from django.utils.log import getLogger
 
 from base.handle_image import HandleImage
@@ -9,10 +9,11 @@ from base.models import Show_Event_Banner, Event_Banner
 
 log = getLogger('django')
 
-from django.conf import settings
-image_path = getattr(settings, 'MOGILEFS_MEDIA_URL', 'images/')
+# from django.conf import settings
+# image_path = getattr(settings, 'MOGILEFS_MEDIA_URL', 'images/')
+#
 
-class BaseBannerForm(forms.Form):
+class BaseEventBannerForm(forms.Form):
 
     link = forms.URLField(
         label=_('link'),
@@ -34,7 +35,7 @@ class BaseBannerForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(BaseBannerForm, self).__init__(*args, **kwargs)
+        super(BaseEventBannerForm, self).__init__(*args, **kwargs)
 
         self.fields['banner_type'] = forms.ChoiceField(
             label= _('banner type'),
@@ -62,7 +63,7 @@ class BaseBannerForm(forms.Form):
         _position = self.cleaned_data.get('position')
         return int(_position)
 
-class CreateEventBannerForms(BaseBannerForm):
+class CreateEventBannerForms(BaseEventBannerForm):
     #
     # link = forms.URLField(
     #     label=_('link'),
@@ -85,13 +86,15 @@ class CreateEventBannerForms(BaseBannerForm):
 
         # log.info(event_banner_image)
         _image = HandleImage(event_banner_image)
-        file_path = "%s%s.jpg" % (image_path, _image.name)
-        default_storage.save(file_path, ContentFile(_image.image_data))
+        # file_path = "%s%s.jpg" % (image_path, _image.name)
+        # default_storage.save(file_path, ContentFile(_image.image_data))
         # log.info(f)
         #
+        filename = _image.save()
+
         _event_banner = Event_Banner.objects.create(
             link = link,
-            image = file_path,
+            image = filename,
             banner_type = banner_type,
             user_id = user_id,
         )
@@ -107,19 +110,9 @@ class CreateEventBannerForms(BaseBannerForm):
                 )
         return _event_banner
 
-class EditEventBannerForms(BaseBannerForm):
 
-    # link = forms.URLField(
-    #     label=_('link'),
-    #     widget=forms.TextInput(attrs={'class':'form-control'}),
-    #     help_text=_(''),
-    # )
-    #
-    # event_banner_image = forms.FileField(
-    #     label=_('event banner image'),
-    #     widget=forms.FileInput(attrs={'class':'controls'}),
-    #     help_text=_(''),
-    # )
+class EditEventBannerForms(BaseEventBannerForm):
+
 
     def __init__(self, banner, *args, **kwargs):
         self.banner = banner
@@ -155,9 +148,9 @@ class EditEventBannerForms(BaseBannerForm):
 
         if event_banner_image:
             _image = HandleImage(event_banner_image)
-            file_path = "%s%s.jpg" % (image_path, _image.name)
-            default_storage.save(file_path, ContentFile(_image.image_data))
-            self.banner.image = file_path
+            # file_path = "%s%s.jpg" % (image_path, _image.name)
+            # filename = default_storage.save(file_path, ContentFile(_image.image_data))
+            self.banner.image = _image.save()
 
         self.banner.save()
 

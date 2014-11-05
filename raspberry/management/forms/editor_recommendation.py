@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+# from django.core.files.storage import default_storage
+# from django.core.files.base import ContentFile
 from django.utils.log import getLogger
 
 from base.handle_image import HandleImage
@@ -9,8 +9,8 @@ from base.models import Show_Editor_Recommendation, Editor_Recommendation
 
 log = getLogger('django')
 
-from django.conf import settings
-image_path = getattr(settings, 'MOGILEFS_MEDIA_URL', 'images/')
+# from django.conf import settings
+# image_path = getattr(settings, 'MOGILEFS_MEDIA_URL', 'images/')
 
 class BaseRecommendationForm(forms.Form):
 
@@ -45,6 +45,7 @@ class BaseRecommendationForm(forms.Form):
         _position = self.cleaned_data.get('position')
         return int(_position)
 
+
 class CreateEditorRecommendForms(BaseRecommendationForm):
 
     def save(self):
@@ -53,13 +54,14 @@ class CreateEditorRecommendForms(BaseRecommendationForm):
         position = self.clean_position()
         # log.info(event_banner_image)
         _image = HandleImage(editor_recommend_image)
-        file_path = "%s%s.jpg" % (image_path, _image.name)
-        default_storage.save(file_path, ContentFile(_image.image_data))
+        filename = _image.save()
+        # file_path = "%s%s.jpg" % (image_path, _image.name)
+        # default_storage.save(file_path, ContentFile(_image.image_data))
         # log.info(f)
         #
         _recommendation = Editor_Recommendation.objects.create(
             link = link,
-            image = file_path,
+            image = filename,
         )
         #
         if position > 0:
@@ -72,6 +74,7 @@ class CreateEditorRecommendForms(BaseRecommendationForm):
                     recommendation =_recommendation
                 )
         return _recommendation
+
 
 class EditEditorRecommendForms(BaseRecommendationForm):
 
@@ -93,9 +96,11 @@ class EditEditorRecommendForms(BaseRecommendationForm):
                                                   help_text=_(''))
 
     def save(self):
+        link = self.cleaned_data.get('link')
         editor_recommend_image = self.cleaned_data.get('editor_recommend_image')
         link = self.cleaned_data.get('link')
         position = self.clean_position()
+<<<<<<< HEAD
 
         # log.info(position)
         self.recommendation.link = link
@@ -105,6 +110,16 @@ class EditEditorRecommendForms(BaseRecommendationForm):
             file_path = "%s%s.jpg" % (image_path, _image.name)
             default_storage.save(file_path, ContentFile(_image.image_data))
             self.recommendation.image = file_path
+=======
+        self.recommendation.link = link
+        log.info(position)
+
+        if editor_recommend_image:
+            _image = HandleImage(editor_recommend_image)
+            # file_path = "%s%s.jpg" % (image_path, _image.name)
+            # filename = default_storage.save(file_path, ContentFile(_image.image_data))
+            self.recommendation.image = _image.save()
+>>>>>>> 5404d97645cad56f99c379ca9aff310cb2bc432f
 
         self.recommendation.save()
 

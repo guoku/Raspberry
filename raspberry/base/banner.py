@@ -1,4 +1,6 @@
 # coding=utf8
+from django.http import Http404
+from django.utils.log import getLogger
 from models import Banner as BannerModel
 from django.conf import settings
 from django.core.cache import cache
@@ -9,6 +11,8 @@ import urllib
 import random 
 import time
 
+log = getLogger('django')
+
 
 
 class Banner(object):
@@ -17,7 +21,12 @@ class Banner(object):
         self.banner_id = int(banner_id)
    
     def read(self):
-        _obj = BannerModel.objects.get(pk = self.banner_id)
+
+        try:
+            _obj = BannerModel.objects.get(pk = self.banner_id)
+        except BannerModel.DoesNotExist, e:
+            log.error("Error: %s" % e.message)
+            raise Http404
         return {
             'banner_id' : _obj.id,
             'image' : Image(_obj.image).getlink(),

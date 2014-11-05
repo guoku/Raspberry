@@ -14,7 +14,7 @@
                 <div class="carousel-inner" role="listbox">
                     {% for show in show_banners %}
                         <div class="item {% if 1 == show.pk %}active{% endif %}">
-                            <img src="{{ show.banner.image_url }}">
+                            <img src="{{ show.banner.image_url }}" width="940" height="430">
                             <div class="carousel-caption">
 
                             </div>
@@ -46,6 +46,7 @@
                             <th>{% trans 'images' %}</th>
                             <th>{% trans 'link' %}</th>
                             <th>{% trans 'type' %}</th>
+                            <th>{% trans 'position' %}</th>
                             <th>{% trans 'operation' %}</th>
                         </tr>
                     </thead>
@@ -57,9 +58,18 @@
                                 <td>{{ banner.link }}</td>
                                 <td>{{ banner.get_banner_type_display }}</td>
                                 <td>
+                                    {% if banner.position > 0 %}
+                                        <span class="label label-info">{{ banner.position }}</span>
+                                    {% else %}
+                                        <span class="label label-default">{{ banner.position }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
                                     <a target="_blank" class="btn btn-default" href="{% url 'management_event_banner_edit' banner.pk %}">{% trans 'edit' %}</a>
                                     {% if banner.banner_type == 1 %}
-                                        <a datatype="1" biz-sellerid="{{ banner.user_id }}" target="_blank" href="#">测试淘客</a>
+                                        <a class="btn btn-default" datatype="1" biz-sellerid="{{ banner.user_id }}" target="_blank" href="#">测试淘客</a>
+                                    {% else %}
+                                        <a class="btn btn-default" href="{{ banner.link }}">{% trans 'link' %}</a>
                                     {% endif %}
                                 </td>
                             </tr>

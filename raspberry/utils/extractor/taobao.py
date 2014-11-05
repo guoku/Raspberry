@@ -39,7 +39,7 @@ class TaobaoExtractor:
             return None
         nick = unquote(at_nick)
         html = f.read()
-        cidre = re.findall(" cid:'\d+'",html)
+        cidre = re.findall(" cid:'\d+'", html)
         if len(cidre)== 0:
             return None
         cidr = re.findall('\d+',cidre[0])
@@ -163,7 +163,7 @@ class TaobaoExtractor:
             "shop_link" : shoplink,
             "location" : ""
                 }
-        print result
+        # print result
         return result
 
 

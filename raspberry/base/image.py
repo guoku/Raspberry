@@ -4,6 +4,9 @@ from models import Image as ImageModel
 from hashlib import md5
 from pymogile import Client
 from wand.image import Image as WandImage
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
 import datetime
 from django.utils.log import getLogger
 
@@ -51,13 +54,19 @@ class Image(object):
     @classmethod
     def save_origin_image_data(cls, store_hash, image_data):
         _datastore = Client(
-            domain = settings.MOGILEFS_DOMAIN, 
-            trackers = settings.MOGILEFS_TRACKERS 
+            domain = settings.MOGILEFS_DOMAIN,
+            trackers = settings.MOGILEFS_TRACKERS
         )
         _fp = _datastore.new_file('img/' + store_hash + '.jpg')
         _fp.write(image_data)
         _fp.close()
-    
+
+        file_path = 'img/' + store_hash + '.jpg'
+        log.info("image path %s" % file_path)
+        filename = default_storage.save(file_path, ContentFile(image_data))
+        log.info("image file name: %s", filename)
+
+
     @classmethod
     def save_square_image_data_fixed(cls, store_hash, image_data):
         # _image_sizes = [64, 128, 240, 310, 480, 640]
@@ -87,6 +96,7 @@ class Image(object):
         _store_hash = None
         if origin_url != None:
             _image_id = Image.get_image_id_by_origin_url(origin_url)
+            # log.info(_image_id)
             if _image_id != None:
                 return cls(_image_id)
         elif image_data != None:
