@@ -100,26 +100,14 @@ class EditEditorRecommendForms(BaseRecommendationForm):
         editor_recommend_image = self.cleaned_data.get('editor_recommend_image')
         link = self.cleaned_data.get('link')
         position = self.clean_position()
-<<<<<<< HEAD
-
+        self.recommendation.link = link
         # log.info(position)
-        self.recommendation.link = link
-
-        if editor_recommend_image:
-            _image = HandleImage(editor_recommend_image)
-            file_path = "%s%s.jpg" % (image_path, _image.name)
-            default_storage.save(file_path, ContentFile(_image.image_data))
-            self.recommendation.image = file_path
-=======
-        self.recommendation.link = link
-        log.info(position)
 
         if editor_recommend_image:
             _image = HandleImage(editor_recommend_image)
             # file_path = "%s%s.jpg" % (image_path, _image.name)
             # filename = default_storage.save(file_path, ContentFile(_image.image_data))
             self.recommendation.image = _image.save()
->>>>>>> 5404d97645cad56f99c379ca9aff310cb2bc432f
 
         self.recommendation.save()
 
