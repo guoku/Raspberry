@@ -147,7 +147,7 @@ class TaoBao():
 
 if __name__=="__main__":
 	# t = TaoBao("9960937204")
-	t = TaoBao("41870721066")
+	t = TaoBao("41253849085")
 	# print t.html
 	# t = TaoBao("36668554861")
 	print t.res()
