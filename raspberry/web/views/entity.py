@@ -443,7 +443,7 @@ def load_item_info(request):
         if re.search(r"\b(jd|360buy)\.com$", _hostname) != None:
             return jd_info(request, _cand_url)
 
-        if re.search(r"\b(tmall|taobao)\.(com|hk)$", _hostname) is not None:
+        if re.search(r"\b(tmall|taobao|95095)\.(com|hk)$", _hostname) is not None:
             _taobao_id = parse_taobao_id_from_url(_cand_url)
             _item = Item.get_item_by_taobao_id(_taobao_id)
 
