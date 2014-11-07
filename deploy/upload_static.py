@@ -27,6 +27,7 @@ ver = local("git log | head -n 1 | awk '{print $2}'", capture=True)
 print ver
 static_path =  '/data/www/core/static/v3/%s/' % ver
 env.remote_static_root = static_path
+print static_path
 
 # local("sed -i 's/v3\/.*/v3\/%s/' settings/static.py" % ver)
 
@@ -45,4 +46,4 @@ def deploy_static():
         local_dir = env.local_static_root,
 #        delete = True
     )
-    local('rm -rf /tmp/static/')
+    #local('rm -rf /tmp/static/')

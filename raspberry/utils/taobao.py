@@ -3,6 +3,12 @@ import re
 from urlparse import urlparse
 from utils.extractor.taobao import TaobaoExtractor 
 import HTMLParser
+
+from django.utils.log import getLogger
+
+log = getLogger('django')
+
+
 def get_taobao_url(taobao_id, is_mobile = False, app_key = None):
     url = ""
     if is_mobile:
@@ -48,6 +54,7 @@ def parse_taobao_id_from_url(url):
 
 def load_taobao_item_info(taobao_id):
     taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
+    log.info(taobao_item_info)
     thumb_images = []
     image_url = None
     for _img_url in taobao_item_info["imgs"]:

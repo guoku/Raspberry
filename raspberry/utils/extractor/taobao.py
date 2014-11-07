@@ -7,13 +7,22 @@ import re
 from urlparse import parse_qs, urlparse
 from urllib import unquote
 
+from utils.extractor.new_taobao import TaoBao
+from django.utils.log import getLogger
+
+log = getLogger('django')
+
+
 class TaobaoExtractor:
     
     IMG_POSTFIX = "_\d+x\d+.*\.jpg|_b\.jpg"
 
     @staticmethod
     def fetch_item(itemid):
-        return TaobaoExtractor.fetch_redirect(itemid)
+        t = TaoBao(itemid)
+        # log.info(t)
+        return t.res()
+        # return TaobaoExtractor.fetch_redirect(itemid)
 
     @staticmethod
     def fetch_redirect(itemid):
