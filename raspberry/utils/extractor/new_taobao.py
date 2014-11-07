@@ -25,27 +25,38 @@ class TaoBao():
     def __init__(self, item_id):
         self.item_id = item_id
         self.html = self.fetch_html()
-        self.soup = BeautifulSoup(self.html)
+        self.soup = BeautifulSoup(self.html, from_encoding="gb18030")
+        if len(self.soup.findAll("body")) == 0:
+            # print "OKOKOKO"
+            self.html = self.fetch_html_ny()
+            print self.html
+            self.soup = BeautifulSoup(self.html)
+            # print self.soup
+
 
 
     @property
     def headers(self):
         return self._headers
 
-
     @property
     def nick(self):
 
         self._nick = self._headers.get('at_nick')
         if not self._nick:
-            raise
+            return ""
         return unquote(self._nick)
 
     @property
     def cid(self):
         cat = self.headers.get('X-Category')
-        _cid = cat.split('/')
-        return _cid[-1]
+        try:
+            _cid = cat.split('/')
+            return _cid[-1]
+        except AttributeError, e:
+            log.error("Error: %s", e.message)
+        return 0
+
 
     @property
     def desc(self):
@@ -116,6 +127,15 @@ class TaoBao():
         self._headers = f.headers
         return f.read()
 
+    def fetch_html_ny(self):
+        try:
+            f= self.opener.open("http://item.ny.taobao.com/item.htm?id=%s" % self.item_id)
+        except Exception, e:
+            log.error(e.message)
+            raise
+        self._headers = f.headers
+        return f.read()
+
     def res(self):
         result = {
 			"desc": self.desc,
@@ -138,7 +158,8 @@ if __name__=="__main__":
     # t = TaoBao("9960937204")
     # t = TaoBao("39523724233")
     # print t.soup.select("img#J_ImgBooth")
-    t = TaoBao("36668554861")
+    t = TaoBao("40869142654")
+    # print t.soup.findAll('body')
     print t.res()
     # print t.nick
     # print t.cid
