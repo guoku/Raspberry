@@ -92,7 +92,7 @@ def new_entity(request):
         _hostname = urlparse(_cand_url).hostname
         if re.search(r"\b(jd|360buy)\.com$", _hostname) != None:
             return new_jd_item(request)
-        if re.search(r"\b(tmall|taobao)\.com$", _hostname) != None: 
+        if re.search(r"\b(tmall|taobao|95095)\.(com|hk)$", _hostname) != None:
             _taobao_id = parse_taobao_id_from_url(_cand_url)
 
             _item = Item.get_item_by_taobao_id(_taobao_id)
