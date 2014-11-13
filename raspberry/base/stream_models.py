@@ -64,9 +64,9 @@ class JDItem(Item):
         'indexes' : [
             'jd_id',
             'jd_category',
-            # 'shop_nick',
-            # 'price',
-            # 'soldout',
+            'shop_nick',
+            'price',
+            'soldout',
         ],
     }
 
