@@ -17,13 +17,13 @@ class JDExtractor:
         resp = urllib2.urlopen(link)
         
         html = resp.read()
-        html = html.decode("gbk").encode("utf8")
+        # html = html.decode("gbk").encode("utf8")
 
         return JDExtractor.parser(html, itemid)
 
     @staticmethod
     def parser(html, itemid):
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, from_encoding="gb18030")
 
         title = soup.title.string
         title = title[:-18]

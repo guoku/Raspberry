@@ -122,7 +122,27 @@ def add_entity(request):
         _item = JDItem.get_item_by_jd_id(_jd_id)
         if _item == None:
             _jd_item_info = load_jd_item_info(_jd_id)
-            return HttpResponse(_jd_item_info)
+            _users = _get_special_names(request.user.id)
+
+            return render_to_response(
+                'entity/create_jd.html',
+                {
+                    'active_division' : 'entity',
+                    'jd_id' : _jd_id,
+                    'category' : _jd_item_info['category'],
+                    'jd_title' : _jd_item_info['title'],
+                    'shop_nick' : _jd_item_info['nick'],
+                    'shop_link' : _jd_item_info['shop_link'],
+                    'price' : _jd_item_info['price'],
+                    'thumb_images' : _jd_item_info['thumb_images'],
+                    'brand' : _jd_item_info['brand'],
+                    'title' : _jd_item_info['title'],
+                    'users' : _users,
+                    'selected_category_id' : ""
+                },
+                context_instance = RequestContext(request)
+            )
+            # return HttpResponse(_jd_item_info)
     return HttpResponse("暂不支持")
 
 
