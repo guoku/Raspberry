@@ -172,7 +172,8 @@ def login(request, template = 'account/login.html'):
 @require_GET
 def login_by_sina(request):
     request.session['auth_source'] = "login"
-    next_url = request.GET.get('next', None)
+    # next_url = request.GET.get('next', None)
+    next_url = request.META.get('HTTP_REFERER')
     if next_url:
         request.session['auth_next_url'] = next_url
     return HttpResponseRedirect(sina_utils.get_login_url())
@@ -180,6 +181,7 @@ def login_by_sina(request):
 @require_GET
 def auth_by_sina(request):
     code = request.GET.get("code", None)
+    error_uri = request.GET.get('error_uri', None)
     if code:
         _sina_data = sina_utils.get_auth_data(code)
         next_url = request.session.get('auth_next_url', reverse("web_selection"))
@@ -238,6 +240,23 @@ def auth_by_sina(request):
                 pass
         else:
             pass
+    elif error_uri:
+        # error_uri = request.GET.get('error_uri', None)
+        log.error("%s", error_uri)
+        error_description = request.GET.get('error_description', None)
+        error_code = request.GET.get('error_code', None)
+        next_url = request.session.get('auth_next_url', reverse("web_selection"))
+        if error_code == '21330':
+            return render_to_response(
+                'account/auth_error.html',
+                {
+                    'next_url': next_url,
+                },
+                context_instance = RequestContext(request),
+            )
+        # return HttpResponse(error_description)
+
+
 
 @require_GET
 @login_required
