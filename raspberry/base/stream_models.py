@@ -58,15 +58,15 @@ class JDItem(Item):
     title = StringField(required=True)
     shop_nick = StringField(required=True)
     price = DecimalField(required=True)
-    soldout = BooleanField(required=True)
+    soldout = BooleanField(required=True, default=False)
     meta = {
         'db_alias' : 'guoku-db',
         'indexes' : [
             'jd_id',
             'jd_category',
-            'shop_nick',
-            'price',
-            'soldout',
+            # 'shop_nick',
+            # 'price',
+            # 'soldout',
         ],
     }
 

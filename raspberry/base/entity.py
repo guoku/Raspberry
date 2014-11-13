@@ -130,7 +130,7 @@ class Entity(object):
     @classmethod
     def create_by_jd_item(cls, creator_id, category_id, chief_image_url,
                           jd_item_info, brand="", title="", intro="", 
-                          detail_image_urls=[], weight = 0, rank_score = 0):
+                          detail_image_urls=list(), weight = 0, rank_score = 0):
         _item = JDItem.get_item_by_jd_id(jd_item_info['jd_id'])
         if _item == None:
             _chief_image_id = Image.get_image_id_by_origin_url(chief_image_url)
@@ -186,7 +186,9 @@ class Entity(object):
                 _item_images.append(_chief_image_id)
 
                 _inst = cls(_entity_obj.id)
+
                 _inst.entity_obj = _entity_obj
+                log.info("entity id %s", _entity_obj.id)
                 _jd_item_id = _inst.__insert_jd_item(jd_item_info, _item_images)
 
                 return _inst

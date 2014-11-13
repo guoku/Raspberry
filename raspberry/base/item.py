@@ -212,9 +212,8 @@ class JDItem(Item):
             soldout = soldout,
             weight = weight,
             created_time = datetime.datetime.now(),
-            updated_time = datetime.datetime.now()
+            updated_time = datetime.datetime.now(),
         )
-        
         _item_obj.save()
         _inst = cls(_item_obj.id)
         _inst.item_obj = _item_obj
