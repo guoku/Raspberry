@@ -62,9 +62,15 @@
                         </a>
 {#                        </div>#}
                         <div class="hidden-sm hidden-md hidden-lg pull-right">
-                            <a id="buy-btn-mobile" class=" btn btn-primary" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank" biz-itemid="{{ taobao_id }}" _hover-ignore="1">
-                                <meta itemprop="currency" content="RMB" />购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>
-                            </a>
+                            {% if taobao_id %}
+                                <a id="buy-btn-mobile" class="btn btn-primary" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank" biz-itemid="{{ taobao_id }}" _hover-ignore="1">
+                                    <meta itemprop="currency" content="RMB" />购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>
+                                </a>
+                            {% else %}
+                                <a id="buy-btn-mobile" class="btn btn-primary" href="http://item.jd.com/{{ jd_id }}.html" target="_blank"  _hover-ignore="1">
+                                    <meta itemprop="currency" content="RMB" />购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
 
