@@ -115,7 +115,15 @@ def add_entity(request):
             )
         else:
             return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _item.get_entity_id() }) + '?code=1')
-    return HttpResponse(_url)
+    elif re.search(r"\b(jd|360buy)\.com$", _hostname) != None:
+        # print _url
+        _jd_id = parse_jd_id_from_url(_url)
+        # print _jd_id
+        _item = JDItem.get_item_by_jd_id(_jd_id)
+        if _item == None:
+            _jd_item_info = load_jd_item_info(_jd_id)
+            return HttpResponse(_jd_item_info)
+    return HttpResponse("暂不支持")
 
 
 @login_required

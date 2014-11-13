@@ -52,6 +52,7 @@ def parse_taobao_id_from_url(url):
             return tokens[1]
     return None
 
+
 def load_taobao_item_info(taobao_id):
     taobao_item_info = TaobaoExtractor.fetch_item(taobao_id)
     log.info(taobao_item_info)
