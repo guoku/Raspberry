@@ -16,4 +16,5 @@ urlpatterns = patterns(
 urlpatterns += patterns (
     'web.views.entity',
     url(r'^add/', 'add_entity', name='web_add_entity'),
+    url(r'^jumpto/$', 'jumpto', name='web_jumpto'),
 )

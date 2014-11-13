@@ -714,3 +714,18 @@ def log_visit_item(request, item_id):
         # )
         return HttpResponse('1')
 
+
+def jumpto(request):
+    url = request.REQUEST.get('url', None)
+
+
+    referer = request.META.get('HTTP_REFERER')
+
+
+    return render_to_response(
+        'main/jumpto.html',
+        {
+            'url':'http://detail.tmall.com/item.htm?id=26997708168',
+        },
+        context_instance = RequestContext(request)
+    )

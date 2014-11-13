@@ -59,7 +59,7 @@ def index(request, tempalte='main/home.html'):
     return HttpResponseRedirect(reverse('web_selection'))
 
 @require_http_methods(['GET'])
-def selection(request, template='main/selection.html'):
+def selection(request, cid = None, template='main/selection.html'):
 
     if request.user.is_authenticated():
         _request_user_id = request.user.id
@@ -74,8 +74,9 @@ def selection(request, template='main/selection.html'):
 
     _page_num = request.GET.get('p', 1)
     _time_filter  = request.GET.get('t', datetime.now())
-    _category_id = request.GET.get('c', None)
-    
+    # _category_id = request.GET.get('c', None)
+    _category_id = cid
+
     _hdl = NoteSelection.objects.filter(post_time__lt = _time_filter)
     if _category_id != None:
         _category_id = int(_category_id)
@@ -192,7 +193,7 @@ def web_message(request,  template='main/message.html'):
         #             log.error(e.message)
 
         _rslt = []
-        for _message in NeoMessage.objects.filter(user_id=_request_user_id,created_time__lt=_timestamp).order_by('-created_time')[0:_count]:
+        for _message in NeoMessage.objects.filter(user_id=_request_user_id, created_time__lt=_timestamp).order_by('-created_time')[0:_count]:
             try:
                 if isinstance(_message, UserFollowMessage):
                     _context = {

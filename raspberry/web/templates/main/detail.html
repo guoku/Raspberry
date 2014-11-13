@@ -52,7 +52,7 @@
                             <span itemprop="brand">{{ entity_context.brand }}</span> - {% endif %}<span itemprop>{{ entity_context.title }}</span>
                         </h4>
 {#                        <div class="col-sm-6">#}
-                        <a class="btn btn-like-detail" href="{% url 'web_like_entity' entity_context.entity_id '1' %}">
+                        <a class="btn btn-like-detail" href="{% url 'web_like_entity' entity_context.entity_id '1' %}" rel="nofollow">
                             {% if is_user_already_like %}
                                 <i class="fa fa-heart fa-lg"></i>
                             {% else %}
@@ -62,7 +62,7 @@
                         </a>
 {#                        </div>#}
                         <div class="hidden-sm hidden-md hidden-lg pull-right">
-                            <a class=" btn btn-primary" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank" biz-itemid="{{ taobao_id }}" _hover-ignore="1">
+                            <a id="buy-btn-mobile" class=" btn btn-primary" href="http://item.taobao.com/item.htm?id={{ taobao_id }}" target="_blank" biz-itemid="{{ taobao_id }}" _hover-ignore="1">
                                 <meta itemprop="currency" content="RMB" />购买<span itemprop="price">&#65509;{{ entity_context.price }}</span>
                             </a>
                         </div>

@@ -14,6 +14,7 @@ urlpatterns = patterns(
     'web.views.main',
     url(r'^$', 'index', name='web_index'),
     url('^selected/$', 'selection', name='web_selection'),
+    url('^selected/(?P<cid>\d+)/$', 'selection', name='web_selection'),
     url('^message/$','web_message', name='web_message'),
     url('^m/selection/$', 'wap_selection', name='wap_selection'),
     url('^tencent/selection/$', 'tencent_selection', name='tencent_selection'),
