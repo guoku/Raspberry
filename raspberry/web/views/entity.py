@@ -178,7 +178,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
                 'liker_list' : _liker_list,
                 'tag_list' : _tag_list,
                 'guess_entity_context' : _guess_entity_context,
-                'item_id' : _item_context['item_id'],
+                # 'item_id' : _item_context['item_id'],
                 'jd_id' : _jd_id,
                 'activity_id' : _activity_id,
                 'is_soldout' : _is_soldout,
@@ -307,16 +307,16 @@ def wechat_entity_detail(request, entity_id, template='wap/detail.html'):
     #         'entity_id' : int(_entity_id),
     #     },
     # )
-    return render_to_response(
-        template,
-        {
-            'entity_context' : _entity_context,
-            'note_list' : _note_list,
-            'liker_list' : _liker_list,
-            'buy_link' : _item_context['buy_link'],
-        },
-        context_instance=RequestContext(request)
-    )
+    # return render_to_response(
+    #     template,
+    #     {
+    #         'entity_context' : _entity_context,
+    #         'note_list' : _note_list,
+    #         'liker_list' : _liker_list,
+    #         'buy_link' : _item_context['buy_link'],
+    #     },
+    #     context_instance=RequestContext(request)
+    # )
 
 def tencent_entity_detail(request, entity_hash, template='tencent/detail.html'):
     return HttpResponseRedirect(reverse('web_detail', args=[entity_hash]))
