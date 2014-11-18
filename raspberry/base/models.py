@@ -430,7 +430,6 @@ class Event(models.Model):
     recommendation_positions = ListObjectField()
 
 
-
 class Event_Banner(models.Model):
     (item, shop) = (0, 1)
     BANNER_TYPE__CHOICES = [
