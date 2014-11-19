@@ -80,5 +80,5 @@ class JDExtractor:
         return result
 if __name__ == '__main__':
     jd = JDExtractor()
-    result = jd.fetch_item(1077000089)
-    print result['cid']
+    result = jd.fetch_item(210347)
+    print result
