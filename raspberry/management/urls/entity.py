@@ -25,5 +25,12 @@ urlpatterns = patterns(
 
 )
 
+
+urlpatterns += patterns(
+    'management.views.entity',
+    url(r'^add/$', 'add_entity', name='management_add_entity'),
+
+)
+
 __author__ = 'edison7500'
 

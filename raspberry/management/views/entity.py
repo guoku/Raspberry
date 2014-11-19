@@ -78,6 +78,76 @@ def _add_note_and_select_delay(entity, user_id, note):
 
 @login_required
 @staff_only
+def add_entity(request):
+    _url = request.REQUEST.get('url', None)
+    if not _url:
+        return Http404
+    _hostname = urlparse(_url).hostname
+    if re.search(r"\b(tmall|taobao|95095)\.(com|hk)$", _hostname) != None:
+        _taobao_id = parse_taobao_id_from_url(_url)
+        _item = Item.get_item_by_taobao_id(_taobao_id)
+        if _item == None:
+            _taobao_item_info = load_taobao_item_info(_taobao_id)
+            _brand = ''
+            _title = ''
+            _selected_category_id = Category.get_category_by_taobao_cid(_taobao_item_info['cid'])
+
+            _users = _get_special_names(request.user.id)
+
+            return render_to_response(
+                'entity/create.html',
+                {
+                    'active_division': 'entity',
+                    'taobao_id': _taobao_id,
+                    'cid': _taobao_item_info['cid'],
+                    'taobao_title': _taobao_item_info['title'],
+                    'shop_nick': _taobao_item_info['nick'],
+                    'shop_link': _taobao_item_info['shop_link'],
+                    'price': _taobao_item_info['price'],
+                    'thumb_images': _taobao_item_info["thumb_images"],
+                    'selected_category_id': _selected_category_id,
+                    'category_list': Category.find(),
+                    'brand': _brand,
+                    'title': _title,
+                    'users': _users
+                },
+                context_instance=RequestContext(request)
+            )
+        else:
+            return HttpResponseRedirect(reverse('management_edit_entity', kwargs = { "entity_id" : _item.get_entity_id() }) + '?code=1')
+    elif re.search(r"\b(jd|360buy)\.com$", _hostname) != None:
+        # print _url
+        _jd_id = parse_jd_id_from_url(_url)
+        # print _jd_id
+        _item = JDItem.get_item_by_jd_id(_jd_id)
+        if _item == None:
+            _jd_item_info = load_jd_item_info(_jd_id)
+            _users = _get_special_names(request.user.id)
+
+            return render_to_response(
+                'entity/create_jd.html',
+                {
+                    'active_division' : 'entity',
+                    'jd_id' : _jd_id,
+                    'category' : _jd_item_info['category'],
+                    'jd_title' : _jd_item_info['title'],
+                    'shop_nick' : _jd_item_info['nick'],
+                    'shop_link' : _jd_item_info['shop_link'],
+                    'price' : _jd_item_info['price'],
+                    'thumb_images' : _jd_item_info['thumb_images'],
+                    'brand' : _jd_item_info['brand'],
+                    'title' : _jd_item_info['title'],
+                    'users' : _users,
+                    'selected_category_id' : ""
+                },
+                context_instance = RequestContext(request)
+            )
+            # return HttpResponse(_jd_item_info)
+    return HttpResponse("暂不支持")
+
+
+@login_required
+@staff_only
 def new_entity(request):
     if request.method == 'GET':
         return render_to_response(

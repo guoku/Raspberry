@@ -596,6 +596,7 @@
                                     reply($html);
                                     $html.insertBefore(form);
                                 }
+                                commentText.val('');
                             } catch (err) {
                                 var html = $(result);
                                 util.modalSignIn(html);

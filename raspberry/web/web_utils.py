@@ -30,7 +30,7 @@ def get_login_redirect_url(request):
     if next_url:
         match = pattern.search(next_url)
         if match:
-            return request.META['HTTP_REFERER']
+            return request.META.get('HTTP_REFERER', reverse("web_selection"))
         return next_url
 
     return reverse("web_selection")

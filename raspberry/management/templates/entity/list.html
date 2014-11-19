@@ -16,6 +16,7 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">操作</li>
                     <li>
+
                         <a href="{% url 'management_new_entity' %}?cid={{category_context.category_id}}">
                             添加商品 - {{ category_context.category_title }}
                         </a>
@@ -31,6 +32,7 @@
             <div class="well sidebar-nav">
                 <ul class="nav nav-list">
                     <li class="nav-header">操作</li>
+                    <li><a href="javascript:window.open('http://admin.guoku.com/management/entity/add/?url=' +encodeURIComponent(location.href), '_blank');">果库+</a></li>
                     <li>
                         <a href="{% url 'management_new_entity' %}">
                             添加商品

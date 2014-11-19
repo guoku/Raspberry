@@ -4,12 +4,14 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.utils.log import getLogger
+
 
 from stream_models import *
 from manager.entity import EntityManager
-from django.conf import settings
+from base.extend.fields.listfield import ListObjectField
 
+from django.conf import settings
+from django.utils.log import getLogger
 
 log = getLogger('django')
 
@@ -28,6 +30,7 @@ class BaseModel(models.Model):
         for attr in fields:
             d[attr] = "%s" % getattr(self, attr)
         return d
+
 
 class User_Profile(models.Model):
     Man = u'M'
@@ -59,7 +62,8 @@ class User_Profile(models.Model):
     
     class Meta:
         app_label = 'base'
-    
+
+
 class Avatar(models.Model):
     user = models.OneToOneField(User)
     avatar_origin = models.CharField(max_length = 1024, db_index = True, null = False, blank = False)
@@ -75,9 +79,11 @@ class Avatar(models.Model):
     def avatar_small_url(self):
         return "%s%s" % (image_server, self.avatar_small)
 
+
 class Seed_User(models.Model):
     user_id = models.IntegerField(null = False, db_index = True, unique = True)
     weight = models.IntegerField(default = 0, db_index = True)
+
 
 class User_Censor(models.Model):
     user = models.OneToOneField(User) 
@@ -110,6 +116,7 @@ class Neo_Category(models.Model):
     def __unicode__(self):
         return self.title
 
+
 class Category(models.Model):
     pid = models.IntegerField(default = 0)
     title = models.CharField(max_length = 256)
@@ -117,15 +124,18 @@ class Category(models.Model):
     level = models.IntegerField(default = 0)
     status = models.IntegerField(default = 1, db_index = True)
 
+
 class Taobao_Item_Category_Mapping(models.Model):
     taobao_category_id = models.IntegerField(db_index = True, unique = True)
     parent_id = models.IntegerField(default = 0)
     title = models.CharField(max_length = 256)
     guoku_category = models.ForeignKey(Category)
- 
+
+
 class Taobao_Item_Neo_Category_Mapping(models.Model):
     taobao_category_id = models.IntegerField(db_index = True, unique = True)
     neo_category_id = models.IntegerField(db_index = True)
+
 
 class Banner(models.Model):
     content_type = models.CharField(max_length = 64, null = False)
@@ -195,7 +205,8 @@ class Entity(BaseModel):
 
     def __unicode__(self):
         return self.title
- 
+
+
 class Entity_Like(models.Model):
     entity = models.ForeignKey(Entity)
     user_id = models.IntegerField(null = False, db_index = True)
@@ -205,6 +216,7 @@ class Entity_Like(models.Model):
         db_table = 'guoku_entity_like'
         ordering = ['-created_time']
         unique_together = ('entity', 'user_id')
+
 
 class Note(models.Model):
     entity = models.ForeignKey(Entity, related_name="notes")
@@ -233,6 +245,7 @@ class Note(models.Model):
     def __unicode__(self):
         return self.note
 
+
 class Note_Poke(models.Model):
     note = models.ForeignKey(Note)
     user_id = models.IntegerField(null = False, db_index = True)
@@ -241,6 +254,7 @@ class Note_Poke(models.Model):
     class Meta:
         ordering = ['-created_time']
         unique_together = ('note', 'user_id')
+
 
 class Note_Comment(models.Model):
     note = models.ForeignKey(Note)
@@ -252,6 +266,7 @@ class Note_Comment(models.Model):
     updated_time = models.DateTimeField(auto_now = True, db_index = True)
     class Meta:
         ordering = ['-created_time']
+
 
 class Tag(models.Model):
     tag = models.CharField(max_length = 128, null = False, unique = True, db_index = True)
@@ -274,6 +289,7 @@ class Tag(models.Model):
     class Meta:
         ordering = ['-created_time']
 
+
 class Entity_Tag(models.Model):
     entity = models.ForeignKey(Entity)
     user = models.ForeignKey(User) 
@@ -294,6 +310,7 @@ class Entity_Tag(models.Model):
     def __unicode__(self):
         return self.tag
 
+
 class Recommend_User_Tag(models.Model):
     user = models.ForeignKey(User) 
     tag = models.CharField(max_length = 128, null = False, db_index = True)
@@ -302,6 +319,7 @@ class Recommend_User_Tag(models.Model):
     class Meta:
         ordering = ['-created_time']
         unique_together = ('user', 'tag')
+
 
 class User_Follow(models.Model):
     follower = models.ForeignKey(User, related_name = "followings")
@@ -312,6 +330,7 @@ class User_Follow(models.Model):
         ordering = ['-followed_time']
         unique_together = ("follower", "followee")
 
+
 class Sina_Token(models.Model):
     user = models.OneToOneField(User)
     sina_id = models.CharField(max_length = 64, null = True, db_index = True)
@@ -320,6 +339,7 @@ class Sina_Token(models.Model):
     create_time = models.DateTimeField(auto_now_add = True)
     expires_in = models.PositiveIntegerField(default = 0)
     updated_time = models.DateTimeField(auto_now = True, null = True) 
+
 
 class Taobao_Token(models.Model):
     user = models.OneToOneField(User)
@@ -332,6 +352,7 @@ class Taobao_Token(models.Model):
     re_expires_in = models.PositiveIntegerField(default = 0)
     updated_time = models.DateTimeField(auto_now = True, null = True)
 
+
 class One_Time_Token(models.Model):
     user = models.ForeignKey(User, related_name="one_time_token") 
     token = models.CharField(max_length=255, db_index=True)
@@ -339,12 +360,14 @@ class One_Time_Token(models.Model):
     is_used = models.BooleanField(default=False)
     created_time = models.DateTimeField(auto_now=True)
 
+
 class User_Footprint(models.Model):
     user = models.ForeignKey(User)
     last_read_selection_time = models.DateTimeField(null = True, db_index = True)
     last_read_message_time = models.DateTimeField(null = True, db_index = True)
     last_read_social_feed_time = models.DateTimeField(null = True, db_index = True)
     last_read_friend_feed_time = models.DateTimeField(null = True, db_index = True)
+
 
 class Seller_Info(models.Model):
     user = models.OneToOneField(User, related_name = "seller_info")
@@ -357,6 +380,7 @@ class Seller_Info(models.Model):
     main_products = models.CharField(null = True, max_length = 50)
     intro = models.CharField(null = True, max_length = 500)
     verified = models.BooleanField(default = False, db_index = True)
+
 
 class Guoku_Plus(models.Model):
     entity = models.ForeignKey(Entity)
@@ -374,6 +398,7 @@ class Guoku_Plus(models.Model):
     updated_time = models.DateTimeField()
     status = models.CharField(max_length = 32, db_index = True)
 
+
 class Guoku_Plus_Token(models.Model):
     user = models.ForeignKey(User)
     guoku_plus_activity = models.ForeignKey(Guoku_Plus)
@@ -382,6 +407,7 @@ class Guoku_Plus_Token(models.Model):
     created_time = models.DateTimeField()
     used_time = models.DateTimeField(null = True)
     quantity = models.IntegerField(null = True)
+
 
 class Novus_Stat(models.Model):
     year = models.IntegerField(db_index=True)
@@ -394,6 +420,15 @@ class Novus_Stat(models.Model):
 
 
 # event banner
+
+class Event(models.Model):
+    tag = models.CharField(max_length=30, null=False)
+    slug = models.CharField(max_length=100, null=False, db_index=True)
+    banner_total = models.IntegerField(default=1)
+    banner_positions =  ListObjectField()
+    recommendation_total = models.IntegerField(default=1)
+    recommendation_positions = ListObjectField()
+
 
 class Event_Banner(models.Model):
     (item, shop) = (0, 1)
