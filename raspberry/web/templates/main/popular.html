@@ -30,14 +30,18 @@
                             </a>
                         </div>
                         <div class="caption">
-                            <a class="btn btn-like" href="{% url 'web_like_entity' popular.entity_context.entity_id '1' %}" target="_blank">
                             {% if popular.is_user_already_like %}
-                                <i class="fa fa-heart fa-lg"></i>
+                                <a class="btn btn-like" href="{% url 'web_like_entity' popular.entity_context.entity_id '1' %}" rel="nofollow" onclick="_hmt.push(['_trackEvent', 'entity', 'unlike', '{{ selection.entity_context.title }}']);">
+                                    <i class="fa fa-heart fa-lg"></i>
+                                    &nbsp;{% trans 'likes' %}&nbsp;<span class="like-count">{{ popular.entity_context.like_count }}</span>
+                                </a>
                             {% else %}
-                                <i class="fa fa-heart-o fa-lg"></i>
+                                <a class="btn btn-like" href="{% url 'web_like_entity' popular.entity_context.entity_id '1' %}" rel="nofollow" onclick="_hmt.push(['_trackEvent', 'entity', 'like', '{{ selection.entity_context.title }}']);">
+                                    <i class="fa fa-heart-o fa-lg"></i>
+                                    {% trans 'likes' %} <span class="like-count">{{ popular.entity_context.like_count }}</span>
+                                </a>
                             {% endif %}
-                            {% trans 'likes' %} <span class="like-count">{{ popular.entity_context.like_count }}</span>
-                            </a>
+
                         </div>
                     </div>
                 </div>
