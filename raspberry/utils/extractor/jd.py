@@ -81,9 +81,7 @@ class JDExtractor:
 
 if __name__ == '__main__':
     jd = JDExtractor()
-<<<<<<< HEAD
+
     result = jd.fetch_item(210347)
-=======
-    result = jd.fetch_item(1172869)
->>>>>>> 37da5ad4bc09e74f8594037ecc6e588ca2948349
+
     print result
