@@ -167,3 +167,5 @@ class ChangePasswordForm(forms.Form):
                 "wrong password"
             )
         return cleaned_data
+
+
