@@ -4,9 +4,11 @@ from django.utils.translation import gettext_lazy as _
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 # from django.contrib.auth import login as auth_login
-from base.user import User
-
+from django.contrib.auth.models import User as AuthUser
 from django.utils.log import getLogger
+
+from base.user import User
+from share.tasks import RetrievePasswordTask
 
 log = getLogger('django')
 
@@ -172,9 +174,29 @@ class ChangePasswordForm(forms.Form):
 class ForgetPassword(forms.Form):
 
     email = forms.EmailField(
-        label = _('email'),
-        widget = forms.TextInput(attrs={'class':'form-control', 'placeholder':_('email')}),
-        help_text = _(''),
+        label = _('signup email'),
+        widget = forms.TextInput(attrs={'class':'form-control', 'placeholder':_('email@guoku.com')}),
+        help_text = _('signup email'),
     )
 
-    
+    def clean_email(self):
+        _email = self.cleaned_data.get('email')
+        try:
+            self.user = AuthUser.objects.get(email = _email)
+            return _email
+
+        except AuthUser.DoesNotExist:
+            raise forms.ValidationError(
+                _('Invalid email: %s' % _email),
+                # params={'value': '42'},
+            )
+
+
+    # def clean(self):
+    #     cleaned_data = super(ForgetPassword, self).clean()
+
+
+    def send(self):
+        # _email = self.cleaned_data.get('email')
+        # self
+        RetrievePasswordTask.delay(self.user.pk)

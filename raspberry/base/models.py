@@ -429,6 +429,9 @@ class Event(models.Model):
     recommendation_total = models.IntegerField(default=1)
     recommendation_positions = ListObjectField()
 
+    # @property
+    # def banner_coun
+
 
 class Event_Banner(models.Model):
     (item, shop) = (0, 1)
@@ -502,6 +505,7 @@ class Editor_Recommendation(models.Model):
             return True
         except Show_Editor_Recommendation.DoesNotExist:
             return False
+
 
 class Show_Editor_Recommendation(models.Model):
     recommendation = models.OneToOneField(Editor_Recommendation, related_name='show', unique=False)
