@@ -355,26 +355,7 @@ def logout(request):
     next_url = request.META.get('HTTP_REFERER', reverse('web_selection'))
     return HttpResponseRedirect(next_url)
 
-def forget_passwd(request, template='account/forget_password.html'):
 
-    if request.method == 'GET':
-        return render_to_response(
-            template,
-            {
-            },
-            context_instance = RequestContext(request),
-        )
-    else:
-        try:
-            _email = request.POST.get('email', None)
-            _user_id = User.get_user_id_by_email(_email)
-            if _user_id == None:
-                return HttpResponse('not_exist')
-            else:
-                RetrievePasswordTask.delay(_user_id)
-                return HttpResponse('success')
-        except Exception, e:
-            return HttpResponse('failed')
   
         
 
@@ -485,3 +466,23 @@ def reset_password(request, template='account/reset_password.html'):
                 context_instance=RequestContext(request)
             )
 
+def forget_passwd(request, template='account/forget_password.html'):
+
+    if request.method == 'GET':
+        return render_to_response(
+            template,
+            {
+            },
+            context_instance = RequestContext(request),
+        )
+    else:
+        try:
+            _email = request.POST.get('email', None)
+            _user_id = User.get_user_id_by_email(_email)
+            if _user_id == None:
+                return HttpResponse('not_exist')
+            else:
+                RetrievePasswordTask.delay(_user_id)
+                return HttpResponse('success')
+        except Exception, e:
+            return HttpResponse('failed')

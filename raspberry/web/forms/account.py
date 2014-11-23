@@ -169,3 +169,12 @@ class ChangePasswordForm(forms.Form):
         return cleaned_data
 
 
+class ForgetPassword(forms.Form):
+
+    email = forms.EmailField(
+        label = _('email'),
+        widget = forms.TextInput(attrs={'class':'form-control', 'placeholder':_('email')}),
+        help_text = _(''),
+    )
+
+    
