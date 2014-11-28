@@ -424,10 +424,11 @@ class Novus_Stat(models.Model):
 class Event(models.Model):
     tag = models.CharField(max_length=30, null=False)
     slug = models.CharField(max_length=100, null=False, db_index=True)
-    banner_total = models.IntegerField(default=1)
-    banner_positions =  ListObjectField()
-    recommendation_total = models.IntegerField(default=1)
-    recommendation_positions = ListObjectField()
+    status = models.BooleanField(default=False)
+    # banner_total = models.IntegerField(default=1)
+    # banner_positions =  ListObjectField()
+    # recommendation_total = models.IntegerField(default=1)
+    # recommendation_positions = ListObjectField()
 
     # @property
     # def banner_coun
@@ -471,6 +472,7 @@ class Event_Banner(models.Model):
 
 class Show_Event_Banner(models.Model):
     banner = models.OneToOneField(Event_Banner, related_name='show')
+    event = models.ForeignKey(Event, related_name='banner')
     created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     class Meta:
@@ -509,6 +511,7 @@ class Editor_Recommendation(models.Model):
 
 class Show_Editor_Recommendation(models.Model):
     recommendation = models.OneToOneField(Editor_Recommendation, related_name='show', unique=False)
+    event = models.ForeignKey(Event, related_name='recommendation')
     created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     class Meta:
