@@ -425,13 +425,20 @@ class Event(models.Model):
     tag = models.CharField(max_length=30, null=False)
     slug = models.CharField(max_length=100, null=False, db_index=True)
     status = models.BooleanField(default=False)
-    # banner_total = models.IntegerField(default=1)
-    # banner_positions =  ListObjectField()
-    # recommendation_total = models.IntegerField(default=1)
-    # recommendation_positions = ListObjectField()
 
-    # @property
-    # def banner_coun
+    @property
+    def has_banner(self):
+        count = self.banner.count()
+        if count > 0:
+            return True
+        return False
+
+    @property
+    def has_recommendation(self):
+        count = self.recommendation.count()
+        if count > 0 :
+            return True
+        return False
 
 
 class Event_Banner(models.Model):
@@ -472,7 +479,7 @@ class Event_Banner(models.Model):
 
 class Show_Event_Banner(models.Model):
     banner = models.OneToOneField(Event_Banner, related_name='show')
-    event = models.ForeignKey(Event, related_name='banner')
+    event = models.ForeignKey(Event, related_name='banner', null=True)
     created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     class Meta:
@@ -511,7 +518,7 @@ class Editor_Recommendation(models.Model):
 
 class Show_Editor_Recommendation(models.Model):
     recommendation = models.OneToOneField(Editor_Recommendation, related_name='show', unique=False)
-    event = models.ForeignKey(Event, related_name='recommendation')
+    event = models.ForeignKey(Event, related_name='recommendation', null=True)
     created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     class Meta:
