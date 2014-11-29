@@ -37,12 +37,12 @@
                     <ul class="nav navbar-nav navbar-left">
                         {% url 'management_event_banner' as management_event_banner_url %}
                         <li {% if management_event_banner_url in request.path %} class="active"{% endif %}>
-                            <a href="{{ management_event_banner_url }}">{% trans 'event' %}</a>
+                            <a href="{{ management_event_banner_url }}">{% trans 'event banner' %}</a>
                         </li>
 
                         {% url 'management_recommend_banner' as management_recommend_banner_url %}
                         <li {% if management_recommend_banner_url in request.path %}class="active" {% endif %}>
-                            <a href="{{ management_recommend_banner_url }}">{% trans 'recommendation' %}</a>
+                            <a href="{{ management_recommend_banner_url }}">{% trans 'event recommendation' %}</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

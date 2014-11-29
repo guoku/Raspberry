@@ -27,6 +27,7 @@ urlpatterns = patterns(
     url(r'^tag/', include('management.urls.tag')),
 
     url(r'^event/', include('management.urls.event')),
+    url(r'^event-banner/', include('management.urls.event_banner')),
     url(r'^recommend/', include('management.urls.recommendation')),
 )
 
