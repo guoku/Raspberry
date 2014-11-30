@@ -16,7 +16,7 @@ log = getLogger('django')
 
 @login_required
 @staff_only
-def list(request, template='management/event/list.html'):
+def list(request, template='management/event_banner/list.html'):
 
     _show_banners = Show_Event_Banner.objects.all()
     _event_banners = Event_Banner.objects.all()
@@ -31,7 +31,7 @@ def list(request, template='management/event/list.html'):
 
 @login_required
 @staff_only
-def create(request, template='management/event/create.html'):
+def create(request, template='management/event_banner/create.html'):
 
     if request.method == "POST":
         _forms = CreateEventBannerForms(request.POST, request.FILES)
@@ -51,7 +51,7 @@ def create(request, template='management/event/create.html'):
 
 @login_required
 @staff_only
-def edit(request, event_banner_id, template='management/event/edit.html'):
+def edit(request, event_banner_id, template='management/event_banner/edit.html'):
 
     try:
         _event_banner = Event_Banner.objects.get(pk = event_banner_id)

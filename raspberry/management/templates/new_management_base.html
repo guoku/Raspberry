@@ -35,6 +35,11 @@
 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-left">
+                        {% url 'management_event' as management_event_url %}
+                        <li {% if management_event_url in request.path %} class="active"{% endif %}>
+                            <a href="{{ management_event_url }}">{% trans 'event' %}</a>
+                        </li>
+
                         {% url 'management_event_banner' as management_event_banner_url %}
                         <li {% if management_event_banner_url in request.path %} class="active"{% endif %}>
                             <a href="{{ management_event_banner_url }}">{% trans 'event banner' %}</a>
