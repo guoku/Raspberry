@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.log import getLogger
 
 from base.handle_image import HandleImage
-from base.models import Show_Event_Banner, Event_Banner
+from base.models import Show_Event_Banner, Event_Banner, Event
 
 log = getLogger('django')
 
@@ -58,6 +58,23 @@ class BaseEventBannerForm(forms.Form):
                                                   widget=forms.Select(attrs={'class':'form-control',}),
                                                   help_text=_(''))
 
+
+        # events = Event.objects.all()
+        # events_list = list()
+        # for event in events:
+        #     events_list.append((event.id, event.slug))
+        # events_choices = tuple(events_list)
+        # # Event_CHOICES = (
+        # #     (none, _("---------------------------")),
+        # # )
+        # events_choices = tuple([(None, '-------------')]) + events_choices
+        # self.fields['event'] = forms.ChoiceField(
+        #     label=_('event'),
+        #     choices=events_choices,
+        #     widget=forms.Select(attrs={'class':'form-control',}),
+        #     help_text=_(''),
+        #     required=False
+        # )
 
     def clean_position(self):
         _position = self.cleaned_data.get('position')

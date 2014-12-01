@@ -56,4 +56,16 @@ def create(request, template='management/event/create.html'):
         context_instance=RequestContext(request),
     )
 
+
+def edit(request, eid, template='management/event/edit.html'):
+
+
+    return render_to_response(
+        template,
+        {
+
+        },
+        context_instance=RequestContext(request),
+    )
+
 __author__ = 'edison'

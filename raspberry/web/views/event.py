@@ -1,5 +1,6 @@
 # coding=utf-8
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods
@@ -8,7 +9,7 @@ from django.utils.log import getLogger
 from datetime import datetime
 
 
-from base.models import NoteSelection, Show_Event_Banner, Show_Editor_Recommendation
+from base.models import NoteSelection, Show_Event_Banner, Show_Editor_Recommendation, Event
 from base.note import Note
 from base.entity import Entity
 from base.tag import Tag
@@ -20,8 +21,15 @@ from utils.http import JSONResponse
 
 log = getLogger('django')
 
+
+
+def home(request):
+    events = Event.objects.filter(status = True)
+    event = events[0]
+    return HttpResponseRedirect(reverse('web_event', args=[event.slug]))
+
 @require_http_methods(['GET'])
-def home(request, template='events/home.html'):
+def event(request, slug, template='events/home.html'):
 
     if request.user.is_authenticated():
         # _request_user_id = request.user.id
