@@ -430,7 +430,6 @@ class Event(models.Model):
     class Meta:
         ordering = ['-created_datetime']
 
-
     @property
     def has_banner(self):
         count = self.banner.count()
@@ -439,11 +438,21 @@ class Event(models.Model):
         return False
 
     @property
+    def banners(self):
+        count = self.banner.count()
+        return count
+
+    @property
     def has_recommendation(self):
         count = self.recommendation.count()
         if count > 0 :
             return True
         return False
+
+    @property
+    def recommendations(self):
+        count = self.recommendation.count()
+        return count
 
     @property
     def tag_url(self):

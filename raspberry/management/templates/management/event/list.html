@@ -34,9 +34,11 @@
                                 <td><a target="_blank" href="{{ event.slug_url }}">{{ event.slug }}</a></td>
                                 <td>{{ event.status }}</td>
                                 <td>{{ event.has_banner }}</td>
-                                <td></td>
+                                <td>
+                                    <a href="{% url 'management_event_show_banner' event.pk %}">{{ event.banners }}</a>
+                                </td>
                                 <td>{{ event.has_recommendation }}</td>
-                                <td></td>
+                                <td>{{ event.recommendations }}</td>
                                 <td>
                                     <div class="btn-group">
 {#                                        <a href="#" class="btn btn-default" target="_blank" >{% trans 'preview' %}</a>#}
