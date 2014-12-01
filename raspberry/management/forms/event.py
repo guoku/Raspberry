@@ -1,12 +1,12 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from base.models import Event
+from base.models import Event, Tag
 
 
 class BaseEventForm(forms.Form):
     YES_OR_NO = (
-        (True, _('yes')),
         (False, _('no')),
+        (True, _('yes')),
     )
 
     tag = forms.CharField(
@@ -33,10 +33,18 @@ class BaseEventForm(forms.Form):
 class CreateEventForm(BaseEventForm):
 
 
+    def clean_tag(self):
+        _tag = self.cleaned_data.get('tag')
+        
+
+
     def save(self):
         _tag = self.cleaned_data.get('tag')
         _slug = self.cleaned_data.get('slug')
-        _status = self.cleaned_data.get('status')
+        _status = self.cleaned_data.get('status', False)
+
+        if _status:
+            Event.objects.all().update(status = False)
 
         event = Event.objects.create(
             tag = _tag,
@@ -45,5 +53,29 @@ class CreateEventForm(BaseEventForm):
         )
 
         return event
+
+
+
+class EditEventForm(BaseEventForm):
+
+
+    def __init__(self, event, *args, **kwargs):
+        self.event = event
+        super(EditEventForm, self).__init__(*args, **kwargs)
+
+
+    def save(self):
+        _tag = self.cleaned_data.get('tag')
+        _slug = self.cleaned_data.get('slug')
+        _status = self.cleaned_data.get('status', False)
+
+        if _status:
+            Event.objects.all().update(status = False)
+
+        self.event.tag = _tag
+        self.event.slug = _slug
+        self.event.status = _status
+        self.event.save()
+
 
 __author__ = 'edison'

@@ -28,13 +28,16 @@
                         {% for event in events %}
                             <tr>
                                 <td>{{ event.id }}</td>
-                                <td>{{ event.tag }}</td>
-                                <td>{{ event.slug }}</td>
+                                <td><a target="_blank" href="{{ event.tag_url }}">{{ event.tag }}</a></td>
+                                <td><a target="_blank" href="{{ event.slug_url }}">{{ event.slug }}</a></td>
                                 <td>{{ event.status }}</td>
                                 <td>{{ event.has_banner }}</td>
                                 <td>{{ event.has_recommendation }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-default">{% trans 'edit' %}</a>
+                                    <div class="btn-group">
+                                        <a href="{% url 'management_event_edit' event.pk %}" class="btn btn-default">{% trans 'edit' %}</a>
+                                        <a href="#" class="btn btn-danger">{% trans 'del' %}</a>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}

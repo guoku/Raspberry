@@ -422,7 +422,7 @@ class Novus_Stat(models.Model):
 # event banner
 
 class Event(models.Model):
-    tag = models.CharField(max_length=30, null=False)
+    tag = models.CharField(max_length=30, null=False, default='')
     slug = models.CharField(max_length=100, null=False, db_index=True, unique=True)
     status = models.BooleanField(default=False)
     created_datetime = models.DateTimeField(auto_now=True, db_index=True)
@@ -444,6 +444,14 @@ class Event(models.Model):
         if count > 0 :
             return True
         return False
+
+    @property
+    def tag_url(self):
+        return reverse('web_tag_detail', args=[self.tag])
+
+    @property
+    def slug_url(self):
+        return reverse('web_event', args=[self.slug])
 
 
 class Event_Banner(models.Model):

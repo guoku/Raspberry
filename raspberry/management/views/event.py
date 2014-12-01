@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from utils.authority import staff_only
 from base.models import Event
 from base.extend.paginator import ExtentPaginator, PageNotAnInteger, EmptyPage
-from management.forms.event import CreateEventForm
+from management.forms.event import CreateEventForm, EditEventForm
 from django.utils.log import getLogger
 
 
@@ -59,11 +59,28 @@ def create(request, template='management/event/create.html'):
 
 def edit(request, eid, template='management/event/edit.html'):
 
+    try:
+        event = Event.objects.get(pk=eid)
+    except Event.DoesNotExist:
+        raise Http404
+
+    if request.method == 'POST':
+        _forms = EditEventForm(event, data=request.POST)
+        if _forms.is_valid():
+            _forms.save()
+    else:
+        data = {
+            'tag': event.tag,
+            'slug': event.slug,
+            'status': event.status,
+        }
+        _forms = EditEventForm(event, initial=data)
+
 
     return render_to_response(
         template,
         {
-
+            'forms': _forms,
         },
         context_instance=RequestContext(request),
     )

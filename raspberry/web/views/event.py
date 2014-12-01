@@ -22,14 +22,20 @@ from utils.http import JSONResponse
 log = getLogger('django')
 
 
-
+@require_http_methods(['GET'])
 def home(request):
     events = Event.objects.filter(status = True)
     event = events[0]
     return HttpResponseRedirect(reverse('web_event', args=[event.slug]))
 
+
 @require_http_methods(['GET'])
 def event(request, slug, template='events/home.html'):
+    _slug = slug
+    try:
+        event = Event.objects.get(slug = _slug)
+    except Event.DoesNotExist:
+        raise Http404
 
     if request.user.is_authenticated():
         # _request_user_id = request.user.id
@@ -42,7 +48,7 @@ def event(request, slug, template='events/home.html'):
 
 
     # _tag_text = Tag.get_tag_text_from_hash('8bae48fe')
-    _entity_id_list = Tag.find_tag_entity('8bae48fe') # 双十一标签 hash
+    _entity_id_list = Tag.find_tag_entity(event.tag) # 双十一标签 hash
     _page_num = request.GET.get('p', 1)
     # _paginator = Paginator(_page_num, 24, len(_entity_id_list))
 
