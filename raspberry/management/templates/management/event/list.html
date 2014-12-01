@@ -20,7 +20,9 @@
                             <th>{% trans 'slug' %}</th>
                             <th>{% trans 'status' %}</th>
                             <th>{% trans 'has banner' %}</th>
+                            <th>{% trans 'banners' %}</th>
                             <th>{% trans 'has recommendation' %}</th>
+                            <th>{% trans 'recommendations' %}</th>
                             <th>{% trans 'operation' %}</th>
                         </tr>
                     </thead>
@@ -32,10 +34,13 @@
                                 <td><a target="_blank" href="{{ event.slug_url }}">{{ event.slug }}</a></td>
                                 <td>{{ event.status }}</td>
                                 <td>{{ event.has_banner }}</td>
+                                <td></td>
                                 <td>{{ event.has_recommendation }}</td>
+                                <td></td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{% url 'management_event_edit' event.pk %}" class="btn btn-default">{% trans 'edit' %}</a>
+{#                                        <a href="#" class="btn btn-default" target="_blank" >{% trans 'preview' %}</a>#}
+                                        <a href="{% url 'management_event_edit' event.pk %}" class="btn btn-default" target="_blank" >{% trans 'edit' %}</a>
                                         <a href="#" class="btn btn-danger">{% trans 'del' %}</a>
                                     </div>
                                 </td>

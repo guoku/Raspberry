@@ -29,14 +29,19 @@ class BaseEventForm(forms.Form):
         help_text=_(''),
     )
 
-
-class CreateEventForm(BaseEventForm):
-
-
     def clean_tag(self):
         _tag = self.cleaned_data.get('tag')
-        
 
+        try:
+            Tag.objects.get(tag_hash=_tag)
+        except Tag.DoesNotExist:
+            raise forms.ValidationError(
+                _('tag is not exist'),
+            )
+        return _tag
+
+
+class CreateEventForm(BaseEventForm):
 
     def save(self):
         _tag = self.cleaned_data.get('tag')
