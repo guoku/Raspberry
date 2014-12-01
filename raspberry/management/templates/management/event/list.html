@@ -24,6 +24,21 @@
                             <th>{% trans 'operation' %}</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        {% for event in events %}
+                            <tr>
+                                <td>{{ event.id }}</td>
+                                <td>{{ event.tag }}</td>
+                                <td>{{ event.slug }}</td>
+                                <td>{{ event.status }}</td>
+                                <td>{{ event.has_banner }}</td>
+                                <td>{{ event.has_recommendation }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-default">{% trans 'edit' %}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>

@@ -423,7 +423,7 @@ class Novus_Stat(models.Model):
 
 class Event(models.Model):
     tag = models.CharField(max_length=30, null=False)
-    slug = models.CharField(max_length=100, null=False, db_index=True)
+    slug = models.CharField(max_length=100, null=False, db_index=True, unique=True)
     status = models.BooleanField(default=False)
 
     @property

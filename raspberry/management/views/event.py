@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from utils.authority import staff_only
 from base.models import Event
 from base.extend.paginator import ExtentPaginator, PageNotAnInteger, EmptyPage
-
+from management.forms.event import CreateEventForm
 from django.utils.log import getLogger
 
 
@@ -41,11 +41,17 @@ def list(request, template='management/event/list.html'):
 
 def create(request, template='management/event/create.html'):
 
+    if request.method == 'POST':
+        _forms = CreateEventForm(request.POST)
+        if _forms.is_valid():
+            _forms.save()
+    else:
+        _forms = CreateEventForm()
 
     return render_to_response(
         template,
         {
-
+            'forms': _forms,
         },
         context_instance=RequestContext(request),
     )
