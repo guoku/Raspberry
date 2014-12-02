@@ -38,6 +38,7 @@ def show_list(request, sid, template='management/event_banner/show_list.html'):
     return render_to_response(
         template,
         {
+            'event': sid,
             'show_banners':_show_banners,
         },
         context_instance=RequestContext(request)
@@ -45,7 +46,9 @@ def show_list(request, sid, template='management/event_banner/show_list.html'):
 
 @login_required
 @staff_only
-def create(request, template='management/event_banner/create.html'):
+def create(request, event_id = None, template='management/event_banner/create.html'):
+    _event_id = event_id
+
 
     if request.method == "POST":
         _forms = CreateEventBannerForms(request.POST, request.FILES)
@@ -53,7 +56,10 @@ def create(request, template='management/event_banner/create.html'):
             _event_banner = _forms.save()
             return HttpResponseRedirect(reverse('management_event_banner_edit', args=[_event_banner.id]))
     else:
-        _forms = CreateEventBannerForms()
+        _forms = CreateEventBannerForms(initial={
+            'event': _event_id,
+        })
+
     return render_to_response(
         template,
         {
