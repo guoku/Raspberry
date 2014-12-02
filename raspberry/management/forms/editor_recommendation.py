@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.log import getLogger
 
 from base.handle_image import HandleImage
-from base.models import Show_Editor_Recommendation, Editor_Recommendation
+from base.models import Show_Editor_Recommendation, Editor_Recommendation, Event
 
 log = getLogger('django')
 
@@ -28,21 +28,39 @@ class BaseRecommendationForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(BaseRecommendationForm, self).__init__(*args, **kwargs)
-        (none, first, second, third, fourth) = (0, 1, 2, 3, 4)
-        BANNER_POSITION_CHOICES = (
-            (none, _("none")),
-            (first, _("first")),
-            (second, _("second")),
-            (third, _("third")),
-            (fourth, _("fourth")),
+        # (none, first, second, third, fourth) = (0, 1, 2, 3, 4)
+        # BANNER_POSITION_CHOICES = (
+        #     (none, _("none")),
+        #     (first, _("first")),
+        #     (second, _("second")),
+        #     (third, _("third")),
+        #     (fourth, _("fourth")),
+        # )
+        # self.fields['position'] = forms.ChoiceField(label=_('position'),
+        #                                           choices=BANNER_POSITION_CHOICES,
+        #                                           widget=forms.Select(attrs={'class':'form-control',}),
+        #                                           help_text=_(''))
+
+        events = Event.objects.all()
+        events_list = list()
+        for event in events:
+            events_list.append((event.id, event.slug))
+        events_choices = tuple(events_list)
+        # Event_CHOICES = (
+        #     (none, _("---------------------------")),
+        # )
+        events_choices = tuple([(None, '-------------')]) + events_choices
+        self.fields['event'] = forms.ChoiceField(
+            label=_('event'),
+            choices=events_choices,
+            widget=forms.Select(attrs={'class':'form-control',}),
+            help_text=_(''),
+            required=False
         )
-        self.fields['position'] = forms.ChoiceField(label=_('position'),
-                                                  choices=BANNER_POSITION_CHOICES,
-                                                  widget=forms.Select(attrs={'class':'form-control',}),
-                                                  help_text=_(''))
+
 
     def clean_position(self):
-        _position = self.cleaned_data.get('position')
+        _position = self.cleaned_data.get('position', 0)
         return int(_position)
 
 
@@ -81,26 +99,44 @@ class EditEditorRecommendForms(BaseRecommendationForm):
     def __init__(self, recommendation, *args, **kwargs):
         self.recommendation = recommendation
         super(EditEditorRecommendForms, self).__init__(*args, **kwargs)
-        if self.recommendation.has_show_banner:
-            (none, first, second, third, fourth) = (0, 1, 2, 3, 4)
-            BANNER_POSITION_CHOICES = (
-                # (none, _("none")),
-                (first, _("first")),
-                (second, _("second")),
-                (third, _("third")),
-                (fourth, _("fourth")),
-            )
-            self.fields['position'] = forms.ChoiceField(label=_('position'),
-                                                  choices=BANNER_POSITION_CHOICES,
+        # if self.recommendation.has_show_banner:
+        #     (none, first, second, third, fourth) = (0, 1, 2, 3, 4)
+        #     BANNER_POSITION_CHOICES = (
+        #         # (none, _("none")),
+        #         (first, _("first")),
+        #         (second, _("second")),
+        #         (third, _("third")),
+        #         (fourth, _("fourth")),
+        #     )
+        #     self.fields['position'] = forms.ChoiceField(label=_('position'),
+        #                                           choices=BANNER_POSITION_CHOICES,
+        #                                           widget=forms.Select(attrs={'class':'form-control',}),
+        #                                           help_text=_(''))
+        if self.recommendation.event:
+            try:
+                # event_id = kwargs['data']['event']
+                positions = Show_Editor_Recommendation.objects.filter(event = self.recommendation.event).count()
+                position_list = list()
+                for position in xrange(1, positions +1):
+                    position_list.append((position, str(position)))
+                position_choices = tuple(position_list)
+                position_choices = tuple([(0, '-------------')]) + position_choices
+                self.fields['position'] = forms.ChoiceField(label=_('position'),
+                                                  choices=position_choices,
                                                   widget=forms.Select(attrs={'class':'form-control',}),
                                                   help_text=_(''))
+            except KeyError:
+                pass
+
 
     def save(self):
         link = self.cleaned_data.get('link')
         editor_recommend_image = self.cleaned_data.get('editor_recommend_image')
         link = self.cleaned_data.get('link')
         position = self.clean_position()
-        self.recommendation.link = link
+        event = self.cleaned_data.get('event')
+
+
         # log.info(position)
 
         if editor_recommend_image:
@@ -109,26 +145,44 @@ class EditEditorRecommendForms(BaseRecommendationForm):
             # filename = default_storage.save(file_path, ContentFile(_image.image_data))
             self.recommendation.image = _image.save()
 
+
+        self.recommendation.link = link
         self.recommendation.save()
 
-        if position > 0 and self.recommendation.position == 0:
+        if event:
             try:
-                show = Show_Editor_Recommendation.objects.get(pk= position)
-                show.recommendation = self.recommendation
+                show = Show_Editor_Recommendation.objects.get(recommendation = self.recommendation)
+                show.event_id = event
                 show.save()
-            except Show_Editor_Recommendation.DoesNotExist:
+            except Show_Editor_Recommendation.DoesNotExist, e:
                 Show_Editor_Recommendation.objects.create(
                     recommendation = self.recommendation,
+                    event_id = event,
                 )
-        elif self.recommendation.position != position:
-            show = Show_Editor_Recommendation.objects.get(pk = position)
-            tmp_show = Show_Editor_Recommendation.objects.get(pk = self.recommendation.position)
-            recommendation = show.recommendation
-            show.recommendation = self.recommendation
-            tmp_show.recommendation = recommendation
 
+        if position > 0 and self.recommendation.position == 0:
+            show = Show_Editor_Recommendation.objects.get(recommendation= self.recommendation)
+            # show.banner = self.banner
+            show.position = position
             show.save()
-            tmp_show.save()
+        # if position > 0 and self.recommendation.position == 0:
+        #     try:
+        #         show = Show_Editor_Recommendation.objects.get(pk= position)
+        #         show.recommendation = self.recommendation
+        #         show.save()
+        #     except Show_Editor_Recommendation.DoesNotExist:
+        #         Show_Editor_Recommendation.objects.create(
+        #             recommendation = self.recommendation,
+        #         )
+        # elif self.recommendation.position != position:
+        #     show = Show_Editor_Recommendation.objects.get(pk = position)
+        #     tmp_show = Show_Editor_Recommendation.objects.get(pk = self.recommendation.position)
+        #     recommendation = show.recommendation
+        #     show.recommendation = self.recommendation
+        #     tmp_show.recommendation = recommendation
+        #
+        #     show.save()
+        #     tmp_show.save()
 
 
 

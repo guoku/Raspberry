@@ -565,4 +565,4 @@ class Show_Editor_Recommendation(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['position']

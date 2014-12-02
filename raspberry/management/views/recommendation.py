@@ -8,6 +8,8 @@ from base.models import Show_Editor_Recommendation, Editor_Recommendation
 from management.forms.editor_recommendation import CreateEditorRecommendForms, EditEditorRecommendForms
 from utils.authority import staff_only
 
+from django.utils.log import getLogger
+log = getLogger('django')
 
 
 @login_required
@@ -68,12 +70,19 @@ def edit(request, event_banner_id, template='management/recommendation/edit.html
     except Editor_Recommendation.DoesNotExist:
         raise Http404
 
+    try:
+        show = Show_Editor_Recommendation.objects.get(recommendation = _editor_recommendation)
+        event_id = show.event_id
+    except Show_Editor_Recommendation.DoesNotExist, e:
+        log.error("Error %s" % e.message)
+        event_id = None
+
     data = {
         # 'content_type': _banner.content_type,
         # 'key': _banner.key,
         'link': _editor_recommendation.link,
         'position':_editor_recommendation.position,
-
+        'event': event_id,
     }
 
     if request.method == "POST":

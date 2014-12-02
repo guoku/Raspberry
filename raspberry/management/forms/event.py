@@ -5,8 +5,8 @@ from base.models import Event, Tag
 
 class BaseEventForm(forms.Form):
     YES_OR_NO = (
-        (False, _('no')),
-        (True, _('yes')),
+        (0, _('no')),
+        (1, _('yes')),
     )
 
     tag = forms.CharField(
@@ -73,7 +73,7 @@ class EditEventForm(BaseEventForm):
         _tag = self.cleaned_data.get('tag')
         _slug = self.cleaned_data.get('slug')
         _status = self.cleaned_data.get('status', False)
-
+        _status = int(_status)
         if _status:
             Event.objects.all().update(status = False)
 

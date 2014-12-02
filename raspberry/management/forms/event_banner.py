@@ -197,6 +197,7 @@ class EditEventBannerForms(BaseEventBannerForm):
                     banner = self.banner,
                     event_id = event,
                 )
+
         if position > 0 and self.banner.position == 0:
             show = Show_Event_Banner.objects.get(banner= self.banner)
             # show.banner = self.banner
