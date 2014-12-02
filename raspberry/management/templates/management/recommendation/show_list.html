@@ -30,7 +30,7 @@
                             <td>{{ show.recommendation.link }}</td>
                             <td><img class="img-responsive img-polaroid" src="{{ show.recommendation.image_url }}" width="150" height="150"></td>
                             <td>{{ show.position }}</td>
-                            <td></td>
+                            <td><a target="_blank" class="btn btn-default" href="{% url 'management_recommend_edit' show.recommendation.pk %}">{% trans 'edit' %}</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
