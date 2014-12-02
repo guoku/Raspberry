@@ -25,9 +25,10 @@ log = getLogger('django')
 @require_http_methods(['GET'])
 def home(request):
     events = Event.objects.filter(status = True)
-    event = events[0]
-    return HttpResponseRedirect(reverse('web_event', args=[event.slug]))
-
+    if len(events) > 0:
+        event = events[0]
+        return HttpResponseRedirect(reverse('web_event', args=[event.slug]))
+    raise Http404
 
 @require_http_methods(['GET'])
 def event(request, slug, template='events/home.html'):
