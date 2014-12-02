@@ -517,7 +517,7 @@ class Show_Event_Banner(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['position']
 
 # editor recommendation
 

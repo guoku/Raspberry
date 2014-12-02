@@ -60,7 +60,7 @@
                 <div id="carousel-guoku" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
                         {% for show in show_event_banners %}
-                            <li data-target="#carousel-guoku" data-slide-to="{{ show.pk|add:'-1' }}" {% if 1 == show.pk %}class="active"{% endif %}></li>
+                            <li data-target="#carousel-guoku" data-slide-to="{{ show.position|add:'-1' }}" {% if 1 == show.pk %}class="active"{% endif %}></li>
                         {% endfor %}
                     </ol>
                     <div class="carousel-inner" role="listbox">
