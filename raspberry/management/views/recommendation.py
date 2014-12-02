@@ -25,6 +25,20 @@ def list(request, template='management/recommendation/list.html'):
         context_instance=RequestContext(request)
     )
 
+
+@login_required
+@staff_only
+def show_list(request, rid, template='management/recommendation/show_list.html'):
+    _show_recommendations = Show_Editor_Recommendation.objects.filter(event_id = rid)
+
+    return render_to_response(
+        template,
+        {
+            'show_recommendations': _show_recommendations,
+        },
+        context_instance=RequestContext(request),
+    )
+
 @login_required
 @staff_only
 def create(request, template='management/recommendation/create.html'):

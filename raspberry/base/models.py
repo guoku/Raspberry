@@ -537,7 +537,7 @@ class Editor_Recommendation(models.Model):
     @property
     def position(self):
         try:
-            return self.show.pk
+            return self.show.position
         except Show_Editor_Recommendation.DoesNotExist:
             return 0
 
@@ -548,6 +548,14 @@ class Editor_Recommendation(models.Model):
             return True
         except Show_Editor_Recommendation.DoesNotExist:
             return False
+
+
+    @property
+    def event(self):
+        try:
+            return self.show.event
+        except Show_Editor_Recommendation.DoesNotExist, Event.DoesNotExist:
+            return  None
 
 
 class Show_Editor_Recommendation(models.Model):

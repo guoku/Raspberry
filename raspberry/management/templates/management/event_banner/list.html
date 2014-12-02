@@ -65,7 +65,11 @@
                                         <span class="label label-default">{{ banner.position }}</span>
                                     {% endif %}
                                 </td>
-                                <td>{{ banner.event }}</td>
+                                {% if banner.event %}
+                                    <td><a target="_blank" href="{% url 'management_event_show_banner' banner.event.id %}">{{ banner.event }}</a></td>
+                                {% else %}
+                                    <td>{{ banner.event }}</td>
+                                {% endif %}
                                 <td>
                                     <a target="_blank" class="btn btn-default" href="{% url 'management_event_banner_edit' banner.pk %}">{% trans 'edit' %}</a>
                                     {% if banner.banner_type == 1 %}
