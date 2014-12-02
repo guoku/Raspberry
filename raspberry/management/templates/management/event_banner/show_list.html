@@ -29,7 +29,7 @@
                                         <span class="label label-default">{{ show.position }}</span>
                                     {% endif %}
                                 </td>
-                                <td><a href="#" class="btn btn-default" target="_blank">{% trans 'edit' %}</a></td>
+                                <td><a href="{% url 'management_event_banner_edit' show.banner.pk %}" class="btn btn-default" target="_blank">{% trans 'edit' %}</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
