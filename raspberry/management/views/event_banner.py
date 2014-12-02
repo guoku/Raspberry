@@ -72,7 +72,13 @@ def edit(request, event_banner_id, template='management/event_banner/edit.html')
     except Event_Banner.DoesNotExist:
         raise Http404
 
-    log.info("user id %s" % _event_banner.user_id)
+    # log.info("user id %s" % _event_banner.user_id)
+    try:
+        show = Show_Event_Banner.objects.get(banner = _event_banner)
+        event_id = show.event_id
+    except Show_Event_Banner.DoesNotExist, e:
+        log.error("Error %s" % e.message)
+        event_id = None
 
     data = {
         # 'content_type': _banner.content_type,
@@ -83,6 +89,7 @@ def edit(request, event_banner_id, template='management/event_banner/edit.html')
         'position':_event_banner.position,
         'banner_type':_event_banner.banner_type,
         'user_id':_event_banner.user_id,
+        'event': event_id,
     }
 
     if request.method == "POST":

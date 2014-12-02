@@ -46,6 +46,7 @@
                             <th>{% trans 'images' %}</th>
                             <th>{% trans 'link' %}</th>
                             <th>{% trans 'type' %}</th>
+                            <th>{% trans 'event' %}</th>
                             <th>{% trans 'position' %}</th>
                             <th>{% trans 'operation' %}</th>
                         </tr>
@@ -64,6 +65,7 @@
                                         <span class="label label-default">{{ banner.position }}</span>
                                     {% endif %}
                                 </td>
+                                <td>{{ banner.event }}</td>
                                 <td>
                                     <a target="_blank" class="btn btn-default" href="{% url 'management_event_banner_edit' banner.pk %}">{% trans 'edit' %}</a>
                                     {% if banner.banner_type == 1 %}

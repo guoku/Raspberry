@@ -43,42 +43,42 @@ class BaseEventBannerForm(forms.Form):
             widget=forms.Select(attrs={'class':'form-control'}),
             help_text=_(''),
         )
-
-        (none, first, second, third, fourth, fifth) = (0, 1, 2, 3, 4, 5)
-        BANNER_POSITION_CHOICES = (
-            (none, _("none")),
-            (first, _("first")),
-            (second, _("second")),
-            (third, _("third")),
-            (fourth, _("fourth")),
-            (fifth, _("fifth")),
-        )
-        self.fields['position'] = forms.ChoiceField(label=_('position'),
-                                                  choices=BANNER_POSITION_CHOICES,
-                                                  widget=forms.Select(attrs={'class':'form-control',}),
-                                                  help_text=_(''))
-
-
-        # events = Event.objects.all()
-        # events_list = list()
-        # for event in events:
-        #     events_list.append((event.id, event.slug))
-        # events_choices = tuple(events_list)
-        # # Event_CHOICES = (
-        # #     (none, _("---------------------------")),
-        # # )
-        # events_choices = tuple([(None, '-------------')]) + events_choices
-        # self.fields['event'] = forms.ChoiceField(
-        #     label=_('event'),
-        #     choices=events_choices,
-        #     widget=forms.Select(attrs={'class':'form-control',}),
-        #     help_text=_(''),
-        #     required=False
+        # (none, first, second, third, fourth, fifth) = (0, 1, 2, 3, 4, 5)
+        # BANNER_POSITION_CHOICES = (
+        #     (none, _("none")),
+        #     (first, _("first")),
+        #     (second, _("second")),
+        #     (third, _("third")),
+        #     (fourth, _("fourth")),
+        #     (fifth, _("fifth")),
         # )
+        # self.fields['position'] = forms.ChoiceField(label=_('position'),
+        #                                           choices=BANNER_POSITION_CHOICES,
+        #                                           widget=forms.Select(attrs={'class':'form-control',}),
+        #                                           help_text=_(''))
 
+
+        events = Event.objects.all()
+        events_list = list()
+        for event in events:
+            events_list.append((event.id, event.slug))
+        events_choices = tuple(events_list)
+        # Event_CHOICES = (
+        #     (none, _("---------------------------")),
+        # )
+        events_choices = tuple([(None, '-------------')]) + events_choices
+        self.fields['event'] = forms.ChoiceField(
+            label=_('event'),
+            choices=events_choices,
+            widget=forms.Select(attrs={'class':'form-control',}),
+            help_text=_(''),
+            required=False
+        )
+    #
     def clean_position(self):
-        _position = self.cleaned_data.get('position')
+        _position = self.cleaned_data.get('position', 0)
         return int(_position)
+
 
 class CreateEventBannerForms(BaseEventBannerForm):
     #
@@ -134,20 +134,36 @@ class EditEventBannerForms(BaseEventBannerForm):
     def __init__(self, banner, *args, **kwargs):
         self.banner = banner
         super(EditEventBannerForms, self).__init__(*args, **kwargs)
-        if self.banner.has_show_banner:
-            (none, first, second, third, fourth, fifth) = (0, 1, 2, 3, 4, 5)
-            BANNER_POSITION_CHOICES = (
-                # (none, _("none")),
-                (first, _("first")),
-                (second, _("second")),
-                (third, _("third")),
-                (fourth, _("fourth")),
-                (fifth, _("fifth")),
-            )
-            self.fields['position'] = forms.ChoiceField(label=_('position'),
-                                                  choices=BANNER_POSITION_CHOICES,
+        log.info(kwargs)
+
+
+        if self.banner.event:
+            try:
+                # event_id = kwargs['data']['event']
+                positions = Show_Event_Banner.objects.filter(event = self.banner.event).count()
+                position_list = list()
+                for position in xrange(1, positions +1):
+                    position_list.append((position, str(position)))
+                position_choices = tuple(position_list)
+                position_choices = tuple([(0, '-------------')]) + position_choices
+                self.fields['position'] = forms.ChoiceField(label=_('position'),
+                                                  choices=position_choices,
                                                   widget=forms.Select(attrs={'class':'form-control',}),
                                                   help_text=_(''))
+            except KeyError:
+                pass
+        # if self.banner.has_show_banner:
+
+            # (none, first, second, third, fourth, fifth) = (0, 1, 2, 3, 4, 5)
+            # BANNER_POSITION_CHOICES = (
+            #     (none, _("none")),
+            #     (first, _("first")),
+            #     (second, _("second")),
+            #     (third, _("third")),
+            #     (fourth, _("fourth")),
+            #     (fifth, _("fifth")),
+            # )
+
 
     def save(self):
         event_banner_image = self.cleaned_data.get('event_banner_image')
@@ -155,7 +171,7 @@ class EditEventBannerForms(BaseEventBannerForm):
         user_id = self.cleaned_data.get('user_id')
         banner_type = self.cleaned_data.get('banner_type')
         position = self.clean_position()
-
+        event = self.cleaned_data.get('event')
 
         # log.info(position)
         self.banner.link = link
@@ -171,20 +187,31 @@ class EditEventBannerForms(BaseEventBannerForm):
 
         self.banner.save()
 
+        if event:
+            try:
+                show = Show_Event_Banner.objects.get(banner = self.banner)
+                show.event_id = event
+                show.save()
+            except Show_Event_Banner.DoesNotExist:
+                Show_Event_Banner.objects.create(
+                    banner = self.banner,
+                    event_id = event,
+                )
         if position > 0 and self.banner.position == 0:
-            show = Show_Event_Banner.objects.get(pk= position)
-            show.banner = self.banner
+            show = Show_Event_Banner.objects.get(banner= self.banner)
+            # show.banner = self.banner
+            show.position = position
             show.save()
-
-        elif self.banner.position != position:
-            show = Show_Event_Banner.objects.get(pk = position)
-            tmp_show = Show_Event_Banner.objects.get(pk = self.banner.position)
-            tmp_banner = show.banner
-            show.banner = self.banner
-            tmp_show.banner = tmp_banner
-
-            show.save()
-            tmp_show.save()
+        #
+        # elif self.banner.position != position:
+        #     show = Show_Event_Banner.objects.get(pk = position)
+        #     tmp_show = Show_Event_Banner.objects.get(pk = self.banner.position)
+        #     tmp_banner = show.banner
+        #     show.banner = self.banner
+        #     tmp_show.banner = tmp_banner
+        #
+        #     show.save()
+        #     tmp_show.save()
 
 
 

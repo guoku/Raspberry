@@ -430,6 +430,9 @@ class Event(models.Model):
     class Meta:
         ordering = ['-created_datetime']
 
+    def __unicode__(self):
+        return self.slug
+
     @property
     def has_banner(self):
         count = self.banner.count()
@@ -487,7 +490,7 @@ class Event_Banner(models.Model):
     @property
     def position(self):
         try:
-            return self.show.pk
+            return self.show.position
         except Show_Event_Banner.DoesNotExist:
             return 0
 
@@ -498,6 +501,14 @@ class Event_Banner(models.Model):
             return True
         except Show_Event_Banner.DoesNotExist:
             return False
+
+    @property
+    def event(self):
+        try:
+            return self.show.event
+        except Show_Event_Banner.DoesNotExist, Event.DoesNotExist:
+            return None
+
 
 class Show_Event_Banner(models.Model):
     banner = models.OneToOneField(Event_Banner, related_name='show')
