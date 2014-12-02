@@ -48,7 +48,8 @@ def event(request, slug, template='events/home.html'):
         _request_user_like_entity_set = []
 
 
-    # _tag_text = Tag.get_tag_text_from_hash('8bae48fe')
+    _tag_text = Tag.get_tag_text_from_hash('8bae48fe')
+
     _entity_id_list = Tag.find_tag_entity(event.tag) # 双十一标签 hash
     _page_num = request.GET.get('p', 1)
     # _paginator = Paginator(_page_num, 24, len(_entity_id_list))
@@ -81,7 +82,7 @@ def event(request, slug, template='events/home.html'):
         log.error("Error: %s" % e.message)
         raise Http404
 
-    log.info(_note_selection_list)
+    # log.info(_note_selection_list)
     _selection_list = []
     # _entity_id_list = []
     for _note_selection in _note_selection_list:
@@ -132,6 +133,8 @@ def event(request, slug, template='events/home.html'):
     return render_to_response(
         template,
         {
+            'event': event,
+            'tag_text': _tag_text,
             'show_event_banners': _show_event_banners,
             'show_editor_recommendations': _show_editor_recommendations,
             'paginator': _paginator,

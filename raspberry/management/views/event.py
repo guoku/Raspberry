@@ -70,6 +70,7 @@ def edit(request, eid, template='management/event/edit.html'):
             _forms.save()
     else:
         data = {
+            'title': event.title,
             'tag': event.tag,
             'slug': event.slug,
             'status': event.status,

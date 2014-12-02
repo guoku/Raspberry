@@ -8,6 +8,11 @@ class BaseEventForm(forms.Form):
         (0, _('no')),
         (1, _('yes')),
     )
+    title = forms.CharField(
+        label=_('title'),
+        widget=forms.TextInput(attrs={'class':'form-control'}),
+        help_text=_(''),
+    )
 
     tag = forms.CharField(
         label=_('tag'),
@@ -44,6 +49,7 @@ class BaseEventForm(forms.Form):
 class CreateEventForm(BaseEventForm):
 
     def save(self):
+        _title = self.cleaned_data.get('title')
         _tag = self.cleaned_data.get('tag')
         _slug = self.cleaned_data.get('slug')
         _status = self.cleaned_data.get('status', False)
@@ -52,6 +58,7 @@ class CreateEventForm(BaseEventForm):
             Event.objects.all().update(status = False)
 
         event = Event.objects.create(
+            title = _title,
             tag = _tag,
             slug = _slug,
             status = _status,
@@ -70,6 +77,7 @@ class EditEventForm(BaseEventForm):
 
 
     def save(self):
+        _title = self.cleaned_data.get('title')
         _tag = self.cleaned_data.get('tag')
         _slug = self.cleaned_data.get('slug')
         _status = self.cleaned_data.get('status', False)
@@ -77,6 +85,7 @@ class EditEventForm(BaseEventForm):
         if _status:
             Event.objects.all().update(status = False)
 
+        self.event.title = _title
         self.event.tag = _tag
         self.event.slug = _slug
         self.event.status = _status
