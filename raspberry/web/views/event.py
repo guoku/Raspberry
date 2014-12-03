@@ -48,7 +48,7 @@ def event(request, slug, template='events/home.html'):
         _request_user_like_entity_set = []
 
 
-    _tag_text = Tag.get_tag_text_from_hash('8bae48fe')
+    _tag_text = Tag.get_tag_text_from_hash(event.tag)
 
     _entity_id_list = Tag.find_tag_entity(event.tag) # 双十一标签 hash
     _page_num = request.GET.get('p', 1)
@@ -130,6 +130,7 @@ def event(request, slug, template='events/home.html'):
             }
         return JSONResponse(data=_ret)
 
+    log.info('tag text %s', _tag_text)
     return render_to_response(
         template,
         {

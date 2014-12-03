@@ -420,7 +420,6 @@ class Novus_Stat(models.Model):
 
 
 # event banner
-
 class Event(models.Model):
     title = models.CharField(max_length=30, null=False, default='')
     tag = models.CharField(max_length=30, null=False, default='')
@@ -436,7 +435,7 @@ class Event(models.Model):
 
     @property
     def has_banner(self):
-        count = self.banner.count()
+        count = self.banner.filter(position__gt = 0).count()
         if count > 0:
             return True
         return False
@@ -448,7 +447,7 @@ class Event(models.Model):
 
     @property
     def has_recommendation(self):
-        count = self.recommendation.count()
+        count = self.recommendation.filter(position__gt = 0).count()
         if count > 0 :
             return True
         return False
