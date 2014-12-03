@@ -55,7 +55,9 @@
 {#            </div>#}
 {#        </div>#}
 {#    </div>#}
-       <div class="row">
+
+        {% if event.has_banner %}
+        <div class="row">
             <div class="col-md-12">
                 <div id="carousel-guoku" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
@@ -90,8 +92,10 @@
                     </a>
                 </div>
             </div>
-       </div>
+        </div>
+        {% endif %}
 
+        {% if event.has_recommendation %}
         <div class="row" style="margin-top: 40px;">
             <div class="col-md-12">
                 <p class="pull-left">编辑推荐</p>
@@ -109,6 +113,8 @@
                 </div>
             {% endfor %}
         </div>
+        {% endif %}
+
 
         <div class="row">
             <div class="col-md-12">

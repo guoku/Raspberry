@@ -550,7 +550,6 @@ class Editor_Recommendation(models.Model):
         except Show_Editor_Recommendation.DoesNotExist:
             return False
 
-
     @property
     def event(self):
         try:
