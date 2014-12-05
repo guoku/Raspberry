@@ -154,26 +154,53 @@ def event(request, slug, template='events/home'):
 @login_required
 def hongbao(request):
 
-    events = Event.objects.filter(status = False)
-    if len(events) > 0:
-        event = events[0]
-        event.user = request.user
-        event.status = True
-        event.save()
+    _user = request.user
+    try:
+        hongbao = Event_Hongbao.objects.get(user = _user, status = True)
+
+        return HttpResponseRedirect(reverse('web_hongbao_already', args=[hongbao.pk]))
+    except Event_Hongbao.DoesNotExist:
+        pass
+
+
+    hongbao_list = Event_Hongbao.objects.filter(status = False)
+    if len(hongbao_list) > 0:
+        hongbao = hongbao_list[0]
+        hongbao.user = request.user
+        hongbao.status = True
+        hongbao.save()
+        return HttpResponseRedirect(reverse('web_hongbao_finished', args=[hongbao.pk]))
     else:
-        return HttpResponse("no hongbao")
+        return HttpResponseRedirect(reverse('web_hongbao_error'))
 
 @login_required
-def hongbao_finished(request, eid, template=''):
-
-    # try:
-    #     event = Event.objects.get(pk = eid)
-    # except Even
+def hongbao_error(request, hid=None, template='events/hongbao_errors.html'):
+    # if hid is None:
+    hongbao = None
+    if hid:
+        hongbao = Event_Hongbao.objects.get(pk = hid, user = request.user)
 
     return render_to_response(
         template,
         {
+            'hongbao': hongbao,
+        },
+        context_instance=RequestContext(request),
+    )
 
+@login_required
+def hongbao_finished(request, hid, template='events/hongbao_finished.html'):
+
+    _user = request.user
+    try:
+        hongbao = Event_Hongbao.objects.get(pk = hid, user = _user)
+    except Event_Hongbao.DoesNotExist:
+        raise Http404
+
+    return render_to_response(
+        template,
+        {
+            'hongbao':hongbao,
         },
         context_instance=RequestContext(request)
     )
