@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods
 from django.template import loader
-from django.utils.log import getLogger
+from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
 
@@ -18,7 +18,7 @@ from base.extend.paginator import ExtentPaginator, PageNotAnInteger, EmptyPage
 # from utils.paginator import Paginator
 from utils.http import JSONResponse
 
-
+from django.utils.log import getLogger
 log = getLogger('django')
 
 
@@ -151,5 +151,10 @@ def event(request, slug, template='events/home'):
         context_instance=RequestContext(request)
     )
 
+@login_required
+def hongbao(request):
+
+
+    return
 
 __author__ = 'edison'
