@@ -565,3 +565,10 @@ class Show_Editor_Recommendation(models.Model):
 
     class Meta:
         ordering = ['position']
+
+
+class Event_Hongbao(models.Model):
+    user = models.ForeignKey(User, related_name='hongbao', null=True,)
+    qrcode = models.CharField(max_length=255, default='')
+    status = models.BooleanField(default=False)
+    expires_in = models.DateTimeField(db_index=True)
