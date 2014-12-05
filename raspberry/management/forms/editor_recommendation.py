@@ -83,8 +83,11 @@ class CreateEditorRecommendForms(BaseRecommendationForm):
         )
         #
         if position > 0:
+            show_list = Show_Editor_Recommendation.objects.filter(event_id = event, position = position)
+
+            show_list.update(position = 0)
             try:
-                show = Show_Editor_Recommendation.objects.get(pk = position)
+                show = Show_Editor_Recommendation.objects.get(position = position)
                 show.recommendation = _recommendation
                 show.save()
             except Show_Editor_Recommendation.DoesNotExist:
@@ -160,9 +163,23 @@ class EditEditorRecommendForms(BaseRecommendationForm):
                     event_id = event,
                 )
 
-        if position > 0 and self.recommendation.position == 0:
+        if position > 0:
+            # try:
+            # log.info(position)
+            show_list = Show_Editor_Recommendation.objects.filter(event_id = event, position = position)
+
+            show_list.update(position = 0)
+            # show.save()
+            # except Show_Editor_Recommendation.DoesNotExist:
+            #     pass
+
+
             show = Show_Editor_Recommendation.objects.get(recommendation= self.recommendation)
             # show.banner = self.banner
+            show.position = position
+            show.save()
+        else:
+            show = Show_Editor_Recommendation.objects.get(recommendation= self.recommendation)
             show.position = position
             show.save()
         # if position > 0 and self.recommendation.position == 0:

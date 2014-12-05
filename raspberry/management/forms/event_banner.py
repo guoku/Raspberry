@@ -116,16 +116,16 @@ class CreateEventBannerForms(BaseEventBannerForm):
             user_id = user_id,
         )
         #
-        if position > 0:
-            try:
-                show = Show_Event_Banner.objects.get(pk = position)
-                show.banner = _event_banner
-                show.save()
-            except Show_Event_Banner.DoesNotExist:
-                Show_Event_Banner.objects.create(
-                    banner = _event_banner
-                )
-        return _event_banner
+        # if position > 0:
+        #     try:
+        #         show = Show_Event_Banner.objects.get(pk = position)
+        #         show.banner = _event_banner
+        #         show.save()
+        #     except Show_Event_Banner.DoesNotExist:
+        #         Show_Event_Banner.objects.create(
+        #             banner = _event_banner
+        #         )
+        # return _event_banner
 
 
 class EditEventBannerForms(BaseEventBannerForm):

@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -160,7 +160,8 @@ def hongbao(request):
         event.user = request.user
         event.status = True
         event.save()
-    return
+    else:
+        return HttpResponse("no hongbao")
 
 @login_required
 def hongbao_finished(request, eid, template=''):
