@@ -69,11 +69,15 @@ def edit(request, eid, template='management/event/edit.html'):
         if _forms.is_valid():
             _forms.save()
     else:
+        status = 0
+        if event.status:
+            status = 1
+
         data = {
             'title': event.title,
             'tag': event.tag,
             'slug': event.slug,
-            'status': event.status,
+            'status': status,
         }
         _forms = EditEventForm(event, initial=data)
 
