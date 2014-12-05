@@ -31,10 +31,11 @@ def home(request):
     raise Http404
 
 @require_http_methods(['GET'])
-def event(request, slug, template='events/home.html'):
+def event(request, slug, template='events/home'):
     _slug = slug
     try:
         event = Event.objects.get(slug = _slug)
+        template = template + '_%s.html' % _slug
     except Event.DoesNotExist:
         raise Http404
 

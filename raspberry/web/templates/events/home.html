@@ -47,20 +47,20 @@
                 <div id="carousel-guoku" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
                         {% for show in show_event_banners %}
-                            <li data-target="#carousel-guoku" data-slide-to="{{ show.position|add:'-1' }}" {% if 1 == show.pk %}class="active"{% endif %}></li>
+                            <li data-target="#carousel-guoku" data-slide-to="{{ show.position|add:'-1' }}" {% if 1 == show.position %}class="active"{% endif %}></li>
                         {% endfor %}
                     </ol>
                     <div class="carousel-inner" role="listbox">
                         {% for show in show_event_banners %}
-                            <div class="item {% if 1 == show.pk %}active{% endif %}">
+                            <div class="item {% if 1 == show.position %}active{% endif %}">
                                 {% if show.banner.banner_type == 1  %}
                                     <a datatype="1" biz-sellerid="{{ show.banner.user_id }}" target="_blank" href="#">
                                         <img src="{{ show.banner.image_url }}" alt="" width="940" height="430">
                                     </a>
                                 {% else %}
-                                <a target="_blank" href="{{ show.banner.link }}">
-                                    <img src="{{ show.banner.image_url }}">
-                                </a>
+                                    <a target="_blank" href="{{ show.banner.link }}">
+                                        <img src="{{ show.banner.image_url }}">
+                                    </a>
                                 {% endif %}
                                 <div class="carousel-caption">
                                 </div>
