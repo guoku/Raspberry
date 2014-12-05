@@ -163,7 +163,7 @@ def hongbao(request):
     return
 
 @login_required
-def hongbao_finshed(request, eid, template=''):
+def hongbao_finished(request, eid, template=''):
 
     # try:
     #     event = Event.objects.get(pk = eid)
