@@ -162,4 +162,19 @@ def hongbao(request):
         event.save()
     return
 
+@login_required
+def hongbao_finshed(request, eid, template=''):
+
+    # try:
+    #     event = Event.objects.get(pk = eid)
+    # except Even
+
+    return render_to_response(
+        template,
+        {
+
+        },
+        context_instance=RequestContext(request)
+    )
+
 __author__ = 'edison'
