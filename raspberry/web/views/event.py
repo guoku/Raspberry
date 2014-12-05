@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
 
-from base.models import NoteSelection, Show_Event_Banner, Show_Editor_Recommendation, Event
+from base.models import NoteSelection, Show_Event_Banner, Show_Editor_Recommendation, Event, Event_Hongbao
 from base.note import Note
 from base.entity import Entity
 from base.tag import Tag
@@ -154,7 +154,12 @@ def event(request, slug, template='events/home'):
 @login_required
 def hongbao(request):
 
-
+    events = Event.objects.filter(status = False)
+    if len(events) > 0:
+        event = events[0]
+        event.user = request.user
+        event.status = True
+        event.save()
     return
 
 __author__ = 'edison'
