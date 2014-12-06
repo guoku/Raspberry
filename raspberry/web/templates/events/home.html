@@ -94,7 +94,7 @@
 
         <div class="row" >
             {% for show_editor in show_editor_recommendations %}
-                <div class="col-xs-6 col-sm-6">
+                <div class="col-xs-12 col-sm-6">
                     <div class="thumbnail">
                         <a target="_blank" href="{{ show_editor.recommendation.link }}">
                             <img class="img-responsive" src="{{ show_editor.recommendation.image_url }}" width="450" height="225">
@@ -105,6 +105,8 @@
         </div>
         {% endif %}
 
+        {% block centerevent %}
+        {% endblock %}
 
         <div class="row">
             <div class="col-md-12">

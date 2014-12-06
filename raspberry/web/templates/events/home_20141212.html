@@ -2,8 +2,18 @@
 {% load i18n static %}
 
 {% block headevent %}
-    <div class="row">
+    <div class="row hidden-xs">
         <div class="col-sm-12">
+            <a href="{% url 'web_hongbao' %}">
+                <img class="img-responsive" src="{% static 'images/event/1212-header.jpg' %}" width="940" height="170">
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block centerevent %}
+    <div class="row">
+        <div class="col-sm-12 hidden-sm hidden-md hidden-lg">
             <a href="{% url 'web_hongbao' %}">
                 <img class="img-responsive" src="{% static 'images/event/1212-header.jpg' %}" width="940" height="170">
             </a>
