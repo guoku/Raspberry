@@ -163,8 +163,8 @@ def hongbao(request):
     start_time = datetime.strptime(start_time_stirng, "%Y-%m-%d %H:%M")
 
     if dt < start_time:
-        # url = reverse('')
-        return HttpResponse("no start")
+        url = reverse('web_hongbao_ready')
+        return JSONResponse(status=200, data={'url': url})
     # if not request.is_ajax():
     #     raise Http404
 
@@ -240,7 +240,7 @@ def hongbao_finished(request, hid, template='events/hongbao_finished.html'):
     )
 
 @login_required
-def hongbao_ready(request, template='event/hongbao_ready.html'):
+def hongbao_ready(request, template='events/hongbao_ready.html'):
 
 
     return render_to_response(
