@@ -50,7 +50,7 @@ class SignInAccountForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(SignInAccountForm, self).clean()
-        log.info(cleaned_data)
+        # log.info(cleaned_data)
         uid = cleaned_data.get('email', None)
         if not uid:
             raise forms.ValidationError(
@@ -65,6 +65,7 @@ class SignInAccountForm(forms.Form):
             )
         cleaned_data['user'] = _user
         return cleaned_data
+
 
 class SignUpAccountFrom(forms.Form):
     error_messages = {

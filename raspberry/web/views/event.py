@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.views.decorators.http import require_http_methods
 from django.template import loader
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 from base.models import NoteSelection, Show_Event_Banner, Show_Editor_Recommendation, Event, Event_Hongbao
@@ -15,6 +15,7 @@ from base.entity import Entity
 from base.tag import Tag
 from base.user import User
 from base.extend.paginator import ExtentPaginator, PageNotAnInteger, EmptyPage
+from web.forms.account import SignInAccountForm
 # from utils.paginator import Paginator
 from utils.http import JSONResponse
 
@@ -151,27 +152,56 @@ def event(request, slug, template='events/home'):
         context_instance=RequestContext(request)
     )
 
-@login_required
+# @login_required
 def hongbao(request):
+    # log.info(datetime.now())
+    dt = datetime.now()
+    d = timedelta(days=1)
+    # log.info(dt.strftime("%Y-%m-%d"))
+    start_time = dt.strftime("%Y-%m-%d") + ' 12:12'
+    end_time = (dt + d).strftime("%Y-%m-%d") + ' 00:00'
+    log.info(start_time)
+    if not request.is_ajax():
+        raise Http404
+
+    if not request.user.is_authenticated():
+        next = reverse('web_event', args=['20141212'])
+        _forms = SignInAccountForm(initial={'next':next})
+        _t = loader.get_template('account/partial/ajax_login.html')
+        _c = RequestContext(request, {
+            'forms': _forms,
+        })
+        _data = _t.render(_c)
+        return JSONResponse(status=403, data={'data':_data})
 
     _user = request.user
     try:
-        hongbao = Event_Hongbao.objects.get(user = _user, status = True)
+        hongbao = Event_Hongbao.objects.get(user = _user, status = True, expires_in__range=(start_time, end_time))
 
-        return HttpResponseRedirect(reverse('web_hongbao_already', args=[hongbao.pk]))
+        url = reverse('web_hongbao_already', args=[hongbao.pk])
+        return JSONResponse(status=200,
+                            data={'url':url},)
+        # return HttpResponseRedirect(reverse('web_hongbao_already', args=[hongbao.pk]))
     except Event_Hongbao.DoesNotExist:
         pass
 
 
-    hongbao_list = Event_Hongbao.objects.filter(status = False)
+    hongbao_list = Event_Hongbao.objects.filter(status = False,  expires_in__range=(start_time, end_time))
+    log.info(hongbao_list.query)
     if len(hongbao_list) > 0:
         hongbao = hongbao_list[0]
         hongbao.user = request.user
         hongbao.status = True
         hongbao.save()
-        return HttpResponseRedirect(reverse('web_hongbao_finished', args=[hongbao.pk]))
+        url = reverse('web_hongbao_finished', args=[hongbao.pk])
+        return JSONResponse(status=200,
+                            data={'url':url})
+        # return HttpResponseRedirect(reverse('web_hongbao_finished', args=[hongbao.pk]))
     else:
-        return HttpResponseRedirect(reverse('web_hongbao_error'))
+        url = reverse('web_hongbao_error')
+        return JSONResponse(status=200,
+                            data={'url':url})
+        # return HttpResponseRedirect(reverse('web_hongbao_error'))
 
 @login_required
 def hongbao_error(request, hid=None, template='events/hongbao_errors.html'):

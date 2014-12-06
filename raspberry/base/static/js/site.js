@@ -795,9 +795,30 @@
                     }
                 });
             }
+        },
 
+
+        hongbao: function() {
+            var url = '/event/hongbao/';
+            $('.hongbao').on('click' ,function(e){
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data.url);
+                    location.href = data.url;
+                },
+                error: function(data) {
+                    console.log("error");
+                    var html = $(data.responseJSON.data);
+                    util.modalSignIn(html);
+                }
+            });
+            });
         }
     };
+
 
     (function init() {
 //        console.log($.find());
@@ -823,6 +844,7 @@
         message.loadData();
 
         event.loadData();
+        event.hongbao();
     })();
 
 
