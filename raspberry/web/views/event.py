@@ -161,8 +161,8 @@ def hongbao(request):
     start_time = dt.strftime("%Y-%m-%d") + ' 12:12'
     end_time = (dt + d).strftime("%Y-%m-%d") + ' 00:00'
     log.info(start_time)
-    if not request.is_ajax():
-        raise Http404
+    # if not request.is_ajax():
+    #     raise Http404
 
     if not request.user.is_authenticated():
         next = reverse('web_event', args=['20141212'])
