@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             {% if hongbao %}
-
+                <img src="{{ hongbao.qrcode }}">
             {% else %}
                 <img src="{% static 'images/event/1212-error-later.jpg' %}">
             {% endif %}
