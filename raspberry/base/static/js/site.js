@@ -806,10 +806,11 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-//                console.log(data);
+                    console.log(data.url);
+                    location.href = data.url;
                 },
                 error: function(data) {
-                    console.log(data.responseJSON);
+                    console.log("error");
                     var html = $(data.responseJSON.data);
                     util.modalSignIn(html);
                 }

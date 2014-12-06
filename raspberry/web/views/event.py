@@ -172,7 +172,10 @@ def hongbao(request):
     try:
         hongbao = Event_Hongbao.objects.get(user = _user, status = True)
 
-        return HttpResponseRedirect(reverse('web_hongbao_already', args=[hongbao.pk]))
+        url = reverse('web_hongbao_already', args=[hongbao.pk])
+        return JSONResponse(status=200,
+                            data={'url':url},)
+        # return HttpResponseRedirect(reverse('web_hongbao_already', args=[hongbao.pk]))
     except Event_Hongbao.DoesNotExist:
         pass
 
