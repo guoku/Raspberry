@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.views.decorators.http import require_http_methods
 from django.template import loader
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 from base.models import NoteSelection, Show_Event_Banner, Show_Editor_Recommendation, Event, Event_Hongbao
@@ -154,7 +154,13 @@ def event(request, slug, template='events/home'):
 
 # @login_required
 def hongbao(request):
-
+    # log.info(datetime.now())
+    dt = datetime.now()
+    d = timedelta(days=1)
+    # log.info(dt.strftime("%Y-%m-%d"))
+    start_time = dt.strftime("%Y-%m-%d") + ' 12:12'
+    end_time = (dt + d).strftime("%Y-%m-%d") + ' 00:00'
+    log.info(start_time)
     if not request.is_ajax():
         raise Http404
 
@@ -170,7 +176,7 @@ def hongbao(request):
 
     _user = request.user
     try:
-        hongbao = Event_Hongbao.objects.get(user = _user, status = True)
+        hongbao = Event_Hongbao.objects.get(user = _user, status = True, expires_in__range=(start_time, end_time))
 
         url = reverse('web_hongbao_already', args=[hongbao.pk])
         return JSONResponse(status=200,
@@ -180,7 +186,8 @@ def hongbao(request):
         pass
 
 
-    hongbao_list = Event_Hongbao.objects.filter(status = False)
+    hongbao_list = Event_Hongbao.objects.filter(status = False,  expires_in__range=(start_time, end_time))
+    log.info(hongbao_list.query)
     if len(hongbao_list) > 0:
         hongbao = hongbao_list[0]
         hongbao.user = request.user
