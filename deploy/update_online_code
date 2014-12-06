@@ -4,7 +4,7 @@ find ../ -name '*.pyc' -exec rm {} \;
 #FAB='/Users/edison7500/PycharmProjects/django15/bin/fab'
 FAB=`which fab`
 
-${FAB} -f update_code.py upload
 ${FAB} -f upload_static.py deploy_static
+${FAB} -f update_code.py upload
 ${FAB} -f reload_server.py reload
 
