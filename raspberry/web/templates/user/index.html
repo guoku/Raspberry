@@ -38,14 +38,15 @@
                     <a class="follow btn btn-primary pull-right" href="{% url 'web_follow' query_user_context.user_id 1 %}"><i class="fa fa-plus" ></i>&nbsp; 关注</a>
                 {% endif %}
 
-                {% if request.user.is_staff %}
-                    <a class="btn btn-default pull-right" href="{% url 'management_edit_user' query_user_context.user_id %}" target="_blank"><i class="fa fa-edit fa-lg"></i></a>
-                {% endif %}
                 <div class="media-body">
                     <h4 class="media-heading">{{ query_user_context.nickname }}</h4>
                     <p>{{ query_user_context.bio }}</p>
                     <address>{{ query_user_context.location }}  {{ query_user_context.city }}</address>
                 </div>
+
+                {% if request.user.is_staff %}
+                    <a class="btn btn-default pull-right" href="{% url 'management_edit_user' query_user_context.user_id %}" target="_blank"><i class="fa fa-edit fa-lg"></i></a>
+                {% endif %}
             </div>
 
             <div class="navbar nav-user-index">
