@@ -15,6 +15,7 @@ from base.entity import Entity
 from base.tag import Tag
 from base.user import User
 from base.extend.paginator import ExtentPaginator, PageNotAnInteger, EmptyPage
+from web.forms.account import SignInAccountForm
 # from utils.paginator import Paginator
 from utils.http import JSONResponse
 
@@ -151,8 +152,21 @@ def event(request, slug, template='events/home'):
         context_instance=RequestContext(request)
     )
 
-@login_required
+# @login_required
 def hongbao(request):
+
+    if not request.is_ajax():
+        raise Http404
+
+    if not request.user.is_authenticated():
+        next = reverse('web_event', args=['20141212'])
+        _forms = SignInAccountForm(initial={'next':next})
+        _t = loader.get_template('account/partial/ajax_login.html')
+        _c = RequestContext(request, {
+            'forms': _forms,
+        })
+        _data = _t.render(_c)
+        return JSONResponse(status=403, data={'data':_data})
 
     _user = request.user
     try:

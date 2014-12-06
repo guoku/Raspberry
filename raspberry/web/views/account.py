@@ -147,6 +147,10 @@ def login(request, template = 'account/login.html'):
         if _forms.is_valid():
             _remember_me = request.POST.get('remember_me', None)
             _user = _forms.cleaned_data['user']
+            _next = _forms.cleaned_data['next']
+            if _next:
+                redirect_url = _next
+
             auth_login(request, _user)
             if _remember_me:
                 request.session.set_expiry(MAX_SESSION_EXPIRATION_TIME)
