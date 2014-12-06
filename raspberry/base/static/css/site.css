@@ -480,7 +480,7 @@ padding-left: 6px;
 .category{background: #f9f9f9;}
 .category >a{padding: 5px 5px 0px 5px;display: block;}
 .category >a > img{width: 32px;height: 32px;}
-.category >a > p{text-align: center;padding-top: 10px;color: #999;white-space: nowrap;overflow: hidden;font-size: 13px;margin: 0px -10px 10px -10px;}
+.category >a > p{text-align: center;padding-top: 10px;color: #999;white-space: nowrap;overflow: hidden;font-size: 13px;margin: 0px -10px 10px -10px;padding-left: 2px; padding-right:2px;}
 
 /* 分类页面 */
 .category-header {
