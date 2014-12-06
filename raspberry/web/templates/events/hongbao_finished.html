@@ -4,7 +4,13 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <img class="img-polaroid img-responsive" src="{{ hongbao.qrcode }}" width="200" height="200">
+        	<div>
+	               	<h1>恭喜您，领取成功。</h1>
+	                <img src="{{ hongbao.qrcode }}">
+	                <p>扫描二维码，既得1212购物券。</p>
+	                <p>1212万能盛典消费者参见</p>
+	                <p><a href="http://www.taobao.com/go/market/2014/1212/rules.php" target="_blank">http://www.taobao.com/go/market/2014/1212/rules.php</a></p>
+        	</div>
         </div>
     </div>
 {% endblock %}
