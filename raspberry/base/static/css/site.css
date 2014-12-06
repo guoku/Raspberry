@@ -29,6 +29,9 @@ input[type="submit"], input[type="reset"], input[type="button"], button,textarea
     height:1px;
     margin-bottom: 20px;
 }
+.carousel-indicators {bottom: 5px;}
+.carousel-indicators li {width: 6px;height: 6px;}
+.carousel-indicators .active {width: 6px;height: 6px;}
 
 .fa-plus {
     color: #ffffff;
