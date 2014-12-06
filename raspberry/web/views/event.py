@@ -158,9 +158,12 @@ def hongbao(request):
     dt = datetime.now()
     d = timedelta(days=1)
     # log.info(dt.strftime("%Y-%m-%d"))
-    start_time = dt.strftime("%Y-%m-%d") + ' 12:12'
+    start_time_stirng  = dt.strftime("%Y-%m-%d") + ' 12:12'
     end_time = (dt + d).strftime("%Y-%m-%d") + ' 00:00'
-    log.info(datetime.strptime(start_time, "%Y-%m-%d %H:%M"))
+    start_time = datetime.strptime(start_time_stirng, "%Y-%m-%d %H:%M")
+
+    if dt < start_time:
+        return HttpResponse("no start")
     # if not request.is_ajax():
     #     raise Http404
 
@@ -187,7 +190,7 @@ def hongbao(request):
 
 
     hongbao_list = Event_Hongbao.objects.filter(status = False,  expires_in__range=(start_time, end_time))
-    log.info(hongbao_list.query)
+    # log.info(hongbao_list.query)
     if len(hongbao_list) > 0:
         hongbao = hongbao_list[0]
         hongbao.user = request.user
