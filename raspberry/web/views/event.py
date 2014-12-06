@@ -53,6 +53,7 @@ def event(request, slug, template='events/home'):
     _tag_text = Tag.get_tag_text_from_hash(event.tag)
 
     _entity_id_list = Tag.find_tag_entity(event.tag) # 双十一标签 hash
+    log.info(_entity_id_list)
     _page_num = request.GET.get('p', 1)
     # _paginator = Paginator(_page_num, 24, len(_entity_id_list))
 
@@ -162,6 +163,7 @@ def hongbao(request):
     end_time = (dt + d).strftime("%Y-%m-%d") + ' 00:00'
     start_time = datetime.strptime(start_time_stirng, "%Y-%m-%d %H:%M")
 
+    log.info(start_time)
     if dt < start_time:
         url = reverse('web_hongbao_ready')
         return JSONResponse(status=200, data={'url': url})

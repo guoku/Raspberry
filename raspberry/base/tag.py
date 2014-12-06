@@ -263,6 +263,9 @@ class Tag(object):
     
     @classmethod
     def find_tag_entity(cls, tag_hash):
+        log.info(
+            EntityTagModel.objects.filter(tag_hash=tag_hash, entity__weight__gt=0).order_by('-created_time').values_list('entity', flat=True).distinct().query
+        )
         return map(lambda x: x, EntityTagModel.objects.filter(tag_hash=tag_hash, entity__weight__gt=0).order_by('-created_time').values_list('entity', flat=True).distinct())
         
     
