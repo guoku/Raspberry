@@ -186,9 +186,15 @@ def hongbao(request):
         hongbao.user = request.user
         hongbao.status = True
         hongbao.save()
-        return HttpResponseRedirect(reverse('web_hongbao_finished', args=[hongbao.pk]))
+        url = reverse('web_hongbao_finished', args=[hongbao.pk])
+        return JSONResponse(status=200,
+                            data={'url':url})
+        # return HttpResponseRedirect(reverse('web_hongbao_finished', args=[hongbao.pk]))
     else:
-        return HttpResponseRedirect(reverse('web_hongbao_error'))
+        url = reverse('web_hongbao_error')
+        return JSONResponse(status=200,
+                            data={'url':url})
+        # return HttpResponseRedirect(reverse('web_hongbao_error'))
 
 @login_required
 def hongbao_error(request, hid=None, template='events/hongbao_errors.html'):
