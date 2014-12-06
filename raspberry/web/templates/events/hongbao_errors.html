@@ -8,11 +8,12 @@
         <div class="row">
         	<div class="col-md-12" style="text-align:center;">
 	            {% if hongbao %}
-	               	<h1>今天已经领取过了。</h1>
+	            	<img class="img-responsive" src="{% static 'images/event/line.png' %}" style="display:inline-block;">
+	               	<h2>领取失败</h2>
 	                <img src="{{ hongbao.qrcode }}">
-	                <p>扫描二维码，既得1212购物券。</p>
-	                <p>1212万能盛典消费者参见</p>
-	                <p><a href="http://www.taobao.com/go/market/2014/1212/rules.php" target="_blank">http://www.taobao.com/go/market/2014/1212/rules.php</a></p>
+	                <h4>今天你已经领过了，就是这个码</h4>
+	                <h5 style="margin:0px;">1212万能盛典消费者参见</h5>
+	                <p><a href="http://www.taobao.com/go/market/2014/1212/rules.php" target="_blank" style="color:red;">http://www.taobao.com/go/market/2014/1212/rules.php</a></p>
 	            {% else %}
 	                <img class="img-responsive" src="{% static 'images/event/1212-error-later.jpg' %}" width="600" height="420" style="display:inline-block;">
 	            {% endif %}
