@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n staticfiles %}
+{% load i18n static %}
 {% load web_common %}
 
 {% block title %}{{ event.title }}{% endblock %}
@@ -164,6 +164,7 @@
     })(window,document);
 </script>
 
+<script src="{% static 'js/event.js' %}"></script>
 {#{% endblock %}#}
 {% endblock %}
 
