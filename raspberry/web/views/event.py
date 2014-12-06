@@ -160,7 +160,7 @@ def hongbao(request):
     # log.info(dt.strftime("%Y-%m-%d"))
     start_time = dt.strftime("%Y-%m-%d") + ' 12:12'
     end_time = (dt + d).strftime("%Y-%m-%d") + ' 00:00'
-    log.info(start_time)
+    log.info(datetime.strptime(start_time, "%Y-%m-%d %H:%M"))
     # if not request.is_ajax():
     #     raise Http404
 
