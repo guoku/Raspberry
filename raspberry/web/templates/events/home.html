@@ -47,7 +47,7 @@
         {% if event.has_banner %}
         <div class="row">
             <div class="col-md-12">
-                <div id="carousel-guoku" class="carousel slide" data-ride="carousel" style="border:1px solid #eee;">
+                <div id="carousel-guoku" class="carousel slide" data-ride="carousel" style="border:5px solid #eee;">
                     <ol class="carousel-indicators">
                         {% for show in show_event_banners %}
                             <li data-target="#carousel-guoku" data-slide-to="{{ show.position|add:'-1' }}" {% if 1 == show.position %}class="active"{% endif %}></li>
