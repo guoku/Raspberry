@@ -163,9 +163,9 @@ def hongbao(request):
     end_time = (dt + d).strftime("%Y-%m-%d") + ' 00:00'
     start_time = datetime.strptime(start_time_stirng, "%Y-%m-%d %H:%M")
 
-    s = datetime.strptime('2014-12-7 12:12', "%Y-%m-%d %H:%M")
+    # s = datetime.strptime('2014-12-7 12:12', "%Y-%m-%d %H:%M")
     log.info(start_time)
-    if dt < s:
+    if dt < start_time:
         url = reverse('web_hongbao_ready')
         return JSONResponse(status=200, data={'url': url})
     # if not request.is_ajax():
