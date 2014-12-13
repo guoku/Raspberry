@@ -50,7 +50,7 @@
                     </a>
                     {% else %}
                     <a id="buy-btn-img" href="http://item.jd.com/{{ jd_id }}.html" target="_blank" _hover-ignore="1">
-                        <img itemprop="image"  src="{{ entity_context.chief_image.url|resize:'640' }}" alt="{{ entity_context.title }}" width="640" height="640">
+                        <img itemprop="image" src="{{ entity_context.chief_image.url|resize:'640' }}" alt="{{ entity_context.title }}" width="640" height="640">
                     </a>
                     {% endif %}
                     <div class="caption" style="border:0px">
@@ -151,7 +151,7 @@
                     <div class="row" style="background-color: #fbfbfb; margin: 0;">
                         <div class="media" style="padding: 15px">
                             <div class="pull-left">
-                                <img class="media-object img-circle" src="{{ user_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}">
+                                <img class="media-object img-circle" src="{{ user_context.avatar_small }}" alt="{{ selection_note.creator_context.nickname }}" width="50" height="50">
                             </div>
                             <div class="media-body post-note">
                                 <form class="form-horizontal " action="{% url 'web.views.entity.add_note' entity_context.entity_id %}" method="POST" role="form">

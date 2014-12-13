@@ -4,7 +4,7 @@
             {% for selection in selection_list %}
                 <div class="col-xs-6 col-sm-4 col-md-4">
                     <div class="thumbnail entity-selection">
-                        <span class="timestr" name="{{ selection.note_context.post_time|date:"Y-m-d H:i:s" }}"></span>
+{#                        <span class="timestr" name="{{ selection.note_context.post_time|date:"Y-m-d H:i:s" }}"></span>#}
                         <div class="img-box">
                             <a  href="{% url 'web_detail' selection.entity_context.entity_hash %}">
                                 <img class="lazy img-responsive" alt="{{ selection.entity_context.title }}" src="{{ selection.entity_context.chief_image.url|resize:'310' }}" width='310' height='310'>

@@ -45,7 +45,7 @@
                 </ul>
             </div>
         </div>
-        <div class="row" id="selection">
+        <div class="row" id="selection" data-datetime="{{ time_filter }}">
             {% include "main/partial/selection_item_list.html" with selection_list=selection_list %}
         </div>
         <div class="row hidden-xs">
@@ -54,7 +54,7 @@
             </div>
         </div>
         {% if paginator %}
-            {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url %}
+            {% include "common/web_selection_paginator.html" with paginator=paginator url=request.url refresh_datetime=time_filter %}
         {% endif %}
     </div>
 {% endblock %}

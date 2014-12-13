@@ -73,7 +73,9 @@ def selection(request, cid = None, template='main/selection.html'):
     _old_category_list = Old_Category.find()[0:11]
 
     _page_num = request.GET.get('p', 1)
-    _time_filter  = request.GET.get('t', datetime.now())
+    _time_filter  = request.GET.get('t', None)
+    if _time_filter is None:
+        _time_filter = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     # _category_id = request.GET.get('c', None)
     _category_id = cid
 
@@ -157,6 +159,7 @@ def selection(request, cid = None, template='main/selection.html'):
                 'user_context' : _request_user_context,
                 'category_list' : _old_category_list,
                 'selection_list' : _selection_list,
+                'time_filter':_time_filter,
             },
             context_instance = RequestContext(request)
         )
