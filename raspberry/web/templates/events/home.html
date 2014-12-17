@@ -9,6 +9,8 @@
 {% block h1 %}{{ tag_text }}{% endblock %}
 
 {% block content %}
+        {% block bg %}
+        {% endblock %}
     <div class="container">
         {% block headevent %}
         {% endblock %}
@@ -22,27 +24,6 @@
                 </ul>
             </div>
         </div>
-
-{#    <div class="row">#}
-{#        <div class="col-md-12" style="overflow: hidden;">#}
-{#            <div id="owl" class="owl-carousel owl-theme" style="opacity: 1; display: block;">#}
-{#                {% for show in show_event_banners %}#}
-{#                    <div class="item">#}
-{#                    {{ show.banner.banner_type }}#}
-{#                        {% if show.banner.banner_type == 1 %}#}
-{#                            <a datatype="1" biz-sellerid="{{ show.banner.user_id }}" target="_blank" href="#">#}
-{#                                <img src="{{ show.banner.image_url }}" alt="">#}
-{#                            </a>#}
-{#                        {% else %}#}
-{#                            <a href="{{ show.banner.link }}" target="_blank">#}
-{#                                <img src="{{ show.banner.image_url }}" alt="">#}
-{#                            </a>#}
-{#                        {% endif %}#}
-{#                    </div>#}
-{#                {% endfor %}#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
 
         {% if event.has_banner %}
         <div class="row">

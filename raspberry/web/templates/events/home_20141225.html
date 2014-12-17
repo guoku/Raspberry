@@ -1,12 +1,18 @@
 {% extends 'events/home.html' %}
 {% load i18n static %}
 
-{#{% block headevent %}#}
-{#    <div class="row" style="margin-bottom:20px;">#}
-{#        <div class="col-sm-12" style="text-align:center;">#}
-{#            <a class="hongbao" href="javascript:;">#}
-{#                <img class="img-responsive" src="{% static 'images/event/1212-header.jpg' %}" width="940" height="170">#}
-{#            </a>#}
-{#        </div>#}
-{#    </div>#}
-{#{% endblock %}#}
+{% block bg %}
+<div class="row" style="margin-bottom:20px;margin-top:-60px;">
+    <div class="col-sm-12" style="background: #FFFFFF url({% static 'images/event/1225-bg.jpg' %}) repeat-x scroll top;height:580px;">
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/snowfall.jquery.min.js' %}"></script>
+<script type='text/javascript'>     
+    $(document).ready(function(){
+        $(document).snowfall({shadow : false, round : true,  minSize: 5, maxSize:8,flakeCount : 250}); 
+    });
+</script>
+{% endblock %}
