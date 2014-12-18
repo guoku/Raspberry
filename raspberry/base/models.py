@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from stream_models import *
 from manager.entity import EntityManager
-from base.extend.fields.listfield import ListObjectField
+# from base.extend.fields.listfield import ListObjectField
 
 from django.conf import settings
 from django.utils.log import getLogger
