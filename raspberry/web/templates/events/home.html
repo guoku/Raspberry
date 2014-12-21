@@ -15,6 +15,7 @@
         {% block headevent %}
         {% endblock %}
 
+        {% block tag %}
         <div class="row">
             <div class="col-md-12">
                 <ul class="nav nav-pills nav-home" role="tablist">
@@ -24,7 +25,7 @@
                 </ul>
             </div>
         </div>
-
+        {% endblock %}
         {% if event.has_banner %}
         <div class="row">
             <div class="col-md-12">
