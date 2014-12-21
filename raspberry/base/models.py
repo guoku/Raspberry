@@ -5,7 +5,6 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
-
 from stream_models import *
 from manager.entity import EntityManager
 # from base.extend.fields.listfield import ListObjectField
