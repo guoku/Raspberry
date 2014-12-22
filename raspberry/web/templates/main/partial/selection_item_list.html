@@ -30,7 +30,7 @@
                                 </a>
                                 <a class="btn btn-user pull-right hidden-xs" href="{% url 'web_user_index' selection.creator_context.user_id %}">
                                     <p style="margin: 0;">
-                                        <img class="img-circle" src="{{ selection.creator_context.avatar_small }}" width="30" height="30" >&nbsp; {{ selection.creator_context.nickname|truncatechars:10 }}
+                                        <img class="img-circle" src="{{ selection.creator_context.avatar_small }}" width="30" height="30" >&nbsp; {{ selection.creator_context.nickname|truncatechars:5 }}
                                     </p>
                                 </a>
                         </div>
