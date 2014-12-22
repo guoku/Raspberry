@@ -31,8 +31,10 @@ window.location.href = url;</script><![endif]-->
     <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}">
     <style>
-    .guoku-weixin{display: none;}
-    @media (min-width: 1270px){.guoku-weixin{position:fixed;right:20px;top:300px;display: block;} }
+    .guoku-weixin{position:fixed;right:20px;top:300px;display: none;width: 136px;height: 183px;}
+    @media (min-width: 1270px){
+        .guoku-weixin{display: block;} 
+    }
     </style>
 
     {% block css %}{% endblock %}
@@ -51,7 +53,7 @@ window.location.href = url;</script><![endif]-->
 </head>
 
 <body>
-<img class="img-responsive guoku-weixin" alt="微信" title="微信" src="{% static 'images/guoku-weixin.gif' %}" >
+<img class="img-responsive guoku-weixin" alt="微信" title="微信" src="{% static 'images/guoku-weixin.gif' %}">
 <h1 class="hidden sr-only">{% block h1 %}果库{% endblock %}</h1>
 {% block header %}
     <header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
