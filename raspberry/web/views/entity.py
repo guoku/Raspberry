@@ -108,6 +108,8 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         try:
             _note = Note(_note_id)
             _note_context = _note.read()
+            if _note_context is None:
+                continue
             if _note_context['weight'] >= 0:
                 _creator_context = User(_note_context['creator_id']).read()
                 _poke_button_target_status = '0' if _note_id in _request_user_poke_note_set else '1' 
@@ -639,6 +641,15 @@ def add_note(request, entity_id, template='main/partial/ajax_detail_note.html'):
         raise HttpResponseForbidden
 
     if request.method == 'POST':
+
+        _user = request.user
+        try:
+            _user.user_censor
+            raise HttpResponseForbidden
+        except Exception:
+            pass
+
+
         _note_text = request.POST.get('note_text', None)
         _ret = {
             'status' : '0',
