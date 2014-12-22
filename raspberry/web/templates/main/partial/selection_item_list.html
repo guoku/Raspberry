@@ -11,7 +11,7 @@
                             </a>
                         </div>
                         <div class="caption">
-                            <p style="margin: 0;">
+                            <p style="margin: 0;" class="hidden-sm hidden-md hidden-lg">
                                 <a class="btn btn-user " style="padding:6px 0px 6px 0px;" href="{% url 'web_user_index' selection.creator_context.user_id %}">
                                     <img class="img-circle" src="{{ selection.creator_context.avatar_small }}" width="30" height="30" style="width:30px;height:30px;display:inline-block;">&nbsp; {{ selection.creator_context.nickname|truncatechars:10 }}
                                 </a>
