@@ -4,8 +4,9 @@
 {% block bg %}
 <div class="row" style="margin-bottom:20px;margin-top:-60px;">
     <div class="col-sm-12" style="background: #FFFFFF url({% static 'images/event/1225-bg.jpg' %}) repeat-x scroll top;height:auto;">
-
+    	<div class="container">
 	  	<a href="#" data-toggle="modal" data-target="#shareModal" > <img class="img-responsive" src="{% static 'images/event/1225-banner.png' %}" style=" margin:40px auto 0px auto;"></a>
+	  	</div>
 	  	<!-- Modal -->
 		<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">
@@ -28,9 +29,17 @@
 
 {% block script %}
 <script src="{% static 'js/snowfall.jquery.min.js' %}"></script>
-<script type='text/javascript'>     
+<script type='text/javascript'>  
+
     $(document).ready(function(){
-        $(document).snowfall({shadow : false, round : true,  minSize: 5, maxSize:8,flakeCount : 180}); 
+    	snow();
+		//循环执行，每隔3秒钟执行一次showalert（） 
+		window.setInterval(snow, 10000); 
+		function snow() 
+		{ 
+			$(document).snowfall('clear');
+			$(document).snowfall({shadow : false, round : true,  minSize: 5, maxSize:8,flakeCount : 180}); 
+		}    
     });
 </script>
 {% endblock %}
