@@ -108,7 +108,7 @@ def entity_detail(request, entity_hash, template='main/detail.html'):
         try:
             _note = Note(_note_id)
             _note_context = _note.read()
-            if _note_context is None:
+            if _note_context['content'] is None:
                 continue
             if _note_context['weight'] >= 0:
                 _creator_context = User(_note_context['creator_id']).read()

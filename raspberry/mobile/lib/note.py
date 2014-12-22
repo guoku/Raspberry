@@ -18,7 +18,8 @@ class MobileNote(Note):
     
     def read(self, request_user_id = None):
         _context = super(MobileNote, self).read(json = True)
-        
+        if _context is None:
+            return _context
         _context['creator'] = MobileUser(_context['creator_id']).read(request_user_id)
         del _context['creator_id']
         
