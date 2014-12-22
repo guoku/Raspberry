@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.views.decorators.http import require_GET, require_POST
 from django.template import RequestContext
@@ -634,6 +634,10 @@ def get_notes(request, entity_id, template='entity/entity_note_list.html'):
 
 @login_required
 def add_note(request, entity_id, template='main/partial/ajax_detail_note.html'):
+
+    if not request.is_ajax():
+        raise HttpResponseForbidden
+
     if request.method == 'POST':
         _note_text = request.POST.get('note_text', None)
         _ret = {
