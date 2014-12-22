@@ -12,8 +12,8 @@
                         </div>
                         <div class="caption">
                             <p style="margin: 0;">
-                                <a class="btn btn-user hidden-sm hidden-md hidden-lg" style="padding:6px 0px 6px 0px;" href="{% url 'web_user_index' selection.creator_context.user_id %}">
-                                    <img class="img-circle" style="display:inline-block;" src="{{ selection.creator_context.avatar_small }}" width="30" height="30" >&nbsp; {{ selection.creator_context.nickname|truncatechars:10 }}
+                                <a class="btn btn-user " style="padding:6px 0px 6px 0px;" href="{% url 'web_user_index' selection.creator_context.user_id %}">
+                                    <img class="img-circle" src="{{ selection.creator_context.avatar_small }}" width="30" height="30" style="width:30px;height:30px;display:inline-block;">&nbsp; {{ selection.creator_context.nickname|truncatechars:10 }}
                                 </a>
                             </p>
                             <p class="note">{{ selection.note_context.content|truncatechars:70 }}</p>
