@@ -191,18 +191,18 @@ def entity_detail(request, entity_id):
 
         _rslt = MobileEntity(entity_id).read_full_context(_request_user_id)
         
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(
-            duration = _duration.seconds * 1000000 + _duration.microseconds, 
-            view = 'ENTITY', 
-            request = request.REQUEST, 
-            ip = get_client_ip(request), 
-            log_time = datetime.datetime.now(),
-            request_user_id = _request_user_id,
-            appendix = { 
-                'entity_id' : int(entity_id) 
-            },
-        )
+        # _duration = datetime.datetime.now() - _start_at
+        # MobileLogTask.delay(
+        #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+        #     view = 'ENTITY',
+        #     request = request.REQUEST,
+        #     ip = get_client_ip(request),
+        #     log_time = datetime.datetime.now(),
+        #     request_user_id = _request_user_id,
+        #     appendix = {
+        #         'entity_id' : int(entity_id)
+        #     },
+        # )
         
         return SuccessJsonResponse(_rslt)
         

@@ -60,6 +60,8 @@ class MobileEntity(Entity):
         _context['note_list'] = []
         for _note_id in _context['entity']['note_id_list']:
             _note_context = MobileNote(_note_id).read(request_user_id)
+            if _note_context['content'] is None:
+                continue
             if _note_context['weight'] >= 0:
                 _context['note_list'].append(_note_context)
         del _context['entity']['note_id_list']

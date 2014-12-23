@@ -321,7 +321,8 @@ class Note(object):
         if with_censor:
             _censor_user_set = User.read_censor_user_set()
             if _context['creator_id'] in _censor_user_set:
-                _context['content'] = u'大家好，我是一只小白兔！爱果库更爱 @果库某工程师 ！'
+                # _context['content'] = u'大家好，我是一只小白兔！爱果库更爱 @果库某工程师 ！'
+                _context['content'] = None
 
         if json:
             _context['created_time'] = time.mktime(_context["created_time"].timetuple())
