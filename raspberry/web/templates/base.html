@@ -102,10 +102,10 @@ window.location.href = url;</script><![endif]-->
                     {% url 'web_event_home' as web_event_home_url %}
 {#                {{ web_event_home_url }}#}
                     <li {% if web_event_home_url in request.path %}class="active" {% endif %}>
-                        <a href="{{ web_event_home_url }}">专题<img class="" alt="果库圣诞High翻天" title="果库圣诞High翻天" src="{% static 'images/new-icon.gif' %}" style="margin-top: -16px;width: 24px; height: 11px;"></a>
+                        <a href="{{ web_event_home_url }}">专题<img class="" alt="果库圣诞High翻天" title="果库圣诞High翻天" src="{% static 'images/1225.png' %}" style="margin-top: -14px;width: 27px; height: 12px;"></a>
 {#                        <a href="{{ web_event_home_url }}">专题</a>#}
                     </li>
-                    <li><a href="/survey/" target="_blank">问卷</a></li>
+{#                    <li><a href="/survey/" target="_blank">问卷</a></li>#}
                 </ul>
 
                 {% url 'web_login' as web_login_url %}
