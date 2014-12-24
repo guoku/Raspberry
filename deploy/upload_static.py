@@ -36,7 +36,7 @@ print static_path
 
 def deploy_static():
     
-    with lcd('/Users/edison/PycharmProjects/Raspberry/raspberry'):
+    with lcd('~/PycharmProjects/Raspberry/raspberry'):
         local('python manage.py collectstatic --noinput --settings="raspberry.settings.stage"')
         local('sh ../deploy/clean_static.sh')
         local('sed  "s/v3\/.*/v3\/%s\/\'/" settings/static.py > settings/static.py.tmp' % ver)
