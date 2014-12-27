@@ -148,7 +148,6 @@
 //                            addEntityNote.find('.media-heading').html(data.data.user_context.nickname);
                             if (data.data.taobao_id == undefined) {
 
-                            } else {
                                 $(".detail_title span:eq(1)").text(data.data.taobao_title);
 //                                $(".detail_title_input").val(data.data.taobao_title);
                                 var title = $.trim(data.data.taobao_title);
