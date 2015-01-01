@@ -54,7 +54,7 @@ class CreateEventForm(BaseEventForm):
         _slug = self.cleaned_data.get('slug')
         _status = self.cleaned_data.get('status', False)
         _status = int(_status)
-        
+
         if _status:
             Event.objects.all().update(status = False)
 
