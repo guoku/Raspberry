@@ -386,7 +386,7 @@ def unread_count(request):
         })
         
 def visit_item(request, item_id):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     
     if item_id == '533bd0caa2128a11428c912b':
         _session = request.GET.get('session', None)
@@ -394,17 +394,17 @@ def visit_item(request, item_id):
             _request_user_id = Session_Key.objects.get_user_id(_session)
         else:
             _request_user_id = None
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(
-            entry="jd_bilang",
-            duration = _duration.seconds * 1000000 + _duration.microseconds, 
-            view = 'CLICK', 
-            request = request.REQUEST, 
-            ip = get_client_ip(request), 
-            log_time = datetime.datetime.now(),
-            request_user_id = _request_user_id,
-            appendix = {}
-        )
+        # _duration = datetime.datetime.now() - _start_at
+        # MobileLogTask.delay(
+        #     entry="jd_bilang",
+        #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+        #     view = 'CLICK',
+        #     request = request.REQUEST,
+        #     ip = get_client_ip(request),
+        #     log_time = datetime.datetime.now(),
+        #     request_user_id = _request_user_id,
+        #     appendix = {}
+        # )
         return HttpResponseRedirect("http://item.jd.com/1076756.html")
         
     if request.method == "GET":

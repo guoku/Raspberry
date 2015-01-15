@@ -54,6 +54,7 @@ urlpatterns += patterns(
     url(r'^login/$', 'login', name="web_login"),
     url(r'^register/$', RegisterWizard.as_view(FORMS), name='web_register'),
     url(r'^logout/$', 'logout', name="web_logout"),
+
     url(r'^sina/login$', 'login_by_sina', name="web_login_by_sina"),
     url(r'^sina/auth/$', 'auth_by_sina', name="web_auth_by_sina"),
     url(r'^sina/bind/$', 'bind_sina', name="web_bind_sina"),
