@@ -182,6 +182,7 @@ def poke_entity_note(request, note_id, target_status):
             _rslt['poke_already'] = 0
         return SuccessJsonResponse(_rslt)
 
+
 @check_sign
 def comment_entity_note(request, note_id):
     if request.method == "POST":
@@ -201,6 +202,7 @@ def comment_entity_note(request, note_id):
         )
         _context = _note.read_comment(_comment_id, _request_user_id)
         return SuccessJsonResponse(_context)
+
 
 @check_sign
 def delete_entity_note_comment(request, note_id, comment_id):

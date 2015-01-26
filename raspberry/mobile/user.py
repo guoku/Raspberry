@@ -105,19 +105,19 @@ def user_following(request, user_id):
         for _following_user_id in _following_user_id_list[_offset : _offset + _count]: 
             _rslt.append(MobileUser(_following_user_id).read(_request_user_id))
     
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(
-            duration = _duration.seconds * 1000000 + _duration.microseconds, 
-            view = 'USER_FOLLOWING', 
-            request = request.REQUEST, 
-            ip = get_client_ip(request), 
-            log_time = datetime.datetime.now(),
-            request_user_id = _request_user_id,
-            appendix = { 
-                'user_id' : int(user_id),
-                'result_users' : _following_user_id_list[_offset : _offset + _count]
-            },
-        )
+        # _duration = datetime.datetime.now() - _start_at
+        # MobileLogTask.delay(
+        #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+        #     view = 'USER_FOLLOWING',
+        #     request = request.REQUEST,
+        #     ip = get_client_ip(request),
+        #     log_time = datetime.datetime.now(),
+        #     request_user_id = _request_user_id,
+        #     appendix = {
+        #         'user_id' : int(user_id),
+        #         'result_users' : _following_user_id_list[_offset : _offset + _count]
+        #     },
+        # )
         return SuccessJsonResponse(_rslt)
 
 @check_sign
@@ -137,19 +137,19 @@ def user_fan(request, user_id):
         for _fan_user_id in _fan_user_id_list[_offset : _offset + _count]: 
             _rslt.append(MobileUser(_fan_user_id).read(_request_user_id))
     
-        _duration = datetime.datetime.now() - _start_at
-        MobileLogTask.delay(
-            duration = _duration.seconds * 1000000 + _duration.microseconds, 
-            view = 'USER_FAN', 
-            request = request.REQUEST, 
-            ip = get_client_ip(request), 
-            log_time = datetime.datetime.now(),
-            request_user_id = _request_user_id,
-            appendix = { 
-                'user_id' : int(user_id),
-                'result_users' : _fan_user_id_list[_offset : _offset + _count]
-            },
-        )
+        # _duration = datetime.datetime.now() - _start_at
+        # MobileLogTask.delay(
+        #     duration = _duration.seconds * 1000000 + _duration.microseconds,
+        #     view = 'USER_FAN',
+        #     request = request.REQUEST,
+        #     ip = get_client_ip(request),
+        #     log_time = datetime.datetime.now(),
+        #     request_user_id = _request_user_id,
+        #     appendix = {
+        #         'user_id' : int(user_id),
+        #         'result_users' : _fan_user_id_list[_offset : _offset + _count]
+        #     },
+        # )
         return SuccessJsonResponse(_rslt)
 
 @check_sign

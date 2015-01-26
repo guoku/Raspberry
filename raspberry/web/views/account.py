@@ -361,8 +361,6 @@ def logout(request):
     return HttpResponseRedirect(next_url)
 
 
-  
-        
 
 @require_POST
 @login_required

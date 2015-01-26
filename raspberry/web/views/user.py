@@ -133,19 +133,19 @@ def user_notes(request, user_id, template=TEMPLATE):
         except Exception, e:
             pass
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='USER_NOTE', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'user_id' : int(user_id),
-            'result_notes' : _note_id_list,
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='USER_NOTE',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'user_id' : int(user_id),
+    #         'result_notes' : _note_id_list,
+    #     },
+    # )
 
     return render_to_response(
         template,
@@ -201,19 +201,19 @@ def user_tags(request, user_id, template=TEMPLATE):
         except Exception, e:
             pass
     
-    _duration = datetime.datetime.now() - _start_at
-    WebLogTask.delay(
-        duration=_duration.seconds * 1000000 + _duration.microseconds, 
-        page='USER_TAGS', 
-        request=request.REQUEST, 
-        ip=get_client_ip(request), 
-        log_time=datetime.datetime.now(),
-        request_user_id=_request_user_id,
-        appendix={ 
-            'user_id' : int(user_id),
-            'result_tags' : _log_tags 
-        },
-    )
+    # _duration = datetime.datetime.now() - _start_at
+    # WebLogTask.delay(
+    #     duration=_duration.seconds * 1000000 + _duration.microseconds,
+    #     page='USER_TAGS',
+    #     request=request.REQUEST,
+    #     ip=get_client_ip(request),
+    #     log_time=datetime.datetime.now(),
+    #     request_user_id=_request_user_id,
+    #     appendix={
+    #         'user_id' : int(user_id),
+    #         'result_tags' : _log_tags
+    #     },
+    # )
 
     return render_to_response(
         template,

@@ -16,6 +16,7 @@ class ApiKeyError(Exception):
     def __str__(self):
         return repr(self.message)
 
+
 class SignError(Exception):
     def __init__(self, sign):
         self.sign = sign

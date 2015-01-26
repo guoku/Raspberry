@@ -255,7 +255,6 @@ def register_by_sina(request):
                 status = 409
             )
         
-        
         _session = Session_Key.objects.generate_session(
             user_id = _user.user_id,
             username = _user.get_username(),

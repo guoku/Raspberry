@@ -89,7 +89,6 @@ APNS_SERVER = {'HOST': 'http://10.0.2.46:7077/'}
 ALLOWED_HOSTS = ['*']
 
 
-
 APP_HOST = "http://test.guoku.com"
 SINA_APP_KEY = '2830558576'
 SINA_APP_SECRET = 'a4861c4ea9facd833eb5d828794a2fb2'
