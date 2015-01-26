@@ -180,7 +180,7 @@ def category_entity(request, category_id):
 
 @check_sign
 def entity_detail(request, entity_id):
-    _start_at = datetime.datetime.now()
+    # _start_at = datetime.datetime.now()
     print 'detail'
     if request.method == "GET":
         _session = request.GET.get('session', None)
